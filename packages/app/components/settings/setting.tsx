@@ -1,7 +1,6 @@
-import { useEffect, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
   HeaderTabView,
@@ -11,7 +10,6 @@ import {
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTabState } from "app/hooks/use-tab-state";
-import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { WalletAddressesV2 } from "app/types";
 
@@ -20,20 +18,11 @@ import { SettingsHeader } from "./setting-header";
 import { SettingTabsScene, SETTINGS_ROUTES } from "./tabs";
 
 const SettingsTabs = () => {
-  const { isAuthenticated } = useUser();
   const headerHeight = useHeaderHeight();
   const { bottom } = useSafeAreaInsets();
-  const router = useRouter();
   const [editingWallet, setEditingWallet] = useState<
     WalletAddressesV2 | undefined
   >(undefined);
-
-  useEffect(() => {
-    const isUnauthenticated = !isAuthenticated;
-    if (isUnauthenticated) {
-      router.pop();
-    }
-  }, [isAuthenticated, router]);
 
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
 

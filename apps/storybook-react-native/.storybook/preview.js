@@ -7,7 +7,6 @@ import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 
 import { AlertProvider } from "design-system/alert";
 import { SnackbarProvider } from "design-system/snackbar";
-import { ToastProvider } from "design-system/toast";
 import { View } from "design-system/view";
 
 const FontsLoader = ({ children }) => {
@@ -17,8 +16,6 @@ const FontsLoader = ({ children }) => {
     Inter: require("../assets/fonts/Inter-Regular.otf"),
     "Inter-Regular": require("../assets/fonts/Inter-Regular.otf"),
     "Inter-SemiBold": require("../assets/fonts/Inter-SemiBold.otf"),
-    "SpaceGrotesk-Regular": require("../assets/fonts/SpaceGrotesk-Regular.otf"),
-    "SpaceGrotesk-Bold": require("../assets/fonts/SpaceGrotesk-Bold.otf"),
   });
 
   if (!fontsLoaded) return null;
@@ -36,17 +33,15 @@ export const decorators = [
       <BottomSheetModalProvider>
         <ColorSchemeProvider>
           <SafeAreaProvider>
-            <ToastProvider>
-              <AlertProvider>
-                <SnackbarProvider>
-                  <View tw="flex-1 justify-center dark:bg-gray-900">
-                    <FontsLoader>
-                      <Story />
-                    </FontsLoader>
-                  </View>
-                </SnackbarProvider>
-              </AlertProvider>
-            </ToastProvider>
+            <AlertProvider>
+              <SnackbarProvider>
+                <View tw="flex-1 justify-center dark:bg-gray-900">
+                  <FontsLoader>
+                    <Story />
+                  </FontsLoader>
+                </View>
+              </SnackbarProvider>
+            </AlertProvider>
           </SafeAreaProvider>
         </ColorSchemeProvider>
       </BottomSheetModalProvider>

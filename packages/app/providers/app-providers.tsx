@@ -7,13 +7,13 @@ import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
-import { ToastProvider } from "@showtime-xyz/universal.toast";
 
 import { growthbook } from "app/lib/growthbook";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { BiconomyProvider } from "app/providers/biconomy-provider";
 import { ClaimProvider } from "app/providers/claim-provider";
+import { DropProvider } from "app/providers/drop-provider";
 import { FeedProvider } from "app/providers/feed-provider";
 import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
@@ -30,36 +30,36 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           <WalletMobileSDKProvider>
             <WalletProvider>
               <Web3Provider>
-                <ToastProvider>
-                  <AlertProvider>
-                    <LightBoxProvider>
-                      <SnackbarProvider>
-                        <NavigationProvider>
-                          <SWRProvider>
-                            <AuthProvider>
-                              <UserProvider>
-                                <BottomSheetModalProvider>
-                                  {/* @ts-ignore */}
-                                  <GrowthBookProvider growthbook={growthbook}>
-                                    <FeedProvider>
-                                      <BiconomyProvider>
-                                        <MuteProvider>
-                                          <ClaimProvider>
+                <AlertProvider>
+                  <LightBoxProvider>
+                    <SnackbarProvider>
+                      <NavigationProvider>
+                        <SWRProvider>
+                          <AuthProvider>
+                            <UserProvider>
+                              <BottomSheetModalProvider>
+                                {/* @ts-ignore */}
+                                <GrowthBookProvider growthbook={growthbook}>
+                                  <FeedProvider>
+                                    <BiconomyProvider>
+                                      <MuteProvider>
+                                        <ClaimProvider>
+                                          <DropProvider>
                                             {children}
-                                          </ClaimProvider>
-                                        </MuteProvider>
-                                      </BiconomyProvider>
-                                    </FeedProvider>
-                                  </GrowthBookProvider>
-                                </BottomSheetModalProvider>
-                              </UserProvider>
-                            </AuthProvider>
-                          </SWRProvider>
-                        </NavigationProvider>
-                      </SnackbarProvider>
-                    </LightBoxProvider>
-                  </AlertProvider>
-                </ToastProvider>
+                                          </DropProvider>
+                                        </ClaimProvider>
+                                      </MuteProvider>
+                                    </BiconomyProvider>
+                                  </FeedProvider>
+                                </GrowthBookProvider>
+                              </BottomSheetModalProvider>
+                            </UserProvider>
+                          </AuthProvider>
+                        </SWRProvider>
+                      </NavigationProvider>
+                    </SnackbarProvider>
+                  </LightBoxProvider>
+                </AlertProvider>
               </Web3Provider>
             </WalletProvider>
           </WalletMobileSDKProvider>

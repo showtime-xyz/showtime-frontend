@@ -21,7 +21,8 @@ import { TextInput } from "@showtime-xyz/universal.text-input";
 import type { TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
-const PlatformAnimateHeight = Platform.OS === "web" ? Fragment : AnimateHeight;
+const PlatformAnimateHeight =
+  Platform.OS === "web" || Platform.OS === "android" ? Fragment : AnimateHeight;
 
 export type FieldsetProps = {
   errorText?: string;
@@ -76,23 +77,28 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
       ]}
       style={containerStyle}
     >
-      <View tw="flex-row">
-        {isValidElement(label) ? (
-          label
-        ) : (
-          <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
-            {label}
-          </Label>
-        )}
+      {label ? (
+        <View tw="flex-row">
+          {isValidElement(label) ? (
+            label
+          ) : (
+            <Label
+              htmlFor={inputId}
+              tw="font-bold text-gray-900 dark:text-white"
+            >
+              {label}
+            </Label>
+          )}
 
-        {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
-      </View>
+          {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
+        </View>
+      ) : null}
 
       <View tw="ml-auto">
         {switchProps ? <Switch {...switchProps} /> : null}
       </View>
       {!switchProps ? (
-        <View tw="mt-4 flex-row items-center">
+        <View tw={["flex-row items-center", label ? "mt-4" : ""]}>
           {leftElement}
           {!selectOnly ? (
             <Component
@@ -109,7 +115,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
               multiline={textInputProps.multiline}
               numberOfLines={textInputProps.numberOfLines ?? 1}
               blurOnSubmit={textInputProps.blurOnSubmit}
-              textAlignVertical="bottom"
+              textAlignVertical="top"
               placeholderTextColor={
                 isDark ? colors.gray[400] : colors.gray[600]
               }
@@ -151,7 +157,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
             <View tw="h-4" />
             <Text
               nativeID={helperTextId}
-              tw="text-sm text-gray-700 dark:text-gray-300"
+              tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
             >
               {helperText}
             </Text>
@@ -172,7 +178,10 @@ export const ErrorText = ({
   return (
     <>
       <View tw="h-4" />
-      <Text nativeID={nativeID} tw="text-sm font-semibold text-red-500">
+      <Text
+        nativeID={nativeID}
+        tw="text-sm font-semibold leading-6 text-red-500"
+      >
         {children}
       </Text>
     </>

@@ -46,6 +46,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       style,
       disableBackdropPress,
       tw: propTw = "",
+      headerShown = true,
     }: ModalContainerProps,
     ref
   ) {
@@ -75,7 +76,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
         <View tw={CONTAINER_TW}>
           <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
           <View tw={modalContainerTW} style={style}>
-            <ModalHeader title={title} onClose={onClose} />
+            {headerShown && <ModalHeader title={title} onClose={onClose} />}
             <View tw={MODAL_BODY_TW} style={bodyStyle} accessibilityViewIsModal>
               {children}
             </View>

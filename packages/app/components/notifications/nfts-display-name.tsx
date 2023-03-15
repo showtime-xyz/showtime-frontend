@@ -52,3 +52,13 @@ export const NFTSDisplayName = ({ nfts }: NotificationDescriptionProps) => {
     </>
   );
 };
+
+export const NFTSDisplayNameText = ({ nfts }: NotificationDescriptionProps) => {
+  if (!nfts || nfts?.length === 0) return null;
+  const nft = nfts[0];
+  return (
+    <Text tw="text-13 font-bold text-black dark:text-white">
+      {nft.display_name}
+    </Text>
+  );
+};

@@ -1,10 +1,9 @@
 {
   "name": "showtime",
-  "version": "92.0.4",
+  "version": "100.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "@react-native-menu/menu": "^0.7.2",
     "@trivago/prettier-plugin-sort-imports": "^3.3.0",
     "@types/react-native": "0.70.5",
     "@typescript-eslint/eslint-plugin": "5.23.0",
@@ -36,6 +35,7 @@
     "packages/*"
   ],
   "scripts": {
+    "create-screen": "node scripts/showtime-cli",
     "dev": "yarn turbo run dev --parallel --no-cache",
     "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
     "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next",
@@ -83,10 +83,9 @@
     "@ethersproject/signing-key": "5.6.2",
     "eth-block-tracker": "4.4.3",
     "next": "^13.1.1",
-    "zeego": "canary",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
-    "react-native-screens": "3.19.0",
-    "@showtime-xyz/universal.color-scheme": "^0.0.43"
+    "react-native-screens": "3.20.0",
+    "react-native-mmkv": "2.5.1"
   },
   "react-native": {
     "zlib": "browserify-zlib",

@@ -5,12 +5,13 @@ import React, {
   useState,
   useRef,
 } from "react";
-import { AppState, Platform } from "react-native";
+import { AppState } from "react-native";
 
 import { useSWRConfig } from "swr";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { clearPersistedForms } from "app/components/drop/utils";
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
@@ -21,13 +22,13 @@ import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
 import { axios } from "app/lib/axios";
 import { deleteAppCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
+import { loginPromiseCallbacks } from "app/lib/login-promise";
 import * as logoutStorage from "app/lib/logout";
 import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { useRudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
 import type { AuthenticationStatus, MyInfo } from "app/types";
-import { isProfileIncomplete } from "app/utilities";
 
 import { MY_INFO_ENDPOINT } from "./user-provider";
 
@@ -90,40 +91,28 @@ export function AuthProvider({
       if (validResponse && res) {
         setTokens(accessToken, refreshToken);
         loginStorage.setLogin(Date.now().toString());
+        mutate(MY_INFO_ENDPOINT, res);
         setAuthenticationStatus("AUTHENTICATED");
 
+        router.pop();
+        /*
         const isIncomplete = isProfileIncomplete(res?.data?.profile);
         if (isIncomplete) {
           if (Platform.OS !== "web") {
             router.pop();
           }
-
           setTimeout(() => {
-            router.push(
-              Platform.select({
-                native: "/profile/complete",
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    completeProfileModal: true,
-                  },
-                } as any,
-              }),
-              Platform.select({
-                native: "/profile/complete",
-                web: router.asPath,
-              })
-            );
-          }, 100);
+            router.push("/profile/onboarding");
+          }, 1000);
         }
+        */
         return res;
       }
 
       setAuthenticationStatus("UNAUTHENTICATED");
       throw "Login failed";
     },
-    [setTokens, setAuthenticationStatus, fetchOnAppForeground, router]
+    [setTokens, setAuthenticationStatus, fetchOnAppForeground, mutate, router]
   );
   /**
    * Log out the customer if logged in, and clear auth cache.
@@ -157,6 +146,8 @@ export function AuthProvider({
       setWeb3(undefined);
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
+
+      clearPersistedForms();
 
       router.push("/");
     },
@@ -229,6 +220,13 @@ export function AuthProvider({
       subscription.remove();
     };
   }, [doRefreshToken]);
+
+  useEffect(() => {
+    if (authenticationStatus === "AUTHENTICATED") {
+      loginPromiseCallbacks.resolve?.(true);
+      loginPromiseCallbacks.resolve = null;
+    }
+  }, [authenticationStatus]);
 
   //#endregion
 

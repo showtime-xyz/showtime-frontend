@@ -97,24 +97,33 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         }
       };
 
-      Alert.alert(
-        "Delete Comment",
-        "Are you sure you want to delete this comment?",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Delete",
-            style: "destructive",
-            onPress: _deleteComment,
-          },
-        ]
-      );
+      return new Promise<void>((resolve) => {
+        Alert.alert(
+          "Delete Comment",
+          "Are you sure you want to delete this comment?",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => {
+                resolve();
+              },
+            },
+            {
+              text: "Delete",
+              style: "destructive",
+              onPress: () => {
+                resolve();
+                _deleteComment();
+              },
+            },
+          ]
+        );
+      });
     },
     [Alert, deleteComment]
   );
+
   const handleOnReply = useCallback((comment: CommentType) => {
     inputRef.current?.reply(comment);
   }, []);
@@ -129,21 +138,30 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         unlikeComment={unlikeComment}
         deleteComment={handleOnDeleteComment}
         reply={handleOnReply}
+        creatorId={nft.creator_id}
       />
     ),
-    [likeComment, unlikeComment, handleOnDeleteComment, handleOnReply]
+    [
+      likeComment,
+      unlikeComment,
+      handleOnDeleteComment,
+      handleOnReply,
+      nft.creator_id,
+    ]
   );
 
   const listEmptyComponent = useCallback(
-    () => (
-      <View tw="absolute h-full w-full items-center justify-center">
-        <EmptyPlaceholder
-          text="Be the first to add a comment!"
-          title="💬 No comments yet..."
-        />
-      </View>
-    ),
-    []
+    () =>
+      !isLoading && !error && !dataReversed.length ? (
+        <View tw="absolute h-full w-full flex-1 items-center justify-center">
+          <EmptyPlaceholder
+            text="Be the first to add a comment!"
+            title="💬 No comments yet..."
+            tw="-mt-20"
+          />
+        </View>
+      ) : null,
+    [isLoading, dataReversed.length, error]
   );
   const listFooterComponent = useCallback(
     () => <View style={{ height: Math.max(bottom, 20) }} />,
@@ -154,22 +172,23 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
-        <>
+        <View tw="web:pt-4 flex-1">
           <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            estimatedItemSize={98}
+            estimatedItemSize={70}
             overscan={98}
             keyboardDismissMode="interactive"
-            ListEmptyComponent={listEmptyComponent}
             ListFooterComponent={listFooterComponent}
             automaticallyAdjustKeyboardInsets
             automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
+            contentContainerStyle={styles.contentContainer}
             {...modalListProps}
           />
+          {listEmptyComponent()}
           {isAuthenticated && (
             <PlatformInputAccessoryView
               {...Platform.select({
@@ -187,7 +206,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
               />
             </PlatformInputAccessoryView>
           )}
-        </>
+        </View>
       )}
     </View>
   );
@@ -201,6 +220,6 @@ const styles = StyleSheet.create({
     minHeight: 200,
   },
   contentContainer: {
-    flex: 1,
+    paddingTop: 20,
   },
 });

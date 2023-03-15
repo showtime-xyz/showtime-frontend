@@ -78,6 +78,7 @@ export function AvatarHoverCard({
             >
               {profileData?.profile.cover_url && (
                 <Image
+                  alt="Profile Image"
                   source={{
                     uri: getFullSizeCover(profileData?.profile.cover_url),
                   }}
@@ -137,7 +138,7 @@ export function AvatarHoverCard({
                 ) : (
                   <View tw="mt-4">
                     <Text
-                      tw="font-space-bold text-xl font-extrabold text-gray-900 dark:text-white"
+                      tw="text-xl font-extrabold text-gray-900 dark:text-white"
                       numberOfLines={2}
                     >
                       {profileData?.profile.name}
@@ -166,7 +167,7 @@ export function AvatarHoverCard({
                         <ClampText
                           text={bioWithMentions}
                           maxLines={3}
-                          tw="text-sm text-gray-900 dark:text-white"
+                          tw="max-w-full break-all text-sm text-gray-900 dark:text-white"
                         />
                       </View>
                     ) : null}

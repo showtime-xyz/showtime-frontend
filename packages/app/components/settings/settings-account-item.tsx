@@ -131,7 +131,7 @@ export const AccountSettingItem = ({
           {Boolean(subTitle) && (
             <>
               <View tw="h-2" />
-              <Text tw="ml-2.5 text-xs italic text-gray-900 dark:text-white">
+              <Text tw="text-xs italic text-gray-900 dark:text-white">
                 {subTitle}
               </Text>
             </>

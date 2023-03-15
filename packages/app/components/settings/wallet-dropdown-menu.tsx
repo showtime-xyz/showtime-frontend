@@ -19,7 +19,7 @@ import { Trash } from "design-system/icon";
 type AddressMenuProps = {
   address?: WalletAddressesV2["address"] | undefined | null;
   isCurrent: boolean;
-  onEditNickname: (item: WalletAddressesV2) => void;
+  onEditNickname: (item?: WalletAddressesV2) => void;
   isMagicWallet: boolean;
 };
 
@@ -36,7 +36,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent loop>
         <DropdownMenuItem onSelect={props.onEditNickname} key="nickname">
-          <MenuItemIcon Icon={Edit} />
+          <MenuItemIcon Icon={Edit} ios={{ name: "highlighter" }} />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Edit nickname
           </DropdownMenuItemTitle>
@@ -48,7 +48,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
             }
             key="export_key"
           >
-            <MenuItemIcon Icon={Wallet} />
+            <MenuItemIcon Icon={Wallet} ios={{ name: "person.badge.key" }} />
             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
               Export Private Key
             </DropdownMenuItemTitle>
@@ -62,7 +62,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
           key="your-profile"
           destructive
         >
-          <MenuItemIcon Icon={Trash} />
+          <MenuItemIcon Icon={Trash} ios={{ name: "trash" }} />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
             Delete Wallet
           </DropdownMenuItemTitle>

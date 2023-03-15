@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Modal } from "@showtime-xyz/universal.modal";
@@ -21,10 +23,16 @@ export const EditNicknameModal = ({
   const initialValueSet = useRef(false);
 
   useEffect(() => {
+    AvoidSoftInput.setEnabled(false);
+
     if (editingWallet?.nickname && !initialValueSet.current) {
       setNickname(editingWallet?.nickname);
       initialValueSet.current = true;
     }
+
+    return function unmount() {
+      AvoidSoftInput.setEnabled(true);
+    };
   }, [editingWallet?.nickname]);
 
   return (

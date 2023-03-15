@@ -58,19 +58,13 @@ export const TextBaseCapsize: React.VFC<{}> = () => (
 );
 
 export const TextLG: React.VFC<{}> = () => (
-  <Text tw="font-space-bold text-lg text-black dark:text-white">
-    Hello World!
-  </Text>
+  <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
 );
 
 export const TextLGCapsize: React.VFC<{}> = () => (
   <View tw="bg-black">
-    <Text tw="font-space-bold text-lg text-black dark:text-white">
-      Hello World!
-    </Text>
-    <Text tw="font-space-bold text-lg text-black dark:text-white">
-      Hello World!
-    </Text>
+    <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
+    <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
@@ -85,16 +79,12 @@ export const TextXLCapsize: React.VFC<{}> = () => (
 );
 
 export const Text2XL: React.VFC<{}> = () => (
-  <Text tw="font-space-bold text-2xl text-black dark:text-white">
-    Hello World!
-  </Text>
+  <Text tw="text-2xl text-black dark:text-white">Hello World!</Text>
 );
 
 export const Text2XLCapsize: React.VFC<{}> = () => (
   <View tw="bg-black">
-    <Text tw="font-space-bold text-2xl text-black dark:text-white">
-      Hello World!
-    </Text>
+    <Text tw="text-2xl text-black dark:text-white">Hello World!</Text>
   </View>
 );
 

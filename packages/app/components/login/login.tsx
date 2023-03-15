@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
-import { StyleSheet } from "react-native";
+import { useMemo, useState, useRef, useEffect } from "react";
+import { StyleSheet, TextInput } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -54,6 +54,14 @@ export function LoginComponent({
     []
   );
 
+  const textInputRef = useRef<TextInput>();
+
+  useEffect(() => {
+    if (textInputRef.current && showEmailLogin) {
+      textInputRef.current.focus();
+    }
+  }, [showEmailLogin]);
+
   //#endregion
   return (
     <View tw={tw}>
@@ -72,6 +80,7 @@ export function LoginComponent({
           textContentType="emailAddress"
           signInButtonLabel="Send Email"
           onSubmit={handleSubmitEmail}
+          textInputRef={textInputRef}
         />
         <LoginButton onPress={() => setShowEmailLogin(false)} type="social" />
       </View>

@@ -1,0 +1,41 @@
+appId: io.showtime.development
+---
+- launchApp
+# - tapOn: "Showtime on Nishans-MacBook-Pro.local"
+- assertVisible: "Sign In"
+- tapOn: "Sign In"
+- tapOn: "Connect Wallet"
+- assertNotVisible: "Sign In"
+- tapOn:
+    text: "Complete Profile"
+- tapOn:
+    text: "Pick profile photo"
+    index: 1
+- tapOn:
+    text: "Select Photos…"
+    optional: true
+- tapOn:
+    # Selects photo from picker
+    point: "16%,22%"
+- tapOn:
+    text: "Choose"
+    optional: true
+- tapOn:
+    text: "Keep current Selection"
+    optional: true
+- tapOn: "Your display name"
+- inputRandomPersonName
+- tapOn: "Your username"
+- inputRandomText
+- tapOn:
+    id: "about_me"
+- inputRandomText
+- pressKey: Enter
+- tapOn:
+    id: "website_url"
+- inputText: "www.google.com"
+- pressKey: Enter
+- tapOn:
+    text: "Complete Profile"
+- assertVisible: "Submitting..."
+- assertNotVisible: "Complete Profile"

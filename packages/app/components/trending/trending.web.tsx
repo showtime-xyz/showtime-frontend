@@ -44,7 +44,7 @@ const Header = () => {
   return (
     <View tw="mx-auto w-full max-w-screen-xl">
       <View tw="w-full flex-row justify-center self-center px-4 py-4 md:justify-between md:pb-8">
-        <Text tw="font-space-bold self-center text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
+        <Text tw="self-center text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
           Trending
         </Text>
       </View>
@@ -119,7 +119,7 @@ export const Trending = () => {
       return null;
     }
     return (
-      <EmptyPlaceholder title={"No results found"} tw="h-[50vh]" hideLoginBtn />
+      <EmptyPlaceholder title={"No drops, yet."} tw="h-[50vh]" hideLoginBtn />
     );
   }, [isLoading]);
 

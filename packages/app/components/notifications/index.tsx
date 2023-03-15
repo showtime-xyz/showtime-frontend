@@ -29,7 +29,7 @@ const Header = () => {
 
   return Platform.OS === "web" ? (
     <View tw="w-full flex-row justify-center px-4 py-4">
-      <Text tw="font-space-bold text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
+      <Text tw="text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
         Notifications
       </Text>
     </View>
@@ -49,7 +49,7 @@ export const Notifications = ({
   hideHeader = false,
   web_height = undefined,
 }: NotificationsProps) => {
-  const { data, fetchMore, refresh, isRefreshing, isLoadingMore } =
+  const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
     useNotifications();
   const { refetchMyInfo } = useMyInfo();
   const isDark = useIsDarkMode();
@@ -83,22 +83,6 @@ export const Notifications = ({
     return null;
   }, [isLoadingMore]);
 
-  const Separator = useCallback(
-    () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
-    []
-  );
-
-  const ListEmptyComponent = useCallback(
-    () => (
-      <View tw="items-center justify-center">
-        <Text tw="p-20 text-gray-900 dark:text-gray-100">
-          No new notifications
-        </Text>
-      </View>
-    ),
-    []
-  );
-
   useEffect(() => {
     (async function resetNotificationLastOpenedTime() {
       await axios({
@@ -109,6 +93,16 @@ export const Notifications = ({
       refetchMyInfo();
     })();
   }, [refetchMyInfo]);
+
+  if (!isLoading && data.length === 0) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Text tw="font-medium text-gray-900 dark:text-gray-100">
+          You have no notifications yet
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <>
@@ -157,12 +151,10 @@ export const Notifications = ({
         }
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        ItemSeparatorComponent={Separator}
         onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}
         ListFooterComponent={ListFooterComponent}
-        ListEmptyComponent={ListEmptyComponent}
         ref={listRef}
         estimatedItemSize={56}
       />

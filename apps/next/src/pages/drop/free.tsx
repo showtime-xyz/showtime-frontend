@@ -1,3 +1,3 @@
-import { DropFreeScreen } from "app/screens/drop-free";
+import { Fragment } from "react";
 
-export default DropFreeScreen;
+export default Fragment;

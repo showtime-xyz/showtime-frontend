@@ -14,12 +14,12 @@ type LoginSource = "undetermined" | "magic" | "wallet";
 export type SubmitWalletParams = {
   onOpenConnectModal?: () => void;
 };
-export const useLogin = (onLogin?: () => void) => {
+export const useLogin = () => {
   const loginSource = useRef<LoginSource>("undetermined");
   const { rudder } = useRudder();
 
   //#region hooks
-  const { authenticationStatus, logout } = useAuth();
+  const { authenticationStatus, logout, setAuthenticationStatus } = useAuth();
   const {
     loginWithWallet,
     name: walletName,
@@ -35,23 +35,24 @@ export const useLogin = (onLogin?: () => void) => {
   //#endregion
 
   //#region methods
-  const handleLoginFailure = useCallback(function handleLoginFailure(
-    error: any
-  ) {
-    loginSource.current = "undetermined";
+  const handleLoginFailure = useCallback(
+    function handleLoginFailure(error: any) {
+      loginSource.current = "undetermined";
+      setAuthenticationStatus("UNAUTHENTICATED");
+      if (process.env.NODE_ENV === "development" || __DEV__) {
+        console.error(error);
+      }
 
-    if (process.env.NODE_ENV === "development" || __DEV__) {
-      console.error(error);
-    }
-
-    captureException(error, {
-      tags: {
-        login_signature_flow: "use-login.ts",
-        login_magic_link: "use-login.ts",
-      },
-    });
-  },
-  []);
+      captureException(error, {
+        tags: {
+          login_signature_flow: "use-login.ts",
+          login_magic_link: "use-login.ts",
+        },
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const handleSubmitWallet = useCallback(
     async function handleSubmitWallet(params?: SubmitWalletParams) {
@@ -122,17 +123,6 @@ export const useLogin = (onLogin?: () => void) => {
 
   //#region effects
   useStableBlurEffect(handleBlur);
-  useEffect(() => {
-    const isLoggedInByMagic =
-      loginSource.current === "magic" &&
-      authenticationStatus === "AUTHENTICATED";
-    const isLoggedInByWallet =
-      loginSource.current === "wallet" && walletStatus === "EXPIRED_NONCE";
-
-    if ((isLoggedInByWallet || isLoggedInByMagic) && onLogin) {
-      onLogin();
-    }
-  }, [authenticationStatus, walletStatus, onLogin]);
 
   useEffect(() => {
     if (walletStatus === "ERRORED" && walletError) {

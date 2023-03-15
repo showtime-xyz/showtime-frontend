@@ -4,7 +4,7 @@ import "setimmediate";
 
 import { useCallback } from "react";
 
-import { Inter, Space_Grotesk } from "@next/font/google";
+import { Inter } from "@next/font/google";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
@@ -20,11 +20,12 @@ import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
+import { CheckoutScreen } from "app/screens/checkout";
+import { CheckoutReturnScreen } from "app/screens/checkout-return";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
-import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEventScreen } from "app/screens/drop-event";
@@ -36,11 +37,14 @@ import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
 import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
+import { OnboardingScreen } from "app/screens/onboarding";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { isMobileWeb } from "app/utilities";
+
+import { Toaster } from "design-system/toast";
 
 import "../styles/styles.css";
 
@@ -185,15 +189,18 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropEventScreen />
         <DropMusicScreen />
         <DropFreeScreen />
+        <CheckoutScreen />
+        <CheckoutReturnScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
-        <CompleteProfileScreen />
+        <OnboardingScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
 
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
+        <Toaster />
       </AppProviders>
     </>
   );
@@ -204,15 +211,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  weight: "700",
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
-
 const Container = withColorScheme(
   ({ children }: { children: React.ReactChild }) => {
-    const fonts = [inter.variable, spaceGrotesk.variable].join(" ");
+    const fonts = [inter.variable].join(" ");
 
     const onResize = useCallback(() => {
       if (isMobileWeb()) {

@@ -33,7 +33,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
   return (
     <View tw={["items-center justify-center pt-4", tw]}>
       <Text
-        tw={`text-lg font-extrabold text-gray-900 dark:text-gray-100 ${titleTw}`}
+        tw={`text-lg font-extrabold leading-6 text-gray-900 dark:text-gray-100 ${titleTw}`}
       >
         {title}
       </Text>
@@ -55,7 +55,7 @@ const EmptyPlaceholder: React.FC<EmptyPlaceholderProps> = ({
             size={isMdWidth ? "regular" : "small"}
             labelTW="font-semibold"
           >
-            Sign&nbsp;In
+            Sign In
           </Button>
         </>
       )}

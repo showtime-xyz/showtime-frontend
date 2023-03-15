@@ -3,7 +3,7 @@ import { useCallback, useMemo } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 import { axios } from "app/lib/axios";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import { useLogInPromise } from "app/lib/login-promise";
 import { MyInfo, NFT, Profile } from "app/types";
 
 import { useAuth } from "./auth/use-auth";
@@ -290,24 +290,21 @@ export const useComments = ({ nftId }: { nftId: number }) => {
 
 export const useMyInfo = () => {
   const { accessToken } = useAuth();
-  const queryKey = "/v2/myinfo";
-  const { mutate } = useSWRConfig();
-  const navigateToLogin = useNavigateToLogin();
-  const { data, error } = useSWR<MyInfo>(
-    accessToken ? queryKey : null,
-    fetcher
+  const { loginPromise } = useLogInPromise();
+  const { data, error, mutate } = useSWR<MyInfo>(
+    accessToken ? "/v2/myinfo" : null,
+    fetcher,
+    {
+      revalidateOnMount: false,
+    }
   );
 
   const follow = useCallback(
     async (profileId: number) => {
-      if (!accessToken) {
-        navigateToLogin();
-        return;
-      }
+      await loginPromise();
 
       if (data) {
         mutate(
-          queryKey,
           {
             data: {
               ...data.data,
@@ -316,28 +313,27 @@ export const useMyInfo = () => {
           },
           false
         );
-
-        try {
-          await axios({
-            url: `/v2/follow/${profileId}`,
-            method: "POST",
-            data: {},
-          });
-        } catch (err) {
-          console.error(err);
-        }
-
-        mutate(queryKey);
       }
+
+      try {
+        await axios({
+          url: `/v2/follow/${profileId}`,
+          method: "POST",
+          data: {},
+        });
+      } catch (err) {
+        console.error(err);
+      }
+
+      mutate();
     },
-    [accessToken, data, mutate, navigateToLogin]
+    [data, mutate, loginPromise]
   );
 
   const unfollow = useCallback(
     async (profileId?: number) => {
       if (data) {
         mutate(
-          queryKey,
           {
             data: {
               ...data.data,
@@ -359,7 +355,7 @@ export const useMyInfo = () => {
           console.error(err);
         }
 
-        mutate(queryKey);
+        mutate();
       }
     },
     [data, mutate]
@@ -376,41 +372,36 @@ export const useMyInfo = () => {
 
   const like = useCallback(
     async (nftId: number) => {
-      if (!accessToken) {
-        navigateToLogin();
-        // TODO: perform the action post login
-        return false;
-      }
+      await loginPromise();
 
       if (data) {
-        try {
-          mutate(
-            queryKey,
-            {
-              data: {
-                ...data.data,
-                likes_nft: [...data.data.likes_nft, nftId],
-              },
+        mutate(
+          {
+            data: {
+              ...data.data,
+              likes_nft: [...data.data.likes_nft, nftId],
             },
-            false
-          );
+          },
+          false
+        );
+      }
 
-          await axios({
-            url: `/v3/like/${nftId}`,
-            method: "POST",
-            data: {},
-          });
+      try {
+        await axios({
+          url: `/v3/like/${nftId}`,
+          method: "POST",
+          data: {},
+        });
 
-          mutate(queryKey);
+        mutate();
 
-          return true;
-        } catch (error) {
-          mutate(queryKey);
-          return false;
-        }
+        return true;
+      } catch (error) {
+        mutate();
+        return false;
       }
     },
-    [data, accessToken, mutate, navigateToLogin]
+    [data, mutate, loginPromise]
   );
 
   const unlike = useCallback(
@@ -418,7 +409,6 @@ export const useMyInfo = () => {
       if (data) {
         try {
           mutate(
-            queryKey,
             {
               data: {
                 ...data.data,
@@ -434,10 +424,10 @@ export const useMyInfo = () => {
             data: {},
           });
 
-          mutate(queryKey);
+          mutate();
           return true;
         } catch (error) {
-          mutate(queryKey);
+          mutate();
           return false;
         }
       }
@@ -453,7 +443,7 @@ export const useMyInfo = () => {
   );
 
   const refetchMyInfo = useCallback(() => {
-    mutate(queryKey);
+    mutate();
   }, [mutate]);
 
   return {
@@ -467,5 +457,6 @@ export const useMyInfo = () => {
     unlike,
     isLiked,
     refetchMyInfo,
+    mutate,
   };
 };

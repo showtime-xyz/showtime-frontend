@@ -1,12 +1,15 @@
-import { useMemo } from "react";
-import { Platform } from "react-native";
+import { useMemo, memo } from "react";
+import { Platform, ViewStyle } from "react-native";
 
 import { Video } from "expo-av";
 
 import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { styled } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { contentFitToresizeMode } from "app/utilities";
+
+import { MuteButton } from "../mute-button";
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
@@ -19,11 +22,14 @@ type PreviewProps = {
   resizeMode?: ResizeMode;
   width: number;
   height: number;
+  isMuted?: boolean;
+  showMuteButton?: boolean;
+  isLooping?: boolean;
 };
 
 const StyledVideo = styled(Video);
-
-export const Preview = ({
+const videoStyle: ViewStyle = { position: "relative" };
+export const Preview = memo(function Preview({
   tw = "",
   style,
   type,
@@ -31,7 +37,10 @@ export const Preview = ({
   resizeMode = "cover",
   width,
   height,
-}: PreviewProps) => {
+  isMuted = true,
+  isLooping = false,
+  showMuteButton = false,
+}: PreviewProps) {
   const uri = getLocalFileURI(file);
 
   const fileType = useMemo(() => {
@@ -50,13 +59,11 @@ export const Preview = ({
       return file?.type.includes("video") ? "video" : "image";
     }
   }, [file, type]);
-
   if (uri) {
     if (fileType === "image") {
       return (
         <Image
           tw={tw}
-          style={style}
           resizeMode={resizeMode}
           source={{
             uri: uri as string,
@@ -66,6 +73,7 @@ export const Preview = ({
           onLoad={() => {
             revokeObjectURL(uri);
           }}
+          style={style}
           alt="Preview Image"
         />
       );
@@ -73,23 +81,35 @@ export const Preview = ({
 
     if (fileType === "video") {
       return (
-        <StyledVideo
-          tw={tw}
-          style={[{ width, height }, style]}
-          resizeMode={contentFitToresizeMode(resizeMode)}
-          source={{ uri: uri as string }}
-          isMuted
-          shouldPlay
-          onLoad={() => {
-            revokeObjectURL(uri);
-          }}
-        />
+        <>
+          <StyledVideo
+            tw={tw}
+            style={[
+              { width, height, justifyContent: "center", alignItems: "center" },
+              style,
+            ]}
+            resizeMode={contentFitToresizeMode(resizeMode)}
+            source={{ uri: uri as string }}
+            isMuted={isMuted}
+            shouldPlay
+            isLooping={isLooping}
+            videoStyle={videoStyle}
+            onLoad={() => {
+              revokeObjectURL(uri);
+            }}
+          />
+          {showMuteButton && (
+            <View tw="z-9 absolute bottom-2.5 right-2.5">
+              <MuteButton />
+            </View>
+          )}
+        </>
       );
     }
   }
 
   return null;
-};
+});
 
 export const getLocalFileURI = (file?: string | File) => {
   if (!file) return null;

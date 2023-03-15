@@ -406,13 +406,29 @@ export async function delay(ms: number) {
   return await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const getCreatorUsernameFromNFT = (nft?: NFT) => {
+export const getCreatorUsernameFromNFT = (nft?: {
+  creator_username?: string;
+  creator_name?: string;
+  creator_address?: string;
+}) => {
   if (!nft) return "";
-
   return nft.creator_username
     ? `@${nft.creator_username}`
     : nft.creator_name
     ? nft.creator_name
+    : formatAddressShort(nft.creator_address);
+};
+
+export const getCreatorNameFromNFT = (nft?: {
+  creator_username?: string;
+  creator_name?: string;
+  creator_address?: string;
+}) => {
+  if (!nft) return "";
+  return nft.creator_name
+    ? nft.creator_name
+    : nft.creator_username
+    ? nft.creator_name?.toLocaleUpperCase()
     : formatAddressShort(nft.creator_address);
 };
 
@@ -608,11 +624,16 @@ export const OAUTH_REDIRECT_URI = Platform.select({
 });
 
 export const isProfileIncomplete = (profile?: Profile) => {
+  const hasConnectedSocialAccount =
+    profile?.social_login_connections &&
+    Object.keys(profile?.social_login_connections).some(
+      // @ts-ignore
+      (k) => profile?.social_login_connections[k]
+    );
+
   return profile
     ? !profile.username ||
-        userHasIncompleteExternalLinks(profile) ||
-        !profile.bio ||
-        !profile.img_url
+        (!hasConnectedSocialAccount && !profile.captcha_completed_at)
     : undefined;
 };
 
@@ -640,8 +661,17 @@ export const getFormatDistanceStrictToWeek = (time?: string) => {
   const currentDate = new Date();
   const givenDate = new Date(time);
   const diffTime = currentDate.getTime() - givenDate.getTime();
+  const diffMinutes = diffTime / (1000 * 60);
   const diffDays = diffTime / (1000 * 60 * 60 * 24);
   const diffHours = diffTime / (1000 * 60 * 60);
+
+  if (diffMinutes < 1) {
+    return `now`;
+  }
+
+  if (diffMinutes >= 1 && diffMinutes < 60) {
+    return `${Math.round(diffMinutes)}m`;
+  }
 
   if (diffDays < 1) {
     return `${Math.round(diffHours)}h`;
@@ -659,4 +689,45 @@ export const contentFitToresizeMode = (resizeMode: ImageResizeMode) => {
     default:
       return ResizeMode.STRETCH;
   }
+};
+
+export const cleanUserTextInput = (text: string) => {
+  return (
+    text
+      // normalize line breaks
+      .replace(/\r\n|\r|\n/g, "\n")
+      // remove extra line breaks (more than 1)
+      .replace(/(\n){3,}/g, "\n")
+      // remove leading and trailing line breaks and whitespace
+      .trim()
+  );
+};
+
+export const limitLineBreaks = (
+  text: string,
+  maxLineBreaks: number = 5,
+  separator: string = " "
+) => {
+  return text
+    .split("\n")
+    .slice(0, maxLineBreaks)
+    .concat(text.split("\n").slice(maxLineBreaks).join(separator).trim())
+    .join("\n")
+    .trim();
+};
+
+export const getWebImageSize = (file: File) => {
+  const img = new Image();
+  img.src = window.URL.createObjectURL(file);
+  const promise = new Promise<
+    { width: number; height: number } | null | undefined
+  >((resolve, reject) => {
+    img.onload = () => {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+      resolve({ width, height });
+    };
+    img.onerror = reject;
+  });
+  return promise;
 };

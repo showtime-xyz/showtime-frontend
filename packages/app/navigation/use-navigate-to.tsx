@@ -28,6 +28,16 @@ export const useNavigateToLogin = () => {
   return navigateToLogin;
 };
 
+export const useNavigateToOnboarding = () => {
+  const router = useRouter();
+
+  const navigateToOnboarding = () => {
+    router.push("/profile/onboarding");
+  };
+
+  return navigateToOnboarding;
+};
+
 export const useNavigateToListing = () => {
   const router = useRouter();
 
@@ -37,6 +47,7 @@ export const useNavigateToListing = () => {
     router.push(
       Platform.select({
         native: as,
+        // @ts-ignore
         web: {
           pathname: router.pathname,
           web: {
@@ -71,6 +82,7 @@ export const useNavigateToBuy = () => {
     router.push(
       Platform.select({
         native: as,
+        // @ts-ignore
         web: {
           pathname: router.pathname,
           query: {

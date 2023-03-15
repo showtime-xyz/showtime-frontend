@@ -1,30 +1,67 @@
+import { useOnboardingPromise } from "app/components/onboarding";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
+import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
+import { useLogInPromise } from "app/lib/login-promise";
 
-import { IEdition, NFT } from "../types";
+import { toast } from "design-system/toast";
+
+import { IEdition } from "../types";
 import { useConnectSpotify } from "./use-connect-spotify";
+import { useSaveSpotifyToken } from "./use-save-spotify-token";
 import { useUser } from "./use-user";
 
 export const useSpotifyGatedClaim = (edition: IEdition) => {
   const user = useUser();
   const { claimNFT } = useClaimNFT(edition);
   const { connectSpotify } = useConnectSpotify();
+  const { loginPromise } = useLogInPromise();
+  const { onboardingPromise } = useOnboardingPromise();
+  const { saveSpotifyToken } = useSaveSpotifyToken();
 
-  const claimSpotifyGatedDrop = async (nft?: NFT) => {
-    if (nft) {
-      // if (false) {
-      // TODO: remove this after testing
-      if (user?.user?.data.profile.has_spotify_token) {
-        try {
-          const res = claimNFT({});
-
-          return res;
-        } catch (error: any) {
-          // TODO: handle error. Could be unauthorized, so we need to redirect to spotify auth flow
+  const claimSpotifyGatedDrop = async (closeModal?: () => void) => {
+    if (user.isAuthenticated) {
+      try {
+        let spotifyConnected = user?.user?.data.profile.has_spotify_token;
+        if (!spotifyConnected) {
+          spotifyConnected = !!(await connectSpotify());
         }
-      } else {
-        return connectSpotify(
-          `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}?showClaim=true`
-        );
+        if (spotifyConnected) {
+          const res = claimNFT({ closeModal });
+          return res;
+        }
+      } catch (error: any) {
+        Logger.error("claimSpotifyGatedDrop failed", error);
+      }
+    } else {
+      try {
+        let spotifyToken = await connectSpotify();
+
+        if (spotifyToken) {
+          await axios({
+            url: "/v1/spotify/gate",
+            data: {
+              code: spotifyToken.code,
+              redirect_uri: spotifyToken.redirectUri,
+              edition_address: edition.contract_address,
+            },
+            method: "POST",
+          });
+
+          toast.success(
+            "Song will be saved in your Spotify library. Please log in to collect your drop!"
+          );
+          await loginPromise();
+          await onboardingPromise();
+
+          await saveSpotifyToken({
+            code: spotifyToken.code,
+            redirectUri: spotifyToken.redirectUri,
+          });
+          await claimNFT({ closeModal });
+        }
+      } catch (error: any) {
+        Logger.error("claimSpotifyGatedDrop failed", error);
       }
     }
   };

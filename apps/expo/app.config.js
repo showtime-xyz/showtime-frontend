@@ -102,6 +102,10 @@ export default {
     barStyle: "dark-content",
     backgroundColor: "#FFFFFF",
   },
+  androidStatusBar: {
+    backgroundColor: "#00000000",
+    barStyle: "light-content",
+  },
   assetBundlePatterns: ["**/*"],
   orientation: "portrait",
   updates: {
@@ -156,6 +160,7 @@ export default {
     "./plugins/react-native-cronet.js",
     "./plugins/with-animated-webp-support.js",
     "./plugins/with-spotify-sdk.js",
+    "./plugins/with-android-splash-screen.js",
     [
       withInfoPlist,
       (config) => {
@@ -185,8 +190,6 @@ export default {
         "./assets/fonts/Inter-Medium.otf",
         "./assets/fonts/Inter-Regular.otf",
         "./assets/fonts/Inter-SemiBold.otf",
-        "./assets/fonts/SpaceGrotesk-Bold.otf",
-        "./assets/fonts/SpaceGrotesk-Regular.otf",
       ],
     ],
     [

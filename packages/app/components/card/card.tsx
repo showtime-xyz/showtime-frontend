@@ -4,8 +4,10 @@ import {
   StyleProp,
   useWindowDimensions,
   ViewStyle,
+  StyleSheet,
 } from "react-native";
 
+import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
 import {
@@ -66,6 +68,8 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
+export const GAP = StyleSheet.hairlineWidth;
+
 function Card(props: Props) {
   const {
     nft,
@@ -83,13 +87,13 @@ function Card(props: Props) {
   );
 
   const cardMaxWidth = useMemo(() => {
+    const availableSpace = contentWidth - (numColumns - 1) * GAP;
+    const itemSize = availableSpace / numColumns;
     switch (numColumns) {
-      case 3:
-        return contentWidth / 3;
-      case 2:
-        return contentWidth / 2;
-      default:
+      case 1:
         return 596;
+      default:
+        return Platform.OS === "web" ? contentWidth / numColumns : itemSize;
     }
   }, [numColumns, contentWidth]);
 
@@ -103,7 +107,7 @@ function Card(props: Props) {
       <RouteComponent
         href={href}
         viewProps={{ style: [{ flex: 1 }, style] }}
-        style={style as any}
+        style={[style as any, { marginBottom: GAP }]}
         onPress={handleOnPress}
       >
         <Media
@@ -187,7 +191,7 @@ const CardLargeScreen = ({
                 width: sizeStyle?.width ?? cardMaxWidth,
                 height: sizeStyle?.height ?? cardMaxWidth,
               }}
-              resizeMode="cover"
+              resizeMode={ResizeMode.COVER}
             />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
               <View tw="z-9 absolute bottom-5 right-5">

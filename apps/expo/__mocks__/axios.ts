@@ -18,6 +18,11 @@ const mockUserProfile: Profile = {
       minting_enabled: false,
       email: "abc@xyz.com",
       is_email: 1,
+      is_twitter: 0,
+      is_google: 0,
+      is_apple: 0,
+      phone_number: "",
+      is_phone: 0,
     },
   ],
   wallet_addresses_excluding_email_v2: [
@@ -33,8 +38,27 @@ const mockUserProfile: Profile = {
   default_created_sort_id: 1,
   default_owned_sort_id: 1,
   notifications_last_opened: new Date(),
-  has_onboarded: true,
   links: [],
+  captcha_completed_at: null,
+  social_login_connections: {
+    email: true,
+    twitter: false,
+    google: false,
+    apple: false,
+    phone: false,
+    spotify: false,
+    instagram: false,
+  },
+  social_login_handles: {
+    twitter: null,
+    instagram: null,
+  },
+  // create mock data for the following fields
+  primary_wallet: undefined,
+  has_verified_phone_number: false,
+  has_spotify_token: false,
+  spotify_artist_id: undefined,
+  has_social_login: false,
 };
 
 module.exports = jest.fn(async (params: AxiosRequestConfig) => {

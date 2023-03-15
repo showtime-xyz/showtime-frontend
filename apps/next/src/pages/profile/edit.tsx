@@ -1,3 +1,3 @@
-import { EditProfileScreen } from "app/screens/edit-profile";
+import { Fragment } from "react";
 
-export default EditProfileScreen;
+export default Fragment;

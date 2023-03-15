@@ -69,6 +69,7 @@ const nextConfig = {
       "expo-linking",
       "expo-localization",
       "expo-location",
+      "expo-mail-composer",
       "expo-media-library",
       "expo-modules-core",
       "expo-navigation-bar",
@@ -90,12 +91,10 @@ const nextConfig = {
       "react-native-mmkv",
       "@react-native-community/slider",
       "react-native-tab-view-next",
-      "@showtime-xyz/universal.typography",
       "@showtime-xyz/universal.tailwind",
       "@showtime-xyz/universal.view",
       "@showtime-xyz/universal.text",
       "@showtime-xyz/universal.accordion",
-      "@showtime-xyz/universal.activity-indicator",
       "@showtime-xyz/universal.alert",
       "@showtime-xyz/universal.avatar",
       "@showtime-xyz/universal.bottom-sheet",
@@ -109,7 +108,6 @@ const nextConfig = {
       "@showtime-xyz/universal.color-scheme",
       "@showtime-xyz/universal.data-pill",
       "@showtime-xyz/universal.divider",
-      "@showtime-xyz/universal.dropdown-menu",
       "@showtime-xyz/universal.fieldset",
       "@showtime-xyz/universal.haptics",
       "@showtime-xyz/universal.hooks",
@@ -137,11 +135,12 @@ const nextConfig = {
       "@showtime-xyz/universal.switch",
       "@showtime-xyz/universal.text-input",
       "@showtime-xyz/universal.tab-view",
-      "@showtime-xyz/universal.toast",
       "@showtime-xyz/universal.tooltip",
       "@showtime-xyz/universal.utils",
       "@showtime-xyz/universal.verification-badge",
       "universal-tooltip",
+      "showtime-tab-view",
+      "react-native-image-colors",
     ],
   },
   webpack: (config, options) => {
@@ -181,6 +180,15 @@ const nextConfig = {
         __DEV__: JSON.stringify(process.env.NODE_ENV !== "production"),
       })
     );
+
+    // this little neat function will allow us to use `bit watch` in dev and change the code from design system without
+    // restarting next or clearing the next cache
+    config.snapshot = {
+      ...(config.snapshot ?? {}),
+      // Add all node_modules but @showtime-xyz module to managedPaths
+      // Allows for hot refresh of changes to @showtime-xyz module
+      managedPaths: [/^(.+?[\\/]node_modules[\\/])(?!@showtime-xyz)/],
+    };
 
     return config;
   },
@@ -240,6 +248,11 @@ const nextConfig = {
         source: "/google-play",
         destination:
           "https://play.google.com/store/apps/details?id=io.showtime",
+        permanent: true,
+      },
+      {
+        source: "/apply",
+        destination: "https://showtimexyz.typeform.com/to/pXQVhkZo",
         permanent: true,
       },
     ];

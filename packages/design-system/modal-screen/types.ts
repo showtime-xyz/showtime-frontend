@@ -5,4 +5,5 @@ export interface ModalScreenOptions extends ModalProps {
   matchingPathname: string;
   matchingQueryParam: string;
   snapPoints?: Array<number | string>;
+  backPressHandlerEnabled?: boolean;
 }

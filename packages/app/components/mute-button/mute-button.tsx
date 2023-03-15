@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Platform, Pressable, StyleSheet } from "react-native";
 
 import { Muted, Unmuted } from "@showtime-xyz/universal.icon";
@@ -7,7 +8,12 @@ import { useMuted } from "app/providers/mute-provider";
 import { colors } from "design-system/tailwind";
 
 const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
-export const MuteButton = () => {
+type MuteButtonProps = {
+  onPress?: (state: boolean) => void;
+};
+export const MuteButton = memo(function MuteButton({
+  onPress,
+}: MuteButtonProps) {
   const [muted, setMuted] = useMuted();
 
   return (
@@ -18,6 +24,7 @@ export const MuteButton = () => {
         if (Platform.OS === "web") {
           e.preventDefault();
         }
+        onPress?.(!muted);
         setMuted(!muted);
       }}
     >
@@ -28,7 +35,7 @@ export const MuteButton = () => {
       )}
     </Pressable>
   );
-};
+});
 
 const muteButtonStyle = StyleSheet.create({
   style: {

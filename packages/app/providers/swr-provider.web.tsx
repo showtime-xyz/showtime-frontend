@@ -1,12 +1,13 @@
+import type { AxiosError } from "axios";
 import type { Revalidator, RevalidatorOptions } from "swr";
 import { SWRConfig } from "swr";
 import type { SWRConfiguration } from "swr";
 
-import { useToast } from "@showtime-xyz/universal.toast";
-
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { isServer } from "app/lib/is-server";
 import { isUndefined } from "app/lib/swr/helper";
+
+import { toast } from "design-system/toast";
 
 import { setupSWRCache } from "./swr-cache";
 
@@ -26,7 +27,6 @@ export const SWRProvider = ({
 }: {
   children: React.ReactNode;
 }): JSX.Element => {
-  const toast = useToast();
   const { refreshTokens } = useAccessTokenManager();
   return (
     <SWRConfig
@@ -35,23 +35,40 @@ export const SWRProvider = ({
         onError: (err) => {
           if (__DEV__ && err?.message && err?.message !== "canceled") {
             console.error(err);
-            toast?.show({
-              message: err.message,
-              hideAfter: 4000,
-            });
+            toast.error(err.message);
           }
         },
         onErrorRetry: async (
-          error: {
-            status: number;
-          },
+          error: AxiosError,
           key: string,
           config: Readonly<SWRConfiguration>,
           revalidate: Revalidator,
           opts: Required<RevalidatorOptions>
         ) => {
+          // bail out immediately if the error is unrecoverable
+          if (
+            error.response?.status === 400 ||
+            error.response?.status === 403 ||
+            error.response?.status === 404
+          ) {
+            return;
+          }
+
           const maxRetryCount = config.errorRetryCount;
           const currentRetryCount = opts.retryCount;
+
+          if (error.response?.status === 401) {
+            // we only want to refresh tokens once and then bail out if it fails on 401
+            // this is to prevent infinite loops. Actually, we should logout the user but AuthProvider is not available here
+            if (currentRetryCount > 1) {
+              return;
+            }
+            try {
+              await refreshTokens();
+            } catch (err) {
+              return;
+            }
+          }
 
           // Exponential backoff
           const timeout =
@@ -65,14 +82,6 @@ export const SWRProvider = ({
             currentRetryCount > maxRetryCount
           ) {
             return;
-          }
-
-          if (error.status === 404) {
-            return;
-          }
-
-          if (error.status === 401) {
-            await refreshTokens();
           }
 
           setTimeout(revalidate, timeout, opts);

@@ -22,6 +22,7 @@ interface LoginInputFieldProps
   leftElement?: React.ReactNode;
   textInputRef?: any;
   onSubmit: (value: string) => void;
+  autoFocus?: boolean;
 }
 
 const INPUT_NAME = "data";
@@ -36,6 +37,7 @@ export function LoginInputField({
   leftElement,
   textInputRef,
   onSubmit,
+  autoFocus,
 }: LoginInputFieldProps) {
   //#region hooks
   const {
@@ -68,6 +70,7 @@ export function LoginInputField({
           <Fieldset
             label={label}
             onBlur={onBlur}
+            autoFocus={autoFocus}
             onChangeText={onChange}
             placeholder={placeholder}
             //@ts-ignore

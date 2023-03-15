@@ -9,7 +9,7 @@ import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableLayoutAnimations } from "react-native-reanimated";
-import { enableScreens } from "react-native-screens";
+import { enableFreeze, enableScreens } from "react-native-screens";
 
 import { growthbook } from "app/lib/growthbook";
 import { Logger } from "app/lib/logger";
@@ -19,6 +19,7 @@ import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AppProviders } from "app/providers/app-providers";
 
 enableScreens(true);
+enableFreeze(true);
 enableLayoutAnimations(false);
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -26,10 +27,10 @@ Sentry.init({
   enableInExpoDevelopment: false,
 });
 
-const scheme = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/wsegue`;
+const coinbaseRedirectScheme = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/wsegue`;
 
 configureWalletMobileSDK({
-  callbackURL: new URL(scheme),
+  callbackURL: new URL(coinbaseRedirectScheme),
   hostURL: new URL("https://go.cb-w.com/wsegue"),
   hostPackageName: "org.toshi",
 });

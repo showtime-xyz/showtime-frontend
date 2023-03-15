@@ -1,10 +1,8 @@
 import { Platform, Share as RNShare, ShareAction } from "react-native";
 
-import { useToast } from "@showtime-xyz/universal.toast";
+import { toast } from "design-system/toast";
 
 export const useShare = () => {
-  const toast = useToast();
-
   const share = async ({ url }: { url: string }): Promise<ShareAction> => {
     if (Platform.OS === "web") {
       if (navigator.canShare?.({ url })) {
@@ -13,8 +11,7 @@ export const useShare = () => {
         });
       } else {
         navigator.clipboard.writeText(url);
-
-        toast?.show({ message: "Copied!", hideAfter: 5000 });
+        toast.success("Copied!");
       }
       return {
         action: "sharedAction",

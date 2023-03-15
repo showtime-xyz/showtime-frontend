@@ -1,12 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { SetFieldValue } from "react-hook-form";
+import { SetFieldValue, UseFormWatch } from "react-hook-form";
 import { MMKV } from "react-native-mmkv";
+
+import { FileStorage } from "app/lib/file-storage/file-storage";
 
 const store = new MMKV();
 
 type FormPersistConfig = {
-  watch: (names?: string | string[]) => any;
+  watch: UseFormWatch<any>;
   setValue: SetFieldValue<any>;
   exclude?: string[];
   onDataRestored?: (data: any) => void;
@@ -15,6 +17,7 @@ type FormPersistConfig = {
   touch?: boolean;
   onTimeout?: () => void;
   timeout?: number;
+  defaultValues?: { [key: string]: any };
 };
 
 export const usePersistForm = (
@@ -22,68 +25,153 @@ export const usePersistForm = (
   {
     watch,
     setValue,
-    exclude = [],
+    exclude,
     onDataRestored,
+    defaultValues,
     validate = false,
     dirty = false,
     touch = false,
     onTimeout,
-    timeout,
+    timeout = 86400000,
   }: FormPersistConfig
 ) => {
-  const watchedValues = watch();
-
-  const clearStorage = () => store.delete(name);
+  const fileStorage = useMemo(() => new FileStorage(name), [name]);
+  let persistDebounceTimeout = useRef<any>(null);
+  const [restoringFiles, setRestoringFiles] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const clearStorage = () => {
+    store.delete(name);
+    fileStorage.clearStorage();
+  };
 
   useEffect(() => {
-    const str = store.getString(name);
-
-    if (str) {
-      const { _timestamp = null, ...values } = JSON.parse(str);
+    async function restoreForm() {
       const dataRestored: { [key: string]: any } = {};
-      const currTimestamp = Date.now();
 
-      if (timeout && currTimestamp - _timestamp > timeout) {
-        onTimeout && onTimeout();
-        clearStorage();
-        return;
-      }
-
-      Object.keys(values).forEach((key) => {
-        const shouldSet = !exclude.includes(key);
-        if (shouldSet) {
-          dataRestored[key] = values[key];
-          setValue(key, values[key], {
-            shouldValidate: validate,
-            shouldDirty: dirty,
-            shouldTouch: touch,
-          });
+      if (defaultValues) {
+        for (let key in defaultValues) {
+          const shouldSet = !exclude?.includes(key);
+          if (shouldSet) {
+            const value = defaultValues?.[key];
+            dataRestored[key] = value;
+            setValue(key, value, {
+              shouldValidate: validate,
+              shouldDirty: dirty,
+              shouldTouch: touch,
+            });
+          }
         }
-      });
-
-      if (onDataRestored) {
-        onDataRestored(dataRestored);
       }
+
+      const str = store.getString(name);
+
+      if (str) {
+        const { _timestamp = null, ...values } = JSON.parse(str);
+        const currTimestamp = Date.now();
+
+        if (timeout && currTimestamp - _timestamp > timeout) {
+          onTimeout?.();
+          clearStorage();
+          return;
+        }
+
+        for (let key in values) {
+          const shouldSet = !exclude?.includes(key);
+          if (shouldSet) {
+            if (values[key] === "instanceof File") {
+              setRestoringFiles((prev) => ({ ...prev, [key]: true }));
+              fileStorage
+                .getFile(key)
+                .then((file) => {
+                  setRestoringFiles((prev) => {
+                    let newPrev = { ...prev };
+                    delete newPrev[key];
+                    return newPrev;
+                  });
+                  setValue(key, file);
+                  dataRestored[key] = file;
+                })
+                .catch(() => {
+                  setRestoringFiles((prev) => {
+                    let newPrev = { ...prev };
+                    delete newPrev[key];
+                    return newPrev;
+                  });
+                });
+
+              // IndexedDB can halt sometimes if it's writing file in more than one tab, so we add this timeout as a fail safe
+              setTimeout(() => {
+                setRestoringFiles((prev) => {
+                  let newPrev = { ...prev };
+                  if (newPrev[key]) {
+                    delete newPrev[key];
+                  }
+                  return newPrev;
+                });
+              }, 2000);
+            } else {
+              const value = values[key] ?? defaultValues?.[key];
+              dataRestored[key] = value;
+              setValue(key, value, {
+                shouldValidate: validate,
+                shouldDirty: dirty,
+                shouldTouch: touch,
+              });
+            }
+          }
+        }
+      }
+
+      onDataRestored?.(dataRestored);
     }
+    restoreForm();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, onDataRestored, setValue]);
 
   useEffect(() => {
-    const values = exclude.length
-      ? Object.entries(watchedValues)
-          .filter(([key]) => !exclude.includes(key))
-          .reduce((obj, [key, val]) => Object.assign(obj, { [key]: val }), {})
-      : Object.assign({}, watchedValues);
-
-    if (Object.entries(values).length) {
-      if (timeout !== undefined) {
-        values._timestamp = Date.now();
+    function persistFormValues(watchedValues: any) {
+      let stringValues: any = {};
+      for (let key in watchedValues) {
+        if (!exclude?.includes(key)) {
+          if (watchedValues[key] instanceof File) {
+            fileStorage.saveFile(watchedValues[key], key);
+            stringValues[key] = "instanceof File";
+          } else {
+            stringValues[key] = watchedValues[key];
+          }
+        }
       }
-      store.set(name, JSON.stringify(values));
+
+      if (Object.keys(stringValues).length) {
+        if (timeout !== undefined) {
+          stringValues._timestamp = Date.now();
+        }
+        store.set(name, JSON.stringify(stringValues));
+      }
     }
-  }, [watchedValues, timeout, exclude, name]);
+
+    const subscription = watch((watchedValues) => {
+      if (persistDebounceTimeout.current) {
+        clearTimeout(persistDebounceTimeout.current);
+      }
+      persistDebounceTimeout.current = setTimeout(() => {
+        if (Object.keys(restoringFiles).length === 0)
+          persistFormValues(watchedValues);
+      }, 300);
+    });
+
+    return () => {
+      if (persistDebounceTimeout.current) {
+        clearTimeout(persistDebounceTimeout.current);
+      }
+      subscription.unsubscribe();
+    };
+  }, [watch, restoringFiles, timeout, exclude, fileStorage, name]);
 
   return {
     clearStorage,
+    restoringFiles,
   };
 };

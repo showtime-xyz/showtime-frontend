@@ -190,7 +190,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
                   tw={[
-                    "rounded-full bg-gray-100 bg-white p-3 dark:bg-gray-900",
+                    "rounded-full bg-white p-3 dark:bg-gray-900",
                     showFullScreen ? "hidden" : "flex",
                   ]}
                   iconColor={isDark ? colors.white : colors.gray[900]}
@@ -261,7 +261,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </View>
           )}
           {nft?.mime_type?.includes("video") ? (
-            <View tw="absolute bottom-4 right-4">
+            <View tw="absolute bottom-6 right-4">
               <Button
                 variant="text"
                 size="regular"
@@ -298,7 +298,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </View>
             <LikedBy nft={nft} tw="mt-4" />
             <View tw="my-4 mr-4 flex-row justify-between">
-              <Text tw="font-space-bold text-lg text-black dark:text-white md:text-2xl">
+              <Text tw="text-lg text-black dark:text-white md:text-2xl">
                 {nft.token_name}
               </Text>
             </View>

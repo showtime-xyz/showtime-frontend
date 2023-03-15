@@ -1,3 +1,3 @@
-import { DropMusicScreen } from "app/screens/drop-music";
+import { Fragment } from "react";
 
-export default DropMusicScreen;
+export default Fragment;

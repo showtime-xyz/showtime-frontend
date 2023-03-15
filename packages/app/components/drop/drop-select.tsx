@@ -2,7 +2,6 @@ import React from "react";
 import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Globe, Lock } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Gift } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -10,40 +9,51 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { useUser } from "app/hooks/use-user";
 
 import { useIsDarkMode } from "design-system/hooks";
 
 export const DropSelect = () => {
   const router = useRouter();
-  const user = useUser();
+  const user = useUser({
+    redirectTo: "/login",
+    redirectIfProfileIncomplete: true,
+  });
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
 
   if (user.isIncompletedProfile) {
-    return <CompleteProfileModalContent />;
+    return null;
   }
 
   return (
     <BottomSheetScrollView>
-      <View tw="flex-row flex-wrap items-center justify-center">
-        <View tw="mt-6 w-full px-4 lg:w-[360px]">
-          <CreateCard
-            title="Free drop"
-            description="Give your fans a free collectible."
-            ctaLabel="Create Free Drop"
-            icon={
-              <Gift color={isDark ? "black" : "white"} height={16} width={16} />
-            }
-            onPress={() => {
-              if (Platform.OS !== "web") {
-                router.pop();
+      <View tw="flex-row flex-wrap items-center justify-center pb-6">
+        {Platform.OS !== "web" && !user.user?.data.profile.verified ? null : (
+          <View tw="mt-6 w-full px-4 lg:w-[360px]">
+            <CreateCard
+              title="Drops: Free digital collectibles"
+              description="Share a link to instantly create a collector list and connect with your fans."
+              ctaLabel="Create Drop"
+              icon={
+                <Gift
+                  color={isDark ? "black" : "white"}
+                  height={16}
+                  width={16}
+                />
               }
-              router.push("/drop/free");
-            }}
-          />
-        </View>
+              onPress={() => {
+                if (Platform.OS !== "web") {
+                  router.pop();
+                  router.push("/drop/free");
+                } else {
+                  router.replace("/drop/free");
+                }
+              }}
+            />
+          </View>
+        )}
+
         <View tw="mt-6 w-full px-4 lg:w-[360px]">
           <CreateCard
             title="Music Drop: Pre-Save on Spotify"
@@ -56,53 +66,22 @@ export const DropSelect = () => {
             }
             description="Promote your latest music: give your fans a free collectible for saving your song to their library."
             ctaLabel={
-              canCreateMusicDrop ? "Create Music Drop" : "Request Access"
+              canCreateMusicDrop ? "Create a Music Drop" : "Request Access"
             }
             onPress={() => {
               if (Platform.OS !== "web") {
                 router.pop();
               }
               if (canCreateMusicDrop) {
-                router.push("/drop/music");
+                if (Platform.OS !== "web") {
+                  router.pop();
+                  router.push("/drop/music");
+                } else {
+                  router.replace("/drop/music");
+                }
               } else {
                 Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
               }
-            }}
-          />
-        </View>
-        <View tw="mt-6 w-full px-4 lg:w-[360px]">
-          <CreateCard
-            title="Event drop"
-            icon={
-              <Globe
-                color={isDark ? "black" : "white"}
-                height={16}
-                width={16}
-              />
-            }
-            description="Connect with fans who show up to your events. This drop lets people mark themselves at your event location."
-            ctaLabel="Create Event Drop"
-            onPress={() => {
-              if (Platform.OS !== "web") {
-                router.pop();
-              }
-              router.push("/drop/event");
-            }}
-          />
-        </View>
-        <View tw="mt-6 w-full px-4 lg:w-[360px]">
-          <CreateCard
-            title="Private drop"
-            icon={
-              <Lock color={isDark ? "black" : "white"} height={16} width={16} />
-            }
-            description="A collectible for your biggest fans of your choice. Don't give up your password so easily!"
-            ctaLabel="Create Private Drop"
-            onPress={() => {
-              if (Platform.OS !== "web") {
-                router.pop();
-              }
-              router.push("/drop/private");
             }}
           />
         </View>
