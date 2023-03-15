@@ -14,7 +14,7 @@ type LoginSource = "undetermined" | "magic" | "wallet";
 export type SubmitWalletParams = {
   onOpenConnectModal?: () => void;
 };
-export const useLogin = (onLogin?: () => void) => {
+export const useLogin = () => {
   const loginSource = useRef<LoginSource>("undetermined");
   const { rudder } = useRudder();
 
@@ -123,17 +123,6 @@ export const useLogin = (onLogin?: () => void) => {
 
   //#region effects
   useStableBlurEffect(handleBlur);
-  useEffect(() => {
-    const isAuthenticated = authenticationStatus === "AUTHENTICATED";
-    const isLoggedInByMagic =
-      loginSource.current === "magic" && isAuthenticated;
-    const isLoggedInByWallet =
-      loginSource.current === "wallet" && walletStatus === "EXPIRED_NONCE";
-
-    if (isLoggedInByWallet || isLoggedInByMagic) {
-      onLogin?.();
-    }
-  }, [authenticationStatus, walletStatus, onLogin]);
 
   useEffect(() => {
     if (walletStatus === "ERRORED" && walletError) {
