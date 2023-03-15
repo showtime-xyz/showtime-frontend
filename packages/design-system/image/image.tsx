@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { Image, ImageProps as ExpoImageProps } from "expo-image";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
@@ -30,17 +32,25 @@ function StyledImage({
   blurhash,
   ...rest
 }: ImageProps) {
+  const imageSource = useMemo(
+    () =>
+      typeof source === "object"
+        ? {
+            ...source,
+            headers: {
+              Accept: "image/webp,*/*;q=0.8",
+            },
+          }
+        : source,
+    [source]
+  );
+
   return (
     <StyledExpoImage
       style={[{ height, width, borderRadius }, style as any]}
       contentFit={contentFit ?? resizeMode}
       placeholder={{ blurhash, width, height }}
-      source={{
-        ...(typeof source === "object" && source),
-        headers: {
-          Accept: "image/webp,*/*;q=0.8",
-        },
-      }}
+      source={imageSource}
       {...rest}
     />
   );
