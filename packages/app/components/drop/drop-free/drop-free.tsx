@@ -28,6 +28,7 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -50,8 +51,8 @@ import { formatAddressShort } from "app/utilities";
 
 import { Hidden } from "design-system/hidden";
 
-import { DropPreview } from "./drop-preview";
-import { DROP_FORM_DATA_KEY } from "./utils";
+import { DropPreview } from "../drop-preview";
+import { DROP_FORM_DATA_KEY } from "../utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
@@ -710,23 +711,25 @@ export const DropFree = () => {
       </BottomSheetScrollView>
       <AnimateHeight delay={0}>
         <View tw="px-4">
-          {state.transactionHash ? null : (
-            <Button
-              variant="primary"
-              size="regular"
-              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-              disabled={state.status === "loading"}
-              onPress={handleSubmit(onSubmit)}
-            >
-              {state.status === "loading"
-                ? "Creating... it should take about 10 seconds"
-                : state.status === "error"
-                ? "Failed. Please retry!"
-                : !showPreview
-                ? "Continue"
-                : "Drop now"}
-            </Button>
-          )}
+          <Button
+            variant="primary"
+            size="regular"
+            tw={state.status === "loading" ? "opacity-[0.45]" : ""}
+            disabled={state.status === "loading"}
+            onPress={handleSubmit(onSubmit)}
+          >
+            {state.status === "loading" ? (
+              <View tw="items-center justify-center">
+                <Spinner size="small" />
+              </View>
+            ) : state.status === "error" ? (
+              "Failed. Please retry!"
+            ) : !showPreview ? (
+              "Continue"
+            ) : (
+              "Drop now"
+            )}
+          </Button>
 
           {state.transactionHash && !showPreview ? (
             <View tw="mt-4">

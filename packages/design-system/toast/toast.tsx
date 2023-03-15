@@ -5,7 +5,7 @@ import type {
 } from "burnt/build/types";
 import type { ToasterProps } from "react-hot-toast";
 
-import { CustomOption } from "./type";
+import { CustomOption, ValueOrFunction } from "./type";
 
 type ToastOptions = Omit<BurntToastOptions, "title" | "preset"> & {};
 
@@ -55,8 +55,8 @@ toast.promise = function <T>(
   promise: Promise<T>,
   msgs: {
     loading: string;
-    success: string;
-    error: string;
+    success: ValueOrFunction<string, T>;
+    error: ValueOrFunction<string, any>;
   },
   options?: AlertOptions
 ) {

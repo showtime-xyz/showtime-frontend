@@ -59,15 +59,20 @@ export const usePaymentsManage = () => {
 
   const setPaymentByDefault = useCallback(
     async (paymentMethodId: string) => {
-      mutate(PAYMENTS_METHODS_ENDPOINT, async () => {
-        await axios({
-          url: "/v1/payments/methods/default",
-          method: "POST",
-          data: { payment_method_id: paymentMethodId },
-        });
-      });
+      mutate(
+        PAYMENTS_METHODS_ENDPOINT,
+        setPaymentByDefaultFetch(paymentMethodId)
+      );
     },
     [mutate]
   );
   return { removePayment, setPaymentByDefault, data, isLoading };
+};
+
+export const setPaymentByDefaultFetch = async (paymentMethodId: string) => {
+  await axios({
+    url: "/v1/payments/methods/default",
+    method: "POST",
+    data: { payment_method_id: paymentMethodId },
+  });
 };

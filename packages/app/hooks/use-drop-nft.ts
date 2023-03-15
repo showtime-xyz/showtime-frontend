@@ -11,6 +11,8 @@ import { captureException } from "app/lib/sentry";
 import { GatingType } from "app/types";
 import { delay, getFileMeta } from "app/utilities";
 
+import { toast } from "design-system/toast";
+
 import { DropContext } from "../context/drop-context";
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
@@ -184,7 +186,7 @@ export const useDropNFT = () => {
         );
         return;
       }
-
+      toast("Creating... it should take about 10 seconds");
       dispatch({ type: "loading" });
 
       const ipfsHash = await uploadMedia({
