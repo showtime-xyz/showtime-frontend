@@ -155,8 +155,6 @@ export default {
     "sentry-expo",
     "./plugins/react-native-cronet.js",
     "./plugins/with-animated-webp-support.js",
-    "./plugins/with-fast-image-webp-support-android.js",
-    "./plugins/with-fast-image-webp-support-ios.js",
     "./plugins/with-spotify-sdk.js",
     [
       withInfoPlist,

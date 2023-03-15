@@ -1,8 +1,7 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, Image } from "react-native";
 
 import { Meta } from "@storybook/react";
 
-import { Image } from "@showtime-xyz/universal.image";
 import { View } from "@showtime-xyz/universal.view";
 
 import { LightBoxProvider, LightBox } from "./index";
@@ -26,9 +25,7 @@ const LightBoxBasic = () => {
           source={{
             uri: "https://storage.googleapis.com/showtime-test/cdnv2/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/114091279957330982022734478648167430968491445987545800607311341400684004114433",
           }}
-          width={120}
-          height={120}
-          style={StyleSheet.absoluteFillObject}
+          style={[StyleSheet.absoluteFillObject, { width: 120, height: 120 }]}
         />
       </LightBox>
     </View>

@@ -2,6 +2,8 @@ import { Image, ImageProps as ExpoImageProps } from "expo-image";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
 
+import { ResizeMode } from "./types";
+
 export type ImgProps = ExpoImageProps & {
   height?: number;
   width?: number;
@@ -10,12 +12,12 @@ export type ImgProps = ExpoImageProps & {
 
 const StyledExpoImage = styled(Image);
 
-type ImageProps = Omit<ExpoImageProps, "resizeMode"> & {
+type ImageProps = Omit<ImgProps, "resizeMode"> & {
   tw?: string;
   alt?: string;
   blurhash?: string;
-  resizeMode?: any;
-} & ImgProps;
+  resizeMode?: ResizeMode;
+};
 
 function StyledImage({
   borderRadius,
@@ -30,10 +32,15 @@ function StyledImage({
 }: ImageProps) {
   return (
     <StyledExpoImage
-      source={source}
       style={[{ height, width, borderRadius }, style as any]}
       contentFit={contentFit ?? resizeMode}
       placeholder={{ blurhash, width, height }}
+      source={{
+        ...(typeof source === "object" && source),
+        headers: {
+          Accept: "image/webp,*/*;q=0.8",
+        },
+      }}
       {...rest}
     />
   );

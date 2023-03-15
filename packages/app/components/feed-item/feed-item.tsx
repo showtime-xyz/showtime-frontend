@@ -191,6 +191,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               source={{
                 uri: getMediaUrl({ nft, stillPreview: true }),
               }}
+              recyclingKey={getMediaUrl({ nft, stillPreview: true })}
               alt={nft.token_name}
             />
           )}

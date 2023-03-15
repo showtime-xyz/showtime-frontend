@@ -1,9 +1,9 @@
-import FastImage from "react-native-fast-image";
+import { Image } from "expo-image";
 import { MMKV } from "react-native-mmkv";
 
 export async function deleteAppCache() {
   const storage = new MMKV();
   storage.delete("app-cache");
-  await FastImage.clearDiskCache();
-  await FastImage.clearMemoryCache();
+  await Image.clearDiskCache();
+  await Image.clearMemoryCache();
 }

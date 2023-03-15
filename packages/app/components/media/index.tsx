@@ -1,11 +1,10 @@
 import { Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
-import { ResizeMode } from "expo-av";
 import dynamic from "next/dynamic";
 
 import { Play } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
+import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -53,7 +52,7 @@ function Media({
   isMuted,
   edition,
 }: Props) {
-  const resizeMode = propResizeMode ?? ResizeMode.COVER;
+  const resizeMode = propResizeMode ?? "cover";
 
   const mediaUri = item?.loading
     ? item?.source_url
@@ -91,6 +90,7 @@ function Media({
             source={{
               uri: mediaUri,
             }}
+            recyclingKey={mediaUri}
             blurhash={item?.blurhash}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             width={width}
@@ -126,7 +126,7 @@ function Media({
             style={sizeStyle}
             blurhash={item?.blurhash}
             isMuted={numColumns > 1 ? true : isMuted}
-            resizeMode={resizeMode as ResizeMode}
+            resizeMode={resizeMode as any}
             //@ts-ignore
             dataset={Platform.select({ web: { testId: "nft-card-media" } })}
           />

@@ -1,11 +1,8 @@
-import type {
-  FastImageProps,
-  ResizeMode as FastImageResizeMode,
-} from "react-native-fast-image";
+import type { ImageProps as ExpoImageProps } from "expo-image";
 
 export type ContentFit = "cover" | "contain" | "fill" | "none" | "scale-down";
 
-export type ImageNativeProps = FastImageProps;
+export type ImageNativeProps = ExpoImageProps;
 
 // it's from expo-image prop, will use expo-image' ImageSource type if we bring back to expo-iamge.
 export type ImageSource = {
@@ -38,5 +35,5 @@ export type ImageSource = {
   blurhash?: string;
 };
 
-export type ResizeMode = FastImageResizeMode;
-export type ImageProps = FastImageProps & {};
+export type ResizeMode = ExpoImageProps["contentFit"];
+export type ImageProps = ExpoImageProps & {};
