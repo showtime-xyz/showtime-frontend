@@ -23,6 +23,8 @@ import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useUser } from "app/hooks/use-user";
 
+import { toast } from "design-system/toast";
+
 import { SettingsTitle } from "../settings-title";
 
 const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
@@ -71,11 +73,14 @@ const ConnectSpotify = () => {
         variant={
           user.user?.data.profile.has_spotify_token ? "danger" : "tertiary"
         }
-        onPress={() => {
+        onPress={async () => {
           if (user.user?.data.profile.has_spotify_token) {
             disconnectSpotify();
           } else {
-            connectSpotify();
+            const res = await connectSpotify();
+            if (res) {
+              toast.success("Spotify connected");
+            }
           }
         }}
       >
