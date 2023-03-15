@@ -89,12 +89,12 @@ export function AuthProvider({
       });
 
       if (validResponse && res) {
-        router.pop();
         setTokens(accessToken, refreshToken);
         loginStorage.setLogin(Date.now().toString());
         mutate(MY_INFO_ENDPOINT, res);
         setAuthenticationStatus("AUTHENTICATED");
 
+        router.pop();
         /*
         const isIncomplete = isProfileIncomplete(res?.data?.profile);
         if (isIncomplete) {
