@@ -9,10 +9,8 @@ import {
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -25,7 +23,6 @@ import { getCreatorUsernameFromNFT } from "app/utilities";
 
 import { VerificationBadge } from "design-system";
 import { breakpoints } from "design-system/theme";
-import { ThreeDotsAnimation } from "design-system/three-dots";
 
 import { PolygonScanButton } from "../polygon-scan-button";
 
@@ -37,17 +34,7 @@ type DropPreviewProps = {
   spotifyUrl?: string;
   releaseDate?: string;
 };
-const CreatingButton = () => {
-  const isDark = useIsDarkMode();
-  return (
-    <Button variant="tertiary" size="regular">
-      <Text tw="text-xs">
-        Creating
-        <ThreeDotsAnimation color={isDark ? colors.white : colors.black} />
-      </Text>
-    </Button>
-  );
-};
+
 export const DropPreview = memo(function DropPreview({
   file,
   title,
@@ -76,26 +63,23 @@ export const DropPreview = memo(function DropPreview({
     [releaseDate, spotifyUrl]
   );
   const renderButtons = useCallback(() => {
-    if (state.status === "loading") {
-      return state.transactionHash ? (
-        <View tw="flex-row justify-between">
-          <View tw="mr-4 flex-1">
-            <CreatingButton />
-          </View>
-          <PolygonScanButton transactionHash={state.transactionHash} />
-        </View>
-      ) : (
-        <CreatingButton />
-      );
+    if (state.status === "loading" && state.transactionHash) {
+      return <PolygonScanButton transactionHash={state.transactionHash} />;
     }
     return (
-      <Button variant="tertiary" size="regular" onPress={onEdit}>
+      <Button
+        variant="tertiary"
+        size="regular"
+        disabled={state.status === "loading"}
+        tw={state.status === "loading" ? "opacity-60" : ""}
+        onPress={onEdit}
+      >
         Edit Drop
       </Button>
     );
   }, [onEdit, state.status, state.transactionHash]);
   return (
-    <View tw="items-center">
+    <View tw="animate-fade-in-250 items-center">
       <View tw="shadow-light dark:shadow-dark w-full rounded-3xl py-8 sm:w-[375px]">
         <View>
           <Preview

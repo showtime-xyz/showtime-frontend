@@ -8,6 +8,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CreditCard, Check, Trash } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -165,6 +166,7 @@ const HistoryItem = memo(function HistoryItem({
 const Header = memo(function Header() {
   const { data, isLoading, removePayment, setPaymentByDefault } =
     usePaymentsManage();
+  const router = useRouter();
   const onDowloadAllHistory = useCallback(() => {
     if (!data) return;
     // Todo: waiting for backend to confirm whether exporting from the frontend is possible and also for the final data format.
@@ -181,7 +183,18 @@ const Header = memo(function Header() {
         desc="Manage the payment methods connected to your profile."
         // Todo: this is waiting for backend support.
         // buttonText="Add payment method"
-        // onPress={() => {}}
+        // onPress={() => {
+        //   router.push(
+        //     {
+        //       pathname: router.pathname,
+        //       query: {
+        //         ...router.query,
+        //         checkoutModal: true,
+        //       },
+        //     },
+        //     router.asPath
+        //   );
+        // }}
       />
       {isLoading ? (
         <View tw="animate-fade-in-250 h-28 items-center justify-center">

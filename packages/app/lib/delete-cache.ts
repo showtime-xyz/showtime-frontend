@@ -5,6 +5,9 @@ import { MMKV } from "react-native-mmkv";
 export async function deleteAppCache() {
   const storage = new MMKV();
   storage.delete("app-cache");
+  // Todo: move those keys to constans file
+  storage.delete("showExplanationv2");
+  storage.delete("showClaimExplanation");
   await FastImage.clearDiskCache();
   await FastImage.clearMemoryCache();
   ImageColors.cache.clear();

@@ -41,15 +41,13 @@ export const ClaimExplanation = ({
       coverElement={
         token?.data.item ? (
           <View tw="items-center">
-            <View tw="rounded-xl shadow-xl">
+            <View tw="overflow-hidden rounded-xl shadow-xl">
               <Media
-                resizeMode="contain"
                 item={token?.data.item}
                 sizeStyle={{
                   width: 240,
                   height: 240,
                 }}
-                tw="overflow-hidden"
               />
             </View>
           </View>
