@@ -3,14 +3,17 @@ import React from "react";
 import { MotiView } from "moti";
 
 import { Button } from "@showtime-xyz/universal.button";
+import {
+  Check,
+  InstagramColorful,
+  Twitter,
+} from "@showtime-xyz/universal.icon";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
 import { useUser } from "app/hooks/use-user";
-
-import { Check, InstagramColorful, Twitter } from "design-system/icon";
-import { Spinner } from "design-system/spinner";
 
 import { Challenge as SkipButton } from "./hcaptcha";
 import { useFinishOnboarding } from "./hcaptcha/hcaptcha-utils";

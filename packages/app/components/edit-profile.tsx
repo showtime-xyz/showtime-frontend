@@ -14,7 +14,12 @@ import { useSWRConfig } from "swr";
 import { Button } from "@showtime-xyz/universal.button";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Upload, Twitter } from "@showtime-xyz/universal.icon";
+import {
+  Upload,
+  Twitter,
+  Check,
+  InstagramColorful,
+} from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -38,7 +43,6 @@ import { createParam } from "app/navigation/use-param";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData } from "app/utilities";
 
-import { Check, InstagramColorful } from "design-system/icon";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
