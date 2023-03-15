@@ -1,9 +1,11 @@
+import { useOnboardingPromise } from "app/components/onboarding";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
 
-import { useOnboardingPromise } from "../components/onboarding";
+import { toast } from "design-system/toast";
+
 import { IEdition } from "../types";
 import { useConnectSpotify } from "./use-connect-spotify";
 import { useSaveSpotifyToken } from "./use-save-spotify-token";
@@ -46,6 +48,9 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
             method: "POST",
           });
 
+          toast.success(
+            "Song will be saved in your Spotify library. Please log in to collect your drop!"
+          );
           await loginPromise();
           await onboardingPromise();
 
