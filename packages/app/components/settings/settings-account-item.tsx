@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 
 import { SvgProps } from "react-native-svg";
 
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { Trash } from "@showtime-xyz/universal.icon";
@@ -14,6 +15,8 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useDeleteUser } from "app/hooks/use-delete-user";
 import { useUser } from "app/hooks/use-user";
 import { Logger } from "app/lib/logger";
+
+import { toast } from "design-system/toast";
 
 export const SettingDeleteAccount = () => {
   const { deleteUser } = useDeleteUser();
@@ -28,14 +31,24 @@ export const SettingDeleteAccount = () => {
       setError("Username does not match");
       return;
     }
-
-    try {
-      await deleteUser();
-      logout();
-    } catch (e) {
-      Logger.error(e);
-      setError("Error deleting account");
-    }
+    Alert.alert("Delete Account", "Are you sure you want to delete your account? This action cannot be undone.", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Confirm",
+        style: "destructive",
+        onPress: async () => {
+          await deleteUser().catch((e) => {
+            Logger.error(e);
+            toast.success("Error deleting account");
+          });
+          toast.success("Your account has been deleted");
+          logout();
+        },
+      },
+    ]);
   };
   return (
     <View>
