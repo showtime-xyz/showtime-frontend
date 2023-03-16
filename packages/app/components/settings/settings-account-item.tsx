@@ -31,7 +31,7 @@ export const SettingDeleteAccount = () => {
       setError("Username does not match");
       return;
     }
-    Alert.alert("Delete Account", "This action cannot be undone.", [
+    Alert.alert("Delete Account", "Are you sure you want to delete your account? This action cannot be undone.", [
       {
         text: "Cancel",
         style: "cancel",
