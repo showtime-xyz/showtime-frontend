@@ -27,6 +27,7 @@ toast.error = (title: string, options?: ToastOptions) => {
   return Burnt.toast({
     title: title,
     preset: getPreset(title, "error"),
+    haptic: "error",
     ...options,
   });
 };
