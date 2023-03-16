@@ -1,0 +1,10 @@
+appId: io.showtime.development
+---
+- runFlow:
+    when:
+      true: ${PLATFORM == 'ios'}
+    file: subflows/create-free-drop-ios.yml
+- runFlow:
+    when:
+      true: ${PLATFORM == 'android'}
+    file: subflows/create-free-drop-android.yml
