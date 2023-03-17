@@ -2,6 +2,7 @@ appId: io.showtime.development
 ---
 - tapOn:
     point: "51%,92%"
+- tapOn: "Let's go"
 - tapOn: "Create drop"
 - tapOn: "Upload"
 - tapOn:
