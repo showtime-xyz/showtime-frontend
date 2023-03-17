@@ -1,9 +1,5 @@
 appId: io.showtime.development
 ---
-- launchApp
-# - tapOn: "Showtime on Nishans-MacBook-Pro.local"
-- runFlow:
-    file: sign-in-with-email.yml
 - tapOn:
     point: "51%,92%"
 - tapOn: "Create drop"

@@ -1,5 +1,9 @@
 appId: io.showtime.development
 ---
+- launchApp
+# - tapOn: "Showtime on Nishans-MacBook-Pro.local"
+- runFlow:
+    file: ./sign-in-with-email.yml
 - runFlow:
     when:
       true: ${PLATFORM == 'ios'}
