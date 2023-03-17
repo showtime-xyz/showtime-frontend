@@ -86,11 +86,7 @@ export const ClaimButton = ({
   const bgIsGreen =
     status === ClaimStatus.Claimed || status === ClaimStatus.Soldout;
 
-  const disabled =
-    status === ClaimStatus.Claimed ||
-    status === ClaimStatus.Soldout ||
-    isExpired ||
-    isProgress;
+  const disabled = false;
   const content = useMemo(() => {
     if (status === ClaimStatus.Claimed) {
       return (
