@@ -22,6 +22,8 @@ export const LoginWithTwitter = () => {
           const idToken = result.magic.idToken;
           await login(LOGIN_MAGIC_ENDPOINT, {
             did: idToken,
+            provider_access_token: result.oauth.accessToken,
+            provider_scope: result.oauth.scope,
           });
           router.pop();
         } catch (e) {

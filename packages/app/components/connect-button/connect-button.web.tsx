@@ -61,11 +61,7 @@ export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
               if (!mounted || !account || !chain) {
                 return (
                   <LoginButton
-                    onPress={() => {
-                      handleSubmitWallet({
-                        onOpenConnectModal: openConnectModal,
-                      });
-                    }}
+                    onPress={() => handleSubmitWallet()}
                     type="wallet"
                   />
                 );
@@ -77,9 +73,7 @@ export const ConnectButton = ({ handleSubmitWallet }: ConnectButtonProps) => {
                   size="regular"
                   tw="my-4"
                   onPress={() => {
-                    handleSubmitWallet({
-                      onOpenConnectModal: openAccountModal,
-                    });
+                    handleSubmitWallet();
                   }}
                 >
                   <>
