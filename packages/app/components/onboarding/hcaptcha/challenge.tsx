@@ -36,12 +36,6 @@ export const Challenge = () => {
   const captchaRef = useRef<ConfirmHcaptcha>(null);
 
   const showCaptcha = () => {
-    // we don't need captcha on e2e tests
-    if (process.env.E2E) {
-      finishOnboarding();
-      return;
-    }
-
     // skip directly to the next step if user has already a social account
     // connected or if the user has already completed the captcha challenge
     if (
