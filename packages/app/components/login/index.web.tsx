@@ -41,7 +41,7 @@ export function Login() {
               We need a signature in order to verify your identity. This won't
               cost any gas.
             </Text>
-            <Button tw="mt-8" onPress={verifySignature}>
+            <Button tw="mt-8" onPress={() => verifySignature()}>
               Sign the message
             </Button>
           </View>

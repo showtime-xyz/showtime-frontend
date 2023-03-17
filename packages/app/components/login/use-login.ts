@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef } from "react";
-import { Platform } from "react-native";
 
 import { captureException } from "@sentry/nextjs";
 
@@ -11,9 +10,7 @@ import { useRudder } from "app/lib/rudderstack";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
 
-export type SubmitWalletParams = {
-  onOpenConnectModal?: () => void;
-};
+export type SubmitWalletParams = {};
 export const useLogin = () => {
   const loginSource = useRef<LoginSource>("undetermined");
   const { rudder } = useRudder();
@@ -31,7 +28,6 @@ export const useLogin = () => {
     verifySignature,
   } = useWalletLogin();
   const { loginWithEmail, loginWithPhoneNumber } = useMagicLogin();
-  const isWeb = Platform.OS === "web";
   //#endregion
 
   //#region methods
@@ -55,7 +51,7 @@ export const useLogin = () => {
   );
 
   const handleSubmitWallet = useCallback(
-    async function handleSubmitWallet(params?: SubmitWalletParams) {
+    async function handleSubmitWallet() {
       try {
         loginSource.current = "wallet";
 
@@ -63,18 +59,12 @@ export const useLogin = () => {
           name: "Login with wallet",
         });
 
-        if (isWeb) {
-          console.log(loginSource.current);
-
-          params?.onOpenConnectModal?.();
-        } else {
-          await loginWithWallet();
-        }
+        await loginWithWallet();
       } catch (error) {
         handleLoginFailure(error);
       }
     },
-    [rudder, isWeb, loginWithWallet, handleLoginFailure]
+    [rudder, loginWithWallet, handleLoginFailure]
   );
   const handleSubmitEmail = useCallback(
     async function handleSubmitEmail(email: string) {
