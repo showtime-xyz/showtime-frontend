@@ -37,7 +37,6 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { Blurhash } from "app/lib/blurhash";
 import { BlurView } from "app/lib/blurview";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation } from "app/lib/react-navigation/native";
@@ -188,31 +187,19 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   useEffect(() => {
     setMomentumScrollCallback?.(showHeader);
   }, [setMomentumScrollCallback, showHeader]);
-
+  console.log(getMediaUrl({ nft, stillPreview: true }));
   return (
     <LikeContextProvider nft={nft}>
       <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
-        <View>
-          {nft.blurhash ? (
-            <Blurhash
-              blurhash={nft.blurhash}
-              decodeWidth={16}
-              decodeHeight={16}
-              decodeAsync={true}
-              style={{ width: "100%", height: "100%" }}
-            />
-          ) : (
-            <Image
-              tw="h-full w-full"
-              source={{
-                uri: getMediaUrl({ nft, stillPreview: true }),
-              }}
-              recyclingKey={getMediaUrl({ nft, stillPreview: true })}
-              alt={nft.token_name}
-            />
-          )}
-        </View>
-
+        <Image
+          tw="h-full w-full"
+          blurhash={nft.blurhash}
+          source={{
+            uri: getMediaUrl({ nft, stillPreview: true }),
+          }}
+          recyclingKey={getMediaUrl({ nft, stillPreview: true })}
+          alt={nft.token_name}
+        />
         <FeedItemTapGesture toggleHeader={toggleHeader} showHeader={showHeader}>
           <Animated.View
             style={[

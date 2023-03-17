@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Platform } from "react-native";
 
 import { Image, ImageProps as ExpoImageProps } from "expo-image";
 
@@ -51,6 +52,7 @@ function StyledImage({
       contentFit={contentFit ?? resizeMode}
       placeholder={{ blurhash, width, height }}
       source={imageSource}
+      cachePolicy={Platform.OS === "ios" ? "memory-disk" : "disk"}
       {...rest}
     />
   );
