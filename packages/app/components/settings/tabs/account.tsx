@@ -92,8 +92,10 @@ const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
   const user = useUser();
   const isDark = useIsDarkMode();
 
-  const { trigger: disconnectInstagram } = useDisconnectInstagram();
-  const { trigger: addSocial } = useAddMagicSocialAccount();
+  const { trigger: disconnectInstagram, isMutating: isDisconnecting } =
+    useDisconnectInstagram();
+  const { trigger: addSocial, isMutating: isConnecting } =
+    useAddMagicSocialAccount();
 
   return (
     <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
@@ -121,13 +123,15 @@ const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
             disconnectInstagram({
               provider: "instagram",
               providerId,
-            });
+            }).catch(() => {});
           } else {
-            addSocial({ type: "instagram" });
+            addSocial({ type: "instagram" }).catch(() => {});
           }
         }}
       >
-        {user.user?.data.profile.social_login_connections.instagram
+        {isDisconnecting || isConnecting
+          ? "Loading..."
+          : user.user?.data.profile.social_login_connections.instagram
           ? "Disconnect"
           : "Connect"}
       </Button>
