@@ -56,7 +56,7 @@ export const Challenge = () => {
         captchaRef.current?.hide();
         toast("Please try again or connect a social account.");
 
-        rudder?.track("hCaptcha Error", {
+        rudder?.track("Hcaptcha Error", {
           error: event.nativeEvent.data,
         });
 
@@ -83,7 +83,7 @@ export const Challenge = () => {
           await matchMutate(
             (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
           );
-          rudder?.track("hCaptcha challenge success");
+          rudder?.track("Hcaptcha Challenge Success");
 
           // finish onboarding
           finishOnboarding();
