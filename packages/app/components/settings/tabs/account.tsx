@@ -47,9 +47,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
       <View tw="mt-6 px-4 md:px-0">
         <ConnectSpotify />
         <WalletSocialAccounts />
-        {!instagramProviderId ? (
-          <ConnectInstagram providerId={instagramProviderId} />
-        ) : null}
+        <ConnectInstagram providerId={instagramProviderId} />
       </View>
     </SettingScrollComponent>
   );
@@ -90,7 +88,7 @@ const ConnectSpotify = () => {
   );
 };
 
-const ConnectInstagram = ({ providerId }: { providerId: string }) => {
+const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
   const user = useUser();
   const isDark = useIsDarkMode();
 
@@ -116,7 +114,10 @@ const ConnectInstagram = ({ providerId }: { providerId: string }) => {
             : "tertiary"
         }
         onPress={() => {
-          if (user.user?.data.profile.social_login_connections.instagram) {
+          if (
+            user.user?.data.profile.social_login_connections.instagram &&
+            providerId
+          ) {
             disconnectInstagram({
               provider: "instagram",
               providerId,
