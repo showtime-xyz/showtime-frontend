@@ -53,10 +53,12 @@ export const Challenge = () => {
     // skip directly to the next step if user has already a social account
     // connected or if the user has already completed the captcha challenge
 
-    if (
-      user?.data.profile.captcha_completed_at ||
-      user?.data.profile.has_social_login
-    ) {
+    const hasSocialHandle =
+      user?.data?.profile?.social_login_handles?.twitter ||
+      user?.data?.profile?.social_login_handles?.instagram ||
+      false;
+
+    if (user?.data?.profile?.captcha_completed_at || hasSocialHandle) {
       finishOnboarding();
       return;
     }
