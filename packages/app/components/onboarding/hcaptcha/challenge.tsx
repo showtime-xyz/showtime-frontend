@@ -36,6 +36,9 @@ export const Challenge = () => {
   const captchaRef = useRef<ConfirmHcaptcha>(null);
 
   const showCaptcha = () => {
+    // skip directly to the next step if user has already a social account
+    // connected or if the user has already completed the captcha challenge
+
     const hasSocialHandle =
       user?.data?.profile?.social_login_handles?.twitter ||
       user?.data?.profile?.social_login_handles?.instagram ||
