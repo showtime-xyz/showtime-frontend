@@ -70,6 +70,7 @@ export function Video({
           source={posterSource as ImageSourcePropType}
           imageStyle={StyleSheet.absoluteFill}
           resizeMode="cover"
+          tw="overflow-hidden"
         >
           <View tw="blur-md">
             <Image
