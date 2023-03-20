@@ -17,6 +17,7 @@ import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
 import { getNextRefillClaim, ledgerWalletHack } from "app/utilities";
 
+import { useSendFeedback } from "./use-send-feedback";
 import { useWallet } from "./use-wallet";
 
 const minterABI = ["function mintEdition(address _to)"];
@@ -126,6 +127,7 @@ export const useClaimNFT = (edition: IEdition) => {
   const Alert = useAlert();
   const { connect } = useWallet();
   let { userAddress } = useCurrentUserAddress();
+  const { onSendFeedback } = useSendFeedback();
 
   // @ts-ignore
   const signTransaction = async ({ forwardRequest }) => {
@@ -266,7 +268,17 @@ export const useClaimNFT = (edition: IEdition) => {
       } else if (e?.response?.status === 500) {
         Alert.alert(
           "Oops. An error occurred.",
-          "We are currently experiencing a lot of usage. Please try again in one hour!"
+          "Please contact us at help@showtime.xyz if this persists. Thanks!",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Contact",
+              onPress: onSendFeedback,
+            },
+          ]
         );
       }
 
