@@ -35,6 +35,7 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { NFT } from "app/types";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
+import { NSFWGate } from "../feed-item/nsfw-gate";
 
 const isWeb = Platform.OS === "web";
 
@@ -120,6 +121,7 @@ function Card(props: Props) {
           }}
           edition={edition}
         />
+        <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
       </RouteComponent>
     );
   }
@@ -193,6 +195,7 @@ const CardLargeScreen = ({
               }}
               resizeMode={ResizeMode.COVER}
             />
+            <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
               <View tw="z-9 absolute bottom-5 right-5">
                 <MuteButton />

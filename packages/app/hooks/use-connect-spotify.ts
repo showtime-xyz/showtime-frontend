@@ -30,9 +30,6 @@ export const useConnectSpotify = () => {
             redirectUri,
           };
         }
-      } else {
-        Logger.error("Spotify auth failed", res);
-        Alert.alert("Error", "Something went wrong");
       }
     } catch (e) {
       Logger.error("Spotify auth failed", e);

@@ -50,48 +50,31 @@ export function useAccessTokenManager() {
       isRefreshing.current = true;
 
       try {
-        // Get refresh token
-        // const sealedRefreshToken = refreshTokenStorage.getRefreshToken();
-        // if (!sealedRefreshToken) {
-        //   throw "Missing sealed refresh token";
-        // }
+        const sealedRefreshToken = refreshTokenStorage.getRefreshToken();
 
-        // TODO: unseal refresh token
-        // const { refreshToken } = await Iron.unseal(
-        //   sealedRefreshToken,
-        //   // @ts-ignore
-        //   process.env.ENCRYPTION_SECRET_V2,
-        //   Iron.defaults
-        // );
+        // logged out users or users with no refresh token should not be able to refresh
+        if (sealedRefreshToken) {
+          // Call refresh API
+          const response = await axios({
+            url: `/v1/jwt/refresh`,
+            method: "POST",
+            data: {
+              refresh: sealedRefreshToken,
+            },
+          });
 
-        // Call refresh API
-        const response = await axios({
-          url: `/v1/jwt/refresh`,
-          method: "POST",
-          data: {
-            refresh: refreshTokenStorage.getRefreshToken(),
-          },
-        });
+          const _accessToken = response?.access;
+          const _refreshToken = response?.refresh;
 
-        const _accessToken = response?.access;
-        const _refreshToken = response?.refresh;
-
-        setAccessToken(_accessToken);
-        setRefreshToken(_refreshToken);
+          setAccessToken(_accessToken);
+          setRefreshToken(_refreshToken);
+        } else {
+          throw "No refresh token found. User is not logged in.";
+        }
 
         isRefreshing.current = false;
       } catch (error: any) {
         isRefreshing.current = false;
-
-        // accessTokenStorage.deleteAccessToken();
-        // refreshTokenStorage.deleteRefreshToken();
-        // setLogout(Date.now().toString());
-
-        // captureException(error, {
-        //   tags: {
-        //     failed_silent_refresh: "use-access-token-manager.ts",
-        //   },
-        // });
 
         throw `Failed to refresh tokens. ${
           typeof error === "string" ? error : error.message || ""

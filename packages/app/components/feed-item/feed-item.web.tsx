@@ -22,6 +22,7 @@ import type { NFT } from "app/types";
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
+import { NSFWGate } from "./nsfw-gate";
 
 export type FeedItemProps = {
   nft: NFT;
@@ -82,57 +83,60 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }
 
   return (
-    <LikeContextProvider nft={nft} key={nft.nft_id}>
-      <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
-        <View
-          tw="duration-200"
-          style={{
-            paddingTop,
-          }}
-        >
-          <FeedItemTapGesture>
-            <Media
-              item={nft}
-              numColumns={1}
-              sizeStyle={{
-                height: mediaHeight,
-                width: windowWidth,
-              }}
-              resizeMode={ResizeMode.COVER}
-            />
-          </FeedItemTapGesture>
-        </View>
-        <View
-          tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"
-          style={{
-            paddingBottom: bottomHeight,
-          }}
-          onLayout={({
-            nativeEvent: {
-              layout: { height },
-            },
-          }) => {
-            setDetailHeight(height);
-          }}
-        >
-          <BlurView
-            blurRadius={15}
-            style={StyleSheet.absoluteFillObject}
-            overlayColor="transparent"
-          />
-          {nft?.mime_type?.startsWith("video") ? (
-            <View tw="z-9 absolute top-[-40px] right-4">
-              <MuteButton />
-            </View>
-          ) : null}
-
-          <View tw="z-9 absolute -top-[40px] left-2.5">
-            <ContentTypeTooltip edition={edition} />
+    <>
+      <LikeContextProvider nft={nft} key={nft.nft_id}>
+        <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
+          <View
+            tw="duration-200"
+            style={{
+              paddingTop,
+            }}
+          >
+            <FeedItemTapGesture>
+              <Media
+                item={nft}
+                numColumns={1}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: windowWidth,
+                }}
+                resizeMode={ResizeMode.COVER}
+              />
+            </FeedItemTapGesture>
           </View>
-          <NFTDetails edition={edition} nft={nft} />
+          <View
+            tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"
+            style={{
+              paddingBottom: bottomHeight,
+            }}
+            onLayout={({
+              nativeEvent: {
+                layout: { height },
+              },
+            }) => {
+              setDetailHeight(height);
+            }}
+          >
+            <BlurView
+              blurRadius={15}
+              style={StyleSheet.absoluteFillObject}
+              overlayColor="transparent"
+            />
+            {nft?.mime_type?.startsWith("video") ? (
+              <View tw="z-9 absolute top-[-40px] right-4">
+                <MuteButton />
+              </View>
+            ) : null}
+
+            <View tw="z-9 absolute -top-[40px] left-2.5">
+              <ContentTypeTooltip edition={edition} />
+            </View>
+            <NFTDetails edition={edition} nft={nft} />
+          </View>
         </View>
-      </View>
-    </LikeContextProvider>
+      </LikeContextProvider>
+      <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
+    </>
   );
 });
 FeedItem.displayName = "FeedItem";

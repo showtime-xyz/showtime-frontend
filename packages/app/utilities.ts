@@ -631,9 +631,15 @@ export const isProfileIncomplete = (profile?: Profile) => {
       (k) => profile?.social_login_connections[k]
     );
 
+  const hasSocialHandle =
+    profile?.social_login_handles?.twitter ||
+    profile?.social_login_handles?.instagram ||
+    false;
+
   return profile
     ? !profile.username ||
-        (!hasConnectedSocialAccount && !profile.captcha_completed_at)
+        (!hasConnectedSocialAccount && !profile.captcha_completed_at) ||
+        (!hasSocialHandle && !profile.captcha_completed_at)
     : undefined;
 };
 

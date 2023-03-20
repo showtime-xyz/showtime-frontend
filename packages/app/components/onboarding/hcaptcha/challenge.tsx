@@ -38,10 +38,13 @@ export const Challenge = () => {
   const showCaptcha = () => {
     // skip directly to the next step if user has already a social account
     // connected or if the user has already completed the captcha challenge
-    if (
-      user?.data.profile.captcha_completed_at ||
-      user?.data.profile.has_social_login
-    ) {
+
+    const hasSocialHandle =
+      user?.data?.profile?.social_login_handles?.twitter ||
+      user?.data?.profile?.social_login_handles?.instagram ||
+      false;
+
+    if (user?.data?.profile?.captcha_completed_at || hasSocialHandle) {
       finishOnboarding();
       return;
     }
@@ -56,7 +59,7 @@ export const Challenge = () => {
         captchaRef.current?.hide();
         toast("Please try again or connect a social account.");
 
-        rudder?.track("hCaptcha Error", {
+        rudder?.track("Hcaptcha Error", {
           error: event.nativeEvent.data,
         });
 
@@ -83,7 +86,7 @@ export const Challenge = () => {
           await matchMutate(
             (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
           );
-          rudder?.track("hCaptcha challenge success");
+          rudder?.track("Hcaptcha Challenge Success");
 
           // finish onboarding
           finishOnboarding();

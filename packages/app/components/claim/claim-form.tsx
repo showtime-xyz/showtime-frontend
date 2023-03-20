@@ -224,7 +224,7 @@ export const ClaimForm = ({
     <BottomSheetScrollView ref={scrollViewRef as any}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
-          <View tw="overflow-hidden rounded-2xl">
+          <View tw="relative overflow-hidden rounded-2xl">
             <Media
               isMuted
               item={nft?.data.item}

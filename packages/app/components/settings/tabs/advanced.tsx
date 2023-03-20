@@ -17,11 +17,11 @@ import { SettingsTitle } from "../settings-title";
 
 const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 
-export type AccountTabProps = {
+export type AdvancedTabProps = {
   index?: number;
 };
 
-export const AdvancedTab = ({ index = 0 }: AccountTabProps) => {
+export const AdvancedTab = ({ index = 0 }: AdvancedTabProps) => {
   const router = useRouter();
   const { onSendFeedback } = useSendFeedback();
   return (

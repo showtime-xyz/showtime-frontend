@@ -129,7 +129,7 @@ export const ClaimButton = ({
             height={20}
           />
           <Text tw="ml-1 font-semibold text-white dark:text-black">
-            Save to Collect
+            {isAuthenticated ? "Save to Collect" : "Save on Spotify"}
           </Text>
         </>
       );
@@ -142,14 +142,14 @@ export const ClaimButton = ({
             height={20}
           />
           <Text tw="ml-1 font-semibold text-white dark:text-black">
-            Pre-Save to Collect
+            {isAuthenticated ? "Pre-Save to Collect" : "Pre-Save on Spotify"}
           </Text>
         </>
       );
     }
 
     return "Collect";
-  }, [status, isProgress, isDark, edition?.gating_type]);
+  }, [status, isProgress, isDark, edition?.gating_type, isAuthenticated]);
 
   const opacityTw = useMemo(() => {
     if (isProgress) {

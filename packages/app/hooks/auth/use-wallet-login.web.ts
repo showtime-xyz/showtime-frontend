@@ -4,6 +4,7 @@ import { useSigner } from "wagmi";
 
 import { useWallet } from "app/hooks/use-wallet";
 import { useAccessToken } from "app/lib/access-token";
+import { Logger } from "app/lib/logger";
 import { isMobileWeb } from "app/utilities";
 
 import { useUser } from "../use-user";
@@ -22,75 +23,84 @@ export function useWalletLogin() {
   //#region hooks
   const { setWeb3 } = useWeb3();
   const { getNonce, rotateNonce } = useNonce();
-  const { login: _login } = useAuth();
+  const { login: _login, logout, setAuthenticationStatus } = useAuth();
   const [showSignMessage, setShowSignMessage] = useState(false);
-  const {
-    address: walletAddress,
-    connected,
-    networkChanged,
-    signMessageAsync,
-  } = useWallet();
-  const wagmiSigner = useSigner();
-  const { user } = useUser();
+  const walletConnector = useWallet();
 
-  const getAddress = () => {
-    return walletAddress || user?.data.profile.wallet_addresses[0];
-  };
+  const wagmiSigner = useSigner();
 
   const { isAuthenticated } = useUser();
   const accessToken = useAccessToken();
   const authenticated = useMemo(() => !!isAuthenticated, [isAuthenticated]);
   //#endregion
 
-  //#region methods
-  const fetchNonce = async (_address: string) => {
-    try {
-      const response = await getNonce(_address);
+  const loginWithWallet = async () => {
+    let address, walletName;
 
-      return response;
-    } catch (error) {
-      dispatch("ERROR", { error });
-      return null;
-    }
-  };
-  const expireNonce = async (_address: string) => {
-    try {
-      await rotateNonce(_address);
-      dispatch("EXPIRE_NONCE_SUCCESS");
-    } catch (error) {
-      dispatch("ERROR", { error });
-    }
-  };
-  const handleLogin = async () => {
-    const address = getAddress();
-    const nonce = await fetchNonce(address as string);
-    if (nonce) {
-      const signature = await signMessageAsync({
-        message: process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce,
-      });
-      handleSignature(signature);
+    if (!walletConnector.connected) {
+      dispatch("CONNECT_TO_WALLET_REQUEST");
+      const res = await walletConnector.connect();
+      if (res?.address) address = res.address;
+      if (res?.walletName) walletName = res.walletName;
     } else {
-      dispatch("ERROR", { error: "Nonce is null" });
+      address = walletConnector.address;
+      walletName = walletConnector.name;
     }
-  };
-  const handleSignature = async (signature?: string) => {
     try {
-      const address = getAddress();
-      if (address && signature) {
-        await _login(LOGIN_WALLET_ENDPOINT, {
-          signature: signature,
+      if (address) {
+        setAuthenticationStatus("AUTHENTICATING");
+        dispatch("CONNECT_TO_WALLET_SUCCESS", {
+          name: walletName,
           address: address,
         });
-        expireNonce(address);
-      } else {
-        dispatch("ERROR", {
-          error: "Couldn't find address or signature data!",
-        });
+
+        // on mobile web we show a prompt to sign a message
+        if (!isMobileWeb()) {
+          await verifySignature(address);
+        }
       }
     } catch (error) {
+      logout();
+      Logger.error("login with wallet error", error);
       dispatch("ERROR", { error });
     }
   };
+
+  const verifySignature = async (addr?: string) => {
+    dispatch("FETCH_NONCE_REQUEST");
+    const address = addr ?? walletConnector.address;
+    if (address) {
+      const nonce = await getNonce(address);
+      dispatch("FETCH_NONCE_SUCCESS", {
+        nonce,
+      });
+
+      if (nonce) {
+        dispatch("SIGN_PERSONAL_MESSAGE_REQUEST");
+        const message = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce;
+        const signature = await walletConnector.signMessageAsync({
+          message,
+        });
+
+        if (signature) {
+          dispatch("SIGN_PERSONAL_MESSAGE_SUCCESS", {
+            signature,
+          });
+          dispatch("LOG_IN_REQUEST");
+          await _login(LOGIN_WALLET_ENDPOINT, {
+            signature: signature,
+            address,
+          });
+          dispatch("LOG_IN_SUCCESS");
+
+          dispatch("EXPIRE_NONCE_REQUEST");
+          await rotateNonce(address);
+          dispatch("EXPIRE_NONCE_SUCCESS");
+        }
+      }
+    }
+  };
+
   //#endregion
 
   // TODO: below thing doesn't work. Keeping it for now
@@ -103,28 +113,33 @@ export function useWalletLogin() {
 
   useEffect(() => {
     if (
-      (connected && authenticated) ||
-      (connected && authenticated && !networkChanged)
+      (walletConnector.connected && authenticated) ||
+      (walletConnector.connected &&
+        authenticated &&
+        !walletConnector.networkChanged)
     ) {
       handleSetWeb3();
-    } else if (connected && !authenticated) {
+    } else if (walletConnector.connected && !authenticated) {
       // TODO: refactor after getting a better alternative
       // https://github.com/rainbow-me/rainbowkit/discussions/536
       if (isMobileWeb()) {
         setShowSignMessage(true);
-      } else {
-        handleLogin();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accessToken, connected, authenticated, networkChanged]);
+  }, [
+    accessToken,
+    walletConnector.connected,
+    authenticated,
+    walletConnector.networkChanged,
+  ]);
 
   return {
     status,
     name,
     error,
-    loginWithWallet: handleLogin,
+    loginWithWallet,
     showSignMessage,
-    verifySignature: handleLogin,
+    verifySignature,
   };
 }

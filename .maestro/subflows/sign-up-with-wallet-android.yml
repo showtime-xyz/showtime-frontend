@@ -1,3 +1,16 @@
 appId: io.showtime.development
 ---
 - launchApp
+# - tapOn: "Showtime on Nishans-MacBook-Pro.local"
+- assertVisible: "Sign In"
+- tapOn: "Sign In"
+- tapOn: "Connect Wallet"
+- assertNotVisible: "Sign In"
+- tapOn:
+    point: "91%,92%"
+- tapOn: "Complete Profile"
+- tapOn: "your_username"
+- "inputRandomText"
+- tapOn: "Next"
+- tapOn: "Skip"
+- tapOn: "Skip"
