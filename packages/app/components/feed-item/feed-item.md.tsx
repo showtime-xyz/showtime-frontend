@@ -52,6 +52,7 @@ import { NFT } from "app/types";
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
+import { NSFWGate } from "./nsfw-gate";
 
 const NFT_DETAIL_WIDTH = 380;
 
@@ -216,6 +217,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 }}
                 resizeMode={ResizeMode.CONTAIN}
               />
+              <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
             </View>
           </View>
           {/* Control Swiper */}

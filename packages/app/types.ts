@@ -52,6 +52,7 @@ export type NFT = {
   multiple_owners_list: Array<OwnersListOwner>;
   listing?: Listing;
   chain_name?: string;
+  nsfw?: boolean;
 };
 
 export type Creator = {
