@@ -171,3 +171,8 @@ textarea:focus-visible {
   outline: none;
   box-shadow: none !important;
 }
+
+.no-scroll {
+  overflow: hidden;
+  height: 100%;
+}
