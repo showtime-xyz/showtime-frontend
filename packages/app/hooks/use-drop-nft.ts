@@ -1,6 +1,6 @@
 import { useCallback, useContext } from "react";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
+import { Alert } from "@showtime-xyz/universal.alert";
 
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
@@ -14,6 +14,7 @@ import { delay, getFileMeta } from "app/utilities";
 import { toast } from "design-system/toast";
 
 import { DropContext } from "../context/drop-context";
+import { useSendFeedback } from "./use-send-feedback";
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -135,7 +136,7 @@ export const useDropNFT = () => {
   const uploadMedia = useUploadMediaToPinata();
   const { state, dispatch } = useContext(DropContext);
   const mutate = useMatchMutate();
-  const Alert = useAlert();
+  const { onSendFeedback } = useSendFeedback();
 
   const pollTransaction = async ({
     transactionId,
@@ -282,7 +283,17 @@ export const useDropNFT = () => {
       if (e?.response?.status === 500) {
         Alert.alert(
           "Oops. An error occurred.",
-          "We are currently experiencing a lot of usage. Please try again in one hour!"
+          "Please contact us at help@showtime.xyz if this persists. Thanks!",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Contact",
+              onPress: onSendFeedback,
+            },
+          ]
         );
       }
 
