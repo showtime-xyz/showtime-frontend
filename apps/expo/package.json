@@ -30,7 +30,7 @@
     "update:production": "STAGE=production eas update --branch production",
     "build:development": "STAGE=development eas build --profile development --platform all && say done",
     "build:development:ios": "STAGE=development eas build --profile development --platform ios && say done",
-    "maestro:build:development:ios": "STAGE=development eas build --profile simulator --platform ios && say done",
+    "maestro:build:development:ios": "./eas-dev-build-ios.sh",
     "maestro:build:development:android": "STAGE=development eas build --profile simulator --platform android && say done",
     "build:development:android": "STAGE=development eas build --profile development --platform android && say done",
     "build:preview": "STAGE=staging eas build --profile preview --platform all && say done",

@@ -20,25 +20,8 @@ jobs:
         with:
           node-version: 14.x
 
-      - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Expo prebuild
-        run: yarn waldo:build
-
-      - name: Build with Xcode
-        run: |
-          DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
-
-          cd ios/ && E2E=true FLIPPER_DISABLE=1 STAGE=development xcodebuild -workspace Showtime.xcworkspace    \
-                    -scheme Showtime                              \
-                    -configuration Release                        \
-                    -sdk iphonesimulator                          \
-                    ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO              \
-                    -derivedDataPath "$DERIVED_DATA_PATH"         \
-                    clean build
-
-          echo "APP_DIR_PATH=${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/Showtime.app" >>$GITHUB_ENV
+      - name: Generate build
+        run: yarn maestro:build:development:ios
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
         with:
