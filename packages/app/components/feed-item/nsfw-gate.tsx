@@ -36,7 +36,7 @@ export const NSFWGate = ({
       <PlatformBlurView
         tint="dark"
         intensity={100}
-        tw="bg-black/30 backdrop-blur-3xl"
+        tw="android:bg-gray-800 web:bg-black/30 backdrop-blur-3xl"
         style={{
           position: "absolute",
           width: "100%",
@@ -46,9 +46,6 @@ export const NSFWGate = ({
           overflow: "hidden",
         }}
       >
-        {Platform.OS === "android" && (
-          <View tw="absolute top-0 left-0 right-0 bottom-0 bg-gray-500 dark:bg-gray-700" />
-        )}
         <View tw="flex-1 justify-between">
           <View tw="mt-auto mb-auto items-center justify-center text-center">
             <EyeOff color="white" fontSize={30} width={30} height={30} />
@@ -59,7 +56,7 @@ export const NSFWGate = ({
   }
   return (
     <PlatformBlurView
-      tw="bg-black/30 backdrop-blur-3xl"
+      tw="web:bg-black/30 android:bg-gray-800 backdrop-blur-3xl"
       tint="dark"
       intensity={100}
       style={{
@@ -68,9 +65,6 @@ export const NSFWGate = ({
         overflow: "hidden",
       }}
     >
-      {Platform.OS === "android" && (
-        <View tw="absolute top-0 left-0 right-0 bottom-0 bg-gray-600 dark:bg-gray-900" />
-      )}
       <View tw="flex-1 justify-between">
         <View tw="mt-auto mb-auto items-center justify-center px-12 text-center">
           <EyeOff color="white" fontSize={30} width={30} height={30} />
