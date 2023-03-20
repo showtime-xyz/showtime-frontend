@@ -36,45 +36,51 @@ export const WebFooter = () => {
         <View tw="flex flex-row justify-between">
           <View tw="mr-20 flex flex-col">
             {links.map((item) => (
-              <Link
-                href={item.link}
-                hrefAttrs={{
-                  target: "_blank",
-                  rel: "noreferrer",
-                }}
-                key={item.title}
-              >
-                <Text
+              <>
+                <Link
+                  href={item.link}
+                  hrefAttrs={{
+                    target: "_blank",
+                    rel: "noreferrer",
+                  }}
                   key={item.title}
-                  tw="text-13 pb-4 font-semibold text-gray-900 dark:text-white"
                 >
-                  {item.title}
-                </Text>
-              </Link>
+                  <Text
+                    key={item.title}
+                    tw="text-13 font-semibold text-gray-900 dark:text-white"
+                  >
+                    {item.title}
+                  </Text>
+                </Link>
+                <View tw="h-5" />
+              </>
             ))}
           </View>
           <View tw="flex flex-col">
             {social.map((item) => (
-              <Link
-                tw="mb-6 flex-row items-center"
-                href={item.link}
-                hrefAttrs={{
-                  target: "_blank",
-                  rel: "noreferrer",
-                }}
-                key={item.title}
-              >
-                <View tw="mr-2 text-base">
-                  {item?.icon({
-                    color: isDark ? "#FFF" : colors.gray[900],
-                    width: 20,
-                    height: 20,
-                  })}
-                </View>
-                <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
-                  {item.title}
-                </Text>
-              </Link>
+              <>
+                <Link
+                  tw="flex-row items-center"
+                  href={item.link}
+                  hrefAttrs={{
+                    target: "_blank",
+                    rel: "noreferrer",
+                  }}
+                  key={item.title}
+                >
+                  <View tw="mr-2 text-base">
+                    {item?.icon({
+                      color: isDark ? "#FFF" : colors.gray[900],
+                      width: 20,
+                      height: 20,
+                    })}
+                  </View>
+                  <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
+                    {item.title}
+                  </Text>
+                </Link>
+                <View tw="h-6" />
+              </>
             ))}
           </View>
         </View>
