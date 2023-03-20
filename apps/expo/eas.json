@@ -4,7 +4,8 @@
       "channel": "production",
       "distribution": "store",
       "ios": {
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "m1-medium"
       },
       "android": {
         "buildType": "app-bundle",
@@ -23,7 +24,8 @@
       "channel": "staging",
       "distribution": "internal",
       "ios": {
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "m1-medium"
       },
       "android": {
         "buildType": "apk",
@@ -42,7 +44,8 @@
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "m1-medium"
       },
       "android": {
         "image": "latest"
@@ -58,13 +61,14 @@
     "simulator": {
       "ios": {
         "simulator": true,
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "m1-medium"
       },
       "android": {
         "image": "latest"
       },
       "env": {
-        "STAGE": "staging"
+        "STAGE": "development"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
