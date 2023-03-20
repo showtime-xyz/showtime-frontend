@@ -10,8 +10,8 @@ export default {
   component: LightBox,
   title: "Components/LightBox",
 } as Meta;
-const { width } = Dimensions.get("window");
 
+const { width } = Dimensions.get("window");
 const LightBoxBasic = () => {
   return (
     <View tw="flex-1 items-center justify-center">

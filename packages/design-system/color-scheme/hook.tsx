@@ -10,6 +10,5 @@ export const useColorScheme = () => {
       "Please wrap your app with <ColorSchemeProvider> from @showtime-xyz/universal.color-scheme"
     );
   }
-
   return colorSchemeContext;
 };
