@@ -247,13 +247,7 @@ export function useLockBodyScroll(isLocked = true) {
       isMounted &&
       isLocked
     ) {
-      window.document.body.style.overflow = "hidden";
-      window.document.body.style.marginRight = "0px";
-      window.document.body.style.position = "fixed";
-      // window.document.body.style.top = `-${y}px`;
-      window.document.body.style.top = "0px";
-      window.document.body.style.left = "0px";
-      window.document.body.style.right = "0px";
+      document.body.classList.add("no-scroll");
     }
 
     return () => {
@@ -263,13 +257,7 @@ export function useLockBodyScroll(isLocked = true) {
         isMounted &&
         isLocked
       ) {
-        window.document.body.style.overflow = "";
-        window.document.body.style.marginRight = "";
-        window.document.body.style.position = "";
-        window.document.body.style.top = "";
-        window.document.body.style.left = "";
-        window.document.body.style.right = "";
-        // window.scrollTo(0, y);
+        document.body.classList.remove("no-scroll");
       }
     };
   }, [isMounted, isLocked]);
