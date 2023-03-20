@@ -18,6 +18,10 @@ const links = [
     link: "/assets/Showtime-Assets.zip",
     title: "Brand Assets",
   },
+  {
+    link: "https://showtime-xyz.notion.site/Frequently-Asked-Questions-Showtime-f57d533e7fb84c7c9728cd0248764c78",
+    title: "Frequently Asked Questions",
+  },
 ];
 
 const social = [
