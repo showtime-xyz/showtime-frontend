@@ -380,6 +380,20 @@ function NFTDropdown({
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           )}
+
+          {__DEV__ && (
+            <DropdownMenuItem
+              onSelect={async () => {
+                const as = `/raffle/${nft?.contract_address}`;
+                router.push(as);
+              }}
+              key="raffle"
+            >
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                Raffle
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenuRoot>
     </>

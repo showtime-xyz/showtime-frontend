@@ -47,6 +47,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       dropPrivate: "drop/private",
       dropUpdate: "drop/update/:editionContractAddress",
       qrCodeShare: "/qr-code-share/:contractAddress",
+      raffle: "/raffle/:contractAddress",
       claim: "claim/:contractAddress",
       collectors: "collectors/:chainName/:contractAddress/:tokenId",
       claimLimitExplanation: "claim/claim-limit-explanation",

@@ -39,6 +39,7 @@ import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { OnboardingScreen } from "app/screens/onboarding";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
+import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
@@ -180,6 +181,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <FollowingScreen />
         <DropScreen />
         <ClaimScreen />
+        <RaffleScreen />
         <CollectorsScreen />
         <ClaimLimitExplanationScreen />
         <LikersScreen />
