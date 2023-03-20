@@ -11,6 +11,8 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { EyeOff } from "design-system/icon";
 import { Text } from "design-system/text";
 
+const PlatformBlurView = Platform.OS === "ios" ? ExpoBlurView : View;
+
 export const NSFWGate = ({
   show,
   nftId,
@@ -31,9 +33,10 @@ export const NSFWGate = ({
 
   if (variant === "thumbnail") {
     return (
-      <ExpoBlurView
+      <PlatformBlurView
         tint="dark"
-        intensity={85}
+        intensity={100}
+        tw="bg-black/30 backdrop-blur-3xl"
         style={{
           position: "absolute",
           width: "100%",
@@ -51,11 +54,12 @@ export const NSFWGate = ({
             <EyeOff color="white" fontSize={30} width={30} height={30} />
           </View>
         </View>
-      </ExpoBlurView>
+      </PlatformBlurView>
     );
   }
   return (
-    <ExpoBlurView
+    <PlatformBlurView
+      tw="bg-black/30 backdrop-blur-3xl"
       tint="dark"
       intensity={100}
       style={{
@@ -97,6 +101,6 @@ export const NSFWGate = ({
           </Text>
         </View>
       </View>
-    </ExpoBlurView>
+    </PlatformBlurView>
   );
 };
