@@ -31,24 +31,28 @@ export const SettingDeleteAccount = () => {
       setError("Username does not match");
       return;
     }
-    Alert.alert("Delete Account", "Are you sure you want to delete your account? This action cannot be undone.", [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "Confirm",
-        style: "destructive",
-        onPress: async () => {
-          await deleteUser().catch((e) => {
-            Logger.error(e);
-            toast.success("Error deleting account");
-          });
-          toast.success("Your account has been deleted");
-          logout();
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to delete your account? This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
         },
-      },
-    ]);
+        {
+          text: "Confirm",
+          style: "destructive",
+          onPress: async () => {
+            await deleteUser().catch((e) => {
+              Logger.error(e);
+              toast.success("Error deleting account");
+            });
+            toast.success("Your account has been deleted");
+            logout();
+          },
+        },
+      ]
+    );
   };
   return (
     <View>

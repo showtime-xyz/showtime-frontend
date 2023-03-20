@@ -4,10 +4,10 @@ import { AppState, LogBox } from "react-native";
 import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
 import rudderClient from "@rudderstack/rudder-sdk-react-native";
 import { Audio } from "expo-av";
+import { Image } from "expo-image";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
-import FastImage from "react-native-fast-image";
 import { enableLayoutAnimations } from "react-native-reanimated";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
@@ -112,7 +112,7 @@ function App() {
       () => {
         async function clearFastImageMemory() {
           try {
-            await FastImage.clearMemoryCache();
+            await Image.clearMemoryCache();
             Logger.log("did receive memory warning and cleared");
           } catch {}
         }

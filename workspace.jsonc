@@ -1,7 +1,7 @@
 /**
  * this is the main configuration file of your bit workspace.
  * for full documentation, please see: https://bit.dev/docs/workspace/workspace-configuration
- **/{
+ **/ {
   "$schema": "https://static.bit.dev/teambit/schemas/schema.json",
   /**
    * main configuration of the Bit workspace.
@@ -63,8 +63,8 @@
         "expo-navigation-bar": "2.0.1",
         "expo-status-bar": "1.4.2",
         "expo-system-ui": "2.0.1",
-        "react-native-fast-image": "8.6.3",
-        "react-native-mmkv": "2.5.1",
+        "expo-image": "^1.0.0",
+        "react-native-mmkv": "2.6.1",
         "react-native-safe-area-context": "4.5.0",
         "react-native-screens": "3.19.0",
         "react-native-svg": "13.8.0",
@@ -98,9 +98,7 @@
      **/
     "*": {
       "teambit.pkg/pkg": {
-        "packageManagerPublishArgs": [
-          "--access public"
-        ],
+        "packageManagerPublishArgs": ["--access public"],
         "packageJson": {
           "private": false,
           "name": "@showtime-xyz/{scope}.{name}"
