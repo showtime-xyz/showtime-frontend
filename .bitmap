@@ -71,7 +71,7 @@
     },
     "country-code-picker": {
         "scope": "showtime.universal",
-        "version": "0.0.103",
+        "version": "0.0.104",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/country-code-picker"
     },
@@ -125,7 +125,7 @@
     },
     "infinite-scroll-list": {
         "scope": "showtime.universal",
-        "version": "0.0.49",
+        "version": "0.0.50",
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/infinite-scroll-list"
     },
@@ -245,7 +245,7 @@
     },
     "tab-view": {
         "scope": "showtime.universal",
-        "version": "0.0.76",
+        "version": "0.0.77",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/tab-view"
     },
