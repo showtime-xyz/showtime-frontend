@@ -16,6 +16,7 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { ResizeMode } from "expo-av";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -30,6 +31,7 @@ import { Image } from "@showtime-xyz/universal.image";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
+import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
@@ -205,54 +207,76 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           >
             <Animated.View
               style={[
-                detailStyle,
                 {
-                  bottom: bottomMargin,
+                  height: itemHeight - bottomPadding,
                   position: "absolute",
-                  right: 0,
-                  left: 0,
-                  zIndex: 1,
                 },
+                contentStyle,
               ]}
-              onLayout={({
-                nativeEvent: {
-                  layout: { height },
-                },
-              }) => {
-                isLayouted.value = 1;
-                setDetailHeight(height);
-              }}
             >
-              <BlurView
-                blurRadius={15}
-                style={StyleSheet.absoluteFillObject}
-                overlayColor="transparent"
-              />
-              {nft?.mime_type?.startsWith("video") ? (
-                <View tw="z-9 absolute top-[-30px] right-4">
-                  <MuteButton />
-                </View>
-              ) : null}
-
-              <View tw="z-9 absolute -top-[30px] left-2.5">
-                <ContentTypeTooltip edition={edition} />
-              </View>
-
-              <View
-                style={{
-                  ...blurredBackgroundStyles,
-                  paddingBottom: bottomPadding,
+              <Media
+                item={nft}
+                numColumns={1}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: windowWidth,
                 }}
-                tw="overflow-hidden"
-              >
-                <NFTDetails
-                  edition={edition}
-                  nft={nft}
-                  detail={detailData?.data?.item}
-                />
-              </View>
+                resizeMode={ResizeMode.COVER}
+                onPinchStart={hideHeader}
+                onPinchEnd={showHeader}
+              />
             </Animated.View>
           </FeedItemTapGesture>
+          <Reanimated.View
+            ref={detailViewRef}
+            style={[
+              detailStyle,
+              {
+                bottom: bottomMargin,
+                position: "absolute",
+                right: 0,
+                left: 0,
+                zIndex: 1,
+              },
+            ]}
+            onLayout={({
+              nativeEvent: {
+                layout: { height },
+              },
+            }) => {
+              isLayouted.value = 1;
+              setDetailHeight(height);
+            }}
+          >
+            <BlurView
+              blurRadius={15}
+              style={StyleSheet.absoluteFillObject}
+              overlayColor="transparent"
+            />
+            {nft?.mime_type?.startsWith("video") ? (
+              <View tw="z-9 absolute top-[-30px] right-4">
+                <MuteButton />
+              </View>
+            ) : null}
+
+            <View tw="z-9 absolute -top-[30px] left-2.5">
+              <ContentTypeTooltip edition={edition} />
+            </View>
+
+            <View
+              style={{
+                ...blurredBackgroundStyles,
+                paddingBottom: bottomPadding,
+              }}
+              tw="overflow-hidden"
+            >
+              <NFTDetails
+                edition={edition}
+                nft={nft}
+                detail={detailData?.data?.item}
+              />
+            </View>
+          </Reanimated.View>
         </View>
       </LikeContextProvider>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />

@@ -1,7 +1,7 @@
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAddWallet } from "app/hooks/use-add-wallet";
