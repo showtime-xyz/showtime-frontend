@@ -23,7 +23,7 @@
     },
     "avatar": {
         "scope": "showtime.universal",
-        "version": "0.0.76",
+        "version": "0.0.77",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/avatar"
     },
@@ -119,7 +119,7 @@
     },
     "image": {
         "scope": "showtime.universal",
-        "version": "0.0.70",
+        "version": "0.0.71",
         "mainFile": "index.tsx",
         "rootDir": "packages/design-system/image"
     },
