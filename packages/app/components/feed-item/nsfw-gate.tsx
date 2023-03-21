@@ -11,6 +11,8 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { EyeOff } from "design-system/icon";
 import { Text } from "design-system/text";
 
+const PlatformBlurView = Platform.OS === "ios" ? ExpoBlurView : View;
+
 export const NSFWGate = ({
   show,
   nftId,
@@ -31,9 +33,10 @@ export const NSFWGate = ({
 
   if (variant === "thumbnail") {
     return (
-      <ExpoBlurView
+      <PlatformBlurView
         tint="dark"
-        intensity={85}
+        intensity={100}
+        tw="android:bg-gray-800 web:bg-black/30 backdrop-blur-3xl"
         style={{
           position: "absolute",
           width: "100%",
@@ -43,19 +46,17 @@ export const NSFWGate = ({
           overflow: "hidden",
         }}
       >
-        {Platform.OS === "android" && (
-          <View tw="absolute top-0 left-0 right-0 bottom-0 bg-gray-500 dark:bg-gray-700" />
-        )}
         <View tw="flex-1 justify-between">
           <View tw="mt-auto mb-auto items-center justify-center text-center">
             <EyeOff color="white" fontSize={30} width={30} height={30} />
           </View>
         </View>
-      </ExpoBlurView>
+      </PlatformBlurView>
     );
   }
   return (
-    <ExpoBlurView
+    <PlatformBlurView
+      tw="web:bg-black/30 android:bg-gray-800 backdrop-blur-3xl"
       tint="dark"
       intensity={100}
       style={{
@@ -64,9 +65,6 @@ export const NSFWGate = ({
         overflow: "hidden",
       }}
     >
-      {Platform.OS === "android" && (
-        <View tw="absolute top-0 left-0 right-0 bottom-0 bg-gray-600 dark:bg-gray-900" />
-      )}
       <View tw="flex-1 justify-between">
         <View tw="mt-auto mb-auto items-center justify-center px-12 text-center">
           <EyeOff color="white" fontSize={30} width={30} height={30} />
@@ -97,6 +95,6 @@ export const NSFWGate = ({
           </Text>
         </View>
       </View>
-    </ExpoBlurView>
+    </PlatformBlurView>
   );
 };
