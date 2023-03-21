@@ -520,12 +520,12 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                           default: {},
                         })}
                       >
-                        <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-black p-1">
+                        <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-white p-1">
                           <ReactQRCode
                             size={68}
-                            // ecl="M"
+                            // ecl="L"
                             value={qrCodeUrl.toString()}
-                            fillColors={["#000", "#FFF"]}
+                            fillColors={["#fff", "#000"]}
                           />
                         </View>
                         <View tw="flex-1 justify-center">
