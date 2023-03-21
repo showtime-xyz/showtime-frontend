@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { View } from "@showtime-xyz/universal.view";
 
 type TabLoadingProps = {
