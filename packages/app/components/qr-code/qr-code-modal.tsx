@@ -229,10 +229,6 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         format: "png",
         quality: 0.8,
         fileName: `QR Code - ${date.valueOf()}`,
-        /**
-         * Notes: Instagram need to format to base64,
-         * I guess it's becuase of can't access private folder when deep link to other App
-         */
         ...(result ? { result } : {}),
       });
       return uri;
@@ -275,14 +271,47 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     }
   }, [nft, requestPermission, status?.granted]);
 
+  const prepareShareToIG = useCallback(
+    async (url: string) => {
+      let hasPermission = false;
+      if (status?.granted) {
+        hasPermission = status?.granted;
+      } else {
+        const res = await requestPermission();
+        hasPermission = res?.granted;
+      }
+      if (hasPermission) {
+        await MediaLibrary.saveToLibraryAsync(url);
+      } else {
+        Alert.alert(
+          "OOps, Before sharing the photo, please enable photo permissions."
+        );
+      }
+      return hasPermission;
+    },
+    [requestPermission, status?.granted]
+  );
+
   const shareSingleImage = useCallback(
     async (
       social: typeof Share.Social.TWITTER | typeof Share.Social.INSTAGRAM
     ) => {
       const url = await getViewShot();
+
       if (!url) {
         Alert.alert("Oops, An error occurred.");
         return;
+      }
+      if (social === Share.Social.INSTAGRAM) {
+        /**
+         * IG is not support private path address, and if you pass a uri, IG will always read the last pic from you Photos!
+         * so we need to hack it, flow here.
+         * check permission -> save to Photo -> share to IG(IG will read the last pic from you Photo)
+         */
+        const isCanShareToIG = await prepareShareToIG(url);
+        if (!isCanShareToIG) {
+          return;
+        }
       }
       try {
         const ShareResponse = await Share.shareSingle({
@@ -299,7 +328,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         Logger.error("shareSingleImage Error =>", error);
       }
     },
-    [nft]
+    [nft, prepareShareToIG]
   );
 
   const shareWithTwitterIntent = useCallback(() => {
