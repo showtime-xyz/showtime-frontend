@@ -9,18 +9,21 @@ on:
 
 jobs:
   build:
-    runs-on: macOS-latest
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up Node
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
-
-      - name: Generate build
+          node-version: 18.x
+          cache: yarn
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build on EAS
         run: yarn maestro:build:development:ios
 
       - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
