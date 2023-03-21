@@ -7,11 +7,11 @@ import React, {
   useRef,
 } from "react";
 
-import { Haptics } from "@showtime-xyz/universal.haptics";
-
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useUser } from "app/hooks/use-user";
 import { NFT } from "app/types";
+
+import { Haptics } from "design-system/haptics";
 
 type LikeContextType = {
   isLiked: boolean;

@@ -15,21 +15,6 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
-import { Accordion } from "@showtime-xyz/universal.accordion";
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -47,7 +32,21 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
+import { Accordion } from "design-system/accordion";
+import { Alert } from "design-system/alert";
+import { Button } from "design-system/button";
+import { Checkbox } from "design-system/checkbox";
+import { DataPill } from "design-system/data-pill";
+import { ErrorText, Fieldset } from "design-system/fieldset";
 import { Hidden } from "design-system/hidden";
+import { useIsDarkMode } from "design-system/hooks";
+import { FlipIcon, Image as ImageIcon } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { useRouter } from "design-system/router";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { ScrollView } from "design-system/scroll-view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;

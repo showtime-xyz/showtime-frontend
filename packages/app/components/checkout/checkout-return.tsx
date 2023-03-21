@@ -1,13 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
+
+import { Button } from "design-system/button";
+import { useRouter } from "design-system/router";
+import { Spinner } from "design-system/spinner";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { stripePromise } from "./stripe";
 

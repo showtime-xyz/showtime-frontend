@@ -1,12 +1,11 @@
 import { Platform, useWindowDimensions } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 
+import { useRouter } from "design-system/router";
+import { useSafeAreaInsets } from "design-system/safe-area";
 import { breakpoints } from "design-system/theme";
 
 import { useUser } from "./use-user";

@@ -3,8 +3,8 @@ import { StyleProp, TextStyle } from "react-native";
 
 import { LinearGradientProps } from "expo-linear-gradient";
 
-import type { Props as PressableProps } from "@showtime-xyz/universal.pressable";
-import type { TW } from "@showtime-xyz/universal.tailwind";
+import type { Props as PressableProps } from "design-system/pressable";
+import type { TW } from "design-system/tailwind";
 
 export type ButtonVariant =
   | "primary"

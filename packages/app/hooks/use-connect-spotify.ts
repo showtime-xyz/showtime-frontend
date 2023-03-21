@@ -1,10 +1,10 @@
 import * as WebBrowser from "expo-web-browser";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-
 import { Logger } from "app/lib/logger";
 import { getQueryString } from "app/lib/spotify";
 import { redirectUri } from "app/lib/spotify/queryString";
+
+import { useAlert } from "design-system/alert";
 
 import { useSaveSpotifyToken } from "./use-save-spotify-token";
 

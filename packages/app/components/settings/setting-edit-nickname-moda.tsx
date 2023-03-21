@@ -2,13 +2,13 @@ import { useEffect, useState, useRef } from "react";
 
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Modal } from "@showtime-xyz/universal.modal";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useAddWalletNickname } from "app/hooks/api/use-add-wallet-nickname";
 import { WalletAddressesV2 } from "app/types";
+
+import { Button } from "design-system/button";
+import { Fieldset } from "design-system/fieldset";
+import { Modal } from "design-system/modal";
+import { View } from "design-system/view";
 
 export type EditNicknameModalProps = {
   editingWallet?: WalletAddressesV2;

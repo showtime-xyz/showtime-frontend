@@ -1,7 +1,7 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { Onboarding } from "app/components/onboarding";
 import { useTrackPageViewed } from "app/lib/analytics";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const OnboardingPage = () => {
   useTrackPageViewed({ name: "Onboarding" });

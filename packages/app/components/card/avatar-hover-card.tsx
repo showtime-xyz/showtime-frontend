@@ -1,6 +1,6 @@
-import { Avatar, AvatarProps } from "@showtime-xyz/universal.avatar";
-
 import { Link } from "app/navigation/link";
+
+import { Avatar, AvatarProps } from "design-system/avatar";
 
 export type AvatarHoverCardProps = Omit<AvatarProps, "alt"> & {
   username: string | undefined | null;

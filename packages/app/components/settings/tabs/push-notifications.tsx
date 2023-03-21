@@ -1,13 +1,13 @@
 import { Platform } from "react-native";
 
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Switch } from "@showtime-xyz/universal.switch";
-import { TabScrollView } from "@showtime-xyz/universal.tab-view";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { usePushNotificationsPreferences } from "app/hooks/use-push-notifications-preferences";
 import { axios } from "app/lib/axios";
+
+import { Spinner } from "design-system/spinner";
+import { Switch } from "design-system/switch";
+import { TabScrollView } from "design-system/tab-view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { SettingsTitle } from "../settings-title";
 

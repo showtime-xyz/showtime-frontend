@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { SwipeList } from "app/components/swipe-list";
 import { useFeed } from "app/hooks/use-feed";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
+
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { View } from "design-system/view";
 
 export const Feed = () => {
   return (

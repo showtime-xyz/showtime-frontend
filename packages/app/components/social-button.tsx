@@ -1,8 +1,5 @@
-import {
-  Pressable,
-  Props as PressableProps,
-} from "@showtime-xyz/universal.pressable";
-import { Text } from "@showtime-xyz/universal.text";
+import { Pressable, Props as PressableProps } from "design-system/pressable";
+import { Text } from "design-system/text";
 
 type SocialButtonProps = PressableProps & {
   text?: string | JSX.Element;

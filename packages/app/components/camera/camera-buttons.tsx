@@ -1,12 +1,12 @@
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Flip, Close, Check } from "@showtime-xyz/universal.icon";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { View } from "@showtime-xyz/universal.view";
-
 import { FilePickerResolveValue } from "app/lib/file-picker";
 import { ImagePickerButton } from "app/lib/image-picker";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { Flip, Close, Check } from "design-system/icon";
+import { PressableScale } from "design-system/pressable-scale";
+import { View } from "design-system/view";
 
 type Props = {
   photos: { uri: string }[];

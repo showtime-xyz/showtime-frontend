@@ -3,9 +3,9 @@ import { Platform, ViewStyle } from "react-native";
 
 import * as DropdownMenu from "zeego/src/dropdown-menu";
 
-import { styled } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
+import { styled } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 const reversalWebIconStyle: ViewStyle = Platform.select({
   web: {

@@ -1,5 +1,3 @@
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { useAuth } from "app/hooks/auth/use-auth";
 import { LOGIN_MAGIC_ENDPOINT } from "app/hooks/auth/use-magic-login";
 import { useWeb3 } from "app/hooks/use-web3";
@@ -7,6 +5,8 @@ import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
 import { useMagicSocialAuth } from "app/lib/social-logins";
 import { isProfileIncomplete } from "app/utilities";
+
+import { useRouter } from "design-system/router";
 
 import { LoginButton } from "./login-button";
 

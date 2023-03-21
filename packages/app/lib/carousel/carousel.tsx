@@ -9,9 +9,9 @@ import Animated, {
 import RNRCarousel from "react-native-reanimated-carousel";
 import type { ICarouselInstance } from "react-native-reanimated-carousel";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { useIsDarkMode } from "design-system/hooks";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { Controller } from "./controller";
 import { CarouselProps } from "./types";

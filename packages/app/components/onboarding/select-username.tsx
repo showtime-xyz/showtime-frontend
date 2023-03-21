@@ -6,11 +6,6 @@ import { MotiView } from "moti";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useValidateUsername } from "app/hooks/use-validate-username";
@@ -19,7 +14,11 @@ import { Logger } from "app/lib/logger";
 import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
+import { Button } from "design-system/button";
+import { Fieldset } from "design-system/fieldset";
 import { Spinner } from "design-system/spinner";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { OnboardingStepContext } from "./onboarding-context";
 import { OnboardingStep } from "./onboarding-types";

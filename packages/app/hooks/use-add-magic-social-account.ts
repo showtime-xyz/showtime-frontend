@@ -4,13 +4,12 @@ import * as WebBrowser from "expo-web-browser";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useMagicSocialAuth } from "app/lib/social-logins";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
+import { useAlert } from "design-system/alert";
 import { toast } from "design-system/toast";
 
 type AddSocialType = {

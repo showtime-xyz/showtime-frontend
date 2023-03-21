@@ -3,13 +3,13 @@ import { Platform, StyleSheet } from "react-native";
 
 import * as Tooltip from "universal-tooltip";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Globe, Spotify, Lock } from "@showtime-xyz/universal.icon";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { Globe, Spotify, Lock } from "design-system/icon";
+import { PressableHover } from "design-system/pressable-hover";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { isMobileWeb } from "../utilities";
 import { PlayOnSpotify } from "./play-on-spotify";

@@ -15,9 +15,9 @@ import BottomSheet, {
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { useIsDarkMode } from "design-system/hooks";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { colors } from "design-system/tailwind";
 
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";

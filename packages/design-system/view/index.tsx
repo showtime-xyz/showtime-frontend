@@ -4,8 +4,8 @@ import {
   ViewProps as RNViewProps,
 } from "react-native";
 
-import { styled } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
+import { styled } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind";
 
 export type ViewProps = Omit<RNViewProps, "tw"> & {
   tw?: string | Array<string> | TW[];

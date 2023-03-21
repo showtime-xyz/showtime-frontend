@@ -3,8 +3,8 @@ import {
   PressableProps,
 } from "react-native";
 
-import { styled } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
+import { styled } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind";
 
 export type Props = Omit<PressableProps, "tw"> & {
   tw?: TW;

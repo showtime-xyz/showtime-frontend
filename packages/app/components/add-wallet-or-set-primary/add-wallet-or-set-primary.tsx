@@ -1,11 +1,11 @@
 import { Platform } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { setPrimaryWalletSuccessCallback } from "app/hooks/api/use-set-primary-wallet";
+
+import { Button } from "design-system/button";
+import { useRouter } from "design-system/router";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const AddWalletOrSetPrimary = ({
   title,

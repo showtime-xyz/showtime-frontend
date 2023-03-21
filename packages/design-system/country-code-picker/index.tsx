@@ -14,12 +14,12 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check } from "@showtime-xyz/universal.icon";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { useIsDarkMode } from "design-system/hooks";
+import { Check } from "design-system/icon";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { PressableScale } from "design-system/pressable-scale";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import data, { CountryDataType } from "./country-code-data";
 

@@ -1,8 +1,5 @@
 import { Platform } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { BlockedListScreen } from "app/screens/blocked-list";
@@ -29,6 +26,9 @@ import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { SwipeListScreen } from "app/screens/swipe-list";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { useSafeAreaInsets } from "design-system/safe-area";
 
 import { DropEventScreen } from "../screens/drop-event";
 import { DropFreeScreen } from "../screens/drop-free";

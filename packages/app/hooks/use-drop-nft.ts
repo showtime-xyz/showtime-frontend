@@ -1,7 +1,5 @@
 import { useCallback, useContext } from "react";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
@@ -11,6 +9,7 @@ import { captureException } from "app/lib/sentry";
 import { GatingType } from "app/types";
 import { delay, getFileMeta } from "app/utilities";
 
+import { Alert } from "design-system/alert";
 import { toast } from "design-system/toast";
 
 import { DropContext } from "../context/drop-context";

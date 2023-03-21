@@ -1,17 +1,5 @@
 import { memo, useCallback } from "react";
 
-import { Chip } from "@showtime-xyz/universal.chip";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { Image } from "@showtime-xyz/universal.image";
-import {
-  InfiniteScrollList,
-  InfiniteScrollListProps,
-} from "@showtime-xyz/universal.infinite-scroll-list";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useMyInfo } from "app/hooks/api-hooks";
 import { UserItemType } from "app/hooks/api/use-follow-list";
 import { useFollow } from "app/hooks/use-follow";
@@ -19,6 +7,18 @@ import { useModalListProps } from "app/hooks/use-modal-list-props";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
+
+import { Chip } from "design-system/chip";
+import { useColorScheme } from "design-system/color-scheme";
+import { Image } from "design-system/image";
+import {
+  InfiniteScrollList,
+  InfiniteScrollListProps,
+} from "design-system/infinite-scroll-list";
+import { Skeleton } from "design-system/skeleton";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 import { EmptyPlaceholder } from "./empty-placeholder";
 import { FollowButton } from "./follow-button";

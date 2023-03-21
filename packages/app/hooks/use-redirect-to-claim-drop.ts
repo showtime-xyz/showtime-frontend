@@ -1,10 +1,10 @@
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { useOnboardingPromise } from "app/components/onboarding";
 import { useLogInPromise } from "app/lib/login-promise";
 import { createParam } from "app/navigation/use-param";
+
+import { useRouter } from "design-system/router";
 
 const { useParam } = createParam<{
   password: string;

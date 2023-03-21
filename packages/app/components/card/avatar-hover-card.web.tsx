@@ -2,18 +2,6 @@ import { useMemo } from "react";
 
 import * as HoverCard from "@radix-ui/react-hover-card";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
-import { Button } from "@showtime-xyz/universal.button";
-import { Chip } from "@showtime-xyz/universal.chip";
-import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { Image } from "@showtime-xyz/universal.image";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
@@ -21,6 +9,18 @@ import { useFollow } from "app/hooks/use-follow";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link, TextLink } from "app/navigation/link";
 import { getFullSizeCover, getProfileImage, isMobileWeb } from "app/utilities";
+
+import { Avatar } from "design-system/avatar";
+import { Button } from "design-system/button";
+import { Chip } from "design-system/chip";
+import { ClampText } from "design-system/clamp-text";
+import { useColorScheme } from "design-system/color-scheme";
+import { Image } from "design-system/image";
+import { Skeleton } from "design-system/skeleton";
+import { Spinner } from "design-system/spinner";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 import { FollowButton } from "../follow-button";
 import { ProfileFollows } from "../profile/profile-follows";

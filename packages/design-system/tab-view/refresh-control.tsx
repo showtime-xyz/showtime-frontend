@@ -14,8 +14,8 @@ import Animated, {
 import {
   RefreshControlProps,
   RefreshTypeEnum,
-} from "@showtime-xyz/universal.collapsible-tab-view";
-import { SpinnerView } from "@showtime-xyz/universal.spinner";
+} from "design-system/collapsible-tab-view";
+import { SpinnerView } from "design-system/spinner";
 
 export const RefreshControl = ({
   progress,

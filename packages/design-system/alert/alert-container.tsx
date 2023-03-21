@@ -3,9 +3,9 @@ import { Modal, StyleSheet } from "react-native";
 
 import { MotiView } from "moti";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { useIsDarkMode } from "design-system/hooks";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { Alert, AlertProps } from "./alert";
 

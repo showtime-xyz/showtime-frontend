@@ -7,19 +7,19 @@ import {
 } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
-import { AnimateHeight } from "@showtime-xyz/universal.accordion";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useId } from "@showtime-xyz/universal.input";
-import { Label } from "@showtime-xyz/universal.label";
-import { Select } from "@showtime-xyz/universal.select";
-import type { SelectProps } from "@showtime-xyz/universal.select";
-import { Switch } from "@showtime-xyz/universal.switch";
-import type { SwitchProps } from "@showtime-xyz/universal.switch";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { TextInput } from "@showtime-xyz/universal.text-input";
-import type { TextInputProps } from "@showtime-xyz/universal.text-input";
-import { View } from "@showtime-xyz/universal.view";
+import { AnimateHeight } from "design-system/accordion";
+import { useIsDarkMode } from "design-system/hooks";
+import { useId } from "design-system/input";
+import { Label } from "design-system/label";
+import { Select } from "design-system/select";
+import type { SelectProps } from "design-system/select";
+import { Switch } from "design-system/switch";
+import type { SwitchProps } from "design-system/switch";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { TextInput } from "design-system/text-input";
+import type { TextInputProps } from "design-system/text-input";
+import { View } from "design-system/view";
 
 const PlatformAnimateHeight =
   Platform.OS === "web" || Platform.OS === "android" ? Fragment : AnimateHeight;

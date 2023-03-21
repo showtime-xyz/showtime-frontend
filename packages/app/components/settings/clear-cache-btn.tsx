@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-import { Zap } from "@showtime-xyz/universal.icon";
-
 import { deleteAppCache } from "app/lib/delete-cache";
+
+import { useAlert } from "design-system/alert";
+import { Zap } from "design-system/icon";
 
 import { AccountSettingItem } from "./settings-account-item";
 

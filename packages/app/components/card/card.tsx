@@ -10,13 +10,6 @@ import {
 import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
-import {
-  PressableScale,
-  Props as PressableScaleProps,
-} from "@showtime-xyz/universal.pressable-scale";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
@@ -33,6 +26,13 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { NFT } from "app/types";
+
+import {
+  PressableScale,
+  Props as PressableScaleProps,
+} from "design-system/pressable-scale";
+import { Skeleton } from "design-system/skeleton";
+import { View } from "design-system/view";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NSFWGate } from "../feed-item/nsfw-gate";

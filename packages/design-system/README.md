@@ -20,7 +20,7 @@ Then if you want to publish a new version you can run:
 
 Then you can install the new version of the packages in `apps/expo/package.json`:
 
-- `yarn up '@showtime-xyz/universal.*'`
+- `yarn up 'design-system/*'`
   or
 - `yarn upgrade:design-system` if you are working in the Showtime monorepo.
 
@@ -32,7 +32,7 @@ You can get started pretty easily if you follow the same monorepo structure as t
 
 `cd apps/expo`
 
-`yarn add @showtime-xyz/universal.view @showtime-xyz/universal.text`
+`yarn add design-system/view design-system/text`
 
 In `next.config.js`, please use `transpilePackages` to transpile the design system:
 
@@ -40,9 +40,9 @@ In `next.config.js`, please use `transpilePackages` to transpile the design syst
 const nextConfig = {
   experimental: {
     transpilePackages: [
-      "@showtime-xyz/universal.tailwind",
-      "@showtime-xyz/universal.view",
-      "@showtime-xyz/universal.text",
+      "design-system/tailwind",
+      "design-system/view",
+      "design-system/text",
     ],
   },
 };
@@ -79,8 +79,8 @@ important: "html",
 You can now use Universal in your app:
 
 ```tsx:app/hello-world.tsx
-import { View } from "@showtime-xyz/universal.view"
-import { Text } from "@showtime-xyz/universal.text"
+import { View } from "design-system/view"
+import { Text } from "design-system/text"
 
 export function HelloWorld() {
   return (

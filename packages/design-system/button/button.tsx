@@ -2,10 +2,10 @@ import { Children, cloneElement, useMemo } from "react";
 
 import { LinearGradient } from "expo-linear-gradient";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { useIsDarkMode } from "design-system/hooks";
+import { PressableHover } from "design-system/pressable-hover";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import {
   CONTAINER_HEIGHT_TW,

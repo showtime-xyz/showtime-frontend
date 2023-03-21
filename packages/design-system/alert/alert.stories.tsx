@@ -2,8 +2,8 @@ import { Platform } from "react-native";
 
 import { Meta } from "@storybook/react";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { View } from "@showtime-xyz/universal.view";
+import { Button } from "design-system/button";
+import { View } from "design-system/view";
 
 import { AlertProvider, useCustomAlert, Alert } from "./index";
 

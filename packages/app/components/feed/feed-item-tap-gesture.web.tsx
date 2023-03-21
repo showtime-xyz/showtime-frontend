@@ -10,9 +10,9 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 
-import { HeartFilled } from "@showtime-xyz/universal.icon";
-
 import { useLike } from "app/context/like-context";
+
+import { HeartFilled } from "design-system/icon";
 
 const heartContainerStyle: ViewStyle = {
   position: "absolute",

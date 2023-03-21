@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { GiftSolid, Gift } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
-
 import { SocialButton } from "app/components/social-button";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
+
+import { GiftSolid, Gift } from "design-system/icon";
+import { useRouter } from "design-system/router";
+import { Text } from "design-system/text";
 
 export function GiftButton({ nft }: { nft: NFT }) {
   const router = useRouter();

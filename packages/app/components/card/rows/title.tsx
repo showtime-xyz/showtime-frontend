@@ -1,11 +1,10 @@
 import { useState, useLayoutEffect, useRef } from "react";
 import { Platform } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
+import { useIsDarkMode } from "design-system/hooks";
+import { Text } from "design-system/text";
 import * as Tooltip from "design-system/tooltip";
+import { View } from "design-system/view";
 
 type Props = {
   title?: string;

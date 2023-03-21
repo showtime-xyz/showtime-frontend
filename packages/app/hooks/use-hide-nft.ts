@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { axios } from "app/lib/axios";
+
+import { useRouter } from "design-system/router";
 
 export const useHideNFT = () => {
   const matchMutate = useMatchMutate();

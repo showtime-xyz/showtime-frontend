@@ -1,8 +1,8 @@
 import React, { useCallback } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { View } from "@showtime-xyz/universal.view";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { View } from "design-system/view";
 
 import type { Activity, TableProps } from "./nft-activity.types";
 import TableHead from "./table-head";

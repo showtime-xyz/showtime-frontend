@@ -1,13 +1,13 @@
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ShowtimeWordmark } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useFooter } from "app/hooks/use-footer";
 import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
 import { Link } from "app/navigation/link";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { ShowtimeWordmark } from "design-system/icon";
+import { useRouter } from "design-system/router";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const WebFooter = () => {
   const isDark = useIsDarkMode();

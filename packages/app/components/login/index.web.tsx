@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 
 import { PortalProvider } from "@gorhom/portal";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Button } from "design-system/button";
+import { ScrollView } from "design-system/scroll-view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { LoginComponent } from "./login";
 import { useLogin } from "./use-login";

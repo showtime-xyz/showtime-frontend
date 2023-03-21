@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { ScrollView as ReactNativeScrollView } from "react-native";
 
-import { styled } from "@showtime-xyz/universal.tailwind";
+import { styled } from "design-system/tailwind";
 
 import { ScrollViewProps } from "./types";
 

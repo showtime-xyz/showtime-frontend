@@ -3,18 +3,18 @@ import { useWindowDimensions } from "react-native";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { MotiView } from "moti";
 
-import { Haptics } from "@showtime-xyz/universal.haptics";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
 import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
 import { useBottomTabBarHeightCallback } from "app/lib/react-navigation/bottom-tabs";
+
+import { Haptics } from "design-system/haptics";
+import { useIsDarkMode } from "design-system/hooks";
+import { Pressable } from "design-system/pressable";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { useNavigationElements } from "./use-navigation-elements";
 

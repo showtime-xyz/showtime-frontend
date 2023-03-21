@@ -1,15 +1,5 @@
 import { Platform, useWindowDimensions } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  MoreHorizontal,
-  Copy,
-  Flag,
-  Slash,
-} from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
@@ -17,6 +7,7 @@ import { useShare } from "app/hooks/use-share";
 import { useRudder } from "app/lib/rudderstack";
 import type { Profile } from "app/types";
 
+import { Button } from "design-system/button";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -24,6 +15,9 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { useIsDarkMode } from "design-system/hooks";
+import { MoreHorizontal, Copy, Flag, Slash } from "design-system/icon";
+import { useRouter } from "design-system/router";
 
 type Props = {
   user: Profile;

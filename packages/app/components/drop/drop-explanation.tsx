@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Image } from "@showtime-xyz/universal.image";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Button } from "design-system/button";
+import { Image } from "design-system/image";
+import { useModalScreenContext } from "design-system/modal-screen";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
   const previewAspectRatio = 382 / 256;

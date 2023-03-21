@@ -1,10 +1,10 @@
 import { forwardRef, Suspense, useContext, useMemo } from "react";
 
-import { TabSpinner } from "@showtime-xyz/universal.tab-view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { TabFallback } from "app/components/error-boundary/tab-fallback";
 import { TrendingContext } from "app/components/trending/context";
+
+import { TabSpinner } from "design-system/tab-view";
 
 import { CreatorsList } from "./creators-list";
 import { NFTSList } from "./nfts-list";

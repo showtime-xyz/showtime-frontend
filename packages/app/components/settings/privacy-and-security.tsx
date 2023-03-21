@@ -1,10 +1,10 @@
 import { Linking, Platform } from "react-native";
 
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+
+import { ScrollView } from "design-system/scroll-view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { AccountSettingItem } from "./settings-account-item";
 

@@ -1,9 +1,9 @@
-import { View } from "@showtime-xyz/universal.view";
-
 import { GiftButton } from "app/components/claim/gift-button";
 import { CommentButton } from "app/components/feed/comment-button";
 import { Like } from "app/components/feed/like";
 import { NFT } from "app/types";
+
+import { View } from "design-system/view";
 
 type SocialProps = {
   nft?: NFT;

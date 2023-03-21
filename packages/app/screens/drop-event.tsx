@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { DropEvent } from "app/components/drop/drop-event";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const DropEventScreen = withModalScreen(DropEvent, {
   title: "Event Drop",

@@ -5,9 +5,8 @@ import { SvgProps } from "react-native-svg";
 import * as DropdownMenu from "zeego/src/dropdown-menu";
 import type { MenuItemIconProps as ZeegoMenuItemIconProps } from "zeego/src/menu/types";
 
-import { colors } from "@showtime-xyz/universal.tailwind";
-
 import { DropdownMenuItemIcon } from "design-system/dropdown-menu";
+import { colors } from "design-system/tailwind";
 
 type MenuItemIconProps = ZeegoMenuItemIconProps & {
   Icon: ComponentType<SvgProps>;

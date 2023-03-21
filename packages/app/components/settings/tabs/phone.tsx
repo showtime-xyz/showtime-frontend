@@ -1,13 +1,13 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { View } from "@showtime-xyz/universal.view";
-
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { SettingsPhoneNumberItem } from "app/components/settings/settings-phone-number-item";
 import { useUser } from "app/hooks/use-user";
+
+import { TabScrollView } from "design-system/collapsible-tab-view";
+import { useRouter } from "design-system/router";
+import { View } from "design-system/view";
 
 import { SettingsTitle } from "../settings-title";
 

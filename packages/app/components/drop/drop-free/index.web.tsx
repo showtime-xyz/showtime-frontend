@@ -1,14 +1,13 @@
 import { useState, useCallback, useLayoutEffect } from "react";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { stripePromise } from "app/components/checkout//stripe";
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { setPaymentByDefaultFetch } from "app/hooks/api/use-payments-manage";
 
+import { useRouter } from "design-system/router";
+import { Spinner } from "design-system/spinner";
 import { toast } from "design-system/toast";
+import { View } from "design-system/view";
 
 import { DropFree as OriginDropFree } from "./drop-free";
 

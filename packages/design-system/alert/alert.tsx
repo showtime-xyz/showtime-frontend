@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Divider } from "@showtime-xyz/universal.divider";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Divider } from "design-system/divider";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export type AlertProps = {
   title?: string;

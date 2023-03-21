@@ -6,7 +6,7 @@ import {
   BlurViewProps as RNBlurViewProps,
 } from "@react-native-community/blur";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "design-system/hooks";
 
 export type BlurViewProps = RNBlurViewProps & {
   tw?: string;

@@ -2,8 +2,8 @@ import React from "react";
 
 import { Meta } from "@storybook/react";
 
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import * as Icon from "./index";
 

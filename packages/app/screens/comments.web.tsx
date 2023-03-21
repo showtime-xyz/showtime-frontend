@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { CommentsModal } from "app/components/comments-modal";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const CommentsScreen = withModalScreen(CommentsModal, {
   title: "Comments",

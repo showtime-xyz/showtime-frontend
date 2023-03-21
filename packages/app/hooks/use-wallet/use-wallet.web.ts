@@ -9,9 +9,9 @@ import {
   useDisconnect,
 } from "wagmi";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-
 import { useWeb3 } from "app/hooks/use-web3";
+
+import { Alert } from "design-system/alert";
 
 import { useLatestValueRef } from "../use-latest-value-ref";
 import { ConnectResult, UseWalletReturnType } from "./types";

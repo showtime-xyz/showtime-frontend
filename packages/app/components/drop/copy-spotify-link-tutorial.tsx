@@ -1,8 +1,8 @@
 import { Dimensions } from "react-native";
 
-import { Image } from "@showtime-xyz/universal.image";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Image } from "design-system/image";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const CopySpotifyLinkTutorial = () => {
   const previewWidth = Math.min(Dimensions.get("window").width, 480) - 40;

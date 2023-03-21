@@ -3,11 +3,11 @@ import { Platform, ViewStyle } from "react-native";
 
 import { Video } from "expo-av";
 
-import { Image, ResizeMode } from "@showtime-xyz/universal.image";
-import { styled } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
 import { contentFitToresizeMode } from "app/utilities";
+
+import { Image, ResizeMode } from "design-system/image";
+import { styled } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { MuteButton } from "../mute-button";
 

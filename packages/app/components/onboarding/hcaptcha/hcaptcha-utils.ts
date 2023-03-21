@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { axios } from "app/lib/axios";
+
+import { useRouter } from "design-system/router";
 
 import { onboardingPromiseCallbacks } from "../onboarding-promise";
 

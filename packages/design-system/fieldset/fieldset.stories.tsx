@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Meta } from "@storybook/react";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 import { Fieldset } from "./index";
 

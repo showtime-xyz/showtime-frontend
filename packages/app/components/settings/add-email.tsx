@@ -1,13 +1,13 @@
 import { useCallback, useState, useEffect } from "react";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
 import { Logger } from "app/lib/logger";
 import { useMagic, Relayer } from "app/lib/magic";
 import { useRudder } from "app/lib/rudderstack";
+
+import { useRouter } from "design-system/router";
+import { View } from "design-system/view";
 
 import { EmailInput } from "./email-input";
 

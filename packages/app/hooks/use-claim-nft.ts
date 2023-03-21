@@ -3,9 +3,6 @@ import { Platform } from "react-native";
 
 import type { LocationObject } from "expo-location";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
@@ -16,6 +13,9 @@ import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
 import { getNextRefillClaim, ledgerWalletHack } from "app/utilities";
+
+import { useAlert } from "design-system/alert";
+import { useRouter } from "design-system/router";
 
 import { useSendFeedback } from "./use-send-feedback";
 import { useWallet } from "./use-wallet";

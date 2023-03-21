@@ -1,7 +1,7 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { Login } from "app/components/login";
 import { useTrackPageViewed } from "app/lib/analytics";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 function LoginModal() {
   useTrackPageViewed({ name: "Login" });

@@ -4,10 +4,10 @@ import { Modal } from "react-native";
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
-import { Close } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { Close } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import type { LightBoxProps } from "./light-box";
 

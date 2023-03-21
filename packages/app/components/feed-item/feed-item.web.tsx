@@ -8,8 +8,6 @@ import {
 
 import { ResizeMode } from "expo-av";
 
-import { View } from "@showtime-xyz/universal.view";
-
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
@@ -18,6 +16,8 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { BlurView } from "app/lib/blurview";
 import type { NFT } from "app/types";
+
+import { View } from "design-system/view";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";

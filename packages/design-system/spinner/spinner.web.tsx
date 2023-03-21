@@ -1,4 +1,4 @@
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 import { getSpinnerSize, SpinnerView, SpinnerProps } from "./spinner-view";
 

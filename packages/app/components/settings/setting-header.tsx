@@ -2,11 +2,11 @@ import { Platform } from "react-native";
 
 import Constants from "expo-constants";
 
-import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+
+import { Route, TabBarSingle } from "design-system/tab-view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import packageJson from "../../../../package.json";
 

@@ -1,14 +1,14 @@
 import { useEffect, useMemo, ReactNode, useRef } from "react";
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { UserContext } from "app/context/user-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
 import { useRudder } from "app/lib/rudderstack";
 import { isProfileIncomplete } from "app/utilities";
+
+import { useRouter } from "design-system/router";
 
 interface UserProviderProps {
   children: ReactNode;

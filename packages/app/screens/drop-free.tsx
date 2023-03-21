@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { DropFree } from "app/components/drop/drop-free";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const DropFreeScreen = withModalScreen(DropFree, {
   title: "Create Drop",

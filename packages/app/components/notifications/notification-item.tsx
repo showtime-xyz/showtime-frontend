@@ -2,6 +2,12 @@ import { memo, useMemo } from "react";
 
 import { Link } from "solito/link";
 
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
+import { Actors } from "app/components/notifications/actors";
+import { Actor, NotificationType } from "app/hooks/use-notifications";
+import { useUser } from "app/hooks/use-user";
+import { getFormatDistanceStrictToWeek } from "app/utilities";
+
 import {
   HeartFilled,
   MarketFilled,
@@ -9,16 +15,10 @@ import {
   PlusFilled,
   GiftSolid,
   Spotify,
-} from "@showtime-xyz/universal.icon";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
-import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
-import { Actors } from "app/components/notifications/actors";
-import { Actor, NotificationType } from "app/hooks/use-notifications";
-import { useUser } from "app/hooks/use-user";
-import { getFormatDistanceStrictToWeek } from "app/utilities";
+} from "design-system/icon";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { NFTSDisplayName, NFTSDisplayNameText } from "./nfts-display-name";
 import { UpdateSpotifyDetails } from "./update-spotify-details";

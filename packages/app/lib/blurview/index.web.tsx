@@ -1,6 +1,6 @@
 import React from "react";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 export type BlurViewProps = {
   tw?: string;

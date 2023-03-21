@@ -15,10 +15,6 @@ import "swiper/css";
 import "swiper/css/virtual";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { clamp } from "@showtime-xyz/universal.utils";
-import { View } from "@showtime-xyz/universal.view";
-
 import { FeedItem } from "app/components/feed-item";
 import {
   ItemKeyContext,
@@ -30,6 +26,10 @@ import { useScrollToTop } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 import { isMobileWeb, isSafari } from "app/utilities";
+
+import { useRouter } from "design-system/router";
+import { clamp } from "design-system/utils";
+import { View } from "design-system/view";
 
 type Props = {
   data: NFT[];

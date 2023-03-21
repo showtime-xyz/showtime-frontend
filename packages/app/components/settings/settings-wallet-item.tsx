@@ -2,7 +2,14 @@ import React from "react";
 
 import { SvgProps } from "react-native-svg";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useUser } from "app/hooks/use-user";
+import { WalletAddressesV2 } from "app/types";
+import { formatAddressShort } from "app/utilities";
+
+import { Hidden } from "design-system/hidden";
+import { useIsDarkMode } from "design-system/hooks";
 import {
   Ethereum,
   Tezos,
@@ -12,19 +19,11 @@ import {
   GoogleOriginal,
   Apple,
   Twitter,
-} from "@showtime-xyz/universal.icon";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
-import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useUser } from "app/hooks/use-user";
-import { WalletAddressesV2 } from "app/types";
-import { formatAddressShort } from "app/utilities";
-
-import { Hidden } from "design-system/hidden";
+} from "design-system/icon";
+import { PressableHover } from "design-system/pressable-hover";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { WalletDropdownMenu } from "./wallet-dropdown-menu";
 

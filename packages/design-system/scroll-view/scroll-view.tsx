@@ -5,8 +5,8 @@ import {
   ScrollView as ReactNativeScrollView,
 } from "react-native";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { styled } from "@showtime-xyz/universal.tailwind";
+import { useColorScheme } from "design-system/color-scheme";
+import { styled } from "design-system/tailwind";
 
 import { ScrollViewProps } from "./types";
 

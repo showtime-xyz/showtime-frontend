@@ -8,13 +8,6 @@ import { AnimatePresence } from "moti";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { ErrorText } from "@showtime-xyz/universal.fieldset";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
@@ -26,8 +19,14 @@ import { yup } from "app/lib/yup";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData } from "app/utilities";
 
+import { Button } from "design-system/button";
+import { ErrorText } from "design-system/fieldset";
 import { AddPhoto } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
 import { Spinner } from "design-system/spinner";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { MediaCropper } from "../media-cropper";
 import { OnboardingStepContext } from "./onboarding-context";

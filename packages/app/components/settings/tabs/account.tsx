@@ -1,20 +1,6 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Spotify,
-  Apple,
-  GoogleOriginal,
-  Twitter,
-  InstagramColorful,
-} from "@showtime-xyz/universal.icon";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
 import { useConnectSpotify } from "app/hooks/use-connect-spotify";
 import { useDisconnectInstagram } from "app/hooks/use-disconnect-instagram";
@@ -23,7 +9,20 @@ import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useUser } from "app/hooks/use-user";
 
+import { Button } from "design-system/button";
+import { TabScrollView } from "design-system/collapsible-tab-view";
+import { useIsDarkMode } from "design-system/hooks";
+import {
+  Spotify,
+  Apple,
+  GoogleOriginal,
+  Twitter,
+  InstagramColorful,
+} from "design-system/icon";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { toast } from "design-system/toast";
+import { View } from "design-system/view";
 
 import { SettingsTitle } from "../settings-title";
 

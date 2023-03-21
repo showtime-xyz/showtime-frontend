@@ -1,8 +1,8 @@
 import { ComponentProps, forwardRef } from "react";
 import { Text as TextType } from "react-native";
 
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { ViewProps } from "@showtime-xyz/universal.view";
+import type { TW } from "design-system/tailwind";
+import { ViewProps } from "design-system/view";
 
 import { Text as StyledText } from "./text";
 

@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { LikersModal } from "app/components/likers-modal";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const LikersScreen = withModalScreen(LikersModal, {
   title: "Likers",

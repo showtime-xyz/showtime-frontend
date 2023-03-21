@@ -3,21 +3,18 @@ import { Modal, Platform, TextInput } from "react-native";
 
 import * as Localization from "expo-localization";
 
-import { Button } from "@showtime-xyz/universal.button";
-import {
-  CountryCodePicker,
-  data,
-} from "@showtime-xyz/universal.country-code-picker";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronLeft, Close, Search } from "@showtime-xyz/universal.icon";
-import { Input } from "@showtime-xyz/universal.input";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { SafeAreaView } from "@showtime-xyz/universal.safe-area";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { yup } from "app/lib/yup";
+
+import { Button } from "design-system/button";
+import { CountryCodePicker, data } from "design-system/country-code-picker";
+import { useIsDarkMode } from "design-system/hooks";
+import { ChevronLeft, Close, Search } from "design-system/icon";
+import { Input } from "design-system/input";
+import { PressableScale } from "design-system/pressable-scale";
+import { SafeAreaView } from "design-system/safe-area";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { LoginInputField } from "./login-input-field";
 

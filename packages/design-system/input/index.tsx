@@ -1,16 +1,16 @@
 import { forwardRef, useMemo } from "react";
 import { Platform, StyleProp, TextInputProps, TextStyle } from "react-native";
 
-import { useOnFocus, useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Label } from "@showtime-xyz/universal.label";
+import { useOnFocus, useIsDarkMode } from "design-system/hooks";
+import { Label } from "design-system/label";
 import {
   PressableScale,
   Props as PressableProps,
-} from "@showtime-xyz/universal.pressable-scale";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { TextInput } from "@showtime-xyz/universal.text-input";
-import { View } from "@showtime-xyz/universal.view";
+} from "design-system/pressable-scale";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { TextInput } from "design-system/text-input";
+import { View } from "design-system/view";
 
 type InputProps = {
   leftElement?: JSX.Element;

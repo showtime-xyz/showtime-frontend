@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { Toaster as RHToaster, toast } from "react-hot-toast";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "design-system/hooks";
 
 const defaultStyle = {
   fontSize: 16,

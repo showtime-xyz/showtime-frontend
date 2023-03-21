@@ -1,8 +1,8 @@
 import { Platform } from "react-native";
 
-import { Route } from "@showtime-xyz/universal.tab-view";
-
 import { WalletAddressesV2 } from "app/types";
+
+import { Route } from "design-system/tab-view";
 
 import { AccountTab } from "./account";
 import { AdvancedTab } from "./advanced";

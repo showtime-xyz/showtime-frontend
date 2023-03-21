@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 export const SettingItemSeparator = ({ tw = "" }: { tw?: string }) => (
   <View

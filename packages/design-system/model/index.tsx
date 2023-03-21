@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
-import { Image, ResizeMode } from "@showtime-xyz/universal.image";
-import { styled } from "@showtime-xyz/universal.tailwind";
+import { Image, ResizeMode } from "design-system/image";
+import { styled } from "design-system/tailwind";
 
 import { useGLTF, Stage, OrbitControls } from "./react-three-drei";
 import { Canvas, useFrame } from "./react-three-fiber";

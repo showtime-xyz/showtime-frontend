@@ -1,9 +1,9 @@
-import { Text } from "@showtime-xyz/universal.text";
-
 import type { NotificationItemProp } from "app/components/notifications/notification-item";
 import { Actor } from "app/hooks/use-notifications";
 import { TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
+
+import { Text } from "design-system/text";
 
 export type ActorsProps = {
   actors: Actor[];

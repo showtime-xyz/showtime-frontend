@@ -5,7 +5,7 @@ import * as Clipboard from "expo-clipboard";
 import Constants from "expo-constants";
 import * as MailComposer from "expo-mail-composer";
 
-import { Alert } from "@showtime-xyz/universal.alert";
+import { Alert } from "design-system/alert";
 
 import packageJson from "../../../package.json";
 

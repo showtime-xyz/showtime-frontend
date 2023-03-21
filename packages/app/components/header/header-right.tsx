@@ -1,21 +1,20 @@
 import { useWindowDimensions } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Plus } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { TrendingTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import { Plus } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { PressableHover } from "design-system/pressable-hover";
+import { useRouter } from "design-system/router";
+import { Text } from "design-system/text";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { NotificationsInHeader } from "./header";
 

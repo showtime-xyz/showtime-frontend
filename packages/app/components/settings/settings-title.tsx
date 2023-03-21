@@ -1,6 +1,6 @@
-import { Button, ButtonProps } from "@showtime-xyz/universal.button";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Button, ButtonProps } from "design-system/button";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Props = {
   title: string;

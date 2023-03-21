@@ -1,9 +1,9 @@
-import { Heart, HeartFilled } from "@showtime-xyz/universal.icon";
-import { colors } from "@showtime-xyz/universal.tailwind";
-
 import { SocialButton } from "app/components/social-button";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { formatNumber } from "app/utilities";
+
+import { Heart, HeartFilled } from "design-system/icon";
+import { colors } from "design-system/tailwind";
 
 export function LikeButton({
   onPress,

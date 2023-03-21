@@ -2,9 +2,9 @@ import { useEffect } from "react";
 
 import { SWRConfig } from "swr";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { ProfileScreen } from "app/screens/profile";
+
+import { useRouter } from "design-system/router";
 
 function ProfileRouter({ fallback = {} }: { fallback?: object }) {
   const router = useRouter();

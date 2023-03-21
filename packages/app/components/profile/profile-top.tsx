@@ -6,26 +6,6 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 
-import { Button, GradientButton } from "@showtime-xyz/universal.button";
-import { Chip } from "@showtime-xyz/universal.chip";
-import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Gift as GiftIcon,
-  InformationCircle as InformationCircleIcon,
-} from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
-import { LightBox } from "@showtime-xyz/universal.light-box";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
-
 import { NotificationsFollowButton } from "app/components/notifications-follow-button";
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { UserProfile } from "app/hooks/api-hooks";
@@ -46,8 +26,27 @@ import {
   getProfileName,
 } from "app/utilities";
 
+import { Button, GradientButton } from "design-system/button";
+import { Chip } from "design-system/chip";
+import { ClampText } from "design-system/clamp-text";
+import { useColorScheme } from "design-system/color-scheme";
 import { Hidden } from "design-system/hidden";
+import { useIsDarkMode } from "design-system/hooks";
+import {
+  Gift as GiftIcon,
+  InformationCircle as InformationCircleIcon,
+} from "design-system/icon";
+import { Image } from "design-system/image";
+import { LightBox } from "design-system/light-box";
+import { Pressable } from "design-system/pressable";
+import { useRouter } from "design-system/router";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { Skeleton } from "design-system/skeleton";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { breakpoints } from "design-system/theme";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 import { FollowButton } from "../follow-button";
 import { ProfileFollows } from "./profile-follows";

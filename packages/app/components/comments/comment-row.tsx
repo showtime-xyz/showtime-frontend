@@ -1,14 +1,14 @@
 import { memo, useCallback, useMemo, useState, useRef } from "react";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { MessageMore } from "app/components/messages/message-more";
 import { MessageRow } from "app/components/messages/message-row";
 import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { formatNumber } from "app/utilities";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { useRouter } from "design-system/router";
 
 interface CommentRowProps {
   comment: CommentType;

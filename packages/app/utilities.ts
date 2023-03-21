@@ -5,12 +5,12 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
 
-import { ResizeMode as ImageResizeMode } from "@showtime-xyz/universal.image";
-
 import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS, CONTRACTS } from "app/lib/constants";
 import { SORT_FIELDS } from "app/lib/constants";
 import { removeMd } from "app/lib/remove-markdown";
+
+import { ResizeMode as ImageResizeMode } from "design-system/image";
 
 import { ProfileTabsAPI } from "./hooks/api-hooks";
 import { NFT, Profile } from "./types";

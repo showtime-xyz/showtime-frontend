@@ -1,20 +1,19 @@
 import { useContext, useMemo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { ButtonProps } from "@showtime-xyz/universal.button/types";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check, Hourglass } from "@showtime-xyz/universal.icon";
-import { Spotify } from "@showtime-xyz/universal.icon";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 
+import { Button } from "design-system/button";
+import { ButtonProps } from "design-system/button/types";
+import { useIsDarkMode } from "design-system/hooks";
+import { Check, Hourglass } from "design-system/icon";
+import { Spotify } from "design-system/icon";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { ThreeDotsAnimation } from "design-system/three-dots";
 
 type ClaimButtonProps = {

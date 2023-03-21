@@ -3,9 +3,9 @@ import React, { useState, useMemo } from "react";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { AnimatePresence } from "moti";
 
-import { View } from "@showtime-xyz/universal.view";
-
 import { useUser } from "app/hooks/use-user";
+
+import { View } from "design-system/view";
 
 import { OnboardingStepContext } from "./onboarding-context";
 import { OnboardingStep } from "./onboarding-types";

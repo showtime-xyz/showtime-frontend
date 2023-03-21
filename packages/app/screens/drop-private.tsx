@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { DropPrivate } from "app/components/drop/drop-private";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const DropPrivateScreen = withModalScreen(DropPrivate, {
   title: "Private Drop",

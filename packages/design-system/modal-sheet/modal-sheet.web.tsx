@@ -1,4 +1,4 @@
-import { Modal } from "@showtime-xyz/universal.modal";
+import { Modal } from "design-system/modal";
 
 import { ModalSheetProps } from ".";
 

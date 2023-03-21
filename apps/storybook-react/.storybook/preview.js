@@ -3,10 +3,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { enableScreens } from "react-native-screens";
 
-import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
-import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
-
 import { AlertProvider } from "design-system/alert";
+import { ColorSchemeProvider } from "design-system/color-scheme";
+import { SafeAreaProvider } from "design-system/safe-area";
 import { SnackbarProvider } from "design-system/snackbar";
 import { View } from "design-system/view";
 

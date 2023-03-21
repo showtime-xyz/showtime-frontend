@@ -3,16 +3,6 @@ import { Platform } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.image";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Card } from "app/components/card";
 import { CreatorPreview } from "app/components/creator-preview";
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -24,7 +14,16 @@ import { Sticky } from "app/lib/stickynode";
 import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 
+import { useColorScheme } from "design-system/color-scheme";
 import { Hidden } from "design-system/hidden";
+import { useIsDarkMode } from "design-system/hooks";
+import { Image } from "design-system/image";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { useRouter } from "design-system/router";
+import { Skeleton } from "design-system/skeleton";
+import { Spinner } from "design-system/spinner";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 const CARD_HEIGHT = 825;
 const CARD_CONTAINER_WIDTH = 620;

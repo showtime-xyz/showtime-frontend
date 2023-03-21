@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
 import {
   Apple,
   GoogleOriginal,
@@ -9,10 +9,10 @@ import {
   Facebook,
   Mail,
   Ethereum,
-} from "@showtime-xyz/universal.icon";
-import { Props as PressableProps } from "@showtime-xyz/universal.pressable";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+} from "design-system/icon";
+import { Props as PressableProps } from "design-system/pressable";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 type LoginType =
   | "apple"

@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { Platform } from "react-native";
 
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useTabState } from "app/hooks/use-tab-state";
@@ -11,6 +8,8 @@ import { Sticky } from "app/lib/stickynode";
 import { WalletAddressesV2 } from "app/types";
 
 import { TabBarVertical } from "design-system/tab-view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { EditNicknameModal } from "./setting-edit-nickname-moda";
 import { SettingTabsScene, SETTINGS_ROUTES } from "./tabs";

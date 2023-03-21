@@ -1,10 +1,10 @@
 import { useCallback, memo, useMemo } from "react";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import type { ButtonProps } from "@showtime-xyz/universal.button/types";
-
 import { useMyInfo } from "app/hooks/api-hooks";
+
+import { Alert } from "design-system/alert";
+import { Button } from "design-system/button";
+import type { ButtonProps } from "design-system/button/types";
 
 type ToggleFollowParams = ButtonProps & {
   name?: string;

@@ -1,9 +1,9 @@
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useMyInfo } from "app/hooks/api-hooks";
+
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const ClaimLimitExplanationModal = () => {
   const { data: userProfile } = useMyInfo();

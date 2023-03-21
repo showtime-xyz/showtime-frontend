@@ -4,14 +4,6 @@ import { Dimensions, Platform, useWindowDimensions } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { SWRConfig } from "swr";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import {
-  useSafeAreaFrame,
-  useSafeAreaInsets,
-} from "@showtime-xyz/universal.safe-area";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/feed-item";
 import {
@@ -26,6 +18,11 @@ import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
+
+import { useColorScheme } from "design-system/color-scheme";
+import { useSafeAreaFrame, useSafeAreaInsets } from "design-system/safe-area";
+import { Skeleton } from "design-system/skeleton";
+import { View } from "design-system/view";
 
 import { EmptyPlaceholder } from "../components/empty-placeholder";
 import { TextLink } from "../navigation/link";

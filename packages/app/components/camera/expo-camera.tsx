@@ -3,13 +3,13 @@ import { useRef, useState, useCallback, useEffect } from "react";
 import { Camera as ExpoCamera } from "expo-camera";
 import { AnimatePresence, View as MotiView } from "moti";
 
-import { View } from "@showtime-xyz/universal.view";
-
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import { useRudder } from "app/lib/rudderstack";
 import { createParam } from "app/navigation/use-param";
+
+import { View } from "design-system/view";
 
 type Props = {
   photos: { uri: string }[];

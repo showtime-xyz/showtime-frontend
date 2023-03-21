@@ -1,11 +1,11 @@
 import { Platform } from "react-native";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { useOnboardingPromise } from "app/components/onboarding";
 import { useUser } from "app/hooks/use-user";
 import { useLogInPromise } from "app/lib/login-promise";
+
+import { useAlert } from "design-system/alert";
+import { useRouter } from "design-system/router";
 
 export const useRedirectToCreateDrop = () => {
   const { isAuthenticated, user } = useUser();

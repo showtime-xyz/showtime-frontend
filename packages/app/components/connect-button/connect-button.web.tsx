@@ -2,12 +2,12 @@ import { useWindowDimensions } from "react-native";
 
 import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Alert } from "@showtime-xyz/universal.icon";
-import { View } from "@showtime-xyz/universal.view";
-
 import { LoginButton } from "app/components/login/login-button";
+
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import { Alert } from "design-system/icon";
+import { View } from "design-system/view";
 
 import { ConnectButtonProps } from "./connect-button";
 

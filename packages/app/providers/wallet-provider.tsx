@@ -8,15 +8,15 @@ import WCProvider, {
 } from "@walletconnect/react-native-dapp";
 import { FullWindowOverlay } from "react-native-screens";
 
-import { Image } from "@showtime-xyz/universal.image";
-import { ModalHeader } from "@showtime-xyz/universal.modal";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { scheme } from "app/lib/scheme";
+
+import { Image } from "design-system/image";
+import { ModalHeader } from "design-system/modal";
+import { PressableScale } from "design-system/pressable-scale";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 const WALLET_CONNECT_CLIENT_META = {
   description: "Connect with Showtime",

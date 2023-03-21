@@ -1,8 +1,8 @@
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Owner } from "app/components/card";
 import type { NFT } from "app/types";
+
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 function Details({ nft }: { nft?: NFT }) {
   if (!nft) return null;

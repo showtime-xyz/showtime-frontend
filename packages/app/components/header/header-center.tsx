@@ -1,6 +1,6 @@
-import { View } from "@showtime-xyz/universal.view";
-
 import { ShowtimeTabBarIcon } from "app/navigation/tab-bar-icons";
+
+import { View } from "design-system/view";
 
 import { SearchInHeader } from "./header";
 

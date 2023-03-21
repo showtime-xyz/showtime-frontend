@@ -14,29 +14,6 @@ import * as Clipboard from "expo-clipboard";
 import { LinearGradient } from "expo-linear-gradient";
 import * as MediaLibrary from "expo-media-library";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Avatar } from "@showtime-xyz/universal.avatar";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { Haptics } from "@showtime-xyz/universal.haptics";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  MoreHorizontal,
-  Instagram,
-  TwitterOutline,
-  Download,
-  Link,
-  Showtime,
-} from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors, styled } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
-
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useUserProfile } from "app/hooks/api-hooks";
@@ -61,8 +38,30 @@ import {
 } from "app/utilities";
 
 import { Skeleton } from "design-system";
+import { Alert } from "design-system/alert";
+import { Avatar } from "design-system/avatar";
+import { useColorScheme } from "design-system/color-scheme";
+import { Haptics } from "design-system/haptics";
+import { useIsDarkMode } from "design-system/hooks";
+import {
+  MoreHorizontal,
+  Instagram,
+  TwitterOutline,
+  Download,
+  Link,
+  Showtime,
+} from "design-system/icon";
 import { ShowtimeBrand } from "design-system/icon";
+import { Image } from "design-system/image";
+import { useModalScreenContext } from "design-system/modal-screen";
+import { Pressable } from "design-system/pressable";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { Spinner } from "design-system/spinner";
+import { colors, styled } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { toast } from "design-system/toast";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 import { contentGatingType } from "../content-type-tooltip";
 

@@ -6,8 +6,8 @@ import { getImgFromArr } from "array-to-image";
 import { decode } from "blurhash";
 import Image, { ImageProps as NextImageProps } from "next/image";
 
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import type { TW } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { ResizeMode, ImageNativeProps, ContentFit } from "./types";
 

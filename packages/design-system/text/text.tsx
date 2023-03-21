@@ -1,6 +1,6 @@
 import { Text } from "react-native";
 
-import { styled } from "@showtime-xyz/universal.tailwind";
+import { styled } from "design-system/tailwind";
 
 const StyledText = styled(Text);
 

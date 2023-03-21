@@ -1,9 +1,9 @@
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
-
 import { NotificationNFT } from "app/hooks/use-notifications";
 import { TextLink } from "app/navigation/link";
 import { findTokenChainName } from "app/utilities";
+
+import { useRouter } from "design-system/router";
+import { Text } from "design-system/text";
 
 type NotificationDescriptionProps = {
   nfts: NotificationNFT[];

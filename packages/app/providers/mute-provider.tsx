@@ -7,10 +7,10 @@ import {
   useEffect,
 } from "react";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { usePreviousValue } from "app/hooks/use-previous-value";
 import { isMobileWeb } from "app/utilities";
+
+import { useRouter } from "design-system/router";
 
 export const MuteContext = createContext([true, () => {}] as
   | [boolean, Dispatch<SetStateAction<boolean>>]);

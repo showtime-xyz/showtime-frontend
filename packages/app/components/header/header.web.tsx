@@ -4,16 +4,6 @@ import { Platform, TextInput, useWindowDimensions } from "react-native";
 import * as Popover from "@radix-ui/react-popover";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Close, Search } from "@showtime-xyz/universal.icon";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { Input } from "@showtime-xyz/universal.input";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { SearchItem, SearchItemSkeleton } from "app/components/search";
@@ -25,7 +15,16 @@ import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
+import { useIsDarkMode } from "design-system/hooks";
+import { Close, Search } from "design-system/icon";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { Input } from "design-system/input";
+import { PressableScale } from "design-system/pressable-scale";
+import { useRouter } from "design-system/router";
+import { Spinner } from "design-system/spinner";
+import { colors } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { withColorScheme } from "../memo-with-theme";
 import { HeaderCenter } from "./header-center";

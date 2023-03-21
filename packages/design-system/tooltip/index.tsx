@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 import type { ContentProps, RootProps } from "universal-tooltip";
 import * as Tooltip from "universal-tooltip";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "design-system/hooks";
 
 export const Root = ({ children, ...rest }: RootProps) => {
   const [open, setOpen] = useState(false);

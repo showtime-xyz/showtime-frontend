@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 
 import { Image, ImageProps as ExpoImageProps } from "expo-image";
 
-import { styled } from "@showtime-xyz/universal.tailwind";
+import { styled } from "design-system/tailwind";
 
 import { ResizeMode } from "./types";
 

@@ -16,13 +16,6 @@ import { stringify } from "querystring";
 import type { ParsedUrlQuery } from "querystring";
 import { useSharedValue } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Card } from "app/components/card";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import {
@@ -40,8 +33,14 @@ import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 import { formatProfileRoutes } from "app/utilities";
 
+import { useIsDarkMode } from "design-system/hooks";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { useRouter } from "design-system/router";
 import { Spinner } from "design-system/spinner";
+import { Route, TabBarSingle } from "design-system/tab-view";
+import { colors } from "design-system/tailwind";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { FilterContext } from "./fillter-context";
 import { ProfileError } from "./profile-error";

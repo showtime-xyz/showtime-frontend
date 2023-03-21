@@ -1,8 +1,8 @@
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.icon";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { Image } from "design-system/icon";
+import { PressableScale } from "design-system/pressable-scale";
 
 export function ImagePickerButton({
   onPick,

@@ -7,10 +7,10 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { useRouter } from "design-system/router";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { HeaderLeft } from "./header-left";
 

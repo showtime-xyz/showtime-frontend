@@ -1,10 +1,10 @@
 import { memo } from "react";
 import { Platform } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Close } from "@showtime-xyz/universal.icon";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Button } from "design-system/button";
+import { Close } from "design-system/icon";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import type { ModalHeaderProps } from "./types";
 

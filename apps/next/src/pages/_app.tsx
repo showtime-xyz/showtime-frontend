@@ -10,9 +10,6 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { usePlatformResize } from "@showtime-xyz/universal.hooks";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
@@ -44,7 +41,9 @@ import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { isMobileWeb } from "app/utilities";
 
+import { usePlatformResize } from "design-system/hooks";
 import { Toaster } from "design-system/toast";
+import { View } from "design-system/view";
 
 import "../styles/styles.css";
 

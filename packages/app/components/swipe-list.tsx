@@ -1,15 +1,15 @@
 import { useCallback, useMemo, useRef } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
-
 import { FeedItem } from "app/components/feed-item";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
+
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { useSafeAreaFrame } from "design-system/safe-area";
 
 const { height: screenHeight } = Dimensions.get("screen");
 

@@ -4,20 +4,6 @@ import { Platform, StatusBar } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSharedValue } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import {
-  SceneRendererProps,
-  HeaderTabView,
-  Route,
-  TabSpinner,
-  ScollableAutoWidthTabBar,
-  NavigationState,
-} from "@showtime-xyz/universal.tab-view";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import {
   DEFAULT_HADER_HEIGHT,
   Header,
@@ -35,6 +21,20 @@ import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { formatProfileRoutes, getProfileName } from "app/utilities";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { useRouter } from "design-system/router";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import {
+  SceneRendererProps,
+  HeaderTabView,
+  Route,
+  TabSpinner,
+  ScollableAutoWidthTabBar,
+  NavigationState,
+} from "design-system/tab-view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";

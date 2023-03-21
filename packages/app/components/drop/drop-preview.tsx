@@ -7,13 +7,6 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
-import { Button } from "@showtime-xyz/universal.button";
-import { Spotify } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Description } from "app/components/card/rows";
 import { Preview } from "app/components/preview";
 import { useDropNFT } from "app/hooks/use-drop-nft";
@@ -22,7 +15,13 @@ import { useMuted } from "app/providers/mute-provider";
 import { getCreatorUsernameFromNFT } from "app/utilities";
 
 import { VerificationBadge } from "design-system";
+import { Avatar } from "design-system/avatar";
+import { Button } from "design-system/button";
+import { Spotify } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { Text } from "design-system/text";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { PolygonScanButton } from "../polygon-scan-button";
 

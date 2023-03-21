@@ -11,22 +11,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Upload,
-  Twitter,
-  Check,
-  InstagramColorful,
-} from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
@@ -43,7 +27,17 @@ import { createParam } from "app/navigation/use-param";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { getFileFormData } from "app/utilities";
 
+import { Button } from "design-system/button";
+import { ErrorText, Fieldset } from "design-system/fieldset";
+import { useIsDarkMode } from "design-system/hooks";
+import { Upload, Twitter, Check, InstagramColorful } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { PressableHover } from "design-system/pressable-hover";
+import { useRouter } from "design-system/router";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { MediaCropper } from "./media-cropper";
 

@@ -4,19 +4,6 @@ import { useState, useEffect, useMemo } from "react";
 import { AxiosError } from "axios";
 import useSWRMutation from "swr/mutation";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { ErrorText } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { CreditCard } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 import { DropPlan, usePaidDropPlans } from "app/hooks/use-paid-drop-plans";
@@ -24,7 +11,19 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
+import { Button } from "design-system/button";
+import { Checkbox } from "design-system/checkbox";
+import { useColorScheme } from "design-system/color-scheme";
+import { ErrorText } from "design-system/fieldset";
+import { useIsDarkMode } from "design-system/hooks";
+import { CreditCard } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { useRouter } from "design-system/router";
+import { Skeleton } from "design-system/skeleton";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { toast } from "design-system/toast";
+import { View } from "design-system/view";
 
 export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   const paidDropPlansQuery = usePaidDropPlans();

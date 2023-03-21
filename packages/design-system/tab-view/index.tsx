@@ -10,18 +10,18 @@ import {
   Route,
   CollapsibleTabView,
   CollapsibleTabViewProps,
-} from "@showtime-xyz/universal.collapsible-tab-view";
-import { Haptics } from "@showtime-xyz/universal.haptics";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors } from "@showtime-xyz/universal.tailwind";
+} from "design-system/collapsible-tab-view";
+import { Haptics } from "design-system/haptics";
+import { useIsDarkMode } from "design-system/hooks";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { colors } from "design-system/tailwind";
 
 import { RefreshControl } from "./refresh-control";
 import { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";
 import { ScollableTabBar } from "./scrollable-tab-bar";
 import { TabSpinner } from "./tab-spinner";
 
-export * from "@showtime-xyz/universal.collapsible-tab-view";
+export * from "design-system/collapsible-tab-view";
 export * from "./tab-flash-list";
 export * from "react-native-tab-view-next";
 export * from "./tab-flash-list-scroll-view";

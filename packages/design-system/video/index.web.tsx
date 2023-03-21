@@ -7,13 +7,13 @@ import {
   ResizeMode as AVResizeMode,
 } from "expo-av";
 
-import { Image, ResizeMode } from "@showtime-xyz/universal.image";
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useVideoConfig } from "app/context/video-config-context";
 import { useItemVisible } from "app/hooks/use-viewability-mount";
 import { useMuted } from "app/providers/mute-provider";
+
+import { Image, ResizeMode } from "design-system/image";
+import type { TW } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 type VideoProps = Omit<AVVideoProps, "resizeMode"> & {
   tw?: TW;

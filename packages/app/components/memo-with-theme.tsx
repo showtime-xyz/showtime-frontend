@@ -1,6 +1,6 @@
 import { ComponentType, memo } from "react";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useColorScheme } from "design-system/color-scheme";
 
 export const withMemoAndColorScheme = <
   T extends ComponentType<any>,

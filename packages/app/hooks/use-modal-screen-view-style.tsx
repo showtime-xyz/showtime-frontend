@@ -1,10 +1,10 @@
 import { Platform, ViewStyle } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+
+import { useRouter } from "design-system/router";
+import { useSafeAreaInsets } from "design-system/safe-area";
 
 type ViewStyleOption = {
   mode?: "padding" | "margin";

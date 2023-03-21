@@ -1,9 +1,9 @@
-import { View } from "@showtime-xyz/universal.view";
-
 import { Media } from "app/components/media";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { IEdition } from "app/types";
 import { getCreatorUsernameFromNFT } from "app/utilities";
+
+import { View } from "design-system/view";
 
 import { Explanation } from "../explanation";
 

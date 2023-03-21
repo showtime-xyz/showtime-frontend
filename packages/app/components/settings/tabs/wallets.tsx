@@ -1,14 +1,13 @@
 import { Platform, useWindowDimensions } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useAddWallet } from "app/hooks/use-add-wallet";
 import { useUser } from "app/hooks/use-user";
 import { WalletAddressesV2 } from "app/types";
 
+import { Button } from "design-system/button";
+import { TabScrollView } from "design-system/collapsible-tab-view";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { EmptyPlaceholder } from "../../empty-placeholder";
 import { SettingItemSeparator } from "../setting-item-separator";

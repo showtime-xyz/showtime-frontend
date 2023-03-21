@@ -7,7 +7,7 @@ import {
 } from "react";
 import { Platform, TextInput } from "react-native";
 
-import type { TextInputProps } from "@showtime-xyz/universal.text-input";
+import type { TextInputProps } from "design-system/text-input";
 
 const map = new Map();
 

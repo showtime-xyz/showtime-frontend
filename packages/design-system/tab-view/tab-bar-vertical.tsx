@@ -1,11 +1,11 @@
 import { memo, useState, useMemo } from "react";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { useIsDarkMode } from "design-system/hooks";
+import { ChevronRight } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { Route } from ".";
 

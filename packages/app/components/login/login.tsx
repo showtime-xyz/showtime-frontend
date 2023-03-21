@@ -1,11 +1,11 @@
 import { useMemo, useState, useRef, useEffect } from "react";
 import { StyleSheet, TextInput } from "react-native";
 
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ConnectButton } from "app/components/connect-button";
 import { yup } from "app/lib/yup";
+
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { LoginButton } from "./login-button";
 import { LoginFooter } from "./login-footer";

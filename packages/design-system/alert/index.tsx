@@ -13,7 +13,7 @@ import {
   Platform,
 } from "react-native";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 import { AlertContainer } from "./alert-container";
 import { AlertOption } from "./alert-option";

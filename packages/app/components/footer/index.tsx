@@ -1,9 +1,5 @@
 import { useWindowDimensions } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { View } from "@showtime-xyz/universal.view";
-
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { useUser } from "app/hooks/use-user";
 import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
@@ -15,6 +11,10 @@ import {
   TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { useRouter } from "design-system/router";
+import { View } from "design-system/view";
 
 import { WebFooter } from "./links-footer.web";
 

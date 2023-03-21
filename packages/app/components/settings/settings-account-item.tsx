@@ -2,21 +2,20 @@ import { useState, useRef } from "react";
 
 import { SvgProps } from "react-native-svg";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button, ButtonProps } from "@showtime-xyz/universal.button";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { Trash } from "@showtime-xyz/universal.icon";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useDeleteUser } from "app/hooks/use-delete-user";
 import { useUser } from "app/hooks/use-user";
 import { Logger } from "app/lib/logger";
 
+import { Alert } from "design-system/alert";
+import { Button, ButtonProps } from "design-system/button";
+import { Fieldset } from "design-system/fieldset";
+import { Trash } from "design-system/icon";
+import { ModalSheet } from "design-system/modal-sheet";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { toast } from "design-system/toast";
+import { View } from "design-system/view";
 
 export const SettingDeleteAccount = () => {
   const { deleteUser } = useDeleteUser();

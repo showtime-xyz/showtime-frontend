@@ -2,8 +2,6 @@ import { useState } from "react";
 
 import { useSWRConfig } from "swr";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-
 import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
 import { useUser } from "app/hooks/use-user";
 import { useWallet } from "app/hooks/use-wallet";
@@ -13,6 +11,8 @@ import { Logger } from "app/lib/logger";
 import { fetchNonce } from "app/lib/nonce";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { isMobileWeb } from "app/utilities";
+
+import { useAlert } from "design-system/alert";
 
 const useAddWallet = () => {
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");

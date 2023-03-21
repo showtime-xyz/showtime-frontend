@@ -1,15 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { GestureResponderEvent, StyleSheet } from "react-native";
 
-import { Image } from "@showtime-xyz/universal.image";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useIntersectionObserver } from "app/hooks/use-intersection-observer.web";
 import { Logger } from "app/lib/logger";
 
 import { Play } from "design-system/icon";
+import { Image } from "design-system/image";
+import { Pressable } from "design-system/pressable";
+import { Spinner } from "design-system/spinner";
+import { View } from "design-system/view";
 
 const Stop = () => <View tw="mx-1 h-3 w-3 bg-white" />;
 

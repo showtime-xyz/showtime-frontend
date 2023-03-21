@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useTabState } from "app/hooks/use-tab-state";
 import { WalletAddressesV2 } from "app/types";
 
+import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { useUser } from "../../hooks/use-user";
 import { EditNicknameModal } from "./setting-edit-nickname-moda";

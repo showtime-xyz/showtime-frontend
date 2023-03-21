@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { QRCodeModal } from "app/components/qr-code/index";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const QRCodeShareScreen = withModalScreen(QRCodeModal, {
   title: "Congrats! Now share it.",

@@ -1,6 +1,6 @@
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Spinner } from "design-system/spinner";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 interface CommentsStatusProps {
   isLoading?: boolean;

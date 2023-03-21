@@ -1,6 +1,6 @@
-import { Button } from "@showtime-xyz/universal.button";
-import { ChevronRight, ChevronLeft } from "@showtime-xyz/universal.icon";
-import { View } from "@showtime-xyz/universal.view";
+import { Button } from "design-system/button";
+import { ChevronRight, ChevronLeft } from "design-system/icon";
+import { View } from "design-system/view";
 
 type ControllerProps = {
   prev: () => void;

@@ -25,10 +25,6 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 
-import { useBlurredBackgroundStyles } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.image";
-import { View } from "@showtime-xyz/universal.view";
-
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
@@ -40,6 +36,10 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
+
+import { useBlurredBackgroundStyles } from "design-system/hooks";
+import { Image } from "design-system/image";
+import { View } from "design-system/view";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";

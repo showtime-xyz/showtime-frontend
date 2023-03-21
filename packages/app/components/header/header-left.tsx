@@ -1,7 +1,7 @@
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Search } from "@showtime-xyz/universal.icon";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { useRouter } from "@showtime-xyz/universal.router";
+import { useIsDarkMode } from "design-system/hooks";
+import { ArrowLeft, Search } from "design-system/icon";
+import { PressableScale } from "design-system/pressable-scale";
+import { useRouter } from "design-system/router";
 
 type HeaderLeftProps = {
   canGoBack: boolean;

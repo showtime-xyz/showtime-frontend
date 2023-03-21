@@ -2,13 +2,12 @@ import { Platform, Linking } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button, ButtonProps } from "@showtime-xyz/universal.button";
-import { Text } from "@showtime-xyz/universal.text";
-
 import { Link, TextLink } from "app/navigation/link";
 
 import { View } from "design-system";
+import { Alert } from "design-system/alert";
+import { Button, ButtonProps } from "design-system/button";
+import { Text } from "design-system/text";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 

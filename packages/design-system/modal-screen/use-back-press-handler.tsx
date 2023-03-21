@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { RefObject } from "react";
 
-import type { ModalMethods } from "@showtime-xyz/universal.modal";
+import type { ModalMethods } from "design-system/modal";
 
 export const useBackPressHandler = (
   ref: RefObject<ModalMethods>,

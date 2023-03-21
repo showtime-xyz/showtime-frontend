@@ -5,19 +5,14 @@ import * as Slider from "@radix-ui/react-slider";
 import Cropper from "react-easy-crop";
 import type { Area } from "react-easy-crop";
 
-import { Button } from "@showtime-xyz/universal.button";
-import {
-  ArrowLeft,
-  ZoomIn,
-  ZoomOut,
-  RotateCw,
-} from "@showtime-xyz/universal.icon";
-import { ModalHeader } from "@showtime-xyz/universal.modal";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
 import { getCroppedImg } from "app/lib/canvas-utils";
+
+import { Button } from "design-system/button";
+import { ArrowLeft, ZoomIn, ZoomOut, RotateCw } from "design-system/icon";
+import { ModalHeader } from "design-system/modal";
+import { Pressable } from "design-system/pressable";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { MediaCropperProps } from ".";
 

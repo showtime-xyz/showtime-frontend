@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { DropMusic } from "app/components/drop/drop-music";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const DropMusicScreen = withModalScreen(DropMusic, {
   title: "Music Drop: Pre-Save on Spotify",

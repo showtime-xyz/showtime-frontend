@@ -4,8 +4,8 @@ import { LayoutChangeEvent, Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { getScrollParent } from "@showtime-xyz/universal.utils";
+import { useColorScheme } from "design-system/color-scheme";
+import { getScrollParent } from "design-system/utils";
 
 export type PlatformRect = Pick<
   DOMRect,

@@ -7,18 +7,17 @@ import * as Portal from "@radix-ui/react-portal";
 import axios, { AxiosError } from "axios";
 import { useSWRConfig } from "swr";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { Logger } from "app/lib/logger";
 import { useRudder } from "app/lib/rudderstack";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import { Spinner } from "design-system/spinner";
 import { toast } from "design-system/toast";
+import { View } from "design-system/view";
 
 import { OnboardingStepContext } from "../onboarding-context";
 import {

@@ -4,27 +4,26 @@ import { Platform } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { ErrorText } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InformationCircle } from "@showtime-xyz/universal.icon";
-import { Label } from "@showtime-xyz/universal.label";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Screen } from "app/components/screen";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useUpdatePresaveReleaseDate } from "app/hooks/use-update-presave-release-date";
 import { yup } from "app/lib/yup";
 
+import { Button } from "design-system/button";
+import { Checkbox } from "design-system/checkbox";
 import { DateTimePicker } from "design-system/date-time-picker";
+import { Fieldset } from "design-system/fieldset";
+import { ErrorText } from "design-system/fieldset";
+import { useIsDarkMode } from "design-system/hooks";
+import { InformationCircle } from "design-system/icon";
+import { Label } from "design-system/label";
+import { ModalSheet } from "design-system/modal-sheet";
+import { Pressable } from "design-system/pressable";
+import { PressableHover } from "design-system/pressable-hover";
+import { useRouter } from "design-system/router";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 

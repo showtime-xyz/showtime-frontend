@@ -5,11 +5,11 @@ import {
   BottomTabBarHeightCallbackContext,
 } from "@react-navigation/bottom-tabs";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-
 import { useUser } from "app/hooks/use-user";
 import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
+
+import { useSafeAreaInsets } from "design-system/safe-area";
 
 const useBottomTabBarHeight = () => {
   const { bottom: safeAreaBottom } = useSafeAreaInsets();

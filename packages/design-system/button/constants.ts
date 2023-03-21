@@ -1,4 +1,4 @@
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { colors } from "design-system/tailwind";
 
 const CONTAINER_TW =
   "rounded-full flex-row justify-center items-center " +

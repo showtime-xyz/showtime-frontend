@@ -1,18 +1,18 @@
 import { useState } from "react";
 
-import { Accordion } from "@showtime-xyz/universal.accordion";
-import { Button } from "@showtime-xyz/universal.button";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useReport } from "app/hooks/use-report";
 import { createParam } from "app/navigation/use-param";
+
+import { Accordion } from "design-system/accordion";
+import { Button } from "design-system/button";
+import { Fieldset } from "design-system/fieldset";
+import { useIsDarkMode } from "design-system/hooks";
+import { ChevronRight } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { useRouter } from "design-system/router";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Query = {
   nftId: string;

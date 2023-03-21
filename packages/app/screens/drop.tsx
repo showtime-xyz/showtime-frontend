@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { Drop } from "app/components/drop";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 const DropModal = () => {
   return <Drop />;

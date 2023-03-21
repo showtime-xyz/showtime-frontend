@@ -1,7 +1,7 @@
 import { useRef, ReactNode } from "react";
 import { Platform } from "react-native";
 
-import { Text } from "@showtime-xyz/universal.text";
+import { Text } from "design-system/text";
 
 import { useClampText } from "./use-clamp-text";
 

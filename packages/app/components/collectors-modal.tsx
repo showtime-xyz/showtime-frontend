@@ -2,12 +2,12 @@ import { Suspense } from "react";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
+
+import { Spinner } from "design-system/spinner";
+import { View } from "design-system/view";
 
 import { ErrorBoundary } from "./error-boundary";
 import { UserList } from "./user-list";

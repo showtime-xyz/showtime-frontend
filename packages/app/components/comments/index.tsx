@@ -8,13 +8,6 @@ import {
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
@@ -22,6 +15,13 @@ import { useStableFocusEffect } from "app/hooks/use-stable-focus-effect";
 import { useUser } from "app/hooks/use-user";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
+
+import { useAlert } from "design-system/alert";
+import { useIsDarkMode } from "design-system/hooks";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";

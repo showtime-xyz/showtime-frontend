@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Notifications } from "app/components/notifications";
 import { useTrackPageViewed } from "app/lib/analytics";
+
+import { Spinner } from "design-system/spinner";
+import { View } from "design-system/view";
 
 const NotificationsScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Notifications" });

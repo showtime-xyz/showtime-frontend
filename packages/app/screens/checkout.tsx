@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { Checkout } from "app/components/checkout/checkout";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const CheckoutScreen = withModalScreen(Checkout, {
   title: "Checkout",

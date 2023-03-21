@@ -1,9 +1,9 @@
 import { Linking } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { PolygonScan } from "@showtime-xyz/universal.icon";
-import { Text } from "@showtime-xyz/universal.text";
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import { PolygonScan } from "design-system/icon";
+import { Text } from "design-system/text";
 
 export const PolygonScanButton = ({
   transactionHash,

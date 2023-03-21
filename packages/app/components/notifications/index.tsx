@@ -3,14 +3,6 @@ import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { NotificationItem } from "app/components/notifications/notification-item";
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -23,6 +15,14 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { ModalSheet } from "design-system/modal-sheet";
+import { Spinner } from "design-system/spinner";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 const Header = () => {
   const headerHeight = useHeaderHeight();

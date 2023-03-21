@@ -14,11 +14,11 @@ import {
   TabBar,
 } from "react-native-tab-view-next";
 
-import { Haptics } from "@showtime-xyz/universal.haptics";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
+import { Haptics } from "design-system/haptics";
+import { useIsDarkMode } from "design-system/hooks";
+import { Pressable } from "design-system/pressable";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 
 import { Route } from "./";
 

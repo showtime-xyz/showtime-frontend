@@ -1,17 +1,17 @@
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import {
-  HeaderTabView,
-  Route,
-  SceneRendererProps,
-} from "@showtime-xyz/universal.tab-view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { WalletAddressesV2 } from "app/types";
+
+import { useSafeAreaInsets } from "design-system/safe-area";
+import {
+  HeaderTabView,
+  Route,
+  SceneRendererProps,
+} from "design-system/tab-view";
 
 import { EditNicknameModal } from "./setting-edit-nickname-moda";
 import { SettingsHeader } from "./setting-header";

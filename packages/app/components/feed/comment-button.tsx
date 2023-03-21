@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import { Message } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { SocialButton } from "app/components/social-button";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
+
+import { Message } from "design-system/icon";
+import { useRouter } from "design-system/router";
 
 interface CommentButtonProps {
   nft?: NFT;

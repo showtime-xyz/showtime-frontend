@@ -1,23 +1,6 @@
 import { useMemo } from "react";
 import { Linking, Platform } from "react-native";
 
-import {
-  MoreHorizontal,
-  UserMinus,
-  Flag,
-  EyeOff,
-  Copy,
-  Slash,
-  Refresh,
-  Twitter,
-  Showtime,
-  Edit,
-  QrCode,
-} from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { TW } from "@showtime-xyz/universal.tailwind";
-
 import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
@@ -41,7 +24,23 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import {
+  MoreHorizontal,
+  UserMinus,
+  Flag,
+  EyeOff,
+  Copy,
+  Slash,
+  Refresh,
+  Twitter,
+  Showtime,
+  Edit,
+  QrCode,
+} from "design-system/icon";
 import { OpenSea } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { useRouter } from "design-system/router";
+import { TW } from "design-system/tailwind";
 
 import { MenuItemIcon } from "./dropdown/menu-item-icon";
 

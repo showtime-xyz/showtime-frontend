@@ -1,8 +1,8 @@
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { FallbackProps } from "app/components/error-boundary";
+
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export function Fallback({ error, resetErrorBoundary }: FallbackProps) {
   return (

@@ -7,7 +7,7 @@ import {
   useWebClientRect,
   usePlatformResize,
   useWebScroll,
-} from "@showtime-xyz/universal.hooks";
+} from "design-system/hooks";
 
 import { SelectButton } from "./lib/select-button";
 import { SelectItem } from "./lib/select-item";

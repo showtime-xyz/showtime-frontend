@@ -8,14 +8,6 @@ import React, {
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import {
-  TabScrollView,
-  TabInfiniteScrollList,
-  TabSpinner,
-} from "@showtime-xyz/universal.tab-view";
-import { Text } from "@showtime-xyz/universal.text";
-
 import { Card, GAP } from "app/components/card";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
@@ -24,6 +16,14 @@ import { useUser } from "app/hooks/use-user";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
+
+import { useRouter } from "design-system/router";
+import {
+  TabScrollView,
+  TabInfiniteScrollList,
+  TabSpinner,
+} from "design-system/tab-view";
+import { Text } from "design-system/text";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";

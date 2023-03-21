@@ -18,12 +18,12 @@ import {
   BottomSheetProps as BSProps,
 } from "@gorhom/bottom-sheet";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { useLockBodyScroll } from "@showtime-xyz/universal.hooks";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { styled, colors } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { useIsDarkMode } from "design-system/hooks";
+import { useLockBodyScroll } from "design-system/hooks";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { styled, colors } from "design-system/tailwind";
+import type { TW } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 type BottomSheetProps = {
   children?: React.ReactElement;

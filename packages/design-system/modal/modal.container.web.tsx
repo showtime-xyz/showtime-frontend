@@ -10,8 +10,8 @@ import {
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 
-import { useLockBodyScroll } from "@showtime-xyz/universal.hooks";
-import { View } from "@showtime-xyz/universal.view";
+import { useLockBodyScroll } from "design-system/hooks";
+import { View } from "design-system/view";
 
 import { WEB_HEIGHT } from "./constants";
 import { ModalBackdrop } from "./modal.backdrop";

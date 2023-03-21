@@ -1,27 +1,14 @@
 import { useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import {
-  User,
-  Settings,
-  Edit,
-  Moon,
-  Sun,
-  LogOut,
-  DarkMode,
-} from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { Profile } from "app/types";
 
+import { Avatar } from "design-system/avatar";
+import { useColorScheme } from "design-system/color-scheme";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -32,7 +19,19 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from "design-system/dropdown-menu";
+import {
+  User,
+  Settings,
+  Edit,
+  Moon,
+  Sun,
+  LogOut,
+  DarkMode,
+} from "design-system/icon";
+import { useRouter } from "design-system/router";
+import { Text } from "design-system/text";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 type HeaderDropdownProps = {
   type: "profile" | "settings";

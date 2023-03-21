@@ -4,11 +4,6 @@ const plugin = require("tailwindcss/plugin");
 // const nativewind = require("nativewind/tailwind/css");
 
 const { textSizes, fontFamily } = require("design-system/typography");
-// const { colors } = require("@showtime-xyz/universal.tailwind");
-// const {
-//   MAX_CONTENT_WIDTH,
-//   MAX_HEADER_WIDTH,
-// } = require("@showtime-xyz/universal.tailwind");
 
 const colors = {
   black: "#000",

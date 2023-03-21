@@ -2,7 +2,7 @@ import { Dimensions, StyleSheet, Image } from "react-native";
 
 import { Meta } from "@storybook/react";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 import { LightBoxProvider, LightBox } from "./index";
 

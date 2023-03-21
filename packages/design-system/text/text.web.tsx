@@ -4,7 +4,7 @@ import { Text as ReactNativeText } from "react-native";
 // @ts-ignore
 import { unstable_createElement } from "react-native-web";
 
-import { styled } from "@showtime-xyz/universal.tailwind";
+import { styled } from "design-system/tailwind";
 
 const StyledText = styled(ReactNativeText);
 

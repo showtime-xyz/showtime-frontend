@@ -2,15 +2,11 @@ import React from "react";
 
 import { useSWRConfig } from "swr";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useReport } from "app/hooks/use-report";
 import { useUser } from "app/hooks/use-user";
 
+import { Button } from "design-system/button";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -18,6 +14,9 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { useIsDarkMode } from "design-system/hooks";
+import { MoreHorizontal } from "design-system/icon";
+import { View } from "design-system/view";
 
 type Props = {
   activity: any; // TODO: add Activity type

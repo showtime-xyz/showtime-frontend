@@ -8,16 +8,16 @@ import {
 } from "react";
 import { Platform, ViewStyle } from "react-native";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Send } from "@showtime-xyz/universal.icon";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { TextInput } from "@showtime-xyz/universal.text-input";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useAutoSizeInput } from "app/hooks/use-auto-size-input";
+
+import { Avatar } from "design-system/avatar";
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import { Send } from "design-system/icon";
+import { Spinner } from "design-system/spinner";
+import { colors } from "design-system/tailwind";
+import { TextInput } from "design-system/text-input";
+import { View } from "design-system/view";
 
 interface MessageBoxProps {
   submitting?: boolean;

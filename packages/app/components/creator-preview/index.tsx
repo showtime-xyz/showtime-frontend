@@ -1,8 +1,5 @@
 import { Pressable } from "react-native";
 
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
-
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { FollowButton } from "app/components/follow-button";
 import { Media } from "app/components/media";
@@ -12,6 +9,9 @@ import { useFollow } from "app/hooks/use-follow";
 import { TextLink } from "app/navigation/link";
 import type { Creator } from "app/types";
 import { formatAddressShort } from "app/utilities";
+
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 type Props = {
   creator: Creator;

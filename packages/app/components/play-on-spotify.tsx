@@ -1,10 +1,10 @@
 import React from "react";
 import { Linking, Platform, StyleSheet } from "react-native";
 
-import { Spotify } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Spotify } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const PlayOnSpotify = ({ url }: { url: string }) => {
   return (

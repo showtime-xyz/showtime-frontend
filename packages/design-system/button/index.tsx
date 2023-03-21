@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { useIsDarkMode } from "design-system/hooks";
+import { colors } from "design-system/tailwind";
 
 import {
   Button as BaseButton,

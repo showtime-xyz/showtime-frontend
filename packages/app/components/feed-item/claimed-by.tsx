@@ -1,12 +1,12 @@
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
+
+import { useRouter } from "design-system/router";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type NFTDetailsProps = {
   nft: NFT | undefined;

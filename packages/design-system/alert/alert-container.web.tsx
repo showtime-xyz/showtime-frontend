@@ -4,7 +4,7 @@ import { Platform, Modal } from "react-native";
 import * as Portal from "@radix-ui/react-portal";
 import { RemoveScrollBar } from "react-remove-scroll-bar";
 
-import { View } from "@showtime-xyz/universal.view";
+import { View } from "design-system/view";
 
 import { Alert } from "./alert";
 import { AlertContainerProps } from "./alert-container";

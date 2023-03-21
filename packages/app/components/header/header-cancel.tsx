@@ -1,6 +1,6 @@
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
+import { PressableScale } from "design-system/pressable-scale";
+import { useRouter } from "design-system/router";
+import { Text } from "design-system/text";
 
 type HeaderCancelProps = {
   canGoBack?: boolean;

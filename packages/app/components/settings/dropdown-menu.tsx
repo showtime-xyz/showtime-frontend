@@ -1,9 +1,7 @@
-import { Button } from "@showtime-xyz/universal.button";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
-
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { WalletAddressesV2 } from "app/types";
 
+import { Button } from "design-system/button";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -11,6 +9,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { MoreHorizontal } from "design-system/icon";
 import { Trash } from "design-system/icon";
 
 type AddressMenuProps = {

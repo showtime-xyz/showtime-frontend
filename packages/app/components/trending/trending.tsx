@@ -1,17 +1,17 @@
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 
+import { useContentWidth } from "app/hooks/use-content-width";
+import { useTabState } from "app/hooks/use-tab-state";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
+
 import {
   SceneRendererProps,
   HeaderTabView,
   Route,
-} from "@showtime-xyz/universal.tab-view";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
-import { useContentWidth } from "app/hooks/use-content-width";
-import { useTabState } from "app/hooks/use-tab-state";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
+} from "design-system/tab-view";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { TrendingContext } from "./context";
 import { TRENDING_ROUTE, TabListContainer, TrendingTabListRef } from "./tabs";

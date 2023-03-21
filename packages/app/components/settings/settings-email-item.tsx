@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { CheckFilled1 } from "@showtime-xyz/universal.icon";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useMagic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
+
+import { DataPill } from "design-system/data-pill";
+import { CheckFilled1 } from "design-system/icon";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { DropdownMenu } from "./dropdown-menu";
 

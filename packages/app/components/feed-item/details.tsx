@@ -1,12 +1,5 @@
 import { Suspense } from "react";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Share } from "@showtime-xyz/universal.icon";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { ClaimButton } from "app/components/claim/claim-button";
@@ -19,6 +12,13 @@ import { SocialButton } from "app/components/social-button";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import type { NFT } from "app/types";
+
+import { useIsDarkMode } from "design-system/hooks";
+import { Share } from "design-system/icon";
+import { Skeleton } from "design-system/skeleton";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { ClaimedShareButton } from "../claim/claimed-share-button";
 

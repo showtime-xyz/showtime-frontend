@@ -7,7 +7,7 @@ export const useColorScheme = () => {
 
   if (!colorSchemeContext) {
     console.error(
-      "Please wrap your app with <ColorSchemeProvider> from @showtime-xyz/universal.color-scheme"
+      "Please wrap your app with <ColorSchemeProvider> from design-system/color-scheme"
     );
   }
   return colorSchemeContext;

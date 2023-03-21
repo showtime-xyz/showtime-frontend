@@ -4,17 +4,6 @@ import { useWindowDimensions, Platform, Linking } from "react-native";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 import { format } from "date-fns";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { CreditCard, Check, Trash } from "@showtime-xyz/universal.icon";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import {
   PaymentsHistory,
@@ -26,6 +15,7 @@ import {
 } from "app/hooks/api/use-payments-manage";
 import { exportFromJSON } from "app/lib/export-from-json";
 
+import { Button } from "design-system/button";
 import {
   DropdownMenuItem,
   DropdownMenuItemTitle,
@@ -33,8 +23,17 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from "design-system/dropdown-menu";
+import { useIsDarkMode } from "design-system/hooks";
+import { CreditCard, Check, Trash } from "design-system/icon";
 import { MoreHorizontal, Receipt } from "design-system/icon";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { useRouter } from "design-system/router";
+import { Spinner } from "design-system/spinner";
+import { TabInfiniteScrollList } from "design-system/tab-view";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { SettingItemSeparator } from "../setting-item-separator";

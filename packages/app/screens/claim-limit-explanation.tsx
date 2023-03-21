@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { ClaimLimitExplanationModal } from "app/components/claim/claim-limit-explanation";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const ClaimLimitExplanationScreen = withModalScreen(
   ClaimLimitExplanationModal,

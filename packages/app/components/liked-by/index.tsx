@@ -1,13 +1,13 @@
 import { Fragment } from "react";
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useLikes } from "app/hooks/api/use-likes";
 import { TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
+
+import { useRouter } from "design-system/router";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 interface Props {
   nft?: any;

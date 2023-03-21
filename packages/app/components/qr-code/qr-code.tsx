@@ -3,14 +3,13 @@ import { Platform, View } from "react-native";
 
 import * as MediaLibrary from "expo-media-library";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import { Haptics } from "@showtime-xyz/universal.haptics";
-
 import domtoimage from "app/lib/dom-to-image";
 import { ReactQRCode } from "app/lib/qr-code";
 import { captureRef } from "app/lib/view-shot";
 
+import { Alert } from "design-system/alert";
+import { Button } from "design-system/button";
+import { Haptics } from "design-system/haptics";
 import { toast } from "design-system/toast";
 
 type Props = {

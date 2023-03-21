@@ -7,10 +7,10 @@ import {
   TabBar,
 } from "react-native-tab-view-next";
 
-import { Haptics } from "@showtime-xyz/universal.haptics";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+import { Haptics } from "design-system/haptics";
+import { useIsDarkMode } from "design-system/hooks";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 import { Route } from "./index";
 

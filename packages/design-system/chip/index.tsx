@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 
-import { TW } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { TW } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export type ChipProps = {
   label: string;

@@ -10,7 +10,7 @@ import Svg, {
   Image,
 } from "react-native-svg";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "design-system/hooks";
 
 import { QRCodeProps } from "./type";
 import { genMatrix } from "./utils";

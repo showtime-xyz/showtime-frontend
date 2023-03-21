@@ -16,31 +16,6 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
-import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  FlipIcon,
-  Image as ImageIcon,
-  InformationCircle,
-} from "@showtime-xyz/universal.icon";
-import { Label } from "@showtime-xyz/universal.label";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
@@ -59,8 +34,32 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
+import { Accordion, AnimateHeight } from "design-system/accordion";
+import { Alert } from "design-system/alert";
+import { Button } from "design-system/button";
+import { Checkbox } from "design-system/checkbox";
+import { DataPill } from "design-system/data-pill";
 import { DateTimePicker } from "design-system/date-time-picker";
+import { ErrorText, Fieldset } from "design-system/fieldset";
 import { Hidden } from "design-system/hidden";
+import { useIsDarkMode } from "design-system/hooks";
+import {
+  FlipIcon,
+  Image as ImageIcon,
+  InformationCircle,
+} from "design-system/icon";
+import { Label } from "design-system/label";
+import { useModalScreenContext } from "design-system/modal-screen";
+import { ModalSheet } from "design-system/modal-sheet";
+import { Pressable } from "design-system/pressable";
+import { PressableHover } from "design-system/pressable-hover";
+import { useRouter } from "design-system/router";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { ScrollView } from "design-system/scroll-view";
+import { Spinner } from "design-system/spinner";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 import { DropPreview } from "./drop-preview";

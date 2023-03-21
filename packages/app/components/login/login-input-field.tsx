@@ -4,10 +4,10 @@ import { TextInputProps } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-
 import { yup } from "app/lib/yup";
+
+import { Button } from "design-system/button";
+import { Fieldset } from "design-system/fieldset";
 
 type FormData = {
   data?: string;

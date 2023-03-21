@@ -1,16 +1,16 @@
 import { memo } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import type { ButtonProps } from "@showtime-xyz/universal.button/types";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { BellOff, BellPlus } from "@showtime-xyz/universal.icon";
-
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useNotificationsFollow } from "app/hooks/use-notifications-follow";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+
+import { Alert } from "design-system/alert";
+import { Button } from "design-system/button";
+import type { ButtonProps } from "design-system/button/types";
+import { useIsDarkMode } from "design-system/hooks";
+import { BellOff, BellPlus } from "design-system/icon";
 
 type NotificationsFollowButtonProps = ButtonProps & {
   username?: string;

@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
-import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { View, ViewProps } from "@showtime-xyz/universal.view";
-
 import { linkifyDescription } from "app/lib/linkify";
 import { removeTags } from "app/utilities";
+
+import { ClampText } from "design-system/clamp-text";
+import { View, ViewProps } from "design-system/view";
 
 type Props = ViewProps & {
   descriptionText?: string;

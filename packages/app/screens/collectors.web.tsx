@@ -1,6 +1,6 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-
 import { CollectorsModal } from "app/components/collectors-modal";
+
+import { withModalScreen } from "design-system/modal-screen";
 
 export const CollectorsScreen = withModalScreen(CollectorsModal, {
   title: "Collectors",

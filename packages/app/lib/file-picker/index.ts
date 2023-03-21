@@ -3,9 +3,9 @@ import { Platform } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-
 import { getWebImageSize } from "app/utilities";
+
+import { Alert } from "design-system/alert";
 
 type Props = {
   mediaTypes?: "image" | "video" | "all";

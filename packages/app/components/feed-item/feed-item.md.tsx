@@ -5,24 +5,6 @@ import { useWindowDimensions } from "react-native";
 import { ResizeMode } from "expo-av";
 import { useSwiper } from "swiper/react";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Close,
-  Muted,
-  Unmuted,
-  Maximize,
-  ChevronDown,
-  ChevronUp,
-} from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
@@ -48,6 +30,24 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useMuted } from "app/providers/mute-provider";
 import { NFT } from "app/types";
+
+import { Button } from "design-system/button";
+import { useIsDarkMode } from "design-system/hooks";
+import {
+  Close,
+  Muted,
+  Unmuted,
+  Maximize,
+  ChevronDown,
+  ChevronUp,
+} from "design-system/icon";
+import { useRouter } from "design-system/router";
+import { Skeleton } from "design-system/skeleton";
+import { Spinner } from "design-system/spinner";
+import { TabBarSingle } from "design-system/tab-view";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";

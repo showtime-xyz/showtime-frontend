@@ -4,13 +4,6 @@ import { Platform } from "react-native";
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { HeartFilled, Heart, Trash } from "@showtime-xyz/universal.icon";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
-
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
@@ -20,6 +13,13 @@ import {
   formatAddressShort,
   limitLineBreaks,
 } from "app/utilities";
+
+import { Button } from "design-system/button";
+import { HeartFilled, Heart, Trash } from "design-system/icon";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 interface MessageRowProps {
   /**

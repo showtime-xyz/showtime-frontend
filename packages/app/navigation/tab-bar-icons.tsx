@@ -1,8 +1,15 @@
 import { Suspense } from "react";
 import { Platform } from "react-native";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { ErrorBoundary } from "app/components/error-boundary";
+import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { useNotifications } from "app/hooks/use-notifications";
+import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useUser } from "app/hooks/use-user";
+import { Link } from "app/navigation/link";
+
+import { Avatar } from "design-system/avatar";
+import { useIsDarkMode } from "design-system/hooks";
 import {
   Bell,
   BellFilled,
@@ -14,18 +21,11 @@ import {
   HotFilled,
   Plus,
   Showtime,
-} from "@showtime-xyz/universal.icon";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
-
-import { ErrorBoundary } from "app/components/error-boundary";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useNotifications } from "app/hooks/use-notifications";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useUser } from "app/hooks/use-user";
-import { Link } from "app/navigation/link";
+} from "design-system/icon";
+import { PressableHover } from "design-system/pressable-hover";
+import type { TW } from "design-system/tailwind";
+import { colors } from "design-system/tailwind";
+import { View } from "design-system/view";
 
 type TabBarIconProps = {
   color?: string;

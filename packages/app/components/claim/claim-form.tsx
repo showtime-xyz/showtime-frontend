@@ -15,18 +15,6 @@ import {
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button } from "@showtime-xyz/universal.button";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { CheckFilled } from "@showtime-xyz/universal.icon";
-import { Spotify } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Media } from "app/components/media";
@@ -46,6 +34,18 @@ import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import { formatAddressShort, getCreatorUsernameFromNFT } from "app/utilities";
+
+import { Alert } from "design-system/alert";
+import { Button } from "design-system/button";
+import { Fieldset } from "design-system/fieldset";
+import { useIsDarkMode } from "design-system/hooks";
+import { CheckFilled } from "design-system/icon";
+import { Spotify } from "design-system/icon";
+import { Pressable } from "design-system/pressable";
+import { useRouter } from "design-system/router";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const ClaimForm = ({
   edition,

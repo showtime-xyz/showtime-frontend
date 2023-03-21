@@ -1,12 +1,12 @@
 import { Dimensions } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Carousel } from "app/lib/carousel";
+
+import { Button } from "design-system/button";
+import { useSafeAreaInsets } from "design-system/safe-area";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 const width = Dimensions.get("window").width;
 

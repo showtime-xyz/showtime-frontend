@@ -8,9 +8,9 @@ import {
   useSwitchNetwork,
 } from "wagmi";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
-
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
+
+import { useAlert } from "design-system/alert";
 
 import { useWeb3 } from "./use-web3";
 

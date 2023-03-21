@@ -1,4 +1,4 @@
-import { Instagram, Twitter, Mail, Github } from "@showtime-xyz/universal.icon";
+import { Instagram, Twitter, Mail, Github } from "design-system/icon";
 
 const links = [
   {

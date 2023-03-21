@@ -3,10 +3,10 @@ import { StyleSheet } from "react-native";
 
 import { PortalProvider } from "@gorhom/portal";
 
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { LoginComponent } from "./login";
 import { useLogin } from "./use-login";

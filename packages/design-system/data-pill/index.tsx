@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import type { TW } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { useIsDarkMode } from "design-system/hooks";
+import type { TW } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 type Type = "primary" | "secondary" | "text";
 type DataPillProps = {

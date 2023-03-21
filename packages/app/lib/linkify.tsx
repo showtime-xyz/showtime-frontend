@@ -1,8 +1,8 @@
 import reactStringReplace from "react-string-replace";
 
-import { TW } from "@showtime-xyz/universal.tailwind";
-
 import { TextLink } from "app/navigation/link";
+
+import { TW } from "design-system/tailwind";
 
 // This function replaces mention tags (@showtime) and URL (http://) with Link components
 export const linkifyDescription = (text?: string, tw?: TW) => {

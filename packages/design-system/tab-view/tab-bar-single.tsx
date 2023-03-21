@@ -1,8 +1,8 @@
 import { useState, memo, useMemo } from "react";
 
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { PressableHover } from "design-system/pressable-hover";
+import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 import { Route } from "./";
 

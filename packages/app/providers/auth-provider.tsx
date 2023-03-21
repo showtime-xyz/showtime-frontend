@@ -9,8 +9,6 @@ import { AppState } from "react-native";
 
 import { useSWRConfig } from "swr";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { clearPersistedForms } from "app/components/drop/utils";
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
@@ -29,6 +27,8 @@ import { deleteRefreshToken } from "app/lib/refresh-token";
 import { useRudder } from "app/lib/rudderstack";
 import { useWalletConnect } from "app/lib/walletconnect";
 import type { AuthenticationStatus, MyInfo } from "app/types";
+
+import { useRouter } from "design-system/router";
 
 import { MY_INFO_ENDPOINT } from "./user-provider";
 

@@ -1,11 +1,11 @@
 import { Platform } from "react-native";
 
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
-import { Showtime, Mail } from "@showtime-xyz/universal.icon";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useSendFeedback } from "app/hooks/use-send-feedback";
+
+import { TabScrollView } from "design-system/collapsible-tab-view";
+import { Showtime, Mail } from "design-system/icon";
+import { useRouter } from "design-system/router";
+import { View } from "design-system/view";
 
 import { SettingClearAppCache } from "../clear-cache-btn";
 import { SettingItemSeparator } from "../setting-item-separator";

@@ -3,11 +3,6 @@ import { Platform } from "react-native";
 
 import dynamic from "next/dynamic";
 
-import { Play } from "@showtime-xyz/universal.icon";
-import { Image, ResizeMode } from "@showtime-xyz/universal.image";
-import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
-import { View } from "@showtime-xyz/universal.view";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useContentWidth } from "app/hooks/use-content-width";
@@ -15,8 +10,12 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
+import { Play } from "design-system/icon";
+import { Image, ResizeMode } from "design-system/image";
 import { Props as ModelProps } from "design-system/model";
+import { PinchToZoom } from "design-system/pinch-to-zoom";
 import { Video } from "design-system/video";
+import { View } from "design-system/view";
 
 import { ContentTypeIcon } from "../content-type-tooltip";
 

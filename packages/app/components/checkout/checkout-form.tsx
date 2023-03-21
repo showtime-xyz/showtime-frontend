@@ -11,18 +11,17 @@ import {
 } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
-
 import { Logger } from "app/lib/logger";
 
+import { Button } from "design-system/button";
+import { Checkbox } from "design-system/checkbox";
+import { useIsDarkMode } from "design-system/hooks";
+import { Spinner } from "design-system/spinner";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
+import { View } from "design-system/view";
 
 import { stripePromise } from "./stripe";
 

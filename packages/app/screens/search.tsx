@@ -1,15 +1,14 @@
 import { useEffect } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { View } from "@showtime-xyz/universal.view";
-
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Search } from "app/components/search";
 import { useTrackPageViewed } from "app/lib/analytics";
 
+import { useRouter } from "design-system/router";
+import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
+import { View } from "design-system/view";
 
 const SearchScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Search" });

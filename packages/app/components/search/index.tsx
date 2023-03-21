@@ -3,29 +3,25 @@ import { Keyboard, Platform, TextInput } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Close as CloseIcon,
-  Search as SearchIcon,
-} from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { Input } from "@showtime-xyz/universal.input";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
-import { View } from "@showtime-xyz/universal.view";
-
 import { HeaderLeft } from "app/components/header";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { Link } from "app/navigation/link";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { formatAddressShort } from "app/utilities";
 
+import { useColorScheme } from "design-system/color-scheme";
+import { useIsDarkMode } from "design-system/hooks";
+import { Close as CloseIcon, Search as SearchIcon } from "design-system/icon";
+import { Image } from "design-system/image";
+import { InfiniteScrollList } from "design-system/infinite-scroll-list";
+import { Input } from "design-system/input";
+import { PressableScale } from "design-system/pressable-scale";
 import { useSafeAreaInsets } from "design-system/safe-area";
+import { Skeleton } from "design-system/skeleton";
+import { colors } from "design-system/tailwind";
+import { Text } from "design-system/text";
+import { VerificationBadge } from "design-system/verification-badge";
+import { View } from "design-system/view";
 
 const PT_2_UNIT = 8;
 

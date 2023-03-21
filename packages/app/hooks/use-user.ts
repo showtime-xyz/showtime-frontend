@@ -1,8 +1,8 @@
 import { useContext, useEffect } from "react";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
 import { UserContext } from "app/context/user-context";
+
+import { useRouter } from "design-system/router";
 
 type UserParams = {
   redirectTo?: string;

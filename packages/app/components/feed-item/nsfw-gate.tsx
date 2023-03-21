@@ -3,13 +3,12 @@ import { StyleSheet, Platform } from "react-native";
 
 import { BlurView as ExpoBlurView } from "expo-blur";
 
-import { TextButton } from "@showtime-xyz/universal.button";
-import { View } from "@showtime-xyz/universal.view";
-
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
+import { TextButton } from "design-system/button";
 import { EyeOff } from "design-system/icon";
 import { Text } from "design-system/text";
+import { View } from "design-system/view";
 
 export const NSFWGate = ({
   show,

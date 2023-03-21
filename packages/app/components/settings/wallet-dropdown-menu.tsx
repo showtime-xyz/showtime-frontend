@@ -1,12 +1,10 @@
 import { Linking } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
-import { Edit, MoreHorizontal, Wallet } from "@showtime-xyz/universal.icon";
-
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { WalletAddressesV2 } from "app/types";
 
+import { Button } from "design-system/button";
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -14,6 +12,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { Edit, MoreHorizontal, Wallet } from "design-system/icon";
 import { Trash } from "design-system/icon";
 
 type AddressMenuProps = {
