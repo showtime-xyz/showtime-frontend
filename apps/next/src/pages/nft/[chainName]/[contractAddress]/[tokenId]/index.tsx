@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
               nft.creator_name ?? getCreatorUsernameFromNFT(nft)
             } | Showtime`,
             description: nft.token_description,
-            image: imageUrl,
+            image: nft?.nsfw ? null : imageUrl,
             deeplinkUrl: `nft/${chainName}/${contractAddress}/${tokenId}`,
           },
         },
