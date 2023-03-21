@@ -236,6 +236,36 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       Logger.log(`captureRefError: ${error}`);
     }
   };
+
+  const checkPhotosPermission = useCallback(async () => {
+    let hasPermission = false;
+    if (status?.granted) {
+      hasPermission = status?.granted;
+    } else {
+      const res = await requestPermission();
+      hasPermission = res?.granted;
+    }
+    if (!hasPermission) {
+      Alert.alert(
+        "No permission",
+        "To share the photo, you'll need to enable photo permissions first",
+        [
+          {
+            text: "Open Settings",
+            onPress: () => {
+              Linking.openSettings();
+            },
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ]
+      );
+    }
+    return hasPermission;
+  }, [requestPermission, status?.granted]);
+
   const onDownload = useCallback(async () => {
     if (Platform.OS === "web") {
       const dataUrl = await domtoimage.toPng(viewRef.current as Node, {
@@ -248,18 +278,12 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       link.href = dataUrl;
       link.click();
     } else {
-      let hasPermission = false;
       const url = await getViewShot();
       if (!url) {
         Alert.alert("Oops, An error occurred.");
         return;
       }
-      if (status?.granted) {
-        hasPermission = status?.granted;
-      } else {
-        const res = await requestPermission();
-        hasPermission = res?.granted;
-      }
+      const hasPermission = await checkPhotosPermission();
       if (hasPermission) {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         await MediaLibrary.saveToLibraryAsync(url);
@@ -269,27 +293,17 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       }
     }
-  }, [nft, requestPermission, status?.granted]);
+  }, [checkPhotosPermission, nft]);
 
   const prepareShareToIG = useCallback(
     async (url: string) => {
-      let hasPermission = false;
-      if (status?.granted) {
-        hasPermission = status?.granted;
-      } else {
-        const res = await requestPermission();
-        hasPermission = res?.granted;
-      }
+      const hasPermission = await checkPhotosPermission();
       if (hasPermission) {
         await MediaLibrary.saveToLibraryAsync(url);
-      } else {
-        Alert.alert(
-          "OOps, Before sharing the photo, please enable photo permissions."
-        );
       }
       return hasPermission;
     },
-    [requestPermission, status?.granted]
+    [checkPhotosPermission]
   );
 
   const shareSingleImage = useCallback(
