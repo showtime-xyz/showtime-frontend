@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Spotify,
@@ -11,6 +10,7 @@ import {
   Twitter,
   InstagramColorful,
 } from "@showtime-xyz/universal.icon";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
