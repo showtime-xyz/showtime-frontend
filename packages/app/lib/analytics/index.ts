@@ -22,12 +22,12 @@ export const Analytics = { track, setUserId, reset };
 
 export const useTrackPageViewed = ({ name }: { name: string }) => {
   useEffect(() => {
-    Analytics.track(EVENTS.PAGE_VIEWED, { page_name: name });
+    Analytics.track(EVENTS.SCREEN_VIEWED, { screenName: name });
   }, [name]);
 };
 
 export const EVENTS = {
-  PAGE_VIEWED: "Page Viewed",
+  SCREEN_VIEWED: "Screen Viewed",
   BUTTON_CLICKED: "Button Clicked",
   DROP_SHARED: "Drop Shared",
   DROP_COLLECTED: "Drop Collected",
