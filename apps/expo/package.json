@@ -47,7 +47,6 @@
     "bump-application-version": "zx scripts/bump-version.mjs"
   },
   "dependencies": {
-    "@amplitude/analytics-browser": "^1.9.1",
     "@amplitude/analytics-react-native": "^1.1.1",
     "@bacons/link-assets": "^1.1.0",
     "@capsizecss/core": "^3.0.0",
