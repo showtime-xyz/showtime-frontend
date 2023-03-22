@@ -185,7 +185,7 @@ Magic + WalletConnect
 
 ### Analytics
 
-RudderStack
+Amplitude
 
 ### Testing
 

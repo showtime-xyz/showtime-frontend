@@ -15,7 +15,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { Logger } from "app/lib/logger";
-import { useRudder } from "app/lib/rudderstack";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 import { toast } from "design-system/toast";
@@ -35,7 +34,6 @@ export const Challenge = () => {
   const finishOnboarding = useFinishOnboarding();
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
-  const { rudder } = useRudder();
   const [hCaptchaLoaded, setHCaptchaLoaded] = useState(
     typeof window.hcaptcha !== "undefined"
   );
@@ -90,7 +88,6 @@ export const Challenge = () => {
         await matchMutate(
           (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
         );
-        rudder?.track("hCaptcha challenge success");
 
         // finish onboarding
         finishOnboarding();

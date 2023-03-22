@@ -47,6 +47,7 @@
     "bump-application-version": "zx scripts/bump-version.mjs"
   },
   "dependencies": {
+    "@amplitude/analytics-react-native": "^1.1.1",
     "@bacons/link-assets": "^1.1.0",
     "@capsizecss/core": "^3.0.0",
     "@coinbase/wallet-mobile-sdk": "^1.0.4",
@@ -68,7 +69,6 @@
     "@react-navigation/stack": "^6.3.2",
     "@react-three/drei": "^9.17.3",
     "@react-three/fiber": "^8.2.1",
-    "@rudderstack/rudder-sdk-react-native": "^1.4.1",
     "@sentry/react-native": "4.2.2",
     "@shopify/flash-list": "^1.4.2",
     "@showtime-xyz/date-picker": "^0.2.0",

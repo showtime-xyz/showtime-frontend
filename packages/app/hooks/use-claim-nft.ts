@@ -10,9 +10,9 @@ import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
-import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
 import { getNextRefillClaim, ledgerWalletHack } from "app/utilities";
@@ -119,7 +119,6 @@ export const reducer = (state: State, action: Action): State => {
 };
 
 export const useClaimNFT = (edition: IEdition) => {
-  const { rudder } = useRudder();
   const router = useRouter();
   const { data: userProfile } = useMyInfo();
   const signTypedData = useSignTypedData();
@@ -228,7 +227,7 @@ export const useClaimNFT = (edition: IEdition) => {
               {
                 text: "Verify my phone number",
                 onPress: () => {
-                  rudder?.track("Button Clicked", {
+                  Analytics.track(EVENTS.BUTTON_CLICKED, {
                     name: "Verify my phone number",
                   });
 

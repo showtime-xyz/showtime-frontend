@@ -11,6 +11,7 @@
     "postinstall": "cd ../.. && yarn patch-package"
   },
   "dependencies": {
+    "@amplitude/analytics-browser": "^1.9.1",
     "@builder.io/partytown": "^0.6.4",
     "@coinbase/wallet-sdk": "^3.3.0",
     "@expo/next-adapter": "^4.0.13",
