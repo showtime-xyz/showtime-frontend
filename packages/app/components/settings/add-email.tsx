@@ -5,7 +5,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
-import { Analytics } from "app/lib/analytics";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { Logger } from "app/lib/logger";
 import { useMagic, Relayer } from "app/lib/magic";
 
@@ -28,7 +28,7 @@ export const AddEmailModal = () => {
 
   const submitEmail = useCallback(
     async (email: string) => {
-      Analytics.track("Button Clicked", {
+      Analytics.track(EVENTS.BUTTON_CLICKED, {
         name: "Login with email",
       });
 

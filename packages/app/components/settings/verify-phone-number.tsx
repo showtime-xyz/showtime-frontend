@@ -6,7 +6,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { PhoneNumberPicker } from "app/components/login/phone-number-picker";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
-import { Analytics } from "app/lib/analytics";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { useMagic, Relayer } from "app/lib/magic";
 
 export const VerifyPhoneNumberModal = () => {
@@ -26,7 +26,7 @@ export const VerifyPhoneNumberModal = () => {
 
   const submitPhoneNumber = useCallback(
     async (phoneNumber: string) => {
-      Analytics.track("Button Clicked", {
+      Analytics.track(EVENTS.BUTTON_CLICKED, {
         name: "Login with phone number",
       });
 

@@ -6,7 +6,7 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
-import { Analytics } from "app/lib/analytics";
+import { Analytics, EVENTS } from "app/lib/analytics";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
 
@@ -54,7 +54,7 @@ export const useLogin = () => {
       try {
         loginSource.current = "wallet";
 
-        Analytics.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with wallet",
         });
 
@@ -69,7 +69,7 @@ export const useLogin = () => {
     async function handleSubmitEmail(email: string) {
       try {
         loginSource.current = "magic";
-        Analytics.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with email",
         });
 
@@ -84,7 +84,7 @@ export const useLogin = () => {
     async function handleSubmitPhoneNumber(phoneNumber: string) {
       try {
         loginSource.current = "magic";
-        Analytics.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with phone number",
         });
 

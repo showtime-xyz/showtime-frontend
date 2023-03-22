@@ -10,7 +10,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
-import { Analytics } from "app/lib/analytics";
 import { Logger } from "app/lib/logger";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
@@ -58,10 +57,6 @@ export const Challenge = () => {
         captchaRef.current?.hide();
         toast("Please try again or connect a social account.");
 
-        Analytics.track("Hcaptcha Error", {
-          error: event.nativeEvent.data,
-        });
-
         return;
       } else {
         const token = event.nativeEvent.data;
@@ -85,7 +80,6 @@ export const Challenge = () => {
           await matchMutate(
             (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
           );
-          Analytics.track("Hcaptcha Challenge Success");
 
           // finish onboarding
           finishOnboarding();

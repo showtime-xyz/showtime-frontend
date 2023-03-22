@@ -14,7 +14,7 @@ import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
-import { Analytics } from "app/lib/analytics";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import type { Profile } from "app/types";
 
 import {
@@ -68,7 +68,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
 
             if (result.action === "sharedAction") {
               Analytics.track(
-                "User Shared",
+                EVENTS.USER_SHARED,
                 result.activityType ? { type: result.activityType } : undefined
               );
             }

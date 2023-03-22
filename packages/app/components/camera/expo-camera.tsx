@@ -7,7 +7,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { CameraButtons } from "app/components/camera/camera-buttons";
 import { useIsForeground } from "app/hooks/use-is-foreground";
-import { Analytics } from "app/lib/analytics";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { useIsFocused } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 
@@ -78,7 +78,7 @@ export function Camera({
 
       setIsLoading(true);
 
-      Analytics.track("Photo Taken");
+      Analytics.track(EVENTS.PHOTO_TAKEN);
     } catch (e) {
       console.error("Failed to take photo!", e);
     }

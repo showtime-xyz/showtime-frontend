@@ -10,6 +10,17 @@ export const Analytics = { track };
 
 export const useTrackPageViewed = ({ name }: { name: string }) => {
   useEffect(() => {
-    Analytics.track("Page Viewed", { page_name: name });
+    Analytics.track(EVENTS.PAGE_VIEWED, { page_name: name });
   }, [name]);
+};
+
+export const EVENTS = {
+  PAGE_VIEWED: "Page Viewed",
+  BUTTON_CLICKED: "Button Clicked",
+  DROP_SHARED: "Drop Shared",
+  DROP_CLAIMED: "Drop Claimed",
+  DROP_CLAIMED_WITH_WALLET: "Drop Claimed with Wallet",
+  USER_SHARED: "User Shared",
+  PHOTO_TAKEN: "Photo Taken",
+  USER_LOGGED_OUT: "User Logged Out",
 };

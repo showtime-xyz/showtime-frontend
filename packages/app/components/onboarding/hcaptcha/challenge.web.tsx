@@ -14,7 +14,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
-import { Analytics } from "app/lib/analytics";
 import { Logger } from "app/lib/logger";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
@@ -89,7 +88,6 @@ export const Challenge = () => {
         await matchMutate(
           (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
         );
-        Analytics.track("hCaptcha challenge success");
 
         // finish onboarding
         finishOnboarding();

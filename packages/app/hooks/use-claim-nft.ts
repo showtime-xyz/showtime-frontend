@@ -10,7 +10,7 @@ import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
-import { Analytics } from "app/lib/analytics";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -227,7 +227,7 @@ export const useClaimNFT = (edition: IEdition) => {
               {
                 text: "Verify my phone number",
                 onPress: () => {
-                  Analytics.track("Button Clicked", {
+                  Analytics.track(EVENTS.BUTTON_CLICKED, {
                     name: "Verify my phone number",
                   });
 

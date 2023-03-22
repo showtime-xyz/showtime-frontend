@@ -1,11 +1,10 @@
 import { Linking } from "react-native";
 
 import { useShare } from "app/hooks/use-share";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { NFT } from "app/types";
 import { findTokenChainName } from "app/utilities";
 import { getTwitterIntent } from "app/utilities";
-
-import { Analytics } from "../lib/analytics";
 
 export const getNFTSlug = (nft: NFT) =>
   `/nft/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
@@ -31,7 +30,7 @@ export const useShareNFT = () => {
 
     if (result.action === "sharedAction") {
       Analytics.track(
-        "Drop Shared",
+        EVENTS.DROP_SHARED,
         result.activityType ? { type: result.activityType } : undefined
       );
     }
@@ -50,7 +49,7 @@ export const useShareNFT = () => {
         message: ``,
       })
     );
-    Analytics.track("Drop Shared", { type: "Twitter" });
+    Analytics.track(EVENTS.DROP_SHARED, { type: "Twitter" });
   };
 
   return { shareNFT, shareNFTOnTwitter };

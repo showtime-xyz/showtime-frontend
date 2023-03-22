@@ -19,7 +19,7 @@ import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 import * as accessTokenStorage from "app/lib/access-token";
 import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
-import { Analytics } from "app/lib/analytics";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { deleteAppCache } from "app/lib/delete-cache";
 import * as loginStorage from "app/lib/login";
@@ -120,7 +120,7 @@ export function AuthProvider({
     async function logout() {
       const wasUserLoggedIn = loginStorage.getLogin();
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
-        Analytics.track("User Logged Out");
+        Analytics.track(EVENTS.USER_LOGGED_OUT);
       }
 
       onWagmiDisconnect?.();
