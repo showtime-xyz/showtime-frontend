@@ -93,6 +93,9 @@ export function AuthProvider({
         mutate(MY_INFO_ENDPOINT, res);
         setAuthenticationStatus("AUTHENTICATED");
         Analytics.setUserId(res?.data?.profile?.profile_id);
+        Analytics.track(EVENTS.USER_LOGIN, undefined, {
+          user_id: res?.data?.profile?.profile_id,
+        });
 
         router.pop();
         /*

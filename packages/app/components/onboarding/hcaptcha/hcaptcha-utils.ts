@@ -2,6 +2,7 @@ import { useCallback } from "react";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 
 import { onboardingPromiseCallbacks } from "../onboarding-promise";
@@ -29,6 +30,7 @@ export const useFinishOnboarding = () => {
     router.pop();
     // let's wait a bit before resolving the promise
     // to make sure the user has time to see the animation
+    Analytics.track(EVENTS.USER_FINISHED_ONBOARDING);
     setTimeout(() => {
       onboardingPromiseCallbacks.resolve?.(true);
     }, 1000);

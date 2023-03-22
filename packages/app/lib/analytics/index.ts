@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 
-import { amplitude } from "app/lib/amplitude";
+import { amplitude, Types } from "app/lib/amplitude";
 
-const track = (event: string, properties?: any) => {
-  amplitude.track(event, properties);
+const track = (
+  event: string,
+  properties?: any,
+  options?: Types.EventOptions
+) => {
+  amplitude.track(event, properties, options);
 };
 
 const setUserId = (userId: string) => {
@@ -26,9 +30,16 @@ export const EVENTS = {
   PAGE_VIEWED: "Page Viewed",
   BUTTON_CLICKED: "Button Clicked",
   DROP_SHARED: "Drop Shared",
-  DROP_CLAIMED: "Drop Claimed",
-  DROP_CLAIMED_WITH_WALLET: "Drop Claimed with Wallet",
-  USER_SHARED: "User Shared",
-  PHOTO_TAKEN: "Photo Taken",
+  DROP_COLLECTED: "Drop Collected",
+  DROP_CREATED: "Drop Created",
+  USER_SHARED_PROFILE: "User Shared Profile",
   USER_LOGGED_OUT: "User Logged Out",
+  USER_LOGIN: "User Logged In",
+  USER_FINISHED_ONBOARDING: "User Finished Onboarding",
+  USER_LIKED_DROP: "User Liked Drop",
+  USER_UNLIKED_DROP: "User Unliked Drop",
+  USER_LIKED_COMMENT: "User Liked Comment",
+  USER_UNLIKED_COMMENT: "User Unliked Comment",
+  USER_FOLLOWED_PROFILE: "User Followed Profile",
+  USER_UNFOLLOWED_PROFILE: "User Unfollowed Profile",
 };

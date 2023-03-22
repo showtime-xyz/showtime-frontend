@@ -68,7 +68,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
 
             if (result.action === "sharedAction") {
               Analytics.track(
-                EVENTS.USER_SHARED,
+                EVENTS.USER_SHARED_PROFILE,
                 result.activityType ? { type: result.activityType } : undefined
               );
             }
