@@ -6,11 +6,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { PhoneNumberPicker } from "app/components/login/phone-number-picker";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { useMagic, Relayer } from "app/lib/magic";
-import { useRudder } from "app/lib/rudderstack";
 
 export const VerifyPhoneNumberModal = () => {
-  const { rudder } = useRudder();
   const router = useRouter();
   const { setMountRelayerOnApp } = useWeb3();
   const { verifyPhoneNumber } = useManageAccount();
@@ -27,7 +26,7 @@ export const VerifyPhoneNumberModal = () => {
 
   const submitPhoneNumber = useCallback(
     async (phoneNumber: string) => {
-      rudder?.track("Button Clicked", {
+      Analytics.track(EVENTS.BUTTON_CLICKED, {
         name: "Login with phone number",
       });
 
@@ -47,7 +46,7 @@ export const VerifyPhoneNumberModal = () => {
         magic?.user?.logout();
       }
     },
-    [magic, verifyPhoneNumber, router, rudder]
+    [magic, verifyPhoneNumber, router]
   );
 
   return (

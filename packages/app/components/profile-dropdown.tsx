@@ -14,7 +14,7 @@ import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
 import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
-import { useRudder } from "app/lib/rudderstack";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import type { Profile } from "app/types";
 
 import {
@@ -31,7 +31,6 @@ type Props = {
 };
 
 function ProfileDropdown({ user, tw = "" }: Props) {
-  const { rudder } = useRudder();
   const { report } = useReport();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
@@ -68,8 +67,8 @@ function ProfileDropdown({ user, tw = "" }: Props) {
             });
 
             if (result.action === "sharedAction") {
-              rudder?.track(
-                "User Shared",
+              Analytics.track(
+                EVENTS.USER_SHARED_PROFILE,
                 result.activityType ? { type: result.activityType } : undefined
               );
             }

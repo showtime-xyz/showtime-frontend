@@ -5,6 +5,105 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@amplitude/analytics-browser@npm:^1.9.1":
+  version: 1.9.1
+  resolution: "@amplitude/analytics-browser@npm:1.9.1"
+  dependencies:
+    "@amplitude/analytics-client-common": ^0.6.1
+    "@amplitude/analytics-core": ^0.12.0
+    "@amplitude/analytics-types": ^0.17.0
+    "@amplitude/plugin-page-view-tracking-browser": ^0.6.1
+    "@amplitude/plugin-web-attribution-browser": ^0.6.1
+    "@amplitude/ua-parser-js": ^0.7.31
+    tslib: ^2.4.1
+  checksum: d298cab6103dc8b2ee264879fb4556ea88855bd425d82255405971e51832417ff759116023ef5dbd8a8d93feb23b6d9ab4cd8ca26e903d115aa3f9a62dce7b74
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-client-common@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "@amplitude/analytics-client-common@npm:0.6.1"
+  dependencies:
+    "@amplitude/analytics-connector": ^1.4.5
+    "@amplitude/analytics-core": ^0.12.0
+    "@amplitude/analytics-types": ^0.17.0
+    tslib: ^2.4.1
+  checksum: 366fa47eaea1a9e4620c9fdfa4ae0d25b5bdce8ebc02b7720befc95b460c5f8030b7097c97c682d34837f91b83e4de23a4767b06c7a47d5ace776e7e6e8cc28b
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-connector@npm:^1.4.5":
+  version: 1.4.6
+  resolution: "@amplitude/analytics-connector@npm:1.4.6"
+  dependencies:
+    "@amplitude/ua-parser-js": 0.7.31
+  checksum: 0a2acfa54e02b405e1b66ec522aa5802f938f525ad0e81a864f9370b53a3a18f166962d891a5372c12938ec7c3fbbb3453304261845bd57e5617963c8285c2dc
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-core@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "@amplitude/analytics-core@npm:0.12.0"
+  dependencies:
+    "@amplitude/analytics-types": ^0.17.0
+    tslib: ^2.4.1
+  checksum: 8683746b58d7177e1182882c69df071b39a909625a1abe969c37d7b9a54f7adf9b430db123f4735885fa48025a6308c447c4acbd55106e8bd2219aea8c4df11f
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-react-native@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@amplitude/analytics-react-native@npm:1.1.1"
+  dependencies:
+    "@amplitude/analytics-client-common": ^0.6.1
+    "@amplitude/analytics-core": ^0.12.0
+    "@amplitude/analytics-types": ^0.17.0
+    "@amplitude/ua-parser-js": ^0.7.31
+    "@react-native-async-storage/async-storage": ^1.17.11
+    tslib: ^2.4.1
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: b8f7a70a47bb5094d3673002e2402438c45982d72e8119eb450e23ecc13f4b5b976c3cd510d724b4131552646d7665361de764a03913410202eca2c5db97a3c7
+  languageName: node
+  linkType: hard
+
+"@amplitude/analytics-types@npm:^0.17.0":
+  version: 0.17.0
+  resolution: "@amplitude/analytics-types@npm:0.17.0"
+  checksum: e53d6a72eca6716d474bcbe82b88136f1725b643186820ed1d487e19b0d6dcd86e812e46a7384b9c79631c7e6e0d1c5c3cccde23d9f0bb1105c943c19affaf0a
+  languageName: node
+  linkType: hard
+
+"@amplitude/plugin-page-view-tracking-browser@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "@amplitude/plugin-page-view-tracking-browser@npm:0.6.1"
+  dependencies:
+    "@amplitude/analytics-client-common": ^0.6.1
+    "@amplitude/analytics-types": ^0.17.0
+    tslib: ^2.4.1
+  checksum: 3a76db85105d114815d8e2b2acc3ad441403cd6408bbdb6ba1f70b10009ffee7ddc41f559d3523cd09082b2bcf7b25090b03a2c65fe39d970cafa79e1929157d
+  languageName: node
+  linkType: hard
+
+"@amplitude/plugin-web-attribution-browser@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "@amplitude/plugin-web-attribution-browser@npm:0.6.1"
+  dependencies:
+    "@amplitude/analytics-client-common": ^0.6.1
+    "@amplitude/analytics-types": ^0.17.0
+    tslib: ^2.4.1
+  checksum: e910528a6ac223d71944138633b64566a61abddd64dbe415f9ef31575bc7b251f426a3228e9c128964fc208fc3e215f6c0e048bdc23c4dde9f4ae2aaa3aff5c5
+  languageName: node
+  linkType: hard
+
+"@amplitude/ua-parser-js@npm:0.7.31, @amplitude/ua-parser-js@npm:^0.7.31":
+  version: 0.7.31
+  resolution: "@amplitude/ua-parser-js@npm:0.7.31"
+  checksum: c72e7c8656dd77a6c2ece9e3817929022aeadf731470e53fecddce03232d87977fd5b09d76c570a2a5bed97f5dd463fe6379aac7a6c4b2d2393f14486d385eec
+  languageName: node
+  linkType: hard
+
 "@ampproject/remapping@npm:^2.1.0, @ampproject/remapping@npm:^2.2.0":
   version: 2.2.0
   resolution: "@ampproject/remapping@npm:2.2.0"
@@ -3159,7 +3258,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.7.7, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
   version: 7.17.9
   resolution: "@babel/runtime@npm:7.17.9"
   dependencies:
@@ -7457,6 +7556,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-async-storage/async-storage@npm:^1.17.11":
+  version: 1.17.12
+  resolution: "@react-native-async-storage/async-storage@npm:1.17.12"
+  dependencies:
+    merge-options: ^3.0.4
+  peerDependencies:
+    react-native: ^0.0.0-0 || 0.60 - 0.71 || 1000.0.0
+  checksum: 8be850aa8f7e6b0cd4051d8bf9d6a65316ec47e45d83872b4413162757afaa7074ef4b391b76d3df784872d0beabb956da1aafa65b1cd923b67bf6c8dcf5fc9c
+  languageName: node
+  linkType: hard
+
 "@react-native-async-storage/async-storage@npm:~1.17.3":
   version: 1.17.10
   resolution: "@react-native-async-storage/async-storage@npm:1.17.10"
@@ -8106,20 +8216,6 @@ __metadata:
   peerDependencies:
     rollup: ^1.20.0||^2.0.0
   checksum: 8be16e27863c219edbb25a4e6ec2fe0e1e451d9e917b6a43cf2ae5bc025a6b8faaa40f82a6e53b66d0de37b58ff472c6c3d57a83037ae635041f8df959d6d9aa
-  languageName: node
-  linkType: hard
-
-"@rudderstack/rudder-sdk-react-native@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@rudderstack/rudder-sdk-react-native@npm:1.4.1"
-  dependencies:
-    "@babel/runtime": ^7.7.7
-    "@types/async-lock": ^1.1.3
-    "@types/react-native": ^0.62.2
-    async-lock: ^1.3.0
-  peerDependencies:
-    react-native: ">=0.41.2 <=0.67.2"
-  checksum: 2b828a5a854506f48a632d89c4cd4ed1e75fe79f43cafaf270199296942d750156604fdb6962cc79c0b61ed759ad75ba754a75babe03e68abb788653c6d9e12e
   languageName: node
   linkType: hard
 
@@ -9531,6 +9627,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@showtime/expo@workspace:apps/expo"
   dependencies:
+    "@amplitude/analytics-react-native": ^1.1.1
     "@babel/core": ^7.19.3
     "@babel/runtime": ^7.18.9
     "@bacons/link-assets": ^1.1.0
@@ -9556,7 +9653,6 @@ __metadata:
     "@react-navigation/stack": ^6.3.2
     "@react-three/drei": ^9.17.3
     "@react-three/fiber": ^8.2.1
-    "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": 4.2.2
     "@shopify/flash-list": ^1.4.2
     "@showtime-xyz/date-picker": ^0.2.0
@@ -9757,6 +9853,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@showtime/next@workspace:apps/next"
   dependencies:
+    "@amplitude/analytics-browser": ^1.9.1
     "@babel/eslint-parser": ^7.18.9
     "@builder.io/partytown": ^0.6.4
     "@coinbase/wallet-sdk": ^3.3.0
@@ -12968,13 +13065,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/async-lock@npm:^1.1.3":
-  version: 1.1.5
-  resolution: "@types/async-lock@npm:1.1.5"
-  checksum: 0e54293601fa43bd4f7641020ad04f063a8dd3df4cf9198194ddaa13660534815bb75d6571dbcad6e9c3757104c02a49f58bbe791204c6d89bc948ab8482cfed
-  languageName: node
-  linkType: hard
-
 "@types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.1.7":
   version: 7.1.19
   resolution: "@types/babel__core@npm:7.1.19"
@@ -13467,15 +13557,6 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 1a21cd62afcd23cbd2d8e27c3b7601819739bb822e77ce9a3995af14be88e4ae19e467bc4b9c133f6da82648e8a951f07d1e55997d1a7a50260b79c784c24535
-  languageName: node
-  linkType: hard
-
-"@types/react-native@npm:^0.62.2":
-  version: 0.62.18
-  resolution: "@types/react-native@npm:0.62.18"
-  dependencies:
-    "@types/react": "*"
-  checksum: 0771a77366c9a59a47ab7f0fc4997b971b074c958ba467a3e609911c81c7435e97d2f4403f199bafd499a1d5e7fb34ee271b0dc09f61141650cb6f0f70b99670
   languageName: node
   linkType: hard
 
@@ -15953,13 +16034,6 @@ __metadata:
   version: 1.0.1
   resolution: "async-limiter@npm:1.0.1"
   checksum: 2b849695b465d93ad44c116220dee29a5aeb63adac16c1088983c339b0de57d76e82533e8e364a93a9f997f28bbfc6a92948cefc120652bd07f3b59f8d75cf2b
-  languageName: node
-  linkType: hard
-
-"async-lock@npm:^1.3.0":
-  version: 1.3.1
-  resolution: "async-lock@npm:1.3.1"
-  checksum: b11aca6d74431a42f9a3010ce7e55ac18c208f389433f55c07249ccd69dc63bc77fade28957d2d36212811d80b9c067a010341fb1e3d6a819b4fb74a122c4c27
   languageName: node
   linkType: hard
 
@@ -38956,6 +39030,13 @@ __metadata:
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
   checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.4.1":
+  version: 2.5.0
+  resolution: "tslib@npm:2.5.0"
+  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
   languageName: node
   linkType: hard
 

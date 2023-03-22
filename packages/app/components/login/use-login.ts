@@ -6,14 +6,13 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
-import { useRudder } from "app/lib/rudderstack";
+import { Analytics, EVENTS } from "app/lib/analytics";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
 
 export type SubmitWalletParams = {};
 export const useLogin = () => {
   const loginSource = useRef<LoginSource>("undetermined");
-  const { rudder } = useRudder();
 
   //#region hooks
   const { authenticationStatus, logout, setAuthenticationStatus } = useAuth();
@@ -55,7 +54,7 @@ export const useLogin = () => {
       try {
         loginSource.current = "wallet";
 
-        rudder?.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with wallet",
         });
 
@@ -64,13 +63,13 @@ export const useLogin = () => {
         handleLoginFailure(error);
       }
     },
-    [rudder, loginWithWallet, handleLoginFailure]
+    [loginWithWallet, handleLoginFailure]
   );
   const handleSubmitEmail = useCallback(
     async function handleSubmitEmail(email: string) {
       try {
         loginSource.current = "magic";
-        rudder?.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with email",
         });
 
@@ -79,13 +78,13 @@ export const useLogin = () => {
         handleLoginFailure(error);
       }
     },
-    [loginWithEmail, handleLoginFailure, rudder]
+    [loginWithEmail, handleLoginFailure]
   );
   const handleSubmitPhoneNumber = useCallback(
     async function handleSubmitPhoneNumber(phoneNumber: string) {
       try {
         loginSource.current = "magic";
-        rudder?.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with phone number",
         });
 
@@ -94,7 +93,7 @@ export const useLogin = () => {
         handleLoginFailure(error);
       }
     },
-    [loginWithPhoneNumber, handleLoginFailure, rudder]
+    [loginWithPhoneNumber, handleLoginFailure]
   );
 
   /**

@@ -229,10 +229,6 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         format: "png",
         quality: 0.8,
         fileName: `QR Code - ${date.valueOf()}`,
-        /**
-         * Notes: Instagram need to format to base64,
-         * I guess it's becuase of can't access private folder when deep link to other App
-         */
         ...(result ? { result } : {}),
       });
       return uri;
@@ -240,6 +236,36 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       Logger.log(`captureRefError: ${error}`);
     }
   };
+
+  const checkPhotosPermission = useCallback(async () => {
+    let hasPermission = false;
+    if (status?.granted) {
+      hasPermission = status?.granted;
+    } else {
+      const res = await requestPermission();
+      hasPermission = res?.granted;
+    }
+    if (!hasPermission) {
+      Alert.alert(
+        "No permission",
+        "To share the photo, you'll need to enable photo permissions first",
+        [
+          {
+            text: "Open Settings",
+            onPress: () => {
+              Linking.openSettings();
+            },
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ]
+      );
+    }
+    return hasPermission;
+  }, [requestPermission, status?.granted]);
+
   const onDownload = useCallback(async () => {
     if (Platform.OS === "web") {
       const dataUrl = await domtoimage.toPng(viewRef.current as Node, {
@@ -252,18 +278,12 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       link.href = dataUrl;
       link.click();
     } else {
-      let hasPermission = false;
       const url = await getViewShot();
       if (!url) {
         Alert.alert("Oops, An error occurred.");
         return;
       }
-      if (status?.granted) {
-        hasPermission = status?.granted;
-      } else {
-        const res = await requestPermission();
-        hasPermission = res?.granted;
-      }
+      const hasPermission = await checkPhotosPermission();
       if (hasPermission) {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         await MediaLibrary.saveToLibraryAsync(url);
@@ -273,16 +293,39 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       }
     }
-  }, [nft, requestPermission, status?.granted]);
+  }, [checkPhotosPermission, nft]);
+
+  const prepareShareToIG = useCallback(
+    async (url: string) => {
+      const hasPermission = await checkPhotosPermission();
+      if (hasPermission) {
+        await MediaLibrary.saveToLibraryAsync(url);
+      }
+      return hasPermission;
+    },
+    [checkPhotosPermission]
+  );
 
   const shareSingleImage = useCallback(
     async (
       social: typeof Share.Social.TWITTER | typeof Share.Social.INSTAGRAM
     ) => {
       const url = await getViewShot();
+
       if (!url) {
         Alert.alert("Oops, An error occurred.");
         return;
+      }
+      if (social === Share.Social.INSTAGRAM) {
+        /**
+         * IG is not support private path address, and if you pass a uri, IG will always read the last pic from you Photos!
+         * so we need to hack it, flow here.
+         * check permission -> save to Photo -> share to IG(IG will read the last pic from you Photo)
+         */
+        const isCanShareToIG = await prepareShareToIG(url);
+        if (!isCanShareToIG) {
+          return;
+        }
       }
       try {
         const ShareResponse = await Share.shareSingle({
@@ -299,7 +342,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         Logger.error("shareSingleImage Error =>", error);
       }
     },
-    [nft]
+    [nft, prepareShareToIG]
   );
 
   const shareWithTwitterIntent = useCallback(() => {
@@ -477,12 +520,12 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                           default: {},
                         })}
                       >
-                        <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-black p-1">
+                        <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-white p-1">
                           <ReactQRCode
                             size={68}
-                            // ecl="M"
+                            // ecl="L"
                             value={qrCodeUrl.toString()}
-                            fillColors={["#000", "#FFF"]}
+                            fillColors={["#fff", "#000"]}
                           />
                         </View>
                         <View tw="flex-1 justify-center">
