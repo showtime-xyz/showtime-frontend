@@ -17,7 +17,6 @@ import { Footer } from "app/components/footer";
 import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
-import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { CheckoutScreen } from "app/screens/checkout";
@@ -149,10 +148,6 @@ function App({ Component, pageProps, router }: AppProps) {
         <meta
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover"
           name="viewport"
-        />
-
-        <script
-          dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
         />
       </Head>
       <AppProviders>
