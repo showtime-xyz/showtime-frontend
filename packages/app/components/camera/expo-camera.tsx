@@ -83,7 +83,7 @@ export function Camera({
       console.error("Failed to take photo!", e);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [camera, photos, setIsLoading, setPhotos, burstCaptureTimer, rudder]);
+  }, [camera, photos, setIsLoading, setPhotos, burstCaptureTimer]);
 
   const [cameraPosition, setCameraPosition] = useState<
     keyof typeof ExpoCamera.Constants.Type

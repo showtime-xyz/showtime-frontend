@@ -3258,7 +3258,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.7.7, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.10.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.14.0, @babel/runtime@npm:^7.14.8, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.17.8, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.0, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.2, @babel/runtime@npm:^7.7.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7":
   version: 7.17.9
   resolution: "@babel/runtime@npm:7.17.9"
   dependencies:
@@ -8219,20 +8219,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rudderstack/rudder-sdk-react-native@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@rudderstack/rudder-sdk-react-native@npm:1.4.1"
-  dependencies:
-    "@babel/runtime": ^7.7.7
-    "@types/async-lock": ^1.1.3
-    "@types/react-native": ^0.62.2
-    async-lock: ^1.3.0
-  peerDependencies:
-    react-native: ">=0.41.2 <=0.67.2"
-  checksum: 2b828a5a854506f48a632d89c4cd4ed1e75fe79f43cafaf270199296942d750156604fdb6962cc79c0b61ed759ad75ba754a75babe03e68abb788653c6d9e12e
-  languageName: node
-  linkType: hard
-
 "@rushstack/eslint-patch@npm:^1.1.3":
   version: 1.1.3
   resolution: "@rushstack/eslint-patch@npm:1.1.3"
@@ -9685,7 +9671,6 @@ __metadata:
     "@react-navigation/stack": ^6.3.2
     "@react-three/drei": ^9.17.3
     "@react-three/fiber": ^8.2.1
-    "@rudderstack/rudder-sdk-react-native": ^1.4.1
     "@sentry/react-native": 4.2.2
     "@shopify/flash-list": ^1.4.1
     "@showtime-xyz/date-picker": ^0.2.0
@@ -13097,13 +13082,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/async-lock@npm:^1.1.3":
-  version: 1.1.5
-  resolution: "@types/async-lock@npm:1.1.5"
-  checksum: 0e54293601fa43bd4f7641020ad04f063a8dd3df4cf9198194ddaa13660534815bb75d6571dbcad6e9c3757104c02a49f58bbe791204c6d89bc948ab8482cfed
-  languageName: node
-  linkType: hard
-
 "@types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.1.7":
   version: 7.1.19
   resolution: "@types/babel__core@npm:7.1.19"
@@ -13596,15 +13574,6 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 1a21cd62afcd23cbd2d8e27c3b7601819739bb822e77ce9a3995af14be88e4ae19e467bc4b9c133f6da82648e8a951f07d1e55997d1a7a50260b79c784c24535
-  languageName: node
-  linkType: hard
-
-"@types/react-native@npm:^0.62.2":
-  version: 0.62.18
-  resolution: "@types/react-native@npm:0.62.18"
-  dependencies:
-    "@types/react": "*"
-  checksum: 0771a77366c9a59a47ab7f0fc4997b971b074c958ba467a3e609911c81c7435e97d2f4403f199bafd499a1d5e7fb34ee271b0dc09f61141650cb6f0f70b99670
   languageName: node
   linkType: hard
 
@@ -16082,13 +16051,6 @@ __metadata:
   version: 1.0.1
   resolution: "async-limiter@npm:1.0.1"
   checksum: 2b849695b465d93ad44c116220dee29a5aeb63adac16c1088983c339b0de57d76e82533e8e364a93a9f997f28bbfc6a92948cefc120652bd07f3b59f8d75cf2b
-  languageName: node
-  linkType: hard
-
-"async-lock@npm:^1.3.0":
-  version: 1.3.1
-  resolution: "async-lock@npm:1.3.1"
-  checksum: b11aca6d74431a42f9a3010ce7e55ac18c208f389433f55c07249ccd69dc63bc77fade28957d2d36212811d80b9c067a010341fb1e3d6a819b4fb74a122c4c27
   languageName: node
   linkType: hard
 

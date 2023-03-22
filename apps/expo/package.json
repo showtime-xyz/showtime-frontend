@@ -70,7 +70,6 @@
     "@react-navigation/stack": "^6.3.2",
     "@react-three/drei": "^9.17.3",
     "@react-three/fiber": "^8.2.1",
-    "@rudderstack/rudder-sdk-react-native": "^1.4.1",
     "@sentry/react-native": "4.2.2",
     "@shopify/flash-list": "^1.4.1",
     "@showtime-xyz/date-picker": "^0.2.0",

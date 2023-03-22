@@ -1,10 +1,11 @@
 import { Linking } from "react-native";
 
 import { useShare } from "app/hooks/use-share";
-import { useRudder } from "app/lib/rudderstack";
 import { NFT } from "app/types";
 import { findTokenChainName } from "app/utilities";
 import { getTwitterIntent } from "app/utilities";
+
+import { Analytics } from "../lib/analytics";
 
 export const getNFTSlug = (nft: NFT) =>
   `/nft/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
@@ -19,7 +20,6 @@ export const getNFTURL = (nft: NFT | undefined) => {
 };
 
 export const useShareNFT = () => {
-  const { rudder } = useRudder();
   const share = useShare();
 
   const shareNFT = async (nft?: NFT) => {
@@ -30,7 +30,7 @@ export const useShareNFT = () => {
     });
 
     if (result.action === "sharedAction") {
-      rudder?.track(
+      Analytics.track(
         "Drop Shared",
         result.activityType ? { type: result.activityType } : undefined
       );
@@ -50,7 +50,7 @@ export const useShareNFT = () => {
         message: ``,
       })
     );
-    rudder?.track("Drop Shared", { type: "Twitter" });
+    Analytics.track("Drop Shared", { type: "Twitter" });
   };
 
   return { shareNFT, shareNFTOnTwitter };
