@@ -624,22 +624,11 @@ export const OAUTH_REDIRECT_URI = Platform.select({
 });
 
 export const isProfileIncomplete = (profile?: Profile) => {
-  const hasConnectedSocialAccount =
-    profile?.social_login_connections &&
-    Object.keys(profile?.social_login_connections).some(
-      // @ts-ignore
-      (k) => profile?.social_login_connections[k]
-    );
-
-  const hasSocialHandle =
-    profile?.social_login_handles?.twitter ||
-    profile?.social_login_handles?.instagram ||
-    false;
-
+  // FYI: has_social_login is true if user has logged in with google, apple, spotify, twitter, instagram
+  // the value is false if user has logged in with email or phone number
   return profile
     ? !profile.username ||
-        (!hasConnectedSocialAccount && !profile.captcha_completed_at) ||
-        (!hasSocialHandle && !profile.captcha_completed_at)
+        (!profile.has_social_login && !profile.captcha_completed_at)
     : undefined;
 };
 

@@ -48,14 +48,11 @@ export const Challenge = () => {
   };
 
   const showCaptcha = async () => {
-    // skip directly to the next step if user has already a social account
-    // connected or if the user has already completed the captcha challenge
+    // has_social_login is true if user has logged in with google, apple, spotify, twitter, instagram
+    // the value is false if user has logged in with email or phone number
+    const hasSocialHandle = user?.data?.profile?.has_social_login;
 
-    const hasSocialHandle =
-      user?.data?.profile?.social_login_handles?.twitter ||
-      user?.data?.profile?.social_login_handles?.instagram ||
-      false;
-
+    // we skip if the user has already completed the captcha or has a social handle
     if (user?.data?.profile?.captcha_completed_at || hasSocialHandle) {
       finishOnboarding();
       return;
