@@ -92,6 +92,7 @@ export function AuthProvider({
         loginStorage.setLogin(Date.now().toString());
         mutate(MY_INFO_ENDPOINT, res);
         setAuthenticationStatus("AUTHENTICATED");
+        Analytics.setUserId(res?.data?.profile?.profile_id);
 
         router.pop();
         /*
@@ -121,6 +122,7 @@ export function AuthProvider({
       const wasUserLoggedIn = loginStorage.getLogin();
       if (wasUserLoggedIn && wasUserLoggedIn.length > 0) {
         Analytics.track(EVENTS.USER_LOGGED_OUT);
+        Analytics.reset();
       }
 
       onWagmiDisconnect?.();

@@ -6,7 +6,15 @@ const track = (event: string, properties?: any) => {
   amplitude.track(event, properties);
 };
 
-export const Analytics = { track };
+const setUserId = (userId: string) => {
+  amplitude.setUserId(userId);
+};
+
+const reset = () => {
+  amplitude.reset();
+};
+
+export const Analytics = { track, setUserId, reset };
 
 export const useTrackPageViewed = ({ name }: { name: string }) => {
   useEffect(() => {
