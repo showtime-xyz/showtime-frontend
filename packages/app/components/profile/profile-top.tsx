@@ -6,7 +6,7 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 
-import { Button } from "@showtime-xyz/universal.button";
+import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -84,7 +84,7 @@ export const ProfileTop = ({
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
   const { colorScheme } = useColorScheme();
-  const { user } = useUser();
+  const { user, isIncompletedProfile } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
   const coverWidth = useContentWidth(ContentLayoutOffset.PROFILE_COVER);
   const isMdWidth = width >= breakpoints["md"];
@@ -301,13 +301,27 @@ export const ProfileTop = ({
                         onToggleFollow={onToggleFollow}
                       />
                     </>
-                  ) : (
-                    isSelf && (
-                      <Button size="small" onPress={redirectToCreateDrop}>
-                        Create free drop
-                      </Button>
-                    )
-                  )}
+                  ) : null}
+                  {isSelf && !isIncompletedProfile ? (
+                    <Button size="small" onPress={redirectToCreateDrop}>
+                      Create free drop
+                    </Button>
+                  ) : null}
+                  {isSelf && isIncompletedProfile ? (
+                    <GradientButton
+                      size="small"
+                      onPress={redirectToCreateDrop}
+                      labelTW={"color-white"}
+                      gradientProps={{
+                        colors: ["#ED0A25", "#ED0ABB"],
+                        locations: [0, 1],
+                        start: { x: 1.0263092128417304, y: 0.5294252532614323 },
+                        end: { x: -0.02630921284173038, y: 0.4705747467385677 },
+                      }}
+                    >
+                      Complete profile
+                    </GradientButton>
+                  ) : null}
                 </>
               )}
             </View>

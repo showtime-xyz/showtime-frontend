@@ -1,0 +1,27 @@
+appId: io.showtime.development
+---
+- tapOn:
+    point: "51%,92%"
+- tapOn: "Let's go"
+- tapOn: "Create drop"
+- tapOn: "Upload"
+- tapOn:
+    text: "Select Photos…"
+    optional: true
+- tapOn:
+    # Selects photo from picker
+    point: "16%,22%"
+- tapOn:
+    text: "Choose"
+    optional: true
+- tapOn:
+    text: "Keep current Selection"
+    optional: true
+- tapOn: "Sweet"
+- inputText: "This is a test drop"
+- tapOn: "What is this drop about?"
+- inputText: "This is a test drop description. Keeping it longer to test some features. Hoping this long works or if I should add a few more words!"
+- tapOn:
+    "I agree to the terms and conditions I have the rights to publish this content,\
+    \ and understand it will be minted on the Polygon network."
+- tapOn: "Continue"

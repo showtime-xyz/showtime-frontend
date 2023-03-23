@@ -419,6 +419,19 @@ export const getCreatorUsernameFromNFT = (nft?: {
     : formatAddressShort(nft.creator_address);
 };
 
+export const getCreatorNameFromNFT = (nft?: {
+  creator_username?: string;
+  creator_name?: string;
+  creator_address?: string;
+}) => {
+  if (!nft) return "";
+  return nft.creator_name
+    ? nft.creator_name
+    : nft.creator_username
+    ? nft.creator_name?.toLocaleUpperCase()
+    : formatAddressShort(nft.creator_address);
+};
+
 export const getTwitterIntentUsername = (profile?: Profile) => {
   if (!profile) return "";
 
@@ -611,11 +624,11 @@ export const OAUTH_REDIRECT_URI = Platform.select({
 });
 
 export const isProfileIncomplete = (profile?: Profile) => {
+  // FYI: has_social_login is true if user has logged in with google, apple, spotify, twitter, instagram
+  // the value is false if user has logged in with email or phone number
   return profile
     ? !profile.username ||
-        userHasIncompleteExternalLinks(profile) ||
-        !profile.bio ||
-        !profile.img_url
+        (!profile.has_social_login && !profile.captcha_completed_at)
     : undefined;
 };
 
@@ -696,4 +709,20 @@ export const limitLineBreaks = (
     .concat(text.split("\n").slice(maxLineBreaks).join(separator).trim())
     .join("\n")
     .trim();
+};
+
+export const getWebImageSize = (file: File) => {
+  const img = new Image();
+  img.src = window.URL.createObjectURL(file);
+  const promise = new Promise<
+    { width: number; height: number } | null | undefined
+  >((resolve, reject) => {
+    img.onload = () => {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+      resolve({ width, height });
+    };
+    img.onerror = reject;
+  });
+  return promise;
 };

@@ -2,8 +2,8 @@ import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { useUser } from "app/hooks/use-user";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import { useOnboardingPromise } from "app/components/onboarding";
+import { useLogInPromise } from "app/lib/login-promise";
 import { createParam } from "app/navigation/use-param";
 
 const { useParam } = createParam<{
@@ -11,36 +11,34 @@ const { useParam } = createParam<{
 }>();
 
 export const useRedirectToClaimDrop = () => {
-  const { isAuthenticated } = useUser();
   const router = useRouter();
-  const navigateToLogin = useNavigateToLogin();
+  const { onboardingPromise } = useOnboardingPromise();
+  const { loginPromise } = useLogInPromise();
+
   const [password] = useParam("password");
 
-  const redirectToClaimDrop = (editionContractAddress: string) => {
-    if (!isAuthenticated) {
-      navigateToLogin();
-    } else {
-      const as = `/claim/${editionContractAddress}`;
-      router.push(
-        Platform.select({
-          native: as,
-          web: {
-            pathname: router.pathname,
-            query: {
-              ...router.query,
-              contractAddress: editionContractAddress,
-              password,
-              claimModal: true,
-            },
-          } as any,
-        }),
-        Platform.select({
-          native: as,
-          web: router.asPath,
-        }),
-        { shallow: true }
-      );
-    }
+  const redirectToClaimDrop = async (editionContractAddress: string) => {
+    await loginPromise();
+    await onboardingPromise();
+    const as = `/claim/${editionContractAddress}`;
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            contractAddress: editionContractAddress,
+            password,
+            claimModal: true,
+          },
+        } as any,
+      }),
+      Platform.select({ native: as, web: router.asPath }),
+      {
+        shallow: true,
+      }
+    );
   };
 
   return redirectToClaimDrop;

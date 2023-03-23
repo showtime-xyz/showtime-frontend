@@ -6,6 +6,7 @@ import { UserContext } from "app/context/user-context";
 
 type UserParams = {
   redirectTo?: string;
+  redirectIfProfileIncomplete?: boolean;
 };
 export function useUser(params?: UserParams) {
   const context = useContext(UserContext);
@@ -15,7 +16,21 @@ export function useUser(params?: UserParams) {
     if (!context?.isAuthenticated && params?.redirectTo && router) {
       router.replace(params?.redirectTo);
     }
-  }, [context?.isAuthenticated, params?.redirectTo, router]);
+    if (
+      context?.isAuthenticated &&
+      params?.redirectIfProfileIncomplete &&
+      context?.isIncompletedProfile &&
+      router
+    ) {
+      router.replace("/profile/onboarding");
+    }
+  }, [
+    context?.isAuthenticated,
+    context?.isIncompletedProfile,
+    params?.redirectIfProfileIncomplete,
+    params?.redirectTo,
+    router,
+  ]);
 
   if (!context) {
     throw "You need to add `UserProvider` to your root component";

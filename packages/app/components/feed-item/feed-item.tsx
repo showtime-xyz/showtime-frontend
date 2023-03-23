@@ -37,7 +37,6 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { Blurhash } from "app/lib/blurhash";
 import { BlurView } from "app/lib/blurview";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation } from "app/lib/react-navigation/native";
@@ -46,6 +45,7 @@ import { getMediaUrl } from "app/utilities";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
+import { NSFWGate } from "./nsfw-gate";
 
 export type FeedItemProps = {
   nft: NFT;
@@ -188,105 +188,99 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   useEffect(() => {
     setMomentumScrollCallback?.(showHeader);
   }, [setMomentumScrollCallback, showHeader]);
-
   return (
-    <LikeContextProvider nft={nft}>
-      <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
-        <View>
-          {nft.blurhash ? (
-            <Blurhash
-              blurhash={nft.blurhash}
-              decodeWidth={16}
-              decodeHeight={16}
-              decodeAsync={true}
-              style={{ width: "100%", height: "100%" }}
-            />
-          ) : (
-            <Image
-              tw="h-full w-full"
-              source={{
-                uri: getMediaUrl({ nft, stillPreview: true }),
-              }}
-              alt={nft.token_name}
-            />
-          )}
-        </View>
-
-        <FeedItemTapGesture toggleHeader={toggleHeader} showHeader={showHeader}>
-          <Animated.View
-            style={[
-              {
-                height: itemHeight - bottomPadding,
-                position: "absolute",
-              },
-              contentStyle,
-            ]}
-          >
-            <Media
-              item={nft}
-              numColumns={1}
-              sizeStyle={{
-                height: mediaHeight,
-                width: windowWidth,
-              }}
-              resizeMode={ResizeMode.COVER}
-              onPinchStart={hideHeader}
-              onPinchEnd={showHeader}
-            />
-          </Animated.View>
-        </FeedItemTapGesture>
-        <Reanimated.View
-          ref={detailViewRef}
-          style={[
-            detailStyle,
-            {
-              bottom: bottomMargin,
-              position: "absolute",
-              right: 0,
-              left: 0,
-              zIndex: 1,
-            },
-          ]}
-          onLayout={({
-            nativeEvent: {
-              layout: { height },
-            },
-          }) => {
-            isLayouted.value = 1;
-            setDetailHeight(height);
-          }}
-        >
-          <BlurView
-            blurRadius={15}
-            style={StyleSheet.absoluteFillObject}
-            overlayColor="transparent"
-          />
-          {nft?.mime_type?.startsWith("video") ? (
-            <View tw="z-9 absolute top-[-30px] right-4">
-              <MuteButton />
-            </View>
-          ) : null}
-
-          <View tw="z-9 absolute -top-[30px] left-2.5">
-            <ContentTypeTooltip edition={edition} />
-          </View>
-
-          <View
-            style={{
-              ...blurredBackgroundStyles,
-              paddingBottom: bottomPadding,
+    <>
+      <LikeContextProvider nft={nft}>
+        <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
+          <Image
+            tw="h-full w-full"
+            blurhash={nft.blurhash}
+            source={{
+              uri: getMediaUrl({ nft, stillPreview: true }),
             }}
-            tw="overflow-hidden"
+            recyclingKey={getMediaUrl({ nft, stillPreview: true })}
+            alt={nft.token_name}
+          />
+          <FeedItemTapGesture
+            toggleHeader={toggleHeader}
+            showHeader={showHeader}
           >
-            <NFTDetails
-              edition={edition}
-              nft={nft}
-              detail={detailData?.data?.item}
+            <Animated.View
+              style={[
+                {
+                  height: itemHeight - bottomPadding,
+                  position: "absolute",
+                },
+                contentStyle,
+              ]}
+            >
+              <Media
+                item={nft}
+                numColumns={1}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: windowWidth,
+                }}
+                resizeMode={ResizeMode.COVER}
+                onPinchStart={hideHeader}
+                onPinchEnd={showHeader}
+              />
+            </Animated.View>
+          </FeedItemTapGesture>
+          <Reanimated.View
+            ref={detailViewRef}
+            style={[
+              detailStyle,
+              {
+                bottom: bottomMargin,
+                position: "absolute",
+                right: 0,
+                left: 0,
+                zIndex: 1,
+              },
+            ]}
+            onLayout={({
+              nativeEvent: {
+                layout: { height },
+              },
+            }) => {
+              isLayouted.value = 1;
+              setDetailHeight(height);
+            }}
+          >
+            <BlurView
+              blurRadius={15}
+              style={StyleSheet.absoluteFillObject}
+              overlayColor="transparent"
             />
-          </View>
-        </Reanimated.View>
-      </View>
-    </LikeContextProvider>
+            {nft?.mime_type?.startsWith("video") ? (
+              <View tw="z-9 absolute top-[-30px] right-4">
+                <MuteButton />
+              </View>
+            ) : null}
+
+            <View tw="z-9 absolute -top-[30px] left-2.5">
+              <ContentTypeTooltip edition={edition} />
+            </View>
+
+            <View
+              style={{
+                ...blurredBackgroundStyles,
+                paddingBottom: bottomPadding,
+              }}
+              tw="overflow-hidden"
+            >
+              <NFTDetails
+                edition={edition}
+                nft={nft}
+                detail={detailData?.data?.item}
+              />
+            </View>
+          </Reanimated.View>
+        </View>
+      </LikeContextProvider>
+      <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
+    </>
   );
 });
 FeedItem.displayName = "FeedItem";

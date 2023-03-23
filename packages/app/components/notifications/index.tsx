@@ -83,11 +83,6 @@ export const Notifications = ({
     return null;
   }, [isLoadingMore]);
 
-  const Separator = useCallback(
-    () => <View tw={`h-[1px] bg-gray-100 dark:bg-gray-800`} />,
-    []
-  );
-
   useEffect(() => {
     (async function resetNotificationLastOpenedTime() {
       await axios({
@@ -156,7 +151,6 @@ export const Notifications = ({
         }
         renderItem={renderItem}
         keyExtractor={keyExtractor}
-        ItemSeparatorComponent={Separator}
         onEndReached={fetchMore}
         refreshing={isRefreshing}
         onRefresh={refresh}

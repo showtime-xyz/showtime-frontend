@@ -25,9 +25,10 @@ export const LoginWithGoogle = () => {
           setAuthenticationStatus("AUTHENTICATING");
           const result = await performMagicAuthWithGoogle();
           const idToken = result.magic.idToken;
-          console.log("idtoken ", result);
           const user = await login(LOGIN_MAGIC_ENDPOINT, {
             did: idToken,
+            provider_access_token: result.oauth.accessToken,
+            provider_scope: result.oauth.scope,
           });
 
           const EthersWeb3Provider = (await import("@ethersproject/providers"))

@@ -18,26 +18,31 @@ import { PlayOnSpinamp } from "./spinamp/play-on-spinamp";
 type ContentTypeTooltipProps = {
   edition: CreatorEditionResponse | undefined;
 };
-const contentGatingType = {
+export const contentGatingType = {
   location: {
     icon: Globe,
     text: "Share location to collect",
+    typeName: "Location",
   },
   password: {
     icon: Lock,
     text: "Enter password to collect",
+    typeName: "Password",
   },
   spotify_save: {
     icon: Spotify,
     text: "Save on Spotify to collect",
+    typeName: "Music",
   },
   multi: {
     icon: Lock,
     text: "Enter password & location to collect",
+    typeName: "Password & Location",
   },
   music_presave: {
     icon: Spotify,
     text: "Pre-Save to collect",
+    typeName: "Pre-Save",
   },
 };
 const TriggerView = isMobileWeb() ? View : PressableHover;

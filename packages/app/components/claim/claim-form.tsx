@@ -29,7 +29,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { QRCodeModal } from "app/components/qr-code";
@@ -64,7 +63,10 @@ export const ClaimForm = ({
   );
 
   const router = useRouter();
-  const { user, isIncompletedProfile } = useUser();
+  const { user, isIncompletedProfile } = useUser({
+    redirectTo: "/login",
+    redirectIfProfileIncomplete: true,
+  });
 
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const comment = useRef("");
@@ -150,7 +152,7 @@ export const ClaimForm = ({
       edition.gating_type === "spotify_save" ||
       edition.gating_type === "music_presave"
     ) {
-      success = await claimSpotifyGatedDrop(nft?.data.item, closeModal);
+      success = await claimSpotifyGatedDrop(closeModal);
     } else if (edition.gating_type === "password") {
       success = await claimNFT({ password: password.trim(), closeModal });
     } else if (edition.gating_type === "location") {
@@ -193,7 +195,7 @@ export const ClaimForm = ({
   // }, [web3]);
 
   if (isIncompletedProfile) {
-    return <CompleteProfileModalContent />;
+    return null;
   }
 
   if (state.status === "share") {
@@ -222,7 +224,7 @@ export const ClaimForm = ({
     <BottomSheetScrollView ref={scrollViewRef as any}>
       <View tw="flex-1 items-start p-4">
         <View tw="flex-row">
-          <View tw="overflow-hidden rounded-2xl">
+          <View tw="relative overflow-hidden rounded-2xl">
             <Media
               isMuted
               item={nft?.data.item}

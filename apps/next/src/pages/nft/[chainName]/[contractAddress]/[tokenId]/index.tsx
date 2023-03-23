@@ -5,6 +5,9 @@ import { NftScreen } from "app/screens/nft";
 import type { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, getMediaUrl } from "app/utilities";
 
+const fallbackImage =
+  "https://storage.googleapis.com/showtime-cdn/Showtime-1200x630.jpg";
+
 export async function getServerSideProps(context) {
   const { chainName, contractAddress, tokenId } = context.params;
   try {
@@ -31,7 +34,7 @@ export async function getServerSideProps(context) {
               nft.creator_name ?? getCreatorUsernameFromNFT(nft)
             } | Showtime`,
             description: nft.token_description,
-            image: imageUrl,
+            image: nft?.nsfw ? fallbackImage : imageUrl,
             deeplinkUrl: `nft/${chainName}/${contractAddress}/${tokenId}`,
           },
         },

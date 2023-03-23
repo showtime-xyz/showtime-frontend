@@ -10,11 +10,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { LoginComponent } from "./login";
 import { useLogin } from "./use-login";
 
-interface LoginProps {
-  onLogin?: () => void;
-}
-
-export function Login({ onLogin }: LoginProps) {
+export function Login() {
   //#region hooks
   const {
     walletStatus,
@@ -25,7 +21,7 @@ export function Login({ onLogin }: LoginProps) {
     handleSubmitPhoneNumber,
     handleSubmitWallet,
     loading,
-  } = useLogin(onLogin);
+  } = useLogin();
   //#endregion
 
   return (
@@ -45,7 +41,7 @@ export function Login({ onLogin }: LoginProps) {
               We need a signature in order to verify your identity. This won't
               cost any gas.
             </Text>
-            <Button tw="mt-8" onPress={verifySignature}>
+            <Button tw="mt-8" onPress={() => verifySignature()}>
               Sign the message
             </Button>
           </View>

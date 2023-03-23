@@ -55,20 +55,13 @@ function Img({
 
   const onLoadingComplete = useCallback(
     (e: HTMLImageElement) => {
-      // this is for using expo-image
-      // onLoad?.({
-      //   cacheType: "none",
-      //   source: {
-      //     url: e.currentSrc,
-      //     width: e.naturalWidth,
-      //     height: e.naturalHeight,
-      //     mediaType: null,
-      //   },
-      // });
       onLoad?.({
-        nativeEvent: {
+        cacheType: "none",
+        source: {
+          url: e.currentSrc,
           width: e.naturalWidth,
           height: e.naturalHeight,
+          mediaType: null,
         },
       });
       onLoadingCompleteProps?.(e);

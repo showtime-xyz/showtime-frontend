@@ -2,18 +2,16 @@ import { useEffect, useState } from "react";
 import { AppState, LogBox } from "react-native";
 
 import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
-import rudderClient from "@rudderstack/rudder-sdk-react-native";
 import { Audio } from "expo-av";
+import { Image } from "expo-image";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
-import FastImage from "react-native-fast-image";
 import { enableLayoutAnimations } from "react-native-reanimated";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
 import { growthbook } from "app/lib/growthbook";
 import { Logger } from "app/lib/logger";
-import { rudderConfig } from "app/lib/rudderstack/config";
 import { Sentry } from "app/lib/sentry";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";
 import { AppProviders } from "app/providers/app-providers";
@@ -52,16 +50,7 @@ function App() {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    const initAnalytics = async () => {
-      await rudderClient.setup(
-        process.env.NEXT_PUBLIC_RUDDERSTACK_WRITE_KEY,
-        rudderConfig
-      );
-    };
-
     AvoidSoftInput.setEnabled(true);
-
-    initAnalytics();
 
     return () => {
       AvoidSoftInput.setEnabled(false);
@@ -112,7 +101,7 @@ function App() {
       () => {
         async function clearFastImageMemory() {
           try {
-            await FastImage.clearMemoryCache();
+            await Image.clearMemoryCache();
             Logger.log("did receive memory warning and cleared");
           } catch {}
         }

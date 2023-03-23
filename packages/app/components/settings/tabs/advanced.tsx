@@ -1,8 +1,8 @@
 import { Platform } from "react-native";
 
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Showtime, Mail } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useSendFeedback } from "app/hooks/use-send-feedback";
@@ -17,11 +17,11 @@ import { SettingsTitle } from "../settings-title";
 
 const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 
-export type AccountTabProps = {
+export type AdvancedTabProps = {
   index?: number;
 };
 
-export const AdvancedTab = ({ index = 0 }: AccountTabProps) => {
+export const AdvancedTab = ({ index = 0 }: AdvancedTabProps) => {
   const router = useRouter();
   const { onSendFeedback } = useSendFeedback();
   return (

@@ -10,13 +10,14 @@ import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useSignTypedData } from "app/hooks/use-sign-typed-data";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
-import { useRudder } from "app/lib/rudderstack";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
 import { getNextRefillClaim, ledgerWalletHack } from "app/utilities";
 
+import { useSendFeedback } from "./use-send-feedback";
 import { useWallet } from "./use-wallet";
 
 const minterABI = ["function mintEdition(address _to)"];
@@ -118,7 +119,6 @@ export const reducer = (state: State, action: Action): State => {
 };
 
 export const useClaimNFT = (edition: IEdition) => {
-  const { rudder } = useRudder();
   const router = useRouter();
   const { data: userProfile } = useMyInfo();
   const signTypedData = useSignTypedData();
@@ -126,6 +126,7 @@ export const useClaimNFT = (edition: IEdition) => {
   const Alert = useAlert();
   const { connect } = useWallet();
   let { userAddress } = useCurrentUserAddress();
+  const { onSendFeedback } = useSendFeedback();
 
   // @ts-ignore
   const signTransaction = async ({ forwardRequest }) => {
@@ -226,7 +227,7 @@ export const useClaimNFT = (edition: IEdition) => {
               {
                 text: "Verify my phone number",
                 onPress: () => {
-                  rudder?.track("Button Clicked", {
+                  Analytics.track(EVENTS.BUTTON_CLICKED, {
                     name: "Verify my phone number",
                   });
 
@@ -266,7 +267,17 @@ export const useClaimNFT = (edition: IEdition) => {
       } else if (e?.response?.status === 500) {
         Alert.alert(
           "Oops. An error occurred.",
-          "We are currently experiencing a lot of usage. Please try again in one hour!"
+          "Please contact us at help@showtime.xyz if this persists. Thanks!",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Contact",
+              onPress: onSendFeedback,
+            },
+          ]
         );
       }
 

@@ -25,12 +25,6 @@ import { FollowButton } from "./follow-button";
 
 const SEPARATOR_HEIGHT = 1;
 const ITEM_HEIGHT = 64;
-const Separator = () => (
-  <View
-    tw={`bg-gray-200 dark:bg-gray-800`}
-    style={{ height: SEPARATOR_HEIGHT }}
-  />
-);
 
 type FollowingListProp = {
   follow: (profileId: number) => void;
@@ -44,7 +38,7 @@ type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
 export const UserList = ({
   users,
   loading,
-  emptyTitle = "No results found",
+  emptyTitle = "No users, yet.",
   ...rest
 }: UserListProps) => {
   const { follow, unfollow } = useMyInfo();
@@ -90,7 +84,6 @@ export const UserList = ({
       renderItem={renderItem}
       estimatedItemSize={64}
       overscan={64}
-      ItemSeparatorComponent={Separator}
       ListEmptyComponent={listEmptyComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
       {...modalListProps}
@@ -121,7 +114,7 @@ const FollowingListUser = memo(
               {item?.img_url && (
                 <Image
                   source={{ uri: item.img_url }}
-                  alt={item.username ?? item.wallet_address}
+                  alt={item.username ?? item.wallet_address ?? ""}
                   width={32}
                   height={32}
                 />
