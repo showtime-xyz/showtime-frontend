@@ -25,7 +25,6 @@ import {
   TwitterOutline,
   Download,
   Link,
-  Showtime,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
@@ -61,10 +60,10 @@ import {
 } from "app/utilities";
 
 import { Skeleton } from "design-system";
-import { ShowtimeBrand } from "design-system/icon";
 import { toast } from "design-system/toast";
 
 import { contentGatingType } from "../content-type-tooltip";
+import { ShowtimeBrandLogo } from "../showtime-brand";
 
 const { width: windowWidth } = Dimensions.get("window");
 const StyledLinearGradient = styled(LinearGradient);
@@ -490,15 +489,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                     end={[0.5, 0.75]}
                   >
                     <View tw="mb-10 w-full flex-row justify-between">
-                      <View tw="flex-row">
-                        <Showtime color={brandColor} width={16} height={16} />
-                        <View tw="w-1" />
-                        <ShowtimeBrand
-                          color={brandColor}
-                          width={84}
-                          height={16}
-                        />
-                      </View>
+                      <ShowtimeBrandLogo color={brandColor} />
                       <View tw="flex-row">
                         <ContentType />
                       </View>
