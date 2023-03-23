@@ -102,6 +102,7 @@ type RootStackNavigatorParams = {
   spotifyAuth: undefined;
   claimLimitExplanation: undefined;
   likers: undefined;
+  appleMusicAuthNativeWebView: undefined;
   report: {
     nftId?: string;
     userId?: string;

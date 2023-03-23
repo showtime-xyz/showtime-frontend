@@ -4,7 +4,7 @@ import { Logger } from "app/lib/logger";
 
 let music: any;
 const developerToken =
-  "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ilo2VkQ0NTJOMjcifQ.eyJpYXQiOjE2NjY5ODIzODUsImV4cCI6MTY4MjUzNDM4NSwiaXNzIjoiODhUS0hCMjY4VyJ9.fVefAK7d250DZw1CzmQgSPrUy_3X6yz8am0SgWYow9fOdz_H5akyyP_NH2maEOH2V8TfOxMpYvyXVzJzvE7dPw";
+  "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjMzRFI3UzY1NEsifQ.eyJpYXQiOjE2Nzg5NDIzNzAsImV4cCI6MTY5NDQ5NDM3MCwiaXNzIjoiODhUS0hCMjY4VyJ9.jD1060-UrGZSdEuccQmJJDHUmN028jsyG-3ieZGJSL09BXEkMjFL_RaGTwfsA7pLWV34cp4CHtqgzXk2cjSx1g";
 
 const initMusicKit = async () => {
   if (music) return music;

@@ -69,6 +69,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       notificationSettings: "settings/notifications",
       blockedList: "settings/blocked-list",
       swipeList: "list",
+      appleMusicAuthNativeWebView: "appleMusicAuthNativeWebView",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {
