@@ -42,4 +42,5 @@ export const EVENTS = {
   USER_UNLIKED_COMMENT: "User Unliked Comment",
   USER_FOLLOWED_PROFILE: "User Followed Profile",
   USER_UNFOLLOWED_PROFILE: "User Unfollowed Profile",
+  PLAY_ON_SPOTIFY_PRESSED: "Play on Spotify Pressed",
 };

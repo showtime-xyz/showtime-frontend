@@ -6,7 +6,14 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-export const PlayOnSpotify = ({ url }: { url: string }) => {
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
+import { Analytics, EVENTS } from "app/lib/analytics";
+
+export const PlayOnSpotify = ({
+  edition,
+}: {
+  edition: CreatorEditionResponse;
+}) => {
   return (
     <Pressable
       tw="px-1 py-0.5"
@@ -15,7 +22,12 @@ export const PlayOnSpotify = ({ url }: { url: string }) => {
           e.preventDefault();
         }
 
-        Linking.openURL(url);
+        if (edition.spotify_track_url) {
+          Linking.openURL(edition.spotify_track_url);
+          Analytics.track(EVENTS.PLAY_ON_SPOTIFY_PRESSED, {
+            editionId: edition.creator_airdrop_edition.id,
+          });
+        }
       }}
     >
       <View
