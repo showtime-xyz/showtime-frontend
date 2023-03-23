@@ -9820,7 +9820,7 @@ __metadata:
     react-native-tab-view-next: ^3.1.3
     react-native-view-shot: 3.4.0
     react-native-web: 0.18.9
-    react-native-webview: 11.23.1
+    react-native-webview: ~11.26.1
     react-string-replace: ^0.4.4
     react-test-renderer: 18.2.0
     readable-stream: 3.6.0
@@ -22405,7 +22405,7 @@ __metadata:
   dependencies:
     bn.js: ^4.11.8
     ethereumjs-util: ^6.0.0
-  checksum: ae074be0bb012857ab5d3ae644d1163b908a48dd724b7d2567cfde309dc72222d460438f2411936a70dc949dc604ce1ef7118f7273bd525815579143c907e336
+  checksum: 03127d09960e5f8a44167463faf25b2894db2f746376dbb8195b789ed11762f93db9c574eaa7c498c400063508e9dfc1c80de2edf5f0e1406b25c87d860ff2f1
   languageName: node
   linkType: hard
 
@@ -34649,16 +34649,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-webview@npm:11.23.1":
-  version: 11.23.1
-  resolution: "react-native-webview@npm:11.23.1"
+"react-native-webview@npm:~11.26.1":
+  version: 11.26.1
+  resolution: "react-native-webview@npm:11.26.1"
   dependencies:
     escape-string-regexp: 2.0.0
     invariant: 2.2.4
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 58367276b4457a12c0ecb24084c237048a31a8b4d49f53615634052c2dfcb318824e9239909b6bfb80cc8abacab658d278f480f7ff96267d10d5ff84a8ff1373
+  checksum: d2f95a89e944a2f1e8cf402e4e274f3568edae42e7ef190915e9fba8004a01d699c962459bdc9688c159060538e90aea3017cab24e6f4112021cbbc10ef57104
   languageName: node
   linkType: hard
 
