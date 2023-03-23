@@ -12,7 +12,7 @@ import {
 } from "@showtime-xyz/universal.hooks";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-type CheckboxProps = {
+export type CheckboxProps = {
   onChange: (checked: boolean) => void;
   checked: boolean;
   hitSlop?: number;

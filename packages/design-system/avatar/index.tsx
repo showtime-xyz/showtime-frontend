@@ -1,7 +1,9 @@
-import { ReactNode, useMemo, forwardRef } from "react";
+import { ReactNode, useMemo, forwardRef, useState } from "react";
 import { ViewStyle } from "react-native";
 
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -26,32 +28,43 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
 
 export const Avatar = forwardRef<typeof View, AvatarProps>(
   function AvatarComponent(
-    { url, borderRadius = 0, size = 32, tw = "", children, alt = "", style },
+    { url, borderRadius = 999, size = 32, tw = "", children, alt = "", style },
     ref
   ) {
+    const { colorScheme } = useColorScheme();
+    const [isLoading, setIsLoading] = useState(false);
     const imageSource = useMemo(
       () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
       [url, size]
     );
-
     return (
-      <View
-        tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
-        style={{ height: size, width: size, ...style }}
-        ref={ref}
+      <Skeleton
+        width={size}
+        height={size}
+        radius={borderRadius}
+        show={isLoading}
+        colorMode={colorScheme as any}
       >
-        <Image
-          source={imageSource}
-          width={size}
-          height={size}
-          borderRadius={borderRadius}
-          resizeMode="cover"
-          tw={IMAGE_TW}
-          style={{ height: size, width: size, borderRadius: borderRadius }}
-          alt={alt}
-        />
-        {children}
-      </View>
+        <View
+          tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
+          style={{ height: size, width: size, ...style }}
+          ref={ref}
+        >
+          <Image
+            source={imageSource}
+            width={size}
+            onLoadStart={() => setIsLoading(true)}
+            onLoad={() => setIsLoading(false)}
+            height={size}
+            borderRadius={borderRadius}
+            resizeMode="cover"
+            tw={IMAGE_TW}
+            style={{ height: size, width: size, borderRadius: borderRadius }}
+            alt={alt}
+          />
+          {children}
+        </View>
+      </Skeleton>
     );
   }
 );

@@ -21,12 +21,17 @@ import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import {
+  ErrorText,
+  Fieldset,
+  FieldsetCheckbox,
+} from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   FlipIcon,
   Image as ImageIcon,
   InformationCircle,
+  Raffle,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
@@ -106,6 +111,8 @@ const getDefaultDate = () => {
 export const DropMusic = () => {
   const isDark = useIsDarkMode();
   const [isSaveDrop, setIsSaveDrop] = useState(false);
+  const [isRaffle, setIsRaffle] = useState(false);
+
   const modalScreenContext = useModalScreenContext();
 
   const dropValidationSchema = useMemo(
@@ -116,7 +123,7 @@ export const DropMusic = () => {
           title: yup.string().required("Title is a required field").max(255),
           description: yup
             .string()
-            .max(280)
+            .max(260)
             .required("Description is a required field"),
           editionSize: yup
             .number()
@@ -220,6 +227,12 @@ export const DropMusic = () => {
     setValue,
     defaultValues,
   });
+  const descPlaceholder = isSaveDrop
+    ? "What is this drop about?"
+    : "Why should people collect this drop?";
+  const descHelperText = isSaveDrop
+    ? "You cannot edit this after the drop is created."
+    : "Tell your fans what the reward is. You cannot edit this after the drop is created";
 
   // this effect should be triggered when the user changes the drop type
   // it will revalidate the form and show the errors if any
@@ -516,9 +529,9 @@ export const DropMusic = () => {
                             label="Description"
                             multiline
                             textAlignVertical="top"
-                            placeholder="What is this drop about?"
+                            placeholder={descPlaceholder}
                             onBlur={onBlur}
-                            helperText="You cannot edit this after the drop is created."
+                            helperText={descHelperText}
                             errorText={errors.description?.message}
                             value={value}
                             numberOfLines={3}
@@ -547,9 +560,9 @@ export const DropMusic = () => {
                       label="Description"
                       multiline
                       textAlignVertical="top"
-                      placeholder="What is this drop about?"
+                      placeholder={descPlaceholder}
                       onBlur={onBlur}
-                      helperText="You cannot edit this after the drop is created."
+                      helperText={descHelperText}
                       errorText={errors.description?.message}
                       value={value}
                       numberOfLines={3}
@@ -559,6 +572,33 @@ export const DropMusic = () => {
                 }}
               />
             </Hidden>
+            <View tw="mt-4">
+              <Controller
+                key="isSupportRaffle"
+                control={control}
+                defaultValue={getDefaultDate()}
+                name="isSupportRaffle"
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <FieldsetCheckbox
+                      onChange={setIsRaffle}
+                      value={isRaffle}
+                      Icon={
+                        <Raffle
+                          color={isDark ? colors.white : colors.gray[900]}
+                        />
+                      }
+                      helperText={
+                        isSaveDrop
+                          ? "Automatically selects a winner once the duration of your drop is over."
+                          : "Automatically selects a winner once your song is live."
+                      }
+                      title="Make it a Raffle"
+                    />
+                  );
+                }}
+              />
+            </View>
             <View tw="z-10 mt-4 flex-row">
               <Controller
                 key="releaseDate"

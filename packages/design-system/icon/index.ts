@@ -125,7 +125,7 @@ export { default as PhonePortraitOutline } from "./PhonePortraitOutline";
 export { default as CreditCard } from "./CreditCard";
 export { default as Receipt } from "./Receipt";
 export { default as AddPhoto } from "./AddPhoto";
-
+export { default as Raffle } from "./Raffle";
 //#region social icons
 export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";

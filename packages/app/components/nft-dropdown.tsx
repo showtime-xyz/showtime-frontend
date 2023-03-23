@@ -385,7 +385,25 @@ function NFTDropdown({
             <DropdownMenuItem
               onSelect={async () => {
                 const as = `/raffle/${nft?.contract_address}`;
-                router.push(as);
+
+                router.push(
+                  Platform.select({
+                    native: as,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        contractAddress: nft?.contract_address,
+                        raffleModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: as,
+                    web: router.asPath,
+                  }),
+                  { shallow: true }
+                );
               }}
               key="raffle"
             >

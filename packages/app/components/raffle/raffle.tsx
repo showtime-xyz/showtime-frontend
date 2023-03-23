@@ -6,7 +6,13 @@ import {
   useState,
   Suspense,
 } from "react";
-import { Dimensions, Linking, Platform, View as RNView } from "react-native";
+import {
+  Dimensions,
+  Linking,
+  Platform,
+  useWindowDimensions,
+  View as RNView,
+} from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BlurView } from "expo-blur";
@@ -26,6 +32,7 @@ import {
   Link,
 } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors, styled } from "@showtime-xyz/universal.tailwind";
@@ -52,10 +59,15 @@ import {
   isMobileWeb,
 } from "app/utilities";
 
+import { Avatar } from "design-system/avatar";
+import { Pressable } from "design-system/pressable";
+import { breakpoints } from "design-system/theme";
 import { toast } from "design-system/toast";
 
 import { contentGatingType } from "../content-type-tooltip";
 import { ShowtimeBrandLogo } from "../showtime-brand";
+import { StarBottomLeft, StarBottomRight, StarTop } from "./decoration-icons";
+import { ShareButton } from "./share-button";
 
 const { width: windowWidth } = Dimensions.get("window");
 const StyledLinearGradient = styled(LinearGradient);
@@ -80,7 +92,7 @@ export const RaffleModal = (props?: RaffleModalParams) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
   const modalScreenContext = useModalScreenContext();
-
+  const router = useRouter();
   const { data: edition, loading: isLoadingCollection } =
     useCreatorCollectionDetail(contractAddress || contractAddressProp);
 
@@ -106,7 +118,8 @@ export const RaffleModal = (props?: RaffleModalParams) => {
   const { data: creatorProfile } = useUserProfile({
     address: nft?.creator_address,
   });
-
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["sm"];
   const iconColor = isDark ? colors.white : colors.gray[900];
   const [isInstalledApps, setIsInstalledApps] = useState({
     twitter: false,
@@ -357,9 +370,65 @@ export const RaffleModal = (props?: RaffleModalParams) => {
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
             <BottomSheetScrollView>
-              <View>
+              <View tw="px-4">
                 <View collapsable={false} ref={viewRef as any}>
-                  <ShowtimeBrandLogo color={isDark ? "#fff" : "#000"} />
+                  <View tw="ml-2 md:ml-4">
+                    <ShowtimeBrandLogo
+                      color={isDark ? "#fff" : "#000"}
+                      size={isMdWidth ? 20 : 16}
+                    />
+                  </View>
+                  <View tw="items-center justify-center py-10">
+                    <View tw="item-center justify-center">
+                      <Avatar
+                        url={nft.creator_img_url}
+                        alt={"Winner Avatar"}
+                        size={240}
+                      />
+                      <Text tw="absolute -top-8 left-4 -rotate-[25deg] text-7xl">
+                        👑
+                      </Text>
+                      <Pressable
+                        onPress={() =>
+                          router.push(`/profile/${nft.creator_name}`)
+                        }
+                        tw="-top-4 self-center rounded-full bg-white p-4 shadow-lg shadow-black/10 dark:bg-black dark:shadow-white/20"
+                      >
+                        <Text tw="text-lg font-bold text-black dark:text-white">
+                          {getCreatorUsernameFromNFT(nft)}
+                        </Text>
+                      </Pressable>
+                    </View>
+                    <View tw="absolute right-6 top-0">
+                      <StarTop
+                        color={isDark ? colors.gray[900] : colors.gray[50]}
+                        width={70}
+                        height={70}
+                      />
+                    </View>
+                    <View tw="absolute left-0 bottom-2">
+                      <StarBottomLeft
+                        color={isDark ? colors.gray[900] : colors.gray[50]}
+                        width={80}
+                        height={80}
+                      />
+                    </View>
+                    <View tw="absolute right-0 bottom-0">
+                      <StarBottomRight
+                        color={isDark ? colors.gray[900] : colors.gray[50]}
+                        width={75}
+                        height={75}
+                      />
+                    </View>
+                  </View>
+                  <View tw="m-4 items-center justify-center">
+                    <Text tw="text-2xl font-bold text-black dark:text-white">
+                      We have a winner 🎉
+                    </Text>
+
+                    <ShareButton type="twitter" tw="mt-8 mb-4 w-full" />
+                    <ShareButton type="instagram" tw="w-full" />
+                  </View>
                 </View>
               </View>
             </BottomSheetScrollView>
