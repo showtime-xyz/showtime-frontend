@@ -43,6 +43,7 @@ function Img({
   contentFit,
   onLoad,
   style,
+  alt,
   onLoadingComplete: onLoadingCompleteProps,
   ...props
 }: Props) {
@@ -86,6 +87,7 @@ function Img({
             ? getBase64Blurhash(props.blurhash)
             : undefined
         }
+        alt={alt ?? ""}
         fill={!hasHeightOrWidth}
         unoptimized // We already optimize the images with our CDN
         {...props}
@@ -101,6 +103,7 @@ function Img({
         width={width}
         height={height}
         fill={!hasHeightOrWidth}
+        alt={alt ?? ""}
         {...props}
       />
     );

@@ -2,10 +2,9 @@ import { memo } from "react";
 import { Platform, Pressable, StyleSheet } from "react-native";
 
 import { Muted, Unmuted } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { useMuted } from "app/providers/mute-provider";
-
-import { colors } from "design-system/tailwind";
 
 const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
 type MuteButtonProps = {
