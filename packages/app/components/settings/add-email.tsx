@@ -2,9 +2,9 @@ import { useCallback, useState, useEffect } from "react";
 
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useWeb3 } from "app/hooks/use-web3";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { Logger } from "app/lib/logger";
 import { useMagic, Relayer } from "app/lib/magic";
-import { useRudder } from "app/lib/rudderstack";
 
 import { useRouter } from "design-system/router";
 import { View } from "design-system/view";
@@ -12,7 +12,6 @@ import { View } from "design-system/view";
 import { EmailInput } from "./email-input";
 
 export const AddEmailModal = () => {
-  const { rudder } = useRudder();
   const router = useRouter();
   const { setMountRelayerOnApp } = useWeb3();
   const { addEmail } = useManageAccount();
@@ -29,7 +28,7 @@ export const AddEmailModal = () => {
 
   const submitEmail = useCallback(
     async (email: string) => {
-      rudder?.track("Button Clicked", {
+      Analytics.track(EVENTS.BUTTON_CLICKED, {
         name: "Login with email",
       });
 
@@ -47,7 +46,7 @@ export const AddEmailModal = () => {
         magic?.user?.logout();
       }
     },
-    [magic, addEmail, router, rudder]
+    [magic, addEmail, router]
   );
 
   return (

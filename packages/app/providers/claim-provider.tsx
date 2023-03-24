@@ -5,6 +5,7 @@ import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { reducer, initialState } from "app/hooks/use-claim-nft";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { delay } from "app/utilities";
@@ -38,6 +39,7 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
 
       if (response.is_complete) {
         dispatch({ type: "success", mint: response.mint });
+        Analytics.track(EVENTS.DROP_COLLECTED);
 
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         mutateEdition((d) => {

@@ -10,7 +10,6 @@ import { useSWRConfig } from "swr";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { Logger } from "app/lib/logger";
-import { useRudder } from "app/lib/rudderstack";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
 import { Button } from "design-system/button";
@@ -34,7 +33,6 @@ export const Challenge = () => {
   const finishOnboarding = useFinishOnboarding();
   const { mutate } = useSWRConfig();
   const matchMutate = useMatchMutate();
-  const { rudder } = useRudder();
   const [hCaptchaLoaded, setHCaptchaLoaded] = useState(
     typeof window.hcaptcha !== "undefined"
   );
@@ -49,14 +47,11 @@ export const Challenge = () => {
   };
 
   const showCaptcha = async () => {
-    // skip directly to the next step if user has already a social account
-    // connected or if the user has already completed the captcha challenge
+    // has_social_login is true if user has logged in with google, apple, spotify, twitter, instagram
+    // the value is false if user has logged in with email or phone number
+    const hasSocialHandle = user?.data?.profile?.has_social_login;
 
-    const hasSocialHandle =
-      user?.data?.profile?.social_login_handles?.twitter ||
-      user?.data?.profile?.social_login_handles?.instagram ||
-      false;
-
+    // we skip if the user has already completed the captcha or has a social handle
     if (user?.data?.profile?.captcha_completed_at || hasSocialHandle) {
       finishOnboarding();
       return;
@@ -89,7 +84,6 @@ export const Challenge = () => {
         await matchMutate(
           (key) => typeof key === "string" && key.includes(USER_PROFILE_KEY)
         );
-        rudder?.track("hCaptcha challenge success");
 
         // finish onboarding
         finishOnboarding();

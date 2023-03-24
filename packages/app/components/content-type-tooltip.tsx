@@ -61,11 +61,11 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
     edition?.presave_release_date &&
     new Date() >= new Date(edition?.presave_release_date)
   ) {
-    return <PlayOnSpotify url={edition?.spotify_track_url} />;
+    return <PlayOnSpotify edition={edition} />;
   }
 
   if (edition?.gating_type === "spotify_save" && edition?.spotify_track_url) {
-    return <PlayOnSpotify url={edition?.spotify_track_url} />;
+    return <PlayOnSpotify edition={edition} />;
   }
 
   if (edition?.gating_type && contentGatingType[edition?.gating_type]) {

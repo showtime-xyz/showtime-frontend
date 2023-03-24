@@ -3,6 +3,7 @@ import { useCallback, useContext } from "react";
 import { PROFILE_NFTS_QUERY_KEY } from "app/hooks/api-hooks";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -160,6 +161,7 @@ export const useDropNFT = () => {
 
       if (response.is_complete) {
         dispatch({ type: "success", edition: response.edition });
+        Analytics.track(EVENTS.DROP_CREATED);
         mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
         return;
       }

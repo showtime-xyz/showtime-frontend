@@ -85,7 +85,10 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   return (
     <>
       <LikeContextProvider nft={nft} key={nft.nft_id}>
-        <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
+        <View
+          tw="max-h-[100dvh] min-h-[100svh] w-full"
+          style={{ height: itemHeight, overflow: "hidden" }}
+        >
           <View
             tw="duration-200"
             style={{

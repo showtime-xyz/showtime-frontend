@@ -5,7 +5,6 @@ import { UserContext } from "app/context/user-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { registerForPushNotificationsAsync } from "app/lib/register-push-notification";
-import { useRudder } from "app/lib/rudderstack";
 import { isProfileIncomplete } from "app/utilities";
 
 import { useRouter } from "design-system/router";
@@ -18,7 +17,6 @@ export const MY_INFO_ENDPOINT = "/v2/myinfo";
 
 export function UserProvider({ children }: UserProviderProps) {
   //#region hooks
-  const { rudder } = useRudder();
   const { authenticationStatus, accessToken } = useAuth();
   const router = useRouter();
 
@@ -73,7 +71,7 @@ export function UserProvider({ children }: UserProviderProps) {
     };
 
     identifyAndRegisterPushNotification();
-  }, [data, rudder]);
+  }, [data]);
   //#endregion
 
   return (

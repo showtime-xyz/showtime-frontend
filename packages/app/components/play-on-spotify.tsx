@@ -1,12 +1,19 @@
 import React from "react";
 import { Linking, Platform, StyleSheet } from "react-native";
 
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
+import { Analytics, EVENTS } from "app/lib/analytics";
+
 import { Spotify } from "design-system/icon";
 import { Pressable } from "design-system/pressable";
 import { Text } from "design-system/text";
 import { View } from "design-system/view";
 
-export const PlayOnSpotify = ({ url }: { url: string }) => {
+export const PlayOnSpotify = ({
+  edition,
+}: {
+  edition: CreatorEditionResponse;
+}) => {
   return (
     <Pressable
       tw="px-1 py-0.5"
@@ -15,7 +22,12 @@ export const PlayOnSpotify = ({ url }: { url: string }) => {
           e.preventDefault();
         }
 
-        Linking.openURL(url);
+        if (edition.spotify_track_url) {
+          Linking.openURL(edition.spotify_track_url);
+          Analytics.track(EVENTS.PLAY_ON_SPOTIFY_PRESSED, {
+            editionId: edition.creator_airdrop_edition.id,
+          });
+        }
       }}
     >
       <View

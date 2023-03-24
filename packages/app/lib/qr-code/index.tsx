@@ -20,7 +20,7 @@ export const ReactQRCode = ({
   size = 100,
   backgroundColor,
   logo,
-  logoSize = size * 0.3,
+  logoSize = size * 0.2,
   logoBackgroundColor = "transparent",
   logoMargin = 2,
   ecl = "L",
@@ -130,7 +130,7 @@ export const ReactQRCode = ({
         <Rect fill={backgroundColor} height={size} width={size} />
       )}
       {dots as any}
-      <G x={logoPosition + 6} y={logoPosition + 6}>
+      <G x={logoPosition + 3} y={logoPosition + 3}>
         <Rect
           clipPath="url(#clip-wrapper)"
           fill={logoBackgroundColor}
@@ -141,21 +141,19 @@ export const ReactQRCode = ({
           {logo ? (
             <Image
               clipPath="url(#clip-logo)"
-              height={logoSize - 10}
+              height={logoSize - 4}
               href={logo}
               preserveAspectRatio="xMidYMid slice"
-              width={logoSize - 10}
+              width={logoSize - 4}
             />
           ) : (
             <Svg
-              width={logoSize - 10}
-              height={logoSize - 10}
-              viewBox="0 0 80 80"
+              width={logoSize - 4}
+              height={logoSize - 4}
+              viewBox="0 0 20 20"
+              fill={fillColor}
             >
-              <Path
-                d="M75.71 41.838c1.617-.692 1.617-2.984 0-3.676l-10.842-4.647a35 35 0 0 1-18.383-18.383L41.838 4.289c-.692-1.616-2.984-1.616-3.676 0l-4.647 10.843a35 35 0 0 1-18.383 18.383L4.289 38.162c-1.616.692-1.616 2.984 0 3.676l10.843 4.647a35 35 0 0 1 18.383 18.383l4.647 10.843c.692 1.616 2.984 1.616 3.676 0l4.647-10.843a35 35 0 0 1 18.383-18.383l10.843-4.647Z"
-                fill={fillColor}
-              />
+              <Path d="M19.7489 10.5751C20.1866 10.3875 20.1866 9.76693 19.7489 9.57933L16.8123 8.32081C14.575 7.362 12.7924 5.57931 11.8336 3.34207L10.575 0.405505C10.3874 -0.0322229 9.76687 -0.0322221 9.57926 0.405505L8.32075 3.34207C7.36194 5.57931 5.57924 7.362 3.34201 8.32081L0.405444 9.57933C-0.0322834 9.76693 -0.0322836 10.3875 0.405444 10.5751L3.34201 11.8336C5.57924 12.7924 7.36194 14.5751 8.32075 16.8124L9.57926 19.7489C9.76687 20.1866 10.3874 20.1866 10.575 19.7489L11.8336 16.8124C12.7924 14.5751 14.575 12.7924 16.8123 11.8336L19.7489 10.5751Z" />
             </Svg>
           )}
         </G>

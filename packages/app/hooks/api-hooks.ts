@@ -2,6 +2,7 @@ import { useCallback, useMemo } from "react";
 
 import useSWR, { useSWRConfig } from "swr";
 
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { useLogInPromise } from "app/lib/login-promise";
 import { MyInfo, NFT, Profile } from "app/types";
@@ -321,6 +322,7 @@ export const useMyInfo = () => {
           method: "POST",
           data: {},
         });
+        Analytics.track(EVENTS.USER_FOLLOWED_PROFILE);
       } catch (err) {
         console.error(err);
       }
@@ -351,6 +353,7 @@ export const useMyInfo = () => {
             method: "POST",
             data: {},
           });
+          Analytics.track(EVENTS.USER_UNFOLLOWED_PROFILE);
         } catch (err) {
           console.error(err);
         }
@@ -392,6 +395,7 @@ export const useMyInfo = () => {
           method: "POST",
           data: {},
         });
+        Analytics.track(EVENTS.USER_LIKED_DROP);
 
         mutate();
 
@@ -423,6 +427,7 @@ export const useMyInfo = () => {
             method: "POST",
             data: {},
           });
+          Analytics.track(EVENTS.USER_UNLIKED_DROP);
 
           mutate();
           return true;
