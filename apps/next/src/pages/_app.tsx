@@ -9,6 +9,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
+import { enableExperimentalWebImplementation } from "react-native-gesture-handler";
 
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
@@ -57,6 +58,8 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
 });
+
+enableExperimentalWebImplementation();
 
 function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;
