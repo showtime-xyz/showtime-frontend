@@ -112,7 +112,7 @@ export const ProfileError = ({
             <Text tw="font-bold">@{username}</Text> is blocked
           </Text>
         ) : (
-          "This profile is private"
+          error?.message
         )
       }
       tw="h-[50vh]"
