@@ -6,6 +6,7 @@ import {
   SetStateAction,
   useEffect,
 } from "react";
+import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
@@ -17,7 +18,8 @@ export const MuteContext = createContext([true, () => {}] as
 
 export const MuteProvider = ({ children }: { children: any }) => {
   const router = useRouter();
-  const values = useState(true);
+  // default to true on web (muted) and false on native
+  const values = useState(Platform.OS === "web");
   const setValue = values[1];
 
   const prevRouter = usePreviousValue(router);

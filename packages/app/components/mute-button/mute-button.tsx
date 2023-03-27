@@ -16,6 +16,8 @@ export const MuteButton = memo(function MuteButton({
 }: MuteButtonProps) {
   const [muted, setMuted] = useMuted();
 
+  if (Platform.OS !== "web") return null;
+
   return (
     <Pressable
       style={muteButtonStyle.style}
