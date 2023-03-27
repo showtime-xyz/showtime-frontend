@@ -4,9 +4,9 @@ import "setimmediate";
 
 import { useCallback } from "react";
 
-import { Inter } from "@next/font/google";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
+import { Inter } from "next/font/google";
 import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
 

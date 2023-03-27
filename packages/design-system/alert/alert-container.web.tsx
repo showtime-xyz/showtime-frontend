@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, Modal } from "react-native";
 
 import * as Portal from "@radix-ui/react-portal";
@@ -10,6 +10,11 @@ import { Alert } from "./alert";
 import { AlertContainerProps } from "./alert-container";
 
 export const AlertContainer = ({ show, ...rest }: AlertContainerProps) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) return null;
   return (
     <Portal.Root>
       <Modal
