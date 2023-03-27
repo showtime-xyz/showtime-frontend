@@ -12,6 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
+import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import type { NFT } from "app/types";
@@ -76,97 +77,99 @@ function Media({
   const videoRef = useRef<ExpoVideo | null>(null);
 
   return (
-    <FeedItemTapGesture
-      videoRef={videoRef}
-      toggleHeader={toggleHeader}
-      showHeader={showHeader}
-      sizeStyle={sizeStyle}
-      mimeType={item?.mime_type}
-    >
-      <View
-        style={{
-          opacity: item?.loading ? 0.5 : 1,
-        }}
+    <LikeContextProvider nft={item!}>
+      <FeedItemTapGesture
+        videoRef={videoRef}
+        toggleHeader={toggleHeader}
+        showHeader={showHeader}
+        sizeStyle={sizeStyle}
+        mimeType={item?.mime_type}
       >
-        {Boolean(edition) && (
-          <View tw="absolute bottom-0.5 left-0.5 z-10">
-            <ContentTypeIcon edition={edition} />
-          </View>
-        )}
-        {item?.mime_type?.startsWith("image") &&
-        item?.mime_type !== "image/gif" ? (
-          <PinchToZoom
-            onPinchStart={onPinchStart}
-            onPinchEnd={onPinchEnd}
-            disabled={numColumns > 1}
-          >
-            <Image
-              source={{
-                uri: mediaUri,
-              }}
-              recyclingKey={mediaUri}
-              blurhash={item?.blurhash}
-              data-test-id={Platform.select({ web: "nft-card-media" })}
-              width={width}
-              height={height}
-              style={sizeStyle}
-              resizeMode={resizeMode}
-              alt={item?.token_name}
-            />
-          </PinchToZoom>
-        ) : null}
-
-        {item?.mime_type?.startsWith("video") ||
-        item?.mime_type === "image/gif" ? (
-          <PinchToZoom
-            onPinchStart={onPinchStart}
-            onPinchEnd={onPinchEnd}
-            disabled={numColumns > 1}
-          >
-            {numColumns > 1 && (
-              <View tw="absolute bottom-2.5 right-2.5 z-10 bg-transparent">
-                <Play height={24} width={24} color="white" />
-              </View>
-            )}
-            <Video
-              ref={videoRef}
-              source={{
-                uri: mediaUri,
-              }}
-              posterSource={{
-                uri: mediaStillPreviewUri,
-              }}
-              width={width}
-              height={height}
-              style={sizeStyle}
-              blurhash={item?.blurhash}
-              isMuted={numColumns > 1 ? true : isMuted}
-              resizeMode={resizeMode as any}
-              //@ts-ignore
-              dataset={Platform.select({ web: { testId: "nft-card-media" } })}
-            />
-          </PinchToZoom>
-        ) : null}
-
-        {item?.mime_type?.startsWith("model") ? (
-          <ErrorBoundary>
-            <Suspense fallback={null}>
-              <Dynamic3dModel
-                url={item?.source_url}
-                // TODO: update this to get a preview from CDN v2
-                fallbackUrl={item?.still_preview_url}
-                numColumns={numColumns}
-                style={sizeStyle}
+        <View
+          style={{
+            opacity: item?.loading ? 0.5 : 1,
+          }}
+        >
+          {Boolean(edition) && (
+            <View tw="absolute bottom-0.5 left-0.5 z-10">
+              <ContentTypeIcon edition={edition} />
+            </View>
+          )}
+          {item?.mime_type?.startsWith("image") &&
+          item?.mime_type !== "image/gif" ? (
+            <PinchToZoom
+              onPinchStart={onPinchStart}
+              onPinchEnd={onPinchEnd}
+              disabled={numColumns > 1}
+            >
+              <Image
+                source={{
+                  uri: mediaUri,
+                }}
+                recyclingKey={mediaUri}
                 blurhash={item?.blurhash}
-                resizeMode={resizeMode}
+                data-test-id={Platform.select({ web: "nft-card-media" })}
                 width={width}
                 height={height}
+                style={sizeStyle}
+                resizeMode={resizeMode}
+                alt={item?.token_name}
               />
-            </Suspense>
-          </ErrorBoundary>
-        ) : null}
-      </View>
-    </FeedItemTapGesture>
+            </PinchToZoom>
+          ) : null}
+
+          {item?.mime_type?.startsWith("video") ||
+          item?.mime_type === "image/gif" ? (
+            <PinchToZoom
+              onPinchStart={onPinchStart}
+              onPinchEnd={onPinchEnd}
+              disabled={numColumns > 1}
+            >
+              {numColumns > 1 && (
+                <View tw="absolute bottom-2.5 right-2.5 z-10 bg-transparent">
+                  <Play height={24} width={24} color="white" />
+                </View>
+              )}
+              <Video
+                ref={videoRef}
+                source={{
+                  uri: mediaUri,
+                }}
+                posterSource={{
+                  uri: mediaStillPreviewUri,
+                }}
+                width={width}
+                height={height}
+                style={sizeStyle}
+                blurhash={item?.blurhash}
+                isMuted={numColumns > 1 ? true : isMuted}
+                resizeMode={resizeMode as any}
+                //@ts-ignore
+                dataset={Platform.select({ web: { testId: "nft-card-media" } })}
+              />
+            </PinchToZoom>
+          ) : null}
+
+          {item?.mime_type?.startsWith("model") ? (
+            <ErrorBoundary>
+              <Suspense fallback={null}>
+                <Dynamic3dModel
+                  url={item?.source_url}
+                  // TODO: update this to get a preview from CDN v2
+                  fallbackUrl={item?.still_preview_url}
+                  numColumns={numColumns}
+                  style={sizeStyle}
+                  blurhash={item?.blurhash}
+                  resizeMode={resizeMode}
+                  width={width}
+                  height={height}
+                />
+              </Suspense>
+            </ErrorBoundary>
+          ) : null}
+        </View>
+      </FeedItemTapGesture>
+    </LikeContextProvider>
   );
 }
 
