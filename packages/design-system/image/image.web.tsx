@@ -18,7 +18,7 @@ const getBase64Blurhash = (blurhash: string): string => {
   return src;
 };
 
-type Props = Pick<ImageNativeProps, "source" | "onLoad"> &
+type Props = Pick<ImageNativeProps, "source" | "onLoad" | "recyclingKey"> &
   Omit<NextImageProps, "src"> & {
     className: string;
     source: ImageURISource;
@@ -45,6 +45,8 @@ function Img({
   style,
   alt,
   onLoadingComplete: onLoadingCompleteProps,
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  recyclingKey,
   ...props
 }: Props) {
   const actualHeight =

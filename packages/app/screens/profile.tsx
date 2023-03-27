@@ -42,3 +42,4 @@ const ProfileScreen = withColorScheme(() => {
 });
 
 export { ProfileScreen };
+export default ProfileScreen;

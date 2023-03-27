@@ -2,6 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "baseUrl": ".",
+    "module": "esnext",
     "paths": {
       "@showtime-xyz/universal.tailwind": ["packages/design-system/tailwind"],
       "@showtime-xyz/universal.view": ["packages/design-system/view"],

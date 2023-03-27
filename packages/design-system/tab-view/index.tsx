@@ -120,7 +120,10 @@ type TabLoadingProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-const TabSpinner = memo<TabLoadingProps>(function TabSpinner({ index, style }) {
+export const TabSpinner = memo<TabLoadingProps>(function TabSpinner({
+  index,
+  style,
+}) {
   return (
     <TabScrollView style={style} index={index}>
       <View tw="h-60 items-center justify-center">

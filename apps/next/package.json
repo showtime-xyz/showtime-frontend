@@ -14,7 +14,6 @@
     "@amplitude/analytics-browser": "^1.9.1",
     "@builder.io/partytown": "^0.6.4",
     "@coinbase/wallet-sdk": "^3.3.0",
-    "@expo/next-adapter": "^4.0.13",
     "@growthbook/growthbook-react": "^0.9.1",
     "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@headlessui/react": "^1.6.6",
@@ -81,7 +80,6 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
-    "@expo/next-adapter": "4.0.8",
     "@types/react-datepicker": "^4.8.0",
     "autoprefixer": "^10.4.8",
     "critters": "^0.0.16",

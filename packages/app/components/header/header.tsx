@@ -139,5 +139,4 @@ export const Header = memo<HeaderProps>(function Header({
     </View>
   );
 });
-export const SearchInHeader = () => null;
 export const NotificationsInHeader = () => <></>;
