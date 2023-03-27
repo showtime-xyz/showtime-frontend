@@ -28,7 +28,9 @@ type PreviewProps = {
 };
 
 const StyledVideo = styled(Video);
-const videoStyle: ViewStyle = { position: "relative" };
+const videoStyle: ViewStyle = {
+  position: Platform.OS === "web" ? "relative" : "absolute",
+};
 export const Preview = memo(function Preview({
   tw = "",
   style,
