@@ -10,7 +10,6 @@ import { ResizeMode } from "expo-av";
 
 import { View } from "@showtime-xyz/universal.view";
 
-import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
@@ -95,17 +94,15 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               paddingTop,
             }}
           >
-            <FeedItemTapGesture>
-              <Media
-                item={nft}
-                numColumns={1}
-                sizeStyle={{
-                  height: mediaHeight,
-                  width: windowWidth,
-                }}
-                resizeMode={ResizeMode.COVER}
-              />
-            </FeedItemTapGesture>
+            <Media
+              item={nft}
+              numColumns={1}
+              sizeStyle={{
+                height: mediaHeight,
+                width: windowWidth,
+              }}
+              resizeMode={ResizeMode.COVER}
+            />
           </View>
           <View
             tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"

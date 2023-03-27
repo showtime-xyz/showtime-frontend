@@ -137,6 +137,7 @@ export const FeedItemTapGesture = ({
         }),
     [toggleHeader]
   );
+
   const gesture = useMemo(
     () =>
       Gesture.Race(
