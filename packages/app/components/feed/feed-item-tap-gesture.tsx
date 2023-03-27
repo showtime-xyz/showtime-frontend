@@ -55,7 +55,6 @@ export const FeedItemTapGesture = ({
 
   const heartAnimation = useSharedValue(0);
   const playAnimation = useSharedValue(0);
-  const pauseAnimation = useSharedValue(0);
 
   const heartStyle = useAnimatedStyle(() => {
     return {
@@ -71,13 +70,6 @@ export const FeedItemTapGesture = ({
     };
   });
 
-  const pauseStyle = useAnimatedStyle(() => {
-    return {
-      opacity: pauseAnimation.value,
-      transform: [{ scale: pauseAnimation.value }],
-    };
-  });
-
   const doubleTapHandleOnJS = useCallback(() => {
     like();
     showHeader?.();
@@ -86,9 +78,9 @@ export const FeedItemTapGesture = ({
   const toggleVideoPlayback = useCallback(async () => {
     const status = await videoRef?.current?.getStatusAsync();
     if (status && status.isLoaded && status?.isPlaying) {
-      pauseAnimation.value = withSequence(
+      playAnimation.value = withSequence(
         withSpring(1),
-        withDelay(200, withSpring(0))
+        withDelay(3500, withSpring(0))
       );
       videoRef?.current?.pauseAsync().catch(() => {});
     } else {
@@ -98,8 +90,7 @@ export const FeedItemTapGesture = ({
       );
       videoRef?.current?.playAsync().catch(() => {});
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videoRef]);
+  }, [videoRef, playAnimation]);
 
   const singleTapHandle = useMemo(
     () =>
@@ -117,6 +108,7 @@ export const FeedItemTapGesture = ({
       Gesture.Tap()
         .numberOfTaps(2)
         .onEnd(() => {
+          playAnimation.value = withSequence(withSpring(0));
           heartAnimation.value = withSequence(
             withSpring(1),
             withDelay(200, withSpring(0))
@@ -169,13 +161,7 @@ export const FeedItemTapGesture = ({
             style={[heartContainerStyle, playStyle, sizeStyle]}
             pointerEvents="none"
           >
-            <Play width={90} height={90} color="#fff" />
-          </Animated.View>
-          <Animated.View
-            style={[heartContainerStyle, pauseStyle, sizeStyle]}
-            pointerEvents="none"
-          >
-            <HeartFilled width={90} height={90} color="#fff" />
+            <Play width={80} height={80} color="#fff" />
           </Animated.View>
         </>
       ) : null}
