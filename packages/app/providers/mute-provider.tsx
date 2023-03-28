@@ -21,7 +21,6 @@ type MuteState = [boolean, Dispatch<SetStateAction<boolean>>];
 const useAutoPlayWithSound = (values: MuteState) => {
   useEffect(() => {
     const handleClick = async () => {
-      console.log("aaa");
       // this should only run on web
       if (Platform.OS !== "web") return;
 
