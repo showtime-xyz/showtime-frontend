@@ -21,9 +21,6 @@ type MuteState = [boolean, Dispatch<SetStateAction<boolean>>];
 const useAutoPlayWithSound = (values: MuteState) => {
   useEffect(() => {
     const handleClick = async () => {
-      // this should only run on web
-      if (Platform.OS !== "web") return;
-
       // now we want to check if the current page has a video
       // if it does, we want to unmute it
       // if it doesn't, we want to do nothing
@@ -49,15 +46,19 @@ const useAutoPlayWithSound = (values: MuteState) => {
       setMuted(false);
 
       // remove the click listener
-      window.removeEventListener("click", handleClick);
+      window.removeEventListener("click", handleClick, true);
     };
 
-    // register the click listener
-    window.addEventListener("click", handleClick);
+    if (Platform.OS === "web") {
+      // register the click listener
+      window.addEventListener("click", handleClick, true);
+    }
 
     // cleanup
     return () => {
-      window.removeEventListener("click", handleClick);
+      if (Platform.OS === "web") {
+        window.removeEventListener("click", handleClick, true);
+      }
     };
   }, [values]);
 };
