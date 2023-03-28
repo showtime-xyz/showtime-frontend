@@ -140,16 +140,16 @@ export const EditProfile = () => {
     }
 
     return {
-      name: user?.data?.profile.name,
-      username: user?.data?.profile.username,
-      bio: user?.data?.profile.bio,
+      name: user?.data?.profile.name || "",
+      username: user?.data?.profile.username || "",
+      bio: user?.data?.profile.bio || "",
       links,
-      website_url: user?.data?.profile.website_url,
+      website_url: user?.data?.profile.website_url || "",
       default_created_sort_id: user?.data?.profile.default_created_sort_id,
-      default_list_id: user?.data?.profile.default_list_id,
+      default_list_id: user?.data?.profile.default_list_id || "",
       default_owned_sort_id: user?.data?.profile.default_owned_sort_id,
       profilePicture: user?.data?.profile.img_url as File | string | undefined,
-      coverPicture: user?.data?.profile.cover_url,
+      coverPicture: user?.data?.profile.cover_url || "",
       submitError: "",
     };
   }, [socialLinks?.data?.data, user?.data?.profile]);
@@ -560,7 +560,7 @@ export const EditProfile = () => {
     </>
   );
 };
-
+export default EditProfile;
 const ConnectButton = ({
   type,
   isConnected,
@@ -597,7 +597,7 @@ const ConnectButton = ({
       >
         {isConnected && (
           <View tw="mr-1.5 scale-[2]">
-            <Check color="white" height={10} width={10} tw="m-0 p-0" />
+            <Check color="white" height={10} width={10} />
           </View>
         )}
         <View tw="flex-row items-center justify-start">

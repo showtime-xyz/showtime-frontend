@@ -1,7 +1,7 @@
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { ButtonProps } from "@showtime-xyz/universal.button/types";
+import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";

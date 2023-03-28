@@ -1,5 +1,6 @@
 import { useState, memo, useMemo } from "react";
 
+import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -18,28 +19,28 @@ const PADDING_X = 16;
 const getTextColor = (isFocus: boolean) =>
   isFocus ? "text-black dark:text-white" : "text-gray-600 dark:text-gray-400";
 
-export const TabBarSingle = memo<IndependentTabBarProps>(
-  function IndependentTabBarProps({
-    routes,
-    index: propIndex,
-    onPress,
-    tw = "",
-    disableScrollableBar = false,
-  }) {
-    const [tabsWidth, setTabsWidth] = useState<{
-      [index: number]: number;
-    }>({});
+export const TabBarSingle = memo<IndependentTabBarProps>(function TabBarSingle({
+  routes,
+  index: propIndex,
+  onPress,
+  tw = "",
+  disableScrollableBar = false,
+}) {
+  const [tabsWidth, setTabsWidth] = useState<{
+    [index: number]: number;
+  }>({});
 
-    const outputRange = useMemo(
-      () =>
-        routes.reduce<number[]>((acc, _, i) => {
-          if (i === 0) return [PADDING_X];
-          return [...acc, acc[i - 1] + tabsWidth[i - 1] + PADDING_X * 2];
-        }, []),
-      [routes, tabsWidth]
-    );
+  const outputRange = useMemo(
+    () =>
+      routes.reduce<number[]>((acc, _, i) => {
+        if (i === 0) return [PADDING_X];
+        return [...acc, acc[i - 1] + tabsWidth[i - 1] + PADDING_X * 2];
+      }, []),
+    [routes, tabsWidth]
+  );
 
-    return (
+  return (
+    <ClientSideOnly>
       <View
         tw={["no-scrollbar flex-row overflow-x-auto overflow-y-hidden", tw]}
       >
@@ -92,6 +93,6 @@ export const TabBarSingle = memo<IndependentTabBarProps>(
           }}
         />
       </View>
-    );
-  }
-);
+    </ClientSideOnly>
+  );
+});

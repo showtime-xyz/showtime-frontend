@@ -154,7 +154,7 @@ export class ReactNativeWebMain {
         devDependencies: {
           "@babel/core": "^7.18.9",
           "@babel/runtime": "^7.18.9",
-          "babel-preset-expo": "^9.1.0",
+          "babel-preset-expo": "^9.3.1",
           "@storybook/react": "6.5.9",
         },
       }),

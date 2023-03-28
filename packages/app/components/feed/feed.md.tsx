@@ -42,7 +42,7 @@ const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 const ViewabilityInfiniteScrollList =
   withViewabilityInfiniteScrollList(InfiniteScrollList);
 
-export const Feed = () => {
+const FeedMd = () => {
   return (
     <View tw="max-w-7xl flex-1 pb-8 pt-24" testID="homeFeed">
       <ErrorBoundary>
@@ -51,7 +51,7 @@ export const Feed = () => {
     </View>
   );
 };
-
+export default FeedMd;
 // const { useParam } = createParam<Query>();
 
 export const FeedList = () => {

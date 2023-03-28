@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import { Platform, StatusBar, View } from "react-native";
+import { useCallback, memo } from "react";
+import { Platform, StatusBar, View, StyleProp, ViewStyle } from "react-native";
 
 import {
   SceneRendererProps,
@@ -11,22 +11,22 @@ import {
   CollapsibleTabView,
   CollapsibleTabViewProps,
 } from "@showtime-xyz/universal.collapsible-tab-view";
+import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { RefreshControl } from "./refresh-control";
 import { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";
 import { ScollableTabBar } from "./scrollable-tab-bar";
-import { TabSpinner } from "./tab-spinner";
 
 export * from "@showtime-xyz/universal.collapsible-tab-view";
 export * from "./tab-flash-list";
 export * from "react-native-tab-view-next";
 export * from "./tab-flash-list-scroll-view";
 export * from "./tab-bar-single";
-export * from "./tab-spinner";
 export * from "./scrollable-auto-width-tab-bar";
 export * from "./scrollable-tab-bar";
 export * from "./tab-bar-vertical";
@@ -115,4 +115,21 @@ function HeaderTabView<T extends Route>({
     />
   );
 }
+type TabLoadingProps = {
+  index: number;
+  style?: StyleProp<ViewStyle>;
+};
+
+export const TabSpinner = memo<TabLoadingProps>(function TabSpinner({
+  index,
+  style,
+}) {
+  return (
+    <TabScrollView style={style} index={index}>
+      <View tw="h-60 items-center justify-center">
+        <Spinner size="small" />
+      </View>
+    </TabScrollView>
+  );
+});
 export { Route, HeaderTabView };

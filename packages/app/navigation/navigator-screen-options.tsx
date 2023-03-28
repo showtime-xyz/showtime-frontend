@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 
-import { HeaderLeft, HeaderCenter } from "app/components/header";
+import { HeaderLeft } from "app/components/header";
+import HeaderCenter from "app/components/header/header-center";
 
 export const screenOptions = ({
   safeAreaTop,

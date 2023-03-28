@@ -4,17 +4,16 @@ import "setimmediate";
 
 import { useCallback } from "react";
 
-import { Inter } from "@next/font/google";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
+import dynamic from "next/dynamic";
+import { Inter } from "next/font/google";
 import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Footer } from "app/components/footer";
-import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { Sentry } from "app/lib/sentry";
@@ -47,6 +46,12 @@ import { Toaster } from "design-system/toast";
 
 import "../styles/styles.css";
 
+const Header = dynamic(() => import("app/components/header"), {
+  ssr: false,
+});
+const Footer = dynamic(() => import("app/components/footer"), {
+  ssr: false,
+});
 // TODO: remove this once Reanimated ship a fix
 if (typeof window !== "undefined") {
   // @ts-ignore

@@ -2,7 +2,7 @@ import { useContext, useMemo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { ButtonProps } from "@showtime-xyz/universal.button/types";
+import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check, Hourglass } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
