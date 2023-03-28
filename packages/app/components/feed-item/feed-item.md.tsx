@@ -11,7 +11,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Close,
   Muted,
-  Unmuted,
   Maximize,
   ChevronDown,
   ChevronUp,
@@ -182,6 +181,20 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Close width={24} height={24} />
             </Button>
             <View tw="flex-row items-center">
+              {nft?.mime_type?.includes("video") && muted ? (
+                <Button
+                  variant="text"
+                  size="regular"
+                  onPress={(e) => {
+                    e.preventDefault();
+                    setMuted(!muted);
+                  }}
+                  iconOnly
+                  tw="mr-4 bg-white px-3 dark:bg-gray-900"
+                >
+                  <Muted width={24} height={24} />
+                </Button>
+              ) : null}
               <Button
                 variant="text"
                 size="regular"
@@ -271,26 +284,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </View>
             </View>
           )}
-          {nft?.mime_type?.includes("video") ? (
-            <View tw="absolute bottom-6 right-4">
-              <Button
-                variant="text"
-                size="regular"
-                onPress={(e) => {
-                  e.preventDefault();
-                  setMuted(!muted);
-                }}
-                iconOnly
-                tw="bg-white px-3 dark:bg-gray-900"
-              >
-                {muted ? (
-                  <Muted width={24} height={24} />
-                ) : (
-                  <Unmuted width={24} height={24} />
-                )}
-              </Button>
-            </View>
-          ) : null}
 
           <View tw="absolute bottom-10 left-4">
             <ContentTypeTooltip edition={edition} />
