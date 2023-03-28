@@ -5,6 +5,7 @@ import {
   Dispatch,
   SetStateAction,
   useEffect,
+  useRef,
 } from "react";
 import { Platform } from "react-native";
 
@@ -65,6 +66,42 @@ const useAutoPlayWithSound = (values: MuteState) => {
   }, []);
 };
 
+const useMuteOnVisbilityChange = (values: MuteState) => {
+  const wasMuted = useRef(values[0]);
+  useEffect(() => {
+    const handleFocus = async () => {
+      // get setter from mute context
+      const [muted, setMuted] = values;
+
+      // first check if the video is muted and store that value in a ref to reset to the correct value once the user returns to the page
+      if (document.visibilityState === "hidden") {
+        if (!muted) {
+          setMuted(true);
+          wasMuted.current = muted;
+        }
+      } else {
+        // if the video is not muted, we want to unmute it
+        if (!wasMuted.current) {
+          setMuted(false);
+          wasMuted.current = false;
+        }
+      }
+    };
+
+    if (Platform.OS === "web") {
+      // register the click listener
+      window.addEventListener("visibilitychange", handleFocus, false);
+    }
+
+    // cleanup
+    return () => {
+      if (Platform.OS === "web") {
+        window.removeEventListener("visibilitychange", handleFocus, false);
+      }
+    };
+  }, [values]);
+};
+
 export const MuteProvider = ({ children }: { children: any }) => {
   const router = useRouter();
   // default to true on web (muted) and false on native
@@ -73,6 +110,9 @@ export const MuteProvider = ({ children }: { children: any }) => {
 
   // auto play with sound on web with first interaction
   useAutoPlayWithSound(values);
+
+  // on web, mute the video when the user navigates away from the page (tab change, etc.)
+  useMuteOnVisbilityChange(values);
 
   const prevRouter = usePreviousValue(router);
 
