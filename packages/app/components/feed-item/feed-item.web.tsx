@@ -87,6 +87,16 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   return (
     <>
       <LikeContextProvider nft={nft} key={nft.nft_id}>
+        {nft?.mime_type?.startsWith("video") ? (
+          <View
+            tw="absolute top-4 left-4 z-50"
+            style={{
+              paddingTop,
+            }}
+          >
+            <MuteButton />
+          </View>
+        ) : null}
         <View
           tw="max-h-[100dvh] min-h-[100svh] w-full"
           style={{ height: itemHeight, overflow: "hidden" }}
@@ -106,6 +116,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               isVideo={nft?.mime_type?.startsWith("video")}
             >
               <Media
+                videoRef={videoRef}
                 item={nft}
                 numColumns={1}
                 sizeStyle={{
@@ -134,11 +145,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               style={StyleSheet.absoluteFillObject}
               overlayColor="transparent"
             />
-            {nft?.mime_type?.startsWith("video") ? (
-              <View tw="z-9 absolute top-[-40px] right-4">
-                <MuteButton />
-              </View>
-            ) : null}
 
             <View tw="z-9 absolute -top-[40px] left-2.5">
               <ContentTypeTooltip edition={edition} />
