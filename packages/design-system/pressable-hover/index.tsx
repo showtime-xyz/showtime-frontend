@@ -1,9 +1,10 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo } from "react";
 import {
   Pressable as ReactNativePressable,
   PressableProps,
 } from "react-native";
 
+import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
@@ -14,7 +15,6 @@ export type Props = Omit<PressableProps, "tw"> & {
 const StyledPressable = styled(ReactNativePressable);
 
 export function PressableHover({ tw, ...props }: Props) {
-  const [mounted, setMounted] = useState(false);
   const twWithHover = useMemo(
     () =>
       [
@@ -23,10 +23,10 @@ export function PressableHover({ tw, ...props }: Props) {
       ].join(" "),
     [tw]
   );
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) return null;
 
-  return <StyledPressable {...props} tw={twWithHover} />;
+  return (
+    <ClientSideOnly>
+      <StyledPressable {...props} tw={twWithHover} />
+    </ClientSideOnly>
+  );
 }

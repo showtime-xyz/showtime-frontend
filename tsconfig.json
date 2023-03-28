@@ -79,6 +79,9 @@
       "@showtime-xyz/universal.utils": ["packages/design-system/utils"],
       "@showtime-xyz/universal.verification-badge": [
         "packages/design-system/verification-badge"
+      ],
+      "@showtime-xyz/universal.client-side-only": [
+        "packages/design-system/client-side-only"
       ]
     }
   },
