@@ -3,6 +3,7 @@ import React from "react";
 import { useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import { Video as ExpoVideo } from "expo-av";
 import { useSwiper } from "swiper/react";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -32,6 +33,7 @@ import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
+import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -85,6 +87,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     tokenId: nft?.token_id,
     chainName: nft?.chain_name,
   });
+  const videoRef = useRef<ExpoVideo | null>(null);
 
   const [muted, setMuted] = useMuted();
   const swiper = useSwiper();
@@ -208,15 +211,21 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 width: mediaWidth,
               }}
             >
-              <Media
-                item={nft}
-                numColumns={1}
-                sizeStyle={{
-                  height: mediaHeight,
-                  width: mediaWidth,
-                }}
-                resizeMode={ResizeMode.CONTAIN}
-              />
+              <FeedItemTapGesture
+                videoRef={videoRef}
+                isVideo={nft?.mime_type?.startsWith("video")}
+              >
+                <Media
+                  videoRef={videoRef}
+                  item={nft}
+                  numColumns={1}
+                  sizeStyle={{
+                    height: mediaHeight,
+                    width: mediaWidth,
+                  }}
+                  resizeMode={ResizeMode.CONTAIN}
+                />
+              </FeedItemTapGesture>
               <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
             </View>
           </View>

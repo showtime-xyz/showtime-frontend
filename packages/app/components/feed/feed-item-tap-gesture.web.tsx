@@ -32,13 +32,13 @@ type FeedItemTapGestureProps = {
     width?: number;
     height?: number;
   };
-  mimeType?: string;
+  isVideo?: boolean;
 };
 export const FeedItemTapGesture = ({
   children,
   videoRef,
   sizeStyle,
-  mimeType,
+  isVideo,
 }: FeedItemTapGestureProps) => {
   const { like } = useLike();
 
@@ -60,6 +60,7 @@ export const FeedItemTapGesture = ({
   }, [playAnimation]);
 
   const toggleVideoPlayback = useCallback(async () => {
+    if (!isVideo) return;
     const curVideo = videoRef?.current?._nativeRef?.current?._video;
     if (!curVideo) return;
 
@@ -81,7 +82,7 @@ export const FeedItemTapGesture = ({
         withDelay(200, withSpring(0))
       );
     }
-  }, [videoRef, playAnimation]);
+  }, [videoRef, playAnimation, isVideo]);
 
   const singleTapHandle = useMemo(
     () =>
@@ -130,7 +131,7 @@ export const FeedItemTapGesture = ({
       >
         <HeartFilled width={90} height={90} color="#fff" />
       </Animated.View>
-      {mimeType?.startsWith("video") || mimeType === "image/gif" ? (
+      {isVideo ? (
         <>
           <Animated.View
             style={[heartContainerStyle, playStyle, sizeStyle]}

@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useRef } from "react";
 import { StyleSheet, ImageStyle } from "react-native";
 
 import {
@@ -47,8 +47,10 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
   }: VideoProps,
   ref
 ) {
+  const videoRef = useRef<ExpoVideo | null>(null);
+
   const videoConfig = useVideoConfig();
-  const { id } = useItemVisible({ videoRef: ref });
+  const { id } = useItemVisible({ videoRef });
   const [muted] = useMuted();
   const isMuted = isMutedProp ?? muted;
 
@@ -86,7 +88,15 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
             resizeMode={contentFitToresizeMode(resizeMode)}
             posterSource={posterSource}
             source={props.source}
-            ref={ref}
+            ref={(innerRef) => {
+              if (videoRef) {
+                videoRef.current = innerRef;
+              }
+              if (ref) {
+                // @ts-ignore
+                ref.current = innerRef;
+              }
+            }}
             shouldPlay={typeof id === "undefined"}
             isLooping
             isMuted={isMuted}

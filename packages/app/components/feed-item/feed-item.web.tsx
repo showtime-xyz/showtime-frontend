@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from "react";
+import { memo, useState, useMemo, useRef } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -6,10 +6,12 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { Video as ExpoVideo } from "expo-av";
 import { ResizeMode } from "expo-av";
 
 import { View } from "@showtime-xyz/universal.view";
 
+import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
@@ -42,6 +44,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+  const videoRef = useRef<ExpoVideo | null>(null);
 
   const maxContentHeight = windowHeight - bottomHeight;
 
@@ -94,15 +97,24 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               paddingTop,
             }}
           >
-            <Media
-              item={nft}
-              numColumns={1}
+            <FeedItemTapGesture
+              videoRef={videoRef}
               sizeStyle={{
                 height: mediaHeight,
                 width: windowWidth,
               }}
-              resizeMode={ResizeMode.COVER}
-            />
+              isVideo={nft?.mime_type?.startsWith("video")}
+            >
+              <Media
+                item={nft}
+                numColumns={1}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: windowWidth,
+                }}
+                resizeMode={ResizeMode.COVER}
+              />
+            </FeedItemTapGesture>
           </View>
           <View
             tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"

@@ -17,6 +17,7 @@ import {
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import { Video as ExpoVideo } from "expo-av";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -30,6 +31,7 @@ import { useBlurredBackgroundStyles } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { View } from "@showtime-xyz/universal.view";
 
+import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
@@ -67,6 +69,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const lastItemId = useRef(nft.nft_id);
   const detailViewRef = useRef<Reanimated.View>(null);
   const headerHeight = useHeaderHeight();
+  const videoRef = useRef<ExpoVideo | null>(null);
   const headerHeightRef = useRef(headerHeight);
   const { data: detailData } = useNFTDetailByTokenId({
     contractAddress: nft?.contract_address,
@@ -210,19 +213,29 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               contentStyle,
             ]}
           >
-            <Media
-              item={nft}
-              numColumns={1}
+            <FeedItemTapGesture
+              videoRef={videoRef}
+              toggleHeader={toggleHeader}
+              showHeader={showHeader}
               sizeStyle={{
                 height: mediaHeight,
                 width: windowWidth,
               }}
-              resizeMode={ResizeMode.COVER}
-              onPinchStart={hideHeader}
-              onPinchEnd={showHeader}
-              toggleHeader={toggleHeader}
-              showHeader={showHeader}
-            />
+              isVideo={nft?.mime_type?.startsWith("video")}
+            >
+              <Media
+                videoRef={videoRef}
+                item={nft}
+                numColumns={1}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: windowWidth,
+                }}
+                resizeMode={ResizeMode.COVER}
+                onPinchStart={hideHeader}
+                onPinchEnd={showHeader}
+              />
+            </FeedItemTapGesture>
           </Animated.View>
           <Reanimated.View
             ref={detailViewRef}

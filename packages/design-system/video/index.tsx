@@ -69,7 +69,9 @@ const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
 
             <ExpoVideo
               ref={(innerRef) => {
-                videoRef.current = innerRef;
+                if (videoRef) {
+                  videoRef.current = innerRef;
+                }
                 if (ref) {
                   // @ts-ignore
                   ref.current = innerRef;
