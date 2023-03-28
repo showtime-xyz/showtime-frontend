@@ -60,7 +60,9 @@ const useAutoPlayWithSound = (values: MuteState) => {
         window.removeEventListener("click", handleClick, true);
       }
     };
-  }, [values]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };
 
 export const MuteProvider = ({ children }: { children: any }) => {
