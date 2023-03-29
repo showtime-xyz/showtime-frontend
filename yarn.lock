@@ -8689,7 +8689,7 @@ __metadata:
     expo: ~47.0.12
     expo-app-loading: ~2.1.1
     expo-application: ~5.0.1
-    expo-av: ~13.0.1
+    expo-av: 13.0.3
     expo-blur: 12.0.1
     expo-build-properties: ~0.4.0
     expo-camera: ~13.0.0
@@ -8903,7 +8903,7 @@ __metadata:
     design-system: "*"
     expo: ~47.0.12
     expo-asset: ~8.6.2
-    expo-av: ~13.0.1
+    expo-av: 13.0.3
     expo-blur: 12.0.1
     expo-constants: ~14.0.2
     expo-dev-client: ~2.0.0
@@ -20579,12 +20579,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-av@npm:~13.0.1":
-  version: 13.0.1
-  resolution: "expo-av@npm:13.0.1"
+"expo-av@npm:13.0.3":
+  version: 13.0.3
+  resolution: "expo-av@npm:13.0.3"
   peerDependencies:
     expo: "*"
-  checksum: fb0469784b31a31561912df917008e22779f20c7bde34d15481bf94bd501b007c59e63f8bde026d974b0d939d3f523f72f5741668d962929be08106817f719be
+  checksum: 9f7cfde57fa725943332f34468a962a4cefed37614c24921c2cbb0daf12a15bd8f97afc10e5cf477dfba9f3d626a18c19117499b26cb666598a43655c9157956
   languageName: node
   linkType: hard
 

@@ -484,7 +484,7 @@ export const DropFree = () => {
                   return (
                     <Fieldset
                       ref={ref}
-                      tw="mt-4 flex-1"
+                      tw="mt-4"
                       label="Description"
                       multiline
                       textAlignVertical="top"

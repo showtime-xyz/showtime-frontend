@@ -1,6 +1,7 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, RefObject } from "react";
 import { Platform } from "react-native";
 
+import { Video as ExpoVideo } from "expo-av";
 import dynamic from "next/dynamic";
 
 import { Play } from "@showtime-xyz/universal.icon";
@@ -40,6 +41,7 @@ type Props = {
   onPinchEnd?: () => void;
   isMuted?: boolean;
   edition?: CreatorEditionResponse;
+  videoRef?: RefObject<ExpoVideo>;
 };
 
 function Media({
@@ -51,6 +53,7 @@ function Media({
   onPinchEnd,
   isMuted,
   edition,
+  videoRef,
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
@@ -115,6 +118,7 @@ function Media({
             </View>
           )}
           <Video
+            ref={videoRef}
             source={{
               uri: mediaUri,
             }}
