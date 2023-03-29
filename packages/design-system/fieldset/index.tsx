@@ -102,7 +102,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
           {leftElement}
           {!selectOnly ? (
             <Component
-              tw="flex-1 text-base text-black focus-visible:ring-1 dark:text-white"
+              tw="w-full flex-1 text-base text-black focus-visible:ring-1 dark:text-white"
               //@ts-ignore - web only
               style={Platform.select({
                 web: { outline: "none" },
