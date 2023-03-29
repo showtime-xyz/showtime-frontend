@@ -16,6 +16,7 @@ import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
+import { toast } from "design-system/toast";
 
 type ClaimButtonProps = {
   edition: CreatorEditionResponse;
@@ -54,9 +55,15 @@ export const ClaimButton = ({
 }: ClaimButtonProps) => {
   const isDark = useIsDarkMode();
   const redirectToClaimDrop = useRedirectToClaimDrop();
-  const { state: claimStates, dispatch } = useContext(ClaimContext);
+  const {
+    state: claimStates,
+    dispatch,
+    contractAddress,
+  } = useContext(ClaimContext);
   const isProgress =
-    claimStates.status === "loading" && claimStates.signaturePrompt === false;
+    claimStates.status === "loading" &&
+    claimStates.signaturePrompt === false &&
+    contractAddress === edition.creator_airdrop_edition.contract_address;
   const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
     edition.creator_airdrop_edition
   );
@@ -64,6 +71,13 @@ export const ClaimButton = ({
   const { isAuthenticated } = useUser();
 
   const onClaimPress = () => {
+    if (
+      claimStates.status === "loading" &&
+      claimStates.signaturePrompt === false
+    ) {
+      toast("Please wait for the previous collect to complete.");
+      return;
+    }
     dispatch({ type: "initial" });
     if (
       (edition.gating_type === "music_presave" ||
