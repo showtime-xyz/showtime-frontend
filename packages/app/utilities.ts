@@ -114,16 +114,6 @@ export function formatToUSNumber(number: number) {
     return str.replace(reg, "$1,");
   }
 }
-export const findListingItemByOwner = (
-  nft: NFT | undefined,
-  profileID: Profile["profile_id"] | undefined
-) => {
-  const listedNFT = nft?.listing?.all_sellers?.find((seller) => {
-    return seller.profile_id === profileID;
-  });
-
-  return listedNFT;
-};
 
 export const getMediaUrl = ({
   nft,
