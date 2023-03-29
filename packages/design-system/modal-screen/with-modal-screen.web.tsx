@@ -50,13 +50,7 @@ function withModalScreen<P extends object>(
 
     return (
       <ModalScreenContext.Provider value={contextValues}>
-        <Modal
-          ref={modalRef}
-          title={title}
-          web_height="auto"
-          onClose={onClose}
-          {...rest}
-        >
+        <Modal ref={modalRef} title={title} onClose={onClose} {...rest}>
           <Screen {...props} />
         </Modal>
       </ModalScreenContext.Provider>

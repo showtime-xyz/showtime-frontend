@@ -12,5 +12,5 @@ module.exports = {
     "^[./]",
   ],
   importOrderSeparation: true,
-  plugins: [require("./merged-prettier-plugin")],
+  plugins: [require("./plugins/merged-prettier-plugin.js")],
 };
