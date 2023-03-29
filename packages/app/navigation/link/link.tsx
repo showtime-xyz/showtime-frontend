@@ -72,7 +72,9 @@ function TextLink({
         [variant, tw, textProps, onPress]
       )}
       {...Platform.select({
-        web: {},
+        web: {
+          prefetch: false,
+        },
         default: {
           hitSlop: hitSlop ?? DEFAULT_TEXT_LINK_HIT_SLOP,
         },
