@@ -37,18 +37,17 @@ export function useWalletLogin() {
   const loginWithWallet = async () => {
     let address, walletName;
 
-    if (!walletConnector.connected) {
-      dispatch("CONNECT_TO_WALLET_REQUEST");
-      const res = await walletConnector.connect();
-      if (res?.address) address = res.address;
-      if (res?.walletName) walletName = res.walletName;
-    } else {
-      address = walletConnector.address;
-      walletName = walletConnector.name;
+    if (walletConnector.connected) {
+      // We disconnect so it shows the Wallet selector Rainbow modal
+      await walletConnector.disconnect();
     }
+
+    dispatch("CONNECT_TO_WALLET_REQUEST");
+    const res = await walletConnector.connect();
+    if (res?.address) address = res.address;
+    if (res?.walletName) walletName = res.walletName;
     try {
       if (address) {
-        setAuthenticationStatus("AUTHENTICATING");
         dispatch("CONNECT_TO_WALLET_SUCCESS", {
           name: walletName,
           address: address,
@@ -69,6 +68,7 @@ export function useWalletLogin() {
   };
 
   const verifySignature = async (addr?: string) => {
+    setAuthenticationStatus("AUTHENTICATING");
     dispatch("FETCH_NONCE_REQUEST");
     const address = addr ?? walletConnector.address;
     if (address) {
