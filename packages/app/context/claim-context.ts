@@ -5,6 +5,7 @@ import { State, Action } from "app/hooks/use-claim-nft";
 type ClaimContextType = {
   state: State;
   dispatch: Dispatch<Action>;
+  contractAddress: string;
   pollTransaction: (transactionId: any, contractAddress: any) => Promise<void>;
 };
 
