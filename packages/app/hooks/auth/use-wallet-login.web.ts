@@ -55,7 +55,9 @@ export function useWalletLogin() {
         });
 
         // on mobile web we show a prompt to sign a message
-        if (!isMobileWeb()) {
+        if (isMobileWeb()) {
+          setShowSignMessage(true);
+        } else {
           await verifySignature(address);
         }
       }
@@ -119,12 +121,6 @@ export function useWalletLogin() {
         !walletConnector.networkChanged)
     ) {
       handleSetWeb3();
-    } else if (walletConnector.connected && !authenticated) {
-      // TODO: refactor after getting a better alternative
-      // https://github.com/rainbow-me/rainbowkit/discussions/536
-      if (isMobileWeb()) {
-        setShowSignMessage(true);
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
