@@ -34,9 +34,9 @@ export function ColorSchemeProvider({
       isDark ? "dark" : "light"
     );
     if (isDark) {
-      document.body.classList.add("dark");
+      document.documentElement.classList.add("dark");
     } else {
-      document.body.classList.remove("dark");
+      document.documentElement.classList.remove("dark");
     }
   }, []);
 
