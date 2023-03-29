@@ -72,6 +72,7 @@ export function Select<T extends string>({
             top:
               (triggerRect?.top ?? 0) +
               (triggerRect?.height ? triggerRect?.height + 8 : 0),
+            zIndex: 999,
           }}
         >
           {options.map((item) => (
