@@ -326,7 +326,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   <ClaimedShareButton tw="ml-3 w-1/3" edition={edition} />
                 </View>
               ) : null}
-              {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
             </View>
           </View>
           <TabBarSingle
