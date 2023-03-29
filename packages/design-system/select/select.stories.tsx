@@ -37,10 +37,6 @@ const options = [
     value: 1,
     label: "Option B",
   },
-  {
-    value: 2,
-    label: "Option C",
-  },
 ];
 
 const Container = (props: any) => {

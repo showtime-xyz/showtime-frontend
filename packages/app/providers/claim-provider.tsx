@@ -62,7 +62,9 @@ export function ClaimProvider({ children }: ClaimProviderProps) {
   };
 
   return (
-    <ClaimContext.Provider value={{ state, dispatch, pollTransaction }}>
+    <ClaimContext.Provider
+      value={{ state, dispatch, pollTransaction, contractAddress }}
+    >
       {children}
     </ClaimContext.Provider>
   );

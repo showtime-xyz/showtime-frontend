@@ -36,29 +36,25 @@ export const WebFooter = () => {
         <View tw="flex flex-row justify-between">
           <View tw="mr-20 flex flex-col">
             {links.map((item) => (
-              <>
+              <View key={item.title}>
                 <Link
                   href={item.link}
                   hrefAttrs={{
                     target: "_blank",
                     rel: "noreferrer",
                   }}
-                  key={item.title}
                 >
-                  <Text
-                    key={item.title}
-                    tw="text-13 font-semibold text-gray-900 dark:text-white"
-                  >
+                  <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
                     {item.title}
                   </Text>
                 </Link>
                 <View tw="h-5" />
-              </>
+              </View>
             ))}
           </View>
           <View tw="flex flex-col">
             {social.map((item) => (
-              <>
+              <View key={item.title}>
                 <Link
                   tw="flex-row items-center"
                   href={item.link}
@@ -66,7 +62,6 @@ export const WebFooter = () => {
                     target: "_blank",
                     rel: "noreferrer",
                   }}
-                  key={item.title}
                 >
                   <View tw="mr-2 text-base">
                     {item?.icon({
@@ -80,7 +75,7 @@ export const WebFooter = () => {
                   </Text>
                 </Link>
                 <View tw="h-6" />
-              </>
+              </View>
             ))}
           </View>
         </View>

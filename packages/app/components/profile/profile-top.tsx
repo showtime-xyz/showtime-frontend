@@ -256,7 +256,7 @@ export const ProfileTop = ({
                         web: {},
                         default: { ...StyleSheet.absoluteFillObject },
                       })}
-                      alt={profileData?.profile.name}
+                      alt={profileData?.profile.name ?? ""}
                     />
                   </LightBox>
                 )}

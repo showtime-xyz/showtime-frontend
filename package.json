@@ -65,7 +65,7 @@
     "upgrade:design-system": "yarn up '@showtime-xyz/universal.*'"
   },
   "resolutions": {
-    "babel-preset-expo": "9.1.0",
+    "babel-preset-expo": "9.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native-svg": "13.8.0",
@@ -82,7 +82,7 @@
     "@ethersproject/bignumber": "5.6.2",
     "@ethersproject/signing-key": "5.6.2",
     "eth-block-tracker": "4.4.3",
-    "next": "^13.1.1",
+    "next": "13.2.2",
     "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
     "react-native-screens": "3.20.0",
     "react-native-mmkv": "2.5.1"

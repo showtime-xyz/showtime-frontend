@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 
 import { PortalProvider } from "@gorhom/portal";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -23,6 +25,15 @@ export function Login() {
     loading,
   } = useLogin();
   //#endregion
+  const modalScreenContext = useModalScreenContext();
+
+  useEffect(() => {
+    if (showSignMessage) {
+      modalScreenContext?.setTitle("Sign with your wallet to continue");
+    } else {
+      modalScreenContext?.setTitle("Sign In");
+    }
+  }, [showSignMessage, modalScreenContext]);
 
   return (
     <PortalProvider>
@@ -37,12 +48,12 @@ export function Login() {
           </View>
         ) : showSignMessage ? (
           <View tw="py-20 px-10">
-            <Text tw="text-center text-lg dark:text-gray-400">
-              We need a signature in order to verify your identity. This won't
-              cost any gas.
+            <Text tw="text-center text-base text-gray-900 dark:text-gray-50">
+              Showtime uses this signature to verify you own this address. This
+              doesn't cost gas fees.
             </Text>
-            <Button tw="mt-8" onPress={() => verifySignature()}>
-              Sign the message
+            <Button size="regular" tw="mt-8" onPress={() => verifySignature()}>
+              Continue
             </Button>
           </View>
         ) : (

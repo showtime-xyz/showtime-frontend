@@ -2,6 +2,7 @@ import React from "react";
 import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Gift } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -10,8 +11,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useUser } from "app/hooks/use-user";
-
-import { useIsDarkMode } from "design-system/hooks";
 
 export const DropSelect = () => {
   const router = useRouter();

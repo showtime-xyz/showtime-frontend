@@ -1,5 +1,6 @@
-import { useState, useCallback, useLayoutEffect } from "react";
+import { useState, useCallback, useLayoutEffect, useEffect } from "react";
 
+import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
@@ -11,6 +12,9 @@ import { setPaymentByDefaultFetch } from "app/hooks/api/use-payments-manage";
 import { toast } from "design-system/toast";
 
 import { DropFree as OriginDropFree } from "./drop-free";
+
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export const DropFree = () => {
   const [isHasPaymentIntentId, setIsHasPaymentIntentId] = useState(false);
@@ -44,7 +48,7 @@ export const DropFree = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setPaymentByDefaultFetch]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const paymentIntentId = new URLSearchParams(window.location.search).get(
       "payment_intent"
     );
@@ -64,7 +68,7 @@ export const DropFree = () => {
   }, [confirmPaymentStatus, handlePaymentSuccess]);
 
   return (
-    <>
+    <ClientSideOnly>
       <OriginDropFree />
       {isHasPaymentIntentId && paymentStatus !== "success" && (
         <View tw="absolute inset-0 items-center justify-center bg-black/30 p-4">
@@ -73,6 +77,6 @@ export const DropFree = () => {
           </View>
         </View>
       )}
-    </>
+    </ClientSideOnly>
   );
 };

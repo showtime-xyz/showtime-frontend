@@ -55,14 +55,16 @@ export const useFilePicker = () => {
         input.onchange = async (e) => {
           const files = (e.target as HTMLInputElement)?.files;
           const file = files ? files[0] : ({} as File);
-          const img = await getWebImageSize(file);
-          if (img && img.width * img.height > MAX_FILE_PIXEL) {
-            Alert.alert(
-              "Your image exceeds the maximum allowed size of 100 megapixels. Please choose a smaller image and try again."
-            );
-            return;
-          }
           const fileType = file["type"].split("/")[0] as "image" | "video";
+          if (fileType === "image") {
+            const img = await getWebImageSize(file);
+            if (img && img.width * img.height > MAX_FILE_PIXEL) {
+              Alert.alert(
+                "Your image exceeds the maximum allowed size of 100 megapixels. Please choose a smaller image and try again."
+              );
+              return;
+            }
+          }
 
           resolve({ file: file, type: fileType, size: file.size });
           input.remove();
