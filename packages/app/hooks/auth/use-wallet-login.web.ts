@@ -37,25 +37,26 @@ export function useWalletLogin() {
   const loginWithWallet = async () => {
     let address, walletName;
 
-    if (!walletConnector.connected) {
-      dispatch("CONNECT_TO_WALLET_REQUEST");
-      const res = await walletConnector.connect();
-      if (res?.address) address = res.address;
-      if (res?.walletName) walletName = res.walletName;
-    } else {
-      address = walletConnector.address;
-      walletName = walletConnector.name;
+    if (walletConnector.connected) {
+      // We disconnect so it shows the Wallet selector Rainbow modal
+      await walletConnector.disconnect();
     }
+
+    dispatch("CONNECT_TO_WALLET_REQUEST");
+    const res = await walletConnector.connect();
+    if (res?.address) address = res.address;
+    if (res?.walletName) walletName = res.walletName;
     try {
       if (address) {
-        setAuthenticationStatus("AUTHENTICATING");
         dispatch("CONNECT_TO_WALLET_SUCCESS", {
           name: walletName,
           address: address,
         });
 
         // on mobile web we show a prompt to sign a message
-        if (!isMobileWeb()) {
+        if (isMobileWeb()) {
+          setShowSignMessage(true);
+        } else {
           await verifySignature(address);
         }
       }
@@ -67,6 +68,7 @@ export function useWalletLogin() {
   };
 
   const verifySignature = async (addr?: string) => {
+    setAuthenticationStatus("AUTHENTICATING");
     dispatch("FETCH_NONCE_REQUEST");
     const address = addr ?? walletConnector.address;
     if (address) {
@@ -119,12 +121,6 @@ export function useWalletLogin() {
         !walletConnector.networkChanged)
     ) {
       handleSetWeb3();
-    } else if (walletConnector.connected && !authenticated) {
-      // TODO: refactor after getting a better alternative
-      // https://github.com/rainbow-me/rainbowkit/discussions/536
-      if (isMobileWeb()) {
-        setShowSignMessage(true);
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
