@@ -16,6 +16,5 @@ export const OnboardingScreen = withModalScreen(OnboardingPage, {
   headerShown: false,
   snapPoints: ["100%"],
   disableBackdropPress: true,
-  web_height: `h-[90vh]`,
   backPressHandlerEnabled: false,
 });
