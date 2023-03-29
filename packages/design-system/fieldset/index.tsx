@@ -154,13 +154,14 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
         {helperText ? (
           <>
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
-            <View tw="h-4" />
-            <Text
-              nativeID={helperTextId}
-              tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
-            >
-              {helperText}
-            </Text>
+            <View tw="mt-4">
+              <Text
+                nativeID={helperTextId}
+                tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
+              >
+                {helperText}
+              </Text>
+            </View>
           </>
         ) : null}
       </PlatformAnimateHeight>
