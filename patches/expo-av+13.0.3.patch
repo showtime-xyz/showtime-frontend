@@ -1,0 +1,69 @@
+diff --git a/node_modules/expo-av/ios/.DS_Store b/node_modules/expo-av/ios/.DS_Store
+new file mode 100644
+index 0000000..9b5c147
+Binary files /dev/null and b/node_modules/expo-av/ios/.DS_Store differ
+diff --git a/node_modules/expo-av/ios/EXAV/.DS_Store b/node_modules/expo-av/ios/EXAV/.DS_Store
+new file mode 100644
+index 0000000..e9b66ff
+Binary files /dev/null and b/node_modules/expo-av/ios/EXAV/.DS_Store differ
+diff --git a/node_modules/expo-av/ios/EXAV/EXAVPlayerData.m b/node_modules/expo-av/ios/EXAV/EXAVPlayerData.m
+index 5650c95..66ce1bd 100644
+--- a/node_modules/expo-av/ios/EXAV/EXAVPlayerData.m
++++ b/node_modules/expo-av/ios/EXAV/EXAVPlayerData.m
+@@ -325,7 +325,7 @@ NSString *const EXAVPlayerDataObserverMetadataKeyPath = @"timedMetadata";
+ 
+       if (audioSessionError) {
+         if (reject) {
+-          reject(@"E_AV_PLAY", @"Play encountered an error: audio session not activated.", audioSessionError);
++          //reject(@"E_AV_PLAY", @"Play encountered an error: audio session not activated.", audioSessionError);
+         }
+       } else if (!seekSucceeded) {
+         if (reject) {
+diff --git a/node_modules/expo-av/ios/EXAV/EXAudioSessionManager.m b/node_modules/expo-av/ios/EXAV/EXAudioSessionManager.m
+index 81dce13..77e372a 100644
+--- a/node_modules/expo-av/ios/EXAV/EXAudioSessionManager.m
++++ b/node_modules/expo-av/ios/EXAV/EXAudioSessionManager.m
+@@ -170,7 +170,9 @@ EX_REGISTER_SINGLETON_MODULE(AudioSessionManager);
+   [_foregroundedModules compact];
+ 
+   // Any possible failures are silent
+-  [self _updateSessionConfiguration];
++  AVAudioSession *session = [AVAudioSession sharedInstance];
++  [session setCategory:AVAudioSessionCategoryAmbient error:nil];
++  [session setActive:false withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+ }
+ 
+ - (void)moduleDidForeground:(id)module
+@@ -185,8 +187,10 @@ EX_REGISTER_SINGLETON_MODULE(AudioSessionManager);
+ 
+   [_foregroundedModules addPointer:(__bridge void * _Nullable)(module)];
+   
+-  // Any possible failures are silent
+-  [self _updateSessionConfiguration];
++  AVAudioSession *session = [AVAudioSession sharedInstance];
++  [session setCategory:AVAudioSessionCategoryPlayback error:nil];
++  [session setActive:true withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
++
+ }
+ 
+ - (void)moduleWillDeallocate:(id)module
+@@ -208,7 +212,8 @@ EX_REGISTER_SINGLETON_MODULE(AudioSessionManager);
+ 
+   BOOL shouldBeActive = [self _shouldBeActive];
+   NSString *category = [self _getRequestedCategory];
+-  AVAudioSessionCategoryOptions options = [self _getCategoryOptions];
++  AVAudioSessionCategoryOptions options = [self _getCategoryOptions] | AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation;
++  
+ 
+   // If the session ought to be deactivated let's deactivate it and then configure.
+   // And if the session should be activated, let's configure it first!
+@@ -284,7 +289,8 @@ EX_REGISTER_SINGLETON_MODULE(AudioSessionManager);
+     }
+   }
+ 
+-  return AVAudioSessionCategorySoloAmbient;
++  // patched to also playback in silent mode (from SoloAmbient to Playback)
++  return AVAudioSessionCategoryPlayback;
+ }
+ 
+ - (AVAudioSessionCategoryOptions)_getCategoryOptions

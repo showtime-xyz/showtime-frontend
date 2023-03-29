@@ -145,6 +145,7 @@ export const Default = () => {
         <IconItem icon={Icon.CreditCard} title="CreditCard" />
         <IconItem icon={Icon.Receipt} title="Receipt" />
         <IconItem icon={Icon.AddPhoto} title="AddPhoto" />
+        <IconItem icon={Icon.PauseOutline} title="PauseOutline" />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>

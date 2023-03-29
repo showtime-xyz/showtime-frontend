@@ -1,4 +1,4 @@
-import { ComponentProps, useRef } from "react";
+import { ComponentProps, useRef, forwardRef } from "react";
 import { StyleSheet, Text } from "react-native";
 
 import { Video as ExpoVideo, ResizeMode } from "expo-av";
@@ -18,17 +18,20 @@ type VideoProps = {
   height: number;
 } & ComponentProps<typeof ExpoVideo>;
 
-function Video({
-  tw,
-  blurhash,
-  style,
-  width,
-  height,
-  isMuted: isMutedProp,
-  posterSource,
-  ...props
-}: VideoProps) {
-  const videoRef = useRef<ExpoVideo>(null);
+const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
+  {
+    tw,
+    blurhash,
+    style,
+    width,
+    height,
+    isMuted: isMutedProp,
+    posterSource,
+    ...props
+  }: VideoProps,
+  ref
+) {
+  const videoRef = useRef<ExpoVideo | null>(null);
   const videoConfig = useVideoConfig();
   const [muted] = useMuted();
 
@@ -65,7 +68,15 @@ function Video({
             />
 
             <ExpoVideo
-              ref={videoRef}
+              ref={(innerRef) => {
+                if (videoRef) {
+                  videoRef.current = innerRef;
+                }
+                if (ref) {
+                  // @ts-ignore
+                  ref.current = innerRef;
+                }
+              }}
               style={StyleSheet.absoluteFill}
               useNativeControls={videoConfig?.useNativeControls}
               resizeMode={ResizeMode.COVER}
@@ -90,6 +101,6 @@ function Video({
       </View>
     </>
   );
-}
+});
 
 export { Video };

@@ -1,6 +1,7 @@
-import { useCallback } from "react";
+import { useCallback, MutableRefObject, useMemo } from "react";
 import { ViewStyle } from "react-native";
 
+import { Video } from "expo-av";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
   useSharedValue,
@@ -11,7 +12,7 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 
-import { HeartFilled } from "@showtime-xyz/universal.icon";
+import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
 
 import { useLike } from "app/context/like-context";
 
@@ -35,15 +36,25 @@ type FeedItemTapGestureProps = {
   children: JSX.Element;
   toggleHeader?: () => void;
   showHeader?: () => void;
+  videoRef?: MutableRefObject<Video | null>;
+  sizeStyle?: {
+    width?: number;
+    height?: number;
+  };
+  isVideo?: boolean;
 };
 export const FeedItemTapGesture = ({
   children,
   toggleHeader,
   showHeader,
+  videoRef,
+  sizeStyle,
+  isVideo,
 }: FeedItemTapGestureProps) => {
   const { like } = useLike();
 
   const heartAnimation = useSharedValue(0);
+  const playAnimation = useSharedValue(0);
 
   const heartStyle = useAnimatedStyle(() => {
     return {
@@ -52,49 +63,110 @@ export const FeedItemTapGesture = ({
     };
   });
 
+  const playStyle = useAnimatedStyle(() => {
+    return {
+      opacity: playAnimation.value,
+      transform: [{ scale: playAnimation.value }],
+    };
+  });
+
   const doubleTapHandleOnJS = useCallback(() => {
     like();
     showHeader?.();
   }, [like, showHeader]);
 
-  const doubleTapHandle = Gesture.Tap()
-    .numberOfTaps(2)
-    .onEnd(() => {
-      heartAnimation.value = withSequence(
+  const toggleVideoPlayback = useCallback(async () => {
+    if (!isVideo) return;
+    const status = await videoRef?.current?.getStatusAsync();
+    if (status && status.isLoaded && status?.isPlaying) {
+      playAnimation.value = withSequence(
+        withSpring(1),
+        withDelay(3500, withSpring(0))
+      );
+      videoRef?.current?.pauseAsync().catch(() => {});
+    } else {
+      playAnimation.value = withSequence(
         withSpring(1),
         withDelay(200, withSpring(0))
       );
-      runOnJS(doubleTapHandleOnJS)();
-    });
+      videoRef?.current?.playAsync().catch(() => {});
+    }
+  }, [videoRef, playAnimation, isVideo]);
 
-  const longPressGesture = Gesture.LongPress()
-    .minDuration(300)
-    .maxDistance(9999)
-    .onStart(() => {
-      ("worklet");
-      if (toggleHeader) {
-        runOnJS(toggleHeader)();
-      }
-    })
-    .onEnd(() => {
-      if (toggleHeader) {
-        runOnJS(toggleHeader)();
-      }
-    });
-  const gesture = Gesture.Race(
-    longPressGesture,
-    Gesture.Exclusive(doubleTapHandle)
+  const singleTapHandle = useMemo(
+    () =>
+      Gesture.Tap()
+        .numberOfTaps(1)
+        .onEnd(() => {
+          runOnJS(toggleVideoPlayback)();
+        }),
+
+    [toggleVideoPlayback]
+  );
+
+  const doubleTapHandle = useMemo(
+    () =>
+      Gesture.Tap()
+        .numberOfTaps(2)
+        .onEnd(() => {
+          playAnimation.value = withSequence(withSpring(0));
+          heartAnimation.value = withSequence(
+            withSpring(1),
+            withDelay(200, withSpring(0))
+          );
+          runOnJS(doubleTapHandleOnJS)();
+        }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [doubleTapHandleOnJS]
+  );
+
+  const longPressGesture = useMemo(
+    () =>
+      Gesture.LongPress()
+        .minDuration(300)
+        .maxDistance(9999)
+        .onStart(() => {
+          ("worklet");
+          if (toggleHeader) {
+            runOnJS(toggleHeader)();
+          }
+        })
+        .onEnd(() => {
+          if (toggleHeader) {
+            runOnJS(toggleHeader)();
+          }
+        }),
+    [toggleHeader]
+  );
+
+  const gesture = useMemo(
+    () =>
+      Gesture.Race(
+        longPressGesture,
+        Gesture.Exclusive(doubleTapHandle, singleTapHandle)
+      ),
+    [doubleTapHandle, longPressGesture, singleTapHandle]
   );
 
   return (
     <>
       <GestureDetector gesture={gesture}>{children}</GestureDetector>
       <Animated.View
-        style={[heartContainerStyle, heartStyle]}
+        style={[heartContainerStyle, heartStyle, sizeStyle]}
         pointerEvents="none"
       >
         <HeartFilled width={90} height={90} color="#fff" />
       </Animated.View>
+      {isVideo ? (
+        <>
+          <Animated.View
+            style={[heartContainerStyle, playStyle, sizeStyle]}
+            pointerEvents="none"
+          >
+            <Play width={80} height={80} color="#fff" />
+          </Animated.View>
+        </>
+      ) : null}
     </>
   );
 };

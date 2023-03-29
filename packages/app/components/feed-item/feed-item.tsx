@@ -17,6 +17,7 @@ import {
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import { Video as ExpoVideo } from "expo-av";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -68,6 +69,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const lastItemId = useRef(nft.nft_id);
   const detailViewRef = useRef<Reanimated.View>(null);
   const headerHeight = useHeaderHeight();
+  const videoRef = useRef<ExpoVideo | null>(null);
   const headerHeightRef = useRef(headerHeight);
   const { data: detailData } = useNFTDetailByTokenId({
     contractAddress: nft?.contract_address,
@@ -201,20 +203,28 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             recyclingKey={getMediaUrl({ nft, stillPreview: true })}
             alt={nft.token_name}
           />
-          <FeedItemTapGesture
-            toggleHeader={toggleHeader}
-            showHeader={showHeader}
+
+          <Animated.View
+            style={[
+              {
+                height: itemHeight - bottomPadding,
+                position: "absolute",
+              },
+              contentStyle,
+            ]}
           >
-            <Animated.View
-              style={[
-                {
-                  height: itemHeight - bottomPadding,
-                  position: "absolute",
-                },
-                contentStyle,
-              ]}
+            <FeedItemTapGesture
+              videoRef={videoRef}
+              toggleHeader={toggleHeader}
+              showHeader={showHeader}
+              sizeStyle={{
+                height: mediaHeight,
+                width: windowWidth,
+              }}
+              isVideo={nft?.mime_type?.startsWith("video")}
             >
               <Media
+                videoRef={videoRef}
                 item={nft}
                 numColumns={1}
                 sizeStyle={{
@@ -225,8 +235,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 onPinchStart={hideHeader}
                 onPinchEnd={showHeader}
               />
-            </Animated.View>
-          </FeedItemTapGesture>
+            </FeedItemTapGesture>
+          </Animated.View>
           <Reanimated.View
             ref={detailViewRef}
             style={[
