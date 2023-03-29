@@ -1,5 +1,5 @@
 import { useCallback, memo } from "react";
-import { Platform, StatusBar, View, StyleProp, ViewStyle } from "react-native";
+import { Platform, StatusBar, StyleProp, ViewStyle } from "react-native";
 
 import {
   SceneRendererProps,
@@ -17,6 +17,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { RefreshControl } from "./refresh-control";
 import { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";
