@@ -42,11 +42,7 @@ export const useShareNFT = () => {
   };
   const shareNFTOnTwitter = async (nft?: NFT) => {
     if (!nft) return;
-    const url = `https://${
-      process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
-    }/t/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
-      nft?.token_id
-    }`;
+    const url = getNFTURL(nft);
     // Todo: add share Claim/Drop copytext
     Linking.openURL(
       getTwitterIntent({
