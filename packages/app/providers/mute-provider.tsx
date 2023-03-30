@@ -21,12 +21,15 @@ type MuteState = [boolean, Dispatch<SetStateAction<boolean>>];
 
 const useAutoPlayWithSound = (values: MuteState) => {
   useEffect(() => {
-    const handleClick = async () => {
-      // now we want to check if the current page has a video
-      // if it does, we want to unmute it
-      // if it doesn't, we want to do nothing
-      const video = document.querySelector("video");
-      if (!video) return;
+    const handleClick = (event: PointerEvent | MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      // if the target is a video, we want to do nothing as well since this is handled by the video player
+      if (
+        typeof target === "object" &&
+        target.tagName.toLowerCase() === "video"
+      )
+        return;
 
       // get setter from mute context
       const setMuted = values[1];

@@ -14,6 +14,7 @@ import Animated, {
 import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
 
 import { useLike } from "app/context/like-context";
+import { useMuted } from "app/providers/mute-provider";
 
 const heartContainerStyle: ViewStyle = {
   position: "absolute",
@@ -41,6 +42,7 @@ export const FeedItemTapGesture = ({
   isVideo,
 }: FeedItemTapGestureProps) => {
   const { like } = useLike();
+  const [muted, setMuted] = useMuted();
 
   const heartAnimation = useSharedValue(0);
   const playAnimation = useSharedValue(0);
@@ -64,8 +66,9 @@ export const FeedItemTapGesture = ({
     const curVideo = videoRef?.current?._nativeRef?.current?._video;
     if (!curVideo) return;
 
-    if (curVideo.muted) {
+    if (curVideo.muted || muted) {
       curVideo.muted = false;
+      setMuted(false);
       return;
     }
 
@@ -82,7 +85,7 @@ export const FeedItemTapGesture = ({
         withDelay(200, withSpring(0))
       );
     }
-  }, [videoRef, playAnimation, isVideo]);
+  }, [isVideo, videoRef, muted, setMuted, playAnimation]);
 
   const singleTapHandle = useMemo(
     () =>
@@ -137,7 +140,7 @@ export const FeedItemTapGesture = ({
             style={[heartContainerStyle, playStyle, sizeStyle]}
             pointerEvents="none"
           >
-            <Play width={120} height={120} color="#fff" />
+            <Play width={100} height={100} color="#fff" />
           </Animated.View>
         </>
       ) : null}
