@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-const isDevelopment = process.env.STAGE === "development";
+const isDevelopment =
+  process.env.NEXT_PUBLIC_WEBSITE_DOMAIN === "dev.showtime.xyz";
 const BUNDLE_ID = isDevelopment ? "io.showtime.development" : "io.showtime";
 const TEAM_ID = "88TKHB268W";
 

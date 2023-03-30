@@ -60,7 +60,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
         <DropdownMenuItem
           onSelect={async () => {
             const result = await share({
-              url: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/${
+              url: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${
                 user?.username ??
                 user?.wallet_addresses_excluding_email_v2?.[0]?.address
               }`,

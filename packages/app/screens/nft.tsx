@@ -21,6 +21,7 @@ import {
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useNFTDetailBySlug } from "app/hooks/use-nft-details-by-slug";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -36,6 +37,8 @@ type Query = {
   chainName: string;
   tabType?: string;
   showClaim?: boolean;
+  username?: string;
+  dropSlug?: string;
 };
 
 const { useParam } = createParam<Query>();
@@ -111,11 +114,19 @@ const NFTDetail = () => {
   const [contractAddress] = useParam("contractAddress");
   const [chainName] = useParam("chainName");
   const [tabType] = useParam("tabType");
+  const [username] = useParam("username");
+  const [dropSlug] = useParam("dropSlug");
   const { data, isLoading } = useNFTDetailByTokenId({
     chainName: chainName as string,
     tokenId: tokenId as string,
     contractAddress: contractAddress as string,
   });
+  const { data: dropDataBySlug, isLoading: dropDataBySlugLoading } =
+    useNFTDetailBySlug({
+      username,
+      dropSlug,
+    });
+
   const headerHeight = useHeaderHeight();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
@@ -127,9 +138,10 @@ const NFTDetail = () => {
     default: screenHeight,
   });
 
-  const nft = data?.data?.item;
+  const nft = dropDataBySlug ?? data?.data?.item;
+  const loading = dropDataBySlugLoading || isLoading;
 
-  if (!nft && !isLoading) {
+  if (!nft && !loading) {
     return (
       <EmptyPlaceholder
         title="No drops, yet."

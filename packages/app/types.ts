@@ -33,6 +33,7 @@ export type NFT = {
   creator_username?: string;
   creator_verified: number;
   owner_username?: string;
+  slug?: string;
   owner_verified: number;
   comment_count: number;
   owner_count: number;
