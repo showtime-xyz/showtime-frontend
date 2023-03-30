@@ -6,10 +6,15 @@ import { NFT } from "app/types";
 import { findTokenChainName } from "app/utilities";
 import { getTwitterIntent } from "app/utilities";
 
-export const getNFTSlug = (nft: NFT) =>
-  `/nft/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
-    nft?.token_id
-  }`;
+export const getNFTSlug = (nft: NFT) => {
+  if (nft.slug) {
+    return `/@${nft.creator_username ?? nft.creator_address}/${nft.slug}`;
+  } else {
+    return `/nft/${findTokenChainName(nft?.chain_identifier)}/${
+      nft?.contract_address
+    }/${nft?.token_id}`;
+  }
+};
 
 export const getNFTURL = (nft: NFT | undefined) => {
   if (!nft) {

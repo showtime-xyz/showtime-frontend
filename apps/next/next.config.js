@@ -217,6 +217,10 @@ const nextConfig = {
         destination: "/profile/:username",
       },
       {
+        source: "/@:username/:dropSlug",
+        destination: "/profile/:username/:dropSlug",
+      },
+      {
         source: "/login",
         destination: "/?login=true",
       },

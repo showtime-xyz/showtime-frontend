@@ -56,6 +56,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       details: "nft/:chainName/:contractAddress/:tokenId/details",
       search: "search",
       profile: "profile/:username",
+      dropSlug: "profile/:username/:dropSlug",
       report: "report",
       editProfile: "profile/edit",
       onboarding: "profile/onboarding",
