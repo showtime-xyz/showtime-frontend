@@ -27,13 +27,17 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 
-import { useBlurredBackgroundStyles } from "@showtime-xyz/universal.hooks";
+import {
+  useBlurredBackgroundStyles,
+  useIsDarkMode,
+} from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
+import { NFTDropdown } from "app/components/nft-dropdown";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -80,6 +84,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const navigation = useNavigation();
   const bottomHeight = usePlatformBottomHeight();
+  const isDark = useIsDarkMode();
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
@@ -236,7 +241,15 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 onPinchEnd={showHeader}
               />
             </FeedItemTapGesture>
+            <View tw="absolute right-2 top-2">
+              <NFTDropdown
+                nft={detailData?.data?.item ?? nft}
+                edition={edition}
+                tw="rounded-full bg-white px-1 py-1 dark:bg-black"
+              />
+            </View>
           </Animated.View>
+
           <Reanimated.View
             ref={detailViewRef}
             style={[
@@ -264,7 +277,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               overlayColor="transparent"
             />
             {nft?.mime_type?.startsWith("video") ? (
-              <View tw="z-9 absolute top-[-30px] right-4">
+              <View tw="z-9 absolute right-4 top-[-30px]">
                 <MuteButton />
               </View>
             ) : null}

@@ -320,7 +320,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <ClaimedBy
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
-                tw="mt-2 mb-4"
+                tw="mb-4 mt-2"
               />
               {isCreatorDrop && edition ? (
                 <View tw="flex-row">

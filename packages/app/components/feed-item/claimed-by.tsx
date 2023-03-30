@@ -30,14 +30,14 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
               <AvatarHoverCard
                 username={item?.username || item?.wallet_address}
                 url={item?.img_url}
-                tw="border border-gray-300 dark:border-gray-700"
+                tw="rounded-full border border-gray-300 dark:border-gray-700"
                 size={20}
                 alt="Claimed by Avatar"
               />
             </View>
           );
         })}
-        <Text tw="ml-1 flex-1 text-sm text-gray-900 dark:text-white">
+        <Text tw="ml-1 flex-1 text-xs text-gray-900 dark:text-white md:text-sm">
           {`Collected by `}
           <TextLink
             href={`/@${firstClaimer.username ?? firstClaimer.wallet_address}`}

@@ -15,7 +15,7 @@ export type AvatarProps = {
   borderRadius?: number;
   tw?: TW;
   children?: ReactNode;
-  alt: string;
+  alt?: string;
   style?: ViewStyle;
 };
 
@@ -28,7 +28,15 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
 
 export const Avatar = forwardRef<typeof View, AvatarProps>(
   function AvatarComponent(
-    { url, borderRadius = 999, size = 32, tw = "", children, alt = "", style },
+    {
+      url,
+      borderRadius = 999,
+      size = 32,
+      tw = "",
+      children,
+      alt = "Avatar",
+      style,
+    },
     ref
   ) {
     const { colorScheme } = useColorScheme();

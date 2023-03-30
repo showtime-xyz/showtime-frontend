@@ -479,7 +479,7 @@ export const EditProfile = () => {
               />
 
               {/* Social */}
-              <View tw="mt-6 mb-10" ref={socialRef}>
+              <View tw="mb-10 mt-6" ref={socialRef}>
                 <View tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800">
                   <View tw="flex-row items-center justify-between">
                     <View tw="flex-row items-center">
@@ -587,7 +587,7 @@ const ConnectButton = ({
       tw={"items-center justify-center"}
     >
       <View
-        tw={`min-h-4 flex flex-row items-center justify-center rounded-2xl border py-2 px-4 ${
+        tw={`min-h-4 flex flex-row items-center justify-center rounded-2xl border px-4 py-2 ${
           !isConnected
             ? isDark
               ? "border-white"
