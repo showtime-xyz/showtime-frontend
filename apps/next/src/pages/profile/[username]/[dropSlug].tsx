@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import { Logger } from "app/lib/logger";
 import { NftScreen } from "app/screens/nft";
 import type { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, getMediaUrl } from "app/utilities";
@@ -39,7 +40,7 @@ export async function getServerSideProps(context) {
       };
     }
   } catch (e) {
-    console.error(e);
+    Logger.error(e);
   }
 
   return {
