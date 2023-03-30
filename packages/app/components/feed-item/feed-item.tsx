@@ -204,24 +204,21 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             alt={nft.token_name}
           />
 
-          <Animated.View
-            style={[
-              {
-                height: itemHeight - bottomPadding,
-                position: "absolute",
-              },
-              contentStyle,
-            ]}
+          <FeedItemTapGesture
+            videoRef={videoRef}
+            toggleHeader={toggleHeader}
+            showHeader={showHeader}
+            mediaOffset={-detailHeight + headerHeightRef.current + bottomHeight}
+            isVideo={nft?.mime_type?.startsWith("video")}
           >
-            <FeedItemTapGesture
-              videoRef={videoRef}
-              toggleHeader={toggleHeader}
-              showHeader={showHeader}
-              sizeStyle={{
-                height: mediaHeight,
-                width: windowWidth,
-              }}
-              isVideo={nft?.mime_type?.startsWith("video")}
+            <Animated.View
+              style={[
+                {
+                  height: itemHeight - bottomPadding,
+                  position: "absolute",
+                },
+                contentStyle,
+              ]}
             >
               <Media
                 videoRef={videoRef}
@@ -235,8 +232,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 onPinchStart={hideHeader}
                 onPinchEnd={showHeader}
               />
-            </FeedItemTapGesture>
-          </Animated.View>
+            </Animated.View>
+          </FeedItemTapGesture>
           <Reanimated.View
             ref={detailViewRef}
             style={[

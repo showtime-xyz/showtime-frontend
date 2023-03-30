@@ -12,6 +12,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
 import { useMuted } from "app/providers/mute-provider";
@@ -76,7 +77,7 @@ export const FeedItemTapGesture = ({
       curVideo.pause();
       playAnimation.value = withSequence(
         withSpring(1),
-        withDelay(2500, withSpring(0))
+        withDelay(2000, withSpring(0))
       );
     } else {
       curVideo.play();
@@ -121,7 +122,7 @@ export const FeedItemTapGesture = ({
   );
 
   const gesture = useMemo(
-    () => Gesture.Race(Gesture.Exclusive(doubleTapHandle, singleTapHandle)),
+    () => Gesture.Exclusive(doubleTapHandle, singleTapHandle),
     [doubleTapHandle, singleTapHandle]
   );
 
@@ -132,7 +133,7 @@ export const FeedItemTapGesture = ({
         style={[heartContainerStyle, heartStyle, sizeStyle]}
         pointerEvents="none"
       >
-        <HeartFilled width={90} height={90} color="#fff" />
+        <HeartFilled width={90} height={90} color={colors.rose[500]} />
       </Animated.View>
       {isVideo ? (
         <>
