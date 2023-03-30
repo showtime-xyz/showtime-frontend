@@ -327,7 +327,7 @@ function NFTDropdown({
             </DropdownMenuItem>
           )}
 
-          {!hasOwnership ? (
+          {!hasOwnership && !isSelf ? (
             <DropdownMenuItem
               className="danger"
               key="block"
