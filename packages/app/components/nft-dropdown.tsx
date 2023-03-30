@@ -327,59 +327,59 @@ function NFTDropdown({
             </DropdownMenuItem>
           )}
 
-          {!hasOwnership ? (
-            <DropdownMenuItem
-              className="danger"
-              key="block"
-              onSelect={() =>
-                toggleBlock({
-                  isBlocked,
-                  creatorId: nft.creator_id,
-                  name: nft.creator_name,
-                })
-              }
-            >
-              <MenuItemIcon
-                Icon={Slash}
-                ios={{
-                  name: isBlocked ? "circle" : "circle.slash",
-                }}
-              />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                {isBlocked ? "Unblock User" : "Block User"}
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : null}
+          {!hasOwnership && !isSelf ? (
+            <>
+              <DropdownMenuItem
+                className="danger"
+                key="block"
+                onSelect={() =>
+                  toggleBlock({
+                    isBlocked,
+                    creatorId: nft.creator_id,
+                    name: nft.creator_name,
+                  })
+                }
+              >
+                <MenuItemIcon
+                  Icon={Slash}
+                  ios={{
+                    name: isBlocked ? "circle" : "circle.slash",
+                  }}
+                />
+                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  {isBlocked ? "Unblock User" : "Block User"}
+                </DropdownMenuItemTitle>
+              </DropdownMenuItem>
 
-          {!hasOwnership && (
-            <DropdownMenuItem
-              onSelect={async () => {
-                router.push(
-                  {
-                    pathname:
-                      Platform.OS === "web" ? router.pathname : "/report",
-                    query: {
-                      ...router.query,
-                      reportModal: true,
-                      nftId: nft.nft_id,
+              <DropdownMenuItem
+                onSelect={async () => {
+                  router.push(
+                    {
+                      pathname:
+                        Platform.OS === "web" ? router.pathname : "/report",
+                      query: {
+                        ...router.query,
+                        reportModal: true,
+                        nftId: nft.nft_id,
+                      },
                     },
-                  },
-                  Platform.OS === "web" ? router.asPath : undefined
-                );
-              }}
-              key="report"
-            >
-              <MenuItemIcon
-                Icon={Flag}
-                ios={{
-                  name: "flag",
+                    Platform.OS === "web" ? router.asPath : undefined
+                  );
                 }}
-              />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                Report
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          )}
+                key="report"
+              >
+                <MenuItemIcon
+                  Icon={Flag}
+                  ios={{
+                    name: "flag",
+                  }}
+                />
+                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  Report
+                </DropdownMenuItemTitle>
+              </DropdownMenuItem>
+            </>
+          ) : null}
         </DropdownMenuContent>
       </DropdownMenuRoot>
     </>
