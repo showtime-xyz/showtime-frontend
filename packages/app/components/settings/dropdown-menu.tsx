@@ -31,7 +31,7 @@ export const DropdownMenu = (props: AddressMenuProps) => {
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent loop>
+      <DropdownMenuContent loop sideOffset={8}>
         <DropdownMenuItem
           // @ts-ignore
           onSelect={props.onRemove}
