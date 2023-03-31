@@ -1,87 +1,150 @@
 {
   "compilerOptions": {
     "strict": true,
-    "baseUrl": ".",
+    "baseUrl": "./packages",
     "module": "esnext",
+    "noUnusedLocals": true,
     "paths": {
-      "@showtime-xyz/universal.tailwind": ["packages/design-system/tailwind"],
-      "@showtime-xyz/universal.view": ["packages/design-system/view"],
-      "@showtime-xyz/universal.text": ["packages/design-system/text"],
-      "@showtime-xyz/universal.accordion": ["packages/design-system/accordion"],
-      "@showtime-xyz/universal.alert": ["packages/design-system/alert"],
-      "@showtime-xyz/universal.avatar": ["packages/design-system/avatar"],
-      "@showtime-xyz/universal.bottom-sheet": [
-        "packages/design-system/bottom-sheet"
+      "@showtime-xyz/universal.tailwind": [
+        "./design-system/tailwind"
       ],
-      "@showtime-xyz/universal.button": ["packages/design-system/button"],
-      "@showtime-xyz/universal.checkbox": ["packages/design-system/checkbox"],
-      "@showtime-xyz/universal.chip": ["packages/design-system/chip"],
+      "@showtime-xyz/universal.view": [
+        "./design-system/view"
+      ],
+      "@showtime-xyz/universal.text": [
+        "./design-system/text"
+      ],
+      "@showtime-xyz/universal.accordion": [
+        "./design-system/accordion"
+      ],
+      "@showtime-xyz/universal.alert": [
+        "./design-system/alert"
+      ],
+      "@showtime-xyz/universal.avatar": [
+        "./design-system/avatar"
+      ],
+      "@showtime-xyz/universal.bottom-sheet": [
+        "./design-system/bottom-sheet"
+      ],
+      "@showtime-xyz/universal.button": [
+        "./design-system/button"
+      ],
+      "@showtime-xyz/universal.checkbox": [
+        "./design-system/checkbox"
+      ],
+      "@showtime-xyz/universal.chip": [
+        "./design-system/chip"
+      ],
       "@showtime-xyz/universal.clamp-text": [
-        "packages/design-system/clamp-text"
+        "./design-system/clamp-text"
       ],
       "@showtime-xyz/universal.collapsible-tab-view": [
-        "packages/design-system/collapsible-tab-view"
+        "./design-system/collapsible-tab-view"
       ],
       "@showtime-xyz/universal.country-code-picker": [
-        "packages/design-system/country-code-picker"
+        "./design-system/country-code-picker"
       ],
       "@showtime-xyz/universal.color-scheme": [
-        "packages/design-system/color-scheme"
+        "./design-system/color-scheme"
       ],
-      "@showtime-xyz/universal.data-pill": ["packages/design-system/data-pill"],
-      "@showtime-xyz/universal.divider": ["packages/design-system/divider"],
-      "@showtime-xyz/universal.fieldset": ["packages/design-system/fieldset"],
-      "@showtime-xyz/universal.haptics": ["packages/design-system/haptics"],
-      "@showtime-xyz/universal.hooks": ["packages/design-system/hooks"],
-      "@showtime-xyz/universal.icon": ["packages/design-system/icon"],
+      "@showtime-xyz/universal.data-pill": [
+        "./design-system/data-pill"
+      ],
+      "@showtime-xyz/universal.divider": [
+        "./design-system/divider"
+      ],
+      "@showtime-xyz/universal.fieldset": [
+        "./design-system/fieldset"
+      ],
+      "@showtime-xyz/universal.haptics": [
+        "./design-system/haptics"
+      ],
+      "@showtime-xyz/universal.hooks": [
+        "./design-system/hooks"
+      ],
+      "@showtime-xyz/universal.icon": [
+        "./design-system/icon"
+      ],
       "@showtime-xyz/universal.infinite-scroll-list": [
-        "packages/design-system/infinite-scroll-list"
+        "./design-system/infinite-scroll-list"
       ],
-      "@showtime-xyz/universal.image": ["packages/design-system/image"],
-      "@showtime-xyz/universal.input": ["packages/design-system/input"],
-      "@showtime-xyz/universal.label": ["packages/design-system/label"],
-      "@showtime-xyz/universal.light-box": ["packages/design-system/light-box"],
-      "@showtime-xyz/universal.modal": ["packages/design-system/modal"],
+      "@showtime-xyz/universal.image": [
+        "./design-system/image"
+      ],
+      "@showtime-xyz/universal.input": [
+        "./design-system/input"
+      ],
+      "@showtime-xyz/universal.label": [
+        "./design-system/label"
+      ],
+      "@showtime-xyz/universal.light-box": [
+        "./design-system/light-box"
+      ],
+      "@showtime-xyz/universal.modal": [
+        "./design-system/modal"
+      ],
       "@showtime-xyz/universal.modal-screen": [
-        "packages/design-system/modal-screen"
+        "./design-system/modal-screen"
       ],
       "@showtime-xyz/universal.modal-sheet": [
-        "packages/design-system/modal-sheet"
+        "./design-system/modal-sheet"
       ],
       "@showtime-xyz/universal.pan-to-close": [
-        "packages/design-system/pan-to-close"
+        "./design-system/pan-to-close"
       ],
       "@showtime-xyz/universal.pinch-to-zoom": [
-        "packages/design-system/pinch-to-zoom"
+        "./design-system/pinch-to-zoom"
       ],
-      "@showtime-xyz/universal.pressable": ["packages/design-system/pressable"],
+      "@showtime-xyz/universal.pressable": [
+        "./design-system/pressable"
+      ],
       "@showtime-xyz/universal.pressable-hover": [
-        "packages/design-system/pressable-hover"
+        "./design-system/pressable-hover"
       ],
       "@showtime-xyz/universal.pressable-scale": [
-        "packages/design-system/pressable-scale"
+        "./design-system/pressable-scale"
       ],
-      "@showtime-xyz/universal.router": ["packages/design-system/router"],
-      "@showtime-xyz/universal.safe-area": ["packages/design-system/safe-area"],
+      "@showtime-xyz/universal.router": [
+        "./design-system/router"
+      ],
+      "@showtime-xyz/universal.safe-area": [
+        "./design-system/safe-area"
+      ],
       "@showtime-xyz/universal.scroll-view": [
-        "packages/design-system/scroll-view"
+        "./design-system/scroll-view"
       ],
-      "@showtime-xyz/universal.select": ["packages/design-system/select"],
-      "@showtime-xyz/universal.skeleton": ["packages/design-system/skeleton"],
-      "@showtime-xyz/universal.snackbar": ["packages/design-system/snackbar"],
-      "@showtime-xyz/universal.spinner": ["packages/design-system/spinner"],
-      "@showtime-xyz/universal.switch": ["packages/design-system/switch"],
+      "@showtime-xyz/universal.select": [
+        "./design-system/select"
+      ],
+      "@showtime-xyz/universal.skeleton": [
+        "./design-system/skeleton"
+      ],
+      "@showtime-xyz/universal.snackbar": [
+        "./design-system/snackbar"
+      ],
+      "@showtime-xyz/universal.spinner": [
+        "./design-system/spinner"
+      ],
+      "@showtime-xyz/universal.switch": [
+        "./design-system/switch"
+      ],
       "@showtime-xyz/universal.text-input": [
-        "packages/design-system/text-input"
+        "./design-system/text-input"
       ],
-      "@showtime-xyz/universal.tab-view": ["packages/design-system/tab-view"],
-      "@showtime-xyz/universal.tooltip": ["packages/design-system/tooltip"],
-      "@showtime-xyz/universal.utils": ["packages/design-system/utils"],
+      "@showtime-xyz/universal.tab-view": [
+        "./design-system/tab-view"
+      ],
+      "@showtime-xyz/universal.tooltip": [
+        "./design-system/tooltip"
+      ],
+      "@showtime-xyz/universal.utils": [
+        "./design-system/utils"
+      ],
       "@showtime-xyz/universal.verification-badge": [
-        "packages/design-system/verification-badge"
+        "./design-system/verification-badge"
       ],
       "@showtime-xyz/universal.client-side-only": [
-        "packages/design-system/client-side-only"
+        "./design-system/client-side-only"
       ]
     }
   },
