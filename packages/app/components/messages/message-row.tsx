@@ -212,10 +212,10 @@ export function MessageRow({
       rightThreshold={80}
       enabled={!!onDeletePress && Platform.OS !== "web"}
     >
-      <View tw="flex flex-row items-start bg-white px-4 py-1 dark:bg-black">
+      <View tw="flex flex-row items-start px-4 py-1">
         {hasParent && <View tw="ml-4" collapsable={true} />}
         <View tw="justify-start">
-          <Link href={`/@${username || address}`} tw="-mt-1 -mb-1">
+          <Link href={`/@${username || address}`} tw="-mb-1 -mt-1">
             <Button
               variant="secondary"
               size="small"
@@ -285,7 +285,7 @@ export function MessageRow({
                 style={{ padding: 0 }}
               >
                 {likedByMe ? <HeartFilled /> : <Heart />}
-                <Text tw="text-sm text-[12px]">{` ${likeCount}`}</Text>
+                <Text tw="text-[12px] text-sm">{` ${likeCount}`}</Text>
               </Button>
               {Platform.OS === "web" && onDeletePress ? (
                 <Button
