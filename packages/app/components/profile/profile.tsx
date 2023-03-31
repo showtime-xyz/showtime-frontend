@@ -202,7 +202,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         navigationState: NavigationState<Route>;
       }
     ) => (
-      <View tw="dark:shadow-dark shadow-light bg-white dark:bg-black">
+      <View tw="bg-white dark:bg-black">
         <View tw="mx-auto w-full max-w-screen-xl">
           <ScollableAutoWidthTabBar {...props} />
         </View>

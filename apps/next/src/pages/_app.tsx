@@ -229,7 +229,7 @@ const Container = withColorScheme(
     usePlatformResize(onResize, true);
 
     return (
-      <View tw="bg-gray-100 dark:bg-black">
+      <View tw="bg-gray-100 dark:bg-black dark:md:bg-gray-900">
         <div className={fonts}>{children}</div>
       </View>
     );

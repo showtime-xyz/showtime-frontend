@@ -261,7 +261,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               overlayColor="transparent"
             />
             {nft?.mime_type?.startsWith("video") ? (
-              <View tw="z-9 absolute top-[-30px] right-4">
+              <View tw="z-9 absolute right-4 top-[-30px]">
                 <MuteButton />
               </View>
             ) : null}

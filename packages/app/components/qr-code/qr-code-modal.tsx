@@ -88,7 +88,7 @@ const QRCodeSkeleton = ({ size = 375 }) => {
   const { colorScheme } = useColorScheme();
   return (
     <View tw="items-center p-4">
-      <View tw="shadow-light dark:shadow-dark w-full max-w-[420px] items-center justify-center rounded-3xl py-4">
+      <View tw="w-full max-w-[420px] items-center justify-center rounded-3xl py-4">
         <Skeleton
           width={size}
           height={size}
@@ -589,7 +589,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                       </View>
                     </PlatformBlurView>
                     <View
-                      tw="shadow-light absolute top-24 rounded-xl"
+                      tw="absolute top-24 rounded-xl"
                       style={{
                         shadowColor: "rgba(0, 0, 0, 0.44)",
                         shadowOffset: {
@@ -616,7 +616,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                         />
                       )}
                     </View>
-                    <PlatformBlurView tw="mb-14 mt-12 items-center justify-center overflow-hidden rounded-full bg-black/40 py-2 px-4">
+                    <PlatformBlurView tw="mb-14 mt-12 items-center justify-center overflow-hidden rounded-full bg-black/40 px-4 py-2">
                       <Text
                         tw="text-13 text-center font-medium"
                         style={{ color: imageColors.textColor }}

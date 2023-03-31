@@ -116,7 +116,7 @@ function NFTDropdown({
           </Pressable>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent loop>
+        <DropdownMenuContent loop sideOffset={8}>
           {tabType && tabType !== "hidden" ? (
             <DropdownMenuItem
               onSelect={() => {

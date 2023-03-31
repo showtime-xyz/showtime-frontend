@@ -291,7 +291,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         </View>
 
         <View
-          tw="dark:shadow-dark shadow-light swiper-no-swiping bg-white dark:bg-black"
+          tw="swiper-no-swiping bg-white dark:bg-gray-900"
           style={{
             width: NFT_DETAIL_WIDTH,
           }}
@@ -320,7 +320,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <ClaimedBy
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
-                tw="mt-2 mb-4"
+                tw="mb-4 mt-2"
               />
               {isCreatorDrop && edition ? (
                 <View tw="flex-row">
