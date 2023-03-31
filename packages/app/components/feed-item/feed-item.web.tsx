@@ -88,12 +88,12 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     <>
       <LikeContextProvider nft={nft} key={nft.nft_id}>
         {nft?.mime_type?.startsWith("video") ? (
-          <View tw="absolute top-2 left-1/2 z-50 -translate-x-1/2">
+          <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
             <MuteButton variant="mobile-web" />
           </View>
         ) : null}
         <View
-          tw="max-h-[100dvh] min-h-[100svh] w-full"
+          tw="max-h-[100svh] min-h-[100svh] w-full"
           style={{ height: itemHeight, overflow: "hidden" }}
         >
           <View
