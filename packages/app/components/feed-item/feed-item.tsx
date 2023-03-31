@@ -11,7 +11,6 @@ import {
   Platform,
   StatusBar,
   StyleProp,
-  StyleSheet,
   useWindowDimensions,
   ViewStyle,
 } from "react-native";
@@ -31,7 +30,10 @@ import {
   useBlurredBackgroundStyles,
   useIsDarkMode,
 } from "@showtime-xyz/universal.hooks";
+import { Share } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
@@ -42,13 +44,18 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { BlurView } from "app/lib/blurview";
+import { useShareNFT } from "app/hooks/use-share-nft";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
+import { AvatarHoverCard } from "../card/avatar-hover-card";
+import { GiftButton } from "../claim/gift-button";
 import { ContentTypeTooltip } from "../content-type-tooltip";
+import { CommentButton } from "../feed/comment-button";
+import { Like } from "../feed/like";
+import { SocialButton } from "../social-button";
 import { NFTDetails } from "./details";
 import { NSFWGate } from "./nsfw-gate";
 
@@ -73,6 +80,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const lastItemId = useRef(nft.nft_id);
   const detailViewRef = useRef<Reanimated.View>(null);
   const headerHeight = useHeaderHeight();
+  const { top } = useSafeAreaInsets();
+  const { shareNFT } = useShareNFT();
   const videoRef = useRef<ExpoVideo | null>(null);
   const headerHeightRef = useRef(headerHeight);
   const { data: detailData } = useNFTDetailByTokenId({
@@ -128,21 +137,28 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     windowWidth,
   ]);
   const platformHeaderHeight = Platform.select({
-    ios: headerHeightRef.current,
+    ios: 0,
     default: 0,
   });
+
   const contentTransY = useDerivedValue(() => {
     const visibleContentHeight =
       windowHeight - detailHeight - StatusBarHeight - headerHeightRef.current;
-
     if (mediaHeight < visibleContentHeight) {
-      return (visibleContentHeight - mediaHeight) / 2 + platformHeaderHeight;
+      return (visibleContentHeight - mediaHeight) / 2;
     } else if (mediaHeight < maxContentHeight - headerHeightRef.current) {
-      return platformHeaderHeight;
+      return top;
     } else {
       return 0;
     }
-  });
+  }, [
+    detailHeight,
+    headerHeightRef,
+    mediaHeight,
+    maxContentHeight,
+    top,
+    windowHeight,
+  ]);
 
   const detailStyle = useAnimatedStyle(() => {
     return {
@@ -161,28 +177,19 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       ],
       opacity: withTiming(isLayouted.value, { duration: 500 }),
     };
-  }, []);
+  });
   const hideHeader = useCallback(() => {
-    if (Platform.OS === "ios") {
-      navigation.setOptions({
-        headerShown: false,
-        headerStyle: {
-          opacity: 0,
-        },
-      });
-    }
-
     opacity.value = withTiming(0);
-  }, [navigation, opacity]);
+  }, [opacity]);
 
   const showHeader = useCallback(() => {
-    if (Platform.OS === "ios") {
-      navigation.setOptions({
-        headerShown: true,
-      });
-    }
+    // if (Platform.OS === "ios") {
+    //   navigation.setOptions({
+    //     headerShown: true,
+    //   });
+    // }
     opacity.value = withTiming(1);
-  }, [navigation, opacity]);
+  }, [opacity]);
 
   const toggleHeader = useCallback(() => {
     if (opacity.value === 1) {
@@ -241,13 +248,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 onPinchEnd={showHeader}
               />
             </FeedItemTapGesture>
-            <View tw="absolute right-2 top-2">
-              <NFTDropdown
-                nft={detailData?.data?.item ?? nft}
-                edition={edition}
-                tw="rounded-full bg-white px-1 py-1 dark:bg-black"
-              />
-            </View>
           </Animated.View>
 
           <Reanimated.View
@@ -259,7 +259,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 position: "absolute",
                 right: 0,
                 left: 0,
-                zIndex: 1,
               },
             ]}
             onLayout={({
@@ -271,11 +270,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               setDetailHeight(height);
             }}
           >
-            <BlurView
+            {/* <BlurView
               blurRadius={15}
               style={StyleSheet.absoluteFillObject}
               overlayColor="transparent"
-            />
+            /> */}
             {nft?.mime_type?.startsWith("video") ? (
               <View tw="z-9 absolute right-4 top-[-30px]">
                 <MuteButton />
@@ -288,7 +287,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
             <View
               style={{
-                ...blurredBackgroundStyles,
+                // ...blurredBackgroundStyles,
+                // backgroundColor: "rgba(25,25,25,.4)",
                 paddingBottom: bottomPadding,
               }}
               tw="overflow-hidden"
@@ -299,9 +299,37 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 detail={detailData?.data?.item}
               />
             </View>
+            <View tw="absolute bottom-32 right-2 flex-col items-center">
+              <AvatarHoverCard
+                username={nft?.creator_username || nft?.creator_address_nonens}
+                url={nft.creator_img_url}
+              />
+              <View tw="h-6" />
+              <Like vertical nft={nft} />
+              <View tw="h-6" />
+              <CommentButton vertical nft={nft} />
+              <View tw="h-6" />
+              <GiftButton vertical nft={nft} />
+              <View tw="h-6" />
+              <SocialButton onPress={() => shareNFT(nft)}>
+                <Share
+                  height={24}
+                  width={24}
+                  color={isDark ? "#FFF" : colors.gray[900]}
+                />
+              </SocialButton>
+            </View>
           </Reanimated.View>
+          <View tw="absolute right-4 z-50" style={{ top: top }}>
+            <NFTDropdown
+              nft={detailData?.data?.item ?? nft}
+              edition={edition}
+              tw="rounded-full bg-white px-1 py-1 dark:bg-black/60"
+            />
+          </View>
         </View>
       </LikeContextProvider>
+
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
     </>
   );

@@ -4,7 +4,7 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 type HeaderLeftProps = {
-  canGoBack: boolean;
+  canGoBack?: boolean;
   withBackground?: boolean;
   color?: string;
 };
@@ -15,6 +15,7 @@ export const HeaderLeft = ({
 }: HeaderLeftProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
+
   const canGoHome = router.pathname.split("/").length - 1 >= 2;
   const Icon = canGoBack || canGoHome ? ArrowLeft : Search;
 

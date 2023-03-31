@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -8,6 +9,8 @@ import { SwipeList } from "app/components/swipe-list";
 import { useFeed } from "app/hooks/use-feed";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
+
+import { SwipeListHeader } from "./header/swipe-list-header";
 
 export const Feed = () => {
   return (
@@ -26,8 +29,14 @@ const FeedList = () => {
   const bottomBarHeight = usePlatformBottomHeight();
   const { isAuthenticated } = useUser();
   const { data } = useFeed();
+  const router = useRouter();
   const bottomPadding = isAuthenticated ? bottomBarHeight : safeAreaBottom;
-  return <SwipeList bottomPadding={bottomPadding} data={data} />;
+  return (
+    <View tw="flex-1">
+      <SwipeListHeader canGoBack={false} withBackground />
+      <SwipeList bottomPadding={bottomPadding} data={data} />
+    </View>
+  );
 };
 
 // export const FeedList = () => {

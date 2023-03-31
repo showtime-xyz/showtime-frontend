@@ -70,6 +70,14 @@ export function RootStackNavigator() {
             animation: "none",
           }}
         />
+        <Stack.Screen
+          name="swipeList"
+          component={SwipeListScreen}
+          getId={({ params }) => {
+            return params?.profileId ?? params.type;
+          }}
+        />
+        <Stack.Screen name="nft" component={NftScreen} />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -84,13 +92,7 @@ export function RootStackNavigator() {
           component={NotificationSettingsScreen}
         />
         <Stack.Screen name="blockedList" component={BlockedListScreen} />
-        <Stack.Screen
-          name="swipeList"
-          component={SwipeListScreen}
-          getId={({ params }) => {
-            return params?.profileId ?? params.type;
-          }}
-        />
+
         <Stack.Screen
           name="followers"
           component={FollowersScreen}
@@ -117,7 +119,6 @@ export function RootStackNavigator() {
           component={CommentsScreen}
         />
 
-        <Stack.Screen name="nft" component={NftScreen} />
         <Stack.Screen
           name="dropUpdate"
           options={{ headerTitle: "Update Spotify Link" }}

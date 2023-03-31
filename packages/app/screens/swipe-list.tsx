@@ -1,7 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { View } from "@showtime-xyz/universal.view";
 
+import { SwipeListHeader } from "app/components/header/swipe-list-header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
@@ -27,11 +29,10 @@ type Query = {
   days: string;
   creatorId: any;
 };
-
-export const SwipeListScreen = withColorScheme(() => {
+export const SwipeListByType = memo(function SwipeListByType() {
   const { useParam } = createParam<Query>();
   const [type] = useParam("type");
-  useTrackPageViewed({ name: "Swipe List", type });
+  useTrackPageViewed({ name: "Swipe List" });
 
   switch (type) {
     case "profile":
@@ -45,6 +46,14 @@ export const SwipeListScreen = withColorScheme(() => {
     default:
       return null;
   }
+});
+export const SwipeListScreen = withColorScheme(() => {
+  return (
+    <View tw="flex-1">
+      <SwipeListHeader canGoBack withBackground />
+      <SwipeListByType />
+    </View>
+  );
 });
 
 const FeedSwipeList = () => {

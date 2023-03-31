@@ -113,7 +113,7 @@ export const Header = memo<HeaderProps>(function Header({
             renderComponent(headerLeft)
           ) : (
             <HeaderLeft
-              canGoBack={canGoBack ?? isRootScreen}
+              canGoBack={canGoBack ?? !isRootScreen}
               withBackground={withBackground}
               color={color}
             />
