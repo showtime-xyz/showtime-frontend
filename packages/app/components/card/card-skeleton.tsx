@@ -28,13 +28,8 @@ export const CardSkeleton = memo<CardSkeletonProps>(
     const isMdWidth = width >= breakpoints["md"];
     if (isMdWidth) {
       return (
-        <View
-          tw={[
-            "dark:shadow-dark shadow-light mb-4 flex-1 overflow-hidden rounded-2xl",
-            tw,
-          ]}
-        >
-          <View tw="py-2 px-4">
+        <View tw={["mb-4 flex-1 overflow-hidden rounded-2xl", tw]}>
+          <View tw="px-4 py-2">
             <View tw="flex-row">
               <Skeleton
                 width={32}
@@ -71,7 +66,7 @@ export const CardSkeleton = memo<CardSkeletonProps>(
             colorMode={colorScheme}
             radius={0}
           />
-          <View tw="py-2 px-4">
+          <View tw="px-4 py-2">
             <Skeleton
               width={140}
               height={16}

@@ -60,7 +60,7 @@ export const MediaCropper = ({
       if (!src || !croppedAreaPixels) return;
 
       const croppedImage = await getCroppedImg(
-        src,
+        src as string,
         croppedAreaPixels,
         rotation
       );
@@ -87,7 +87,7 @@ export const MediaCropper = ({
     >
       <View tw="animate-fade-in-250 absolute inset-0 bg-black/30" />
       <View tw="h-full w-full items-center justify-end md:justify-center">
-        <View tw="shadow-light dark:shadow-dark rounded-t-4xl md:rounded-b-4xl w-full border-b-0 bg-white dark:bg-black md:w-auto">
+        <View tw="rounded-t-4xl md:rounded-b-4xl w-full border-b-0 bg-white dark:bg-black md:w-auto">
           <ModalHeader
             title={title}
             onClose={onClose}
@@ -97,7 +97,7 @@ export const MediaCropper = ({
             <View tw="w-full md:w-[480px]" style={{ height: cropViewHeight }}>
               {src && (
                 <Cropper
-                  image={src}
+                  image={src as string}
                   crop={crop}
                   zoom={zoom}
                   rotation={rotation}
@@ -143,7 +143,7 @@ export const MediaCropper = ({
                 <RotateCw width={20} height={20} color={colors.gray[500]} />
               </Pressable>
             </View>
-            <View tw="mt-6 mb-8 px-4">
+            <View tw="mb-8 mt-6 px-4">
               <Button size="regular" onPress={showCroppedImage}>
                 Looks Good
               </Button>
