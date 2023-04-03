@@ -3,6 +3,7 @@ import React, { useState, useMemo } from "react";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { AnimatePresence } from "moti";
 
+import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUser } from "app/hooks/use-user";
@@ -36,18 +37,22 @@ export const Onboarding = () => {
   const value = useMemo(() => ({ step, setStep, user }), [step, user]);
 
   return (
-    <OnboardingStepContext.Provider value={value}>
-      <BottomSheetModalProvider>
-        <View tw="mt-8 flex-1">
-          <AnimatePresence exitBeforeEnter>
-            {step === OnboardingStep.Username && (
-              <SelectUsername key="username" />
-            )}
-            {step === OnboardingStep.Picture && <SelectPicture key="picture" />}
-            {step === OnboardingStep.Social && <SelectSocial key="social" />}
-          </AnimatePresence>
-        </View>
-      </BottomSheetModalProvider>
-    </OnboardingStepContext.Provider>
+    <ClientSideOnly>
+      <OnboardingStepContext.Provider value={value}>
+        <BottomSheetModalProvider>
+          <View tw="mt-8 flex-1">
+            <AnimatePresence exitBeforeEnter>
+              {step === OnboardingStep.Username && (
+                <SelectUsername key="username" />
+              )}
+              {step === OnboardingStep.Picture && (
+                <SelectPicture key="picture" />
+              )}
+              {step === OnboardingStep.Social && <SelectSocial key="social" />}
+            </AnimatePresence>
+          </View>
+        </BottomSheetModalProvider>
+      </OnboardingStepContext.Provider>
+    </ClientSideOnly>
   );
 };
