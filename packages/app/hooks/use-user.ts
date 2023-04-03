@@ -23,7 +23,7 @@ export function useUser(params?: UserParams) {
       context?.isIncompletedProfile &&
       router
     ) {
-      navigateToOnboarding(true);
+      navigateToOnboarding({ replace: true });
     }
   }, [
     context?.isAuthenticated,
