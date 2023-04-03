@@ -4,6 +4,22 @@ import { GatingType, IEdition } from "app/types";
 
 import { fetcher } from "./use-infinite-list-query";
 
+interface Winner {
+  profile_id: number;
+  wallet_address: string;
+  username: string;
+  ens_domain: string;
+  twitter_username: string;
+  instagram_username: string;
+}
+
+interface Raffle {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  concluded_at: string;
+  winner?: Winner;
+}
 export type CreatorEditionResponse = {
   creator_airdrop_edition: IEdition;
   is_already_claimed: boolean;
@@ -15,6 +31,7 @@ export type CreatorEditionResponse = {
   spotify_track_url: string | null;
   spinamp_track_url: string | null; // this will be removed after the airdrop
   presave_release_date: string | null;
+  raffles?: Raffle[];
 };
 
 export function useCreatorCollectionDetail(editionAddress?: string) {

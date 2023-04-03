@@ -9,6 +9,7 @@ export const useSocialColor = () => {
   const isDark = useIsDarkMode();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+
   return {
     iconColor: isMdWidth
       ? isDark

@@ -44,11 +44,8 @@ export const contentGatingType = {
     typeName: "Pre-Save",
   },
 };
-const TriggerView = isMobileWeb() ? View : PressableHover;
 
 export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
-  const isDark = useIsDarkMode();
-  const [open, setOpen] = useState(false);
   // This will be removed after the airdrop
   if (edition?.spinamp_track_url) {
     return <PlayOnSpinamp url={edition?.spinamp_track_url} />;
@@ -107,7 +104,9 @@ export const ContentTypeIcon = ({ edition }: ContentTypeTooltipProps) => {
     return (
       <View>
         <View tw="rounded bg-black/60" style={StyleSheet.absoluteFillObject} />
-        <Icon color="white" width={20} height={20} />
+        <View tw="z-10">
+          <Icon color="#fff" width={20} height={20} />
+        </View>
       </View>
     );
   }

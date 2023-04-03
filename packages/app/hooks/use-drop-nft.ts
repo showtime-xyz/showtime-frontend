@@ -132,6 +132,7 @@ export type UseDropNFT = {
   longitude?: number;
   radius?: number;
   releaseDate?: string;
+  raffle?: boolean;
 };
 
 export const useDropNFT = () => {
@@ -241,7 +242,7 @@ export const useDropNFT = () => {
 
       let requestData: DropRequestData = {
         name: params.title,
-        raffle: params.raffle,
+        raffle: params?.raffle,
         description: params.description,
         image_url: "ipfs://" + ipfsHash,
         edition_size: params.editionSize,

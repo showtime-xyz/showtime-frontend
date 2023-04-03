@@ -54,6 +54,7 @@ import { Like } from "../feed/like";
 import { SocialButton } from "../social-button";
 import { NFTDetails } from "./details";
 import { NSFWGate } from "./nsfw-gate";
+import { SocialIcons } from "./social-icons";
 
 export type FeedItemProps = {
   nft: NFT;
@@ -285,22 +286,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 detail={detailData?.data?.item}
               />
             </LinearGradient>
-            <View tw="absolute bottom-32 right-2 flex-col items-center">
-              <AvatarHoverCard
-                username={nft?.creator_username || nft?.creator_address_nonens}
-                url={nft.creator_img_url}
-              />
-              <View tw="h-6" />
-              <Like vertical nft={nft} />
-              <View tw="h-6" />
-              <CommentButton vertical nft={nft} />
-              <View tw="h-6" />
-              <GiftButton vertical nft={nft} />
-              <View tw="h-6" />
-              <SocialButton onPress={() => shareNFT(nft)}>
-                <Share height={24} width={24} color="#FFF" />
-              </SocialButton>
-            </View>
+            <SocialIcons nft={nft} />
           </Reanimated.View>
           <View tw="absolute right-4 z-50" style={{ top: top }}>
             <NFTDropdown
@@ -311,7 +297,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           </View>
         </View>
       </LikeContextProvider>
-
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
     </>
   );
