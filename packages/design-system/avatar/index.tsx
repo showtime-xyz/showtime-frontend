@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, forwardRef, useState } from "react";
+import { ReactNode, useMemo, forwardRef, useState, memo } from "react";
 import { ViewStyle } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -17,6 +17,7 @@ export type AvatarProps = {
   children?: ReactNode;
   alt?: string;
   style?: ViewStyle;
+  enableSkeleton?: boolean;
 };
 
 const getAvatarImageUrl = (imgUrl: string, size: number) => {
@@ -26,7 +27,7 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
   return imgUrl;
 };
 
-export const Avatar = forwardRef<typeof View, AvatarProps>(
+const AvatarComponent = forwardRef<typeof View, AvatarProps>(
   function AvatarComponent(
     {
       url,
@@ -36,11 +37,12 @@ export const Avatar = forwardRef<typeof View, AvatarProps>(
       children,
       alt = "Avatar",
       style,
+      enableSkeleton,
     },
     ref
   ) {
     const { colorScheme } = useColorScheme();
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(enableSkeleton);
     const imageSource = useMemo(
       () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
       [url, size]
@@ -61,14 +63,18 @@ export const Avatar = forwardRef<typeof View, AvatarProps>(
           <Image
             source={imageSource}
             width={size}
-            onLoadStart={() => setIsLoading(true)}
-            onLoad={() => setIsLoading(false)}
             height={size}
             borderRadius={borderRadius}
             resizeMode="cover"
             tw={IMAGE_TW}
             style={{ height: size, width: size, borderRadius: borderRadius }}
             alt={alt}
+            {...(enableSkeleton
+              ? {
+                  onLoadEnd: () => setIsLoading(true),
+                  onLoad: () => setIsLoading(false),
+                }
+              : {})}
           />
           {children}
         </View>
@@ -76,3 +82,4 @@ export const Avatar = forwardRef<typeof View, AvatarProps>(
     );
   }
 );
+export const Avatar = memo(AvatarComponent);

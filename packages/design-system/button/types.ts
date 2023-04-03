@@ -13,7 +13,8 @@ export type ButtonVariant =
   | "secondary"
   | "text"
   | "gradient"
-  | "outlined";
+  | "outlined"
+  | "base";
 
 export type ButtonSize = "small" | "regular";
 
@@ -28,7 +29,12 @@ export type ButtonProps = {
   Partial<
     Pick<
       BaseButtonProps,
-      "labelTW" | "iconOnly" | "size" | "accentColor" | "gradientProps"
+      | "labelTW"
+      | "iconOnly"
+      | "size"
+      | "accentColor"
+      | "gradientProps"
+      | "backgroundColors"
     >
   >;
 

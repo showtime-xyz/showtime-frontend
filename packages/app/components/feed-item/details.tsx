@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { Text as RNText } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Raffle } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -11,7 +10,6 @@ import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
-import { useShareNFT } from "app/hooks/use-share-nft";
 import { linkifyDescription } from "app/lib/linkify";
 import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
@@ -30,15 +28,12 @@ type NFTDetailsProps = {
 };
 
 export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
-  const isDark = useIsDarkMode();
-  const { shareNFT } = useShareNFT();
-  const isCreatorDrop = !!nft.creator_airdrop_edition_address;
   const description = useMemo(
     () => linkifyDescription(removeTags(nft?.token_description)),
     [nft?.token_description]
   );
   return (
-    <View tw="px-4 py-4 pr-16">
+    <View tw="px-4 pb-4 pr-16 pt-6">
       <View tw="flex flex-row justify-between">
         <View tw="flex-1 flex-col justify-between">
           <View tw="">
@@ -54,12 +49,15 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 />
               )}
 
-              <Text tw="flex-1 text-2xl dark:text-white" numberOfLines={3}>
+              <Text
+                tw="flex-1 text-2xl text-white dark:text-white md:text-gray-900"
+                numberOfLines={3}
+              >
                 {nft.token_name}
-                <Text tw="text-base font-semibold text-gray-900 dark:text-gray-400">
+                <Text tw="text-base font-semibold text-gray-400 dark:text-gray-400 md:text-gray-900">
                   {` · `}
                 </Text>
-                <Text tw="self-center text-xs font-semibold text-gray-900 dark:text-gray-200">
+                <Text tw="self-center text-xs font-semibold text-gray-200 dark:text-gray-200 md:text-gray-900">
                   {getFormatDistanceStrictToWeek(nft.token_created)}
                 </Text>
               </Text>
@@ -72,23 +70,40 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             <RNText>
               <TextLink
                 href={`/@${nft.creator_username ?? nft.creator_address}`}
-                tw="flex text-sm font-semibold text-gray-900 dark:text-white"
+                tw="flex text-sm font-semibold text-white dark:text-white md:text-gray-900"
               >
                 {getCreatorUsernameFromNFT(nft)}
               </TextLink>
               <RNText>
                 {` `}
-                {nft.creator_verified ? <VerificationBadge size={12} /> : null}
+                {nft.creator_verified ? (
+                  <VerificationBadge
+                    size={12}
+                    fillColor="#000"
+                    bgColor="#FFF"
+                  />
+                ) : null}
                 {` `}
               </RNText>
-              <Text tw="text-sm text-gray-600 dark:text-gray-400">
+              <Text tw="text-sm text-gray-200 dark:text-gray-200 md:text-gray-600">
                 {description}
               </Text>
             </RNText>
           </View>
           {edition && (
             <View tw="mt-2 flex-row">
-              <ClaimButton tw="flex-1" edition={edition} size="regular" />
+              <ClaimButton
+                tw="flex-1"
+                edition={edition}
+                color="#000"
+                size="regular"
+                variant="base"
+                labelTW="text-black md:text-white dark:text-black"
+                backgroundColors={{
+                  default: "bg-white md:bg-gray-900 dark:bg-white",
+                  pressed: "bg-gray-200 md:bg-gray-700 dark:bg-gray-200",
+                }}
+              />
               <ClaimedShareButton
                 tw="ml-3 w-1/3"
                 edition={edition}

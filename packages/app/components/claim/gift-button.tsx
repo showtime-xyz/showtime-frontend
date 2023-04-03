@@ -62,7 +62,7 @@ export function GiftButton({ nft, ...rest }: { nft: NFT; vertical?: boolean }) {
                 edition.total_claimed_count >
                 0
                 ? "text-orange-500"
-                : "text-gray-900 dark:text-white dark:md:text-gray-400",
+                : "text-white dark:text-white md:text-gray-900 dark:md:text-gray-400",
             ]}
           >
             {formatClaimNumber(edition.total_claimed_count)}

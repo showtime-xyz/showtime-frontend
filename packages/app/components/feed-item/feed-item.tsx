@@ -8,7 +8,6 @@ import {
   useRef,
 } from "react";
 import {
-  Platform,
   StatusBar,
   StyleProp,
   useWindowDimensions,
@@ -17,6 +16,7 @@ import {
 
 import { ResizeMode } from "expo-av";
 import { Video as ExpoVideo } from "expo-av";
+import { LinearGradient } from "expo-linear-gradient";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -26,14 +26,10 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 
-import {
-  useBlurredBackgroundStyles,
-  useIsDarkMode,
-} from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Share } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
@@ -114,7 +110,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     });
   }
 
-  const blurredBackgroundStyles = useBlurredBackgroundStyles(95);
   const maxContentHeight = windowHeight - bottomHeight;
 
   const mediaHeight = useMemo(() => {
@@ -136,17 +131,13 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     windowHeight,
     windowWidth,
   ]);
-  const platformHeaderHeight = Platform.select({
-    ios: 0,
-    default: 0,
-  });
 
   const contentTransY = useDerivedValue(() => {
-    const visibleContentHeight =
-      windowHeight - detailHeight - StatusBarHeight - headerHeightRef.current;
+    const visibleContentHeight = windowHeight - detailHeight - StatusBarHeight;
+
     if (mediaHeight < visibleContentHeight) {
-      return (visibleContentHeight - mediaHeight) / 2;
-    } else if (mediaHeight < maxContentHeight - headerHeightRef.current) {
+      return (visibleContentHeight + bottomPadding - mediaHeight) / 2;
+    } else if (mediaHeight < maxContentHeight) {
       return top;
     } else {
       return 0;
@@ -205,7 +196,10 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   return (
     <>
       <LikeContextProvider nft={nft}>
-        <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
+        <View
+          tw="w-full bg-black"
+          style={{ height: itemHeight, overflow: "hidden" }}
+        >
           <Image
             tw="h-full w-full"
             blurhash={nft.blurhash}
@@ -270,11 +264,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               setDetailHeight(height);
             }}
           >
-            {/* <BlurView
-              blurRadius={15}
-              style={StyleSheet.absoluteFillObject}
-              overlayColor="transparent"
-            /> */}
             {nft?.mime_type?.startsWith("video") ? (
               <View tw="z-9 absolute right-4 top-[-30px]">
                 <MuteButton />
@@ -284,21 +273,22 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             <View tw="z-9 absolute -top-[30px] left-2.5">
               <ContentTypeTooltip edition={edition} />
             </View>
-
-            <View
+            <LinearGradient
               style={{
-                // ...blurredBackgroundStyles,
-                // backgroundColor: "rgba(25,25,25,.4)",
                 paddingBottom: bottomPadding,
+                overflow: "hidden",
               }}
-              tw="overflow-hidden"
+              start={[1, 0]}
+              end={[1, 1]}
+              locations={[0.01, 0.8]}
+              colors={["rgba(0,0,0,0)", "rgba(0,0,0,.8)"]}
             >
               <NFTDetails
                 edition={edition}
                 nft={nft}
                 detail={detailData?.data?.item}
               />
-            </View>
+            </LinearGradient>
             <View tw="absolute bottom-32 right-2 flex-col items-center">
               <AvatarHoverCard
                 username={nft?.creator_username || nft?.creator_address_nonens}
@@ -312,11 +302,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               <GiftButton vertical nft={nft} />
               <View tw="h-6" />
               <SocialButton onPress={() => shareNFT(nft)}>
-                <Share
-                  height={24}
-                  width={24}
-                  color={isDark ? "#FFF" : colors.gray[900]}
-                />
+                <Share height={24} width={24} color="#FFF" />
               </SocialButton>
             </View>
           </Reanimated.View>
@@ -324,7 +310,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             <NFTDropdown
               nft={detailData?.data?.item ?? nft}
               edition={edition}
-              tw="rounded-full bg-white px-1 py-1 dark:bg-black/60"
+              tw="rounded-full bg-black/60 px-1 py-1"
             />
           </View>
         </View>

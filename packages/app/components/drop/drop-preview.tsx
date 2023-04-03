@@ -100,12 +100,7 @@ export const DropPreview = memo(function DropPreview({
                 style={StyleSheet.absoluteFillObject}
               />
               <View tw="flex-row items-center">
-                <Spotify
-                  color="white"
-                  width={20}
-                  height={20}
-                  className="z-10"
-                />
+                <Spotify color="white" width={20} height={20} />
                 <Text tw="px-1 text-xs font-semibold text-white">
                   {releaseDate
                     ? `Available on ${new Date(releaseDate).toLocaleString(

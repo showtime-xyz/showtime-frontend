@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -33,7 +34,9 @@ const FeedList = () => {
   const bottomPadding = isAuthenticated ? bottomBarHeight : safeAreaBottom;
   return (
     <View tw="flex-1">
-      <SwipeListHeader canGoBack={false} withBackground />
+      {Platform.OS !== "web" && (
+        <SwipeListHeader canGoBack={false} withBackground />
+      )}
       <SwipeList bottomPadding={bottomPadding} data={data} />
     </View>
   );

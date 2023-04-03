@@ -20,6 +20,24 @@ import {
   setDisabledSystemTheme,
 } from "./store";
 
+export const toggleColorScheme = (isDark?: boolean) => {
+  if (isDark) {
+    if (Platform.OS === "android") {
+      NavigationBar.setBackgroundColorAsync("#000");
+      NavigationBar.setButtonStyleAsync("light");
+    }
+    SystemUI.setBackgroundColorAsync("black");
+    setStatusBarStyle("light");
+  } else {
+    if (Platform.OS === "android") {
+      NavigationBar.setBackgroundColorAsync("#FFF");
+      NavigationBar.setButtonStyleAsync("dark");
+    }
+    SystemUI.setBackgroundColorAsync("white");
+    setStatusBarStyle("dark");
+  }
+};
+
 export function ColorSchemeProvider({
   children,
 }: {
@@ -37,21 +55,11 @@ export function ColorSchemeProvider({
       setColorScheme(newColorScheme);
       const isDark = newColorScheme === "dark";
       if (isDark) {
-        if (Platform.OS === "android") {
-          NavigationBar.setBackgroundColorAsync("#000");
-          NavigationBar.setButtonStyleAsync("light");
-        }
+        toggleColorScheme(isDark);
         nativewind.setColorScheme("dark");
-        SystemUI.setBackgroundColorAsync("black");
-        setStatusBarStyle("light");
       } else {
-        if (Platform.OS === "android") {
-          NavigationBar.setBackgroundColorAsync("#FFF");
-          NavigationBar.setButtonStyleAsync("dark");
-        }
+        toggleColorScheme();
         nativewind.setColorScheme("light");
-        SystemUI.setBackgroundColorAsync("white");
-        setStatusBarStyle("dark");
       }
     },
     [nativewind]

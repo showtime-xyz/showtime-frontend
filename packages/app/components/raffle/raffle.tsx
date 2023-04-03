@@ -384,6 +384,7 @@ export const RaffleModal = (props?: RaffleModalParams) => {
                         url={nft.creator_img_url}
                         alt={"Winner Avatar"}
                         size={240}
+                        enableSkeleton
                       />
                       <Text tw="absolute -top-8 left-4 -rotate-[25deg] text-7xl">
                         👑
@@ -406,14 +407,14 @@ export const RaffleModal = (props?: RaffleModalParams) => {
                         height={70}
                       />
                     </View>
-                    <View tw="absolute left-0 bottom-2">
+                    <View tw="absolute bottom-2 left-0">
                       <StarBottomLeft
                         color={isDark ? colors.gray[900] : colors.gray[50]}
                         width={80}
                         height={80}
                       />
                     </View>
-                    <View tw="absolute right-0 bottom-0">
+                    <View tw="absolute bottom-0 right-0">
                       <StarBottomRight
                         color={isDark ? colors.gray[900] : colors.gray[50]}
                         width={75}
@@ -426,7 +427,7 @@ export const RaffleModal = (props?: RaffleModalParams) => {
                       We have a winner 🎉
                     </Text>
 
-                    <ShareButton type="twitter" tw="mt-8 mb-4 w-full" />
+                    <ShareButton type="twitter" tw="mb-4 mt-8 w-full" />
                     <ShareButton type="instagram" tw="w-full" />
                   </View>
                 </View>

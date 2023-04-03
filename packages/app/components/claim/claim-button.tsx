@@ -18,11 +18,11 @@ import { useUser } from "app/hooks/use-user";
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
-type ClaimButtonProps = {
+type ClaimButtonProps = ButtonProps & {
   edition: CreatorEditionResponse;
-  size?: ButtonProps["size"];
   tw?: string;
   style?: StyleProp<ViewStyle>;
+  color?: string;
 };
 
 export enum ClaimStatus {
@@ -52,6 +52,8 @@ export const ClaimButton = ({
   size = "small",
   tw = "",
   style,
+  color,
+  ...rest
 }: ClaimButtonProps) => {
   const isDark = useIsDarkMode();
   const redirectToClaimDrop = useRedirectToClaimDrop();
@@ -131,18 +133,23 @@ export const ClaimButton = ({
       return (
         <Text tw="text-xs font-bold">
           Collecting
-          <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
+          <ThreeDotsAnimation
+            color={color ?? isDark ? colors.black : colors.white}
+          />
         </Text>
       );
     } else if (edition?.gating_type === "spotify_save") {
       return (
         <>
           <Spotify
-            color={isDark ? colors.black : colors.white}
+            color={color ?? isDark ? colors.black : colors.white}
             width={20}
             height={20}
           />
-          <Text tw="ml-1 font-semibold text-white dark:text-black">
+          <Text
+            tw="ml-1 font-semibold text-white dark:text-black"
+            style={{ color }}
+          >
             {isAuthenticated ? "Save to Collect" : "Save on Spotify"}
           </Text>
         </>
@@ -151,11 +158,14 @@ export const ClaimButton = ({
       return (
         <>
           <Spotify
-            color={isDark ? colors.black : colors.white}
+            color={color ?? isDark ? colors.black : colors.white}
             width={20}
             height={20}
           />
-          <Text tw="ml-1 font-semibold text-white dark:text-black">
+          <Text
+            tw="ml-1 font-semibold text-white dark:text-black"
+            style={{ color }}
+          >
             {isAuthenticated ? "Pre-Save to Collect" : "Pre-Save on Spotify"}
           </Text>
         </>
@@ -163,7 +173,14 @@ export const ClaimButton = ({
     }
 
     return "Collect";
-  }, [status, isProgress, isDark, edition?.gating_type, isAuthenticated]);
+  }, [
+    status,
+    isProgress,
+    edition?.gating_type,
+    color,
+    isDark,
+    isAuthenticated,
+  ]);
 
   const opacityTw = useMemo(() => {
     if (isProgress) {
@@ -192,6 +209,7 @@ export const ClaimButton = ({
       style={[backgroundColor, style]}
       size={size}
       tw={[opacityTw, tw]}
+      {...rest}
     >
       {content}
     </Button>
