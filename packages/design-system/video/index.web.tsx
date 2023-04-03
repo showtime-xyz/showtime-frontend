@@ -68,20 +68,18 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
           alt={"Video Poster"}
         />
       ) : (
-        <View tw="overflow-hidden">
-          <View tw="blur-md">
-            <Image
-              tw={tw}
-              style={style as ImageStyle}
-              resizeMode={resizeMode}
-              blurhash={blurhash}
-              source={posterSource}
-              width={width}
-              height={height}
-              alt={"Video Background"}
-            />
-          </View>
-
+        <View>
+          <Image
+            tw={tw}
+            style={style as ImageStyle}
+            resizeMode={resizeMode}
+            blurhash={blurhash}
+            source={posterSource}
+            width={width}
+            height={height}
+            alt={"Video Background"}
+          />
+          <View tw="absolute inset-0 backdrop-blur-md" />
           <ExpoVideo
             style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}
             useNativeControls={videoConfig?.useNativeControls}

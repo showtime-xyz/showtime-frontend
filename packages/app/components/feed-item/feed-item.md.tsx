@@ -138,10 +138,14 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   };
 
   const mediaHeight = Math.min(windowWidth, feedItemStyle.height) - 160 - 80;
-
   const mediaWidth = useMemo(() => {
-    return contentWidth - NFT_DETAIL_WIDTH - 160;
-  }, [contentWidth]);
+    return (
+      mediaHeight *
+      (isNaN(Number(nft.token_aspect_ratio))
+        ? 1
+        : Number(nft.token_aspect_ratio))
+    );
+  }, [mediaHeight, nft.token_aspect_ratio]);
 
   const onFullScreen = () => {
     setShowFullScreen(!showFullScreen);
@@ -169,7 +173,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           width: contentWidth,
         }}
       >
-        <View tw="bg-gray-100 dark:bg-black" ref={container}>
+        <View tw="flex-1 bg-gray-100 dark:bg-black" ref={container}>
           <View tw="w-full flex-row items-center justify-between p-4">
             <Button
               variant="text"
