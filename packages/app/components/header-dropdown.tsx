@@ -101,7 +101,7 @@ function HeaderDropdown({
         )}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent loop>
+      <DropdownMenuContent loop sideOffset={12}>
         {type === "profile" && (
           <DropdownMenuItem
             onSelect={() => {
@@ -134,7 +134,22 @@ function HeaderDropdown({
 
         <DropdownMenuItem
           onSelect={() => {
-            router.push("/profile/edit");
+            router.push(
+              Platform.select({
+                native: "/profile/edit",
+                web: {
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    editProfileModal: true,
+                  },
+                } as any,
+              }),
+              Platform.select({
+                native: "/profile/edit",
+                web: router.asPath,
+              })
+            );
           }}
           key="edit-profile"
         >

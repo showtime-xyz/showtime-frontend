@@ -165,7 +165,6 @@ const CardLargeScreen = ({
           numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl",
-          "dark:shadow-dark shadow-light",
           "flex-1",
           "bg-white dark:bg-black",
           tw,
@@ -197,7 +196,7 @@ const CardLargeScreen = ({
             />
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
-              <View tw="z-9 absolute top-5 left-5">
+              <View tw="z-9 absolute left-5 top-5">
                 <MuteButton />
               </View>
             ) : null}

@@ -20,7 +20,13 @@ function LinkCore({
   componentProps?: any;
 }) {
   return (
-    <NextLink {...props} href={href} as={as} passHref prefetch={false}>
+    <NextLink
+      {...props}
+      href={href}
+      as={as}
+      passHref
+      prefetch={props.prefetch ?? false}
+    >
       <Component {...componentProps} onClick={componentProps?.onPress}>
         {children}
       </Component>

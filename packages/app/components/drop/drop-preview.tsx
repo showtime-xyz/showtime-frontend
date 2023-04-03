@@ -80,7 +80,7 @@ export const DropPreview = memo(function DropPreview({
   }, [onEdit, state.status, state.transactionHash]);
   return (
     <View tw="animate-fade-in-250 items-center">
-      <View tw="shadow-light dark:shadow-dark w-full rounded-3xl py-8 sm:w-[375px]">
+      <View tw="w-full rounded-3xl py-8 sm:w-[375px]">
         <View>
           <Preview
             file={file}

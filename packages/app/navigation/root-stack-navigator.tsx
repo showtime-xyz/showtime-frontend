@@ -119,6 +119,8 @@ export function RootStackNavigator() {
           component={CommentsScreen}
         />
 
+        <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen name="dropSlug" component={NftScreen} />
         <Stack.Screen
           name="dropUpdate"
           options={{ headerTitle: "Update Spotify Link" }}

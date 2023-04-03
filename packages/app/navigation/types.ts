@@ -72,6 +72,7 @@ type RootStackNavigatorParams = {
   blockedList: undefined;
   dropMusic: undefined;
   dropFree: undefined;
+  dropSlug: undefined;
   dropEvent: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;

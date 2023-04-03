@@ -3,6 +3,7 @@
     "strict": true,
     "baseUrl": "./packages",
     "module": "esnext",
+    "noUnusedLocals": true,
     "paths": {
       "@showtime-xyz/universal.tailwind": ["./design-system/tailwind"],
       "@showtime-xyz/universal.view": ["./design-system/view"],

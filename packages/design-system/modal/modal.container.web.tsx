@@ -27,7 +27,6 @@ const MODAL_CONTAINER_TW = [
   "flex overflow-hidden justify-center",
   "w-full	sm:w-[480px]",
   "bg-white dark:bg-black",
-  "dark:shadow-lg-dark shadow-lg-light",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-4",
   "max-h-[90vh] md:max-h-[82vh]",
 ];

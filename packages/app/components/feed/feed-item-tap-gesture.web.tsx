@@ -12,8 +12,10 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
+import { useMuted } from "app/providers/mute-provider";
 
 const heartContainerStyle: ViewStyle = {
   position: "absolute",
@@ -41,6 +43,7 @@ export const FeedItemTapGesture = ({
   isVideo,
 }: FeedItemTapGestureProps) => {
   const { like } = useLike();
+  const [muted, setMuted] = useMuted();
 
   const heartAnimation = useSharedValue(0);
   const playAnimation = useSharedValue(0);
@@ -64,8 +67,9 @@ export const FeedItemTapGesture = ({
     const curVideo = videoRef?.current?._nativeRef?.current?._video;
     if (!curVideo) return;
 
-    if (curVideo.muted) {
+    if (curVideo.muted || muted) {
       curVideo.muted = false;
+      setMuted(false);
       return;
     }
 
@@ -73,7 +77,7 @@ export const FeedItemTapGesture = ({
       curVideo.pause();
       playAnimation.value = withSequence(
         withSpring(1),
-        withDelay(2500, withSpring(0))
+        withDelay(2000, withSpring(0))
       );
     } else {
       curVideo.play();
@@ -82,7 +86,7 @@ export const FeedItemTapGesture = ({
         withDelay(200, withSpring(0))
       );
     }
-  }, [videoRef, playAnimation, isVideo]);
+  }, [isVideo, videoRef, muted, setMuted, playAnimation]);
 
   const singleTapHandle = useMemo(
     () =>
@@ -118,7 +122,7 @@ export const FeedItemTapGesture = ({
   );
 
   const gesture = useMemo(
-    () => Gesture.Race(Gesture.Exclusive(doubleTapHandle, singleTapHandle)),
+    () => Gesture.Exclusive(doubleTapHandle, singleTapHandle),
     [doubleTapHandle, singleTapHandle]
   );
 
@@ -129,7 +133,7 @@ export const FeedItemTapGesture = ({
         style={[heartContainerStyle, heartStyle, sizeStyle]}
         pointerEvents="none"
       >
-        <HeartFilled width={90} height={90} color="#fff" />
+        <HeartFilled width={90} height={90} color={colors.rose[500]} />
       </Animated.View>
       {isVideo ? (
         <>
@@ -137,7 +141,7 @@ export const FeedItemTapGesture = ({
             style={[heartContainerStyle, playStyle, sizeStyle]}
             pointerEvents="none"
           >
-            <Play width={120} height={120} color="#fff" />
+            <Play width={100} height={100} color="#fff" />
           </Animated.View>
         </>
       ) : null}
