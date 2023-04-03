@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useRef, createContext, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  createContext,
+  useState,
+  useEffect,
+} from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -48,6 +55,7 @@ export const SwipeList = ({
   useScrollToTop(listRef);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
+  const initialURLSet = useRef(false);
   const isSwiped = useRef(false);
 
   const visibleItems = useSharedValue<any[]>([
@@ -64,6 +72,30 @@ export const SwipeList = ({
     }),
     []
   );
+
+  useEffect(() => {
+    if (
+      !initialURLSet.current &&
+      isSwipeListScreen &&
+      typeof initialParamProp !== "undefined"
+    ) {
+      const nft = data[Number(initialParamProp)];
+      if (nft) {
+        router.replace(
+          {
+            query: {
+              initialScrollIndex: initialParamProp,
+              type,
+            },
+          },
+          getNFTSlug(nft),
+          { shallow: true }
+        );
+      }
+
+      initialURLSet.current = true;
+    }
+  }, [data, isSwipeListScreen, initialParamProp, type, router]);
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
@@ -85,13 +117,12 @@ export const SwipeList = ({
       if (isSwipeListScreen) {
         router.replace(
           {
-            pathname: getNFTSlug(data[e.activeIndex]),
             query: {
               initialScrollIndex: e.activeIndex,
               type,
             },
           },
-          undefined,
+          getNFTSlug(data[e.activeIndex]),
           { shallow: true }
         );
       }
