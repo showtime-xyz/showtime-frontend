@@ -28,11 +28,14 @@ export const useNavigateToLogin = () => {
   return navigateToLogin;
 };
 
+type NavigateToOnboardingParams = {
+  replace?: boolean;
+};
+
 export const useNavigateToOnboarding = () => {
   const router = useRouter();
-
-  const navigateToOnboarding = ({ replace }: { replace?: boolean } ) => {
-    if (replace) {
+  const navigateToOnboarding = (params?: NavigateToOnboardingParams) => {
+    if (params?.replace) {
       router.replace("/profile/onboarding");
     } else {
       router.push(
