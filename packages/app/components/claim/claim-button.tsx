@@ -86,7 +86,9 @@ export const ClaimButton = ({
       !isAuthenticated
     ) {
       Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
-      claimSpotifyGatedDrop();
+      claimSpotifyGatedDrop().then(() => {
+        Analytics.track(EVENTS.SPOTIFY_SAVE_SUCCESS_BEFORE_LOGIN);
+      });
     } else {
       redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
     }
