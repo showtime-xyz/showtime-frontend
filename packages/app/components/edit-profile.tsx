@@ -390,10 +390,13 @@ export const EditProfile = () => {
                 <View tw="mt-4 flex-row">
                   <Pressable
                     tw={`mr-2 w-1/2 flex-1 ${
-                      isVerified ? "opacity-60" : "opacity-100"
+                      isVerified && defaultValues.name !== ""
+                        ? "opacity-60"
+                        : "opacity-100"
                     }`}
                     onPress={() => {
-                      if (isVerified) setShowVerifiedExplanation(true);
+                      if (isVerified && defaultValues.name !== "")
+                        setShowVerifiedExplanation(true);
                     }}
                   >
                     <Controller
@@ -410,9 +413,10 @@ export const EditProfile = () => {
                           onBlur={onBlur}
                           onChangeText={onChange}
                           keyboardAppearance={isDark ? "dark" : "light"}
-                          disabled={isVerified}
+                          disabled={isVerified && defaultValues.name !== ""}
                           onPressIn={() => {
-                            if (isVerified) setShowVerifiedExplanation(true);
+                            if (isVerified && defaultValues.name !== "")
+                              setShowVerifiedExplanation(true);
                           }}
                         />
                       )}
