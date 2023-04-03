@@ -31,8 +31,27 @@ export const useNavigateToLogin = () => {
 export const useNavigateToOnboarding = () => {
   const router = useRouter();
 
-  const navigateToOnboarding = () => {
-    router.push("/profile/onboarding");
+  const navigateToOnboarding = ({ replace }: { replace?: boolean } ) => {
+    if (replace) {
+      router.replace("/profile/onboarding");
+    } else {
+      router.push(
+        Platform.select({
+          native: "/profile/onboarding",
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              onboardingModal: true,
+            },
+          } as any,
+        }),
+        Platform.select({
+          native: "/profile/onboarding",
+          web: router.asPath,
+        })
+      );
+    }
   };
 
   return navigateToOnboarding;
