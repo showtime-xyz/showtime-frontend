@@ -70,6 +70,7 @@ type DropRequestData = {
     google_maps_url?: string;
   };
   multi_gating_types?: ["password", "location"];
+  raffle?: boolean;
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -240,6 +241,7 @@ export const useDropNFT = () => {
 
       let requestData: DropRequestData = {
         name: params.title,
+        raffle: params.raffle,
         description: params.description,
         image_url: "ipfs://" + ipfsHash,
         edition_size: params.editionSize,
@@ -259,7 +261,6 @@ export const useDropNFT = () => {
       if (params.releaseDate && params.gatingType === "music_presave") {
         requestData.release_date = params.releaseDate;
       }
-
       const relayerResponse = await axios({
         url: "/v1/creator-airdrops/create-gated-edition",
         method: "POST",
