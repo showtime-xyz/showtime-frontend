@@ -34,7 +34,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent loop>
+      <DropdownMenuContent loop sideOffset={8}>
         <DropdownMenuItem onSelect={props.onEditNickname} key="nickname">
           <MenuItemIcon Icon={Edit} ios={{ name: "highlighter" }} />
           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">

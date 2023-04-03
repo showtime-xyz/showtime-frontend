@@ -116,7 +116,7 @@ const HistoryItem = memo(function HistoryItem({
   item: PaymentsHistory;
 }) {
   return (
-    <View tw="flex-row justify-between py-3.5 px-4 md:px-0">
+    <View tw="flex-row justify-between px-4 py-3.5 md:px-0">
       <View tw="flex-col items-start justify-center md:flex-row md:items-center">
         <Text tw="text-sm font-medium text-gray-900 dark:text-white md:text-base">
           {item.amount}
@@ -139,7 +139,7 @@ const HistoryItem = memo(function HistoryItem({
               </Button>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent loop>
+            <DropdownMenuContent loop sideOffset={8}>
               {item.receipts.map((link, index) => {
                 return (
                   <DropdownMenuItem

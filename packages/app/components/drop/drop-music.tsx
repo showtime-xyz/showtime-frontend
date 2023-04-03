@@ -580,7 +580,7 @@ export const DropMusic = () => {
 
                     return (
                       <View
-                        tw={`flex-1 rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-800 ${
+                        tw={`flex-1 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800 ${
                           isSaveDrop ? "opacity-40" : ""
                         }`}
                       >
@@ -693,9 +693,7 @@ export const DropMusic = () => {
                         onChangeText={onChange}
                         value={value}
                         placeholder={
-                          isSaveDrop
-                            ? "Enter your Spotify Song Link"
-                            : "Enter your Spotify Track URI"
+                          "e.g. https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
                         }
                         errorText={errors.spotifyUrl?.message}
                       />

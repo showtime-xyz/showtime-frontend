@@ -12,8 +12,8 @@ import packageJson from "../../../../package.json";
 
 export const SettingHeaderSection = ({ title = "" }) => {
   return (
-    <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black md:mb-8">
-      <View tw="w-full max-w-screen-2xl flex-row justify-between bg-white py-4 px-4 dark:bg-black">
+    <View tw="items-center bg-white dark:bg-black md:mb-8">
+      <View tw="w-full max-w-screen-2xl flex-row justify-between bg-white px-4 py-4 dark:bg-black">
         <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
           {title}
         </Text>
@@ -36,7 +36,7 @@ export const SettingsHeader = ({
   return (
     <>
       {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
-      <View tw="dark:shadow-dark shadow-light items-center bg-white dark:bg-black">
+      <View tw="items-center bg-white dark:bg-black">
         <View tw="w-full max-w-screen-2xl">
           <View tw="w-full flex-row justify-between self-center px-4 py-4">
             <Text tw="self-center text-2xl font-extrabold text-gray-900 dark:text-white">

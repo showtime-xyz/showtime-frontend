@@ -4,6 +4,7 @@ import {
   useWindowDimensions,
   ScrollView as RNScrollView,
   View as RNView,
+  Keyboard,
 } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
@@ -19,7 +20,9 @@ import {
   Twitter,
   Check,
   InstagramColorful,
+  InformationCircle,
 } from "@showtime-xyz/universal.icon";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -46,6 +49,7 @@ import { getFileFormData } from "app/utilities";
 import { breakpoints } from "design-system/theme";
 
 import { MediaCropper } from "./media-cropper";
+import { ProfileVerifiedExplanation } from "./profile/profile-verified-explanation";
 
 type Query = {
   redirectUri?: string;
@@ -112,14 +116,19 @@ export const EditProfile = () => {
   const isMdWidth = width >= breakpoints["md"];
   const { isValid, validate } = useValidateUsername();
   const socialLinks = useLinkOptions();
+  const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
   const [cropViewHeight, setCropViewHeight] = useState(400);
   const scrollViewRef = useRef<RNScrollView>(null);
   const socialRef = useRef<RNView>(null);
   // edit media regin
   const [selectedImg, setSelectedImg] = useState<string | File | null>(null);
+  const [showVerifiedExplanation, setShowVerifiedExplanation] = useState(false);
 
   const [redirectUri] = useParam("redirectUri");
+
+  // store if the user is verified
+  const isVerified = user?.data?.profile?.verified || false;
 
   const [currentCropField, setCurrentCropField] = useState<
     null | "coverPicture" | "profilePicture"
@@ -383,57 +392,100 @@ export const EditProfile = () => {
                 )}
               />
               <View tw="pt-6">
-                <Text tw="text-base font-bold text-gray-900 dark:text-gray-500">
-                  About me
-                </Text>
-                <View tw="mt-4 flex-row">
-                  <Controller
-                    control={control}
-                    name="name"
-                    render={({ field: { onChange, onBlur, value, ref } }) => (
-                      <Fieldset
-                        ref={ref}
-                        tw="mr-2 w-1/2 flex-1"
-                        label="Name"
-                        placeholder="Your display name"
-                        value={value}
-                        textContentType="name"
-                        errorText={errors.name?.message}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
+                <View tw="flex-row items-center justify-between">
+                  <Text tw="text-base font-bold text-gray-900 dark:text-gray-500">
+                    About me
+                  </Text>
+                  {isVerified && (
+                    <Pressable
+                      onPress={() => {
+                        Keyboard.dismiss();
+                        setShowVerifiedExplanation(true);
+                      }}
+                    >
+                      <InformationCircle
+                        height={20}
+                        width={20}
+                        color={isDark ? colors.gray[400] : colors.gray[600]}
                       />
-                    )}
-                  />
+                    </Pressable>
+                  )}
+                </View>
 
-                  <Controller
-                    control={control}
-                    rules={{
-                      onChange: (v) => {
-                        validate(v.target.value);
-                      },
+                <View tw="mt-4 flex-row">
+                  <Pressable
+                    tw={`mr-2 w-1/2 flex-1 ${
+                      isVerified ? "opacity-60" : "opacity-100"
+                    }`}
+                    onPress={() => {
+                      if (isVerified) setShowVerifiedExplanation(true);
                     }}
-                    name="username"
-                    render={({ field: { onChange, onBlur, value, ref } }) => (
-                      <Fieldset
-                        ref={ref}
-                        tw="ml-2 w-1/2 flex-1"
-                        label="Username"
-                        placeholder="Your username"
-                        value={value}
-                        textContentType="username"
-                        errorText={
-                          !isValid
-                            ? "Username has been taken"
-                            : errors.username?.message
-                        }
-                        autoCorrect={false}
-                        autoCapitalize="none"
-                        autoComplete="off"
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                      />
-                    )}
-                  />
+                  >
+                    <Controller
+                      control={control}
+                      name="name"
+                      render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <Fieldset
+                          ref={ref}
+                          label="Name"
+                          placeholder="Your display name"
+                          value={value}
+                          textContentType="name"
+                          errorText={errors.name?.message}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          keyboardAppearance={isDark ? "dark" : "light"}
+                          disabled={isVerified}
+                          onPressIn={() => {
+                            if (isVerified) setShowVerifiedExplanation(true);
+                          }}
+                        />
+                      )}
+                    />
+                  </Pressable>
+
+                  <Pressable
+                    tw={`ml-2 w-1/2 flex-1 ${
+                      isVerified ? "opacity-60" : "opacity-100"
+                    }`}
+                    onPress={() => {
+                      if (isVerified) setShowVerifiedExplanation(true);
+                    }}
+                  >
+                    <Controller
+                      control={control}
+                      rules={{
+                        onChange: (v) => {
+                          validate(v.target.value);
+                        },
+                      }}
+                      name="username"
+                      render={({ field: { onChange, onBlur, value, ref } }) => (
+                        <Fieldset
+                          ref={ref}
+                          label="Username"
+                          placeholder="Your username"
+                          value={value}
+                          textContentType="username"
+                          errorText={
+                            !isValid
+                              ? "Username has been taken"
+                              : errors.username?.message
+                          }
+                          autoCorrect={false}
+                          autoCapitalize="none"
+                          autoComplete="off"
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          keyboardAppearance={isDark ? "dark" : "light"}
+                          disabled={isVerified}
+                          onPressIn={() => {
+                            if (isVerified) setShowVerifiedExplanation(true);
+                          }}
+                        />
+                      )}
+                    />
+                  </Pressable>
                 </View>
               </View>
 
@@ -454,6 +506,7 @@ export const EditProfile = () => {
                     errorText={errors.bio?.message}
                     onBlur={onBlur}
                     onChangeText={onChange}
+                    keyboardAppearance={isDark ? "dark" : "light"}
                   />
                 )}
               />
@@ -474,12 +527,13 @@ export const EditProfile = () => {
                     onBlur={onBlur}
                     onChangeText={onChange}
                     errorText={errors.website_url?.message}
+                    keyboardAppearance={isDark ? "dark" : "light"}
                   />
                 )}
               />
 
               {/* Social */}
-              <View tw="mt-6 mb-10" ref={socialRef}>
+              <View tw="mb-10 mt-6" ref={socialRef}>
                 <View tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800">
                   <View tw="flex-row items-center justify-between">
                     <View tw="flex-row items-center">
@@ -535,6 +589,15 @@ export const EditProfile = () => {
             </Text>
           </View>
         </View>
+        <ModalSheet
+          snapPoints={[240]}
+          title="Verified profiles"
+          visible={showVerifiedExplanation}
+          close={() => setShowVerifiedExplanation(false)}
+          onClose={() => setShowVerifiedExplanation(false)}
+        >
+          <ProfileVerifiedExplanation />
+        </ModalSheet>
       </BottomSheetModalProvider>
       <MediaCropper
         src={selectedImg}
@@ -587,7 +650,7 @@ const ConnectButton = ({
       tw={"items-center justify-center"}
     >
       <View
-        tw={`min-h-4 flex flex-row items-center justify-center rounded-2xl border py-2 px-4 ${
+        tw={`min-h-4 flex flex-row items-center justify-center rounded-2xl border px-4 py-2 ${
           !isConnected
             ? isDark
               ? "border-white"

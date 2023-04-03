@@ -34,7 +34,6 @@ module.exports = {
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "unused-imports/no-unused-imports": "warn",
     "unused-imports/no-unused-vars": "warn",
     "no-empty": "warn",
     "react/display-name": "warn",

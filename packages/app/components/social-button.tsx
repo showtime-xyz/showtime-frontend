@@ -16,7 +16,7 @@ export function SocialButton({
   return (
     <Pressable
       tw={[
-        "h-6 flex-row items-center justify-center rounded-full p-0 duration-150 hover:bg-gray-400/30 md:h-8 md:p-4",
+        "h-6 flex-row items-center justify-center rounded-full p-0 duration-150 md:ml-2 md:h-8 md:p-2 md:hover:bg-gray-400/30",
         tw,
       ]}
       {...rest}

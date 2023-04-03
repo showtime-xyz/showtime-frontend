@@ -56,7 +56,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent loop>
+      <DropdownMenuContent loop sideOffset={8}>
         <DropdownMenuItem
           onSelect={async () => {
             const result = await share({
