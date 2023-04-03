@@ -116,7 +116,7 @@ function NFTDropdown({
           </Pressable>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent loop>
+        <DropdownMenuContent loop sideOffset={8}>
           {tabType && tabType !== "hidden" ? (
             <DropdownMenuItem
               onSelect={() => {
@@ -327,91 +327,59 @@ function NFTDropdown({
             </DropdownMenuItem>
           )}
 
-          {!hasOwnership ? (
-            <DropdownMenuItem
-              className="danger"
-              key="block"
-              onSelect={() =>
-                toggleBlock({
-                  isBlocked,
-                  creatorId: nft.creator_id,
-                  name: nft.creator_name,
-                })
-              }
-            >
-              <MenuItemIcon
-                Icon={Slash}
-                ios={{
-                  name: isBlocked ? "circle" : "circle.slash",
-                }}
-              />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                {isBlocked ? "Unblock User" : "Block User"}
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : null}
+          {!hasOwnership && !isSelf ? (
+            <>
+              <DropdownMenuItem
+                className="danger"
+                key="block"
+                onSelect={() =>
+                  toggleBlock({
+                    isBlocked,
+                    creatorId: nft.creator_id,
+                    name: nft.creator_name,
+                  })
+                }
+              >
+                <MenuItemIcon
+                  Icon={Slash}
+                  ios={{
+                    name: isBlocked ? "circle" : "circle.slash",
+                  }}
+                />
+                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  {isBlocked ? "Unblock User" : "Block User"}
+                </DropdownMenuItemTitle>
+              </DropdownMenuItem>
 
-          {!hasOwnership && (
-            <DropdownMenuItem
-              onSelect={async () => {
-                router.push(
-                  {
-                    pathname:
-                      Platform.OS === "web" ? router.pathname : "/report",
-                    query: {
-                      ...router.query,
-                      reportModal: true,
-                      nftId: nft.nft_id,
-                    },
-                  },
-                  Platform.OS === "web" ? router.asPath : undefined
-                );
-              }}
-              key="report"
-            >
-              <MenuItemIcon
-                Icon={Flag}
-                ios={{
-                  name: "flag",
-                }}
-              />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                Report
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          )}
-
-          {__DEV__ && (
-            <DropdownMenuItem
-              onSelect={async () => {
-                const as = `/raffle/${nft?.contract_address}`;
-
-                router.push(
-                  Platform.select({
-                    native: as,
-                    web: {
-                      pathname: router.pathname,
+              <DropdownMenuItem
+                onSelect={async () => {
+                  router.push(
+                    {
+                      pathname:
+                        Platform.OS === "web" ? router.pathname : "/report",
                       query: {
                         ...router.query,
-                        contractAddress: nft?.contract_address,
-                        raffleModal: true,
+                        reportModal: true,
+                        nftId: nft.nft_id,
                       },
-                    } as any,
-                  }),
-                  Platform.select({
-                    native: as,
-                    web: router.asPath,
-                  }),
-                  { shallow: true }
-                );
-              }}
-              key="raffle"
-            >
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                Raffle
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          )}
+                    },
+                    Platform.OS === "web" ? router.asPath : undefined
+                  );
+                }}
+                key="report"
+              >
+                <MenuItemIcon
+                  Icon={Flag}
+                  ios={{
+                    name: "flag",
+                  }}
+                />
+                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  Report
+                </DropdownMenuItemTitle>
+              </DropdownMenuItem>
+            </>
+          ) : null}
         </DropdownMenuContent>
       </DropdownMenuRoot>
     </>

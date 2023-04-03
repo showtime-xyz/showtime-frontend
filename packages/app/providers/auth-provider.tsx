@@ -98,17 +98,6 @@ export function AuthProvider({
         });
 
         router.pop();
-        /*
-        const isIncomplete = isProfileIncomplete(res?.data?.profile);
-        if (isIncomplete) {
-          if (Platform.OS !== "web") {
-            router.pop();
-          }
-          setTimeout(() => {
-            router.push("/profile/onboarding");
-          }, 1000);
-        }
-        */
         return res;
       }
 

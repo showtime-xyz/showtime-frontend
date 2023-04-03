@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
 
@@ -25,11 +26,11 @@ const heartContainerStyle: ViewStyle = {
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
-    height: 4,
+    height: 2,
   },
-  shadowOpacity: 0.32,
-  shadowRadius: 5.46,
-  elevation: 9,
+  shadowOpacity: 0.3,
+  shadowRadius: 4,
+  elevation: 13,
 };
 
 type FeedItemTapGestureProps = {
@@ -37,6 +38,7 @@ type FeedItemTapGestureProps = {
   toggleHeader?: () => void;
   showHeader?: () => void;
   videoRef?: MutableRefObject<Video | null>;
+  mediaOffset?: number;
   sizeStyle?: {
     width?: number;
     height?: number;
@@ -48,7 +50,7 @@ export const FeedItemTapGesture = ({
   toggleHeader,
   showHeader,
   videoRef,
-  sizeStyle,
+  mediaOffset,
   isVideo,
 }: FeedItemTapGestureProps) => {
   const { like } = useLike();
@@ -81,7 +83,7 @@ export const FeedItemTapGesture = ({
     if (status && status.isLoaded && status?.isPlaying) {
       playAnimation.value = withSequence(
         withSpring(1),
-        withDelay(3500, withSpring(0))
+        withDelay(1500, withSpring(0))
       );
       videoRef?.current?.pauseAsync().catch(() => {});
     } else {
@@ -125,6 +127,7 @@ export const FeedItemTapGesture = ({
       Gesture.LongPress()
         .minDuration(300)
         .maxDistance(9999)
+        .shouldCancelWhenOutside(true)
         .onStart(() => {
           ("worklet");
           if (toggleHeader) {
@@ -140,30 +143,33 @@ export const FeedItemTapGesture = ({
   );
 
   const gesture = useMemo(
-    () =>
-      Gesture.Race(
-        longPressGesture,
-        Gesture.Exclusive(doubleTapHandle, singleTapHandle)
-      ),
+    () => Gesture.Exclusive(doubleTapHandle, longPressGesture, singleTapHandle),
     [doubleTapHandle, longPressGesture, singleTapHandle]
+  );
+
+  const topOffset = useMemo(
+    () => ({
+      top: mediaOffset ?? 0,
+    }),
+    [mediaOffset]
   );
 
   return (
     <>
       <GestureDetector gesture={gesture}>{children}</GestureDetector>
       <Animated.View
-        style={[heartContainerStyle, heartStyle, sizeStyle]}
+        style={[heartContainerStyle, heartStyle, topOffset]}
         pointerEvents="none"
       >
-        <HeartFilled width={90} height={90} color="#fff" />
+        <HeartFilled width={90} height={90} color={colors.rose[500]} />
       </Animated.View>
       {isVideo ? (
         <>
           <Animated.View
-            style={[heartContainerStyle, playStyle, sizeStyle]}
+            style={[heartContainerStyle, playStyle, topOffset]}
             pointerEvents="none"
           >
-            <Play width={80} height={80} color="#fff" />
+            <Play width={110} height={110} color="#fff" />
           </Animated.View>
         </>
       ) : null}

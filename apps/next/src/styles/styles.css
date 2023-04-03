@@ -29,7 +29,7 @@
   }
 
   [data-color-scheme="dark"] [role="menu"] > div:nth-child(1) {
-    @apply shadow-black45 bg-neutral-900 bg-opacity-75 shadow-md;
+    @apply shadow-black45 bg-black bg-opacity-100 shadow-md;
   }
 
   [role="menuitem"] {

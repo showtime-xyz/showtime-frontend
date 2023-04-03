@@ -72,6 +72,10 @@ export const SwipeList = ({
   );
 
   useEffect(() => {
+    const popStateListener = () => {
+      window.removeEventListener("popstate", popStateListener);
+      router.pop();
+    };
     if (
       !initialURLSet.current &&
       isSwipeListScreen &&
@@ -79,12 +83,17 @@ export const SwipeList = ({
     ) {
       const nft = data[Number(initialParamProp)];
       if (nft) {
-        window.history.replaceState(null, "", getNFTSlug(nft));
+        window.history.pushState({}, "", getNFTSlug(nft));
+        window.addEventListener("popstate", popStateListener);
       }
 
       initialURLSet.current = true;
     }
-  }, [data, isSwipeListScreen, initialParamProp]);
+
+    return () => {
+      window.removeEventListener("popstate", popStateListener);
+    };
+  }, [data, isSwipeListScreen, initialParamProp, router]);
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {

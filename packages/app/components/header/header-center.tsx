@@ -101,7 +101,7 @@ const SearchInHeader = () => {
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
-        <View tw="shadow-light dark:shadow-dark mt-2 w-[350px] overflow-hidden rounded-3xl bg-white dark:bg-black">
+        <View tw="mt-2 w-[350px] overflow-hidden rounded-3xl bg-white dark:bg-black">
           {data ? (
             <InfiniteScrollList
               useWindowScroll={false}

@@ -22,7 +22,7 @@ const CONTAINER_HEIGHT_TW = {
 const CONTAINER_BACKGROUND_MAPPER = {
   primary: {
     // default: [colors.gray[900], colors.white],
-    default: "bg-gray-900 dark:bg-white",
+    default: "bg-gray-800 dark:bg-white",
     // pressed: [colors.gray[700], colors.gray[200]],
     pressed: "bg-gray-700 dark:bg-gray-200",
   },
@@ -34,7 +34,7 @@ const CONTAINER_BACKGROUND_MAPPER = {
   },
   tertiary: {
     // default: [colors.gray[100], colors.gray[900]],
-    default: "bg-gray-100 dark:bg-gray-900",
+    default: "bg-gray-100 dark:bg-gray-800",
     // pressed: [colors.gray[300], colors.gray[700]],
     pressed: "bg-gray-300 dark:bg-gray-700",
   },

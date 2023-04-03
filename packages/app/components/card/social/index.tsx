@@ -13,7 +13,7 @@ function Social({ nft, tw = "" }: SocialProps) {
   if (!nft) return null;
 
   return (
-    <View tw={["flex-row justify-between bg-white dark:bg-black", tw]}>
+    <View tw={["flex-row justify-between", tw]}>
       <View tw="-ml-4 flex-row items-center">
         <Like nft={nft} />
         <CommentButton nft={nft} />

@@ -66,9 +66,10 @@ export const NotificationsInHeader = () => {
       <Popover.Content
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
+        sideOffset={12}
       >
         <View
-          tw="dark:shadow-dark shadow-light mt-2 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
+          tw="dark:shadow-light shadow-light z-50 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
           style={Platform.select({
             web: {
               height: NOTIFICATION_LIST_HEIGHT,
@@ -102,7 +103,7 @@ export const Header = withColorScheme(
 
     if (isMdWidth) {
       return (
-        <View tw="fixed top-0 right-0 left-0 z-50 w-screen items-center bg-white/60 stroke-inherit shadow-sm backdrop-blur-md dark:bg-black/60">
+        <View tw="fixed left-0 right-0 top-0 z-50 w-screen items-center bg-white/60 stroke-inherit backdrop-blur-md dark:bg-black/60">
           <View
             style={{
               height: WEB_HEADER_HEIGHT,
@@ -127,7 +128,7 @@ export const Header = withColorScheme(
     return (
       <View
         style={{ height: MOBILE_WEB_HEADER_HEIGHT }}
-        tw="fixed top-0 right-0 left-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2"
+        tw="fixed left-0 right-0 top-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2"
       >
         <View tw="w-20 items-start">
           <HeaderLeft withBackground={!isMdWidth} canGoBack={canGoBack} />
