@@ -31,6 +31,7 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
+  type: string;
 };
 const { useParam } = createParam();
 
@@ -39,6 +40,7 @@ export const SwipeList = ({
   data,
   fetchMore,
   initialScrollIndex = 0,
+  type,
 }: Props) => {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -81,11 +83,21 @@ export const SwipeList = ({
         e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
       if (isSwipeListScreen) {
-        window.history.replaceState(null, "", getNFTSlug(data[e.activeIndex]));
+        router.replace(
+          {
+            pathname: getNFTSlug(data[e.activeIndex]),
+            query: {
+              initialScrollIndex: e.activeIndex,
+              type,
+            },
+          },
+          undefined,
+          { shallow: true }
+        );
       }
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, data, router, isSwipeListScreen]
+    [visibleItems, data, router, isSwipeListScreen, type]
   );
 
   if (data.length === 0) return null;
