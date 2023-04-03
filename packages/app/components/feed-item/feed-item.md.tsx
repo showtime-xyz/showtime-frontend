@@ -55,12 +55,16 @@ import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
 
+// NFT detail width is the width of the NFT detail on the right side of the feed item
 const NFT_DETAIL_WIDTH = 380;
+// Media padding is the padding between the media and the content
+const MEDIA_PADDING = 160;
+// Media header height is the height of the header of the media
 
+const MEDIA_HEADER_HEIGHT = 80;
 type TabProps = {
   nft: NFT;
 };
-
 const Collectors = ({ nft }: TabProps) => {
   return (
     <UserList
@@ -137,11 +141,20 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     width: windowWidth,
   };
 
-  const mediaHeight = Math.min(windowWidth, feedItemStyle.height) - 160 - 80;
-
+  const mediaHeight =
+    Math.min(windowWidth, feedItemStyle.height) -
+    MEDIA_PADDING -
+    MEDIA_HEADER_HEIGHT;
+  const maxContentWidth = contentWidth - NFT_DETAIL_WIDTH - MEDIA_PADDING;
   const mediaWidth = useMemo(() => {
-    return contentWidth - NFT_DETAIL_WIDTH - 160;
-  }, [contentWidth]);
+    return Math.min(
+      mediaHeight *
+        (isNaN(Number(nft.token_aspect_ratio))
+          ? 1
+          : Number(nft.token_aspect_ratio)),
+      maxContentWidth
+    );
+  }, [maxContentWidth, mediaHeight, nft.token_aspect_ratio]);
 
   const onFullScreen = () => {
     setShowFullScreen(!showFullScreen);
@@ -169,7 +182,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           width: contentWidth,
         }}
       >
-        <View tw="bg-gray-100 dark:bg-black" ref={container}>
+        <View tw="flex-1 bg-gray-100 dark:bg-black" ref={container}>
           <View tw="w-full flex-row items-center justify-between p-4">
             <Button
               variant="text"
@@ -217,7 +230,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Suspense>
             </View>
           </View>
-          <View tw="flex-1 items-center justify-center px-20 pb-20">
+          <View tw="items-center justify-center px-20 pb-20">
             <View
               style={{
                 height: mediaHeight,
