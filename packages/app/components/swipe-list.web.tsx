@@ -1,11 +1,4 @@
-import {
-  useCallback,
-  useMemo,
-  useRef,
-  useEffect,
-  createContext,
-  useState,
-} from "react";
+import { useCallback, useMemo, useRef, createContext, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -51,7 +44,6 @@ export const SwipeList = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef<any>(null);
   useScrollToTop(listRef);
-  const initialURLSet = useRef(false);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
   const isSwiped = useRef(false);
@@ -70,30 +62,6 @@ export const SwipeList = ({
     }),
     []
   );
-
-  useEffect(() => {
-    const popStateListener = () => {
-      window.removeEventListener("popstate", popStateListener);
-      router.pop();
-    };
-    if (
-      !initialURLSet.current &&
-      isSwipeListScreen &&
-      typeof initialParamProp !== "undefined"
-    ) {
-      const nft = data[Number(initialParamProp)];
-      if (nft) {
-        window.history.pushState({}, "", getNFTSlug(nft));
-        window.addEventListener("popstate", popStateListener);
-      }
-
-      initialURLSet.current = true;
-    }
-
-    return () => {
-      window.removeEventListener("popstate", popStateListener);
-    };
-  }, [data, isSwipeListScreen, initialParamProp, router]);
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {

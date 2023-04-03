@@ -9,6 +9,7 @@ import { Card, GAP } from "app/components/card";
 import { ListFooter } from "app/components/footer/list-footer";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { NFT } from "app/types";
 
@@ -32,9 +33,11 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       []
     );
     const onItemPress = useCallback(
-      (currentIndex: number) => {
+      (item: NFT, currentIndex: number) => {
         router.push(
-          `/list?initialScrollIndex=${currentIndex}&days=${days}&type=trendingNFTs`
+          `/${getNFTSlug(
+            item
+          )}?initialScrollIndex=${currentIndex}&days=${days}&type=trendingNFTs`
         );
       },
       [router, days]
@@ -45,7 +48,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         return (
           <Card
             nft={item}
-            onPress={() => onItemPress(index)}
+            onPress={() => onItemPress(item, index)}
             numColumns={NUM_COLUMNS}
           />
         );
