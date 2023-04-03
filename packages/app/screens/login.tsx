@@ -14,6 +14,5 @@ export const LoginScreen = withModalScreen(LoginModal, {
   matchingPathname: "/login",
   matchingQueryParam: "loginModal",
   snapPoints: ["90%"],
-  web_height: `max-h-[100vh] md:max-h-[95vh]`,
   disableBackdropPress: true,
 });

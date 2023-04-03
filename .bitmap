@@ -57,6 +57,12 @@
         "mainFile": "index.ts",
         "rootDir": "packages/design-system/clamp-text"
     },
+    "client-side-only":{
+        "scope": "showtime.universal",
+        "version": "0.0.0",
+        "mainFile": "index.ts",
+        "rootDir": "packages/design-system/client-side-only"
+    },
     "collapsible-tab-view": {
         "scope": "showtime.universal",
         "version": "0.0.56",

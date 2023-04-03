@@ -17,6 +17,7 @@ import {
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import { Video as ExpoVideo } from "expo-av";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -68,6 +69,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const lastItemId = useRef(nft.nft_id);
   const detailViewRef = useRef<Reanimated.View>(null);
   const headerHeight = useHeaderHeight();
+  const videoRef = useRef<ExpoVideo | null>(null);
   const headerHeightRef = useRef(headerHeight);
   const { data: detailData } = useNFTDetailByTokenId({
     contractAddress: nft?.contract_address,
@@ -201,9 +203,13 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             recyclingKey={getMediaUrl({ nft, stillPreview: true })}
             alt={nft.token_name}
           />
+
           <FeedItemTapGesture
+            videoRef={videoRef}
             toggleHeader={toggleHeader}
             showHeader={showHeader}
+            mediaOffset={-detailHeight + headerHeightRef.current + bottomHeight}
+            isVideo={nft?.mime_type?.startsWith("video")}
           >
             <Animated.View
               style={[
@@ -215,6 +221,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               ]}
             >
               <Media
+                videoRef={videoRef}
                 item={nft}
                 numColumns={1}
                 sizeStyle={{
@@ -254,7 +261,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               overlayColor="transparent"
             />
             {nft?.mime_type?.startsWith("video") ? (
-              <View tw="z-9 absolute top-[-30px] right-4">
+              <View tw="z-9 absolute right-4 top-[-30px]">
                 <MuteButton />
               </View>
             ) : null}

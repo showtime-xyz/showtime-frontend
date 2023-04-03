@@ -43,7 +43,6 @@ function ModalHeaderComponent({
           MODAL_HEADER_TITLE_TW,
           "ios:pl-8 android:pl-8 max-w-[90%] text-base font-bold",
         ]}
-        numberOfLines={1}
       >
         {title}
       </Text>

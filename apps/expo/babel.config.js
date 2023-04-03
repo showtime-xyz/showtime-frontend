@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const resolveDesignSystemPackages = require("../../plugins/resolve-design-system-packages");
 
 const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
@@ -27,6 +28,7 @@ module.exports = function (api) {
           stream: "stream-browserify",
           buffer: "@craftzdog/react-native-buffer",
           "bn.js": "react-native-bignumber",
+          ...resolveDesignSystemPackages(),
         },
       },
     ],

@@ -77,7 +77,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       [handleReset, handleFocus]
     );
     return (
-      <View tw="flex-row items-center bg-white p-4 dark:bg-black" style={style}>
+      <View tw="flex-row items-center  p-4 " style={style}>
         <View tw="mr-2 flex-1">
           <TextInput
             //@ts-ignore
@@ -85,10 +85,10 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             value={value}
             editable={!submitting}
             placeholder="Add a comment..."
-            placeholderTextColor={isDark ? colors.gray[400] : colors.gray[500]}
+            placeholderTextColor={isDark ? colors.gray[300] : colors.gray[500]}
             multiline={true}
             keyboardType="twitter"
-            tw="web:max-h-40 max-h-32 rounded-[32px] bg-gray-100 py-3 pr-3 pl-[44px] text-sm text-black dark:bg-gray-900 dark:text-white"
+            tw="web:max-h-40 max-h-32 rounded-[32px] bg-gray-100 py-3 pl-[44px] pr-3 text-sm text-black dark:bg-gray-700 dark:text-white"
             onChangeText={handleTextChange}
             onFocus={onFocus}
             onBlur={onBlur}
@@ -96,7 +96,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
           />
           <Avatar
             alt="Avatar"
-            tw="absolute top-1.5 left-3"
+            tw="absolute left-3 top-1.5"
             size={24}
             url={userAvatar}
           />
@@ -119,7 +119,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             <Send
               width={20}
               height={20}
-              color={disable ? colors.gray[300] : colors.gray[800]}
+              color={disable ? colors.gray[400] : colors.gray[800]}
             />
           )}
         </Button>

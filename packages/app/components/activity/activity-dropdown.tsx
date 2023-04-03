@@ -44,7 +44,7 @@ function ActivityDropdown({ activity }: Props) {
         </View>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent loop>
+      <DropdownMenuContent loop sideOffset={8}>
         {isAuthenticated && (
           <DropdownMenuItem
             onSelect={async () => {

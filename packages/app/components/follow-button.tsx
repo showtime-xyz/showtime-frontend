@@ -2,7 +2,7 @@ import { useCallback, memo, useMemo } from "react";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
-import type { ButtonProps } from "@showtime-xyz/universal.button/types";
+import type { ButtonProps } from "@showtime-xyz/universal.button";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 

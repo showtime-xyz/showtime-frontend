@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from "react";
+import { memo, useState, useMemo, useRef } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { Video as ExpoVideo } from "expo-av";
 import { ResizeMode } from "expo-av";
 
 import { View } from "@showtime-xyz/universal.view";
@@ -43,6 +44,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+  const videoRef = useRef<ExpoVideo | null>(null);
 
   const maxContentHeight = windowHeight - bottomHeight;
 
@@ -85,15 +87,31 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   return (
     <>
       <LikeContextProvider nft={nft} key={nft.nft_id}>
-        <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
+        {nft?.mime_type?.startsWith("video") ? (
+          <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
+            <MuteButton variant="mobile-web" />
+          </View>
+        ) : null}
+        <View
+          tw="max-h-[100svh] min-h-[100svh] w-full"
+          style={{ height: itemHeight, overflow: "hidden" }}
+        >
           <View
             tw="duration-200"
             style={{
               paddingTop,
             }}
           >
-            <FeedItemTapGesture>
+            <FeedItemTapGesture
+              videoRef={videoRef}
+              sizeStyle={{
+                height: mediaHeight,
+                width: windowWidth,
+              }}
+              isVideo={nft?.mime_type?.startsWith("video")}
+            >
               <Media
+                videoRef={videoRef}
                 item={nft}
                 numColumns={1}
                 sizeStyle={{
@@ -122,11 +140,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               style={StyleSheet.absoluteFillObject}
               overlayColor="transparent"
             />
-            {nft?.mime_type?.startsWith("video") ? (
-              <View tw="z-9 absolute top-[-40px] right-4">
-                <MuteButton />
-              </View>
-            ) : null}
 
             <View tw="z-9 absolute -top-[40px] left-2.5">
               <ContentTypeTooltip edition={edition} />

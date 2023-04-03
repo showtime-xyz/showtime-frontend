@@ -62,7 +62,7 @@ export function Select<T extends string>({
       <RadixSelect.Portal>
         <RadixSelect.Content
           style={{
-            position: "absolute",
+            position: "fixed",
             maxHeight: "50vh",
             backgroundColor: isDark ? "#000" : "#fff",
             borderRadius: 16,
@@ -72,6 +72,7 @@ export function Select<T extends string>({
             top:
               (triggerRect?.top ?? 0) +
               (triggerRect?.height ? triggerRect?.height + 8 : 0),
+            zIndex: 999,
           }}
         >
           {options.map((item) => (
