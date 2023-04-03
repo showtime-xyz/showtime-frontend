@@ -31,7 +31,7 @@ export const useNavigateToLogin = () => {
 export const useNavigateToOnboarding = () => {
   const router = useRouter();
 
-  const navigateToOnboarding = ({ replace }: { replace?: boolean } ) => {
+  const navigateToOnboarding = ({ replace = false }: { replace?: boolean }) => {
     if (replace) {
       router.replace("/profile/onboarding");
     } else {
