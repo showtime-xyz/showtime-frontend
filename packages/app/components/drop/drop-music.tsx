@@ -22,12 +22,17 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import {
+  ErrorText,
+  Fieldset,
+  FieldsetCheckbox,
+} from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   FlipIcon,
   Image as ImageIcon,
   InformationCircle,
+  Raffle,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
@@ -107,8 +112,6 @@ const getDefaultDate = () => {
 export const DropMusic = () => {
   const isDark = useIsDarkMode();
   const [isSaveDrop, setIsSaveDrop] = useState(false);
-  const [isRaffle, setIsRaffle] = useState(false);
-
   const modalScreenContext = useModalScreenContext();
 
   const dropValidationSchema = useMemo(
@@ -300,30 +303,8 @@ export const DropMusic = () => {
       );
     }
   };
-
-  // useEffect(() => {
-  //   if (transactionId) {
-  //     pollTransaction(transactionId)
-  //   }
-  // }, [transactionId])
-
-  // useEffect(() => {
-  //   if (state.transactionId) {
-  //     setTransactionId(transactionId)
-  //   }
-  // }, [state.transactionId])
-
   const pickFile = useFilePicker();
-  const share = useShare();
-  const router = useRouter();
-  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
   const [showDatePicker, setShowDatePicker] = useState(false);
-
-  // if (state.transactionHash) {
-  //   return <View>
-  //     <Text>Loading</Text>
-  //   </View>
-  // }
 
   const selectedDuration = watch("duration");
 
@@ -528,9 +509,9 @@ export const DropMusic = () => {
                               label="Description"
                               multiline
                               textAlignVertical="top"
-                              placeholder="What is this drop about?"
+                              placeholder={descPlaceholder}
                               onBlur={onBlur}
-                              helperText="You cannot edit this after the drop is created."
+                              helperText={descHelperText}
                               errorText={errors.description?.message}
                               value={value}
                               numberOfLines={3}
@@ -571,6 +552,33 @@ export const DropMusic = () => {
                   }}
                 />
               </Hidden>
+              <View tw="mt-4">
+                <Controller
+                  key="raffle"
+                  control={control}
+                  defaultValue={getDefaultDate()}
+                  name="raffle"
+                  render={({ field: { onChange, value } }) => {
+                    return (
+                      <FieldsetCheckbox
+                        onChange={onChange}
+                        value={value}
+                        Icon={
+                          <Raffle
+                            color={isDark ? colors.white : colors.gray[900]}
+                          />
+                        }
+                        helperText={
+                          isSaveDrop
+                            ? "Automatically selects a winner once the duration of your drop is over."
+                            : "Automatically selects a winner once your song is live."
+                        }
+                        title="Make it a Raffle"
+                      />
+                    );
+                  }}
+                />
+              </View>
               <View tw="z-10 mt-4 flex-row">
                 <Controller
                   key="releaseDate"
