@@ -89,7 +89,7 @@ export const SwipeList = ({
             },
           },
           getNFTSlug(nft),
-          { shallow: true }
+          { shallow: true, _shouldResolveHref: true }
         );
       }
 
@@ -123,7 +123,7 @@ export const SwipeList = ({
             },
           },
           getNFTSlug(data[e.activeIndex]),
-          { shallow: true }
+          { shallow: true, _shouldResolveHref: true }
         );
       }
       setActiveIndex(e.activeIndex);
