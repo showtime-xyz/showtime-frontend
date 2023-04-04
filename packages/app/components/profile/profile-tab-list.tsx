@@ -20,6 +20,7 @@ import { Card, GAP } from "app/components/card";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
@@ -64,9 +65,13 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       refresh,
     }));
     const onItemPress = useCallback(
-      (currentIndex: number) => {
+      (item: NFT, currentIndex: number) => {
         router.push(
-          `/list?initialScrollIndex=${currentIndex}&tabType=${list.type}&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${filter.sortType}&type=profile`
+          `/${getNFTSlug(item)}?initialScrollIndex=${currentIndex}&tabType=${
+            list.type
+          }&profileId=${profileId}&collectionId=${
+            filter.collectionId
+          }&sortType=${filter.sortType}&type=profile`
         );
       },
       [list.type, profileId, filter.collectionId, filter.sortType, router]
@@ -87,7 +92,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         return (
           <Card
             nft={item}
-            onPress={() => onItemPress(itemIndex)}
+            onPress={() => onItemPress(item, itemIndex)}
             numColumns={NUM_COLUMNS}
           />
         );

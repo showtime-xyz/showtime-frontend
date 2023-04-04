@@ -163,7 +163,6 @@ function App({ Component, pageProps, router }: AppProps) {
           <Header
             canGoBack={
               router.pathname === "/search" ||
-              router.pathname === "/list" ||
               router.pathname.split("/").length - 1 >= 2
             }
           />

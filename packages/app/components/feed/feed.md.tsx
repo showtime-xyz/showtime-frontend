@@ -20,6 +20,7 @@ import { VideoConfigContext } from "app/context/video-config-context";
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { Sticky } from "app/lib/stickynode";
 import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
@@ -98,7 +99,7 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
     return (
       <View tw="p-2">
         <Card
-          href={`/list?initialScrollIndex=${index}&type=feed`}
+          href={`/${getNFTSlug(item)}?initialScrollIndex=${index}&type=feed`}
           nft={item}
           sizeStyle={{ width: CARD_WIDTH, height: CARD_WIDTH }}
           tw="mb-4"

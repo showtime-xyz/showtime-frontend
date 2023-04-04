@@ -34,6 +34,7 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
@@ -233,7 +234,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}
-              href={`/list?initialScrollIndex=${
+              href={`/${getNFTSlug(item)}?initialScrollIndex=${
                 itemIndex * numColumns + chuckItemIndex
               }&tabType=${type}&profileId=${profileId}&collectionId=${
                 filter.collectionId

@@ -15,6 +15,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
 
@@ -98,7 +99,7 @@ export const Trending = () => {
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}
-              href={`/list?initialScrollIndex=${
+              href={`/${getNFTSlug(item)}?initialScrollIndex=${
                 itemIndex * numColumns + chuckItemIndex
               }&days=${days}&type=trendingNFTs`}
             />
