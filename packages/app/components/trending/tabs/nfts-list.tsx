@@ -35,7 +35,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
     const onItemPress = useCallback(
       (item: NFT, currentIndex: number) => {
         router.push(
-          `/${getNFTSlug(
+          `${getNFTSlug(
             item
           )}?initialScrollIndex=${currentIndex}&days=${days}&type=trendingNFTs`
         );
