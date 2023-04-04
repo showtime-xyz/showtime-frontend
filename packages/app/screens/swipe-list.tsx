@@ -11,7 +11,6 @@ import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useProfileNFTs } from "app/hooks/api-hooks";
 import { useFeed } from "app/hooks/use-feed";
 import { useUser } from "app/hooks/use-user";
-import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
@@ -32,17 +31,16 @@ type Query = {
 export const SwipeListByType = memo(function SwipeListByType() {
   const { useParam } = createParam<Query>();
   const [type] = useParam("type");
-  useTrackPageViewed({ name: "Swipe List" });
 
   switch (type) {
     case "profile":
-      return <ProfileSwipeList />;
+      return <ProfileSwipeList type={type} />;
     case "trendingNFTs":
-      return <TrendingNFTsSwipeList />;
+      return <TrendingNFTsSwipeList type={type} />;
     case "trendingCreator":
-      return <TrendingCreatorSwipeList />;
+      return <TrendingCreatorSwipeList type={type} />;
     case "feed":
-      return <FeedSwipeList />;
+      return <FeedSwipeList type={type} />;
     default:
       return null;
   }
@@ -56,7 +54,7 @@ export const SwipeListScreen = withColorScheme(() => {
   );
 });
 
-const FeedSwipeList = () => {
+const FeedSwipeList = ({ type }: { type: string }) => {
   const { useParam } = createParam<Query>();
   const { data } = useFeed();
   const [initialScrollIndex] = useParam("initialScrollIndex");
@@ -71,7 +69,7 @@ const FeedSwipeList = () => {
   );
 };
 
-const ProfileSwipeList = () => {
+const ProfileSwipeList = ({ type }: { type: string }) => {
   const { useParam } = createParam<Query>();
   const [tabType] = useParam("tabType");
   const [profileId] = useParam("profileId");
@@ -79,6 +77,17 @@ const ProfileSwipeList = () => {
   const [sortType] = useParam("sortType");
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const { user } = useUser();
+  const queryParams = useMemo(
+    () => ({
+      tabType,
+      profileId,
+      collectionId,
+      sortType,
+      type,
+      initialScrollIndex,
+    }),
+    [tabType, profileId, collectionId, sortType, type, initialScrollIndex]
+  );
 
   const { data, fetchMore, updateItem, isRefreshing, refresh } = useProfileNFTs(
     {
@@ -103,6 +112,7 @@ const ProfileSwipeList = () => {
           data={data}
           fetchMore={fetchMore}
           isRefreshing={isRefreshing}
+          queryParams={queryParams}
           refresh={refresh}
           initialScrollIndex={Number(initialScrollIndex)}
           bottomPadding={safeAreaBottom}
@@ -112,7 +122,7 @@ const ProfileSwipeList = () => {
   );
 };
 
-const TrendingNFTsSwipeList = () => {
+const TrendingNFTsSwipeList = ({ type }: { type: string }) => {
   const { useParam } = createParam<Query>();
   const [days] = useParam("days");
   const [initialScrollIndex] = useParam("initialScrollIndex");
@@ -129,47 +139,51 @@ const TrendingNFTsSwipeList = () => {
       // isRefreshing={isRefreshing}
       // refresh={refresh}
       initialScrollIndex={Number(initialScrollIndex)}
+      type={type}
       bottomPadding={safeAreaBottom}
     />
   );
 };
 
-export const TrendingCreatorSwipeList = withColorScheme(() => {
-  const { useParam } = createParam<Query>();
-  const [days] = useParam("days");
-  const [initialScrollIndex] = useParam("initialScrollIndex");
-  const [creatorId] = useParam("creatorId");
+export const TrendingCreatorSwipeList = withColorScheme(
+  ({ type }: { type: string }) => {
+    const { useParam } = createParam<Query>();
+    const [days] = useParam("days");
+    const [initialScrollIndex] = useParam("initialScrollIndex");
+    const [creatorId] = useParam("creatorId");
 
-  const { data, mutate } = useTrendingCreators({
-    days: Number(days),
-  });
+    const { data, mutate } = useTrendingCreators({
+      days: Number(days),
+    });
 
-  const creatorTopNFTs = useMemo(() => {
-    let nfts: NFT[] = [];
-    if (data && Array.isArray(data)) {
-      const creator = data.find((c) => c.profile_id === Number(creatorId));
-      if (creator && creator.top_items) {
-        nfts = creator.top_items;
+    const creatorTopNFTs = useMemo(() => {
+      let nfts: NFT[] = [];
+      if (data && Array.isArray(data)) {
+        const creator = data.find((c) => c.profile_id === Number(creatorId));
+        if (creator && creator.top_items) {
+          nfts = creator.top_items;
+        }
       }
-    }
-    return nfts;
-  }, [data, creatorId]);
+      return nfts;
+    }, [data, creatorId]);
 
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const updateItem = () => {
-    mutate();
-  };
+    const { bottom: safeAreaBottom } = useSafeAreaInsets();
+    const updateItem = () => {
+      mutate();
+    };
 
-  return (
-    <MutateProvider mutate={updateItem}>
-      <SwipeList
-        data={creatorTopNFTs}
-        initialScrollIndex={Number(initialScrollIndex)}
-        bottomPadding={safeAreaBottom}
-        fetchMore={() => {}}
-        isRefreshing={false}
-        refresh={() => {}}
-      />
-    </MutateProvider>
-  );
-});
+    return (
+      <MutateProvider mutate={updateItem}>
+        <SwipeList
+          data={creatorTopNFTs}
+          initialScrollIndex={Number(initialScrollIndex)}
+          bottomPadding={safeAreaBottom}
+          fetchMore={() => {}}
+          isRefreshing={false}
+          refresh={() => {}}
+          type={type}
+        />
+      </MutateProvider>
+    );
+  }
+);

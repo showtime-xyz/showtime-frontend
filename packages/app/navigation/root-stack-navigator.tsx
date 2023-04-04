@@ -92,7 +92,6 @@ export function RootStackNavigator() {
           component={NotificationSettingsScreen}
         />
         <Stack.Screen name="blockedList" component={BlockedListScreen} />
-
         <Stack.Screen
           name="followers"
           component={FollowersScreen}

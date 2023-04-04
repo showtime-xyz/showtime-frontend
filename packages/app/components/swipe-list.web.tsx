@@ -2,9 +2,9 @@ import {
   useCallback,
   useMemo,
   useRef,
-  useEffect,
   createContext,
   useState,
+  useEffect,
 } from "react";
 import { useWindowDimensions } from "react-native";
 
@@ -38,6 +38,7 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
+  queryParams: object;
 };
 const { useParam } = createParam();
 
@@ -46,14 +47,15 @@ export const SwipeList = ({
   data,
   fetchMore,
   initialScrollIndex = 0,
+  queryParams,
 }: Props) => {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef<any>(null);
   useScrollToTop(listRef);
-  const initialURLSet = useRef(false);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
+  const initialURLSet = useRef(false);
   const isSwiped = useRef(false);
 
   const visibleItems = useSharedValue<any[]>([
@@ -72,10 +74,6 @@ export const SwipeList = ({
   );
 
   useEffect(() => {
-    const popStateListener = () => {
-      window.removeEventListener("popstate", popStateListener);
-      router.pop();
-    };
     if (
       !initialURLSet.current &&
       isSwipeListScreen &&
@@ -83,17 +81,23 @@ export const SwipeList = ({
     ) {
       const nft = data[Number(initialParamProp)];
       if (nft) {
-        window.history.pushState({}, "", getNFTSlug(nft));
-        window.addEventListener("popstate", popStateListener);
+        router.replace(
+          {
+            pathname: "/profile/[username]/[dropSlug]",
+            query: {
+              ...queryParams,
+              username: nft.creator_username,
+              dropSlug: nft.slug,
+            },
+          },
+          getNFTSlug(nft),
+          { shallow: true }
+        );
       }
 
       initialURLSet.current = true;
     }
-
-    return () => {
-      window.removeEventListener("popstate", popStateListener);
-    };
-  }, [data, isSwipeListScreen, initialParamProp, router]);
+  }, [data, isSwipeListScreen, initialParamProp, router, queryParams]);
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
@@ -113,11 +117,23 @@ export const SwipeList = ({
         e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
       if (isSwipeListScreen) {
-        window.history.replaceState(null, "", getNFTSlug(data[e.activeIndex]));
+        router.replace(
+          {
+            pathname: "/profile/[username]/[dropSlug]",
+            query: {
+              ...queryParams,
+              initialScrollIndex: e.activeIndex,
+              username: data[e.activeIndex].creator_username,
+              dropSlug: data[e.activeIndex].slug,
+            },
+          },
+          getNFTSlug(data[e.activeIndex]),
+          { shallow: true }
+        );
       }
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, data, router, isSwipeListScreen]
+    [visibleItems, data, router, isSwipeListScreen, queryParams]
   );
 
   if (data.length === 0) return null;

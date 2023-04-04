@@ -30,6 +30,7 @@ import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../components/empty-placeholder";
 import { TextLink } from "../navigation/link";
+import { SwipeListScreen } from "./swipe-list";
 
 type Query = {
   tokenId: string;
@@ -39,74 +40,19 @@ type Query = {
   showClaim?: boolean;
   username?: string;
   dropSlug?: string;
+  initialScrollIndex?: string;
 };
 
 const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 function NftScreen({ fallback = {} }: { fallback?: object }) {
-  useTrackPageViewed({ name: "NFT" });
-  const { colorScheme } = useColorScheme();
-  const [showClaim] = useParam("showClaim", {
-    initial: false,
-    parse: (v) => Boolean(v),
-  });
-  const [contractAddress] = useParam("contractAddress");
-  const initialRef = useRef(false);
-  const videoConfig = useMemo(
-    () => ({
-      isMuted: true,
-      useNativeControls: false,
-      previewOnly: false,
-    }),
-    []
-  );
+  const [initialScrollIndex] = useParam("initialScrollIndex");
+  if (initialScrollIndex) {
+    return <SwipeListScreen />;
+  }
 
-  const redirectToClaimDrop = useRedirectToClaimDrop();
-
-  const dummyId = 1;
-  const visibileItems = useSharedValue([undefined, dummyId, undefined]);
-
-  useEffect(() => {
-    if (showClaim && contractAddress && !initialRef.current) {
-      initialRef.current = true;
-      redirectToClaimDrop(contractAddress);
-    }
-  }, [showClaim, redirectToClaimDrop, contractAddress]);
-
-  return (
-    <ErrorBoundary>
-      <SWRConfig value={{ fallback }}>
-        <VideoConfigContext.Provider value={videoConfig}>
-          <ItemKeyContext.Provider value={dummyId}>
-            <ViewabilityItemsContext.Provider value={visibileItems}>
-              <Suspense
-                fallback={
-                  <View tw="items-center">
-                    <Skeleton
-                      //@ts-ignore
-                      colorMode={colorScheme}
-                      height={screenHeight - 300}
-                      width={screenWidth}
-                    />
-                    <View tw="h-2" />
-                    <Skeleton
-                      //@ts-ignore
-                      colorMode={colorScheme}
-                      height={300}
-                      width={screenWidth}
-                    />
-                  </View>
-                }
-              >
-                <NFTDetail />
-              </Suspense>
-            </ViewabilityItemsContext.Provider>
-          </ItemKeyContext.Provider>
-        </VideoConfigContext.Provider>
-      </SWRConfig>
-    </ErrorBoundary>
-  );
+  return <NFTDetailScreenImpl fallback={fallback} />;
 }
 
 const NFTDetail = () => {
@@ -172,3 +118,68 @@ const NFTDetail = () => {
 };
 
 export { NftScreen };
+
+const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
+  useTrackPageViewed({ name: "NFT" });
+  const { colorScheme } = useColorScheme();
+  const [showClaim] = useParam("showClaim", {
+    initial: false,
+    parse: (v) => Boolean(v),
+  });
+  const [contractAddress] = useParam("contractAddress");
+  const initialRef = useRef(false);
+  const videoConfig = useMemo(
+    () => ({
+      isMuted: true,
+      useNativeControls: false,
+      previewOnly: false,
+    }),
+    []
+  );
+
+  const redirectToClaimDrop = useRedirectToClaimDrop();
+
+  const dummyId = 1;
+  const visibileItems = useSharedValue([undefined, dummyId, undefined]);
+
+  useEffect(() => {
+    if (showClaim && contractAddress && !initialRef.current) {
+      initialRef.current = true;
+      redirectToClaimDrop(contractAddress);
+    }
+  }, [showClaim, redirectToClaimDrop, contractAddress]);
+
+  return (
+    <ErrorBoundary>
+      <SWRConfig value={{ fallback }}>
+        <VideoConfigContext.Provider value={videoConfig}>
+          <ItemKeyContext.Provider value={dummyId}>
+            <ViewabilityItemsContext.Provider value={visibileItems}>
+              <Suspense
+                fallback={
+                  <View tw="items-center">
+                    <Skeleton
+                      //@ts-ignore
+                      colorMode={colorScheme}
+                      height={screenHeight - 300}
+                      width={screenWidth}
+                    />
+                    <View tw="h-2" />
+                    <Skeleton
+                      //@ts-ignore
+                      colorMode={colorScheme}
+                      height={300}
+                      width={screenWidth}
+                    />
+                  </View>
+                }
+              >
+                <NFTDetail />
+              </Suspense>
+            </ViewabilityItemsContext.Provider>
+          </ItemKeyContext.Provider>
+        </VideoConfigContext.Provider>
+      </SWRConfig>
+    </ErrorBoundary>
+  );
+};
