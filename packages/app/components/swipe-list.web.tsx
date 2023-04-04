@@ -38,7 +38,8 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
-  queryParams: object;
+  queryParams?: object;
+  type?: string;
 };
 const { useParam } = createParam();
 

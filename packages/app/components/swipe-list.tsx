@@ -25,7 +25,8 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
-  queryParams: object;
+  queryParams?: object;
+  type?: string;
 };
 
 export const SwipeList = ({
