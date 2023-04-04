@@ -75,7 +75,6 @@ export const ClaimButton = ({
     edition.creator_airdrop_edition
   );
   const { isAuthenticated, user } = useUser();
-  console.log(edition);
   const isSelf =
     user?.data?.profile.profile_id ===
     edition.creator_airdrop_edition?.owner_profile_id;

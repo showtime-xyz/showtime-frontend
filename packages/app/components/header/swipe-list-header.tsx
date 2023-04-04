@@ -37,7 +37,7 @@ export const SwipeListHeader = memo<SwipeListHeaderProps>(
     return (
       <>
         <View
-          tw={["absolute left-5 z-10", tw]}
+          tw={["absolute left-5 z-10 flex md:hidden", tw]}
           style={[
             {
               paddingTop: top,
@@ -56,7 +56,7 @@ export const SwipeListHeader = memo<SwipeListHeaderProps>(
             onPress={() => {
               navigateToLogin();
             }}
-            tw="absolute right-5 z-10 h-8 items-center justify-center rounded-full bg-white px-4"
+            tw="absolute right-5 z-10 flex h-8 items-center justify-center rounded-full bg-white px-4 md:hidden"
             style={[
               {
                 marginTop: top,

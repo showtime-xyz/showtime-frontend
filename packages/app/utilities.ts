@@ -438,6 +438,14 @@ export const getTwitterIntentUsername = (profile?: Profile) => {
     ? profile.wallet_addresses_v2[0].ens_domain
     : formatAddressShort(profile.wallet_addresses_v2?.[0]?.address);
 };
+export const getInstagramUsername = (profile?: Profile) => {
+  if (!profile) return "";
+
+  const instagramUsername = profile.social_login_handles.instagram;
+  if (instagramUsername) {
+    return `@${instagramUsername.replace(/@/g, "")}`;
+  }
+};
 
 export const getDomainName = (link?: string) => {
   if (!link) return null;

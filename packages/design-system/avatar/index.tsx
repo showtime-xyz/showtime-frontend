@@ -80,8 +80,8 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
             alt={alt}
             {...(enableSkeleton
               ? {
-                  onLoadEnd: () => setIsLoading(true),
                   onLoad: () => setIsLoading(false),
+                  onLoadStart: () => setIsLoading(true),
                 }
               : {})}
           />
