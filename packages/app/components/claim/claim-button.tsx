@@ -1,6 +1,8 @@
 import { useContext, useMemo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
+import { formatDistanceToNowStrict } from "date-fns";
+
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -73,24 +75,45 @@ export const ClaimButton = ({
     edition.creator_airdrop_edition
   );
   const { isAuthenticated, user } = useUser();
+  console.log(edition);
+  const isSelf =
+    user?.data?.profile.profile_id ===
+    edition.creator_airdrop_edition?.owner_profile_id;
+  const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
 
-  const isCanAnnounceRaffleResult = useMemo(() => {
-    const isSelf =
-      user?.data?.profile.profile_id ===
-      edition.creator_airdrop_edition?.owner_profile_id;
-    const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
-    const isRaffleHasWinner =
-      isRaffleDrop && edition.raffles?.findIndex((r) => !r.winner) != -1;
-
-    return isSelf && isRaffleHasWinner;
+  const raffleConcludedAt = useMemo(() => {
+    if (!isSelf || !isRaffleDrop) return null;
+    if (
+      edition.gating_type === "music_presave" &&
+      edition?.presave_release_date
+    ) {
+      return formatDistanceToNowStrict(
+        new Date(edition?.presave_release_date),
+        {
+          addSuffix: true,
+        }
+      );
+    }
+    if (edition?.time_limit) {
+      return formatDistanceToNowStrict(new Date(edition?.time_limit), {
+        addSuffix: true,
+      });
+    }
   }, [
-    edition.creator_airdrop_edition?.owner_profile_id,
-    edition.raffles,
-    user?.data?.profile.profile_id,
+    edition.gating_type,
+    edition?.presave_release_date,
+    edition?.time_limit,
+    isRaffleDrop,
+    isSelf,
   ]);
+  const isCanViewRaffleResult = useMemo(() => {
+    const isRaffleHasWinner =
+      isRaffleDrop && edition.raffles?.findIndex((r) => !!r.winner) != -1;
+    return isSelf && isRaffleHasWinner;
+  }, [edition.raffles, isRaffleDrop, isSelf]);
 
   const onClaimPress = () => {
-    if (isCanAnnounceRaffleResult) {
+    if (isCanViewRaffleResult) {
       redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
       return;
     }
@@ -126,7 +149,7 @@ export const ClaimButton = ({
   const bgIsGreen =
     status === ClaimStatus.Claimed || status === ClaimStatus.Soldout;
 
-  const disabled = isCanAnnounceRaffleResult
+  const disabled = isCanViewRaffleResult
     ? false
     : status === ClaimStatus.Claimed ||
       status === ClaimStatus.Soldout ||
@@ -134,9 +157,17 @@ export const ClaimButton = ({
       isProgress;
 
   const content = useMemo(() => {
-    if (isCanAnnounceRaffleResult) {
+    if (isCanViewRaffleResult) {
       return <Text tw="font-semibold text-white">Announce your raffle</Text>;
     }
+    if (raffleConcludedAt) {
+      return (
+        <Text tw="font-semibold text-white">
+          Your raffle ends {`${raffleConcludedAt}`}
+        </Text>
+      );
+    }
+
     if (status === ClaimStatus.Claimed) {
       return (
         <>
@@ -206,9 +237,10 @@ export const ClaimButton = ({
     color,
     edition?.gating_type,
     isAuthenticated,
-    isCanAnnounceRaffleResult,
+    isCanViewRaffleResult,
     isDark,
     isProgress,
+    raffleConcludedAt,
     status,
   ]);
 

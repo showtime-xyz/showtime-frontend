@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { Text as RNText } from "react-native";
 
-import { Raffle } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -19,7 +18,6 @@ import {
   removeTags,
 } from "app/utilities";
 
-import { TextTooltip } from "../text-tooltip";
 import { RaffleTooltip } from "./raffle-tooltip";
 
 type NFTDetailsProps = {

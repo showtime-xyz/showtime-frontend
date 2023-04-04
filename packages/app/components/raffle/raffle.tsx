@@ -179,10 +179,14 @@ export const Raffle = (props?: RaffleModalParams) => {
     Linking.openURL(
       getTwitterIntent({
         url: "",
-        message: `Congrats @`,
+        message: `Congratulations @${getTwitterIntentUsername(
+          winnerProfile
+        )} on winning the ${
+          edition?.creator_airdrop_edition.name
+        } raffle on @showtime_xyz! \nDM me for more details!`,
       })
     );
-  }, []);
+  }, [edition?.creator_airdrop_edition.name, winnerProfile]);
 
   if (isLoadingCollection) {
     return <RaffleSkeleton size={size} />;

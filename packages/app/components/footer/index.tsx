@@ -18,10 +18,20 @@ import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { WebFooter } from "./links-footer.web";
 
+const DARK_THEME_PATHNAMES = ["/", "/foryou"];
+
 const Footer = () => {
   const router = useRouter();
   const isDark = useIsDarkMode();
-  const color = isDark ? "white" : "black";
+  const isDarkThemePage = DARK_THEME_PATHNAMES.includes(router.pathname);
+  const color = isDark ? "#fff" : isDarkThemePage ? "#fff" : "#000";
+  const buttonColor = isDark ? "#000" : isDarkThemePage ? "#000" : "#fff";
+  const buttonBackgroundColor = isDark
+    ? "#000"
+    : DARK_THEME_PATHNAMES.includes(router.pathname)
+    ? "#fff"
+    : "#000";
+
   const { width } = useWindowDimensions();
   const { isAuthenticated } = useUser();
   const { isTabBarHidden } = useNavigationElements();
@@ -53,7 +63,11 @@ const Footer = () => {
         color={color}
         focused={router.pathname === "/trending"}
       />
-      <CreateTabBarIcon color={color} focused={router.pathname === "/drop"} />
+      <CreateTabBarIcon
+        color={buttonColor}
+        focused={router.pathname === "/drop"}
+        style={{ backgroundColor: buttonBackgroundColor }}
+      />
       <NotificationsTabBarIcon
         color={color}
         focused={router.pathname === "/notifications"}

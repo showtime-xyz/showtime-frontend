@@ -1,6 +1,5 @@
 import { Platform } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Raffle } from "@showtime-xyz/universal.icon";
 import { View } from "@showtime-xyz/universal.view";
 

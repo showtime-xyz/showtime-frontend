@@ -425,10 +425,7 @@ export const getCreatorNameFromNFT = (nft?: {
 export const getTwitterIntentUsername = (profile?: Profile) => {
   if (!profile) return "";
 
-  const twitterUsername = profile.links.find(
-    (l) => l.type__name.toLowerCase() === "twitter"
-  )?.user_input;
-
+  const twitterUsername = profile.social_login_handles.twitter;
   if (twitterUsername) {
     return `@${twitterUsername.replace(/@/g, "")}`;
   }
