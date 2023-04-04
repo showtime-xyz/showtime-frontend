@@ -65,6 +65,7 @@ const FeedSwipeList = ({ type }: { type: string }) => {
       data={data}
       initialScrollIndex={Number(initialScrollIndex)}
       bottomPadding={safeAreaBottom}
+      type={type}
     />
   );
 };
