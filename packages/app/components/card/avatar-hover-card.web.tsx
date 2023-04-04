@@ -26,12 +26,9 @@ import { FollowButton } from "../follow-button";
 import { ProfileFollows } from "../profile/profile-follows";
 import { AvatarHoverCardProps } from "./avatar-hover-card";
 
-const CARD_WIDTH = 320;
-export function AvatarHoverCard({
-  username,
-  url,
-  ...rest
-}: AvatarHoverCardProps) {
+export const CARD_WIDTH = 320;
+
+export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
   const { data, isLoading } = useUserProfile({ address: username });
   const userId = useCurrentUserId();
   const { getIsBlocked, unblock } = useBlock();
@@ -47,6 +44,131 @@ export function AvatarHoverCard({
     username: profileData?.profile.username,
   });
 
+  return (
+    <>
+      <View tw="overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <Skeleton
+          height={CARD_WIDTH / 3}
+          width={CARD_WIDTH}
+          show={isLoading}
+          colorMode={colorScheme as any}
+          radius={0}
+        >
+          {profileData?.profile.cover_url && (
+            <Image
+              alt="Profile Image"
+              source={{
+                uri: getFullSizeCover(profileData?.profile.cover_url),
+              }}
+              resizeMode="cover"
+              width={CARD_WIDTH}
+              height={CARD_WIDTH / 3}
+              style={{
+                width: CARD_WIDTH,
+                height: CARD_WIDTH / 3,
+              }}
+            />
+          )}
+        </Skeleton>
+      </View>
+      <View tw="px-4 pb-4">
+        <View tw="flex-row justify-between">
+          <View tw="-m-2 -mt-10 rounded-full border-8 border-white dark:border-black">
+            <Avatar
+              alt="Avatar"
+              size={112}
+              url={getProfileImage(profileData?.profile)}
+            />
+          </View>
+          {isBlocked ? (
+            <Button
+              size="regular"
+              onPress={() => {
+                unblock(profileId);
+              }}
+              tw="mt-2"
+            >
+              Unblock
+            </Button>
+          ) : (
+            profileData?.profile.profile_id &&
+            !isSelf && (
+              <FollowButton
+                name={profileData?.profile.name}
+                size="regular"
+                profileId={profileData?.profile.profile_id}
+                onToggleFollow={onToggleFollow}
+                tw="mt-2"
+              />
+            )
+          )}
+        </View>
+        {isLoading ? (
+          <View tw="w-full items-center">
+            <Spinner />
+          </View>
+        ) : (
+          <>
+            {isBlocked ? (
+              <Text tw="text-gray-900 dark:text-white">
+                <Text tw="font-bold">@{username}</Text> is blocked
+              </Text>
+            ) : (
+              <View tw="mt-4">
+                <Text
+                  tw="text-xl font-extrabold text-gray-900 dark:text-white"
+                  numberOfLines={2}
+                >
+                  {profileData?.profile.name}
+                </Text>
+                <View tw="my-2 flex-row items-center">
+                  {Boolean(username) && (
+                    <TextLink
+                      href={`/@${username}`}
+                      tw="text-sm font-semibold text-gray-600 hover:underline dark:text-gray-400"
+                    >
+                      {`@${username}`}
+                    </TextLink>
+                  )}
+
+                  {profileData?.profile.verified ? (
+                    <View tw="ml-1">
+                      <VerificationBadge size={16} />
+                    </View>
+                  ) : null}
+                  {profileData?.follows_you && !isSelf ? (
+                    <Chip label="Follows You" tw="ml-2" />
+                  ) : null}
+                </View>
+                {bio ? (
+                  <View tw="mt-4 items-baseline">
+                    <ClampText
+                      text={bioWithMentions}
+                      maxLines={3}
+                      tw="max-w-full break-all text-sm text-gray-900 dark:text-white"
+                    />
+                  </View>
+                ) : null}
+                <ProfileFollows
+                  profileId={profileId}
+                  followersCount={profileData?.followers_count}
+                  followingCount={profileData?.following_count}
+                  tw="mt-4"
+                />
+              </View>
+            )}
+          </>
+        )}
+      </View>
+    </>
+  );
+}
+
+export function AvatarHoverCard({
+  username,
+  url,
+  ...rest
+}: AvatarHoverCardProps) {
   if (isMobileWeb()) {
     return (
       <Link href={`/@${username}`}>
@@ -54,8 +176,9 @@ export function AvatarHoverCard({
       </Link>
     );
   }
+
   return (
-    <HoverCard.Root>
+    <HoverCard.Root closeDelay={200}>
       <HoverCard.Trigger asChild>
         <div>
           <Link href={`/@${username}`}>
@@ -67,121 +190,9 @@ export function AvatarHoverCard({
         <HoverCard.Content
           className="animate-fade-in dark:shadow-dark shadow-light w-80 overflow-hidden rounded-2xl bg-white dark:bg-black"
           sideOffset={5}
+          hideWhenDetached={true}
         >
-          <View tw="overflow-hidden bg-gray-100 dark:bg-gray-800">
-            <Skeleton
-              height={CARD_WIDTH / 3}
-              width={CARD_WIDTH}
-              show={isLoading}
-              colorMode={colorScheme as any}
-              radius={0}
-            >
-              {profileData?.profile.cover_url && (
-                <Image
-                  alt="Profile Image"
-                  source={{
-                    uri: getFullSizeCover(profileData?.profile.cover_url),
-                  }}
-                  resizeMode="cover"
-                  width={CARD_WIDTH}
-                  height={CARD_WIDTH / 3}
-                  style={{
-                    width: CARD_WIDTH,
-                    height: CARD_WIDTH / 3,
-                  }}
-                />
-              )}
-            </Skeleton>
-          </View>
-          <View tw="px-4 pb-4">
-            <View tw="flex-row justify-between">
-              <View tw="-m-2 -mt-10 rounded-full border-8 border-white dark:border-black">
-                <Avatar
-                  alt="Avatar"
-                  size={112}
-                  url={getProfileImage(profileData?.profile)}
-                />
-              </View>
-              {isBlocked ? (
-                <Button
-                  size="regular"
-                  onPress={() => {
-                    unblock(profileId);
-                  }}
-                  tw="mt-2"
-                >
-                  Unblock
-                </Button>
-              ) : (
-                profileData?.profile.profile_id &&
-                !isSelf && (
-                  <FollowButton
-                    name={profileData?.profile.name}
-                    size="regular"
-                    profileId={profileData?.profile.profile_id}
-                    onToggleFollow={onToggleFollow}
-                    tw="mt-2"
-                  />
-                )
-              )}
-            </View>
-            {isLoading ? (
-              <View tw="w-full items-center">
-                <Spinner />
-              </View>
-            ) : (
-              <>
-                {isBlocked ? (
-                  <Text tw="text-gray-900 dark:text-white">
-                    <Text tw="font-bold">@{username}</Text> is blocked
-                  </Text>
-                ) : (
-                  <View tw="mt-4">
-                    <Text
-                      tw="text-xl font-extrabold text-gray-900 dark:text-white"
-                      numberOfLines={2}
-                    >
-                      {profileData?.profile.name}
-                    </Text>
-                    <View tw="my-2 flex-row items-center">
-                      {Boolean(username) && (
-                        <TextLink
-                          href={`/@${username}`}
-                          tw="text-sm font-semibold text-gray-600 hover:underline dark:text-gray-400"
-                        >
-                          {`@${username}`}
-                        </TextLink>
-                      )}
-
-                      {profileData?.profile.verified ? (
-                        <View tw="ml-1">
-                          <VerificationBadge size={16} />
-                        </View>
-                      ) : null}
-                      {profileData?.follows_you && !isSelf ? (
-                        <Chip label="Follows You" tw="ml-2" />
-                      ) : null}
-                    </View>
-                    {bio ? (
-                      <View tw="mt-4 items-baseline">
-                        <ClampText
-                          text={bioWithMentions}
-                          maxLines={3}
-                          tw="max-w-full break-all text-sm text-gray-900 dark:text-white"
-                        />
-                      </View>
-                    ) : null}
-                    <ProfileFollows
-                      profileId={profileId}
-                      followersCount={profileData?.followers_count}
-                      followingCount={profileData?.following_count}
-                      tw="mt-4"
-                    />
-                  </View>
-                )}
-              </>
-            )}
-          </View>
+          <AvatarHoverCardContent {...{ username, url, rest }} />
         </HoverCard.Content>
       </HoverCard.Portal>
     </HoverCard.Root>
