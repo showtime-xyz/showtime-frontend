@@ -69,6 +69,17 @@ const ProfileSwipeList = ({ type }: { type: string }) => {
   const [sortType] = useParam("sortType");
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const { user } = useUser();
+  const queryParams = useMemo(
+    () => ({
+      tabType,
+      profileId,
+      collectionId,
+      sortType,
+      type,
+      initialScrollIndex,
+    }),
+    [tabType, profileId, collectionId, sortType, type, initialScrollIndex]
+  );
 
   const { data, fetchMore, updateItem, isRefreshing, refresh } = useProfileNFTs(
     {
@@ -93,7 +104,7 @@ const ProfileSwipeList = ({ type }: { type: string }) => {
           data={data}
           fetchMore={fetchMore}
           isRefreshing={isRefreshing}
-          type={type}
+          queryParams={queryParams}
           refresh={refresh}
           initialScrollIndex={Number(initialScrollIndex)}
           bottomPadding={safeAreaBottom}
