@@ -12,6 +12,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+import { useRedirectToRaffleResult } from "app/hooks/use-redirect-to-raffle-result";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
@@ -58,6 +59,7 @@ export const ClaimButton = ({
 }: ClaimButtonProps) => {
   const isDark = useIsDarkMode();
   const redirectToClaimDrop = useRedirectToClaimDrop();
+  const redirectToRaffleResult = useRedirectToRaffleResult();
   const {
     state: claimStates,
     dispatch,
@@ -70,10 +72,28 @@ export const ClaimButton = ({
   const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
     edition.creator_airdrop_edition
   );
+  const { isAuthenticated, user } = useUser();
 
-  const { isAuthenticated } = useUser();
+  const isCanAnnounceRaffleResult = useMemo(() => {
+    const isSelf =
+      user?.data?.profile.profile_id ===
+      edition.creator_airdrop_edition?.owner_profile_id;
+    const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
+    const isRaffleHasWinner =
+      isRaffleDrop && edition.raffles?.findIndex((r) => !r.winner) != -1;
+
+    return isSelf && isRaffleHasWinner;
+  }, [
+    edition.creator_airdrop_edition?.owner_profile_id,
+    edition.raffles,
+    user?.data?.profile.profile_id,
+  ]);
 
   const onClaimPress = () => {
+    if (isCanAnnounceRaffleResult) {
+      redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
+      return;
+    }
     if (
       claimStates.status === "loading" &&
       claimStates.signaturePrompt === false
@@ -106,12 +126,17 @@ export const ClaimButton = ({
   const bgIsGreen =
     status === ClaimStatus.Claimed || status === ClaimStatus.Soldout;
 
-  const disabled =
-    status === ClaimStatus.Claimed ||
-    status === ClaimStatus.Soldout ||
-    isExpired ||
-    isProgress;
+  const disabled = isCanAnnounceRaffleResult
+    ? false
+    : status === ClaimStatus.Claimed ||
+      status === ClaimStatus.Soldout ||
+      isExpired ||
+      isProgress;
+
   const content = useMemo(() => {
+    if (isCanAnnounceRaffleResult) {
+      return <Text tw="font-semibold text-white">Announce your raffle</Text>;
+    }
     if (status === ClaimStatus.Claimed) {
       return (
         <>
@@ -178,12 +203,13 @@ export const ClaimButton = ({
 
     return "Collect";
   }, [
-    status,
-    isProgress,
-    edition?.gating_type,
     color,
-    isDark,
+    edition?.gating_type,
     isAuthenticated,
+    isCanAnnounceRaffleResult,
+    isDark,
+    isProgress,
+    status,
   ]);
 
   const opacityTw = useMemo(() => {

@@ -14,14 +14,17 @@ type ShowtimeTooltipProps = {
   triggerElement: JSX.Element;
   text?: string;
   side?: "top" | "bottom" | "left" | "right";
+  theme?: "dark" | "light";
 };
 export const TextTooltip = ({
   triggerElement,
   text,
   side = "right",
+  theme,
 }: ShowtimeTooltipProps) => {
   const [open, setOpen] = useState(false);
-  const isDark = useIsDarkMode();
+  const isDarkMode = useIsDarkMode();
+  const isDark = theme ? theme === "dark" : isDarkMode;
   return (
     <Tooltip.Root
       onDismiss={() => {

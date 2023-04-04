@@ -29,7 +29,6 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
-import { SwipeListScreen } from "app/screens/swipe-list";
 
 import { DropEventScreen } from "../screens/drop-event";
 import { DropFreeScreen } from "../screens/drop-free";
@@ -70,14 +69,8 @@ export function RootStackNavigator() {
             animation: "none",
           }}
         />
-        <Stack.Screen
-          name="swipeList"
-          component={SwipeListScreen}
-          getId={({ params }) => {
-            return params?.profileId ?? params.type;
-          }}
-        />
         <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen name="dropSlug" component={NftScreen} />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -117,9 +110,6 @@ export function RootStackNavigator() {
           options={{ headerTitle: "Comments" }}
           component={CommentsScreen}
         />
-
-        <Stack.Screen name="nft" component={NftScreen} />
-        <Stack.Screen name="dropSlug" component={NftScreen} />
         <Stack.Screen
           name="dropUpdate"
           options={{ headerTitle: "Update Spotify Link" }}

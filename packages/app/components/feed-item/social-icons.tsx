@@ -27,6 +27,8 @@ export const SocialIcons = memo<SocialIconsProps>(function FeedItem({
       <AvatarHoverCard
         username={nft?.creator_username || nft?.creator_address_nonens}
         url={nft.creator_img_url}
+        borderColor="#FFF"
+        tw="border"
       />
       <View tw="h-6" />
       <Like vertical nft={nft} />

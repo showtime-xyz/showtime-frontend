@@ -16,10 +16,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
         href={`/@${match}`}
         key={match + i}
         target="_blank"
-        tw={
-          tw ??
-          "text-13 font-bold text-gray-100 dark:text-gray-100 md:text-gray-900"
-        }
+        tw={tw ?? "text-13 font-bold text-gray-900 dark:text-gray-100"}
       >
         @{match}
       </TextLink>
@@ -41,10 +38,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
           href={match}
           key={match + i}
           target="_blank"
-          tw={
-            tw ??
-            "text-13 font-bold text-gray-100 dark:text-gray-100 md:text-gray-900"
-          }
+          tw={tw ?? "text-13 font-bold text-gray-900 dark:text-gray-100"}
         >
           {urlText}
         </TextLink>

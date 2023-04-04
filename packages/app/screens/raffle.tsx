@@ -1,10 +1,10 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { RaffleModal } from "app/components/raffle";
+import { Raffle } from "app/components/raffle";
 
-export const RaffleScreen = withModalScreen(RaffleModal, {
+export const RaffleScreen = withModalScreen(Raffle, {
   title: "",
   matchingPathname: "/raffle/[contractAddress]",
   matchingQueryParam: "raffleModal",
-  snapPoints: ["100%"],
+  snapPoints: ["98%"],
 });

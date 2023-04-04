@@ -28,7 +28,6 @@ type Props = {
   queryParams?: object;
   type?: string;
 };
-
 export const SwipeList = ({
   data,
   fetchMore,

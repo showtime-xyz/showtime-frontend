@@ -10,6 +10,10 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 const cache = require("./workbox-cache");
+const {
+  getDesignSystemPackages,
+  resolveAliasDesignSystemPackages,
+} = require("../../plugins/resolve-design-system-packages");
 const withPWA = require("next-pwa")({
   dest: "public",
   disable: isDev,
@@ -39,17 +43,15 @@ const nextConfig = {
     "react-native",
     "react-native-web",
     "app",
+    "desing-system",
+    "@showtime-xyz",
     "@gorhom/bottom-sheet",
     "@gorhom/portal",
     "moti",
     "zeego",
     "sentry-expo",
     "solito",
-    "three",
     "nativewind",
-    "@shopify/flash-list",
-    "recyclerlistview",
-    "expo",
     "expo-app-loading",
     "expo-application",
     "expo-av",
@@ -58,13 +60,10 @@ const nextConfig = {
     "expo-build-properties",
     "expo-camera",
     "expo-clipboard",
-    "expo-community-flipper",
     "expo-constants",
     "expo-dev-client",
     "expo-device",
-    "expo-font",
-    "expo-gl",
-    "expo-haptics",
+    "expo-modules-core",
     "expo-image-picker",
     "expo-linear-gradient",
     "expo-linking",
@@ -72,16 +71,12 @@ const nextConfig = {
     "expo-location",
     "expo-mail-composer",
     "expo-media-library",
-    "expo-modules-core",
-    "expo-navigation-bar",
     "expo-next-react-navigation",
     "expo-notifications",
     "expo-splash-screen",
     "expo-status-bar",
     "expo-system-ui",
-    "expo-updates",
     "expo-web-browser",
-    "expo-next-react-navigation",
     "expo-file-system",
     "@react-native-menu/menu",
     "react-native-reanimated",
@@ -136,12 +131,12 @@ const nextConfig = {
 
     // this little neat function will allow us to use `bit watch` in dev and change the code from design system without
     // restarting next or clearing the next cache
-    config.snapshot = {
-      ...(config.snapshot ?? {}),
-      // Add all node_modules but @showtime-xyz module to managedPaths
-      // Allows for hot refresh of changes to @showtime-xyz module
-      managedPaths: [/^(.+?[\\/]node_modules[\\/])(?!@showtime-xyz)/],
-    };
+    // config.snapshot = {
+    //   ...(config.snapshot ?? {}),
+    //   // Add all node_modules but @showtime-xyz module to managedPaths
+    //   // Allows for hot refresh of changes to @showtime-xyz module
+    //   managedPaths: [/^(.+?[\\/]node_modules[\\/])(?!@showtime-xyz)/],
+    // };
 
     return config;
   },

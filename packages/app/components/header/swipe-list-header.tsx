@@ -1,8 +1,13 @@
 import React, { memo } from "react";
 
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { useUser } from "app/hooks/use-user";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import { HeaderLeft } from "./header-left";
 
@@ -23,25 +28,45 @@ export const SwipeListHeader = memo<SwipeListHeaderProps>(
     color,
   }) {
     const { top } = useSafeAreaInsets();
+    const { isAuthenticated } = useUser();
+
+    const navigateToLogin = useNavigateToLogin();
     const router = useRouter();
     const isRootScreen = router.asPath === "/";
     const headerHeight = top + DEFAULT_HADER_HEIGHT;
     return (
-      <View
-        tw={["absolute left-5 z-10", tw]}
-        style={[
-          {
-            paddingTop: top,
-            height: headerHeight,
-          },
-        ]}
-      >
-        <HeaderLeft
-          canGoBack={canGoBack ?? isRootScreen}
-          withBackground={withBackground}
-          color={color}
-        />
-      </View>
+      <>
+        <View
+          tw={["absolute left-5 z-10", tw]}
+          style={[
+            {
+              paddingTop: top,
+              height: headerHeight,
+            },
+          ]}
+        >
+          <HeaderLeft
+            canGoBack={canGoBack ?? isRootScreen}
+            withBackground={withBackground}
+            color={color}
+          />
+        </View>
+        {!isAuthenticated && (
+          <Pressable
+            onPress={() => {
+              navigateToLogin();
+            }}
+            tw="absolute right-5 z-10 h-8 items-center justify-center rounded-full bg-white px-4"
+            style={[
+              {
+                marginTop: top,
+              },
+            ]}
+          >
+            <Text tw="text-sm font-semibold text-black">Sign In</Text>
+          </Pressable>
+        )}
+      </>
     );
   }
 );

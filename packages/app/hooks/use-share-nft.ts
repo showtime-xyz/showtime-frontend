@@ -7,8 +7,10 @@ import { findTokenChainName } from "app/utilities";
 import { getTwitterIntent } from "app/utilities";
 
 export const getNFTSlug = (nft: NFT) => {
+  console.log(nft.slug);
+
   if (nft.slug) {
-    return `/@${nft.creator_username ?? nft.creator_address}/${nft.slug}`;
+    return `/${nft.creator_username ?? nft.creator_address}/${nft.slug}`;
   } else {
     return `/nft/${findTokenChainName(nft?.chain_identifier)}/${
       nft?.contract_address

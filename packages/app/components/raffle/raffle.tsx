@@ -54,6 +54,7 @@ import { createParam } from "app/navigation/use-param";
 import {
   getCreatorUsernameFromNFT,
   getMediaUrl,
+  getProfileImage,
   getTwitterIntent,
   getTwitterIntentUsername,
   isMobileWeb,
@@ -88,36 +89,32 @@ const RaffleSkeleton = ({ size = 375 }) => {
   );
 };
 
-export const RaffleModal = (props?: RaffleModalParams) => {
+export const Raffle = (props?: RaffleModalParams) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
   const modalScreenContext = useModalScreenContext();
   const router = useRouter();
   const { data: edition, loading: isLoadingCollection } =
     useCreatorCollectionDetail(contractAddress || contractAddressProp);
+  const winner = useMemo(() => {
+    if (!edition?.raffles) return null;
+    const winnerIndex = edition?.raffles.findIndex((item) => !!item.winner);
+    if (winnerIndex === -1) return null;
+    return edition?.raffles[winnerIndex].winner;
+  }, [edition?.raffles]);
 
-  const { data, isLoading: isLoadingNFT } = useNFTDetailByTokenId({
-    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
-    tokenId: "0",
-    contractAddress: edition?.creator_airdrop_edition.contract_address,
+  console.log(edition?.raffles);
+
+  const { data: profile } = useUserProfile({
+    address: winner?.username ?? `${winner?.profile_id}` ?? winner?.ens_domain,
   });
+  const winnerProfile = profile && profile?.data?.profile;
 
-  const nft = data?.data.item;
-  const qrCodeUrl = useMemo(() => {
-    if (!nft) return "";
-    const url = new URL(getNFTURL(nft));
-    if (edition && edition.password) {
-      url.searchParams.set("password", edition?.password);
-    }
-    return url;
-  }, [edition, nft]);
   const viewRef = useRef<RNView | Node>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const isDark = useIsDarkMode();
   const { bottom } = useSafeAreaInsets();
-  const { data: creatorProfile } = useUserProfile({
-    address: nft?.creator_address,
-  });
+
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["sm"];
   const iconColor = isDark ? colors.white : colors.gray[900];
@@ -158,11 +155,6 @@ export const RaffleModal = (props?: RaffleModalParams) => {
   }, []);
 
   const size = Platform.OS === "web" ? 276 : windowWidth - 48;
-  const mediaUri = getMediaUrl({
-    nft,
-    stillPreview: !nft?.mime_type?.startsWith("image"),
-  });
-  const { imageColors } = useGetImageColors({ uri: mediaUri });
 
   const getViewShot = async (result?: CaptureOptions["result"]) => {
     const date = new Date();
@@ -182,182 +174,19 @@ export const RaffleModal = (props?: RaffleModalParams) => {
       Logger.log(`captureRefError: ${error}`);
     }
   };
-  const onDownload = useCallback(async () => {
-    if (Platform.OS === "web") {
-      const dataUrl = await domtoimage.toPng(viewRef.current as Node, {
-        quality: 1,
-      });
-      const link = document.createElement("a");
-      link.download = `${getCreatorUsernameFromNFT(
-        nft
-      )}-QRCode-${new Date().valueOf()}`;
-      link.href = dataUrl;
-      link.click();
-    } else {
-      let hasPermission = false;
-      const url = await getViewShot();
-      if (!url) {
-        Alert.alert("Oops, An error occurred.");
-        return;
-      }
-      if (status?.granted) {
-        hasPermission = status?.granted;
-      } else {
-        const res = await requestPermission();
-        hasPermission = res?.granted;
-      }
-      if (hasPermission) {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        await MediaLibrary.saveToLibraryAsync(url);
-        toast.success("Saved to Photos");
-      } else {
-        Alert.alert("No write permission");
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      }
-    }
-  }, [nft, requestPermission, status?.granted]);
-
-  const shareSingleImage = useCallback(
-    async (
-      social: typeof Share.Social.TWITTER | typeof Share.Social.INSTAGRAM
-    ) => {
-      const url = await getViewShot();
-      if (!url) {
-        Alert.alert("Oops, An error occurred.");
-        return;
-      }
-      try {
-        const ShareResponse = await Share.shareSingle({
-          title: `${nft?.token_name}`,
-          message: `${nft?.token_name}`,
-          url,
-          social,
-          filename: `${getCreatorUsernameFromNFT(
-            nft
-          )}-QRCode-${new Date().valueOf()}`,
-        });
-        Logger.log("shareSingleImage Result =>", ShareResponse);
-      } catch (error) {
-        Logger.error("shareSingleImage Error =>", error);
-      }
-    },
-    [nft]
-  );
 
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
-        url: qrCodeUrl.toString(),
-        message: `Congrats @${getTwitterIntentUsername(
-          creatorProfile?.data?.profile
-        )}`,
+        url: "",
+        message: `Congrats @`,
       })
     );
-  }, [creatorProfile?.data?.profile, qrCodeUrl]);
+  }, []);
 
-  const shareOpenMore = useCallback(async () => {
-    const url = await getViewShot();
-    try {
-      const ShareResponse = await Share.open({
-        title: `${nft?.token_name}`,
-        message: `${nft?.token_name}`,
-        url,
-      });
-      Logger.log("shareOpenMore Result =>", ShareResponse);
-    } catch (error) {
-      Logger.error("shareOpenMore Error =>", error);
-    }
-  }, [nft]);
-
-  const onCopyLink = useCallback(async () => {
-    await Clipboard.setStringAsync(qrCodeUrl.toString());
-    toast.success("Copied!");
-  }, [qrCodeUrl]);
-  const imageStyle = {
-    height: size,
-    width: size,
-    borderRadius: 16,
-  };
-  const shareButtons = Platform.select({
-    web: [
-      {
-        title: "Twitter",
-        Icon: TwitterOutline,
-        onPress: shareWithTwitterIntent,
-        visable: true,
-      },
-      {
-        title: "Copy Link",
-        Icon: Link,
-        onPress: onCopyLink,
-        visable: true,
-      },
-      {
-        title: "Download",
-        Icon: Download,
-        onPress: onDownload,
-        /**
-         *  if not contractAddress here, it may use a local blob address file on web
-         *  but we can't convert it to an image, so we need to disable it.
-         *
-         *  the download function is not working on the mobile web..
-         */
-        visable: !!contractAddress && !isMobileWeb(),
-      },
-    ],
-    default: [
-      {
-        title: "Twitter",
-        Icon: TwitterOutline,
-        onPress: shareWithTwitterIntent,
-        visable: isInstalledApps.twitter,
-      },
-      {
-        title: "Instagram",
-        Icon: Instagram,
-        onPress: () => shareSingleImage(Share.Social.INSTAGRAM),
-        visable: isInstalledApps.instagram,
-      },
-      {
-        title: "Link",
-        Icon: Link,
-        onPress: onCopyLink,
-        visable: true,
-      },
-      {
-        title: "Save QR",
-        Icon: Download,
-        onPress: onDownload,
-        visable: true,
-      },
-      {
-        title: "More",
-        Icon: MoreHorizontal,
-        onPress: shareOpenMore,
-        visable: true,
-      },
-    ],
-  });
-  const brandColor = imageColors?.isDark ? "#FFF" : "#000";
-  const ContentType = useCallback(() => {
-    if (!edition?.gating_type) return null;
-    const Icon = contentGatingType[edition?.gating_type].icon;
-    return (
-      <View tw="flex-row items-center justify-center">
-        <Icon color={brandColor} width={20} height={20} />
-        <Text
-          tw="ml-1 text-sm font-medium text-white"
-          style={{ color: brandColor }}
-        >
-          {`${contentGatingType[edition?.gating_type].typeName} Drop`}
-        </Text>
-      </View>
-    );
-  }, [edition?.gating_type, brandColor]);
-  if (isLoadingCollection || isLoadingNFT || !imageColors) {
+  if (isLoadingCollection) {
     return <RaffleSkeleton size={size} />;
   }
-  if (!nft) return null;
   return (
     <ErrorBoundary>
       <Suspense
@@ -381,7 +210,7 @@ export const RaffleModal = (props?: RaffleModalParams) => {
                   <View tw="items-center justify-center py-10">
                     <View tw="item-center justify-center">
                       <Avatar
-                        url={nft.creator_img_url}
+                        url={getProfileImage(winnerProfile)}
                         alt={"Winner Avatar"}
                         size={240}
                         enableSkeleton
@@ -391,12 +220,14 @@ export const RaffleModal = (props?: RaffleModalParams) => {
                       </Text>
                       <Pressable
                         onPress={() =>
-                          router.push(`/profile/${nft.creator_name}`)
+                          router.push(
+                            `/profile/${winner?.username ?? winner?.profile_id}`
+                          )
                         }
                         tw="-top-4 self-center rounded-full bg-white p-4 shadow-lg shadow-black/10 dark:bg-black dark:shadow-white/20"
                       >
                         <Text tw="text-lg font-bold text-black dark:text-white">
-                          {getCreatorUsernameFromNFT(nft)}
+                          @{winner?.username}
                         </Text>
                       </Pressable>
                     </View>
@@ -427,8 +258,21 @@ export const RaffleModal = (props?: RaffleModalParams) => {
                       We have a winner 🎉
                     </Text>
 
-                    <ShareButton type="twitter" tw="mb-4 mt-8 w-full" />
-                    <ShareButton type="instagram" tw="w-full" />
+                    {(isInstalledApps.twitter || Platform.OS === "web") && (
+                      <ShareButton
+                        type="twitter"
+                        onPress={shareWithTwitterIntent}
+                        tw="mb-4 mt-8 w-full"
+                      />
+                    )}
+
+                    {Platform.OS != "web" && isInstalledApps.instagram && (
+                      <ShareButton
+                        type="instagram"
+                        onPress={shareWithTwitterIntent}
+                        tw="w-full"
+                      />
+                    )}
                   </View>
                 </View>
               </View>

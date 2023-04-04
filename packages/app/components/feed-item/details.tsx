@@ -20,6 +20,7 @@ import {
 } from "app/utilities";
 
 import { TextTooltip } from "../text-tooltip";
+import { RaffleTooltip } from "./raffle-tooltip";
 
 type NFTDetailsProps = {
   nft: NFT;
@@ -32,7 +33,6 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
     () => linkifyDescription(removeTags(nft?.token_description)),
     [nft?.token_description]
   );
-  console.log(edition);
 
   return (
     <View tw="px-4 pb-4 pr-16 pt-6">
@@ -40,17 +40,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
         <View tw="flex-1 flex-col justify-between">
           <View tw="">
             <View tw="mb-3 flex flex-row items-center justify-between">
-              {edition?.raffles && edition?.raffles?.length > 0 && (
-                <TextTooltip
-                  triggerElement={
-                    <View tw="mr-2 flex flex-row items-center rounded-full border-2 border-[#F7FF97]">
-                      <Raffle color="#F7FF97" width={28} height={28} />
-                    </View>
-                  }
-                  text="Collect to enter a raffle"
-                />
-              )}
-
+              <RaffleTooltip edition={edition} theme="dark" />
               <Text
                 tw="flex-1 text-2xl text-white dark:text-white md:text-gray-900"
                 numberOfLines={3}

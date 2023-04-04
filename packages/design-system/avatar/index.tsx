@@ -1,4 +1,11 @@
-import { ReactNode, useMemo, forwardRef, useState, memo } from "react";
+import {
+  ReactNode,
+  useMemo,
+  forwardRef,
+  useState,
+  memo,
+  useCallback,
+} from "react";
 import { ViewStyle } from "react-native";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -18,6 +25,7 @@ export type AvatarProps = {
   alt?: string;
   style?: ViewStyle;
   enableSkeleton?: boolean;
+  borderColor?: string;
 };
 
 const getAvatarImageUrl = (imgUrl: string, size: number) => {
@@ -38,6 +46,7 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
       alt = "Avatar",
       style,
       enableSkeleton,
+      borderColor,
     },
     ref
   ) {
@@ -47,17 +56,17 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
       () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
       [url, size]
     );
-    return (
-      <Skeleton
-        width={size}
-        height={size}
-        radius={borderRadius}
-        show={isLoading}
-        colorMode={colorScheme as any}
-      >
+    const renderAvatar = useCallback(() => {
+      return (
         <View
           tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
-          style={{ height: size, width: size, ...style }}
+          style={{
+            height: size,
+            width: size,
+            borderRadius,
+            borderColor,
+            ...style,
+          }}
           ref={ref}
         >
           <Image
@@ -67,7 +76,7 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
             borderRadius={borderRadius}
             resizeMode="cover"
             tw={IMAGE_TW}
-            style={{ height: size, width: size, borderRadius: borderRadius }}
+            style={{ height: size, width: size }}
             alt={alt}
             {...(enableSkeleton
               ? {
@@ -78,8 +87,33 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
           />
           {children}
         </View>
-      </Skeleton>
-    );
+      );
+    }, [
+      tw,
+      size,
+      borderRadius,
+      borderColor,
+      style,
+      ref,
+      imageSource,
+      alt,
+      enableSkeleton,
+      children,
+    ]);
+    if (enableSkeleton) {
+      return (
+        <Skeleton
+          width={size}
+          height={size}
+          radius={borderRadius}
+          show={isLoading}
+          colorMode={colorScheme as any}
+        >
+          {renderAvatar()}
+        </Skeleton>
+      );
+    }
+    return renderAvatar();
   }
 );
 export const Avatar = memo(AvatarComponent);

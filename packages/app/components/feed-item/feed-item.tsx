@@ -238,6 +238,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 resizeMode={ResizeMode.COVER}
                 onPinchStart={hideHeader}
                 onPinchEnd={showHeader}
+                theme="dark"
               />
             </Animated.View>
           </FeedItemTapGesture>
@@ -268,7 +269,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             ) : null}
 
             <View tw="z-9 absolute -top-[30px] left-2.5">
-              <ContentTypeTooltip edition={edition} />
+              <ContentTypeTooltip edition={edition} theme="dark" />
             </View>
             <LinearGradient
               style={{

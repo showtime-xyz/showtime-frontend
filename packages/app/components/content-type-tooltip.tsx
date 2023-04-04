@@ -1,21 +1,18 @@
-import { useState } from "react";
 import { StyleSheet } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Globe, Spotify, Lock } from "@showtime-xyz/universal.icon";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 
-import { isMobileWeb } from "../utilities";
 import { PlayOnSpotify } from "./play-on-spotify";
 import { PlayOnSpinamp } from "./spinamp/play-on-spinamp";
 import { TextTooltip } from "./text-tooltip";
 
 type ContentTypeTooltipProps = {
   edition: CreatorEditionResponse | undefined;
+  theme?: "dark" | "light";
 };
 export const contentGatingType = {
   location: {
@@ -45,7 +42,10 @@ export const contentGatingType = {
   },
 };
 
-export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
+export const ContentTypeTooltip = ({
+  edition,
+  ...rest
+}: ContentTypeTooltipProps) => {
   // This will be removed after the airdrop
   if (edition?.spinamp_track_url) {
     return <PlayOnSpinamp url={edition?.spinamp_track_url} />;
@@ -91,6 +91,7 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
           </>
         }
         text={contentGatingType[edition?.gating_type].text}
+        {...rest}
       />
     );
   }

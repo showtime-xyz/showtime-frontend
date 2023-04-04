@@ -9,6 +9,10 @@ import type { PublicConfiguration } from "swr/_internal";
 
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useIsOnline } from "app/hooks/use-is-online";
+import { deleteAccessToken } from "app/lib/access-token";
+import * as loginStorage from "app/lib/login";
+import * as logoutStorage from "app/lib/logout";
+import { deleteRefreshToken } from "app/lib/refresh-token";
 import { isUndefined } from "app/lib/swr/helper";
 
 import { toast } from "design-system/toast";
@@ -72,6 +76,12 @@ export const SWRProvider = ({
             // we only want to refresh tokens once and then bail out if it fails on 401
             // this is to prevent infinite loops. Actually, we should logout the user but AuthProvider is not available here
             if (currentRetryCount > 1) {
+              if (__DEV__) {
+                loginStorage.deleteLogin();
+                logoutStorage.setLogout(Date.now().toString());
+                deleteRefreshToken();
+                deleteAccessToken();
+              }
               return;
             }
             try {

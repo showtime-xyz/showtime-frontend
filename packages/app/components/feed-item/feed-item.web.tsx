@@ -1,10 +1,5 @@
 import { memo, useState, useMemo, useRef } from "react";
-import {
-  StyleProp,
-  StyleSheet,
-  useWindowDimensions,
-  ViewStyle,
-} from "react-native";
+import { StyleProp, useWindowDimensions, ViewStyle } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
 import { ResizeMode } from "expo-av";
@@ -18,7 +13,6 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { BlurView } from "app/lib/blurview";
 import type { NFT } from "app/types";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";

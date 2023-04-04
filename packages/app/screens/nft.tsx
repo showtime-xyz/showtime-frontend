@@ -46,7 +46,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
-function NftScreen({ fallback = {} }: { fallback?: object }) {
+export function NftScreen({ fallback = {} }: { fallback?: object }) {
   const [initialScrollIndex] = useParam("initialScrollIndex");
   if (initialScrollIndex) {
     return <SwipeListScreen />;
@@ -116,8 +116,6 @@ const NFTDetail = () => {
 
   return null;
 };
-
-export { NftScreen };
 
 const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
   useTrackPageViewed({ name: "NFT" });

@@ -552,7 +552,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                               alt={"QRCode Share Avatar"}
                               size={20}
                               tw="border"
-                              style={{ borderColor: "#7C757F" }}
+                              borderColor="#7C757F"
                               url={nft.creator_img_url}
                             />
                             <View tw="ml-1 flex flex-row items-center">
