@@ -99,7 +99,7 @@ export const Trending = () => {
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}
-              href={`/${getNFTSlug(item)}?initialScrollIndex=${
+              href={`${getNFTSlug(item)}?initialScrollIndex=${
                 itemIndex * numColumns + chuckItemIndex
               }&days=${days}&type=trendingNFTs`}
             />
