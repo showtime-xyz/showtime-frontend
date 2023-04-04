@@ -36,6 +36,11 @@ function Link({ viewProps, tw, hrefAttrs, onPress, ...rest }: LinkProps) {
         hrefAttrs,
         onPress,
       }}
+      {...Platform.select({
+        web: {
+          prefetch: false,
+        },
+      })}
     />
   );
 }
