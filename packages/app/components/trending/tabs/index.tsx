@@ -18,19 +18,14 @@ export type TrendingTabListProps = {
 };
 export const TRENDING_ROUTE = [
   {
-    title: "Today",
+    title: "Music releases",
     key: "1",
     index: 0,
   },
   {
-    title: "This week",
-    key: "7",
-    index: 1,
-  },
-  {
-    title: "This month",
+    title: "Digital Art",
     key: "30",
-    index: 2,
+    index: 1,
   },
 ];
 

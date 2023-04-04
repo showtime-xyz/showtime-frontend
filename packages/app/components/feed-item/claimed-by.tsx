@@ -18,7 +18,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
   if (!claimersList || claimersList?.length <= 1) {
     return <View tw="native:mb-4 web:h-5 ml-2 h-9" collapsable />;
   }
-  const slicedClaimersList = claimersList?.slice(1, 4);
+  const slicedClaimersList = claimersList?.slice(0, 4);
   const firstClaimer = claimersList[1];
 
   return (
@@ -26,7 +26,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
       <>
         {slicedClaimersList?.map((item, index) => {
           return (
-            <View tw="-ml-2" key={`${item.profile_id}-${index}`}>
+            <View tw="-ml-2" key={index}>
               <AvatarHoverCard
                 username={item?.username || item?.wallet_address}
                 url={item?.img_url}
@@ -75,6 +75,70 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
                 tw="font-bold"
               >
                 {`${claimersList?.length - 1} others`}
+              </Text>
+            </>
+          )}
+        </Text>
+      </>
+    </View>
+  );
+};
+
+export const ClaimedByBig = ({
+  nft,
+  claimersList,
+  tw = "",
+}: NFTDetailsProps) => {
+  const router = useRouter();
+  const slicedClaimersList = claimersList?.slice(1, 5);
+
+  return (
+    <View tw={["h-12 flex-row items-center", tw]}>
+      <>
+        {slicedClaimersList?.map((item, index) => {
+          return (
+            <View tw="-mr-4" key={index}>
+              <AvatarHoverCard
+                username={item?.username || item?.wallet_address}
+                url={item?.img_url}
+                tw="border border-gray-300 dark:border-gray-700"
+                size={50}
+                alt="Claimed by Avatar"
+              />
+            </View>
+          );
+        })}
+        <Text tw="ml-4 flex-1 text-sm text-gray-900 dark:text-white">
+          {claimersList?.length && claimersList?.length >= 2 && (
+            <>
+              {` & `}
+              <Text
+                onPress={() => {
+                  const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
+                  router.push(
+                    Platform.select({
+                      native: as,
+                      web: {
+                        pathname: router.pathname,
+                        query: {
+                          ...router.query,
+                          contractAddress: nft?.contract_address,
+                          tokenId: nft?.token_id,
+                          chainName: nft?.chain_name,
+                          collectorsModal: true,
+                        },
+                      } as any,
+                    }),
+                    Platform.select({
+                      native: as,
+                      web: router.asPath,
+                    }),
+                    { shallow: true }
+                  );
+                }}
+                tw="font-bold"
+              >
+                {`${claimersList?.length - 1} collected`}
               </Text>
             </>
           )}
