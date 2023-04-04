@@ -20,15 +20,24 @@ import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import {
+  ErrorText,
+  Fieldset,
+  FieldsetCheckbox,
+} from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import {
+  FlipIcon,
+  Image as ImageIcon,
+  Raffle,
+} from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -71,6 +80,7 @@ const defaultValues = {
   radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
+  raffle: false,
 };
 
 const { useParam } = createParam<{
@@ -195,7 +205,7 @@ export const DropFree = () => {
     defaultValues,
     exclude: excludedPersistFields,
   });
-
+  const descPlaceholder = "Why should people collect this drop?";
   useEffect(() => {
     resetDropState();
   }, [resetDropState]);
@@ -457,7 +467,7 @@ export const DropFree = () => {
                             label="Description"
                             multiline
                             textAlignVertical="top"
-                            placeholder="What is this drop about?"
+                            placeholder={descPlaceholder}
                             onBlur={onBlur}
                             helperText="You cannot edit this after the drop is created."
                             errorText={errors.description?.message}
@@ -488,7 +498,7 @@ export const DropFree = () => {
                       label="Description"
                       multiline
                       textAlignVertical="top"
-                      placeholder="What is this drop about?"
+                      placeholder={descPlaceholder}
                       onBlur={onBlur}
                       helperText="You cannot edit this after the drop is created."
                       errorText={errors.description?.message}
@@ -500,7 +510,28 @@ export const DropFree = () => {
                 }}
               />
             </Hidden>
-
+            <View tw="mt-4">
+              <Controller
+                key="raffle"
+                control={control}
+                name="raffle"
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <FieldsetCheckbox
+                      onChange={onChange}
+                      value={value}
+                      Icon={
+                        <Raffle
+                          color={isDark ? colors.white : colors.gray[900]}
+                        />
+                      }
+                      helperText="Automatically selects a winner once your drop is over."
+                      title="Make it a Raffle"
+                    />
+                  );
+                }}
+              />
+            </View>
             <View>
               <Accordion.Root
                 value={accordionValue}
@@ -607,6 +638,7 @@ export const DropFree = () => {
                           />
                         </View>
                       </View>
+
                       <View tw="z-10 mt-4 flex-row">
                         <Controller
                           control={control}

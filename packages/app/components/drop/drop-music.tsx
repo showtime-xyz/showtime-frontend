@@ -85,6 +85,7 @@ const defaultValues = {
   radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
+  raffle: false,
 };
 
 const durationOptions = [
@@ -556,7 +557,6 @@ export const DropMusic = () => {
                 <Controller
                   key="raffle"
                   control={control}
-                  defaultValue={getDefaultDate()}
                   name="raffle"
                   render={({ field: { onChange, value } }) => {
                     return (
