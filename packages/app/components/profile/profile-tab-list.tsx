@@ -67,7 +67,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     const onItemPress = useCallback(
       (item: NFT, currentIndex: number) => {
         router.push(
-          `/${getNFTSlug(item)}?initialScrollIndex=${currentIndex}&tabType=${
+          `${getNFTSlug(item)}?initialScrollIndex=${currentIndex}&tabType=${
             list.type
           }&profileId=${profileId}&collectionId=${
             filter.collectionId
