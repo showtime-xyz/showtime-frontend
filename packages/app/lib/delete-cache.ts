@@ -7,6 +7,7 @@ export async function deleteAppCache() {
   storage.delete("app-cache");
   // Todo: move those keys to constans file
   storage.delete("showExplanationv2");
+  // TODO: showClaimExplanation is not used anymore, remove soon
   storage.delete("showClaimExplanation");
   await Image.clearDiskCache();
   await Image.clearMemoryCache();

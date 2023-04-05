@@ -33,7 +33,7 @@ export function Creator({
   nft,
   shouldShowCreatorIndicator = true,
   shouldShowDateCreated = true,
-  label = "Creator",
+  label = "",
 }: Props) {
   if (!nft) return null;
 
