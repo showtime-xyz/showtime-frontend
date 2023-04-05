@@ -48,7 +48,7 @@ const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 function NftScreen({ fallback = {} }: { fallback?: object }) {
   const [initialScrollIndex] = useParam("initialScrollIndex");
-  if (initialScrollIndex) {
+  if (typeof initialScrollIndex !== "undefined") {
     return <SwipeListScreen />;
   }
 
