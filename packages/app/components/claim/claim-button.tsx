@@ -14,6 +14,7 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
+import { Analytics, EVENTS } from "app/lib/analytics";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
@@ -84,7 +85,10 @@ export const ClaimButton = ({
         edition.gating_type === "spotify_save") &&
       !isAuthenticated
     ) {
-      claimSpotifyGatedDrop();
+      Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
+      claimSpotifyGatedDrop().then(() => {
+        Analytics.track(EVENTS.SPOTIFY_SAVE_SUCCESS_BEFORE_LOGIN);
+      });
     } else {
       redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
     }

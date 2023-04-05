@@ -8,7 +8,7 @@ export enum ContentLayoutOffset {
   PROFILE_COVER = -160,
 }
 
-export function useContentWidth(offset: ContentLayoutOffset = 0) {
+export function useContentWidth(offset = 0) {
   const { width } = useWindowDimensions();
   const contentWidth = useMemo(
     () =>

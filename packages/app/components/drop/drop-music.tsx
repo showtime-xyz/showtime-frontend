@@ -693,9 +693,7 @@ export const DropMusic = () => {
                         onChangeText={onChange}
                         value={value}
                         placeholder={
-                          isSaveDrop
-                            ? "Enter your Spotify Song Link"
-                            : "Enter your Spotify Track URI"
+                          "e.g. https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
                         }
                         errorText={errors.spotifyUrl?.message}
                       />

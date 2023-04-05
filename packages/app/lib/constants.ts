@@ -182,4 +182,5 @@ export const CURRENCY_NAMES = {
 export const HIDE_LINK_FOOTER_ROUTER_LIST = [
   "/nft/[chainName]/[contractAddress]/[tokenId]",
   "/list",
+  "/profile/[username]/[dropSlug]",
 ];
