@@ -18,6 +18,7 @@ import {
   removeTags,
 } from "app/utilities";
 
+import { EngagementIcons } from "./engagement-icons";
 import { RaffleTooltip } from "./raffle-tooltip";
 
 type NFTDetailsProps = {
@@ -33,9 +34,9 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
   );
 
   return (
-    <View tw="px-4 pb-2 pr-16 pt-6">
+    <View tw="px-4 pb-2 pt-6">
       <View tw="flex flex-row justify-between">
-        <View tw="flex-1 flex-col justify-between">
+        <View tw="flex-1 flex-col justify-end">
           <View tw="">
             <View tw="mb-3 flex flex-row items-center justify-between">
               <RaffleTooltip edition={edition} theme="dark" />
@@ -100,6 +101,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             </View>
           )}
         </View>
+        <EngagementIcons nft={nft} />
       </View>
     </View>
   );
