@@ -482,7 +482,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
               <View tw="ios:scale-[0.82] android:scale-[0.82] web:pt-0 web:pb-2 ios:-mt-10 android:-mt-10 web:w-[340px] web:self-center select-none">
                 <View collapsable={false} ref={viewRef as any}>
                   <StyledLinearGradient
-                    tw="web:mb-[74px] web:px-8 w-full items-center overflow-hidden rounded-3xl bg-white px-6 pt-8"
+                    tw="web:mb-[60px] web:px-8 w-full items-center overflow-hidden rounded-3xl bg-white px-6 pt-8"
                     colors={imageColors?.colors}
                     locations={[0, 1]}
                     start={[0.5, 0.25]}
@@ -501,16 +501,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                       tint="dark"
                       tw="-mt-4 w-full overflow-hidden rounded-xl pt-4"
                     >
-                      <View
-                        tw="w-full flex-row justify-between px-2 py-6"
-                        style={Platform.select({
-                          web: {
-                            background: "rgba(0, 0, 0, .7)",
-                            "backdrop-filter": "blur(43.5px)",
-                          } as any,
-                          default: {},
-                        })}
-                      >
+                      <View tw="web:bg-black/40 w-full flex-row justify-between px-2 py-6 backdrop-blur-lg">
                         <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-white p-1">
                           <ReactQRCode
                             size={68}
@@ -634,12 +625,12 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
                     Haptics.impactAsync();
                     onPress();
                   }}
-                  tw="flex-1 items-center justify-center py-4"
+                  tw="flex-1 flex-col items-center justify-center pt-4 md:flex-row"
                   key={title}
                 >
                   <Icon height={24} width={24} color={iconColor} />
-                  <View tw="h-2" />
-                  <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
+                  <View tw="h-2 md:w-2" />
+                  <Text tw="text-xs font-semibold text-gray-900 dark:text-white md:text-sm">
                     {title}
                   </Text>
                 </Pressable>
