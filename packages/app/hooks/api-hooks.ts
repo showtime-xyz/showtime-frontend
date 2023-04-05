@@ -117,7 +117,10 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
   const queryKey = address ? USER_PROFILE_KEY + address : null;
   const { data, error, isLoading } = useSWR<{
     data?: UserProfile;
-  }>(queryKey, fetcher);
+  }>(queryKey, fetcher, {
+    revalidateIfStale: false,
+    focusThrottleInterval: 200000,
+  });
   const { mutate } = useSWRConfig();
 
   const { data: myInfoData } = useMyInfo();
@@ -297,6 +300,7 @@ export const useMyInfo = () => {
     fetcher,
     {
       revalidateOnMount: false,
+      revalidateIfStale: false,
     }
   );
 
