@@ -34,7 +34,17 @@ export function useRouter() {
         if (modal) {
           const as = nextRouter.asPath;
 
-          nextRouter.replace(as, as, { shallow: true, scroll: false });
+          nextRouter.replace(
+            {
+              pathname: as,
+              query: {
+                ...nextRouter.query,
+                [modal]: undefined,
+              },
+            },
+            as,
+            { shallow: true, scroll: false }
+          );
         } else {
           nextRouter.back();
         }
