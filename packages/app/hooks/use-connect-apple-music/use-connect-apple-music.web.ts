@@ -1,7 +1,10 @@
+import { useSaveAppleMusicToken } from "../use-save-apple-music-token";
 import { developerToken } from "./utils";
 
-export const useAppleMusicToken = () => {
-  const getUserToken = async () => {
+export const useConnectAppleMusic = () => {
+  const { saveAppleMusicToken } = useSaveAppleMusicToken();
+
+  const connectAppleMusic = async () => {
     //@ts-ignore
     const music = await window.MusicKit.configure({
       developerToken,
@@ -12,10 +15,11 @@ export const useAppleMusicToken = () => {
     });
 
     const token = await music.authorize();
+    await saveAppleMusicToken({ token });
     return token;
   };
 
   return {
-    getUserToken,
+    connectAppleMusic,
   };
 };
