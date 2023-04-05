@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -15,10 +16,14 @@ type NFTDetailsProps = {
 };
 export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
   const router = useRouter();
+  const slicedClaimersList = useMemo(
+    () => claimersList?.slice(1, 5),
+    [claimersList]
+  );
   if (!claimersList || claimersList?.length <= 1) {
     return <View tw="native:mb-4 web:h-5 ml-2 h-9" collapsable />;
   }
-  const slicedClaimersList = claimersList?.slice(0, 4);
+
   const firstClaimer = claimersList[1];
 
   return (
@@ -90,7 +95,10 @@ export const ClaimedByBig = ({
   tw = "",
 }: NFTDetailsProps) => {
   const router = useRouter();
-  const slicedClaimersList = claimersList?.slice(1, 5);
+  const slicedClaimersList = useMemo(
+    () => claimersList?.slice(1, 5),
+    [claimersList]
+  );
 
   return (
     <View tw={["h-12 flex-row items-center", tw]}>

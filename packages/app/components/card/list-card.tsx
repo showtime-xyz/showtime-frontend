@@ -10,6 +10,7 @@ import {
 import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
+import { Button } from "@showtime-xyz/universal.button";
 import {
   PressableScale,
   Props as PressableScaleProps,
@@ -36,6 +37,9 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { linkifyDescription } from "app/lib/linkify";
 import { NFT } from "app/types";
 import { removeTags } from "app/utilities";
+
+import { Hidden } from "design-system/hidden";
+import { breakpoints } from "design-system/theme";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NSFWGate } from "../feed-item/nsfw-gate";
@@ -119,6 +123,9 @@ const ListCardLargeScreen = ({
   showClaimButton,
   handleOnPress,
 }: Props & { handleOnPress: any }) => {
+  const { width } = useWindowDimensions();
+  const isLgWidth = width >= breakpoints["lg"];
+
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
@@ -189,16 +196,16 @@ const ListCardLargeScreen = ({
                   />
                 </View>
               </RouteComponent>
-              {description ? (
-                <View tw="mt-2">
+              <View tw="mt-2 min-h-fit">
+                {description ? (
                   <Text
                     tw="text-sm text-gray-600 dark:text-gray-400"
                     numberOfLines={5}
                   >
                     {description}
                   </Text>
-                </View>
-              ) : null}
+                ) : null}
+              </View>
             </View>
           </View>
 
@@ -209,11 +216,11 @@ const ListCardLargeScreen = ({
             />
           </View>
         </View>
-        <View tw="mx-4 self-center">
+        <View tw="mx-4 w-1/5 self-center">
           {showClaimButton &&
           !!nft.creator_airdrop_edition_address &&
           edition ? (
-            <View tw="flex-row">
+            <View tw="flex-row self-end">
               <ClaimButton edition={edition} size="regular" />
               <ClaimedShareButton
                 tw="ml-3 w-1/3"
@@ -223,16 +230,18 @@ const ListCardLargeScreen = ({
             </View>
           ) : null}
         </View>
-        <View tw="self-center">
-          <ErrorBoundary renderFallback={() => null}>
-            <Suspense fallback={<Skeleton width={24} height={24} />}>
-              <NFTDropdown
-                nft={detailData?.data.item ?? nft}
-                edition={edition}
-              />
-            </Suspense>
-          </ErrorBoundary>
-        </View>
+        <Hidden until="md">
+          <View tw="mt-4 lg:mt-0 lg:self-center">
+            <ErrorBoundary renderFallback={() => null}>
+              <Suspense fallback={<Skeleton width={24} height={24} />}>
+                <NFTDropdown
+                  nft={detailData?.data.item ?? nft}
+                  edition={edition}
+                />
+              </Suspense>
+            </ErrorBoundary>
+          </View>
+        </Hidden>
       </View>
     </View>
   );

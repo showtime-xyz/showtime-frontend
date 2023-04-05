@@ -5,7 +5,7 @@ import type { ListRenderItemInfo } from "@shopify/flash-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
 
-import { Card, GAP } from "app/components/card";
+import { GAP } from "app/components/card";
 import { ListCard } from "app/components/card/list-card";
 import { ListFooter } from "app/components/footer/list-footer";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
@@ -46,13 +46,7 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
 
     const renderItem = useCallback(
       ({ item, index }: ListRenderItemInfo<NFT>) => {
-        return (
-          <ListCard
-            nft={item}
-            onPress={() => onItemPress(item, index)}
-            numColumns={NUM_COLUMNS}
-          />
-        );
+        return <ListCard nft={item} onPress={() => onItemPress(item, index)} />;
       },
       [onItemPress]
     );

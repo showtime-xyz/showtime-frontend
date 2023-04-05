@@ -43,7 +43,7 @@ export const ClaimedShareButton = ({
     );
   };
 
-  if (!edition.is_already_claimed) return null;
+  if (!edition || !edition.is_already_claimed) return null;
   return (
     <Button onPress={onClaimPress} size={size} style={style} tw={tw}>
       Share
