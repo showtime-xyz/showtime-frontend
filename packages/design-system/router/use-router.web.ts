@@ -33,14 +33,13 @@ export function useRouter() {
         );
         if (modal) {
           const as = nextRouter.asPath;
+          const newQuery = { ...nextRouter.query };
+          delete newQuery[modal];
 
           nextRouter.replace(
             {
               pathname: as,
-              query: {
-                ...nextRouter.query,
-                [modal]: undefined,
-              },
+              query: newQuery,
             },
             as,
             { shallow: true, scroll: false }
