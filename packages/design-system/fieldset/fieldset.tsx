@@ -102,12 +102,8 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
           {leftElement}
           {!selectOnly ? (
             <Component
-              tw="flex-1 text-base text-black focus-visible:ring-1 dark:text-white"
-              //@ts-ignore - web only
-              style={Platform.select({
-                web: { outline: "none" },
-                default: undefined,
-              })}
+              tw="flex-1 text-black outline-none focus-visible:ring-1 dark:text-white"
+              style={[{ fontSize: 16 }]}
               ref={ref}
               editable={!disabled}
               nativeID={inputId}

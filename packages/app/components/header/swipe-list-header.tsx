@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+import { Platform } from "react-native";
 
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -33,15 +34,18 @@ export const SwipeListHeader = memo<SwipeListHeaderProps>(
     const navigateToLogin = useNavigateToLogin();
     const router = useRouter();
     const isRootScreen = router.asPath === "/";
-    const headerHeight = top + DEFAULT_HADER_HEIGHT;
+    const platformTop = Platform.select({
+      android: top + 8,
+      default: top,
+    });
+
     return (
       <>
         <View
-          tw={["absolute left-5 z-10 flex md:hidden", tw]}
+          tw={["absolute left-4 z-10 flex md:hidden", tw]}
           style={[
             {
-              paddingTop: top,
-              height: headerHeight,
+              marginTop: platformTop,
             },
           ]}
         >
@@ -56,10 +60,10 @@ export const SwipeListHeader = memo<SwipeListHeaderProps>(
             onPress={() => {
               navigateToLogin();
             }}
-            tw="absolute right-5 z-10 flex h-8 items-center justify-center rounded-full bg-white px-4 md:hidden"
+            tw="absolute right-4 z-10 flex h-8 items-center justify-center rounded-full bg-white px-4 md:hidden"
             style={[
               {
-                marginTop: top,
+                marginTop: platformTop,
               },
             ]}
           >

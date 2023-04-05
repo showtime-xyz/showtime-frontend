@@ -157,11 +157,13 @@ export const ClaimButton = ({
 
   const content = useMemo(() => {
     if (isCanViewRaffleResult) {
-      return <Text tw="font-semibold text-white">Announce your raffle</Text>;
+      return (
+        <Text tw="text-sm font-semibold text-white">Announce your raffle</Text>
+      );
     }
     if (raffleConcludedAt) {
       return (
-        <Text tw="text-center font-semibold text-white">
+        <Text tw="text-center text-sm font-semibold text-white">
           Your raffle ends {`${raffleConcludedAt}`}
         </Text>
       );
@@ -171,26 +173,26 @@ export const ClaimButton = ({
       return (
         <>
           <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 font-semibold text-white">Collected</Text>
+          <Text tw="ml-1 text-sm font-semibold text-white">Collected</Text>
         </>
       );
     } else if (status === ClaimStatus.Soldout) {
       return (
         <>
           <Check color="white" width={20} height={20} />
-          <Text tw="ml-1 font-semibold text-white">Sold out</Text>
+          <Text tw="ml-1 text-sm font-semibold text-white">Sold out</Text>
         </>
       );
     } else if (status === ClaimStatus.Expired) {
       return (
         <>
           <Hourglass color="white" width={16} height={16} />
-          <Text tw="ml-1 font-semibold text-white">Time out</Text>
+          <Text tw="ml-1 text-sm font-semibold text-white">Time out</Text>
         </>
       );
     } else if (isProgress) {
       return (
-        <Text tw="text-xs font-bold">
+        <Text tw="text-sm font-bold">
           Collecting
           <ThreeDotsAnimation
             color={color ?? isDark ? colors.black : colors.white}
@@ -206,7 +208,7 @@ export const ClaimButton = ({
             height={20}
           />
           <Text
-            tw="ml-1 font-semibold text-white dark:text-black"
+            tw="ml-1 text-sm font-semibold text-white dark:text-black"
             style={{ color }}
           >
             {isAuthenticated ? "Save to Collect" : "Save on Spotify"}
@@ -222,8 +224,8 @@ export const ClaimButton = ({
             height={20}
           />
           <Text
-            tw="ml-1 font-semibold text-white dark:text-black"
-            style={{ color }}
+            tw="ml-1 text-sm font-semibold text-white dark:text-black"
+            style={{ color, lineHeight: 20 }}
           >
             {isAuthenticated ? "Pre-Save to Collect" : "Pre-Save on Spotify"}
           </Text>

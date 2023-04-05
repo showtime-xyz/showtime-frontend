@@ -42,10 +42,21 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
               <RaffleTooltip edition={edition} theme="dark" />
               <Text tw="flex-1 text-2xl text-white dark:text-white md:text-gray-900">
                 {nft.token_name}
-                <Text tw="text-base font-semibold text-gray-400 dark:text-gray-400 md:text-gray-900">
+                <Text
+                  style={{
+                    fontSize: 16,
+                  }}
+                  tw="font-semibold text-gray-400 dark:text-gray-400 md:text-gray-900"
+                >
                   {` · `}
                 </Text>
-                <Text tw="self-center text-xs font-semibold text-gray-200 dark:text-gray-200 md:text-gray-900">
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: "500",
+                  }}
+                  tw="text-gray-200 dark:text-gray-200 md:text-gray-900"
+                >
                   {getFormatDistanceStrictToWeek(nft.token_created)}
                 </Text>
               </Text>
