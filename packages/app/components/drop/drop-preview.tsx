@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
-import { Button } from "@showtime-xyz/universal.button";
+import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
@@ -30,22 +30,28 @@ type DropPreviewProps = {
   file: any;
   title: string;
   description: string;
-  onEdit: () => void;
+  onPressCTA: () => void;
   spotifyUrl?: string;
   releaseDate?: string;
+  ctaCopy?: string;
+  tw?: string;
+  buttonProps?: ButtonProps;
 };
 
 export const DropPreview = memo(function DropPreview({
   file,
   title,
   description,
-  onEdit,
+  onPressCTA,
   spotifyUrl,
   releaseDate,
+  ctaCopy,
+  tw = "",
+  buttonProps,
 }: DropPreviewProps) {
   const { user: userProfile } = useUser();
   const [muted] = useMuted();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const isSmWidth = width >= breakpoints["sm"];
   const { state } = useDropNFT();
   const onPressSpotify = useCallback(
@@ -72,23 +78,29 @@ export const DropPreview = memo(function DropPreview({
         size="regular"
         disabled={state.status === "loading"}
         tw={state.status === "loading" ? "opacity-60" : ""}
-        onPress={onEdit}
+        onPress={onPressCTA}
+        {...buttonProps}
       >
-        Edit Drop
+        {ctaCopy}
       </Button>
     );
-  }, [onEdit, state.status, state.transactionHash]);
+  }, [state.status, state.transactionHash, onPressCTA, buttonProps, ctaCopy]);
+  const size = isSmWidth ? height * 0.3 : width - 32;
   return (
-    <View tw="animate-fade-in-250 items-center">
-      <View tw="w-full rounded-3xl py-8 sm:w-[375px]">
+    <View tw={["animate-fade-in-250 items-center", tw]}>
+      <View tw="shadow-light dark:shadow-dark w-full rounded-3xl py-8 sm:w-[30svh]">
         <View>
           <Preview
             file={file}
-            width={isSmWidth ? 375 : width - 32}
-            height={isSmWidth ? 375 : width - 32}
+            width={size}
+            height={size}
             isMuted={muted}
             showMuteButton
             isLooping
+            style={{
+              width: size,
+              height: size,
+            }}
           />
           {(Boolean(spotifyUrl) || Boolean(releaseDate)) && (
             <Pressable

@@ -5,8 +5,8 @@ import { useRouter } from "@showtime-xyz/universal.router";
 export const useRedirectToRaffleResult = () => {
   const router = useRouter();
 
-  const redirectToRaffleResult = async (editionContractAddress: string) => {
-    const as = `/raffle/${editionContractAddress}`;
+  const redirectToRaffleResult = (contractAddress: string) => {
+    const as = `/raffle/${contractAddress}`;
     router.push(
       Platform.select({
         native: as,
@@ -14,7 +14,7 @@ export const useRedirectToRaffleResult = () => {
           pathname: router.pathname,
           query: {
             ...router.query,
-            contractAddress: editionContractAddress,
+            contractAddress,
             raffleModal: true,
           },
         } as any,

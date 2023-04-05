@@ -53,10 +53,8 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
@@ -935,7 +933,8 @@ export const DropMusic = () => {
             <DropPreview
               title={getValues("title")}
               description={getValues("description")}
-              onEdit={() => setShowPreview(false)}
+              onPressCTA={() => setShowPreview(false)}
+              ctaCopy="Edit Drop"
               file={getValues("file")}
               spotifyUrl={getValues("spotifyUrl")}
               releaseDate={isSaveDrop ? null : getValues("releaseDate")}

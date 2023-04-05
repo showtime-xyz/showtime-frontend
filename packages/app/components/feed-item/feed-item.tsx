@@ -26,8 +26,6 @@ import Animated, {
   Easing,
 } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Share } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
@@ -40,18 +38,11 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { useShareNFT } from "app/hooks/use-share-nft";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useNavigation } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
-import { AvatarHoverCard } from "../card/avatar-hover-card";
-import { GiftButton } from "../claim/gift-button";
 import { ContentTypeTooltip } from "../content-type-tooltip";
-import { CommentButton } from "../feed/comment-button";
-import { Like } from "../feed/like";
-import { SocialButton } from "../social-button";
 import { NFTDetails } from "./details";
 import { NSFWGate } from "./nsfw-gate";
 import { SocialIcons } from "./social-icons";
@@ -78,7 +69,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const detailViewRef = useRef<Reanimated.View>(null);
   const headerHeight = useHeaderHeight();
   const { top } = useSafeAreaInsets();
-  const { shareNFT } = useShareNFT();
   const videoRef = useRef<ExpoVideo | null>(null);
   const headerHeightRef = useRef(headerHeight);
   const { data: detailData } = useNFTDetailByTokenId({
@@ -88,9 +78,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   });
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-  const navigation = useNavigation();
   const bottomHeight = usePlatformBottomHeight();
-  const isDark = useIsDarkMode();
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
@@ -175,11 +163,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }, [opacity]);
 
   const showHeader = useCallback(() => {
-    // if (Platform.OS === "ios") {
-    //   navigation.setOptions({
-    //     headerShown: true,
-    //   });
-    // }
     opacity.value = withTiming(1);
   }, [opacity]);
 

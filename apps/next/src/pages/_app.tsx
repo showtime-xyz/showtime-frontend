@@ -187,7 +187,6 @@ function App({ Component, pageProps, router }: AppProps) {
         <CollectorsScreen />
         <ClaimLimitExplanationScreen />
         <LikersScreen />
-        <QRCodeShareScreen />
         <ReportScreen />
         <DropPrivateScreen />
         <DropEventScreen />
@@ -195,6 +194,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropFreeScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />
+        <QRCodeShareScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />

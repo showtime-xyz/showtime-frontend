@@ -45,7 +45,6 @@ import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary"
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { QRCodeModal } from "app/components/qr-code";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
@@ -61,6 +60,7 @@ import { formatAddressShort } from "app/utilities";
 import { Hidden } from "design-system/hidden";
 
 import { DropPreview } from "../drop-preview";
+import { DropViewShare } from "../drop-view-share";
 import { DROP_FORM_DATA_KEY } from "../utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
@@ -295,7 +295,6 @@ export const DropFree = () => {
         message: "Please retry!",
       });
       setValue("file", undefined);
-
       return;
     }
     if (
@@ -316,17 +315,12 @@ export const DropFree = () => {
 
   if (state.status === "success") {
     return (
-      <QRCodeModal
-        dropCreated
+      <DropViewShare
+        title={getValues("title")}
+        description={getValues("description")}
+        onPressCTA={() => setShowPreview(false)}
+        file={getValues("file")}
         contractAddress={state.edition?.contract_address}
-        renderPreviewComponent={({ width, height, borderRadius }) => (
-          <Preview
-            file={getValues("file")}
-            width={width}
-            height={height}
-            style={{ borderRadius }}
-          />
-        )}
       />
     );
   }
@@ -736,7 +730,8 @@ export const DropFree = () => {
           <DropPreview
             title={getValues("title")}
             description={getValues("description")}
-            onEdit={() => setShowPreview(false)}
+            onPressCTA={() => setShowPreview(false)}
+            ctaCopy="Edit Drop"
             file={getValues("file")}
           />
         )}
