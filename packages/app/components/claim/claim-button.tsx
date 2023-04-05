@@ -161,7 +161,7 @@ export const ClaimButton = ({
     }
     if (raffleConcludedAt) {
       return (
-        <Text tw="font-semibold text-white">
+        <Text tw="text-center font-semibold text-white">
           Your raffle ends {`${raffleConcludedAt}`}
         </Text>
       );

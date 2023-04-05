@@ -33,16 +33,13 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
   );
 
   return (
-    <View tw="px-4 pb-4 pr-16 pt-6">
+    <View tw="px-4 pb-2 pr-16 pt-6">
       <View tw="flex flex-row justify-between">
         <View tw="flex-1 flex-col justify-between">
           <View tw="">
             <View tw="mb-3 flex flex-row items-center justify-between">
               <RaffleTooltip edition={edition} theme="dark" />
-              <Text
-                tw="flex-1 text-2xl text-white dark:text-white md:text-gray-900"
-                numberOfLines={3}
-              >
+              <Text tw="flex-1 text-2xl text-white dark:text-white md:text-gray-900">
                 {nft.token_name}
                 <Text tw="text-base font-semibold text-gray-400 dark:text-gray-400 md:text-gray-900">
                   {` · `}
@@ -82,7 +79,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             </RNText>
           </View>
           {edition && (
-            <View tw="mt-2 flex-row">
+            <View tw="mt-4 flex-row">
               <ClaimButton
                 tw="flex-1"
                 edition={edition}
