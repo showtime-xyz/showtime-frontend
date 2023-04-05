@@ -60,13 +60,20 @@ const FeedSwipeList = ({ type }: { type: string }) => {
   const { data } = useFeed();
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const queryParams = useMemo(
+    () => ({
+      type,
+      initialScrollIndex,
+    }),
+    [type, initialScrollIndex]
+  );
 
   return (
     <SwipeList
       data={data}
-      type={type}
       initialScrollIndex={Number(initialScrollIndex)}
       bottomPadding={safeAreaBottom}
+      queryParams={queryParams}
     />
   );
 };
@@ -128,7 +135,13 @@ const TrendingNFTsSwipeList = ({ type }: { type: string }) => {
   const { useParam } = createParam<Query>();
   const [days] = useParam("days");
   const [initialScrollIndex] = useParam("initialScrollIndex");
-
+  const queryParams = useMemo(
+    () => ({
+      type,
+      initialScrollIndex,
+    }),
+    [type, initialScrollIndex]
+  );
   const { data } = useTrendingNFTS({
     days: Number(days),
   });
@@ -141,7 +154,7 @@ const TrendingNFTsSwipeList = ({ type }: { type: string }) => {
       // isRefreshing={isRefreshing}
       // refresh={refresh}
       initialScrollIndex={Number(initialScrollIndex)}
-      type={type}
+      queryParams={queryParams}
       bottomPadding={safeAreaBottom}
     />
   );
@@ -153,7 +166,14 @@ export const TrendingCreatorSwipeList = withColorScheme(
     const [days] = useParam("days");
     const [initialScrollIndex] = useParam("initialScrollIndex");
     const [creatorId] = useParam("creatorId");
-
+    const queryParams = useMemo(
+      () => ({
+        type,
+        creatorId: creatorId,
+        initialScrollIndex,
+      }),
+      [type, initialScrollIndex, creatorId]
+    );
     const { data, mutate } = useTrendingCreators({
       days: Number(days),
     });
@@ -180,10 +200,10 @@ export const TrendingCreatorSwipeList = withColorScheme(
           data={creatorTopNFTs}
           initialScrollIndex={Number(initialScrollIndex)}
           bottomPadding={safeAreaBottom}
+          queryParams={queryParams}
           fetchMore={() => {}}
           isRefreshing={false}
           refresh={() => {}}
-          type={type}
         />
       </MutateProvider>
     );
