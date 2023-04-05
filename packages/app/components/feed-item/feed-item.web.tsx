@@ -17,9 +17,9 @@ import type { NFT } from "app/types";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
+import { EngagementIcons } from "./engagement-icons";
 import { FeedItemMD } from "./feed-item.md";
 import { NSFWGate } from "./nsfw-gate";
-import { SocialIcons } from "./social-icons";
 
 export type FeedItemProps = {
   nft: NFT;
@@ -145,7 +145,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               detail={detailData?.data?.item}
             />
           </View>
-          <SocialIcons nft={nft} />
+          <EngagementIcons nft={nft} />
         </View>
       </LikeContextProvider>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />

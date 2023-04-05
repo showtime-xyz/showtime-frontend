@@ -1,5 +1,7 @@
 import { Platform, Share as RNShare, ShareAction } from "react-native";
 
+import * as Clipboard from "expo-clipboard";
+
 import { toast } from "design-system/toast";
 
 export const useShare = () => {
@@ -10,7 +12,7 @@ export const useShare = () => {
           url,
         });
       } else {
-        navigator.clipboard.writeText(url);
+        await Clipboard.setStringAsync(url);
         toast.success("Copied!");
       }
       return {

@@ -44,8 +44,8 @@ import { getMediaUrl } from "app/utilities";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
+import { EngagementIcons } from "./engagement-icons";
 import { NSFWGate } from "./nsfw-gate";
-import { SocialIcons } from "./social-icons";
 
 export type FeedItemProps = {
   nft: NFT;
@@ -270,7 +270,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 detail={detailData?.data?.item}
               />
             </LinearGradient>
-            <SocialIcons nft={nft} />
+            <EngagementIcons nft={nft} />
           </Reanimated.View>
           <View tw="absolute right-4 z-50" style={{ top: top }}>
             <NFTDropdown
