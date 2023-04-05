@@ -200,7 +200,7 @@ const ListCardLargeScreen = ({
                 {description ? (
                   <Text
                     tw="text-sm text-gray-600 dark:text-gray-400"
-                    numberOfLines={5}
+                    numberOfLines={isLgWidth ? 5 : 3}
                   >
                     {description}
                   </Text>
