@@ -32,7 +32,13 @@ export function useRouter() {
           key.includes("Modal")
         );
         if (modal) {
-          const as = nextRouter.asPath;
+          const modalName = modal.split("Modal")[0];
+          const shouldRemoveModalNameFromAsPath =
+            nextRouter.asPath === "/" + modalName;
+          const as = shouldRemoveModalNameFromAsPath
+            ? nextRouter.asPath.split("/").slice(0, -1).join("/")
+            : nextRouter.asPath;
+
           const newQuery = { ...nextRouter.query };
           delete newQuery[modal];
 
