@@ -9,6 +9,7 @@ import {
 import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import {
   PressableScale,
   Props as PressableScaleProps,
@@ -51,9 +52,9 @@ const RouteComponent = ({
     return <Link {...(rest as LinkProps)}>{children}</Link>;
   }
   return (
-    <PressableScale onPress={onPress} {...(rest as PressableScaleProps)}>
+    <Pressable onPress={onPress} {...(rest as PressableScaleProps)}>
       {children}
-    </PressableScale>
+    </Pressable>
   );
 };
 
@@ -163,25 +164,39 @@ const ListCardSmallScreen = ({
         </View>
         <View tw="flex-row pb-2 pt-2">
           <View tw="relative ml-2">
-            <View tw="h-36 w-36 items-center justify-center bg-gray-300 dark:bg-gray-700">
-              <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
-              <NSFWGate
-                show={nft.nsfw}
-                nftId={nft.nft_id}
-                variant="thumbnail"
-              />
-            </View>
+            <RouteComponent
+              viewProps={{
+                style: {
+                  width: "100%",
+                  height: "100%",
+                },
+              }}
+              href={href}
+              onPress={handleOnPress}
+            >
+              <View tw="h-36 w-36 items-center justify-center bg-gray-300 dark:bg-gray-700">
+                <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
+                <NSFWGate
+                  show={nft.nsfw}
+                  nftId={nft.nft_id}
+                  variant="thumbnail"
+                />
+              </View>
+            </RouteComponent>
           </View>
 
           <View tw="flex-1 justify-between">
             <View tw="px-2">
               <View tw="py-2">
-                <Text
-                  tw="overflow-ellipsis whitespace-nowrap text-base font-bold text-black dark:text-white"
-                  numberOfLines={1}
-                >
-                  {nft.token_name}
-                </Text>
+                <RouteComponent href={href} onPress={handleOnPress}>
+                  <Text
+                    tw="overflow-ellipsis whitespace-nowrap text-base font-bold text-black dark:text-white"
+                    numberOfLines={1}
+                  >
+                    {nft.token_name}
+                  </Text>
+                </RouteComponent>
+
                 {description ? (
                   <View tw="mt-3">
                     <Text
