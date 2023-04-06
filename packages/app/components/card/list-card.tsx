@@ -4,13 +4,11 @@ import {
   StyleProp,
   useWindowDimensions,
   ViewStyle,
-  StyleSheet,
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
-import { Button } from "@showtime-xyz/universal.button";
 import {
   PressableScale,
   Props as PressableScaleProps,
@@ -21,24 +19,19 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Title } from "app/components/card/rows/title";
-import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy, ClaimedByBig } from "app/components/feed-item/claimed-by";
-import { Like } from "app/components/feed/like";
 import { ListMedia } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
-import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
-import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { linkifyDescription } from "app/lib/linkify";
 import { NFT } from "app/types";
 import { removeTags } from "app/utilities";
 
-import { Hidden } from "design-system/hidden";
 import { breakpoints } from "design-system/theme";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
@@ -99,27 +92,6 @@ function ListCard(props: Props) {
   const isLgWidth = width >= breakpoints["md"];
 
   if (!isLgWidth) {
-    /*
-    return (
-      <RouteComponent
-        href={href}
-        viewProps={{ style: [{ flex: 1 }, style] }}
-        style={[style as any]}
-        onPress={handleOnPress}
-      >
-        <Media
-          item={nft}
-          tw={tw}
-          sizeStyle={{
-            width: sizeStyle?.width,
-            height: sizeStyle?.height,
-          }}
-          edition={edition}
-        />
-        <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
-      </RouteComponent>
-    );
-    */
     return <ListCardSmallScreen {...props} />;
   }
 
@@ -169,13 +141,13 @@ const ListCardSmallScreen = ({
           tw,
         ]}
       >
-        <View tw="flex-row items-center justify-between border-b-0 bg-slate-100 px-2 dark:bg-gray-800">
+        <View tw="flex-row items-center justify-between border-b-0 bg-gray-200 px-2 dark:bg-gray-800">
           <Creator
             nft={nft}
             shouldShowDateCreated={false}
             shouldShowCreatorIndicator={false}
             size={24}
-            tw={"py-2"}
+            tw={"web:py-2 py-2"}
           />
           <View tw="items-center">
             <ErrorBoundary renderFallback={() => null}>
@@ -190,25 +162,15 @@ const ListCardSmallScreen = ({
           </View>
         </View>
         <View tw="flex-row pb-2 pt-2">
-          <View tw="relative ml-2 bg-gray-200 dark:bg-gray-800">
-            <RouteComponent
-              href={href}
-              onPress={handleOnPress}
-              viewProps={{
-                style: {
-                  height: "100%",
-                },
-              }}
-            >
-              <View tw="h-32 w-32 items-center">
-                <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
-                <NSFWGate
-                  show={nft.nsfw}
-                  nftId={nft.nft_id}
-                  variant="thumbnail"
-                />
-              </View>
-            </RouteComponent>
+          <View tw="relative ml-2">
+            <View tw="h-36 w-36 items-center justify-center bg-gray-300 dark:bg-gray-700">
+              <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
+              <NSFWGate
+                show={nft.nsfw}
+                nftId={nft.nft_id}
+                variant="thumbnail"
+              />
+            </View>
           </View>
 
           <View tw="flex-1 justify-between">
@@ -233,24 +195,17 @@ const ListCardSmallScreen = ({
               </View>
             </View>
 
-            <View tw="mb-2 justify-between px-2">
+            <View tw="mb-2 mt-1 justify-between px-2">
               <ClaimedBy
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
               />
+              {!!nft.creator_airdrop_edition_address && edition ? (
+                <View tw="mt-3.5 flex-row">
+                  <ClaimButton edition={edition} size="small" />
+                </View>
+              ) : null}
             </View>
-          </View>
-        </View>
-        <View tw="flex-row items-center justify-between overflow-hidden bg-slate-100 px-2 py-2 dark:bg-gray-800">
-          <View>
-            <ContentTypeTooltip edition={edition} />
-          </View>
-          <View tw="items-center">
-            {!!nft.creator_airdrop_edition_address && edition ? (
-              <View tw="flex-row">
-                <ClaimButton edition={edition} size="small" />
-              </View>
-            ) : null}
           </View>
         </View>
       </View>
