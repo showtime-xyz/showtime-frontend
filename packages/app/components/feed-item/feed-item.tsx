@@ -8,6 +8,7 @@ import {
   useRef,
 } from "react";
 import {
+  Platform,
   StatusBar,
   StyleProp,
   useWindowDimensions,
@@ -270,7 +271,17 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               />
             </LinearGradient>
           </Reanimated.View>
-          <View tw="absolute right-4 z-50" style={{ top: top }}>
+          <View
+            tw="absolute right-4 z-50"
+            style={{
+              top:
+                top +
+                Platform.select({
+                  android: top + 10,
+                  default: top + 6,
+                }),
+            }}
+          >
             <NFTDropdown
               nft={detailData?.data?.item ?? nft}
               edition={edition}

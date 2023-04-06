@@ -44,19 +44,9 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             </View>
 
             <View tw="mb-3 flex flex-row items-center justify-between">
-              <RNText>
-                <Text tw="flex-1 text-sm font-bold text-white dark:text-white md:text-gray-900">
-                  {nft.token_name}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 10,
-                  }}
-                  tw="text-gray-200 dark:text-gray-200 md:text-gray-900"
-                >
-                  {`  ${getFormatDistanceToNowStrict(nft?.token_created)}`}
-                </Text>
-              </RNText>
+              <Text tw="flex-1 text-sm font-bold text-white dark:text-white md:text-gray-900">
+                {nft.token_name}
+              </Text>
             </View>
 
             <Text>

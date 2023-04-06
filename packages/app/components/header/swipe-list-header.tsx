@@ -35,8 +35,8 @@ export const SwipeListHeader = memo<SwipeListHeaderProps>(
     const router = useRouter();
     const isRootScreen = router.asPath === "/";
     const platformTop = Platform.select({
-      android: top + 8,
-      default: top,
+      android: top + 10,
+      default: top + 6,
     });
 
     return (
