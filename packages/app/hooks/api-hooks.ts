@@ -96,7 +96,7 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
   };
 };
 
-export const useTrendingNFTS = ({ filter }: { filter: string }) => {
+export const useTrendingNFTS = ({ filter }: { filter?: string }) => {
   const trendingUrlFn = useCallback(() => {
     if (filter === "music") {
       return "/v3/trending/nfts/music";
