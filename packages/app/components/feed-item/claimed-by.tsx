@@ -43,7 +43,6 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
           );
         })}
         <Text tw="ml-1 flex-1 text-sm text-gray-900 dark:text-white">
-          {`Collected by `}
           <TextLink
             href={`/@${firstClaimer.username ?? firstClaimer.wallet_address}`}
             tw="font-bold"
@@ -79,7 +78,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
                 }}
                 tw="font-bold"
               >
-                {`${claimersList?.length - 1} others`}
+                {`${claimersList?.length - 1} collected`}
               </Text>
             </>
           )}
@@ -117,7 +116,7 @@ export const ClaimedByBig = ({
           );
         })}
         <Text tw="ml-4 flex-1 text-sm text-gray-900 dark:text-white">
-          {claimersList?.length && claimersList?.length >= 2 && (
+          {claimersList?.length && claimersList?.length >= 4 && (
             <>
               {` & `}
               <Text
@@ -146,7 +145,7 @@ export const ClaimedByBig = ({
                 }}
                 tw="font-bold"
               >
-                {`${claimersList?.length - 1} collected`}
+                {`${claimersList?.length - 4} collected`}
               </Text>
             </>
           )}

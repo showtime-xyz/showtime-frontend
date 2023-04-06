@@ -70,6 +70,7 @@ function ListMediaImpl({
           data-test-id={Platform.select({ web: "nft-card-media" })}
           resizeMode={resizeMode}
           alt={item?.token_name}
+          style={{ width: "100%", height: "100%" }}
         />
       ) : null}
 

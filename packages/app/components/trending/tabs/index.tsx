@@ -13,18 +13,18 @@ export type TrendingTabListRef = {
   refresh: () => void;
 };
 export type TrendingTabListProps = {
-  days: number;
+  filter: string;
   index: number;
 };
 export const TRENDING_ROUTE = [
   {
     title: "Music releases",
-    key: "1",
+    key: "music",
     index: 0,
   },
   {
     title: "Digital Art",
-    key: "30",
+    key: "art",
     index: 1,
   },
 ];
@@ -37,7 +37,7 @@ const LIST_MAP = new Map([
 export const TabListContainer = forwardRef<
   TrendingTabListRef,
   TrendingTabListProps
->(function TabListContainer({ days, index }, ref) {
+>(function TabListContainer({ filter, index }, ref) {
   const selected = useContext(TrendingContext);
   const List = useMemo(() => LIST_MAP.get(selected[index]), [index, selected]);
   return (
@@ -45,7 +45,7 @@ export const TabListContainer = forwardRef<
       renderFallback={(props) => <TabFallback {...props} index={index} />}
     >
       <Suspense fallback={<TabSpinner index={index} />}>
-        {List && <List days={days} index={index} ref={ref} />}
+        {List && <List filter={filter} index={index} ref={ref} />}
       </Suspense>
     </ErrorBoundary>
   );

@@ -18,10 +18,10 @@ import { TrendingTabListProps, TrendingTabListRef } from "./";
 
 const NUM_COLUMNS = 1;
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
-  function NFTSList({ days, index }, ref) {
+  function NFTSList({ filter, index }, ref) {
     const router = useRouter();
     const { data, mutate } = useTrendingNFTS({
-      days,
+      filter,
     });
     const listRef = useRef(null);
     useScrollToTop(listRef);
@@ -38,10 +38,10 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         router.push(
           `${getNFTSlug(
             item
-          )}?initialScrollIndex=${currentIndex}&days=${days}&type=trendingNFTs`
+          )}?initialScrollIndex=${currentIndex}&filter=${filter}&type=trendingNFTs`
         );
       },
-      [router, days]
+      [router, filter]
     );
 
     const renderItem = useCallback(

@@ -27,7 +27,7 @@ import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy, ClaimedByBig } from "app/components/feed-item/claimed-by";
 import { Like } from "app/components/feed/like";
-import { ListMedia } from "app/components/media/";
+import { ListMedia } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -77,19 +77,11 @@ type Props = {
 };
 
 function ListCard(props: Props) {
-  const { nft, tw = "", sizeStyle, onPress, href = "", style } = props;
   const { width } = useWindowDimensions();
-  const { data: edition } = useCreatorCollectionDetail(
-    nft.creator_airdrop_edition_address
-  );
+  const isLgWidth = width >= breakpoints["md"];
 
-  const handleOnPress = useCallback(() => {
-    if (isWeb) return null;
-    onPress?.();
-  }, [onPress]);
-
-  /*
-  if (width < 768) {
+  if (!isLgWidth) {
+    /*
     return (
       <RouteComponent
         href={href}
@@ -109,22 +101,28 @@ function ListCard(props: Props) {
         <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
       </RouteComponent>
     );
+    */
+    return <ListCardSmallScreen {...props} />;
   }
-  */
 
-  return <ListCardLargeScreen {...props} handleOnPress={handleOnPress} />;
+  return <ListCardLargeScreen {...props} />;
 }
 
-const ListCardLargeScreen = ({
+const ListCardSmallScreen = ({
   nft,
   tw = "",
   sizeStyle,
   href = "",
   showClaimButton,
-  handleOnPress,
-}: Props & { handleOnPress: any }) => {
+  onPress,
+}: Props) => {
   const { width } = useWindowDimensions();
   const isLgWidth = width >= breakpoints["lg"];
+
+  const handleOnPress = useCallback(() => {
+    if (isWeb) return null;
+    onPress?.();
+  }, [onPress]);
 
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
@@ -146,7 +144,111 @@ const ListCardLargeScreen = ({
   return (
     <View
       // @ts-expect-error TODO: add accessibility types for RNW
-      //accessibilityRole="article"
+      dataset={Platform.select({ web: { testId: "nft-card-list" } })}
+      style={[sizeStyle]}
+      tw={[
+        "mx-2 my-2 md:mx-0",
+        nft?.loading ? "opacity-50" : "opacity-100",
+        "flex-1",
+        "bg-white dark:bg-gray-900 md:dark:bg-black",
+        tw,
+      ]}
+    >
+      <View tw="flex-row">
+        <View tw="relative bg-gray-200 dark:bg-gray-800">
+          <RouteComponent
+            href={href}
+            onPress={handleOnPress}
+            viewProps={{
+              style: {
+                height: "100%",
+              },
+            }}
+          >
+            <View tw="h-24 w-24 items-center">
+              <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
+              <NSFWGate
+                show={nft.nsfw}
+                nftId={nft.nft_id}
+                variant="thumbnail"
+              />
+            </View>
+          </RouteComponent>
+
+          <View tw="z-9 absolute bottom-4 left-4 ">
+            <ContentTypeTooltip edition={edition} />
+          </View>
+        </View>
+
+        <View tw="flex-1 justify-between bg-red-300">
+          <View tw="pr-2">
+            <View tw="-mt-2 px-2">
+              <Creator
+                nft={nft}
+                shouldShowDateCreated={false}
+                shouldShowCreatorIndicator={false}
+                size={24}
+              />
+              <View tw="-mt-2">
+                <Text
+                  tw="overflow-ellipsis whitespace-nowrap text-base font-bold text-black dark:text-white"
+                  numberOfLines={1}
+                >
+                  {nft.token_name}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View tw="mb-2 justify-between px-2">
+            <ClaimedBy
+              claimersList={detailData?.data.item?.multiple_owners_list}
+              nft={nft}
+            />
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const ListCardLargeScreen = ({
+  nft,
+  tw = "",
+  sizeStyle,
+  href = "",
+  showClaimButton,
+  onPress,
+}: Props) => {
+  const { width } = useWindowDimensions();
+  const isLgWidth = width >= breakpoints["lg"];
+
+  const handleOnPress = useCallback(() => {
+    if (isWeb) return null;
+    onPress?.();
+  }, [onPress]);
+
+  const { data: edition } = useCreatorCollectionDetail(
+    nft.creator_airdrop_edition_address
+  );
+  const { data: detailData } = useNFTDetailByTokenId({
+    contractAddress: nft?.contract_address,
+    tokenId: nft?.token_id,
+    chainName: nft?.chain_name,
+  });
+
+  const description = useMemo(
+    () =>
+      nft?.token_description
+        ? linkifyDescription(removeTags(nft?.token_description))
+        : "",
+    [nft?.token_description]
+  );
+
+  return (
+    <View
+      // @ts-expect-error TODO: add accessibility types for RNW
+      accessibilityRole="article"
       dataset={Platform.select({ web: { testId: "nft-card" } })}
       style={[sizeStyle]}
       tw={[

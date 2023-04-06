@@ -27,13 +27,15 @@ type Props = {
   shouldShowCreatorIndicator?: boolean;
   shouldShowDateCreated?: boolean;
   label?: string;
+  size?: number;
 };
 
 export function Creator({
   nft,
-  shouldShowCreatorIndicator = true,
+  shouldShowCreatorIndicator = false,
   shouldShowDateCreated = true,
-  label = "",
+  label = "Creator",
+  size = 32,
 }: Props) {
   if (!nft) return null;
 
@@ -42,6 +44,7 @@ export function Creator({
       <AvatarHoverCard
         username={nft?.creator_username || nft?.creator_address_nonens}
         url={nft.creator_img_url}
+        size={size}
       />
       <View tw="ml-2 justify-center">
         {shouldShowCreatorIndicator && (

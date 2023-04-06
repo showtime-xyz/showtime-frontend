@@ -8,7 +8,7 @@ import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Card } from "app/components/card";
+import { ListCard } from "app/components/card/list-card";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
@@ -20,31 +20,30 @@ import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
 
-import { ListCard } from "../card/list-card";
 import { TRENDING_ROUTE } from "./tabs";
 
 type Query = {
   tab: "creator" | "drop";
-  days: string;
+  filter: string;
 };
 
 const TrendingHeaderContext = createContext<{
-  days: string | undefined;
-  setDays: (type: string) => void;
+  filter: string | undefined;
+  setFilter: (type: string) => void;
 }>({
-  days: undefined,
-  setDays: () => {},
+  filter: undefined,
+  setFilter: () => {},
 });
 const { useParam } = createParam<Query>();
 const Header = () => {
   const context = useContext(TrendingHeaderContext);
-  const { days, setDays } = context;
+  const { filter, setFilter } = context;
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
 
   const tabIndex = useMemo(
-    () => TRENDING_ROUTE.findIndex((item) => item.key === days),
-    [days]
+    () => TRENDING_ROUTE.findIndex((item) => item.key === filter),
+    [filter]
   );
 
   return (
@@ -57,7 +56,7 @@ const Header = () => {
       <View tw="web:min-h-[43px]">
         <TabBarSingle
           onPress={(index: number) => {
-            setDays(TRENDING_ROUTE[index].key);
+            setFilter(TRENDING_ROUTE[index].key);
           }}
           routes={TRENDING_ROUTE}
           index={tabIndex}
@@ -72,11 +71,14 @@ export const Trending = () => {
   const contentWidth = useContentWidth();
   const bottomBarHeight = usePlatformBottomHeight();
   const isMdWidth = contentWidth >= breakpoints["md"];
-  const [days, setDays] = useParam("days", { initial: "1" });
-  const contextValues = useMemo(() => ({ days, setDays }), [days, setDays]);
+  const [filter, setFilter] = useParam("filter", { initial: "music" });
+  const contextValues = useMemo(
+    () => ({ filter, setFilter }),
+    [filter, setFilter]
+  );
 
   const { data: list, isLoading } = useTrendingNFTS({
-    days: Number(days),
+    filter: filter,
   });
 
   const keyExtractor = useCallback(
@@ -93,12 +95,12 @@ export const Trending = () => {
             showClaimButton
             href={`/${getNFTSlug(
               item
-            )}?initialScrollIndex=${index}&days=${days}&type=trendingNFTs`}
+            )}?initialScrollIndex=${index}&filter=${filter}&type=trendingNFTs`}
           />
         </View>
       );
     },
-    [days]
+    [filter]
   );
 
   const ListEmptyComponent = useCallback(() => {
