@@ -85,8 +85,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }
 
   return (
-    <View tw="bg-black">
-      <LikeContextProvider nft={nft} key={nft.nft_id}>
+    <>
+      <LikeContextProvider nft={nft}>
         {nft?.mime_type?.startsWith("video") ? (
           <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
             <MuteButton variant="mobile-web" />
@@ -147,7 +147,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
         </View>
       </LikeContextProvider>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
-    </View>
+    </>
   );
 });
 FeedItem.displayName = "FeedItem";

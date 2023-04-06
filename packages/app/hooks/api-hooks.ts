@@ -96,17 +96,21 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
   };
 };
 
-export const useTrendingNFTS = ({ days }: { days: number }) => {
+export const useTrendingNFTS = ({ filter }: { filter?: string }) => {
   const trendingUrlFn = useCallback(() => {
-    const url = `/v2/trending/nfts?timeframe=${
-      days === 1 ? "day" : days === 7 ? "week" : days === 30 ? "month" : "all"
-    }`;
-    return url;
-  }, [days]);
+    if (filter === "music") {
+      return "/v3/trending/nfts/music";
+    }
+    return "/v3/trending/nfts";
+  }, [filter]);
 
   const { data, isLoading, error, mutate } = useSWR<NFT[]>(
     trendingUrlFn,
-    fetcher
+    fetcher,
+    {
+      revalidateIfStale: false,
+      focusThrottleInterval: 200000,
+    }
   );
 
   return { data: data ?? [], isLoading, error, mutate };

@@ -45,7 +45,7 @@ type Props = {
   theme?: "light" | "dark";
 };
 
-function Media({
+function MediaImplementation({
   item,
   numColumns = 1,
   sizeStyle = {},
@@ -159,6 +159,6 @@ function Media({
   );
 }
 
-const MemoizedMedia = withMemoAndColorScheme<typeof Media, Props>(Media);
-
-export { MemoizedMedia as Media };
+export const Media = withMemoAndColorScheme<typeof MediaImplementation, Props>(
+  MediaImplementation
+);

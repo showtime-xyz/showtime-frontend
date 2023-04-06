@@ -120,6 +120,8 @@ function StyledImage({ borderRadius = 0, tw = "", ...props }: ImageProps) {
   return (
     <View
       style={{
+        width: "inherit",
+        height: "inherit",
         borderRadius,
         overflow: "hidden",
       }}
