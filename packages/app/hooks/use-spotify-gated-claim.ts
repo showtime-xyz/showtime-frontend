@@ -1,5 +1,6 @@
 import { useOnboardingPromise } from "app/components/onboarding";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
@@ -47,6 +48,7 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
             },
             method: "POST",
           });
+          Analytics.track(EVENTS.SPOTIFY_SAVE_SUCCESS_BEFORE_LOGIN);
 
           toast.success(
             "You just saved this song to your library! Sign in now to collect this drop."
