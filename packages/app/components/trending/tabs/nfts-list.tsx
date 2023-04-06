@@ -16,7 +16,6 @@ import { NFT } from "app/types";
 
 import { TrendingTabListProps, TrendingTabListRef } from "./";
 
-const NUM_COLUMNS = 1;
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
   function NFTSList({ filter, index }, ref) {
     const router = useRouter();
@@ -59,10 +58,10 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         viewabilityConfig={{ itemVisiblePercentThreshold: 85 }}
-        estimatedItemSize={contentWidth / NUM_COLUMNS}
+        estimatedItemSize={200}
         overscan={{
-          main: contentWidth / NUM_COLUMNS,
-          reverse: contentWidth / NUM_COLUMNS,
+          main: contentWidth * 3,
+          reverse: contentWidth * 3,
         }}
         style={{ margin: -GAP }}
         ListFooterComponent={ListFooterComponent}
