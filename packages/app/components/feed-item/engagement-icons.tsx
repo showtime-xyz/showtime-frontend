@@ -21,7 +21,7 @@ export const EngagementIcons = memo<EngagementIconsProps>(
   function EngagementIcons({ nft, tw = "" }) {
     const { shareNFT } = useShareNFT();
     return (
-      <View tw={["flex-col items-center justify-end pb-2 pl-2", tw]}>
+      <View tw={["flex-col items-center justify-end pb-2 pl-5", tw]}>
         <AvatarHoverCard
           username={nft?.creator_username || nft?.creator_address_nonens}
           url={nft.creator_img_url}

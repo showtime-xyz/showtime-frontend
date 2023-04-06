@@ -14,7 +14,7 @@ import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 import {
   getCreatorUsernameFromNFT,
-  getFormatDistanceStrictToWeek,
+  getFormatDistanceToNowStrict,
   removeTags,
 } from "app/utilities";
 
@@ -37,36 +37,29 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
     <View tw="px-4 pb-2 pt-6">
       <View tw="flex flex-row justify-between">
         <View tw="flex-1 flex-col justify-end">
-          <View tw="">
-            <View tw="mb-3 flex flex-row items-center justify-between">
+          <View>
+            <View tw="mb-3 flex-row justify-between">
               <RaffleTooltip edition={edition} theme="dark" />
-              <Text tw="flex-1 text-2xl text-white dark:text-white md:text-gray-900">
-                {nft.token_name}
-                <Text
-                  style={{
-                    fontSize: 16,
-                  }}
-                  tw="font-semibold text-gray-400 dark:text-gray-400 md:text-gray-900"
-                >
-                  {` · `}
+              <View />
+            </View>
+
+            <View tw="mb-3 flex flex-row items-center justify-between">
+              <RNText>
+                <Text tw="flex-1 text-sm font-bold text-white dark:text-white md:text-gray-900">
+                  {nft.token_name}
                 </Text>
                 <Text
                   style={{
-                    fontSize: 12,
-                    fontWeight: "500",
+                    fontSize: 10,
                   }}
                   tw="text-gray-200 dark:text-gray-200 md:text-gray-900"
                 >
-                  {getFormatDistanceStrictToWeek(nft.token_created)}
+                  {`  ${getFormatDistanceToNowStrict(nft?.token_created)}`}
                 </Text>
-              </Text>
+              </RNText>
             </View>
-            <ClaimedBy
-              claimersList={detail?.multiple_owners_list}
-              nft={nft}
-              tw="mb-4"
-            />
-            <RNText>
+
+            <Text>
               <TextLink
                 href={`/@${nft.creator_username ?? nft.creator_address}`}
                 tw="web:inline flex text-sm font-semibold text-white dark:text-white md:text-gray-900"
@@ -85,11 +78,17 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 ) : null}
                 {` `}
               </RNText>
-              <Text tw="text-sm text-gray-200 dark:text-gray-200 md:text-gray-600">
+              <Text tw="text-xs text-gray-200 dark:text-gray-200 md:text-gray-600">
                 {description}
               </Text>
-            </RNText>
+            </Text>
+            <ClaimedBy
+              claimersList={detail?.multiple_owners_list}
+              nft={nft}
+              tw="mt-3"
+            />
           </View>
+
           {edition && (
             <View tw="mt-4 flex-row">
               <ClaimButton

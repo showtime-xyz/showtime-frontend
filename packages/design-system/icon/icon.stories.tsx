@@ -32,8 +32,8 @@ const IconItem = ({ icon, title }: IconItemProps) => {
 
 export const Default = () => {
   return (
-    <View tw="bg-white py-4 px-4">
-      <View tw="mt-4 mb-6 flex-row items-center justify-center">
+    <View tw="bg-white px-4 py-4">
+      <View tw="mb-6 mt-4 flex-row items-center justify-center">
         <Icon.ShowtimeBrand color="black" width={120} />
       </View>
       <View tw="flex flex-row flex-wrap bg-white">
@@ -146,6 +146,7 @@ export const Default = () => {
         <IconItem icon={Icon.Receipt} title="Receipt" />
         <IconItem icon={Icon.AddPhoto} title="AddPhoto" />
         <IconItem icon={Icon.PauseOutline} title="PauseOutline" />
+        <IconItem icon={Icon.RaffleHorizontal} title="RaffleHorizontal" />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>

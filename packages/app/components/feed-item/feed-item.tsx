@@ -99,7 +99,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }
 
   const maxContentHeight = windowHeight - bottomHeight;
-
   const mediaHeight = useMemo(() => {
     const actualHeight =
       windowWidth /
@@ -121,10 +120,12 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   ]);
 
   const contentTransY = useDerivedValue(() => {
-    const visibleContentHeight = windowHeight - detailHeight - StatusBarHeight;
-
+    const visibleContentHeight = windowHeight - detailHeight;
     if (mediaHeight < visibleContentHeight) {
-      return (visibleContentHeight + bottomPadding - mediaHeight) / 2;
+      return (
+        (visibleContentHeight + bottomPadding - mediaHeight) / 2 +
+        StatusBarHeight
+      );
     } else if (mediaHeight < maxContentHeight) {
       return top;
     } else {
@@ -143,7 +144,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     return {
       opacity: opacity.value,
     };
-  }, []);
+  }, [opacity]);
+
   const contentStyle = useAnimatedStyle<ViewStyle>(() => {
     return {
       transform: [
@@ -157,6 +159,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
       opacity: withTiming(isLayouted.value, { duration: 500 }),
     };
   });
+
   const hideHeader = useCallback(() => {
     opacity.value = withTiming(0);
   }, [opacity]);

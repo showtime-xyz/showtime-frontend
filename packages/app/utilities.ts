@@ -593,7 +593,7 @@ export const formatProfileRoutes = (
 };
 //#endregion
 
-export const getNextRefillClaim = (time?: string) => {
+export const getFormatDistanceToNowStrict = (time?: string) => {
   if (!time) return "";
   return formatDistanceToNowStrict(new Date(time), { addSuffix: true });
 };
@@ -604,7 +604,7 @@ export function formatClaimNumber(number: number) {
   // for the edge case of 100k, our max supply, put “100k”, no decimals
   if (number >= 100000) {
     return `100k`;
-  } else if (number > 1000) {
+  } else if (number > 9999) {
     return `${(number / 1000).toFixed(1)}k`;
   } else {
     return number;

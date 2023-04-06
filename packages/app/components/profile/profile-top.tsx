@@ -41,7 +41,7 @@ import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import {
   getFullSizeCover,
-  getNextRefillClaim,
+  getFormatDistanceToNowStrict,
   getProfileImage,
   getProfileName,
 } from "app/utilities";
@@ -400,7 +400,7 @@ export const ProfileTop = ({
               <Text tw="ml-0.5 mr-0.5 text-sm text-gray-600 dark:text-gray-400">
                 {user?.data.claim_tank.available_claims
                   ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
-                  : `Your next claim will be available ${getNextRefillClaim(
+                  : `Your next claim will be available ${getFormatDistanceToNowStrict(
                       user?.data.claim_tank.next_refill_at
                     )}`}
               </Text>
