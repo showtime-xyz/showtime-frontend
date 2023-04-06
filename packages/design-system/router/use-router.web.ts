@@ -32,17 +32,24 @@ export function useRouter() {
           key.includes("Modal")
         );
         if (modal) {
-          // Sometimes we open a modal and we also update the URL to match the
-          // modal name. Example: /nft/id/details
           const modalName = modal.split("Modal")[0];
           const shouldRemoveModalNameFromAsPath =
-            nextRouter.asPath.includes(modalName);
-
+            nextRouter.asPath === "/" + modalName;
           const as = shouldRemoveModalNameFromAsPath
             ? nextRouter.asPath.split("/").slice(0, -1).join("/")
             : nextRouter.asPath;
 
-          nextRouter.replace(as, as, { shallow: true, scroll: false });
+          const newQuery = { ...nextRouter.query };
+          delete newQuery[modal];
+
+          nextRouter.replace(
+            {
+              pathname: as,
+              query: newQuery,
+            },
+            as,
+            { shallow: true, scroll: false }
+          );
         } else {
           nextRouter.back();
         }

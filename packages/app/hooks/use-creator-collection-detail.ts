@@ -22,7 +22,8 @@ export function useCreatorCollectionDetail(editionAddress?: string) {
     editionAddress
       ? "/v1/creator-airdrops/edition?edition_address=" + editionAddress
       : null,
-    fetcher
+    fetcher,
+    { focusThrottleInterval: 300000, revalidateIfStale: false }
   );
 
   return {
