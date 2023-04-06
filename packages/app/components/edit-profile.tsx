@@ -115,7 +115,6 @@ export const EditProfile = () => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const { isValid, validate } = useValidateUsername();
-  const socialLinks = useLinkOptions();
   const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
   const [cropViewHeight, setCropViewHeight] = useState(400);
@@ -135,24 +134,10 @@ export const EditProfile = () => {
   >(null);
 
   const defaultValues = useMemo(() => {
-    const links: any = {};
-    if (socialLinks?.data?.data && user?.data?.profile?.links) {
-      socialLinks.data.data.forEach((s) => {
-        const foundLink = user.data.profile.links.find(
-          (l) => l.type_id === s.id
-        );
-
-        if (foundLink) {
-          links[s.id] = foundLink.user_input;
-        }
-      });
-    }
-
     return {
       name: user?.data?.profile.name || "",
       username: user?.data?.profile.username || "",
       bio: user?.data?.profile.bio || "",
-      links,
       website_url: user?.data?.profile.website_url || "",
       default_created_sort_id: user?.data?.profile.default_created_sort_id,
       default_list_id: user?.data?.profile.default_list_id || "",
@@ -161,7 +146,7 @@ export const EditProfile = () => {
       coverPicture: user?.data?.profile.cover_url || "",
       submitError: "",
     };
-  }, [socialLinks?.data?.data, user?.data?.profile]);
+  }, [user?.data?.profile]);
 
   const {
     control,
@@ -184,21 +169,11 @@ export const EditProfile = () => {
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
     if (!isValid || !formIsValid) return;
-    const links = Object.keys(values.links)
-      .filter((key) => values.links[key]?.trim())
-      .map((key) => {
-        const typeIdInt = parseInt(key);
-        return {
-          type_id: isNaN(typeIdInt) ? key : typeIdInt,
-          user_input: values.links[key] ? values.links[key].trim() : null,
-        };
-      });
 
     const newValues = {
       name: values.name?.trim() || null,
       username: values.username?.trim() || null,
       bio: values.bio?.trim() || null,
-      links,
       website_url: values.website_url?.trim() || null,
       default_created_sort_id: values.default_created_sort_id,
       default_list_id: values.default_list_id,
@@ -415,10 +390,13 @@ export const EditProfile = () => {
                 <View tw="mt-4 flex-row">
                   <Pressable
                     tw={`mr-2 w-1/2 flex-1 ${
-                      isVerified ? "opacity-60" : "opacity-100"
+                      isVerified && defaultValues.name !== ""
+                        ? "opacity-60"
+                        : "opacity-100"
                     }`}
                     onPress={() => {
-                      if (isVerified) setShowVerifiedExplanation(true);
+                      if (isVerified && defaultValues.name !== "")
+                        setShowVerifiedExplanation(true);
                     }}
                   >
                     <Controller
@@ -435,9 +413,10 @@ export const EditProfile = () => {
                           onBlur={onBlur}
                           onChangeText={onChange}
                           keyboardAppearance={isDark ? "dark" : "light"}
-                          disabled={isVerified}
+                          disabled={isVerified && defaultValues.name !== ""}
                           onPressIn={() => {
-                            if (isVerified) setShowVerifiedExplanation(true);
+                            if (isVerified && defaultValues.name !== "")
+                              setShowVerifiedExplanation(true);
                           }}
                         />
                       )}
