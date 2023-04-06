@@ -23,7 +23,7 @@ export const TRENDING_ROUTE = [
     index: 0,
   },
   {
-    title: "Digital Art",
+    title: "Digital art",
     key: "art",
     index: 1,
   },
