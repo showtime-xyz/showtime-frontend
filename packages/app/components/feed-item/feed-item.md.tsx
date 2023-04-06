@@ -14,6 +14,7 @@ import {
   Maximize,
   ChevronDown,
   ChevronUp,
+  Unmuted,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -173,7 +174,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const TabScene = useMemo(() => TAB_SCENES_MAP.get(index), [index]);
 
   return (
-    <LikeContextProvider nft={nft} key={nft.nft_id}>
+    <LikeContextProvider nft={nft}>
       <View
         tw="h-full w-full flex-row overflow-hidden"
         style={{
@@ -194,7 +195,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Close width={24} height={24} />
             </Button>
             <View tw="flex-row items-center">
-              {nft?.mime_type?.includes("video") && muted ? (
+              {nft?.mime_type?.includes("video") ? (
                 <Button
                   variant="text"
                   size="regular"
@@ -205,7 +206,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   iconOnly
                   tw="mr-4 bg-white px-3 dark:bg-gray-900"
                 >
-                  <Muted width={24} height={24} />
+                  {muted ? (
+                    <Muted width={24} height={24} />
+                  ) : (
+                    <Unmuted width={24} height={24} />
+                  )}
                 </Button>
               ) : null}
               <Button

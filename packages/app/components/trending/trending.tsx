@@ -27,7 +27,7 @@ export const Trending = () => {
     }: SceneRendererProps & {
       route: Route;
     }) => {
-      return <TabListContainer days={Number(key)} index={sceneIndex} />;
+      return <TabListContainer filter={key} index={sceneIndex} />;
     },
     []
   );
@@ -38,7 +38,7 @@ export const Trending = () => {
     return (
       <>
         {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
-        <View tw="flex-row justify-between bg-white py-4 px-4 dark:bg-black">
+        <View tw="flex-row justify-between bg-white px-4 py-4 dark:bg-black">
           <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
             Trending
           </Text>

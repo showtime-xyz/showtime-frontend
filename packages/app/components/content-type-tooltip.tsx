@@ -104,6 +104,7 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
               style={StyleSheet.absoluteFillObject}
             />
             <View tw="flex-row items-center">
+              {/* @ts-expect-error className not supported */}
               <Icon color="white" width={20} height={20} className="z-10" />
               {edition.presave_release_date ? (
                 <Text tw="px-1 text-xs font-semibold text-white">

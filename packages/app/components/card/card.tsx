@@ -154,7 +154,7 @@ const CardLargeScreen = ({
     chainName: nft?.chain_name,
   });
   return (
-    <LikeContextProvider nft={nft} key={nft.nft_id}>
+    <LikeContextProvider nft={nft}>
       <View
         // @ts-ignore
         // TODO: add accessibility types for RNW
@@ -170,7 +170,7 @@ const CardLargeScreen = ({
           tw,
         ]}
       >
-        <View tw="pb-4" shouldRasterizeIOS={true}>
+        <View tw="pb-4">
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <ErrorBoundary renderFallback={() => null}>
