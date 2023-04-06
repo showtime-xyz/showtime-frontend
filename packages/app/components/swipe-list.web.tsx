@@ -38,8 +38,6 @@ type Props = {
   refresh?: () => void;
   initialScrollIndex?: number;
   bottomPadding?: number;
-  queryParams?: object;
-  type?: string;
 };
 const { useParam } = createParam();
 
@@ -48,7 +46,6 @@ export const SwipeList = ({
   data,
   fetchMore,
   initialScrollIndex = 0,
-  queryParams,
 }: Props) => {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -86,7 +83,7 @@ export const SwipeList = ({
           {
             pathname: "/profile/[username]/[dropSlug]",
             query: {
-              ...queryParams,
+              ...router.query,
               username: nft.creator_username,
               dropSlug: nft.slug,
             },
@@ -98,7 +95,7 @@ export const SwipeList = ({
 
       initialURLSet.current = true;
     }
-  }, [data, isSwipeListScreen, initialParamProp, router, queryParams]);
+  }, [data, isSwipeListScreen, initialParamProp, router]);
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
@@ -122,7 +119,7 @@ export const SwipeList = ({
           {
             pathname: "/profile/[username]/[dropSlug]",
             query: {
-              ...queryParams,
+              ...router.query,
               initialScrollIndex: e.activeIndex,
               username: data[e.activeIndex].creator_username,
               dropSlug: data[e.activeIndex].slug,
@@ -134,7 +131,7 @@ export const SwipeList = ({
       }
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, data, router, isSwipeListScreen, queryParams]
+    [visibleItems, data, router, isSwipeListScreen]
   );
 
   if (data.length === 0) return null;
