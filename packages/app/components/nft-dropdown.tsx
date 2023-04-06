@@ -50,6 +50,7 @@ type Props = {
   shouldEnableSharing?: boolean;
   tw?: TW;
   iconColor?: string;
+  iconSize?: number;
   edition?: CreatorEditionResponse;
 };
 
@@ -58,6 +59,7 @@ function NFTDropdown({
   shouldEnableSharing = true,
   tw = "",
   iconColor: iconColorProp,
+  iconSize = 24,
   edition,
 }: Props) {
   //#region hooks
@@ -109,8 +111,8 @@ function NFTDropdown({
         <DropdownMenuTrigger>
           <Pressable tw={tw} accessibilityLabel="nft card item menu">
             <MoreHorizontal
-              width={24}
-              height={24}
+              width={iconSize}
+              height={iconSize}
               color={iconColorProp ?? iconColor}
             />
           </Pressable>

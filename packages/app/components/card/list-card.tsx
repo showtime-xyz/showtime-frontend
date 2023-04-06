@@ -64,6 +64,24 @@ const RouteComponent = ({
   );
 };
 
+const RouteComponentNative = ({
+  children,
+  onPress,
+  ...rest
+}: (LinkProps | PressableScaleProps) & {
+  onPress: () => void;
+  children: ReactNode;
+}) => {
+  if (isWeb) {
+    return <View tw="flex-1">{children}</View>;
+  }
+  return (
+    <PressableScale onPress={onPress} {...(rest as PressableScaleProps)}>
+      {children}
+    </PressableScale>
+  );
+};
+
 type Props = {
   nft: NFT & { loading?: boolean };
   numColumns?: number;
@@ -113,12 +131,8 @@ const ListCardSmallScreen = ({
   tw = "",
   sizeStyle,
   href = "",
-  showClaimButton,
   onPress,
 }: Props) => {
-  const { width } = useWindowDimensions();
-  const isLgWidth = width >= breakpoints["lg"];
-
   const handleOnPress = useCallback(() => {
     if (isWeb) return null;
     onPress?.();
@@ -142,73 +156,105 @@ const ListCardSmallScreen = ({
   );
 
   return (
-    <View
-      // @ts-expect-error TODO: add accessibility types for RNW
-      dataset={Platform.select({ web: { testId: "nft-card-list" } })}
-      style={[sizeStyle]}
-      tw={[
-        "mx-2 my-2 md:mx-0",
-        nft?.loading ? "opacity-50" : "opacity-100",
-        "flex-1",
-        "bg-white dark:bg-gray-900 md:dark:bg-black",
-        tw,
-      ]}
-    >
-      <View tw="flex-row">
-        <View tw="relative bg-gray-200 dark:bg-gray-800">
-          <RouteComponent
-            href={href}
-            onPress={handleOnPress}
-            viewProps={{
-              style: {
-                height: "100%",
-              },
-            }}
-          >
-            <View tw="h-24 w-24 items-center">
-              <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
-              <NSFWGate
-                show={nft.nsfw}
-                nftId={nft.nft_id}
-                variant="thumbnail"
-              />
-            </View>
-          </RouteComponent>
-
-          <View tw="z-9 absolute bottom-4 left-4 ">
-            <ContentTypeTooltip edition={edition} />
+    <RouteComponentNative href={href} onPress={handleOnPress}>
+      <View
+        // @ts-expect-error TODO: add accessibility types for RNW
+        dataset={Platform.select({ web: { testId: "nft-card-list" } })}
+        style={[sizeStyle]}
+        tw={[
+          "mx-2 my-2 md:mx-0",
+          nft?.loading ? "opacity-50" : "opacity-100",
+          "flex-1 overflow-hidden rounded-lg",
+          "bg-gray-50 dark:bg-gray-900 md:dark:bg-black",
+          tw,
+        ]}
+      >
+        <View tw="flex-row items-center justify-between border-b-0 bg-slate-100 px-2 dark:bg-gray-800">
+          <Creator
+            nft={nft}
+            shouldShowDateCreated={false}
+            shouldShowCreatorIndicator={false}
+            size={24}
+            tw={"py-2"}
+          />
+          <View tw="items-center">
+            <ErrorBoundary renderFallback={() => null}>
+              <Suspense fallback={<Skeleton width={24} height={24} />}>
+                <NFTDropdown
+                  nft={detailData?.data.item ?? nft}
+                  edition={edition}
+                  iconSize={18}
+                />
+              </Suspense>
+            </ErrorBoundary>
           </View>
         </View>
+        <View tw="flex-row pb-2 pt-2">
+          <View tw="relative ml-2 bg-gray-200 dark:bg-gray-800">
+            <RouteComponent
+              href={href}
+              onPress={handleOnPress}
+              viewProps={{
+                style: {
+                  height: "100%",
+                },
+              }}
+            >
+              <View tw="h-32 w-32 items-center">
+                <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
+                <NSFWGate
+                  show={nft.nsfw}
+                  nftId={nft.nft_id}
+                  variant="thumbnail"
+                />
+              </View>
+            </RouteComponent>
+          </View>
 
-        <View tw="flex-1 justify-between bg-red-300">
-          <View tw="pr-2">
-            <View tw="-mt-2 px-2">
-              <Creator
-                nft={nft}
-                shouldShowDateCreated={false}
-                shouldShowCreatorIndicator={false}
-                size={24}
-              />
-              <View tw="-mt-2">
+          <View tw="flex-1 justify-between">
+            <View tw="px-2">
+              <View tw="py-2">
                 <Text
                   tw="overflow-ellipsis whitespace-nowrap text-base font-bold text-black dark:text-white"
                   numberOfLines={1}
                 >
                   {nft.token_name}
                 </Text>
+                {description ? (
+                  <View tw="mt-3">
+                    <Text
+                      tw="text-xs text-gray-600 dark:text-gray-400"
+                      numberOfLines={2}
+                    >
+                      {description}
+                    </Text>
+                  </View>
+                ) : null}
               </View>
             </View>
-          </View>
 
-          <View tw="mb-2 justify-between px-2">
-            <ClaimedBy
-              claimersList={detailData?.data.item?.multiple_owners_list}
-              nft={nft}
-            />
+            <View tw="mb-2 justify-between px-2">
+              <ClaimedBy
+                claimersList={detailData?.data.item?.multiple_owners_list}
+                nft={nft}
+              />
+            </View>
+          </View>
+        </View>
+        <View tw="flex-row items-center justify-between overflow-hidden bg-slate-100 px-2 py-2 dark:bg-gray-800">
+          <View>
+            <ContentTypeTooltip edition={edition} />
+          </View>
+          <View tw="items-center">
+            {!!nft.creator_airdrop_edition_address && edition ? (
+              <View tw="flex-row">
+                <ClaimButton edition={edition} size="small" />
+              </View>
+            ) : null}
           </View>
         </View>
       </View>
-    </View>
+    </RouteComponentNative>
   );
 };
 
@@ -332,18 +378,16 @@ const ListCardLargeScreen = ({
             </View>
           ) : null}
         </View>
-        <Hidden until="md">
-          <View tw="mt-4 lg:mt-0 lg:self-center">
-            <ErrorBoundary renderFallback={() => null}>
-              <Suspense fallback={<Skeleton width={24} height={24} />}>
-                <NFTDropdown
-                  nft={detailData?.data.item ?? nft}
-                  edition={edition}
-                />
-              </Suspense>
-            </ErrorBoundary>
-          </View>
-        </Hidden>
+        <View tw="mt-4 lg:mt-0 lg:self-center">
+          <ErrorBoundary renderFallback={() => null}>
+            <Suspense fallback={<Skeleton width={24} height={24} />}>
+              <NFTDropdown
+                nft={detailData?.data.item ?? nft}
+                edition={edition}
+              />
+            </Suspense>
+          </ErrorBoundary>
+        </View>
       </View>
     </View>
   );
