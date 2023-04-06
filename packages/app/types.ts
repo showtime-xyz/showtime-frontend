@@ -133,6 +133,7 @@ export interface Profile {
   has_verified_phone_number: boolean;
   has_spotify_token: boolean;
   spotify_artist_id?: string;
+  apple_music_artist_id?: string;
   captcha_completed_at: Date | null;
   has_social_login: boolean;
   social_login_connections: SocialLoginConnections;
@@ -252,7 +253,7 @@ export type MyInfo = {
 };
 
 export type GatingType =
-  | "spotify_save"
+  | "multi_provider_music_save"
   | "password"
   | "location"
   | "multi"

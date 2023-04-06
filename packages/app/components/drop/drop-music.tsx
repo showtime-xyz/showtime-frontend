@@ -165,9 +165,9 @@ export const DropMusic = () => {
         if (isSaveDrop) {
           return baseSchema.concat(
             yup.object({
-              spotifyUrl: yup
-                .string()
-                .required("Spotify Song URL is required for saved drops."),
+              spotifyUrl: yup.string(),
+              appleMusicTrackId: yup.string(),
+              // .required("Spotify Song URL is required for saved drops."),
             })
           );
         } else {
@@ -282,11 +282,14 @@ export const DropMusic = () => {
       await dropNFT(
         {
           ...values,
-          gatingType: isSaveDrop ? "spotify_save" : "music_presave",
+          gatingType: isSaveDrop
+            ? "multi_provider_music_save"
+            : "music_presave",
           editionSize: isUnlimited ? 0 : values.editionSize,
           releaseDate: isSaveDrop
             ? undefined
             : values.releaseDate ?? getDefaultDate().toISOString(),
+          appleMusicTrackId: isSaveDrop ? values.appleMusicTrackId : undefined,
         },
         clearStorage
       );
@@ -591,7 +594,7 @@ export const DropMusic = () => {
                             }}
                           >
                             <Text tw="font-bold text-gray-900 dark:text-white">
-                              Spotify Release Date
+                              Release Date
                             </Text>
                             <Text tw="pt-4 text-base text-gray-900 dark:text-white">
                               {(dateValue as Date).toDateString()}
@@ -599,7 +602,7 @@ export const DropMusic = () => {
                           </Pressable>
                         ) : (
                           <Text tw="font-bold text-gray-900 dark:text-white">
-                            Spotify Release Date
+                            Release Date
                           </Text>
                         )}
 
@@ -701,6 +704,35 @@ export const DropMusic = () => {
                   }}
                 />
               </View>
+              {isSaveDrop && user.user?.data.profile.apple_music_artist_id ? (
+                <View tw="mt-4">
+                  <Controller
+                    control={control}
+                    name="appleMusicTrackId"
+                    render={({ field: { onChange, onBlur, value, ref } }) => {
+                      return (
+                        <Fieldset
+                          ref={ref}
+                          label={
+                            <View tw="flex-row">
+                              <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                                Apple Music Track Id
+                                <Text tw="text-red-600">*</Text>
+                              </Label>
+                            </View>
+                          }
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          value={value}
+                          placeholder={"e.g. 1673804556"}
+                          errorText={errors.appleMusicTrackId?.message}
+                        />
+                      );
+                    }}
+                  />
+                </View>
+              ) : null}
+
               <View>
                 <Accordion.Root
                   value={accordionValue}
