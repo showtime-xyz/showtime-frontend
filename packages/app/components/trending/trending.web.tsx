@@ -93,7 +93,7 @@ export const Trending = () => {
           <ListCard
             nft={item}
             showClaimButton
-            href={`/${getNFTSlug(
+            href={`${getNFTSlug(
               item
             )}?initialScrollIndex=${index}&filter=${filter}&type=trendingNFTs`}
           />
