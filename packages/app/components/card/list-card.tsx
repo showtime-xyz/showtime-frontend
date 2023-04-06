@@ -9,11 +9,10 @@ import {
 import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import {
-  PressableScale,
+  Pressable,
   Props as PressableScaleProps,
-} from "@showtime-xyz/universal.pressable-scale";
+} from "@showtime-xyz/universal.pressable";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -70,9 +69,9 @@ const RouteComponentNative = ({
     return <View tw="flex-1">{children}</View>;
   }
   return (
-    <PressableScale onPress={onPress} {...(rest as PressableScaleProps)}>
+    <Pressable onPress={onPress} {...(rest as PressableScaleProps)}>
       {children}
-    </PressableScale>
+    </Pressable>
   );
 };
 
