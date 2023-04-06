@@ -88,11 +88,12 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
   );
 };
 
-export const ClaimedByBig = ({
+export const ClaimedByReduced = ({
   nft,
   claimersList,
   tw = "",
-}: NFTDetailsProps) => {
+  size = "small",
+}: NFTDetailsProps & { size?: "small" | "regular" }) => {
   const router = useRouter();
   const slicedClaimersList = useMemo(
     () => claimersList?.slice(1, 5),
@@ -100,22 +101,28 @@ export const ClaimedByBig = ({
   );
 
   return (
-    <View tw={["h-12 flex-row items-center", tw]}>
+    <View
+      tw={[
+        "flex-row items-center",
+        tw,
+        size === "small" ? "ml-1 h-5" : "ml-4 h-12",
+      ]}
+    >
       <>
         {slicedClaimersList?.map((item, index) => {
           return (
-            <View tw="-mr-4" key={index}>
+            <View tw={size === "small" ? "-ml-1" : "-ml-4"} key={index}>
               <AvatarHoverCard
                 username={item?.username || item?.wallet_address}
                 url={item?.img_url}
                 tw="border border-gray-300 dark:border-gray-700"
-                size={50}
+                size={size === "small" ? 20 : 50}
                 alt="Claimed by Avatar"
               />
             </View>
           );
         })}
-        <Text tw="ml-4 flex-1 text-sm text-gray-900 dark:text-white">
+        <Text tw="flex-1 text-sm text-gray-900 dark:text-white">
           {claimersList?.length && claimersList?.length >= 4 && (
             <>
               {` & `}

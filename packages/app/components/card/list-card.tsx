@@ -22,7 +22,7 @@ import { Title } from "app/components/card/rows/title";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
-import { ClaimedBy, ClaimedByBig } from "app/components/feed-item/claimed-by";
+import { ClaimedByReduced } from "app/components/feed-item/claimed-by";
 import { ListMedia } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -196,7 +196,7 @@ const ListCardSmallScreen = ({
             </View>
 
             <View tw="mb-2 mt-1 justify-between px-2">
-              <ClaimedBy
+              <ClaimedByReduced
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
               />
@@ -313,9 +313,10 @@ const ListCardLargeScreen = ({
           </View>
 
           <View tw="mb-4 mt-4 justify-between space-y-2 px-4">
-            <ClaimedByBig
+            <ClaimedByReduced
               claimersList={detailData?.data.item?.multiple_owners_list}
               nft={nft}
+              size="regular"
             />
           </View>
         </View>
