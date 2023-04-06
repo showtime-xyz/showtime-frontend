@@ -97,7 +97,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           style={{ height: itemHeight, overflow: "hidden" }}
         >
           <View
-            tw="duration-200"
+            tw="animate-fade-in-500"
             style={{
               paddingTop,
             }}

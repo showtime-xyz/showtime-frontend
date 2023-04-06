@@ -20,14 +20,7 @@ export const RaffleTooltip = ({ edition, ...rest }: RaffleTooltipProps) => {
     <TextTooltip
       triggerElement={
         <View tw="h-5 flex-row items-center justify-center self-start rounded-sm bg-black/50 px-1">
-          <RaffleHorizontal
-            color={Platform.select({
-              web: "currentColor",
-              default: "#F7FF97",
-            })}
-            width={20}
-            height={20}
-          />
+          <RaffleHorizontal color={"#FFC633"} width={20} height={20} />
           <Text tw="ml-1 text-xs text-white">Raffle</Text>
         </View>
       }

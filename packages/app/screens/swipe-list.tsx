@@ -1,4 +1,5 @@
 import { useMemo, memo } from "react";
+import { Platform } from "react-native";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
@@ -49,7 +50,7 @@ export const SwipeListByType = () => {
 export const SwipeListScreen = withColorScheme(() => {
   return (
     <View tw="flex-1">
-      <SwipeListHeader canGoBack withBackground />
+      {Platform.OS !== "web" && <SwipeListHeader canGoBack withBackground />}
       <SwipeListByType />
     </View>
   );

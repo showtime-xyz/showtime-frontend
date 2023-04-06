@@ -150,15 +150,12 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     return {
       transform: [
         {
-          translateY: withTiming(contentTransY.value, {
-            duration: 200,
-            easing: Easing.out(Easing.ease),
-          }),
+          translateY: contentTransY.value,
         },
       ],
       opacity: withTiming(isLayouted.value, { duration: 500 }),
     };
-  });
+  }, [contentTransY, isLayouted]);
 
   const hideHeader = useCallback(() => {
     opacity.value = withTiming(0);
