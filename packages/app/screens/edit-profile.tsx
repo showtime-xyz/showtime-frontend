@@ -1,10 +1,20 @@
+import dynamic from "next/dynamic";
+
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { EditProfile } from "app/components/edit-profile";
+import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
+
+const EditProfile = dynamic(() => import("app/components/edit-profile"), {
+  ssr: false,
+});
 
 export const EditProfilePage = () => {
   useTrackPageViewed({ name: "Edit Profile" });
+  useUser({
+    redirectIfProfileIncomplete: true,
+  });
+
   return <EditProfile />;
 };
 export const EditProfileScreen = withModalScreen(EditProfilePage, {
@@ -14,5 +24,4 @@ export const EditProfileScreen = withModalScreen(EditProfilePage, {
   enableContentPanningGesture: false,
   snapPoints: ["100%"],
   disableBackdropPress: true,
-  web_height: `h-[90vh]`,
 });

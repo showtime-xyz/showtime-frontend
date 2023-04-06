@@ -4,27 +4,27 @@ import "setimmediate";
 
 import { useCallback } from "react";
 
-import { Inter } from "@next/font/google";
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
+import dynamic from "next/dynamic";
+import { Inter } from "next/font/google";
 import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
+import { enableExperimentalWebImplementation } from "react-native-gesture-handler";
 
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Footer } from "app/components/footer";
-import { Header } from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
-import { renderEmptyAnalyticsSnippet } from "app/lib/rudderstack/script";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
+import { CheckoutScreen } from "app/screens/checkout";
+import { CheckoutReturnScreen } from "app/screens/checkout-return";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
-import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEventScreen } from "app/screens/drop-event";
@@ -36,14 +36,23 @@ import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
 import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
+import { OnboardingScreen } from "app/screens/onboarding";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { isMobileWeb } from "app/utilities";
 
+import { Toaster } from "design-system/toast";
+
 import "../styles/styles.css";
 
+const Header = dynamic(() => import("app/components/header"), {
+  ssr: false,
+});
+const Footer = dynamic(() => import("app/components/footer"), {
+  ssr: false,
+});
 // TODO: remove this once Reanimated ship a fix
 if (typeof window !== "undefined") {
   // @ts-ignore
@@ -54,6 +63,8 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
 });
+
+enableExperimentalWebImplementation();
 
 function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;
@@ -146,17 +157,12 @@ function App({ Component, pageProps, router }: AppProps) {
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover"
           name="viewport"
         />
-
-        <script
-          dangerouslySetInnerHTML={{ __html: renderEmptyAnalyticsSnippet() }}
-        />
       </Head>
       <AppProviders>
         <Container>
           <Header
             canGoBack={
               router.pathname === "/search" ||
-              router.pathname === "/list" ||
               router.pathname.split("/").length - 1 >= 2
             }
           />
@@ -185,15 +191,18 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropEventScreen />
         <DropMusicScreen />
         <DropFreeScreen />
+        <CheckoutScreen />
+        <CheckoutReturnScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
-        <CompleteProfileScreen />
+        <OnboardingScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
 
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
+        <Toaster />
       </AppProviders>
     </>
   );
@@ -219,7 +228,7 @@ const Container = withColorScheme(
     usePlatformResize(onResize, true);
 
     return (
-      <View tw="bg-gray-100 dark:bg-black">
+      <View tw="bg-gray-100 dark:bg-black dark:md:bg-gray-900">
         <div className={fonts}>{children}</div>
       </View>
     );

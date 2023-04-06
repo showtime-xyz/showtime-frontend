@@ -1,4 +1,4 @@
-import { memo, useState, useMemo } from "react";
+import { memo, useState, useMemo, useRef } from "react";
 import {
   StyleProp,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   ViewStyle,
 } from "react-native";
 
+import { Video as ExpoVideo } from "expo-av";
 import { ResizeMode } from "expo-av";
 
 import { View } from "@showtime-xyz/universal.view";
@@ -22,6 +23,7 @@ import type { NFT } from "app/types";
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
+import { NSFWGate } from "./nsfw-gate";
 
 export type FeedItemProps = {
   nft: NFT;
@@ -42,6 +44,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+  const videoRef = useRef<ExpoVideo | null>(null);
 
   const maxContentHeight = windowHeight - bottomHeight;
 
@@ -82,57 +85,71 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }
 
   return (
-    <LikeContextProvider nft={nft} key={nft.nft_id}>
-      <View tw="w-full" style={{ height: itemHeight, overflow: "hidden" }}>
+    <>
+      <LikeContextProvider nft={nft} key={nft.nft_id}>
+        {nft?.mime_type?.startsWith("video") ? (
+          <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
+            <MuteButton variant="mobile-web" />
+          </View>
+        ) : null}
         <View
-          tw="duration-200"
-          style={{
-            paddingTop,
-          }}
+          tw="max-h-[100svh] min-h-[100svh] w-full"
+          style={{ height: itemHeight, overflow: "hidden" }}
         >
-          <FeedItemTapGesture>
-            <Media
-              item={nft}
-              numColumns={1}
+          <View
+            tw="duration-200"
+            style={{
+              paddingTop,
+            }}
+          >
+            <FeedItemTapGesture
+              videoRef={videoRef}
               sizeStyle={{
                 height: mediaHeight,
                 width: windowWidth,
               }}
-              resizeMode={ResizeMode.COVER}
-            />
-          </FeedItemTapGesture>
-        </View>
-        <View
-          tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"
-          style={{
-            paddingBottom: bottomHeight,
-          }}
-          onLayout={({
-            nativeEvent: {
-              layout: { height },
-            },
-          }) => {
-            setDetailHeight(height);
-          }}
-        >
-          <BlurView
-            blurRadius={15}
-            style={StyleSheet.absoluteFillObject}
-            overlayColor="transparent"
-          />
-          {nft?.mime_type?.startsWith("video") ? (
-            <View tw="z-9 absolute top-[-40px] right-4">
-              <MuteButton />
-            </View>
-          ) : null}
-
-          <View tw="z-9 absolute -top-[40px] left-2.5">
-            <ContentTypeTooltip edition={edition} />
+              isVideo={nft?.mime_type?.startsWith("video")}
+            >
+              <Media
+                videoRef={videoRef}
+                item={nft}
+                numColumns={1}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: windowWidth,
+                }}
+                resizeMode={ResizeMode.COVER}
+              />
+            </FeedItemTapGesture>
           </View>
-          <NFTDetails edition={edition} nft={nft} />
+          <View
+            tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"
+            style={{
+              paddingBottom: bottomHeight,
+            }}
+            onLayout={({
+              nativeEvent: {
+                layout: { height },
+              },
+            }) => {
+              setDetailHeight(height);
+            }}
+          >
+            <BlurView
+              blurRadius={15}
+              style={StyleSheet.absoluteFillObject}
+              overlayColor="transparent"
+            />
+
+            <View tw="z-9 absolute -top-[40px] left-2.5">
+              <ContentTypeTooltip edition={edition} />
+            </View>
+            <NFTDetails edition={edition} nft={nft} />
+          </View>
         </View>
-      </View>
-    </LikeContextProvider>
+      </LikeContextProvider>
+      <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
+    </>
   );
 });
 FeedItem.displayName = "FeedItem";

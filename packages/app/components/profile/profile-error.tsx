@@ -112,7 +112,7 @@ export const ProfileError = ({
             <Text tw="font-bold">@{username}</Text> is blocked
           </Text>
         ) : (
-          "No results found"
+          error?.message
         )
       }
       tw="h-[50vh]"

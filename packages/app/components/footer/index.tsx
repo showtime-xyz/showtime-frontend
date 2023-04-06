@@ -43,7 +43,7 @@ const Footer = () => {
       style={{
         height: MOBILE_WEB_TABS_HEIGHT,
       }}
-      tw="safe-bottom fixed bottom-0 right-0 left-0 z-50 h-12 flex-row items-center justify-between px-4 backdrop-blur-md"
+      tw="safe-bottom fixed bottom-0 left-0 right-0 z-50 h-12 flex-row items-center justify-between px-4 backdrop-blur-md"
     >
       <HomeTabBarIcon
         color={color}
@@ -63,4 +63,4 @@ const Footer = () => {
   );
 };
 
-export { Footer };
+export default Footer;

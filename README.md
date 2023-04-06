@@ -17,3 +17,15 @@ digital experiences for iOS, Android, and the Web.
 - Bit: [bit.cloud/showtime/universal](https://bit.cloud/showtime/universal)
 - npm: [npmjs.com/org/showtime-xyz](https://npmjs.com/org/showtime-xyz)
 - Figma: [figma.com/file/hseAlaaQKC4b7MIZS6TdF9](https://figma.com/file/hseAlaaQKC4b7MIZS6TdF9)
+
+## Run maestro tests locally
+
+- Install Maestro CLI - [More info](https://maestro.mobile.dev/)
+
+- Run `maestro test [flowname]`
+
+- e.g. To run sign in flow:
+
+```
+maestro test .maestro/sign-in-with-email.yml
+```

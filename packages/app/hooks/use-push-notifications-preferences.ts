@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { fetcher } from "./use-infinite-list-query";
 
 export function usePushNotificationsPreferences() {
-  const { data, error, mutate } = useSWR<any>(
+  const { data, error, mutate, isLoading } = useSWR<any>(
     "/v1/notifications/preferences/push",
     fetcher
   );
@@ -11,6 +11,7 @@ export function usePushNotificationsPreferences() {
   return {
     data: data,
     loading: !data,
+    isLoading,
     error,
     refresh: mutate,
   };

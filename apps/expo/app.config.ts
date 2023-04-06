@@ -161,11 +161,9 @@ const expoConfig: ExpoConfig = {
     "./plugins/with-hermes-ios-m1-workaround.js",
     "sentry-expo",
     "./plugins/react-native-cronet.js",
-    "./plugins/with-animated-webp-support.js",
-    "./plugins/with-fast-image-webp-support-android.js",
-    "./plugins/with-fast-image-webp-support-ios.js",
     "./plugins/with-spotify-sdk.js",
     "./plugins/with-android-splash-screen.js",
+    "./plugins/fix-deployment-target.js",
     [
       withInfoPlist,
       (config) => {

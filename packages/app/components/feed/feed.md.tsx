@@ -20,6 +20,7 @@ import { VideoConfigContext } from "app/context/video-config-context";
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useFeed } from "app/hooks/use-feed";
 import { useFollowSuggestions } from "app/hooks/use-follow-suggestions";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { Sticky } from "app/lib/stickynode";
 import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
@@ -33,16 +34,10 @@ const CARD_WIDTH = CARD_CONTAINER_WIDTH - HORIZONTAL_GAPS;
 const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
-// type Tab = "following" | "curated" | "" | undefined;
-
-// type Query = {
-//   tab: number;
-// };
-
 const ViewabilityInfiniteScrollList =
   withViewabilityInfiniteScrollList(InfiniteScrollList);
 
-export const Feed = () => {
+const FeedMd = () => {
   return (
     <View tw="max-w-7xl flex-1 pb-8 pt-24" testID="homeFeed">
       <ErrorBoundary>
@@ -51,25 +46,9 @@ export const Feed = () => {
     </View>
   );
 };
-
-// const { useParam } = createParam<Query>();
+export default FeedMd;
 
 export const FeedList = () => {
-  // const { isAuthenticated } = useUser();
-  // const [selected, setSelected] = useParam("tab", {
-  //   parse: (v) => Number(v ?? 1),
-  //   initial: 1,
-  // });
-  // const isDark = useIsDarkMode();
-
-  // const handleTabChange = useCallback(
-  //   (index: number) => {
-  //     Haptics.impactAsync();
-  //     setSelected(index);
-  //   },
-  //   [setSelected]
-  // );
-
   return (
     <View tw="flex-row">
       <Hidden until="xl">
@@ -85,40 +64,6 @@ export const FeedList = () => {
         </View>
       </Hidden>
       <View tw="flex-1" style={{ width: CARD_CONTAINER_WIDTH }}>
-        {/* {isAuthenticated ? (
-          <>
-            <View
-              tw="mr-2 mb-6 w-[375px] self-end rounded-lg bg-white p-4 shadow-lg dark:bg-black dark:shadow-dark shadow-light"
-            >
-              <SegmentedControl
-                values={["FOLLOWING", "FOR YOU"]}
-                onChange={handleTabChange}
-                selectedIndex={selected}
-              />
-            </View>
-            <Tabs.Root onIndexChange={setSelected} index={selected}>
-              <Tabs.Pager
-                style={{
-                  width: CARD_CONTAINER_WIDTH,
-                }}
-              >
-                <ErrorBoundary>
-                  <Suspense fallback={<View />}>
-                    <FollowingFeed />
-                  </Suspense>
-                </ErrorBoundary>
-                <ErrorBoundary>
-                  <Suspense fallback={<View />}>
-                    <AlgorithmicFeed />
-                  </Suspense>
-                </ErrorBoundary>
-              </Tabs.Pager>
-            </Tabs.Root>
-          </>
-        ) : (
-          <CuratedFeed />
-        )} */}
-
         <ErrorBoundary>
           <HomeFeed />
         </ErrorBoundary>
@@ -126,35 +71,6 @@ export const FeedList = () => {
     </View>
   );
 };
-
-// const FollowingFeed = () => {
-//   const queryState = useFeed("/following");
-
-//   return (
-//     <MutateProvider mutate={queryState.updateItem}>
-//       <NFTScrollList {...queryState} data={queryState.data} tab="following" />
-//     </MutateProvider>
-//   );
-// };
-
-// const AlgorithmicFeed = () => {
-//   const queryState = useFeed("");
-
-//   return (
-//     <MutateProvider mutate={queryState.updateItem}>
-//       <NFTScrollList {...queryState} data={queryState.data} />
-//     </MutateProvider>
-//   );
-// };
-
-// const CuratedFeed = () => {
-//   // const queryState = useFeed("/curated");
-//   const { data } = useTrendingNFTS({
-//     days: 1,
-//   });
-
-//   return <NFTScrollList data={data} tab="curated" fetchMore={() => null} />;
-// };
 
 const HomeFeed = () => {
   const { data, isLoading } = useFeed();
@@ -183,7 +99,7 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
     return (
       <View tw="p-2">
         <Card
-          href={`/list?initialScrollIndex=${index}&type=feed`}
+          href={`${getNFTSlug(item)}?initialScrollIndex=${index}&type=feed`}
           nft={item}
           sizeStyle={{ width: CARD_WIDTH, height: CARD_WIDTH }}
           tw="mb-4"
@@ -234,7 +150,7 @@ const SuggestedUsers = () => {
         <Text tw="text-2xl text-black dark:text-white">Home</Text>
       </View>
 
-      <View tw="dark:shadow-dark shadow-light mt-8 rounded-2xl bg-white dark:bg-black">
+      <View tw="mt-8 rounded-2xl bg-white dark:bg-black">
         <Text tw="p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
           <View tw="m-4">
@@ -260,9 +176,9 @@ const SuggestedUsers = () => {
         })}
       </View>
 
-      <View tw="dark:shadow-dark shadow-light mt-8 rounded-2xl bg-white dark:bg-black">
+      <View tw="mt-8 rounded-2xl bg-white dark:bg-black">
         <Text tw="p-4 text-lg dark:text-white">Get the app</Text>
-        <View tw="flex flex-row items-center justify-between py-4 px-2">
+        <View tw="flex flex-row items-center justify-between px-2 py-4">
           <TextLink
             tw="text-base font-bold dark:text-white"
             href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"

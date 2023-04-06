@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { MMKV } from "react-native-mmkv";
 
@@ -6,12 +6,14 @@ import { DropExplanation } from "./drop-explanation";
 import { DropSelect } from "./drop-select";
 
 const store = new MMKV();
-const STORE_KEY = "showExplanation";
+const STORE_KEY = "showExplanationv2";
 
 export const Drop = () => {
-  const [showExplanation, setShowExplanation] = useState(
-    () => store.getBoolean(STORE_KEY) ?? true
-  );
+  const [showExplanation, setShowExplanation] = useState(false);
+
+  useEffect(() => {
+    setShowExplanation(store.getBoolean(STORE_KEY) ?? true);
+  }, []);
 
   const hideExplanation = () => {
     setShowExplanation(false);

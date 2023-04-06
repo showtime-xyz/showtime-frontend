@@ -28,6 +28,38 @@ export const useNavigateToLogin = () => {
   return navigateToLogin;
 };
 
+type NavigateToOnboardingParams = {
+  replace?: boolean;
+};
+
+export const useNavigateToOnboarding = () => {
+  const router = useRouter();
+  const navigateToOnboarding = (params?: NavigateToOnboardingParams) => {
+    if (params?.replace) {
+      router.replace("/profile/onboarding");
+    } else {
+      router.push(
+        Platform.select({
+          native: "/profile/onboarding",
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              onboardingModal: true,
+            },
+          } as any,
+        }),
+        Platform.select({
+          native: "/profile/onboarding",
+          web: router.asPath,
+        })
+      );
+    }
+  };
+
+  return navigateToOnboarding;
+};
+
 export const useNavigateToListing = () => {
   const router = useRouter();
 
@@ -37,6 +69,7 @@ export const useNavigateToListing = () => {
     router.push(
       Platform.select({
         native: as,
+        // @ts-ignore
         web: {
           pathname: router.pathname,
           web: {
@@ -71,6 +104,7 @@ export const useNavigateToBuy = () => {
     router.push(
       Platform.select({
         native: as,
+        // @ts-ignore
         web: {
           pathname: router.pathname,
           query: {

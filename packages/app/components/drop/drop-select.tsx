@@ -2,6 +2,7 @@ import React from "react";
 import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Gift } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -9,19 +10,19 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { useUser } from "app/hooks/use-user";
-
-import { useIsDarkMode } from "design-system/hooks";
 
 export const DropSelect = () => {
   const router = useRouter();
-  const user = useUser({ redirectTo: "/login" });
+  const user = useUser({
+    redirectTo: "/login",
+    redirectIfProfileIncomplete: true,
+  });
   const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
   const isDark = useIsDarkMode();
 
   if (user.isIncompletedProfile) {
-    return <CompleteProfileModalContent />;
+    return null;
   }
 
   return (
@@ -78,7 +79,7 @@ export const DropSelect = () => {
                   router.replace("/drop/music");
                 }
               } else {
-                Linking.openURL("https://form.typeform.com/to/pXQVhkZo");
+                Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
               }
             }}
           />

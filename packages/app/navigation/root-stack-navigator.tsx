@@ -10,7 +10,6 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
-import { CompleteProfileScreen } from "app/screens/complete-profile";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropUpdateScreen } from "app/screens/drop-update";
@@ -29,12 +28,12 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
-import { SwipeListScreen } from "app/screens/swipe-list";
 
 import { DropEventScreen } from "../screens/drop-event";
 import { DropFreeScreen } from "../screens/drop-free";
 import { DropMusicScreen } from "../screens/drop-music";
 import { DropPrivateScreen } from "../screens/drop-private";
+import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
 import { RootStackNavigatorParams } from "./types";
@@ -84,13 +83,6 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="blockedList" component={BlockedListScreen} />
         <Stack.Screen
-          name="swipeList"
-          component={SwipeListScreen}
-          getId={({ params }) => {
-            return params?.profileId ?? params.type;
-          }}
-        />
-        <Stack.Screen
           name="followers"
           component={FollowersScreen}
           options={{ headerTitle: "Followers" }}
@@ -117,6 +109,7 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen name="dropSlug" component={NftScreen} />
         <Stack.Screen
           name="dropUpdate"
           options={{ headerTitle: "Update Spotify Link" }}
@@ -136,8 +129,9 @@ export function RootStackNavigator() {
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
         <Stack.Screen
-          name="completeProfile"
-          component={CompleteProfileScreen}
+          name="onboarding"
+          component={OnboardingScreen}
+          options={{ gestureEnabled: false }}
         />
 
         <Stack.Screen name="addEmail" component={AddEmailScreen} />

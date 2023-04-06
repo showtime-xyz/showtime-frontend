@@ -7,6 +7,9 @@ import { useSharedValue } from "react-native-reanimated";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { getScrollParent } from "@showtime-xyz/universal.utils";
 
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export type PlatformRect = Pick<
   DOMRect,
   "top" | "left" | "width" | "height"
@@ -171,7 +174,7 @@ export const usePlatformResize = (
   onResize: (evt?: Event) => any,
   isInit = false
 ) => {
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const handleResize = (evt: Event) => {
       onResize(evt);
     };
@@ -191,7 +194,7 @@ export function useWebScroll<T>(
   onScroll: (evt: Event) => void,
   deps: any[] = []
 ) {
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (Platform.OS !== "web") {
       return;
     }
@@ -219,7 +222,7 @@ export function useWebClientRect<T>(ele: React.RefObject<T>) {
     };
   }, [ele]);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (ele.current && Platform.OS === "web") {
       updateClientRect();
     }
@@ -234,7 +237,7 @@ export function useWebClientRect<T>(ele: React.RefObject<T>) {
 export function useLockBodyScroll(isLocked = true) {
   const [isMounted, setIsMounted] = useState(false);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (typeof window !== "undefined" && window.document) {
       setIsMounted(true);
     }
@@ -247,13 +250,7 @@ export function useLockBodyScroll(isLocked = true) {
       isMounted &&
       isLocked
     ) {
-      window.document.body.style.overflow = "hidden";
-      window.document.body.style.marginRight = "0px";
-      window.document.body.style.position = "fixed";
-      // window.document.body.style.top = `-${y}px`;
-      window.document.body.style.top = "0px";
-      window.document.body.style.left = "0px";
-      window.document.body.style.right = "0px";
+      document.body.classList.add("no-scroll");
     }
 
     return () => {
@@ -263,13 +260,7 @@ export function useLockBodyScroll(isLocked = true) {
         isMounted &&
         isLocked
       ) {
-        window.document.body.style.overflow = "";
-        window.document.body.style.marginRight = "";
-        window.document.body.style.position = "";
-        window.document.body.style.top = "";
-        window.document.body.style.left = "";
-        window.document.body.style.right = "";
-        // window.scrollTo(0, y);
+        document.body.classList.remove("no-scroll");
       }
     };
   }, [isMounted, isLocked]);

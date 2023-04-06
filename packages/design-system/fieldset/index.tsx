@@ -77,27 +77,32 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
       ]}
       style={containerStyle}
     >
-      <View tw="flex-row">
-        {isValidElement(label) ? (
-          label
-        ) : (
-          <Label htmlFor={inputId} tw="font-bold text-gray-900 dark:text-white">
-            {label}
-          </Label>
-        )}
+      {label ? (
+        <View tw="flex-row">
+          {isValidElement(label) ? (
+            label
+          ) : (
+            <Label
+              htmlFor={inputId}
+              tw="font-bold text-gray-900 dark:text-white"
+            >
+              {label}
+            </Label>
+          )}
 
-        {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
-      </View>
+          {required ? <Text tw="ml-1 text-red-500">*</Text> : null}
+        </View>
+      ) : null}
 
       <View tw="ml-auto">
         {switchProps ? <Switch {...switchProps} /> : null}
       </View>
       {!switchProps ? (
-        <View tw="mt-4 flex-row items-center">
+        <View tw={["flex-row items-center", label ? "mt-4" : ""]}>
           {leftElement}
           {!selectOnly ? (
             <Component
-              tw="flex-1 text-base text-black focus-visible:ring-1 dark:text-white"
+              tw="w-full flex-1 text-base text-black focus-visible:ring-1 dark:text-white"
               //@ts-ignore - web only
               style={Platform.select({
                 web: { outline: "none" },
@@ -149,13 +154,14 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
         {helperText ? (
           <>
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
-            <View tw="h-4" />
-            <Text
-              nativeID={helperTextId}
-              tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
-            >
-              {helperText}
-            </Text>
+            <View tw="mt-4">
+              <Text
+                nativeID={helperTextId}
+                tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
+              >
+                {helperText}
+              </Text>
+            </View>
           </>
         ) : null}
       </PlatformAnimateHeight>

@@ -2,17 +2,22 @@ import { useContext, useMemo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { ButtonProps } from "@showtime-xyz/universal.button/types";
+import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check, Hourglass } from "@showtime-xyz/universal.icon";
+import { Spotify } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
+import { useUser } from "app/hooks/use-user";
+import { Analytics, EVENTS } from "app/lib/analytics";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
+import { toast } from "design-system/toast";
 
 type ClaimButtonProps = {
   edition: CreatorEditionResponse;
@@ -51,13 +56,40 @@ export const ClaimButton = ({
 }: ClaimButtonProps) => {
   const isDark = useIsDarkMode();
   const redirectToClaimDrop = useRedirectToClaimDrop();
-  const { state: claimStates, dispatch } = useContext(ClaimContext);
+  const {
+    state: claimStates,
+    dispatch,
+    contractAddress,
+  } = useContext(ClaimContext);
   const isProgress =
-    claimStates.status === "loading" && claimStates.signaturePrompt === false;
+    claimStates.status === "loading" &&
+    claimStates.signaturePrompt === false &&
+    contractAddress === edition.creator_airdrop_edition.contract_address;
+  const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
+    edition.creator_airdrop_edition
+  );
+
+  const { isAuthenticated } = useUser();
 
   const onClaimPress = () => {
+    if (
+      claimStates.status === "loading" &&
+      claimStates.signaturePrompt === false
+    ) {
+      toast("Please wait for the previous collect to complete.");
+      return;
+    }
     dispatch({ type: "initial" });
-    redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
+    if (
+      (edition.gating_type === "music_presave" ||
+        edition.gating_type === "spotify_save") &&
+      !isAuthenticated
+    ) {
+      Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
+      claimSpotifyGatedDrop();
+    } else {
+      redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
+    }
   };
 
   let isExpired = false;
@@ -75,7 +107,6 @@ export const ClaimButton = ({
     status === ClaimStatus.Soldout ||
     isExpired ||
     isProgress;
-  const isMusicDrop = edition?.gating_type === "spotify_save";
   const content = useMemo(() => {
     if (status === ClaimStatus.Claimed) {
       return (
@@ -105,10 +136,36 @@ export const ClaimButton = ({
           <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
         </Text>
       );
-    } else {
-      return isMusicDrop ? "Save to Collect" : "Collect";
+    } else if (edition?.gating_type === "spotify_save") {
+      return (
+        <>
+          <Spotify
+            color={isDark ? colors.black : colors.white}
+            width={20}
+            height={20}
+          />
+          <Text tw="ml-1 font-semibold text-white dark:text-black">
+            {isAuthenticated ? "Save to Collect" : "Save on Spotify"}
+          </Text>
+        </>
+      );
+    } else if (edition?.gating_type === "music_presave") {
+      return (
+        <>
+          <Spotify
+            color={isDark ? colors.black : colors.white}
+            width={20}
+            height={20}
+          />
+          <Text tw="ml-1 font-semibold text-white dark:text-black">
+            {isAuthenticated ? "Pre-Save to Collect" : "Pre-Save on Spotify"}
+          </Text>
+        </>
+      );
     }
-  }, [status, isProgress, isDark, isMusicDrop]);
+
+    return "Collect";
+  }, [status, isProgress, isDark, edition?.gating_type, isAuthenticated]);
 
   const opacityTw = useMemo(() => {
     if (isProgress) {

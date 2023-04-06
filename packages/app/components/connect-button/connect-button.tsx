@@ -1,11 +1,7 @@
 import { LoginButton } from "app/components/login/login-button";
 
 export type ConnectButtonProps = {
-  handleSubmitWallet: ({
-    onOpenConnectModal,
-  }?: {
-    onOpenConnectModal: () => void;
-  }) => void;
+  handleSubmitWallet: () => void;
 };
 
 export const ConnectButton: React.FC<ConnectButtonProps> = (

@@ -32,13 +32,16 @@ const IconItem = ({ icon, title }: IconItemProps) => {
 
 export const Default = () => {
   return (
-    <View tw="bg-white py-4 px-4">
-      <Text tw="text-xl font-bold">Showtime Icons</Text>
+    <View tw="bg-white px-4 py-4">
+      <View tw="mb-6 mt-4 flex-row items-center justify-center">
+        <Icon.ShowtimeBrand color="black" width={120} />
+      </View>
       <View tw="flex flex-row flex-wrap bg-white">
         <IconItem icon={Icon.ArrowTop} title="ArrowTop" />
         <IconItem icon={Icon.ArrowBottom} title="ArrowBottom" />
         <IconItem icon={Icon.ArrowLeft} title="ArrowLeft" />
         <IconItem icon={Icon.ArrowRight} title="ArrowRight" />
+
         <IconItem icon={Icon.Badge} title="Badge" />
         {/* <IconItem icon={Icon.Basket} title="Basket"  /> */}
         <IconItem icon={Icon.Bell} title="Bell" />
@@ -135,11 +138,14 @@ export const Default = () => {
         <IconItem icon={Icon.BellMinus} title="BellMinus" />
         <IconItem icon={Icon.BellOff} title="BellOff" />
         <IconItem icon={Icon.Trash} title="Trash" />
-
         <IconItem
           icon={Icon.PhonePortraitOutline}
           title="PhonePortraitOutline"
         />
+        <IconItem icon={Icon.CreditCard} title="CreditCard" />
+        <IconItem icon={Icon.Receipt} title="Receipt" />
+        <IconItem icon={Icon.AddPhoto} title="AddPhoto" />
+        <IconItem icon={Icon.PauseOutline} title="PauseOutline" />
       </View>
       <View tw="h-10" />
       <Text tw="text-xl font-bold">Social Icons</Text>
@@ -150,6 +156,7 @@ export const Default = () => {
         <IconItem icon={Icon.Facebook} title="Facebook" />
         <IconItem icon={Icon.OpenSea} title="OpenSea" />
         <IconItem icon={Icon.Instagram} title="Instagram" />
+        <IconItem icon={Icon.InstagramColorful} title="InstagramColorful" />
         <IconItem icon={Icon.Facebook} title="Facebook" />
         <IconItem icon={Icon.Apple} title="Apple" />
         <IconItem icon={Icon.GoogleOriginal} title="GoogleOriginal" />

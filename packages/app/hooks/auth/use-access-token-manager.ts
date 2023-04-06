@@ -4,7 +4,11 @@ import { useCallback, useRef } from "react";
 // import { captureException } from "@sentry/nextjs";
 import * as accessTokenStorage from "app/lib/access-token";
 import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
 import * as refreshTokenStorage from "app/lib/refresh-token";
+
+// 8 hours in seconds because jwt exp is in seconds since unix epoch
+const ACCESS_TOKEN_MAX_INTERVAL_SECONDS = 28800;
 
 export function useAccessTokenManager() {
   const isRefreshing = useRef(false);
@@ -50,52 +54,53 @@ export function useAccessTokenManager() {
       isRefreshing.current = true;
 
       try {
-        // Get refresh token
-        // const sealedRefreshToken = refreshTokenStorage.getRefreshToken();
-        // if (!sealedRefreshToken) {
-        //   throw "Missing sealed refresh token";
-        // }
+        const sealedAccessToken = accessTokenStorage.getAccessToken();
+        const sealedRefreshToken = refreshTokenStorage.getRefreshToken();
 
-        // TODO: unseal refresh token
-        // const { refreshToken } = await Iron.unseal(
-        //   sealedRefreshToken,
-        //   // @ts-ignore
-        //   process.env.ENCRYPTION_SECRET_V2,
-        //   Iron.defaults
-        // );
+        // split jwt and get payload
+        const accessTokenPayload = sealedAccessToken?.split(".")[1];
+        // decode payload and get expiration
+        const accessTokenExp = sealedAccessToken
+          ? JSON.parse(
+              Buffer.from(accessTokenPayload || "", "base64").toString("utf8")
+            ).exp
+          : 0;
 
-        // Call refresh API
-        const response = await axios({
-          url: `/v1/jwt/refresh`,
-          method: "POST",
-          data: {
-            refresh: refreshTokenStorage.getRefreshToken(),
-          },
-        });
+        // check if access token validity is still within the max interval
+        const isAccessTokenValid =
+          accessTokenExp - Math.floor(Date.now() / 1000) >
+          ACCESS_TOKEN_MAX_INTERVAL_SECONDS;
 
-        const _accessToken = response?.access;
-        const _refreshToken = response?.refresh;
+        if (isAccessTokenValid) {
+          Logger.log("Access token is still valid, skipping refresh.");
+          return;
+        }
 
-        setAccessToken(_accessToken);
-        setRefreshToken(_refreshToken);
+        // logged out users or users with no refresh token should not be able to refresh
+        if (sealedRefreshToken) {
+          // Call refresh API
+          const response = await axios({
+            url: `/v1/jwt/refresh`,
+            method: "POST",
+            data: {
+              refresh: sealedRefreshToken,
+            },
+          });
 
-        isRefreshing.current = false;
+          const _accessToken = response?.access;
+          const _refreshToken = response?.refresh;
+
+          setAccessToken(_accessToken);
+          setRefreshToken(_refreshToken);
+        } else {
+          throw "No refresh token found. User is not logged in.";
+        }
       } catch (error: any) {
-        isRefreshing.current = false;
-
-        // accessTokenStorage.deleteAccessToken();
-        // refreshTokenStorage.deleteRefreshToken();
-        // setLogout(Date.now().toString());
-
-        // captureException(error, {
-        //   tags: {
-        //     failed_silent_refresh: "use-access-token-manager.ts",
-        //   },
-        // });
-
         throw `Failed to refresh tokens. ${
           typeof error === "string" ? error : error.message || ""
         }`;
+      } finally {
+        isRefreshing.current = false;
       }
     },
     [setAccessToken, setRefreshToken]

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef } from "react";
-import { Platform } from "react-native";
 
 import { captureException } from "@sentry/nextjs";
 
@@ -7,19 +6,16 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { useMagicLogin } from "app/hooks/auth/use-magic-login";
 import { useWalletLogin } from "app/hooks/auth/use-wallet-login";
 import { useStableBlurEffect } from "app/hooks/use-stable-blur-effect";
-import { useRudder } from "app/lib/rudderstack";
+import { Analytics, EVENTS } from "app/lib/analytics";
 
 type LoginSource = "undetermined" | "magic" | "wallet";
 
-export type SubmitWalletParams = {
-  onOpenConnectModal?: () => void;
-};
-export const useLogin = (onLogin?: () => void) => {
+export type SubmitWalletParams = {};
+export const useLogin = () => {
   const loginSource = useRef<LoginSource>("undetermined");
-  const { rudder } = useRudder();
 
   //#region hooks
-  const { authenticationStatus, logout } = useAuth();
+  const { authenticationStatus, logout, setAuthenticationStatus } = useAuth();
   const {
     loginWithWallet,
     name: walletName,
@@ -31,55 +27,49 @@ export const useLogin = (onLogin?: () => void) => {
     verifySignature,
   } = useWalletLogin();
   const { loginWithEmail, loginWithPhoneNumber } = useMagicLogin();
-  const isWeb = Platform.OS === "web";
   //#endregion
 
   //#region methods
-  const handleLoginFailure = useCallback(function handleLoginFailure(
-    error: any
-  ) {
-    loginSource.current = "undetermined";
+  const handleLoginFailure = useCallback(
+    function handleLoginFailure(error: any) {
+      loginSource.current = "undetermined";
+      setAuthenticationStatus("UNAUTHENTICATED");
+      if (process.env.NODE_ENV === "development" || __DEV__) {
+        console.error(error);
+      }
 
-    if (process.env.NODE_ENV === "development" || __DEV__) {
-      console.error(error);
-    }
-
-    captureException(error, {
-      tags: {
-        login_signature_flow: "use-login.ts",
-        login_magic_link: "use-login.ts",
-      },
-    });
-  },
-  []);
+      captureException(error, {
+        tags: {
+          login_signature_flow: "use-login.ts",
+          login_magic_link: "use-login.ts",
+        },
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   const handleSubmitWallet = useCallback(
-    async function handleSubmitWallet(params?: SubmitWalletParams) {
+    async function handleSubmitWallet() {
       try {
         loginSource.current = "wallet";
 
-        rudder?.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with wallet",
         });
 
-        if (isWeb) {
-          console.log(loginSource.current);
-
-          params?.onOpenConnectModal?.();
-        } else {
-          await loginWithWallet();
-        }
+        await loginWithWallet();
       } catch (error) {
         handleLoginFailure(error);
       }
     },
-    [rudder, isWeb, loginWithWallet, handleLoginFailure]
+    [loginWithWallet, handleLoginFailure]
   );
   const handleSubmitEmail = useCallback(
     async function handleSubmitEmail(email: string) {
       try {
         loginSource.current = "magic";
-        rudder?.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with email",
         });
 
@@ -88,13 +78,13 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [loginWithEmail, handleLoginFailure, rudder]
+    [loginWithEmail, handleLoginFailure]
   );
   const handleSubmitPhoneNumber = useCallback(
     async function handleSubmitPhoneNumber(phoneNumber: string) {
       try {
         loginSource.current = "magic";
-        rudder?.track("Button Clicked", {
+        Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with phone number",
         });
 
@@ -103,7 +93,7 @@ export const useLogin = (onLogin?: () => void) => {
         handleLoginFailure(error);
       }
     },
-    [loginWithPhoneNumber, handleLoginFailure, rudder]
+    [loginWithPhoneNumber, handleLoginFailure]
   );
 
   /**
@@ -122,17 +112,6 @@ export const useLogin = (onLogin?: () => void) => {
 
   //#region effects
   useStableBlurEffect(handleBlur);
-  useEffect(() => {
-    const isLoggedInByMagic =
-      loginSource.current === "magic" &&
-      authenticationStatus === "AUTHENTICATED";
-    const isLoggedInByWallet =
-      loginSource.current === "wallet" && walletStatus === "EXPIRED_NONCE";
-
-    if ((isLoggedInByWallet || isLoggedInByMagic) && onLogin) {
-      onLogin();
-    }
-  }, [authenticationStatus, walletStatus, onLogin]);
 
   useEffect(() => {
     if (walletStatus === "ERRORED" && walletError) {

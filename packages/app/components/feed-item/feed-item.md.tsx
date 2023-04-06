@@ -3,6 +3,7 @@ import React from "react";
 import { useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import { Video as ExpoVideo } from "expo-av";
 import { useSwiper } from "swiper/react";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -10,7 +11,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Close,
   Muted,
-  Unmuted,
   Maximize,
   ChevronDown,
   ChevronUp,
@@ -32,6 +32,7 @@ import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
+import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -52,13 +53,18 @@ import { NFT } from "app/types";
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
+import { NSFWGate } from "./nsfw-gate";
 
+// NFT detail width is the width of the NFT detail on the right side of the feed item
 const NFT_DETAIL_WIDTH = 380;
+// Media padding is the padding between the media and the content
+const MEDIA_PADDING = 160;
+// Media header height is the height of the header of the media
 
+const MEDIA_HEADER_HEIGHT = 80;
 type TabProps = {
   nft: NFT;
 };
-
 const Collectors = ({ nft }: TabProps) => {
   return (
     <UserList
@@ -84,6 +90,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     tokenId: nft?.token_id,
     chainName: nft?.chain_name,
   });
+  const videoRef = useRef<ExpoVideo | null>(null);
 
   const [muted, setMuted] = useMuted();
   const swiper = useSwiper();
@@ -134,11 +141,20 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     width: windowWidth,
   };
 
-  const mediaHeight = Math.min(windowWidth, feedItemStyle.height) - 160 - 80;
-
+  const mediaHeight =
+    Math.min(windowWidth, feedItemStyle.height) -
+    MEDIA_PADDING -
+    MEDIA_HEADER_HEIGHT;
+  const maxContentWidth = contentWidth - NFT_DETAIL_WIDTH - MEDIA_PADDING;
   const mediaWidth = useMemo(() => {
-    return contentWidth - NFT_DETAIL_WIDTH - 160;
-  }, [contentWidth]);
+    return Math.min(
+      mediaHeight *
+        (isNaN(Number(nft.token_aspect_ratio))
+          ? 1
+          : Number(nft.token_aspect_ratio)),
+      maxContentWidth
+    );
+  }, [maxContentWidth, mediaHeight, nft.token_aspect_ratio]);
 
   const onFullScreen = () => {
     setShowFullScreen(!showFullScreen);
@@ -166,7 +182,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           width: contentWidth,
         }}
       >
-        <View tw="bg-gray-100 dark:bg-black" ref={container}>
+        <View tw="flex-1 bg-gray-100 dark:bg-black" ref={container}>
           <View tw="w-full flex-row items-center justify-between p-4">
             <Button
               variant="text"
@@ -178,6 +194,20 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Close width={24} height={24} />
             </Button>
             <View tw="flex-row items-center">
+              {nft?.mime_type?.includes("video") && muted ? (
+                <Button
+                  variant="text"
+                  size="regular"
+                  onPress={(e) => {
+                    e.preventDefault();
+                    setMuted(!muted);
+                  }}
+                  iconOnly
+                  tw="mr-4 bg-white px-3 dark:bg-gray-900"
+                >
+                  <Muted width={24} height={24} />
+                </Button>
+              ) : null}
               <Button
                 variant="text"
                 size="regular"
@@ -190,7 +220,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Suspense fallback={<Skeleton width={24} height={24} />}>
                 <NFTDropdown
                   tw={[
-                    "rounded-full bg-gray-100 bg-white p-3 dark:bg-gray-900",
+                    "rounded-full bg-white p-3 dark:bg-gray-900",
                     showFullScreen ? "hidden" : "flex",
                   ]}
                   iconColor={isDark ? colors.white : colors.gray[900]}
@@ -200,22 +230,29 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Suspense>
             </View>
           </View>
-          <View tw="flex-1 items-center justify-center px-20 pb-20">
+          <View tw="items-center justify-center px-20 pb-20">
             <View
               style={{
                 height: mediaHeight,
                 width: mediaWidth,
               }}
             >
-              <Media
-                item={nft}
-                numColumns={1}
-                sizeStyle={{
-                  height: mediaHeight,
-                  width: mediaWidth,
-                }}
-                resizeMode={ResizeMode.CONTAIN}
-              />
+              <FeedItemTapGesture
+                videoRef={videoRef}
+                isVideo={nft?.mime_type?.startsWith("video")}
+              >
+                <Media
+                  videoRef={videoRef}
+                  item={nft}
+                  numColumns={1}
+                  sizeStyle={{
+                    height: mediaHeight,
+                    width: mediaWidth,
+                  }}
+                  resizeMode={ResizeMode.CONTAIN}
+                />
+              </FeedItemTapGesture>
+              <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
             </View>
           </View>
           {/* Control Swiper */}
@@ -260,26 +297,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </View>
             </View>
           )}
-          {nft?.mime_type?.includes("video") ? (
-            <View tw="absolute bottom-4 right-4">
-              <Button
-                variant="text"
-                size="regular"
-                onPress={(e) => {
-                  e.preventDefault();
-                  setMuted(!muted);
-                }}
-                iconOnly
-                tw="bg-white px-3 dark:bg-gray-900"
-              >
-                {muted ? (
-                  <Muted width={24} height={24} />
-                ) : (
-                  <Unmuted width={24} height={24} />
-                )}
-              </Button>
-            </View>
-          ) : null}
 
           <View tw="absolute bottom-10 left-4">
             <ContentTypeTooltip edition={edition} />
@@ -287,7 +304,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         </View>
 
         <View
-          tw="dark:shadow-dark shadow-light swiper-no-swiping bg-white dark:bg-black"
+          tw="swiper-no-swiping bg-white dark:bg-gray-900"
           style={{
             width: NFT_DETAIL_WIDTH,
           }}
@@ -316,7 +333,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <ClaimedBy
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
-                tw="mt-2 mb-4"
+                tw="mb-4 mt-2"
               />
               {isCreatorDrop && edition ? (
                 <View tw="flex-row">
@@ -324,7 +341,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   <ClaimedShareButton tw="ml-3 w-1/3" edition={edition} />
                 </View>
               ) : null}
-              {/* {!isCreatorDrop ? <BuyButton nft={nft} /> : null} */}
             </View>
           </View>
           <TabBarSingle

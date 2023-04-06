@@ -1,5 +1,7 @@
 import { Meta } from "@storybook/react";
 
+import { View } from "@showtime-xyz/universal.view";
+
 import { Avatar } from "./index";
 
 const URL =
@@ -10,8 +12,14 @@ export default {
   title: "Components/Avatar",
 } as Meta;
 
-export const Basic: React.VFC<{}> = () => <Avatar url={URL} alt="Avatar" />;
-
-export const withBorder: React.VFC<{}> = () => (
-  <Avatar url={URL} alt="Avatar" />
+export const Basic: React.FC<{}> = () => (
+  <View tw="flex-1 items-center justify-center">
+    <Avatar url={URL} alt="Avatar" />
+    <View tw="h-2" />
+    <Avatar url={URL} alt="Avatar" size={38} />
+    <View tw="h-2" />
+    <Avatar url={URL} alt="Avatar" size={56} />
+    <View tw="h-2" />
+    <Avatar url={URL} alt="Avatar" size={96} />
+  </View>
 );

@@ -3,6 +3,7 @@ import { useMemo, useCallback, useState } from "react";
 import { useSWRConfig } from "swr";
 
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { UserType } from "app/types";
@@ -85,15 +86,21 @@ export const useComments = (nftId?: number) => {
           data: {},
         });
 
+        Analytics.track(EVENTS.USER_LIKED_COMMENT);
+
         // mutate customer info
         mutate(
           MY_INFO_ENDPOINT,
-          (data: UserType): UserType => ({
-            data: {
-              ...data.data,
-              likes_comment: [...data.data.likes_comment, commentId],
-            },
-          }),
+          (data?: UserType) => {
+            if (data) {
+              return {
+                data: {
+                  ...data.data,
+                  likes_comment: [...data.data.likes_comment, commentId],
+                },
+              };
+            }
+          },
           true
         );
 
@@ -112,18 +119,23 @@ export const useComments = (nftId?: number) => {
           method: "POST",
           data: {},
         });
+        Analytics.track(EVENTS.USER_UNLIKED_COMMENT);
 
         // mutate local data
         mutate(
           MY_INFO_ENDPOINT,
-          (data: UserType): UserType => ({
-            data: {
-              ...data.data,
-              likes_comment: data.data.likes_comment.filter(
-                (item) => item !== commentId
-              ),
-            },
-          }),
+          (data?: UserType) => {
+            if (data) {
+              return {
+                data: {
+                  ...data.data,
+                  likes_comment: data.data.likes_comment.filter(
+                    (item) => item !== commentId
+                  ),
+                },
+              };
+            }
+          },
           true
         );
 

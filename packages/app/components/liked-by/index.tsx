@@ -26,12 +26,7 @@ export function LikedBy({ nft, max = 2, tw = "" }: Props) {
   }
 
   return (
-    <View
-      tw={[
-        "flex flex-row items-center justify-start bg-white	dark:bg-black",
-        tw,
-      ]}
-    >
+    <View tw={["flex flex-row items-center justify-start", tw]}>
       <Text tw="text-sm text-gray-900 dark:text-white">
         <Text tw="text-sm text-gray-900 dark:text-white">Liked by&nbsp;</Text>
 

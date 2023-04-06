@@ -67,10 +67,10 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         style={{
           marginTop: Platform.select({
-            android: 7,
+            android: -4,
             default: 0,
           }),
-          height: 28,
+          height: 24,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
@@ -79,9 +79,9 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         <Text
           style={{
             marginTop: Platform.select({
-              android: -4,
+              android: -2,
               default: 0,
-              web: 4,
+              web: 2,
             }),
             fontSize: Platform.select({
               default: 18,
@@ -222,7 +222,7 @@ export function Header({ title, close, onSearchSubmit, twCenter = "" }: Props) {
         </Button>
       </View>
 
-      <View tw={["my-2 mx-2 flex-1", twCenter]}>
+      <View tw={["mx-2 my-2 flex-1", twCenter]}>
         {showSearch ? (
           <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (

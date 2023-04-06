@@ -32,7 +32,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { CompleteProfileModalContent } from "app/components/complete-profile-modal-content";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
@@ -78,7 +77,7 @@ const DROP_FORM_DATA_KEY = "drop_form_local_data_private";
 export const DropPrivate = () => {
   const isDark = useIsDarkMode();
   const { data: userProfile } = useMyInfo();
-  const maxEditionSize = userProfile?.data?.profile.verified ? 100000 : 50;
+  const maxEditionSize = userProfile?.data?.profile.verified ? 350 : 50;
   const dropValidationSchema = useMemo(
     () =>
       yup.object({
@@ -139,7 +138,10 @@ export const DropPrivate = () => {
   const bottomBarHeight = useBottomTabBarHeight();
 
   const { state, dropNFT } = useDropNFT();
-  const user = useUser({ redirectTo: "/login" });
+  const user = useUser({
+    redirectTo: "/login",
+    redirectIfProfileIncomplete: true,
+  });
 
   const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
@@ -219,7 +221,7 @@ export const DropPrivate = () => {
   );
 
   if (user.isIncompletedProfile) {
-    return <CompleteProfileModalContent />;
+    return null;
   }
 
   if (state.status === "success") {

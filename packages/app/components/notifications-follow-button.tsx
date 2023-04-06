@@ -3,7 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
-import type { ButtonProps } from "@showtime-xyz/universal.button/types";
+import type { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { BellOff, BellPlus } from "@showtime-xyz/universal.icon";
 

@@ -55,7 +55,7 @@ export const SettingsMd = () => {
         </View>
 
         <View
-          tw="dark:shadow-dark mt-12 flex-1 rounded-2xl bg-white p-8 dark:bg-black"
+          tw="mt-12 flex-1 rounded-2xl bg-white p-8 dark:bg-black"
           style={{
             maxWidth: contentWidth - LEFT_SLIDE_WIDTH - LEFT_SLIDE_MARGIN,
           }}

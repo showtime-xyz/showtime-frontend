@@ -4,6 +4,7 @@ import {
   StyleProp,
   useWindowDimensions,
   ViewStyle,
+  StyleSheet,
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
@@ -34,6 +35,7 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { NFT } from "app/types";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
+import { NSFWGate } from "../feed-item/nsfw-gate";
 
 const isWeb = Platform.OS === "web";
 
@@ -67,6 +69,8 @@ type Props = {
   style?: StyleProp<ViewStyle>;
 };
 
+export const GAP = StyleSheet.hairlineWidth;
+
 function Card(props: Props) {
   const {
     nft,
@@ -84,13 +88,13 @@ function Card(props: Props) {
   );
 
   const cardMaxWidth = useMemo(() => {
+    const availableSpace = contentWidth - (numColumns - 1) * GAP;
+    const itemSize = availableSpace / numColumns;
     switch (numColumns) {
-      case 3:
-        return contentWidth / 3;
-      case 2:
-        return contentWidth / 2;
-      default:
+      case 1:
         return 596;
+      default:
+        return Platform.OS === "web" ? contentWidth / numColumns : itemSize;
     }
   }, [numColumns, contentWidth]);
 
@@ -104,7 +108,7 @@ function Card(props: Props) {
       <RouteComponent
         href={href}
         viewProps={{ style: [{ flex: 1 }, style] }}
-        style={style as any}
+        style={[style as any, { marginBottom: GAP }]}
         onPress={handleOnPress}
       >
         <Media
@@ -117,6 +121,7 @@ function Card(props: Props) {
           }}
           edition={edition}
         />
+        <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
       </RouteComponent>
     );
   }
@@ -160,7 +165,6 @@ const CardLargeScreen = ({
           numColumns > 1 ? "my-4" : "",
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl",
-          "dark:shadow-dark shadow-light",
           "flex-1",
           "bg-white dark:bg-black",
           tw,
@@ -190,8 +194,9 @@ const CardLargeScreen = ({
               }}
               resizeMode={ResizeMode.COVER}
             />
+            <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
-              <View tw="z-9 absolute bottom-5 right-5">
+              <View tw="z-9 absolute left-5 top-5">
                 <MuteButton />
               </View>
             ) : null}

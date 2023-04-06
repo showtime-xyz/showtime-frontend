@@ -290,11 +290,7 @@ const MAX_CONTENT_WIDTH = 1140;
 const MAX_HEADER_WIDTH = 1440;
 
 module.exports = {
-  content: [
-    "./App.tsx",
-    "../../packages/**/*.{js,ts,jsx,tsx}",
-    "../../node_modules/@showtime-xyz/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./App.tsx", "../../packages/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       maxWidth: {

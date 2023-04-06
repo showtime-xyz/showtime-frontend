@@ -101,7 +101,7 @@ function HeaderDropdown({
         )}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent loop>
+      <DropdownMenuContent loop sideOffset={12}>
         {type === "profile" && (
           <DropdownMenuItem
             onSelect={() => {

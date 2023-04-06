@@ -1,11 +1,12 @@
 import { useRef, useCallback, useEffect } from "react";
 
-type Callback = (...args: any[]) => any;
-
-export function useStableCallback(callback: Callback) {
+export function useStableCallback<Callback extends (...args: any) => any>(
+  callback: Callback
+) {
   const callbackRef = useRef<Callback>();
   const memoCallback = useCallback(
-    (...args) => callbackRef.current && callbackRef.current(...args),
+    (...args: Parameters<Callback>) =>
+      callbackRef.current && callbackRef.current(...args),
     []
   );
   useEffect(() => {

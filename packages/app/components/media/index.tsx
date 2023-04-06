@@ -1,11 +1,11 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, RefObject } from "react";
 import { Platform } from "react-native";
 
-import { ResizeMode } from "expo-av";
+import { Video as ExpoVideo } from "expo-av";
 import dynamic from "next/dynamic";
 
 import { Play } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
+import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -41,6 +41,7 @@ type Props = {
   onPinchEnd?: () => void;
   isMuted?: boolean;
   edition?: CreatorEditionResponse;
+  videoRef?: RefObject<ExpoVideo>;
 };
 
 function Media({
@@ -52,8 +53,9 @@ function Media({
   onPinchEnd,
   isMuted,
   edition,
+  videoRef,
 }: Props) {
-  const resizeMode = propResizeMode ?? ResizeMode.COVER;
+  const resizeMode = propResizeMode ?? "cover";
 
   const mediaUri = item?.loading
     ? item?.source_url
@@ -91,6 +93,7 @@ function Media({
             source={{
               uri: mediaUri,
             }}
+            recyclingKey={mediaUri}
             blurhash={item?.blurhash}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             width={width}
@@ -110,11 +113,12 @@ function Media({
           disabled={numColumns > 1}
         >
           {numColumns > 1 && (
-            <View tw="absolute bottom-0.5 right-0.5 z-10 bg-transparent">
+            <View tw="absolute bottom-2.5 right-2.5 z-10 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
           )}
           <Video
+            ref={videoRef}
             source={{
               uri: mediaUri,
             }}
@@ -126,7 +130,7 @@ function Media({
             style={sizeStyle}
             blurhash={item?.blurhash}
             isMuted={numColumns > 1 ? true : isMuted}
-            resizeMode={resizeMode as ResizeMode}
+            resizeMode={resizeMode as any}
             //@ts-ignore
             dataset={Platform.select({ web: { testId: "nft-card-media" } })}
           />

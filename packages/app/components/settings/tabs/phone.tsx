@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { View } from "@showtime-xyz/universal.view";
 
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
@@ -56,7 +56,7 @@ export const PhoneTab = ({ index = 0 }: PhoneTabProps) => {
       />
       {phoneNumberWallets?.length === 0 ? (
         <EmptyPlaceholder
-          tw="h-full min-h-[60px] px-4"
+          tw="min-h-[60px] px-4"
           title="No phone number connected to your profile."
         />
       ) : (

@@ -1,8 +1,12 @@
+import { Platform } from "react-native";
+
 import { Route } from "@showtime-xyz/universal.tab-view";
 
 import { WalletAddressesV2 } from "app/types";
 
 import { AccountTab } from "./account";
+import { AdvancedTab } from "./advanced";
+import { BillingTab } from "./billing";
 import { EmailTab } from "./email";
 import { PhoneTab } from "./phone";
 import { PushNotificationTab } from "./push-notifications";
@@ -17,29 +21,36 @@ export const SETTINGS_ROUTES = [
   {
     title: "Wallets",
     key: "Wallets",
-    index: 0,
   },
   {
     title: "Email",
     key: "Email",
-    index: 1,
   },
   {
     title: "Phone Number",
     key: "Phone",
-    index: 2,
   },
   {
-    title: "Accounts",
+    title: "Connected Accounts",
     key: "Account",
-    index: 3,
+  },
+  {
+    title: "Billing",
+    key: "Billing",
+    hidden: Platform.OS !== "web",
   },
   {
     title: "Push Notifications",
     key: "Push Notifications",
-    index: 4,
   },
-];
+  {
+    title: "Advanced",
+    key: "Advanced",
+  },
+]
+  .filter((item) => !item.hidden)
+  .map((item, index) => ({ ...item, index }));
+
 export const SettingTabsScene = ({
   route: { index, key },
   setEditingWallet,
@@ -53,8 +64,12 @@ export const SettingTabsScene = ({
       return <PhoneTab index={index} />;
     case "Account":
       return <AccountTab index={index} />;
+    case "Billing":
+      return <BillingTab index={index} />;
     case "Push Notifications":
       return <PushNotificationTab index={index} />;
+    case "Advanced":
+      return <AdvancedTab index={index} />;
     default:
       return null;
   }

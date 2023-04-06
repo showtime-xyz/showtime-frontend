@@ -21,6 +21,7 @@ import {
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useNFTDetailBySlug } from "app/hooks/use-nft-details-by-slug";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -29,6 +30,7 @@ import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../components/empty-placeholder";
 import { TextLink } from "../navigation/link";
+import { SwipeListScreen } from "./swipe-list";
 
 type Query = {
   tokenId: string;
@@ -36,12 +38,88 @@ type Query = {
   chainName: string;
   tabType?: string;
   showClaim?: boolean;
+  username?: string;
+  dropSlug?: string;
+  initialScrollIndex?: string;
 };
 
 const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 function NftScreen({ fallback = {} }: { fallback?: object }) {
+  const [initialScrollIndex] = useParam("initialScrollIndex");
+  if (typeof initialScrollIndex !== "undefined") {
+    return <SwipeListScreen />;
+  }
+
+  return <NFTDetailScreenImpl fallback={fallback} />;
+}
+
+const NFTDetail = () => {
+  const [tokenId] = useParam("tokenId");
+  const [contractAddress] = useParam("contractAddress");
+  const [chainName] = useParam("chainName");
+  const [tabType] = useParam("tabType");
+  const [username] = useParam("username");
+  const [dropSlug] = useParam("dropSlug");
+  const { data, isLoading } = useNFTDetailByTokenId({
+    chainName: chainName as string,
+    tokenId: tokenId as string,
+    contractAddress: contractAddress as string,
+  });
+  const { data: dropDataBySlug, isLoading: dropDataBySlugLoading } =
+    useNFTDetailBySlug({
+      username,
+      dropSlug,
+    });
+
+  const headerHeight = useHeaderHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { height: safeAreaFrameHeight } = useSafeAreaFrame();
+  const { height: windowHeight } = useWindowDimensions();
+
+  const itemHeight = Platform.select({
+    web: windowHeight,
+    android: safeAreaFrameHeight - headerHeight,
+    default: screenHeight,
+  });
+
+  const nft = dropDataBySlug ?? data?.data?.item;
+  const loading = dropDataBySlugLoading || isLoading;
+
+  if (!nft && !loading) {
+    return (
+      <EmptyPlaceholder
+        title="No drops, yet."
+        text={
+          <TextLink href={`/`} tw="text-indigo-500">
+            Go Home
+          </TextLink>
+        }
+        tw="min-h-screen"
+        hideLoginBtn
+      />
+    );
+  }
+
+  if (nft) {
+    return (
+      <ProfileTabsNFTProvider tabType={tabType}>
+        <FeedItem
+          itemHeight={itemHeight}
+          bottomPadding={safeAreaBottom}
+          nft={nft as NFT}
+        />
+      </ProfileTabsNFTProvider>
+    );
+  }
+
+  return null;
+};
+
+export { NftScreen };
+
+const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
   useTrackPageViewed({ name: "NFT" });
   const { colorScheme } = useColorScheme();
   const [showClaim] = useParam("showClaim", {
@@ -104,59 +182,4 @@ function NftScreen({ fallback = {} }: { fallback?: object }) {
       </SWRConfig>
     </ErrorBoundary>
   );
-}
-
-const NFTDetail = () => {
-  const [tokenId] = useParam("tokenId");
-  const [contractAddress] = useParam("contractAddress");
-  const [chainName] = useParam("chainName");
-  const [tabType] = useParam("tabType");
-  const { data, isLoading } = useNFTDetailByTokenId({
-    chainName: chainName as string,
-    tokenId: tokenId as string,
-    contractAddress: contractAddress as string,
-  });
-  const headerHeight = useHeaderHeight();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const { height: safeAreaFrameHeight } = useSafeAreaFrame();
-  const { height: windowHeight } = useWindowDimensions();
-
-  const itemHeight = Platform.select({
-    web: windowHeight,
-    android: safeAreaFrameHeight - headerHeight,
-    default: screenHeight,
-  });
-
-  const nft = data?.data?.item;
-
-  if (!nft && !isLoading) {
-    return (
-      <EmptyPlaceholder
-        title="No results found"
-        text={
-          <TextLink href={`/`} tw="text-indigo-500">
-            Go Home
-          </TextLink>
-        }
-        tw="min-h-screen"
-        hideLoginBtn
-      />
-    );
-  }
-
-  if (nft) {
-    return (
-      <ProfileTabsNFTProvider tabType={tabType}>
-        <FeedItem
-          itemHeight={itemHeight}
-          bottomPadding={safeAreaBottom}
-          nft={nft as NFT}
-        />
-      </ProfileTabsNFTProvider>
-    );
-  }
-
-  return null;
 };
-
-export { NftScreen };

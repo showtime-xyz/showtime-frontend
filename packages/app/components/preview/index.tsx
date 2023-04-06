@@ -5,8 +5,11 @@ import { Video } from "expo-av";
 
 import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { styled } from "@showtime-xyz/universal.tailwind";
+import { View } from "@showtime-xyz/universal.view";
 
 import { contentFitToresizeMode } from "app/utilities";
+
+import { MuteButton } from "../mute-button";
 
 export const supportedImageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
 export const supportedVideoExtensions = ["mp4", "mov", "avi", "mkv", "webm"];
@@ -19,10 +22,15 @@ type PreviewProps = {
   resizeMode?: ResizeMode;
   width: number;
   height: number;
+  isMuted?: boolean;
+  showMuteButton?: boolean;
+  isLooping?: boolean;
 };
 
 const StyledVideo = styled(Video);
-const videoStyle: ViewStyle = { position: "relative" };
+const videoStyle: ViewStyle = {
+  position: Platform.OS === "web" ? "relative" : "absolute",
+};
 export const Preview = memo(function Preview({
   tw = "",
   style,
@@ -31,6 +39,9 @@ export const Preview = memo(function Preview({
   resizeMode = "cover",
   width,
   height,
+  isMuted = true,
+  isLooping = false,
+  showMuteButton = false,
 }: PreviewProps) {
   const uri = getLocalFileURI(file);
 
@@ -55,7 +66,6 @@ export const Preview = memo(function Preview({
       return (
         <Image
           tw={tw}
-          style={style}
           resizeMode={resizeMode}
           source={{
             uri: uri as string,
@@ -65,6 +75,7 @@ export const Preview = memo(function Preview({
           onLoad={() => {
             revokeObjectURL(uri);
           }}
+          style={style}
           alt="Preview Image"
         />
       );
@@ -72,21 +83,29 @@ export const Preview = memo(function Preview({
 
     if (fileType === "video") {
       return (
-        <StyledVideo
-          tw={tw}
-          style={[
-            { width, height, justifyContent: "center", alignItems: "center" },
-            style,
-          ]}
-          resizeMode={contentFitToresizeMode(resizeMode)}
-          source={{ uri: uri as string }}
-          isMuted
-          shouldPlay
-          videoStyle={videoStyle}
-          onLoad={() => {
-            revokeObjectURL(uri);
-          }}
-        />
+        <>
+          <StyledVideo
+            tw={tw}
+            style={[
+              { width, height, justifyContent: "center", alignItems: "center" },
+              style,
+            ]}
+            resizeMode={contentFitToresizeMode(resizeMode)}
+            source={{ uri: uri as string }}
+            isMuted={isMuted}
+            shouldPlay
+            isLooping={isLooping}
+            videoStyle={videoStyle}
+            onLoad={() => {
+              revokeObjectURL(uri);
+            }}
+          />
+          {showMuteButton && (
+            <View tw="z-9 absolute bottom-2.5 right-2.5">
+              <MuteButton />
+            </View>
+          )}
+        </>
       );
     }
   }

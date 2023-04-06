@@ -27,7 +27,6 @@ const MODAL_CONTAINER_TW = [
   "flex overflow-hidden justify-center",
   "w-full	sm:w-[480px]",
   "bg-white dark:bg-black",
-  "dark:shadow-lg-dark shadow-lg-light",
   "rounded-t-[32px] rounded-b-0 sm:rounded-b-[32px] pb-4",
   "max-h-[90vh] md:max-h-[82vh]",
 ];
@@ -46,6 +45,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       style,
       disableBackdropPress,
       tw: propTw = "",
+      headerShown = true,
     }: ModalContainerProps,
     ref
   ) {
@@ -75,7 +75,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
         <View tw={CONTAINER_TW}>
           <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
           <View tw={modalContainerTW} style={style}>
-            <ModalHeader title={title} onClose={onClose} />
+            {headerShown && <ModalHeader title={title} onClose={onClose} />}
             <View tw={MODAL_BODY_TW} style={bodyStyle} accessibilityViewIsModal>
               {children}
             </View>

@@ -72,6 +72,7 @@ type RootStackNavigatorParams = {
   blockedList: undefined;
   dropMusic: undefined;
   dropFree: undefined;
+  dropSlug: undefined;
   dropEvent: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;
@@ -90,7 +91,7 @@ type RootStackNavigatorParams = {
   details: undefined;
   activity: undefined;
   editProfile: undefined;
-  completeProfile: undefined;
+  onboarding: undefined;
   followers: undefined;
   following: undefined;
   addEmail: undefined;

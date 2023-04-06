@@ -1,14 +1,23 @@
+import { memo, useMemo } from "react";
 import { Platform, Pressable, StyleSheet } from "react-native";
 
 import { Muted, Unmuted } from "@showtime-xyz/universal.icon";
 
 import { useMuted } from "app/providers/mute-provider";
 
-import { colors } from "design-system/tailwind";
-
 const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
-export const MuteButton = () => {
+type MuteButtonProps = {
+  onPress?: (state: boolean) => void;
+  variant?: "default" | "mobile-web";
+};
+export const MuteButton = memo(function MuteButton({
+  onPress,
+  variant,
+}: MuteButtonProps) {
   const [muted, setMuted] = useMuted();
+  const size = useMemo(() => (variant === "mobile-web" ? 22 : 16), [variant]);
+
+  if (Platform.OS !== "web" || !muted) return null;
 
   return (
     <Pressable
@@ -18,25 +27,26 @@ export const MuteButton = () => {
         if (Platform.OS === "web") {
           e.preventDefault();
         }
+        onPress?.(!muted);
         setMuted(!muted);
       }}
     >
       {muted ? (
-        <Muted nativeID="12344" color="#fff" width={16} height={16} />
+        <Muted nativeID="12344" color="#fff" width={size} height={size} />
       ) : (
         <Unmuted nativeID="12344" color="#fff" width={16} height={16} />
       )}
     </Pressable>
   );
-};
+});
 
 const muteButtonStyle = StyleSheet.create({
   style: {
     zIndex: 5,
-    backgroundColor: colors.gray[700],
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     borderRadius: 999,
     alignItems: "center",
     justifyContent: "center",
-    padding: 4,
+    padding: 6,
   },
 });

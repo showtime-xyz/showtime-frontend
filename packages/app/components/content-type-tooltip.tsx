@@ -18,26 +18,31 @@ import { PlayOnSpinamp } from "./spinamp/play-on-spinamp";
 type ContentTypeTooltipProps = {
   edition: CreatorEditionResponse | undefined;
 };
-const contentGatingType = {
+export const contentGatingType = {
   location: {
     icon: Globe,
     text: "Share location to collect",
+    typeName: "Location",
   },
   password: {
     icon: Lock,
     text: "Enter password to collect",
+    typeName: "Password",
   },
   spotify_save: {
     icon: Spotify,
     text: "Save on Spotify to collect",
+    typeName: "Music",
   },
   multi: {
     icon: Lock,
     text: "Enter password & location to collect",
+    typeName: "Password & Location",
   },
   music_presave: {
     icon: Spotify,
     text: "Pre-Save to collect",
+    typeName: "Pre-Save",
   },
 };
 const TriggerView = isMobileWeb() ? View : PressableHover;
@@ -56,11 +61,11 @@ export const ContentTypeTooltip = ({ edition }: ContentTypeTooltipProps) => {
     edition?.presave_release_date &&
     new Date() >= new Date(edition?.presave_release_date)
   ) {
-    return <PlayOnSpotify url={edition?.spotify_track_url} />;
+    return <PlayOnSpotify edition={edition} />;
   }
 
   if (edition?.gating_type === "spotify_save" && edition?.spotify_track_url) {
-    return <PlayOnSpotify url={edition?.spotify_track_url} />;
+    return <PlayOnSpotify edition={edition} />;
   }
 
   if (edition?.gating_type && contentGatingType[edition?.gating_type]) {

@@ -1,25 +1,25 @@
 import React from "react";
-import { View } from "react-native";
 
 import { Meta } from "@storybook/react";
 
-import { ClampText } from "./clamp-text";
+import { View } from "@showtime-xyz/universal.view";
+
+import { ClampText } from "./index";
 
 export default {
-  component: ClampText,
+  component: View,
   title: "Components/ClampText",
 } as Meta;
 
-export const Basic: React.VFC<{}> = () => {
+export const Basic: React.FC<{}> = () => {
   return (
-    <View style={{ width: 200 }}>
-      <ClampText
-        tw="text-sm text-gray-600 dark:text-gray-400"
-        maxLines={2}
-        text={
-          "A very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long text"
-        }
-      />
+    <View tw="flex-1 items-center justify-center">
+      <View style={{ width: 200, overflow: "hidden" }}>
+        <ClampText
+          maxLines={2}
+          text="A very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long text"
+        />
+      </View>
     </View>
   );
 };

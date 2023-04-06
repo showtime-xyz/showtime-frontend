@@ -1,3 +1,3 @@
-import { DropPrivateScreen } from "app/screens/drop-private";
+import { Fragment } from "react";
 
-export default DropPrivateScreen;
+export default Fragment;

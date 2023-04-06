@@ -7,7 +7,6 @@ import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { FollowButton } from "app/components/follow-button";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
-import { useMyInfo } from "app/hooks/api-hooks";
 import { useFollow } from "app/hooks/use-follow";
 import { TextLink } from "app/navigation/link";
 import type { Creator } from "app/types";
@@ -21,7 +20,7 @@ type Props = {
 
 export const CreatorPreview = withMemoAndColorScheme<any, Props>(
   ({ mediaSize, creator, onMediaPress }: Props) => {
-    const { isFollowing } = useMyInfo();
+    //const { isFollowing } = useMyInfo();
     const creatorId = creator.profile_id;
 
     const { onToggleFollow } = useFollow({ username: creator.username });

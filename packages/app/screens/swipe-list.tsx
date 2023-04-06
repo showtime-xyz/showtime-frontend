@@ -9,7 +9,6 @@ import { useTrendingCreators, useTrendingNFTS } from "app/hooks/api-hooks";
 import { useProfileNFTs } from "app/hooks/api-hooks";
 import { useFeed } from "app/hooks/use-feed";
 import { useUser } from "app/hooks/use-user";
-import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
@@ -31,7 +30,6 @@ type Query = {
 export const SwipeListScreen = withColorScheme(() => {
   const { useParam } = createParam<Query>();
   const [type] = useParam("type");
-  useTrackPageViewed({ name: "Swipe List", type });
 
   switch (type) {
     case "profile":
@@ -130,7 +128,6 @@ export const TrendingCreatorSwipeList = withColorScheme(() => {
   const [days] = useParam("days");
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const [creatorId] = useParam("creatorId");
-
   const { data, mutate } = useTrendingCreators({
     days: Number(days),
   });

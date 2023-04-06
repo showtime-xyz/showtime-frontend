@@ -23,7 +23,10 @@ const SettingsTabs = () => {
     WalletAddressesV2 | undefined
   >(undefined);
   const { width } = useWindowDimensions();
-  const { isAuthenticated } = useUser({ redirectTo: "/login" });
+  const { isAuthenticated } = useUser({
+    redirectTo: "/login",
+    redirectIfProfileIncomplete: true,
+  });
   const isMdWidth = width >= breakpoints["md"];
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
 

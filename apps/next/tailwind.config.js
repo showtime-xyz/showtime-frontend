@@ -318,6 +318,7 @@ module.exports = {
       },
       borderRadius: {
         inherit: "inherit",
+        "4xl": "32px",
         4: "16px",
       },
       colors: {
@@ -359,6 +360,7 @@ module.exports = {
       animation: {
         "bounce-in": "bounce-in 250ms",
         "fade-in": "fade-in 150ms",
+        "fade-in-250": "fade-in 250ms",
       },
     },
   },

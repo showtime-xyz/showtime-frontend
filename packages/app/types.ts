@@ -1,3 +1,5 @@
+import { DropPlan } from "./hooks/use-paid-drop-plans";
+
 export type NFT = {
   nft_id: number;
   is_user_owner: boolean;
@@ -31,6 +33,7 @@ export type NFT = {
   creator_username?: string;
   creator_verified: number;
   owner_username?: string;
+  slug?: string;
   owner_verified: number;
   comment_count: number;
   owner_count: number;
@@ -50,6 +53,7 @@ export type NFT = {
   multiple_owners_list: Array<OwnersListOwner>;
   listing?: Listing;
   chain_name?: string;
+  nsfw?: boolean;
 };
 
 export type Creator = {
@@ -92,6 +96,20 @@ export interface Link {
   type__prefix: string;
   type__icon_url: string;
 }
+export interface SocialLoginConnections {
+  email: boolean;
+  google: boolean;
+  apple: boolean;
+  phone: boolean;
+  twitter: boolean;
+  spotify: boolean;
+  instagram: boolean;
+}
+
+export interface SocialLoginHandles {
+  twitter?: string | null;
+  instagram?: string | null;
+}
 
 export interface Profile {
   profile_id: number;
@@ -110,11 +128,15 @@ export interface Profile {
   default_created_sort_id: number;
   default_owned_sort_id: number;
   notifications_last_opened: Date;
-  has_onboarded: boolean;
   links: Link[];
   primary_wallet?: WalletAddressesV2;
   has_verified_phone_number: boolean;
+  has_spotify_token: boolean;
   spotify_artist_id?: string;
+  captcha_completed_at: Date | null;
+  has_social_login: boolean;
+  social_login_connections: SocialLoginConnections;
+  social_login_handles: SocialLoginHandles;
 }
 
 type FollowType = {
@@ -220,6 +242,7 @@ export type MyInfo = {
     notifications_last_opened: string | null;
     can_create_drop: boolean;
     daily_claim_limit: number;
+    paid_drop_credits?: DropPlan[];
     claim_tank: {
       available_claims: number;
       next_refill_at: string;

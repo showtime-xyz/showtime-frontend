@@ -114,16 +114,6 @@ export function formatToUSNumber(number: number) {
     return str.replace(reg, "$1,");
   }
 }
-export const findListingItemByOwner = (
-  nft: NFT | undefined,
-  profileID: Profile["profile_id"] | undefined
-) => {
-  const listedNFT = nft?.listing?.all_sellers?.find((seller) => {
-    return seller.profile_id === profileID;
-  });
-
-  return listedNFT;
-};
 
 export const getMediaUrl = ({
   nft,
@@ -406,13 +396,29 @@ export async function delay(ms: number) {
   return await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const getCreatorUsernameFromNFT = (nft?: NFT) => {
+export const getCreatorUsernameFromNFT = (nft?: {
+  creator_username?: string;
+  creator_name?: string;
+  creator_address?: string;
+}) => {
   if (!nft) return "";
-
   return nft.creator_username
     ? `@${nft.creator_username}`
     : nft.creator_name
     ? nft.creator_name
+    : formatAddressShort(nft.creator_address);
+};
+
+export const getCreatorNameFromNFT = (nft?: {
+  creator_username?: string;
+  creator_name?: string;
+  creator_address?: string;
+}) => {
+  if (!nft) return "";
+  return nft.creator_name
+    ? nft.creator_name
+    : nft.creator_username
+    ? nft.creator_name?.toLocaleUpperCase()
     : formatAddressShort(nft.creator_address);
 };
 
@@ -608,11 +614,11 @@ export const OAUTH_REDIRECT_URI = Platform.select({
 });
 
 export const isProfileIncomplete = (profile?: Profile) => {
+  // FYI: has_social_login is true if user has logged in with google, apple, spotify, twitter, instagram
+  // the value is false if user has logged in with email or phone number
   return profile
     ? !profile.username ||
-        userHasIncompleteExternalLinks(profile) ||
-        !profile.bio ||
-        !profile.img_url
+        (!profile.has_social_login && !profile.captcha_completed_at)
     : undefined;
 };
 
@@ -693,4 +699,20 @@ export const limitLineBreaks = (
     .concat(text.split("\n").slice(maxLineBreaks).join(separator).trim())
     .join("\n")
     .trim();
+};
+
+export const getWebImageSize = (file: File) => {
+  const img = new Image();
+  img.src = window.URL.createObjectURL(file);
+  const promise = new Promise<
+    { width: number; height: number } | null | undefined
+  >((resolve, reject) => {
+    img.onload = () => {
+      const width = img.naturalWidth;
+      const height = img.naturalHeight;
+      resolve({ width, height });
+    };
+    img.onerror = reject;
+  });
+  return promise;
 };

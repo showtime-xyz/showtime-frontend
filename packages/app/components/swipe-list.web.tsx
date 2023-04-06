@@ -2,9 +2,9 @@ import {
   useCallback,
   useMemo,
   useRef,
-  useEffect,
   createContext,
   useState,
+  useEffect,
 } from "react";
 import { useWindowDimensions } from "react-native";
 
@@ -51,9 +51,9 @@ export const SwipeList = ({
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef<any>(null);
   useScrollToTop(listRef);
-  const initialURLSet = useRef(false);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
+  const initialURLSet = useRef(false);
   const isSwiped = useRef(false);
 
   const visibleItems = useSharedValue<any[]>([
@@ -79,12 +79,23 @@ export const SwipeList = ({
     ) {
       const nft = data[Number(initialParamProp)];
       if (nft) {
-        window.history.replaceState(null, "", getNFTSlug(nft));
+        router.replace(
+          {
+            pathname: "/profile/[username]/[dropSlug]",
+            query: {
+              ...router.query,
+              username: nft.creator_username,
+              dropSlug: nft.slug,
+            },
+          },
+          getNFTSlug(nft),
+          { shallow: true }
+        );
       }
 
       initialURLSet.current = true;
     }
-  }, [data, isSwipeListScreen, initialParamProp]);
+  }, [data, isSwipeListScreen, initialParamProp, router]);
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
@@ -104,7 +115,19 @@ export const SwipeList = ({
         e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
       if (isSwipeListScreen) {
-        window.history.replaceState(null, "", getNFTSlug(data[e.activeIndex]));
+        router.replace(
+          {
+            pathname: "/profile/[username]/[dropSlug]",
+            query: {
+              ...router.query,
+              initialScrollIndex: e.activeIndex,
+              username: data[e.activeIndex].creator_username,
+              dropSlug: data[e.activeIndex].slug,
+            },
+          },
+          getNFTSlug(data[e.activeIndex]),
+          { shallow: true }
+        );
       }
       setActiveIndex(e.activeIndex);
     },
@@ -117,7 +140,7 @@ export const SwipeList = ({
     <View
       testID="swipeList"
       nativeID="slidelist"
-      tw="fixed inset-0 h-screen overflow-hidden"
+      tw="fixed inset-0 h-screen overflow-hidden bg-gray-100 dark:bg-black"
     >
       <VideoConfigContext.Provider value={videoConfig}>
         <SwiperActiveIndexContext.Provider value={activeIndex}>
