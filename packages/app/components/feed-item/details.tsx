@@ -25,7 +25,11 @@ type NFTDetailsProps = {
 
 export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
   const description = useMemo(
-    () => linkifyDescription(removeTags(nft?.token_description)),
+    () =>
+      linkifyDescription(
+        removeTags(nft?.token_description),
+        "text-13 font-bold text-gray-100"
+      ),
     [nft?.token_description]
   );
 
