@@ -4,6 +4,7 @@ import { useWindowDimensions } from "react-native";
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -105,7 +106,11 @@ export const Trending = () => {
 
   const ListEmptyComponent = useCallback(() => {
     if (isLoading) {
-      return null;
+      return (
+        <View tw="mx-auto max-w-screen-xl flex-row justify-center pt-20 md:px-4">
+          <Spinner />
+        </View>
+      );
     }
     return (
       <EmptyPlaceholder title={"No drops, yet."} tw="h-[50vh]" hideLoginBtn />

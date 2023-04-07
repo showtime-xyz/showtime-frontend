@@ -65,7 +65,6 @@ export const Trending = () => {
         initialLayout={{
           width: contentWidth,
         }}
-        // renderSceneHeader={renderSceneHeader}
       />
     </TrendingContext.Provider>
   );

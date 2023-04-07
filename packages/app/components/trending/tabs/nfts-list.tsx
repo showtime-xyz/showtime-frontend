@@ -3,7 +3,10 @@ import { useCallback, forwardRef, useImperativeHandle, useRef } from "react";
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useRouter } from "@showtime-xyz/universal.router";
-import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
+import {
+  TabInfiniteScrollList,
+  TabSpinner,
+} from "@showtime-xyz/universal.tab-view";
 
 import { GAP } from "app/components/card";
 import { ListCard } from "app/components/card/list-card";
@@ -19,7 +22,7 @@ import { TrendingTabListProps, TrendingTabListRef } from "./";
 export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
   function NFTSList({ filter, index }, ref) {
     const router = useRouter();
-    const { data, mutate } = useTrendingNFTS({
+    const { data, mutate, isLoading } = useTrendingNFTS({
       filter,
     });
     const listRef = useRef(null);
@@ -50,7 +53,9 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
       [onItemPress]
     );
     const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
-
+    if (isLoading) {
+      return <TabSpinner index={index} />;
+    }
     return (
       <TabInfiniteScrollList
         data={data}
