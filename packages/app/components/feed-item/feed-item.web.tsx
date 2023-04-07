@@ -17,6 +17,7 @@ import type { NFT } from "app/types";
 
 import { NFTDropdown } from "../nft-dropdown";
 import { NFTDetails } from "./details";
+import { EngagementIcons } from "./engagement-icons";
 import { FeedItemMD } from "./feed-item.md";
 import { NSFWGate } from "./nsfw-gate";
 
@@ -123,7 +124,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             </FeedItemTapGesture>
           </View>
           <View
-            tw="absolute bottom-0 w-full bg-gradient-to-t from-black/80"
+            tw="z-1 pointer-events-none absolute bottom-0 w-full"
             style={{
               paddingBottom: bottomHeight,
             }}
@@ -141,6 +142,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               detail={detailData?.data?.item}
             />
           </View>
+          <EngagementIcons nft={nft} bottomHeight={bottomHeight} />
+
           <View
             tw="absolute right-4 z-50"
             style={{

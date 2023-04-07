@@ -19,14 +19,26 @@ export function LikeButton({
   const { iconColor } = useSocialColor();
   return (
     <SocialButton
-      text={likeCount > 0 ? ` ${formatNumber(likeCount)}` : ""}
+      text={
+        likeCount > 0
+          ? `${!vertical ? " " : ""}${formatNumber(likeCount)}`
+          : " " // this is a non-breaking space to prevent jumps
+      }
       onPress={onPress}
       vertical={vertical}
     >
       {isLiked ? (
-        <HeartFilled height={24} width={24} color={colors.red[500]} />
+        <HeartFilled
+          height={vertical ? 36 : 24}
+          width={vertical ? 36 : 24}
+          color={colors.red[500]}
+        />
       ) : (
-        <Heart height={24} width={24} color={iconColor} />
+        <Heart
+          height={vertical ? 36 : 24}
+          width={vertical ? 36 : 24}
+          color={iconColor}
+        />
       )}
     </SocialButton>
   );

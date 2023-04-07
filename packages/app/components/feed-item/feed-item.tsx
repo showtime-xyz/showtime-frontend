@@ -17,7 +17,6 @@ import {
 
 import { ResizeMode } from "expo-av";
 import { Video as ExpoVideo } from "expo-av";
-import { LinearGradient } from "expo-linear-gradient";
 import Reanimated from "react-native-reanimated";
 import Animated, {
   useAnimatedStyle,
@@ -42,8 +41,8 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDetails } from "./details";
+import { EngagementIcons } from "./engagement-icons";
 import { NSFWGate } from "./nsfw-gate";
 
 export type FeedItemProps = {
@@ -250,22 +249,21 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               </View>
             ) : null}
 
-            <LinearGradient
+            <View
+              pointerEvents="box-none"
               style={{
                 paddingBottom: bottomPadding,
                 overflow: "hidden",
+                zIndex: 1,
               }}
-              start={[1, 0]}
-              end={[1, 1]}
-              locations={[0.01, 0.8]}
-              colors={["rgba(0,0,0,0)", "rgba(0,0,0,.8)"]}
             >
               <NFTDetails
                 edition={edition}
                 nft={nft}
                 detail={detailData?.data?.item}
               />
-            </LinearGradient>
+            </View>
+            <EngagementIcons nft={nft} bottomHeight={bottomHeight} />
           </Reanimated.View>
           <View
             tw="absolute right-4 z-50"
