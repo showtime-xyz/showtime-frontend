@@ -53,7 +53,6 @@ function HeaderDropdown({
   const isWeb = Platform.OS === "web";
   const isMdWidth = width >= breakpoints["md"];
   const isDark = colorScheme === "dark";
-
   const walletAddressMatch = useMemo(
     () =>
       user?.wallet_addresses_v2?.some(

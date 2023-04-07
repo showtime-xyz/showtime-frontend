@@ -9,16 +9,19 @@ export function LikeButton({
   onPress,
   isLiked,
   likeCount,
+  vertical,
 }: {
   onPress: () => void;
   isLiked?: boolean;
   likeCount: number;
+  vertical?: boolean;
 }) {
   const { iconColor } = useSocialColor();
   return (
     <SocialButton
       text={likeCount > 0 ? ` ${formatNumber(likeCount)}` : ""}
       onPress={onPress}
+      vertical={vertical}
     >
       {isLiked ? (
         <HeartFilled height={24} width={24} color={colors.red[500]} />

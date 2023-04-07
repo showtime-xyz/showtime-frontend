@@ -15,7 +15,7 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
-import { getNextRefillClaim, ledgerWalletHack } from "app/utilities";
+import { getFormatDistanceToNowStrict, ledgerWalletHack } from "app/utilities";
 
 import { useSendFeedback } from "./use-send-feedback";
 import { useWallet } from "./use-wallet";
@@ -257,7 +257,7 @@ export const useClaimNFT = (edition: IEdition) => {
             "Wow, you love collecting drops!",
             `Only ${
               userProfile?.data.daily_claim_limit
-            } claims per day is allowed. Come back ${getNextRefillClaim(
+            } claims per day is allowed. Come back ${getFormatDistanceToNowStrict(
               userProfile?.data.claim_tank.next_refill_at
             )}!`
           );

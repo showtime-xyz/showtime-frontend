@@ -55,6 +55,7 @@ import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
+import { RaffleTooltip } from "./raffle-tooltip";
 
 // NFT detail width is the width of the NFT detail on the right side of the feed item
 const NFT_DETAIL_WIDTH = 380;
@@ -319,7 +320,8 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Social nft={nft} />
             </View>
             <LikedBy nft={nft} tw="mt-4" />
-            <View tw="my-4 mr-4 flex-row justify-between">
+            <View tw="my-4 mr-4 flex-row items-center">
+              <RaffleTooltip edition={edition} />
               <Text tw="text-lg text-black dark:text-white md:text-2xl">
                 {nft.token_name}
               </Text>

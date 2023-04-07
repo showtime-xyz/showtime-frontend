@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
-import { Button } from "@showtime-xyz/universal.button";
+import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
@@ -30,22 +30,28 @@ type DropPreviewProps = {
   file: any;
   title: string;
   description: string;
-  onEdit: () => void;
+  onPressCTA: () => void;
   spotifyUrl?: string;
   releaseDate?: string;
+  ctaCopy?: string;
+  tw?: string;
+  buttonProps?: ButtonProps;
 };
 
 export const DropPreview = memo(function DropPreview({
   file,
   title,
   description,
-  onEdit,
+  onPressCTA,
   spotifyUrl,
   releaseDate,
+  ctaCopy,
+  tw = "",
+  buttonProps,
 }: DropPreviewProps) {
   const { user: userProfile } = useUser();
   const [muted] = useMuted();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const isSmWidth = width >= breakpoints["sm"];
   const { state } = useDropNFT();
   const onPressSpotify = useCallback(
@@ -72,23 +78,29 @@ export const DropPreview = memo(function DropPreview({
         size="regular"
         disabled={state.status === "loading"}
         tw={state.status === "loading" ? "opacity-60" : ""}
-        onPress={onEdit}
+        onPress={onPressCTA}
+        {...buttonProps}
       >
-        Edit Drop
+        {ctaCopy}
       </Button>
     );
-  }, [onEdit, state.status, state.transactionHash]);
+  }, [state.status, state.transactionHash, onPressCTA, buttonProps, ctaCopy]);
+  const size = isSmWidth ? height * 0.3 : width - 32;
   return (
-    <View tw="animate-fade-in-250 items-center">
-      <View tw="w-full rounded-3xl py-8 sm:w-[375px]">
+    <View tw={["animate-fade-in-250 items-center px-4", tw]}>
+      <View tw="shadow-light dark:shadow-dark ios:border android:border web:py-8 ios:pb-4 android:pb-4 overflow-hidden rounded-3xl border-gray-100 dark:border-gray-900 sm:w-[30svh]">
         <View>
           <Preview
             file={file}
-            width={isSmWidth ? 375 : width - 32}
-            height={isSmWidth ? 375 : width - 32}
+            width={size}
+            height={size}
             isMuted={muted}
             showMuteButton
             isLooping
+            style={{
+              width: size,
+              height: size,
+            }}
           />
           {(Boolean(spotifyUrl) || Boolean(releaseDate)) && (
             <Pressable
@@ -100,12 +112,7 @@ export const DropPreview = memo(function DropPreview({
                 style={StyleSheet.absoluteFillObject}
               />
               <View tw="flex-row items-center">
-                <Spotify
-                  color="white"
-                  width={20}
-                  height={20}
-                  className="z-10"
-                />
+                <Spotify color="white" width={20} height={20} />
                 <Text tw="px-1 text-xs font-semibold text-white">
                   {releaseDate
                     ? `Available on ${new Date(releaseDate).toLocaleString(
@@ -122,7 +129,7 @@ export const DropPreview = memo(function DropPreview({
             </Pressable>
           )}
         </View>
-        <View tw="px-4">
+        <View tw="px-2">
           <View tw="flex-row py-4">
             <View tw="rounded-full border border-gray-200 dark:border-gray-700">
               <Avatar alt="Avatar" url={userProfile?.data.profile.img_url} />
@@ -153,11 +160,9 @@ export const DropPreview = memo(function DropPreview({
           <Text tw="text-lg dark:text-white" numberOfLines={3}>
             {title}
           </Text>
-          <Description
-            descriptionText={description}
-            maxLines={2}
-            tw="max-h-[30vh] pt-2"
-          />
+          <Text tw="pt-2 text-xs text-gray-600 dark:text-gray-200 ">
+            {description}
+          </Text>
           <View tw="h-4" />
           {renderButtons()}
         </View>

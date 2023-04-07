@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Platform } from "react-native";
+import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -17,7 +17,6 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import type { TW } from "@showtime-xyz/universal.tailwind";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -32,6 +31,7 @@ type TabBarIconProps = {
   focused?: boolean;
   tw?: TW;
   onPress?: () => void;
+  style?: StyleProp<ViewStyle>;
 };
 
 type TabBarButtonProps = {
@@ -123,31 +123,24 @@ export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
   );
 };
 
-export const CreateTabBarIcon = ({ focused }: TabBarIconProps) => {
-  const isDark = useIsDarkMode();
+export const CreateTabBarIcon = ({
+  color,
+  tw = "",
+  style,
+}: TabBarIconProps) => {
   const redirectToCreateDrop = useRedirectToCreateDrop();
 
   return (
     <TabBarIcon onPress={redirectToCreateDrop}>
       <View
         tw={[
-          "h-12 w-12 items-center justify-center rounded-full",
-          focused ? "bg-gray-100 dark:bg-gray-900" : "bg-black dark:bg-white",
+          "web:h-10 web:w-10 h-12 w-12 items-center justify-center rounded-full",
+          "bg-black dark:bg-white",
+          tw,
         ]}
+        style={style}
       >
-        <Plus
-          width={24}
-          height={24}
-          color={
-            focused
-              ? isDark
-                ? colors.white
-                : colors.gray[900]
-              : isDark
-              ? colors.gray[900]
-              : colors.white
-          }
-        />
+        <Plus width={24} height={24} color={color} />
       </View>
     </TabBarIcon>
   );
@@ -196,7 +189,7 @@ const UnreadNotificationIndicator = () => {
 
   return (
     <View
-      tw="absolute top-2 right-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500"
+      tw="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500"
       style={{ opacity: hasUnreadNotification ? 1 : 0 }}
     />
   );
@@ -208,9 +201,7 @@ export const ProfileTabBarIcon = () => {
 
   return (
     <TabBarIcon tab={`/@${user?.data?.profile?.username ?? userAddress}`}>
-      <View tw="h-8 w-8 items-center justify-center rounded-full">
-        <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
-      </View>
+      <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
     </TabBarIcon>
   );
 };

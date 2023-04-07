@@ -20,15 +20,24 @@ import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import {
+  ErrorText,
+  Fieldset,
+  FieldsetCheckbox,
+} from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
+import {
+  FlipIcon,
+  Image as ImageIcon,
+  Raffle,
+} from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -36,7 +45,6 @@ import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary"
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { QRCodeModal } from "app/components/qr-code";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
@@ -52,6 +60,7 @@ import { formatAddressShort } from "app/utilities";
 import { Hidden } from "design-system/hidden";
 
 import { DropPreview } from "../drop-preview";
+import { DropViewShare } from "../drop-view-share";
 import { DROP_FORM_DATA_KEY } from "../utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
@@ -71,6 +80,7 @@ const defaultValues = {
   radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
+  raffle: false,
 };
 
 const { useParam } = createParam<{
@@ -96,7 +106,7 @@ export const DropFree = () => {
   const dropValidationSchema = useMemo(() => {
     const validationObject = {
       file: yup.mixed().required("Media is required"),
-      title: yup.string().required("Title is a required field").max(255),
+      title: yup.string().required("Title is a required field").max(100),
       description: yup
         .string()
         .max(280)
@@ -195,7 +205,7 @@ export const DropFree = () => {
     defaultValues,
     exclude: excludedPersistFields,
   });
-
+  const descPlaceholder = "Why should people collect this drop?";
   useEffect(() => {
     resetDropState();
   }, [resetDropState]);
@@ -285,7 +295,6 @@ export const DropFree = () => {
         message: "Please retry!",
       });
       setValue("file", undefined);
-
       return;
     }
     if (
@@ -306,17 +315,12 @@ export const DropFree = () => {
 
   if (state.status === "success") {
     return (
-      <QRCodeModal
-        dropCreated
+      <DropViewShare
+        title={getValues("title")}
+        description={getValues("description")}
+        onPressCTA={() => setShowPreview(false)}
+        file={getValues("file")}
         contractAddress={state.edition?.contract_address}
-        renderPreviewComponent={({ width, height, borderRadius }) => (
-          <Preview
-            file={getValues("file")}
-            width={width}
-            height={height}
-            style={{ borderRadius }}
-          />
-        )}
       />
     );
   }
@@ -457,7 +461,7 @@ export const DropFree = () => {
                             label="Description"
                             multiline
                             textAlignVertical="top"
-                            placeholder="What is this drop about?"
+                            placeholder={descPlaceholder}
                             onBlur={onBlur}
                             helperText="You cannot edit this after the drop is created."
                             errorText={errors.description?.message}
@@ -488,7 +492,7 @@ export const DropFree = () => {
                       label="Description"
                       multiline
                       textAlignVertical="top"
-                      placeholder="What is this drop about?"
+                      placeholder={descPlaceholder}
                       onBlur={onBlur}
                       helperText="You cannot edit this after the drop is created."
                       errorText={errors.description?.message}
@@ -500,7 +504,28 @@ export const DropFree = () => {
                 }}
               />
             </Hidden>
-
+            {/* <View tw="mt-4">
+              <Controller
+                key="raffle"
+                control={control}
+                name="raffle"
+                render={({ field: { onChange, value } }) => {
+                  return (
+                    <FieldsetCheckbox
+                      onChange={onChange}
+                      value={value}
+                      Icon={
+                        <Raffle
+                          color={isDark ? colors.white : colors.gray[900]}
+                        />
+                      }
+                      helperText="Automatically selects a winner once your drop is over."
+                      title="Make it a Raffle"
+                    />
+                  );
+                }}
+              />
+            </View> */}
             <View>
               <Accordion.Root
                 value={accordionValue}
@@ -607,6 +632,7 @@ export const DropFree = () => {
                           />
                         </View>
                       </View>
+
                       <View tw="z-10 mt-4 flex-row">
                         <Controller
                           control={control}
@@ -704,7 +730,8 @@ export const DropFree = () => {
           <DropPreview
             title={getValues("title")}
             description={getValues("description")}
-            onEdit={() => setShowPreview(false)}
+            onPressCTA={() => setShowPreview(false)}
+            ctaCopy="Edit Drop"
             file={getValues("file")}
           />
         )}

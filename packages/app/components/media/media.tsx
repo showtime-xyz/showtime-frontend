@@ -42,6 +42,7 @@ type Props = {
   isMuted?: boolean;
   edition?: CreatorEditionResponse;
   videoRef?: RefObject<ExpoVideo>;
+  theme?: "light" | "dark";
 };
 
 function MediaImplementation({

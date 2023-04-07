@@ -11,7 +11,7 @@ import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
 
-export function GiftButton({ nft }: { nft: NFT }) {
+export function GiftButton({ nft, ...rest }: { nft: NFT; vertical?: boolean }) {
   const router = useRouter();
   const { iconColor } = useSocialColor();
   const { data: edition } = useCreatorCollectionDetail(
@@ -62,7 +62,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
                 edition.total_claimed_count >
                 0
                 ? "text-orange-500"
-                : "text-gray-900 dark:text-white dark:md:text-gray-400",
+                : "text-white dark:text-white md:text-gray-900 dark:md:text-gray-400",
             ]}
           >
             {formatClaimNumber(edition.total_claimed_count)}
@@ -72,6 +72,7 @@ export function GiftButton({ nft }: { nft: NFT }) {
             : ""}
         </>
       }
+      {...rest}
     >
       <GiftIcon height={24} width={24} color={iconColor} />
     </SocialButton>

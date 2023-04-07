@@ -14,6 +14,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/feed-item";
+import { SwipeListHeader } from "app/components/header/swipe-list-header";
 import {
   ItemKeyContext,
   ViewabilityItemsContext,
@@ -46,7 +47,7 @@ type Query = {
 const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
-function NftScreen({ fallback = {} }: { fallback?: object }) {
+export function NftScreen({ fallback = {} }: { fallback?: object }) {
   const [initialScrollIndex] = useParam("initialScrollIndex");
   if (typeof initialScrollIndex !== "undefined") {
     return <SwipeListScreen />;
@@ -105,6 +106,7 @@ const NFTDetail = () => {
   if (nft) {
     return (
       <ProfileTabsNFTProvider tabType={tabType}>
+        {Platform.OS !== "web" && <SwipeListHeader canGoBack withBackground />}
         <FeedItem
           itemHeight={itemHeight}
           bottomPadding={safeAreaBottom}
@@ -116,8 +118,6 @@ const NFTDetail = () => {
 
   return null;
 };
-
-export { NftScreen };
 
 const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
   useTrackPageViewed({ name: "NFT" });

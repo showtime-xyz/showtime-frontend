@@ -23,7 +23,7 @@ export const ReactQRCode = ({
   logoSize = size * 0.2,
   logoBackgroundColor = "transparent",
   logoMargin = 2,
-  ecl = "L",
+  ecl = "M",
   fillColors: propsFillColors,
 }: QRCodeProps) => {
   const isDark = useIsDarkMode();
@@ -72,7 +72,7 @@ export const ReactQRCode = ({
       }
     });
 
-    const clearArenaSize = Math.floor(logoSize / cellSize);
+    const clearArenaSize = Math.floor(logoSize / cellSize) + logoMargin;
 
     const matrixMiddleStart = matrix.length / 2 - clearArenaSize / 2;
     const matrixMiddleEnd = matrix.length / 2 + clearArenaSize / 2;
@@ -111,7 +111,7 @@ export const ReactQRCode = ({
     });
 
     return result;
-  }, [ecl, fillColor, getFill, logoSize, size, value]);
+  }, [ecl, fillColor, getFill, logoMargin, logoSize, size, value]);
 
   const logoPosition = size / 2 - logoSize / 2 - logoMargin;
   const logoWrapperSize = logoSize + logoMargin * 2;

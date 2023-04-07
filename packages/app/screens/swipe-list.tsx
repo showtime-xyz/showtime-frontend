@@ -1,5 +1,9 @@
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { Platform } from "react-native";
 
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { View } from "@showtime-xyz/universal.view";
+
+import { SwipeListHeader } from "app/components/header/swipe-list-header";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { SwipeList } from "app/components/swipe-list";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
@@ -23,8 +27,7 @@ type Query = {
   filter: string;
   creatorId: any;
 };
-
-export const SwipeListScreen = withColorScheme(() => {
+export const SwipeListByType = () => {
   const { useParam } = createParam<Query>();
   const [type] = useParam("type");
 
@@ -38,6 +41,15 @@ export const SwipeListScreen = withColorScheme(() => {
     default:
       return null;
   }
+};
+
+export const SwipeListScreen = withColorScheme(() => {
+  return (
+    <View tw="flex-1">
+      {Platform.OS !== "web" && <SwipeListHeader canGoBack withBackground />}
+      <SwipeListByType />
+    </View>
+  );
 });
 
 const FeedSwipeList = () => {
@@ -45,7 +57,6 @@ const FeedSwipeList = () => {
   const { data } = useFeed();
   const [initialScrollIndex] = useParam("initialScrollIndex");
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-
   return (
     <SwipeList
       data={data}
@@ -100,7 +111,6 @@ const TrendingNFTsSwipeList = () => {
   const { useParam } = createParam<Query>();
   const [filter] = useParam("filter");
   const [initialScrollIndex] = useParam("initialScrollIndex");
-
   const { data } = useTrendingNFTS({
     filter,
   });

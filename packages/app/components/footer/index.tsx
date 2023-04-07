@@ -6,7 +6,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { useUser } from "app/hooks/use-user";
-import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
+import {
+  HIDE_LINK_FOOTER_ROUTER_LIST,
+  SWIPE_LIST_SCREENS,
+} from "app/lib/constants";
 import {
   CreateTabBarIcon,
   HomeTabBarIcon,
@@ -21,7 +24,15 @@ import { WebFooter } from "./links-footer.web";
 const Footer = () => {
   const router = useRouter();
   const isDark = useIsDarkMode();
-  const color = isDark ? "white" : "black";
+  const isDarkThemePage = SWIPE_LIST_SCREENS.includes(router.pathname);
+  const color = isDark ? "#fff" : isDarkThemePage ? "#fff" : "#000";
+  const buttonColor = isDark ? "#000" : isDarkThemePage ? "#000" : "#fff";
+  const buttonBackgroundColor = isDark
+    ? "#fff"
+    : SWIPE_LIST_SCREENS.includes(router.pathname)
+    ? "#fff"
+    : "#000";
+
   const { width } = useWindowDimensions();
   const { isAuthenticated } = useUser();
   const { isTabBarHidden } = useNavigationElements();
@@ -43,7 +54,7 @@ const Footer = () => {
       style={{
         height: MOBILE_WEB_TABS_HEIGHT,
       }}
-      tw="safe-bottom fixed bottom-0 right-0 left-0 z-50 h-12 flex-row items-center justify-between px-4 backdrop-blur-md"
+      tw="safe-bottom fixed bottom-0 left-0 right-0 z-50 h-12 flex-row items-center justify-between px-4 backdrop-blur-md"
     >
       <HomeTabBarIcon
         color={color}
@@ -53,7 +64,11 @@ const Footer = () => {
         color={color}
         focused={router.pathname === "/trending"}
       />
-      <CreateTabBarIcon color={color} focused={router.pathname === "/drop"} />
+      <CreateTabBarIcon
+        color={buttonColor}
+        focused={router.pathname === "/drop"}
+        style={{ backgroundColor: buttonBackgroundColor }}
+      />
       <NotificationsTabBarIcon
         color={color}
         focused={router.pathname === "/notifications"}

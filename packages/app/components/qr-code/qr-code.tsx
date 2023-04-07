@@ -1,11 +1,12 @@
 import { useRef, useCallback } from "react";
-import { Platform, View } from "react-native";
+import { Platform } from "react-native";
 
 import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Haptics } from "@showtime-xyz/universal.haptics";
+import { ViewProps, View } from "@showtime-xyz/universal.view";
 
 import domtoimage from "app/lib/dom-to-image";
 import { ReactQRCode } from "app/lib/qr-code";
@@ -13,14 +14,14 @@ import { captureRef } from "app/lib/view-shot";
 
 import { toast } from "design-system/toast";
 
-type Props = {
-  text: string;
+type Props = ViewProps & {
+  value: string;
   size: number;
 };
 
-export const QRCode = ({ text, size }: Props) => {
+export const QRCode = ({ value, size, ...rest }: Props) => {
   const [status, requestPermission] = MediaLibrary.usePermissions();
-  const viewRef = useRef<View | Node>(null);
+  const viewRef = useRef<typeof View | Node>(null);
 
   const onDownload = useCallback(async () => {
     if (Platform.OS === "web") {
@@ -57,11 +58,11 @@ export const QRCode = ({ text, size }: Props) => {
   }, [requestPermission, status?.granted]);
 
   return (
-    <View style={{ alignItems: "center" }}>
-      <View ref={viewRef as any}>
-        <ReactQRCode size={size} value={text} />
+    <View {...rest}>
+      <View ref={viewRef as any} tw="rounded-lg bg-white p-2 dark:bg-black">
+        <ReactQRCode size={size} value={value} />
       </View>
-      <Button tw="mt-4 self-center" onPress={onDownload}>
+      <Button tw="mt-8 self-center" onPress={onDownload}>
         Download QR Code
       </Button>
     </View>

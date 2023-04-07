@@ -28,6 +28,8 @@ export function Button({ variant = "primary", ...props }: ButtonProps) {
       return <OutlinedButton {...props} />;
     case "gradient":
       return <GradientButton {...props} />;
+    case "base":
+      return <BaseButton {...props} />;
     default:
       return <PrimaryButton {...props} />;
   }

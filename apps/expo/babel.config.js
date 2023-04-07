@@ -1,6 +1,8 @@
 const path = require("path");
 const fs = require("fs");
-const resolveDesignSystemPackages = require("../../plugins/resolve-design-system-packages");
+const {
+  resolveDesignSystemPackages,
+} = require("../../plugins/resolve-design-system-packages");
 
 const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);

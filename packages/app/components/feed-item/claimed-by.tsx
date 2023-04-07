@@ -21,7 +21,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
     [claimersList]
   );
   if (!claimersList || claimersList?.length <= 1) {
-    return <View tw="native:mb-4 web:h-5 ml-2 h-9" collapsable />;
+    return null;
   }
 
   const firstClaimer = claimersList[1];
@@ -35,14 +35,14 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
               <AvatarHoverCard
                 username={item?.username || item?.wallet_address}
                 url={item?.img_url}
-                tw="border border-gray-300 dark:border-gray-700"
+                tw="rounded-full border border-gray-300"
                 size={20}
                 alt="Claimed by Avatar"
               />
             </View>
           );
         })}
-        <Text tw="ml-1 flex-1 text-sm text-gray-900 dark:text-white">
+        <Text tw="ml-1 flex-1 text-xs text-white dark:text-white md:text-sm md:text-gray-900">
           <TextLink
             href={`/@${firstClaimer.username ?? firstClaimer.wallet_address}`}
             tw="font-bold"
@@ -156,6 +156,7 @@ export const ClaimedByReduced = ({
               </Text>
             </>
           )}
+          {` collected`}
         </Text>
       </>
     </View>

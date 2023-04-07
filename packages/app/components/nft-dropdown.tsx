@@ -24,7 +24,6 @@ import { useBlock } from "app/hooks/use-block";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useHideNFT } from "app/hooks/use-hide-nft";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
-import { useReport } from "app/hooks/use-report";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useSocialColor } from "app/hooks/use-social-color";
@@ -67,7 +66,6 @@ function NFTDropdown({
 
   const tabType = useProfileTabType();
   const { isAuthenticated, user } = useUser();
-  const { report } = useReport();
   const { unfollow, isFollowing } = useMyInfo();
   const { hideNFT, unhideNFT } = useHideNFT();
   const { getIsBlocked, toggleBlock } = useBlock();
@@ -253,7 +251,6 @@ function NFTDropdown({
           <DropdownMenuItem
             onSelect={() => {
               const as = `/qr-code-share/${nft?.contract_address}`;
-
               router.push(
                 Platform.select({
                   native: as,

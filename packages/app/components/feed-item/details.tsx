@@ -1,26 +1,21 @@
-import { Suspense } from "react";
+import { useMemo } from "react";
+import { Text as RNText } from "react-native";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Share } from "@showtime-xyz/universal.icon";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Description } from "app/components/card/rows/description";
-import { Creator } from "app/components/card/rows/elements/creator";
 import { ClaimButton } from "app/components/claim/claim-button";
-import { GiftButton } from "app/components/claim/gift-button";
+import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
-import { CommentButton } from "app/components/feed/comment-button";
-import { Like } from "app/components/feed/like";
-import { NFTDropdown } from "app/components/nft-dropdown";
-import { SocialButton } from "app/components/social-button";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
-import { useShareNFT } from "app/hooks/use-share-nft";
+import { linkifyDescription } from "app/lib/linkify";
+import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
+import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
-import { ClaimedShareButton } from "../claim/claimed-share-button";
+import { EngagementIcons } from "./engagement-icons";
+import { RaffleTooltip } from "./raffle-tooltip";
 
 type NFTDetailsProps = {
   nft: NFT;
@@ -29,64 +24,81 @@ type NFTDetailsProps = {
 };
 
 export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
-  const isDark = useIsDarkMode();
-  const { shareNFT } = useShareNFT();
-  const isCreatorDrop = !!nft.creator_airdrop_edition_address;
+  const description = useMemo(
+    () => linkifyDescription(removeTags(nft?.token_description)),
+    [nft?.token_description]
+  );
 
   return (
-    <View tw="px-4">
-      <View tw="flex-row items-center justify-between">
-        <Creator nft={nft} shouldShowCreatorIndicator={false} />
-      </View>
-      <Text tw="text-lg dark:text-white" numberOfLines={3}>
-        {nft.token_name}
-      </Text>
-      <Description
-        descriptionText={nft?.token_description}
-        maxLines={2}
-        tw="max-h-[30vh] pt-2"
-      />
-      <View tw="flex-row justify-between py-2">
-        <View tw="flex-row">
-          <Like nft={nft} />
-          <View tw="w-6" />
-          <CommentButton nft={nft} />
-          <View tw="w-6" />
-          <GiftButton nft={nft} />
-        </View>
+    <View tw="px-4 pb-2 pt-6">
+      <View tw="flex flex-row justify-between">
+        <View tw="flex-1 flex-col justify-end">
+          <View>
+            <View tw="mb-3 flex-row justify-between">
+              <RaffleTooltip edition={edition} theme="dark" />
+              <View />
+            </View>
 
-        <View tw="flex-row">
-          <SocialButton onPress={() => shareNFT(nft)}>
-            <Share
-              height={32}
-              width={22}
-              color={isDark ? "#FFF" : colors.gray[900]}
+            <View tw="mb-3 flex flex-row items-center justify-between">
+              <Text tw="flex-1 text-sm font-bold text-white dark:text-white md:text-gray-900">
+                {nft.token_name}
+              </Text>
+            </View>
+
+            <Text>
+              <TextLink
+                href={`/@${nft.creator_username ?? nft.creator_address}`}
+                tw="web:inline flex text-sm font-semibold text-white dark:text-white md:text-gray-900"
+              >
+                {getCreatorUsernameFromNFT(nft)}
+              </TextLink>
+              <RNText>
+                {` `}
+                {nft.creator_verified ? (
+                  <VerificationBadge
+                    size={12}
+                    fillColor="#000"
+                    bgColor="#FFF"
+                    className="web:inline"
+                  />
+                ) : null}
+                {` `}
+              </RNText>
+              <Text tw="text-xs text-gray-200 dark:text-gray-200 md:text-gray-600">
+                {description}
+              </Text>
+            </Text>
+            <ClaimedBy
+              claimersList={detail?.multiple_owners_list}
+              nft={nft}
+              tw="mt-3"
             />
-          </SocialButton>
-          <View tw="w-8" />
-          <Suspense fallback={<Skeleton width={24} height={24} />}>
-            <NFTDropdown nft={detail ?? nft} tw="" edition={edition} />
-          </Suspense>
+          </View>
+
+          {edition && (
+            <View tw="mt-4 flex-row">
+              <ClaimButton
+                tw="flex-1"
+                edition={edition}
+                color="#000"
+                size="regular"
+                variant="base"
+                labelTW="text-black md:text-white dark:text-black"
+                backgroundColors={{
+                  default: "bg-white md:bg-gray-900 dark:bg-white",
+                  pressed: "bg-gray-200 md:bg-gray-700 dark:bg-gray-200",
+                }}
+              />
+              <ClaimedShareButton
+                tw="ml-3 w-1/3"
+                edition={edition}
+                size="regular"
+              />
+            </View>
+          )}
         </View>
+        <EngagementIcons nft={nft} />
       </View>
-      <ClaimedBy
-        claimersList={detail?.multiple_owners_list}
-        nft={nft}
-        tw="mb-4"
-      />
-      {isCreatorDrop && edition ? (
-        <View tw="flex-row">
-          <ClaimButton tw="flex-1" edition={edition} size="regular" />
-          <ClaimedShareButton
-            tw="ml-3 w-1/3"
-            edition={edition}
-            size="regular"
-          />
-        </View>
-      ) : isCreatorDrop ? (
-        <View tw="h-12" />
-      ) : null}
-      <View tw="h-4" />
     </View>
   );
 };

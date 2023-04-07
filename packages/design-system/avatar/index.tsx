@@ -1,7 +1,16 @@
-import { ReactNode, useMemo, forwardRef } from "react";
+import {
+  ReactNode,
+  useMemo,
+  forwardRef,
+  useState,
+  memo,
+  useCallback,
+} from "react";
 import { ViewStyle } from "react-native";
 
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -13,8 +22,10 @@ export type AvatarProps = {
   borderRadius?: number;
   tw?: TW;
   children?: ReactNode;
-  alt: string;
+  alt?: string;
   style?: ViewStyle;
+  enableSkeleton?: boolean;
+  borderColor?: string;
 };
 
 const getAvatarImageUrl = (imgUrl: string, size: number) => {
@@ -24,34 +35,85 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
   return imgUrl;
 };
 
-export const Avatar = forwardRef<typeof View, AvatarProps>(
+const AvatarComponent = forwardRef<typeof View, AvatarProps>(
   function AvatarComponent(
-    { url, borderRadius = 0, size = 32, tw = "", children, alt = "", style },
+    {
+      url,
+      borderRadius = 999,
+      size = 32,
+      tw = "",
+      children,
+      alt = "Avatar",
+      style,
+      enableSkeleton,
+      borderColor,
+    },
     ref
   ) {
+    const { colorScheme } = useColorScheme();
+    const [isLoading, setIsLoading] = useState(enableSkeleton);
     const imageSource = useMemo(
       () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
       [url, size]
     );
-
-    return (
-      <View
-        tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
-        style={{ height: size, width: size, ...style }}
-        ref={ref}
-      >
-        <Image
-          source={imageSource}
+    const renderAvatar = useCallback(() => {
+      return (
+        <View
+          tw={[CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
+          style={{
+            height: size,
+            width: size,
+            borderRadius,
+            borderColor,
+            ...style,
+          }}
+          ref={ref}
+        >
+          <Image
+            source={imageSource}
+            width={size}
+            height={size}
+            borderRadius={borderRadius}
+            resizeMode="cover"
+            tw={IMAGE_TW}
+            style={{ height: size, width: size }}
+            alt={alt}
+            {...(enableSkeleton
+              ? {
+                  onLoad: () => setIsLoading(false),
+                  onLoadStart: () => setIsLoading(true),
+                }
+              : {})}
+          />
+          {children}
+        </View>
+      );
+    }, [
+      tw,
+      size,
+      borderRadius,
+      borderColor,
+      style,
+      ref,
+      imageSource,
+      alt,
+      enableSkeleton,
+      children,
+    ]);
+    if (enableSkeleton) {
+      return (
+        <Skeleton
           width={size}
           height={size}
-          borderRadius={borderRadius}
-          resizeMode="cover"
-          tw={IMAGE_TW}
-          style={{ height: size, width: size, borderRadius: borderRadius }}
-          alt={alt}
-        />
-        {children}
-      </View>
-    );
+          radius={borderRadius}
+          show={isLoading}
+          colorMode={colorScheme as any}
+        >
+          {renderAvatar()}
+        </Skeleton>
+      );
+    }
+    return renderAvatar();
   }
 );
+export const Avatar = memo(AvatarComponent);

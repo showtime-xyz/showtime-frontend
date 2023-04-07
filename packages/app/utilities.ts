@@ -60,7 +60,10 @@ const DEFAULT_PROFILE_PIC =
   "https://cdn.tryshowtime.com/profile_placeholder2.jpg";
 
 export const getProfileImage = (profile?: Profile) => {
-  return profile?.img_url ?? DEFAULT_PROFILE_PIC;
+  if (!profile?.img_url) {
+    return DEFAULT_PROFILE_PIC;
+  }
+  return profile?.img_url;
 };
 
 export const getSortFields = () => {
@@ -425,10 +428,7 @@ export const getCreatorNameFromNFT = (nft?: {
 export const getTwitterIntentUsername = (profile?: Profile) => {
   if (!profile) return "";
 
-  const twitterUsername = profile.links.find(
-    (l) => l.type__name.toLowerCase() === "twitter"
-  )?.user_input;
-
+  const twitterUsername = profile.social_login_handles.twitter;
   if (twitterUsername) {
     return `@${twitterUsername.replace(/@/g, "")}`;
   }
@@ -440,6 +440,14 @@ export const getTwitterIntentUsername = (profile?: Profile) => {
     : profile.wallet_addresses_v2?.[0]?.ens_domain
     ? profile.wallet_addresses_v2[0].ens_domain
     : formatAddressShort(profile.wallet_addresses_v2?.[0]?.address);
+};
+export const getInstagramUsername = (profile?: Profile) => {
+  if (!profile) return "";
+
+  const instagramUsername = profile.social_login_handles.instagram;
+  if (instagramUsername) {
+    return `@${instagramUsername.replace(/@/g, "")}`;
+  }
 };
 
 export const getDomainName = (link?: string) => {
@@ -588,7 +596,7 @@ export const formatProfileRoutes = (
 };
 //#endregion
 
-export const getNextRefillClaim = (time?: string) => {
+export const getFormatDistanceToNowStrict = (time?: string) => {
   if (!time) return "";
   return formatDistanceToNowStrict(new Date(time), { addSuffix: true });
 };
@@ -599,7 +607,7 @@ export function formatClaimNumber(number: number) {
   // for the edge case of 100k, our max supply, put “100k”, no decimals
   if (number >= 100000) {
     return `100k`;
-  } else if (number > 1000) {
+  } else if (number > 9999) {
     return `${(number / 1000).toFixed(1)}k`;
   } else {
     return number;
@@ -623,6 +631,7 @@ export const isProfileIncomplete = (profile?: Profile) => {
 };
 
 export function getFullSizeCover(url: string | undefined) {
+  if (!url) return DEFAULT_PROFILE_PIC;
   if (
     url &&
     url.startsWith("https://lh3.googleusercontent.com") &&

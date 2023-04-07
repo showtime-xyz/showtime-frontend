@@ -22,12 +22,17 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
+import {
+  ErrorText,
+  Fieldset,
+  FieldsetCheckbox,
+} from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   FlipIcon,
   Image as ImageIcon,
   InformationCircle,
+  Raffle,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
@@ -48,10 +53,8 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
@@ -65,6 +68,7 @@ import { Hidden } from "design-system/hidden";
 
 import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 import { DropPreview } from "./drop-preview";
+import { DropViewShare } from "./drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "./utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
@@ -80,6 +84,7 @@ const defaultValues = {
   radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
+  raffle: false,
 };
 
 const durationOptions = [
@@ -114,7 +119,7 @@ export const DropMusic = () => {
       yup.lazy((values) => {
         const baseSchema = yup.object({
           file: yup.mixed().required("Media is required"),
-          title: yup.string().required("Title is a required field").max(255),
+          title: yup.string().required("Title is a required field").max(100),
           description: yup
             .string()
             .max(280)
@@ -221,6 +226,12 @@ export const DropMusic = () => {
     setValue,
     defaultValues,
   });
+  const descPlaceholder = isSaveDrop
+    ? "What is this drop about?"
+    : "Why should people collect this drop?";
+  const descHelperText = isSaveDrop
+    ? "You cannot edit this after the drop is created."
+    : "Tell your fans what the reward is. You cannot edit this after the drop is created";
 
   // this effect should be triggered when the user changes the drop type
   // it will revalidate the form and show the errors if any
@@ -292,30 +303,8 @@ export const DropMusic = () => {
       );
     }
   };
-
-  // useEffect(() => {
-  //   if (transactionId) {
-  //     pollTransaction(transactionId)
-  //   }
-  // }, [transactionId])
-
-  // useEffect(() => {
-  //   if (state.transactionId) {
-  //     setTransactionId(transactionId)
-  //   }
-  // }, [state.transactionId])
-
   const pickFile = useFilePicker();
-  const share = useShare();
-  const router = useRouter();
-  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
   const [showDatePicker, setShowDatePicker] = useState(false);
-
-  // if (state.transactionHash) {
-  //   return <View>
-  //     <Text>Loading</Text>
-  //   </View>
-  // }
 
   const selectedDuration = watch("duration");
 
@@ -330,17 +319,12 @@ export const DropMusic = () => {
 
   if (state.status === "success") {
     return (
-      <QRCodeModal
-        dropCreated
+      <DropViewShare
+        title={getValues("title")}
+        description={getValues("description")}
+        onPressCTA={() => setShowPreview(false)}
+        file={getValues("file")}
         contractAddress={state.edition?.contract_address}
-        renderPreviewComponent={({ width, height, borderRadius }) => (
-          <Preview
-            file={getValues("file")}
-            width={width}
-            height={height}
-            style={{ borderRadius }}
-          />
-        )}
       />
     );
   }
@@ -520,9 +504,9 @@ export const DropMusic = () => {
                               label="Description"
                               multiline
                               textAlignVertical="top"
-                              placeholder="What is this drop about?"
+                              placeholder={descPlaceholder}
                               onBlur={onBlur}
-                              helperText="You cannot edit this after the drop is created."
+                              helperText={descHelperText}
                               errorText={errors.description?.message}
                               value={value}
                               numberOfLines={3}
@@ -563,6 +547,32 @@ export const DropMusic = () => {
                   }}
                 />
               </Hidden>
+              {/* <View tw="mt-4">
+                <Controller
+                  key="raffle"
+                  control={control}
+                  name="raffle"
+                  render={({ field: { onChange, value } }) => {
+                    return (
+                      <FieldsetCheckbox
+                        onChange={onChange}
+                        value={value}
+                        Icon={
+                          <Raffle
+                            color={isDark ? colors.white : colors.gray[900]}
+                          />
+                        }
+                        helperText={
+                          isSaveDrop
+                            ? "Automatically selects a winner once the duration of your drop is over."
+                            : "Automatically selects a winner once your song is live."
+                        }
+                        title="Make it a Raffle"
+                      />
+                    );
+                  }}
+                />
+              </View> */}
               <View tw="z-10 mt-4 flex-row">
                 <Controller
                   key="releaseDate"
@@ -919,7 +929,8 @@ export const DropMusic = () => {
             <DropPreview
               title={getValues("title")}
               description={getValues("description")}
-              onEdit={() => setShowPreview(false)}
+              onPressCTA={() => setShowPreview(false)}
+              ctaCopy="Edit Drop"
               file={getValues("file")}
               spotifyUrl={getValues("spotifyUrl")}
               releaseDate={isSaveDrop ? null : getValues("releaseDate")}
