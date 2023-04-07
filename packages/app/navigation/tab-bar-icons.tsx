@@ -76,7 +76,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
 
 export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/">
+    <TabBarIcon tab={Platform.OS === "web" ? "/foryou" : "/"}>
       {focused ? (
         <HomeFilled
           style={{ zIndex: 1 }}
