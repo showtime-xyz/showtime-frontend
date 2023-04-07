@@ -68,6 +68,7 @@ import { Hidden } from "design-system/hidden";
 
 import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 import { DropPreview } from "./drop-preview";
+import { DropViewShare } from "./drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "./utils";
 
 const SECONDS_IN_A_DAY = 24 * 60 * 60;
@@ -118,10 +119,10 @@ export const DropMusic = () => {
       yup.lazy((values) => {
         const baseSchema = yup.object({
           file: yup.mixed().required("Media is required"),
-          title: yup.string().required("Title is a required field").max(255),
+          title: yup.string().required("Title is a required field").max(100),
           description: yup
             .string()
-            .max(260)
+            .max(280)
             .required("Description is a required field"),
           editionSize: yup
             .number()
@@ -318,17 +319,12 @@ export const DropMusic = () => {
 
   if (state.status === "success") {
     return (
-      <QRCodeModal
-        dropCreated
+      <DropViewShare
+        title={getValues("title")}
+        description={getValues("description")}
+        onPressCTA={() => setShowPreview(false)}
+        file={getValues("file")}
         contractAddress={state.edition?.contract_address}
-        renderPreviewComponent={({ width, height, borderRadius }) => (
-          <Preview
-            file={getValues("file")}
-            width={width}
-            height={height}
-            style={{ borderRadius }}
-          />
-        )}
       />
     );
   }
@@ -551,7 +547,7 @@ export const DropMusic = () => {
                   }}
                 />
               </Hidden>
-              <View tw="mt-4">
+              {/* <View tw="mt-4">
                 <Controller
                   key="raffle"
                   control={control}
@@ -576,7 +572,7 @@ export const DropMusic = () => {
                     );
                   }}
                 />
-              </View>
+              </View> */}
               <View tw="z-10 mt-4 flex-row">
                 <Controller
                   key="releaseDate"

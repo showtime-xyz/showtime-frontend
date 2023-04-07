@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react";
-import { Linking } from "react-native";
+import { Linking, Platform } from "react-native";
 
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import * as Clipboard from "expo-clipboard";
@@ -25,6 +25,7 @@ import { toast } from "design-system/toast";
 import { QRCode } from "../qr-code";
 import { DropPreview } from "./drop-preview";
 
+const BUTTON_HEIGHT = 40;
 type DropPreviewProps = {
   file: any;
   title: string;
@@ -75,7 +76,7 @@ export const DropViewShare = memo(function DropViewShare({
   }, [qrCodeUrl]);
 
   const showQRCode = () => {
-    setIsShowQRCode(true);
+    setIsShowQRCode(!isShowQRCode);
   };
   const shareButtons = [
     {
@@ -96,12 +97,18 @@ export const DropViewShare = memo(function DropViewShare({
   ];
   return (
     <View tw="flex-1">
-      {!isShowQRCode && (
+      {isShowQRCode ? (
+        <QRCode
+          value={qrCodeUrl.toString()}
+          size={240}
+          tw="web:mt-0 -mt-28 flex-1 items-center justify-center"
+        />
+      ) : (
         <>
           <BottomSheetModalProvider>
             <BottomSheetScrollView
               contentContainerStyle={{
-                alignItems: "center",
+                paddingBottom: Math.max(bottom, 8) + BUTTON_HEIGHT,
               }}
             >
               <DropPreview
@@ -109,13 +116,21 @@ export const DropViewShare = memo(function DropViewShare({
                 ctaCopy="View"
                 buttonProps={{ variant: "primary" }}
                 tw="web:mb-[80px] mt-2"
-                onPressCTA={() => nft && router.push(getNFTSlug(nft))}
+                onPressCTA={() => {
+                  if (!nft) return;
+                  if (Platform.OS !== "web") {
+                    router.pop();
+                    router.push(getNFTSlug(nft));
+                  } else {
+                    router.replace(getNFTSlug(nft));
+                  }
+                }}
               />
             </BottomSheetScrollView>
           </BottomSheetModalProvider>
           <View
             tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black"
-            style={{ paddingBottom: bottom }}
+            style={{ paddingBottom: Math.max(bottom, 8) }}
           >
             {shareButtons.map(({ onPress, Icon, title }) => (
               <Pressable
@@ -125,6 +140,7 @@ export const DropViewShare = memo(function DropViewShare({
                 }}
                 tw="flex-1 flex-col items-center justify-center pb-0 pt-4 sm:flex-row"
                 key={title}
+                style={{ height: BUTTON_HEIGHT }}
               >
                 <Icon height={24} width={24} color={iconColor} />
                 <View tw="h-2 sm:w-2" />
@@ -135,13 +151,6 @@ export const DropViewShare = memo(function DropViewShare({
             ))}
           </View>
         </>
-      )}
-      {isShowQRCode && (
-        <QRCode
-          value={qrCodeUrl.toString()}
-          size={240}
-          tw="web:mt-0 -mt-28 flex-1 items-center justify-center"
-        />
       )}
     </View>
   );

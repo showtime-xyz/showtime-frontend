@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { Platform } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -30,7 +29,6 @@ const FeedList = () => {
   const bottomBarHeight = usePlatformBottomHeight();
   const { isAuthenticated } = useUser();
   const { data } = useFeed();
-  const router = useRouter();
   const bottomPadding = isAuthenticated ? bottomBarHeight : safeAreaBottom;
   return (
     <View tw="flex-1">

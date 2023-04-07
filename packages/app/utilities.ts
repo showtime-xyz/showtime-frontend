@@ -60,7 +60,10 @@ const DEFAULT_PROFILE_PIC =
   "https://cdn.tryshowtime.com/profile_placeholder2.jpg";
 
 export const getProfileImage = (profile?: Profile) => {
-  return profile?.img_url ?? DEFAULT_PROFILE_PIC;
+  if (!profile?.img_url) {
+    return DEFAULT_PROFILE_PIC;
+  }
+  return profile?.img_url;
 };
 
 export const getSortFields = () => {
@@ -628,6 +631,9 @@ export const isProfileIncomplete = (profile?: Profile) => {
 };
 
 export function getFullSizeCover(url: string | undefined) {
+  console.log(url);
+
+  if (!url) return DEFAULT_PROFILE_PIC;
   if (
     url &&
     url.startsWith("https://lh3.googleusercontent.com") &&

@@ -14,6 +14,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { FeedItem } from "app/components/feed-item";
+import { SwipeListHeader } from "app/components/header/swipe-list-header";
 import {
   ItemKeyContext,
   ViewabilityItemsContext,
@@ -105,6 +106,7 @@ const NFTDetail = () => {
   if (nft) {
     return (
       <ProfileTabsNFTProvider tabType={tabType}>
+        {Platform.OS !== "web" && <SwipeListHeader canGoBack withBackground />}
         <FeedItem
           itemHeight={itemHeight}
           bottomPadding={safeAreaBottom}

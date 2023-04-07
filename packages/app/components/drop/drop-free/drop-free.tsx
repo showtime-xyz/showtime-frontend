@@ -106,7 +106,7 @@ export const DropFree = () => {
   const dropValidationSchema = useMemo(() => {
     const validationObject = {
       file: yup.mixed().required("Media is required"),
-      title: yup.string().required("Title is a required field").max(255),
+      title: yup.string().required("Title is a required field").max(100),
       description: yup
         .string()
         .max(280)
@@ -504,7 +504,7 @@ export const DropFree = () => {
                 }}
               />
             </Hidden>
-            <View tw="mt-4">
+            {/* <View tw="mt-4">
               <Controller
                 key="raffle"
                 control={control}
@@ -525,7 +525,7 @@ export const DropFree = () => {
                   );
                 }}
               />
-            </View>
+            </View> */}
             <View>
               <Accordion.Root
                 value={accordionValue}
