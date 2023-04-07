@@ -334,17 +334,13 @@ const ListCardLargeScreen = ({
             />
           </View>
         </View>
-        <View tw="mx-4 w-1/5 self-center">
+        <View tw="mx-4 self-center">
           {showClaimButton &&
           !!nft.creator_airdrop_edition_address &&
           edition ? (
             <View tw="flex-row self-end">
               <ClaimButton edition={edition} size="regular" />
-              <ClaimedShareButton
-                tw="ml-3 w-1/3"
-                edition={edition}
-                size="regular"
-              />
+              <ClaimedShareButton tw="ml-3" edition={edition} size="regular" />
             </View>
           ) : null}
         </View>

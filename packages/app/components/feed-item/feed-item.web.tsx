@@ -124,7 +124,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             </FeedItemTapGesture>
           </View>
           <View
-            tw="absolute bottom-0 w-full bg-gradient-to-t from-black/60"
+            tw="absolute bottom-0 w-full bg-gradient-to-t from-black/80"
             style={{
               paddingBottom: bottomHeight,
             }}

@@ -58,7 +58,11 @@ const Footer = () => {
     >
       <HomeTabBarIcon
         color={color}
-        focused={router.pathname === "/" || router.pathname === "/home"}
+        focused={
+          router.pathname === "/" ||
+          router.pathname === "/home" ||
+          router.pathname === "/foryou"
+        }
       />
       <TrendingTabBarIcon
         color={color}
