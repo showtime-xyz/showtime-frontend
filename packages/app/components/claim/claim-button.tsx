@@ -156,14 +156,20 @@ export const ClaimButton = ({
   const content = useMemo(() => {
     if (isCanViewRaffleResult) {
       return (
-        <Text tw="text-sm font-semibold text-white">Announce your raffle</Text>
+        <>
+          <Text tw="text-sm font-semibold text-white">
+            Announce your raffle
+          </Text>
+        </>
       );
     }
     if (raffleConcludedAt) {
       return (
-        <Text tw="text-center text-sm font-semibold text-white">
-          Your raffle ends {`${raffleConcludedAt}`}
-        </Text>
+        <>
+          <Text tw="text-center text-sm font-semibold text-white">
+            Your raffle ends {`${raffleConcludedAt}`}
+          </Text>
+        </>
       );
     }
 
@@ -207,7 +213,7 @@ export const ClaimButton = ({
           />
           <Text
             tw="ml-1 text-sm font-semibold text-white dark:text-black"
-            style={{ color }}
+            style={{ color, lineHeight: 20 }}
           >
             {isAuthenticated ? "Save to Collect" : "Save on Spotify"}
           </Text>
