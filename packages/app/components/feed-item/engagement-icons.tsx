@@ -33,6 +33,7 @@ export const EngagementIcons = memo<EngagementIconsProps>(
       >
         <View style={{ height: bottomHeight }} pointerEvents="none" />
         <LinearGradient
+          pointerEvents="none"
           style={{
             overflow: "hidden",
             width: width + 200,
