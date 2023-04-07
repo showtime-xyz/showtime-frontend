@@ -12,7 +12,12 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import { linkifyDescription } from "app/lib/linkify";
 import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
-import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
+import {
+  cleanUserTextInput,
+  getCreatorUsernameFromNFT,
+  limitLineBreaks,
+  removeTags,
+} from "app/utilities";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { RaffleTooltip } from "./raffle-tooltip";
@@ -27,7 +32,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
   const description = useMemo(
     () =>
       linkifyDescription(
-        removeTags(nft?.token_description),
+        limitLineBreaks(cleanUserTextInput(removeTags(nft?.token_description))),
         "text-13 font-bold text-gray-100"
       ),
     [nft?.token_description]
