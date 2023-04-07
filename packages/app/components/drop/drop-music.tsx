@@ -119,7 +119,7 @@ export const DropMusic = () => {
       yup.lazy((values) => {
         const baseSchema = yup.object({
           file: yup.mixed().required("Media is required"),
-          title: yup.string().required("Title is a required field").max(100),
+          title: yup.string().required("Title is a required field").max(50),
           description: yup
             .string()
             .max(280)
