@@ -80,7 +80,7 @@ export const DropEvent = () => {
     () =>
       yup.object({
         file: yup.mixed().required("Media is required"),
-        title: yup.string().required("Title is a required field").max(255),
+        title: yup.string().required("Title is a required field").max(50),
         description: yup
           .string()
           .max(280)
