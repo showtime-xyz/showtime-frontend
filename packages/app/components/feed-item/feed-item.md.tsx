@@ -47,9 +47,11 @@ import {
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useFullscreen } from "app/hooks/use-full-screen";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { linkifyDescription } from "app/lib/linkify";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useMuted } from "app/providers/mute-provider";
 import { NFT } from "app/types";
+import { removeTags } from "app/utilities";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
@@ -100,6 +102,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const { commentsCount } = useComments(nft.nft_id);
   const headerHeight = useHeaderHeight();
   const [showFullScreen, setShowFullScreen] = useState(false);
+  const description = useMemo(
+    () => linkifyDescription(removeTags(nft?.token_description)),
+    [nft?.token_description]
+  );
 
   const disablePrevButton = activeIndex === 0;
   const disableNextButton = swiper
@@ -321,15 +327,14 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </View>
             <LikedBy nft={nft} tw="mt-4" />
             <View tw="my-4 mr-4 flex-row items-center">
-              <RaffleTooltip edition={edition} />
-              <Text tw="text-lg text-black dark:text-white md:text-2xl">
+              <RaffleTooltip edition={edition} tw="mr-1" />
+              <Text tw="text-xl font-bold text-black dark:text-white">
                 {nft.token_name}
               </Text>
             </View>
-            <Description
-              descriptionText={nft?.token_description}
-              tw="max-h-[30vh] overflow-auto py-4"
-            />
+            <Text tw="text-sm text-gray-600 dark:text-gray-200">
+              {description}
+            </Text>
 
             <View tw="flex-row items-center justify-between">
               <Creator nft={nft} />

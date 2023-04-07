@@ -15,7 +15,6 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import type { NFT } from "app/types";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NFTDropdown } from "../nft-dropdown";
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
@@ -136,9 +135,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               setDetailHeight(height);
             }}
           >
-            <View tw="z-9 absolute -top-[40px] left-2.5">
-              <ContentTypeTooltip edition={edition} />
-            </View>
             <NFTDetails
               edition={edition}
               nft={nft}
