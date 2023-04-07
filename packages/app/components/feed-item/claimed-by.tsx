@@ -13,8 +13,14 @@ type NFTDetailsProps = {
   nft: NFT | undefined;
   claimersList: NFT["multiple_owners_list"] | undefined;
   tw?: string;
+  avatarSize?: number;
 };
-export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
+export const ClaimedBy = ({
+  nft,
+  claimersList,
+  avatarSize = 20,
+  tw = "",
+}: NFTDetailsProps) => {
   const router = useRouter();
   const slicedClaimersList = useMemo(
     () => claimersList?.slice(1, 5),
@@ -36,7 +42,7 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
                 username={item?.username || item?.wallet_address}
                 url={item?.img_url}
                 tw="rounded-full border border-gray-300"
-                size={20}
+                size={avatarSize}
                 alt="Claimed by Avatar"
               />
             </View>
@@ -90,16 +96,21 @@ export const ClaimedBy = ({ nft, claimersList, tw = "" }: NFTDetailsProps) => {
 
 export const ClaimedByReduced = ({
   nft,
-  claimersList,
+  claimersList = [],
   tw = "",
   size = "small",
 }: NFTDetailsProps & { size?: "small" | "regular" }) => {
   const router = useRouter();
-  const slicedClaimersList = useMemo(
-    () => claimersList?.slice(1, 5),
-    [claimersList]
-  );
+  const slicedClaimersList = useMemo(() => {
+    if (!claimersList) return [];
+    return claimersList?.length > 2 ? claimersList?.slice(1, 5) : claimersList;
+  }, [claimersList]);
 
+  const isShowAndSymbol =
+    claimersList?.length &&
+    claimersList?.length - slicedClaimersList?.length > 0;
+
+  const remainingClaimers = claimersList?.length - slicedClaimersList?.length;
   return (
     <View
       tw={[
@@ -122,41 +133,38 @@ export const ClaimedByReduced = ({
             </View>
           );
         })}
-        <Text tw="flex-1 text-sm text-gray-900 dark:text-white">
-          {claimersList?.length && claimersList?.length >= 4 && (
-            <>
-              {` & `}
-              <Text
-                onPress={() => {
-                  const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
-                  router.push(
-                    Platform.select({
-                      native: as,
-                      web: {
-                        pathname: router.pathname,
-                        query: {
-                          ...router.query,
-                          contractAddress: nft?.contract_address,
-                          tokenId: nft?.token_id,
-                          chainName: nft?.chain_name,
-                          collectorsModal: true,
-                        },
-                      } as any,
-                    }),
-                    Platform.select({
-                      native: as,
-                      web: router.asPath,
-                    }),
-                    { shallow: true }
-                  );
-                }}
-                tw="font-bold"
-              >
-                {`${claimersList?.length - 4} collected`}
-              </Text>
-            </>
-          )}
-          {` collected`}
+        <Text tw="ml-1 flex-1 text-sm text-gray-900 dark:text-white">
+          <>
+            {isShowAndSymbol ? ` & ` : ""}
+            <Text
+              onPress={() => {
+                const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
+                router.push(
+                  Platform.select({
+                    native: as,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        contractAddress: nft?.contract_address,
+                        tokenId: nft?.token_id,
+                        chainName: nft?.chain_name,
+                        collectorsModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: as,
+                    web: router.asPath,
+                  }),
+                  { shallow: true }
+                );
+              }}
+              tw="font-bold"
+            >
+              {`${remainingClaimers > 0 ? remainingClaimers : ""} collected`}
+            </Text>
+          </>
         </Text>
       </>
     </View>
