@@ -8,11 +8,16 @@ import {
   GradientButton as BaseGradientButton,
 } from "./button";
 import { CONTAINER_BACKGROUND_MAPPER, ICON_COLOR_MAPPER } from "./constants";
-import type { ButtonProps } from "./types";
+import type { BaseButtonProps, ButtonProps } from "./types";
 
 export type { ButtonVariant, ButtonProps } from "./types";
 
-export function Button({ variant = "primary", ...props }: ButtonProps) {
+export function Button({ variant = "primary", theme, ...rest }: ButtonProps) {
+  const isDarkMode = useIsDarkMode();
+  const isDark = theme === "dark" || (theme === "light" ? false : isDarkMode);
+
+  const props = useMemo(() => ({ isDark, ...rest }), [isDark, rest]);
+
   switch (variant) {
     case "primary":
       return <PrimaryButton {...props} />;
@@ -35,12 +40,11 @@ export function Button({ variant = "primary", ...props }: ButtonProps) {
   }
 }
 
-export function PrimaryButton(props: ButtonProps) {
-  const isDark = useIsDarkMode();
-
+export function PrimaryButton({ isDark, ...rest }: BaseButtonProps) {
   return (
     <BaseButton
-      {...props}
+      {...rest}
+      isDark={isDark}
       labelStyle={{ color: isDark ? "#000" : "#FFF" }}
       iconColor={ICON_COLOR_MAPPER.primary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.primary}
@@ -48,12 +52,11 @@ export function PrimaryButton(props: ButtonProps) {
   );
 }
 
-export function SecondaryButton(props: ButtonProps) {
-  const isDark = useIsDarkMode();
-
+export function SecondaryButton({ isDark, ...rest }: BaseButtonProps) {
   return (
     <BaseButton
-      {...props}
+      {...rest}
+      isDark={isDark}
       labelStyle={{ color: isDark ? "#FFF" : colors.gray[900] }}
       iconColor={ICON_COLOR_MAPPER.secondary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.secondary}
@@ -61,12 +64,11 @@ export function SecondaryButton(props: ButtonProps) {
   );
 }
 
-export function TertiaryButton(props: ButtonProps) {
-  const isDark = useIsDarkMode();
-
+export function TertiaryButton({ isDark, ...rest }: BaseButtonProps) {
   return (
     <BaseButton
-      {...props}
+      {...rest}
+      isDark={isDark}
       labelStyle={{ color: isDark ? "#FFF" : colors.gray[900] }}
       iconColor={ICON_COLOR_MAPPER.tertiary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.tertiary}
@@ -74,7 +76,7 @@ export function TertiaryButton(props: ButtonProps) {
   );
 }
 
-export function DangerButton(props: ButtonProps) {
+export function DangerButton(props: BaseButtonProps) {
   return (
     <BaseButton
       {...props}
@@ -85,9 +87,7 @@ export function DangerButton(props: ButtonProps) {
   );
 }
 
-export function TextButton({ accentColor, ...props }: ButtonProps) {
-  const isDark = useIsDarkMode();
-
+export function TextButton({ accentColor, isDark, ...props }: BaseButtonProps) {
   const labelStyle = useMemo(
     () => ({
       color: accentColor
@@ -116,6 +116,7 @@ export function TextButton({ accentColor, ...props }: ButtonProps) {
   return (
     <BaseButton
       {...props}
+      isDark={isDark}
       labelStyle={labelStyle}
       iconColor={iconColor}
       backgroundColors={undefined}
@@ -123,12 +124,11 @@ export function TextButton({ accentColor, ...props }: ButtonProps) {
   );
 }
 
-export function OutlinedButton({ ...props }: ButtonProps) {
-  const isDark = useIsDarkMode();
-
+export function OutlinedButton({ isDark, ...rest }: BaseButtonProps) {
   return (
     <BaseButton
-      {...props}
+      {...rest}
+      isDark={isDark}
       labelStyle={{ color: isDark ? "#FFF" : "#000" }}
       iconColor={ICON_COLOR_MAPPER.outlined}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.outlined}

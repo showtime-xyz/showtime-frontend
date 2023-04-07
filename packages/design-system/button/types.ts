@@ -24,6 +24,11 @@ export type ButtonProps = {
    * @default primary
    */
   variant?: ButtonVariant;
+  /**
+   * Defines the button theme.
+   * @default undefined
+   */
+  theme?: "light" | "dark";
   children?: React.ReactNode | string;
 } & PressableProps &
   Partial<
@@ -37,7 +42,6 @@ export type ButtonProps = {
       | "backgroundColors"
     >
   >;
-
 export type BaseButtonProps = {
   /**
    * Defines the tailwind class names to
@@ -61,8 +65,8 @@ export type BaseButtonProps = {
    * Defines the background state colors.
    */
   backgroundColors?: {
-    default: string;
-    pressed: string;
+    default: string[];
+    pressed: string[];
   };
   /**
    * Defines the background state colors.
@@ -90,4 +94,5 @@ export type BaseButtonProps = {
    */
   size?: ButtonSize;
   children?: React.ReactNode | string;
+  isDark?: boolean;
 } & PressableProps;
