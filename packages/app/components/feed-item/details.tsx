@@ -84,19 +84,14 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
               <ClaimButton
                 tw="flex-1"
                 edition={edition}
-                color="#000"
                 size="regular"
-                variant="base"
-                labelTW="text-black md:text-white dark:text-black"
-                backgroundColors={{
-                  default: "bg-white md:bg-gray-900 dark:bg-white",
-                  pressed: "bg-gray-200 md:bg-gray-700 dark:bg-gray-200",
-                }}
+                theme="dark"
               />
               <ClaimedShareButton
                 tw="ml-3 w-1/3"
                 edition={edition}
                 size="regular"
+                theme="dark"
               />
             </View>
           )}

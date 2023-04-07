@@ -26,7 +26,6 @@ type ClaimButtonProps = ButtonProps & {
   edition: CreatorEditionResponse;
   tw?: string;
   style?: StyleProp<ViewStyle>;
-  color?: string;
 };
 
 export enum ClaimStatus {
@@ -56,10 +55,12 @@ export const ClaimButton = ({
   size = "small",
   tw = "",
   style,
-  color,
+  theme,
   ...rest
 }: ClaimButtonProps) => {
-  const isDark = useIsDarkMode();
+  const isDarkMode = useIsDarkMode();
+  const isDark = theme === "dark" || (theme === "light" ? false : isDarkMode);
+
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const redirectToRaffleResult = useRedirectToRaffleResult();
   const {
@@ -198,22 +199,20 @@ export const ClaimButton = ({
       return (
         <Text tw="text-sm font-bold">
           Collecting
-          <ThreeDotsAnimation
-            color={color ?? isDark ? colors.black : colors.white}
-          />
+          <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
         </Text>
       );
     } else if (edition?.gating_type === "spotify_save") {
       return (
         <>
           <Spotify
-            color={color ?? isDark ? colors.black : colors.white}
+            color={isDark ? colors.black : colors.white}
             width={20}
             height={20}
           />
           <Text
-            tw="ml-1 text-sm font-semibold text-white dark:text-black"
-            style={{ color, lineHeight: 20 }}
+            tw="ml-1 text-sm font-semibold"
+            style={{ color: isDark ? colors.black : colors.white }}
           >
             {isAuthenticated ? "Save to Collect" : "Save on Spotify"}
           </Text>
@@ -223,13 +222,13 @@ export const ClaimButton = ({
       return (
         <>
           <Spotify
-            color={color ?? isDark ? colors.black : colors.white}
+            color={isDark ? colors.black : colors.white}
             width={20}
             height={20}
           />
           <Text
-            tw="ml-1 text-sm font-semibold text-white dark:text-black"
-            style={{ color, lineHeight: 20 }}
+            tw="ml-1 text-sm font-semibold leading-5"
+            style={{ color: isDark ? colors.black : colors.white }}
           >
             {isAuthenticated ? "Pre-Save to Collect" : "Pre-Save on Spotify"}
           </Text>
@@ -239,7 +238,6 @@ export const ClaimButton = ({
 
     return "Collect";
   }, [
-    color,
     edition?.gating_type,
     isAuthenticated,
     isCanViewRaffleResult,
@@ -276,6 +274,7 @@ export const ClaimButton = ({
       style={[backgroundColor, style]}
       size={size}
       tw={[opacityTw, tw]}
+      theme={theme}
       {...rest}
     >
       {content}
