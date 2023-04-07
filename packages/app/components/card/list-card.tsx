@@ -218,7 +218,9 @@ const ListCardSmallScreen = ({
                 <View tw="mt-3.5 flex-row">
                   <ClaimButton edition={edition} size="small" />
                 </View>
-              ) : null}
+              ) : (
+                <View tw="mt-3.5 h-8" />
+              )}
             </View>
           </View>
         </View>
@@ -307,10 +309,12 @@ const ListCardLargeScreen = ({
               <Creator nft={nft} shouldShowDateCreated={false} />
               <RouteComponent href={href!} onPress={handleOnPress}>
                 <View tw="inline flex-grow-0">
-                  <Title
-                    tw="inline-flex flex-grow-0 pt-0"
-                    title={nft.token_name}
-                  />
+                  <Text
+                    tw="inline-block overflow-ellipsis whitespace-nowrap text-lg font-bold text-black dark:text-white"
+                    numberOfLines={1}
+                  >
+                    {nft.token_name}
+                  </Text>
                 </View>
               </RouteComponent>
               <View tw="mt-2 min-h-fit">
@@ -334,17 +338,21 @@ const ListCardLargeScreen = ({
             />
           </View>
         </View>
-        <View tw="mx-4 self-center">
+        <View tw="ml-8 mr-4 min-w-[140px] self-center lg:min-w-[200px]">
           {showClaimButton &&
           !!nft.creator_airdrop_edition_address &&
           edition ? (
             <View tw="flex-row self-end">
               <ClaimButton edition={edition} size="regular" />
-              <ClaimedShareButton tw="ml-3" edition={edition} size="regular" />
+              <ClaimedShareButton
+                tw="ml-3 hidden lg:flex"
+                edition={edition}
+                size="regular"
+              />
             </View>
           ) : null}
         </View>
-        <View tw="mt-4 lg:mt-0 lg:self-center">
+        <View tw="self-center">
           <ErrorBoundary renderFallback={() => null}>
             <Suspense fallback={<Skeleton width={24} height={24} />}>
               <NFTDropdown

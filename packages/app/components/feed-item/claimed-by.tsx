@@ -111,6 +111,7 @@ export const ClaimedByReduced = ({
     claimersList?.length - slicedClaimersList?.length > 0;
 
   const remainingClaimers = claimersList?.length - slicedClaimersList?.length;
+  if (!claimersList || claimersList?.length <= 1) return null;
   return (
     <View
       tw={[
@@ -133,9 +134,9 @@ export const ClaimedByReduced = ({
             </View>
           );
         })}
-        <Text tw="ml-1 flex-1 text-sm text-gray-900 dark:text-white">
+        <Text tw="ml-1.5 flex-1 text-sm text-gray-900 dark:text-white">
           <>
-            {isShowAndSymbol ? ` & ` : ""}
+            {isShowAndSymbol ? `& ` : ""}
             <Text
               onPress={() => {
                 const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
