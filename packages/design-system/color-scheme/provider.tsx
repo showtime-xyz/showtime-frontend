@@ -3,11 +3,11 @@ import {
   useColorScheme as useDeviceColorScheme,
   Appearance,
   Platform,
+  StatusBar,
 } from "react-native";
 import type { ColorSchemeName } from "react-native";
 
 import * as NavigationBar from "expo-navigation-bar";
-import { setStatusBarStyle } from "expo-status-bar";
 import * as SystemUI from "expo-system-ui";
 import { useColorScheme as useTailwindColorScheme } from "nativewind";
 
@@ -26,15 +26,13 @@ export const toggleColorScheme = (isDark?: boolean) => {
       NavigationBar.setBackgroundColorAsync("#000");
       NavigationBar.setButtonStyleAsync("light");
     }
-    SystemUI.setBackgroundColorAsync("black");
-    setStatusBarStyle("light");
+    StatusBar.setBarStyle("light-content", true);
   } else {
     if (Platform.OS === "android") {
       NavigationBar.setBackgroundColorAsync("#FFF");
       NavigationBar.setButtonStyleAsync("dark");
     }
-    SystemUI.setBackgroundColorAsync("white");
-    setStatusBarStyle("dark");
+    StatusBar.setBarStyle("dark-content", true);
   }
 };
 
@@ -56,9 +54,11 @@ export function ColorSchemeProvider({
       const isDark = newColorScheme === "dark";
       if (isDark) {
         toggleColorScheme(isDark);
+        SystemUI.setBackgroundColorAsync("black");
         nativewind.setColorScheme("dark");
       } else {
         toggleColorScheme();
+        SystemUI.setBackgroundColorAsync("white");
         nativewind.setColorScheme("light");
       }
     },

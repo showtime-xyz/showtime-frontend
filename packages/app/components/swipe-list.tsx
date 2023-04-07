@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useEffect } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
 import { toggleColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -10,7 +10,10 @@ import { FeedItem } from "app/components/feed-item";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useNavigation, useScrollToTop } from "app/lib/react-navigation/native";
+import {
+  useFocusEffect,
+  useScrollToTop,
+} from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
 const { height: screenHeight } = Dimensions.get("screen");
@@ -37,7 +40,6 @@ export const SwipeList = ({
   const listRef = useRef<any>(null);
   const isDark = useIsDarkMode();
   const headerHeight = useHeaderHeight();
-  const navigation = useNavigation();
   useScrollToTop(listRef);
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
   const { height: windowHeight } = useWindowDimensions();
@@ -74,25 +76,24 @@ export const SwipeList = ({
     }),
     []
   );
-  useEffect(() => {
-    const removeFocusListense = navigation.addListener("focus", () => {
-      toggleColorScheme(true);
-    });
-    const removeBlurListense = navigation.addListener("blur", () => {
-      toggleColorScheme(isDark);
-    });
-    return () => {
-      removeFocusListense();
-      removeBlurListense();
-    };
-  }, [isDark, navigation]);
+  useFocusEffect(
+    useCallback(() => {
+      // The reason for adding setTimeout is that the profile screen has a useFocusEffect hook, which will be affected by this hook.
+      setTimeout(() => {
+        toggleColorScheme(true);
+      }, 100);
+      return () => {
+        toggleColorScheme(isDark);
+      };
+    }, [isDark])
+  );
+
   const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
 
   if (data.length === 0) return null;
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      {/* <Header disableBlur canGoBack={false} color="#FFF" /> */}
       <ViewabilityInfiniteScrollList
         data={data}
         onEndReached={fetchMore}
