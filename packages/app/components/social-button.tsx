@@ -29,7 +29,7 @@ export function SocialButton({
         {children}
         {vertical && <View tw="h-1" />}
         {Boolean(text) && (
-          <Text tw="text-sm font-semibold text-white dark:text-white md:text-gray-900 dark:md:text-gray-400">
+          <Text tw="text-xs font-semibold text-white dark:text-white md:text-gray-900 dark:md:text-gray-400">
             {text}
           </Text>
         )}

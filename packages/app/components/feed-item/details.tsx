@@ -15,7 +15,6 @@ import type { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
-import { EngagementIcons } from "./engagement-icons";
 import { RaffleTooltip } from "./raffle-tooltip";
 
 type NFTDetailsProps = {
@@ -35,7 +34,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
   );
 
   return (
-    <View tw="px-4 pb-2 pt-6">
+    <View tw="px-4 pb-4 pr-20 pt-6" pointerEvents="box-none">
       <View tw="flex flex-row justify-between">
         <View tw="flex-1 flex-col justify-end">
           <View>
@@ -83,7 +82,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             />
           </View>
 
-          {edition && (
+          {edition ? (
             <View tw="mt-4 flex-row">
               <ClaimButton
                 tw="flex-1"
@@ -98,9 +97,10 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 theme="dark"
               />
             </View>
+          ) : (
+            <View tw="mt-4 h-12" />
           )}
         </View>
-        <EngagementIcons nft={nft} />
       </View>
     </View>
   );
