@@ -14,6 +14,7 @@ import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
+import { ContentTypeTooltip } from "../content-type-tooltip";
 import { EngagementIcons } from "./engagement-icons";
 import { RaffleTooltip } from "./raffle-tooltip";
 
@@ -38,6 +39,9 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
       <View tw="flex flex-row justify-between">
         <View tw="flex-1 flex-col justify-end">
           <View>
+            <View tw="z-9 absolute -top-6">
+              <ContentTypeTooltip edition={edition} theme="dark" />
+            </View>
             <View tw="mb-3 flex-row justify-between">
               <RaffleTooltip edition={edition} theme="dark" />
               <View />
@@ -52,7 +56,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             <Text>
               <TextLink
                 href={`/@${nft.creator_username ?? nft.creator_address}`}
-                tw="web:inline flex text-sm font-semibold text-white dark:text-white md:text-gray-900"
+                tw="web:inline flex text-xs font-semibold text-white dark:text-white md:text-gray-900"
               >
                 {getCreatorUsernameFromNFT(nft)}
               </TextLink>

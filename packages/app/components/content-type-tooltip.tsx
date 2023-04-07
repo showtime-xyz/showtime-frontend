@@ -74,7 +74,7 @@ export const ContentTypeTooltip = ({
               tw="rounded bg-black/60"
               style={StyleSheet.absoluteFillObject}
             />
-            <View tw="flex-row items-center">
+            <View tw="flex-row items-center py-0.5 pl-0.5">
               {/* @ts-expect-error className not supported */}
               <Icon color="white" width={20} height={20} className="z-10" />
               {edition.presave_release_date ? (

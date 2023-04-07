@@ -24,7 +24,6 @@ import Animated, {
   useSharedValue,
   withTiming,
   useDerivedValue,
-  Easing,
 } from "react-native-reanimated";
 
 import { Image } from "@showtime-xyz/universal.image";
@@ -251,9 +250,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               </View>
             ) : null}
 
-            <View tw="z-9 absolute -top-[30px] left-2.5">
-              <ContentTypeTooltip edition={edition} theme="dark" />
-            </View>
             <LinearGradient
               style={{
                 paddingBottom: bottomPadding,
