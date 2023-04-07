@@ -16,6 +16,7 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import type { NFT } from "app/types";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
+import { NFTDropdown } from "../nft-dropdown";
 import { NFTDetails } from "./details";
 import { FeedItemMD } from "./feed-item.md";
 import { NSFWGate } from "./nsfw-gate";
@@ -85,7 +86,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }
 
   return (
-    <>
+    <View tw="bg-black">
       <LikeContextProvider nft={nft}>
         {nft?.mime_type?.startsWith("video") ? (
           <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
@@ -144,10 +145,22 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               detail={detailData?.data?.item}
             />
           </View>
+          <View
+            tw="absolute right-4 z-50"
+            style={{
+              top: 8,
+            }}
+          >
+            <NFTDropdown
+              nft={detailData?.data?.item ?? nft}
+              edition={edition}
+              tw="rounded-full bg-black/60 px-1 py-1"
+            />
+          </View>
         </View>
       </LikeContextProvider>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
-    </>
+    </View>
   );
 });
 FeedItem.displayName = "FeedItem";

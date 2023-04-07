@@ -60,7 +60,10 @@ export const SwipeListHeader = memo<SwipeListHeaderProps>(
             onPress={() => {
               navigateToLogin();
             }}
-            tw="absolute right-4 z-10 flex h-8 items-center justify-center rounded-full bg-white px-4 md:hidden"
+            tw={[
+              "absolute right-4 z-10 flex h-8 items-center justify-center rounded-full bg-white px-4 md:hidden",
+              tw,
+            ]}
             style={[
               {
                 marginTop: platformTop,

@@ -184,3 +184,12 @@ export const HIDE_LINK_FOOTER_ROUTER_LIST = [
   "/list",
   "/profile/[username]/[dropSlug]",
 ];
+export const SWIPE_LIST_SCREENS = [
+  "/",
+  "/foryou",
+  "/profile/[username]/[dropSlug]",
+  "/nft/[chainName]/[contractAddress]/[tokenId]",
+  "/list",
+];
+
+export const DARK_THEME_PATHNAMES = ["/", "/foryou"];

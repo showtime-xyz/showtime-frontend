@@ -6,7 +6,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { useUser } from "app/hooks/use-user";
-import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
+import {
+  HIDE_LINK_FOOTER_ROUTER_LIST,
+  SWIPE_LIST_SCREENS,
+} from "app/lib/constants";
 import {
   CreateTabBarIcon,
   HomeTabBarIcon,
@@ -18,17 +21,15 @@ import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { WebFooter } from "./links-footer.web";
 
-const DARK_THEME_PATHNAMES = ["/", "/foryou"];
-
 const Footer = () => {
   const router = useRouter();
   const isDark = useIsDarkMode();
-  const isDarkThemePage = DARK_THEME_PATHNAMES.includes(router.pathname);
+  const isDarkThemePage = SWIPE_LIST_SCREENS.includes(router.pathname);
   const color = isDark ? "#fff" : isDarkThemePage ? "#fff" : "#000";
   const buttonColor = isDark ? "#000" : isDarkThemePage ? "#000" : "#fff";
   const buttonBackgroundColor = isDark
-    ? "#000"
-    : DARK_THEME_PATHNAMES.includes(router.pathname)
+    ? "#fff"
+    : SWIPE_LIST_SCREENS.includes(router.pathname)
     ? "#fff"
     : "#000";
 

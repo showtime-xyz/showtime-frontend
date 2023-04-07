@@ -274,12 +274,10 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           <View
             tw="absolute right-4 z-50"
             style={{
-              top:
-                top +
-                Platform.select({
-                  android: top + 10,
-                  default: top + 6,
-                }),
+              top: Platform.select({
+                android: top + 10,
+                default: top + 6,
+              }),
             }}
           >
             <NFTDropdown

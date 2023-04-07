@@ -134,7 +134,7 @@ export const CreateTabBarIcon = ({
     <TabBarIcon onPress={redirectToCreateDrop}>
       <View
         tw={[
-          "h-12 w-12 items-center justify-center rounded-full",
+          "web:h-10 web:w-10 h-12 w-12 items-center justify-center rounded-full",
           "bg-black dark:bg-white",
           tw,
         ]}
@@ -201,9 +201,7 @@ export const ProfileTabBarIcon = () => {
 
   return (
     <TabBarIcon tab={`/@${user?.data?.profile?.username ?? userAddress}`}>
-      <View tw="h-8 w-8 items-center justify-center rounded-full">
-        <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
-      </View>
+      <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
     </TabBarIcon>
   );
 };

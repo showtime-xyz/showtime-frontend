@@ -45,6 +45,7 @@ const SearchInHeader = () => {
     },
     [setIsOpen]
   );
+  if (Platform.OS !== "web") return null;
   return (
     <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger />
@@ -126,17 +127,13 @@ const SearchInHeader = () => {
     </Popover.Root>
   );
 };
-const HeaderCenter = ({
-  isDark,
-  isMdWidth,
-}: {
-  isDark?: boolean;
-  isMdWidth?: boolean;
-}) => {
+const HeaderCenter = ({ isDark }: { isDark?: boolean }) => {
   return (
     <View tw="flex flex-row">
       <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
-      {isMdWidth ? <SearchInHeader /> : null}
+      <View tw="hidden md:flex">
+        <SearchInHeader />
+      </View>
     </View>
   );
 };

@@ -12,11 +12,7 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import { linkifyDescription } from "app/lib/linkify";
 import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
-import {
-  getCreatorUsernameFromNFT,
-  getFormatDistanceToNowStrict,
-  removeTags,
-} from "app/utilities";
+import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
 import { EngagementIcons } from "./engagement-icons";
 import { RaffleTooltip } from "./raffle-tooltip";
