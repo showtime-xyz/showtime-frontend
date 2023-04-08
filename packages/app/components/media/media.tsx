@@ -19,7 +19,7 @@ import { getMediaUrl } from "app/utilities";
 import { Props as ModelProps } from "design-system/model";
 import { Video } from "design-system/video";
 
-import { ContentTypeIcon, ContentTypeTooltip } from "../content-type-tooltip";
+import { ContentTypeIcon } from "../content-type-tooltip";
 
 const Dynamic3dModel = dynamic<ModelProps>(
   () => import("design-system/model").then((mod) => mod.Model),
