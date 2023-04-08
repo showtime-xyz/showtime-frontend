@@ -9,6 +9,7 @@ import {
 import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Pressable,
   Props as PressableScaleProps,
@@ -18,7 +19,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
-import { Title } from "app/components/card/rows/title";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -105,6 +105,8 @@ const ListCardSmallScreen = ({
   href = "",
   onPress,
 }: Props) => {
+  const isDark = useIsDarkMode();
+
   const handleOnPress = useCallback(() => {
     if (isWeb) return null;
     onPress?.();
@@ -156,6 +158,7 @@ const ListCardSmallScreen = ({
                   nft={detailData?.data.item ?? nft}
                   edition={edition}
                   iconSize={18}
+                  iconColor={isDark ? "white" : "black"}
                 />
               </Suspense>
             </ErrorBoundary>
