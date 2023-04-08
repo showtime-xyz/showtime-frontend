@@ -19,7 +19,7 @@ import { getMediaUrl } from "app/utilities";
 import { Props as ModelProps } from "design-system/model";
 import { Video } from "design-system/video";
 
-import { ContentTypeIcon, ContentTypeTooltip } from "../content-type-tooltip";
+import { ContentTypeIcon } from "../content-type-tooltip";
 
 const Dynamic3dModel = dynamic<ModelProps>(
   () => import("design-system/model").then((mod) => mod.Model),
@@ -83,9 +83,6 @@ function MediaImplementation({
           <ContentTypeIcon edition={edition} />
         </View>
       )}
-      <View tw="z-9 absolute bottom-2 left-2.5">
-        <ContentTypeTooltip edition={edition} theme="dark" />
-      </View>
       {item?.mime_type?.startsWith("image") &&
       item?.mime_type !== "image/gif" ? (
         <PinchToZoom
