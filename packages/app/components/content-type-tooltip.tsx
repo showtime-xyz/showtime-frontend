@@ -68,10 +68,11 @@ export const ContentTypeTooltip = ({
     const Icon = contentGatingType[edition?.gating_type].icon;
     return (
       <TextTooltip
+        side="bottom"
         triggerElement={
           <>
             <View
-              tw="rounded bg-black/60"
+              tw="rounded-sm bg-black/60"
               style={StyleSheet.absoluteFillObject}
             />
             <View tw="flex-row items-center py-0.5 pl-0.5">
@@ -105,7 +106,10 @@ export const ContentTypeIcon = ({ edition }: ContentTypeTooltipProps) => {
     const Icon = contentGatingType[edition?.gating_type]?.icon;
     return (
       <View>
-        <View tw="rounded bg-black/60" style={StyleSheet.absoluteFillObject} />
+        <View
+          tw="rounded-sm bg-black/60"
+          style={StyleSheet.absoluteFillObject}
+        />
         <View tw="z-10">
           <Icon color="#fff" width={20} height={20} />
         </View>
