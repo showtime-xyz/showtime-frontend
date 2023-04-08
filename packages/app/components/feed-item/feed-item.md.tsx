@@ -24,7 +24,6 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
 import { Social } from "app/components/card/social";

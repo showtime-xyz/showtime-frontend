@@ -223,11 +223,13 @@ const CardLargeScreen = ({
               </View>
             ) : null}
           </View>
-          <ClaimedBy
-            claimersList={detailData?.data.item?.multiple_owners_list}
-            nft={nft}
-            tw="px-4"
-          />
+          <View tw="h-5">
+            <ClaimedBy
+              claimersList={detailData?.data.item?.multiple_owners_list}
+              nft={nft}
+              tw="px-4"
+            />
+          </View>
         </View>
       </View>
     </LikeContextProvider>
