@@ -324,12 +324,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           }}
         >
           <View tw="px-4">
-            <View tw="pt-4">
+            <View tw="flex-row items-center justify-between pt-4">
               <Social nft={nft} />
+              <RaffleTooltip edition={edition} tw="mr-1" />
             </View>
             <LikedBy nft={nft} tw="mt-4" />
             <View tw="my-4 mr-4 flex-row items-center">
-              <RaffleTooltip edition={edition} tw="mr-1" />
               <Text tw="text-xl font-bold text-black dark:text-white">
                 {nft.token_name}
               </Text>

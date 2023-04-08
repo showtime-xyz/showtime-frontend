@@ -1,6 +1,4 @@
-import { Platform } from "react-native";
-
-import { Raffle, RaffleHorizontal } from "@showtime-xyz/universal.icon";
+import { RaffleHorizontal } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -23,15 +21,16 @@ export const RaffleTooltip = ({
   if (!edition?.raffles || !edition?.raffles?.length) return null;
   return (
     <TextTooltip
+      side="bottom"
       triggerElement={
         <View
           tw={[
-            "h-5 flex-row items-center justify-center self-start rounded-sm bg-black/50 px-1",
+            "h-6 flex-row items-center justify-center self-start rounded-sm bg-black/60 px-1",
             tw,
           ]}
         >
           <RaffleHorizontal color={"#FFC633"} width={20} height={20} />
-          <Text tw="ml-1 text-xs text-white">Raffle</Text>
+          <Text tw="ml-1 text-xs font-semibold text-white">Raffle</Text>
         </View>
       }
       text="Collect to enter a raffle"

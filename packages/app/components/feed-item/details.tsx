@@ -43,16 +43,16 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
       <View tw="flex flex-row justify-between">
         <View tw="flex-1 flex-col justify-end">
           <View>
-            <View tw="z-9 absolute -top-6">
-              <ContentTypeTooltip edition={edition} theme="dark" />
-            </View>
-            <View tw="mb-3 flex-row justify-between">
+            <View tw="-mt-5 mb-3 h-6 flex-row justify-start space-x-2">
               <RaffleTooltip edition={edition} theme="dark" />
-              <View />
+              <ContentTypeTooltip edition={edition} theme="dark" />
             </View>
 
             <View tw="mb-3 flex flex-row items-center justify-between">
-              <Text tw="flex-1 text-sm font-bold text-white dark:text-white md:text-gray-900">
+              <Text
+                tw="flex-1 text-sm font-bold text-white dark:text-white md:text-gray-900"
+                numberOfLines={2}
+              >
                 {nft.token_name}
               </Text>
             </View>
@@ -80,11 +80,12 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 {description}
               </Text>
             </Text>
-            <ClaimedBy
-              claimersList={detail?.multiple_owners_list}
-              nft={nft}
-              tw="mt-3"
-            />
+            <View tw="mt-3 h-5">
+              <ClaimedBy
+                claimersList={detail?.multiple_owners_list}
+                nft={nft}
+              />
+            </View>
           </View>
 
           {edition ? (
