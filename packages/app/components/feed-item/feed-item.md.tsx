@@ -50,7 +50,7 @@ import { linkifyDescription } from "app/lib/linkify";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useMuted } from "app/providers/mute-provider";
 import { NFT } from "app/types";
-import { removeTags } from "app/utilities";
+import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
@@ -102,7 +102,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const headerHeight = useHeaderHeight();
   const [showFullScreen, setShowFullScreen] = useState(false);
   const description = useMemo(
-    () => linkifyDescription(removeTags(nft?.token_description)),
+    () =>
+      linkifyDescription(
+        limitLineBreaks(cleanUserTextInput(removeTags(nft?.token_description)))
+      ),
     [nft?.token_description]
   );
 

@@ -30,7 +30,7 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { linkifyDescription } from "app/lib/linkify";
 import { NFT } from "app/types";
-import { removeTags } from "app/utilities";
+import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
@@ -124,7 +124,11 @@ const ListCardSmallScreen = ({
   const description = useMemo(
     () =>
       nft?.token_description
-        ? linkifyDescription(removeTags(nft?.token_description))
+        ? linkifyDescription(
+            limitLineBreaks(
+              cleanUserTextInput(removeTags(nft?.token_description))
+            )
+          )
         : "",
     [nft?.token_description]
   );
@@ -260,7 +264,11 @@ const ListCardLargeScreen = ({
   const description = useMemo(
     () =>
       nft?.token_description
-        ? linkifyDescription(removeTags(nft?.token_description))
+        ? linkifyDescription(
+            limitLineBreaks(
+              cleanUserTextInput(removeTags(nft?.token_description))
+            )
+          )
         : "",
     [nft?.token_description]
   );
