@@ -142,7 +142,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               detail={detailData?.data?.item}
             />
           </View>
-          <EngagementIcons nft={nft} bottomHeight={bottomHeight} />
+          <EngagementIcons nft={nft} bottomPadding={bottomHeight} />
 
           <View
             tw="absolute right-4 z-50"

@@ -196,7 +196,7 @@ const CardLargeScreen = ({
             />
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
-              <View tw="z-9 absolute left-5 top-5">
+              <View tw="z-9 absolute left-4 top-5">
                 <MuteButton />
               </View>
             ) : null}
