@@ -15,7 +15,7 @@ export const MuteButton = memo(function MuteButton({
   variant,
 }: MuteButtonProps) {
   const [muted, setMuted] = useMuted();
-  const size = useMemo(() => (variant === "mobile-web" ? 22 : 16), [variant]);
+  const size = useMemo(() => (variant === "mobile-web" ? 22 : 18), [variant]);
 
   if (Platform.OS !== "web" || (Platform.OS !== "web" && !muted)) return null;
 

@@ -18,20 +18,20 @@ import { SocialButton } from "../social-button";
 export type EngagementIconsProps = {
   nft: NFT;
   tw?: string;
-  bottomHeight?: number;
+  bottomPadding?: number;
 };
 
 export const EngagementIcons = memo<EngagementIconsProps>(
-  function EngagementIcons({ nft, tw = "", bottomHeight = 0 }) {
+  function EngagementIcons({ nft, tw = "", bottomPadding = 0 }) {
     const { width } = useWindowDimensions();
     const { shareNFT } = useShareNFT();
     return (
       <View
         pointerEvents="box-none"
         tw={["absolute bottom-0 right-0 flex-col pr-3", tw]}
-        style={{ paddingBottom: bottomHeight }}
+        style={{ paddingBottom: bottomPadding }}
       >
-        <View style={{ height: bottomHeight }} pointerEvents="none" />
+        <View style={{ height: bottomPadding }} pointerEvents="none" />
         <LinearGradient
           pointerEvents="none"
           style={{
