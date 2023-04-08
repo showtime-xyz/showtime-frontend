@@ -83,9 +83,6 @@ function MediaImplementation({
           <ContentTypeIcon edition={edition} />
         </View>
       )}
-      <View tw="z-9 absolute bottom-2 left-2.5">
-        <ContentTypeTooltip edition={edition} theme="dark" />
-      </View>
       {item?.mime_type?.startsWith("image") &&
       item?.mime_type !== "image/gif" ? (
         <PinchToZoom
