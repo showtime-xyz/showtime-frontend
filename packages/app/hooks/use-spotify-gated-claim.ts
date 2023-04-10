@@ -51,7 +51,8 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
           Analytics.track(EVENTS.SPOTIFY_SAVE_SUCCESS_BEFORE_LOGIN);
 
           toast.success(
-            "You just saved this song to your library! Sign in now to collect this drop."
+            "You just saved this song to your library! Sign in now to collect this drop.",
+            { duration: 5000 }
           );
           await loginPromise();
           await onboardingPromise();
