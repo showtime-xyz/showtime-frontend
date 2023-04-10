@@ -14,6 +14,7 @@ import {
   Maximize,
   ChevronDown,
   ChevronUp,
+  Unmuted,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -23,7 +24,6 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Description } from "app/components/card/rows/description";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Owner } from "app/components/card/rows/owner";
 import { Social } from "app/components/card/social";
@@ -46,14 +46,17 @@ import {
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useFullscreen } from "app/hooks/use-full-screen";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { linkifyDescription } from "app/lib/linkify";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useMuted } from "app/providers/mute-provider";
 import { NFT } from "app/types";
+import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
+import { RaffleTooltip } from "./raffle-tooltip";
 
 // NFT detail width is the width of the NFT detail on the right side of the feed item
 const NFT_DETAIL_WIDTH = 380;
@@ -98,6 +101,13 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const { commentsCount } = useComments(nft.nft_id);
   const headerHeight = useHeaderHeight();
   const [showFullScreen, setShowFullScreen] = useState(false);
+  const description = useMemo(
+    () =>
+      linkifyDescription(
+        limitLineBreaks(cleanUserTextInput(removeTags(nft?.token_description)))
+      ),
+    [nft?.token_description]
+  );
 
   const disablePrevButton = activeIndex === 0;
   const disableNextButton = swiper
@@ -173,7 +183,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const TabScene = useMemo(() => TAB_SCENES_MAP.get(index), [index]);
 
   return (
-    <LikeContextProvider nft={nft} key={nft.nft_id}>
+    <LikeContextProvider nft={nft}>
       <View
         tw="h-full w-full flex-row overflow-hidden"
         style={{
@@ -194,7 +204,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Close width={24} height={24} />
             </Button>
             <View tw="flex-row items-center">
-              {nft?.mime_type?.includes("video") && muted ? (
+              {nft?.mime_type?.includes("video") ? (
                 <Button
                   variant="text"
                   size="regular"
@@ -205,7 +215,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   iconOnly
                   tw="mr-4 bg-white px-3 dark:bg-gray-900"
                 >
-                  <Muted width={24} height={24} />
+                  {muted ? (
+                    <Muted width={24} height={24} />
+                  ) : (
+                    <Unmuted width={24} height={24} />
+                  )}
                 </Button>
               ) : null}
               <Button
@@ -310,19 +324,19 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           }}
         >
           <View tw="px-4">
-            <View tw="pt-4">
+            <View tw="flex-row items-center justify-between pt-4">
               <Social nft={nft} />
+              <RaffleTooltip edition={edition} tw="mr-1" />
             </View>
             <LikedBy nft={nft} tw="mt-4" />
-            <View tw="my-4 mr-4 flex-row justify-between">
-              <Text tw="text-lg text-black dark:text-white md:text-2xl">
+            <View tw="my-4 mr-4 flex-row items-center">
+              <Text tw="text-xl font-bold text-black dark:text-white">
                 {nft.token_name}
               </Text>
             </View>
-            <Description
-              descriptionText={nft?.token_description}
-              tw="max-h-[30vh] overflow-auto py-4"
-            />
+            <Text tw="text-sm text-gray-600 dark:text-gray-200">
+              {description}
+            </Text>
 
             <View tw="flex-row items-center justify-between">
               <Creator nft={nft} />

@@ -13,7 +13,8 @@ export type ButtonVariant =
   | "secondary"
   | "text"
   | "gradient"
-  | "outlined";
+  | "outlined"
+  | "base";
 
 export type ButtonSize = "small" | "regular";
 
@@ -23,15 +24,24 @@ export type ButtonProps = {
    * @default primary
    */
   variant?: ButtonVariant;
+  /**
+   * Defines the button theme.
+   * @default undefined
+   */
+  theme?: "light" | "dark";
   children?: React.ReactNode | string;
 } & PressableProps &
   Partial<
     Pick<
       BaseButtonProps,
-      "labelTW" | "iconOnly" | "size" | "accentColor" | "gradientProps"
+      | "labelTW"
+      | "iconOnly"
+      | "size"
+      | "accentColor"
+      | "gradientProps"
+      | "backgroundColors"
     >
   >;
-
 export type BaseButtonProps = {
   /**
    * Defines the tailwind class names to
@@ -55,8 +65,8 @@ export type BaseButtonProps = {
    * Defines the background state colors.
    */
   backgroundColors?: {
-    default: string;
-    pressed: string;
+    default: string[];
+    pressed: string[];
   };
   /**
    * Defines the background state colors.
@@ -84,4 +94,5 @@ export type BaseButtonProps = {
    */
   size?: ButtonSize;
   children?: React.ReactNode | string;
+  isDark?: boolean;
 } & PressableProps;

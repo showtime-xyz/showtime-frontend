@@ -6,6 +6,7 @@ type VerificationBadgeProps = SvgProps & {
   size?: number;
   fillColor?: string;
   bgColor?: string;
+  className?: string;
 };
 export const VerificationBadge = ({
   size = 24,

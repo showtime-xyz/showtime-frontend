@@ -7,7 +7,7 @@ import { TextLink } from "app/navigation/link";
 // This function replaces mention tags (@showtime) and URL (http://) with Link components
 export const linkifyDescription = (text?: string, tw?: TW) => {
   if (!text) {
-    return null;
+    return "";
   }
   // Match @-mentions
   let replacedText = reactStringReplace(text, /@(\w+)/g, (match, i) => {

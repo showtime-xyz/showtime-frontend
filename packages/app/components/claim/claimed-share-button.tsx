@@ -6,9 +6,8 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 
-type ClaimedShareButtonProps = {
+type ClaimedShareButtonProps = Pick<ButtonProps, "size" | "theme"> & {
   edition: CreatorEditionResponse;
-  size?: ButtonProps["size"];
   tw?: string;
   style?: StyleProp<ViewStyle>;
 };
@@ -18,6 +17,7 @@ export const ClaimedShareButton = ({
   size = "small",
   tw = "",
   style,
+  ...rest
 }: ClaimedShareButtonProps) => {
   const router = useRouter();
   const onClaimPress = () => {
@@ -43,9 +43,9 @@ export const ClaimedShareButton = ({
     );
   };
 
-  if (!edition.is_already_claimed) return null;
+  if (!edition || !edition.is_already_claimed) return null;
   return (
-    <Button onPress={onClaimPress} size={size} style={style} tw={tw}>
+    <Button onPress={onClaimPress} size={size} style={style} tw={tw} {...rest}>
       Share
     </Button>
   );

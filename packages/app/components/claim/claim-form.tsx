@@ -45,7 +45,13 @@ import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
-import { formatAddressShort, getCreatorUsernameFromNFT } from "app/utilities";
+import {
+  cleanUserTextInput,
+  formatAddressShort,
+  getCreatorUsernameFromNFT,
+  limitLineBreaks,
+  removeTags,
+} from "app/utilities";
 
 export const ClaimForm = ({
   edition,
@@ -174,7 +180,14 @@ export const ClaimForm = ({
   };
 
   const linkifiedDescription = useMemo(
-    () => linkifyDescription(edition.creator_airdrop_edition.description),
+    () =>
+      linkifyDescription(
+        limitLineBreaks(
+          cleanUserTextInput(
+            removeTags(edition.creator_airdrop_edition.description)
+          )
+        )
+      ),
     [edition.creator_airdrop_edition.description]
   );
   const isDisableButton =

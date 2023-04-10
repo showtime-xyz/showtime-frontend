@@ -1,7 +1,12 @@
-import { useWindowDimensions } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { MotiView } from "moti";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+  useDerivedValue,
+} from "react-native-reanimated";
 
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -16,23 +21,116 @@ import { BlurView } from "app/lib/blurview";
 import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
 import { useBottomTabBarHeightCallback } from "app/lib/react-navigation/bottom-tabs";
 
+import { CreateTabBarIcon } from "./tab-bar-icons";
 import { useNavigationElements } from "./use-navigation-elements";
 
-export const BottomTabbar = ({
+type ThemeBottomTabBarProps = BottomTabBarProps & {
+  dark?: boolean;
+};
+export const ThemeBottomTabbar = ({
   navigation,
   state,
   descriptors,
-}: BottomTabBarProps) => {
+  dark,
+}: ThemeBottomTabBarProps) => {
   const { width } = useWindowDimensions();
+  const isDarkMode = useIsDarkMode();
+  const isDark = dark !== undefined ? dark : isDarkMode;
+
+  const color = isDark ? colors.gray[100] : colors.gray[900];
+
+  const redirectToCreateDrop = useRedirectToCreateDrop();
+  return (
+    <View tw="flex-row bg-transparent pt-2">
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const focused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: "tabPress",
+            target: route.key,
+            canPreventDefault: true,
+          });
+          Haptics.impactAsync();
+
+          if (route.name === "createTab") {
+            redirectToCreateDrop();
+            return;
+          }
+
+          if (!focused && !event.defaultPrevented) {
+            navigation.navigate({
+              name: route.name,
+              merge: true,
+              params: route.params,
+            });
+          }
+        };
+        const onLongPress = () => {
+          navigation.emit({
+            type: "tabLongPress",
+            target: route.key,
+          });
+        };
+
+        return (
+          <View key={route.key} tw="flex flex-1 items-center justify-center">
+            <Pressable tw="flex-1" onLongPress={onLongPress} onPress={onPress}>
+              {options.tabBarButton && (
+                <CreateTabBarIcon
+                  color={isDark ? "#000" : "#fff"}
+                  style={{ backgroundColor: isDark ? "#fff" : "#000" }}
+                />
+              )}
+              {options.tabBarIcon?.({ focused, color, size: 24 })}
+            </Pressable>
+          </View>
+        );
+      })}
+
+      <MotiView
+        style={{
+          position: "absolute",
+          top: 0,
+          height: 2,
+          backgroundColor: color,
+          width: width / state.routes.length,
+        }}
+        animate={{
+          translateX: (width / state.routes.length) * state.index,
+        }}
+        transition={{ type: "timing", duration: 250 }}
+      />
+    </View>
+  );
+};
+
+export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
   const { isTabBarHidden } = useNavigationElements();
   const { isAuthenticated } = useUser();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const isDark = useIsDarkMode();
-  const color = isDark ? colors.gray[100] : colors.gray[900];
-  const redirectToCreateDrop = useRedirectToCreateDrop();
   const nativeBottomTabBarHeightCallback = useBottomTabBarHeightCallback();
-
   const isHiddenBottomTabbar = !isAuthenticated || isTabBarHidden;
+  const isDark = useIsDarkMode();
+  const isHome = useDerivedValue(() => {
+    return state.index === 0 ? 1 : 0;
+  }, [state.index]);
+
+  const activeAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(isHome.value, { duration: 250 }),
+    };
+  }, [isHome.value]);
+
+  const overlayColor =
+    state.index === 0
+      ? "rgba(0,0,0,.8)"
+      : isDark
+      ? "rgba(0,0,0,.8)"
+      : "rgba(255, 255, 255, 0.8)";
+  const blurType = state.index === 0 ? "dark" : isDark ? "dark" : "light";
+
   return (
     <View
       style={{
@@ -55,72 +153,17 @@ export const BottomTabbar = ({
     >
       <BlurView
         blurRadius={20}
-        overlayColor={isDark ? "rgba(0,0,0,.8)" : "rgba(255, 255, 255, 0.8)"}
+        overlayColor={overlayColor}
+        blurType={blurType}
         blurAmount={100}
+        style={[StyleSheet.absoluteFillObject]}
+      />
+      <ThemeBottomTabbar state={state} {...rest} />
+      <Animated.View
+        style={[StyleSheet.absoluteFillObject, activeAnimatedStyle]}
       >
-        <View tw="flex-row bg-transparent pt-2">
-          {state.routes.map((route, index) => {
-            const { options } = descriptors[route.key];
-            const focused = state.index === index;
-
-            const onPress = () => {
-              const event = navigation.emit({
-                type: "tabPress",
-                target: route.key,
-                canPreventDefault: true,
-              });
-              Haptics.impactAsync();
-
-              if (route.name === "createTab") {
-                redirectToCreateDrop();
-                return;
-              }
-
-              if (!focused && !event.defaultPrevented) {
-                navigation.navigate({
-                  name: route.name,
-                  merge: true,
-                  params: route.params,
-                });
-              }
-            };
-            const onLongPress = () => {
-              navigation.emit({
-                type: "tabLongPress",
-                target: route.key,
-              });
-            };
-            return (
-              <View
-                key={route.key}
-                tw="flex flex-1 items-center justify-center"
-              >
-                <Pressable
-                  tw="flex-1"
-                  onLongPress={onLongPress}
-                  onPress={onPress}
-                >
-                  {options.tabBarIcon?.({ focused, color, size: 24 })}
-                </Pressable>
-              </View>
-            );
-          })}
-
-          <MotiView
-            style={{
-              position: "absolute",
-              top: 0,
-              height: 2,
-              backgroundColor: color,
-              width: width / state.routes.length,
-            }}
-            animate={{
-              translateX: (width / state.routes.length) * state.index,
-            }}
-            transition={{ type: "timing", duration: 250 }}
-          />
-        </View>
-      </BlurView>
+        <ThemeBottomTabbar state={state} {...rest} dark />
+      </Animated.View>
     </View>
   );
 };

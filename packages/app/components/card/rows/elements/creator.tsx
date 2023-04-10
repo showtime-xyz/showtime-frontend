@@ -1,5 +1,6 @@
 import { formatDistanceToNowStrict } from "date-fns";
 
+import { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -27,21 +28,26 @@ type Props = {
   shouldShowCreatorIndicator?: boolean;
   shouldShowDateCreated?: boolean;
   label?: string;
+  size?: number;
+  tw?: TW;
 };
 
 export function Creator({
   nft,
-  shouldShowCreatorIndicator = true,
+  shouldShowCreatorIndicator = false,
   shouldShowDateCreated = true,
-  label = "",
+  label = "Creator",
+  size = 32,
+  tw = "",
 }: Props) {
   if (!nft) return null;
 
   return (
-    <View tw="flex flex-row py-4">
+    <View tw={["flex flex-row py-4", tw]}>
       <AvatarHoverCard
         username={nft?.creator_username || nft?.creator_address_nonens}
         url={nft.creator_img_url}
+        size={size}
       />
       <View tw="ml-2 justify-center">
         {shouldShowCreatorIndicator && (

@@ -11,9 +11,10 @@ import { formatNumber } from "app/utilities";
 
 interface CommentButtonProps {
   nft?: NFT;
+  vertical?: boolean;
 }
 
-export function CommentButton({ nft }: CommentButtonProps) {
+export function CommentButton({ nft, vertical, ...rest }: CommentButtonProps) {
   const router = useRouter();
   const { iconColor } = useSocialColor();
   //const { commentsCount } = useComments(nft?.nft_id ?? -Infinity);
@@ -49,12 +50,22 @@ export function CommentButton({ nft }: CommentButtonProps) {
 
   return (
     <SocialButton
+      vertical={vertical}
       onPress={handleOnPress}
       text={
-        nft?.comment_count > 0 ? ` ${formatNumber(nft?.comment_count)}` : ""
+        nft?.comment_count > 0
+          ? `${vertical ? "" : " "}${formatNumber(nft?.comment_count)}`
+          : vertical
+          ? "0"
+          : " " // this is a non-breaking space to prevent jumps
       }
+      {...rest}
     >
-      <Message height={24} width={24} color={iconColor} />
+      <Message
+        height={vertical ? 32 : 24}
+        width={vertical ? 32 : 24}
+        color={iconColor}
+      />
     </SocialButton>
   );
 }

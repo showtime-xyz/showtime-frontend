@@ -12,7 +12,7 @@ export function MessageMore({ count = 0, onPress }: MessageMoreProps) {
   }
   const replyText = count > 1 ? "Show more replies" : "Show reply";
   return (
-    <View tw="mb-5 ml-1 flex bg-white pl-14 dark:bg-black">
+    <View tw="ml-1 flex pb-5 pl-14">
       <Text tw="text-xs font-bold dark:text-white" onPress={onPress}>
         {`${replyText} (${count})`}
       </Text>

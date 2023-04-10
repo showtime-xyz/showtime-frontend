@@ -165,17 +165,12 @@ export const SelectUsername = () => {
                 leftElement={
                   <Text
                     onPress={() => usernameRef.current?.focus()}
-                    tw="text-base text-gray-600 dark:text-gray-400"
+                    tw="text-gray-600 dark:text-gray-400"
                     style={{
+                      fontSize: 16,
                       marginTop: Platform.select({
-                        ios: 3,
-                        android: 8,
+                        android: -8,
                         default: 0,
-                      }),
-                      marginBottom: Platform.select({
-                        default: 4,
-                        android: 0,
-                        web: 0,
                       }),
                       marginRight: 1,
                     }}

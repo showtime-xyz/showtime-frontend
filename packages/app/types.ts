@@ -222,6 +222,7 @@ export type IEdition = {
   edition_size: number;
   image_url: string;
   name: string;
+  owner_profile_id?: number;
   owner_address: string;
   symbol: string;
   is_gated?: boolean;

@@ -1,9 +1,11 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { Image, ImageProps as ExpoImageProps } from "expo-image";
+import { Image, ImageProps as ExpoImageProps, ImageSource } from "expo-image";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
+
+import { Logger } from "app/lib/logger";
 
 import { ResizeMode } from "./types";
 
@@ -45,7 +47,10 @@ function StyledImage({
         : source,
     [source]
   );
-
+  if (typeof source === "object" && !(source as ImageSource)?.uri) {
+    Logger.warn("Image source is not a valid uri", source);
+    return null;
+  }
   return (
     <StyledExpoImage
       style={[{ height, width, borderRadius }, style as any]}

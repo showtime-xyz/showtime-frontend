@@ -361,6 +361,7 @@ module.exports = {
         "bounce-in": "bounce-in 250ms",
         "fade-in": "fade-in 150ms",
         "fade-in-250": "fade-in 250ms",
+        "fade-in-500": "fade-in 500ms",
       },
     },
   },

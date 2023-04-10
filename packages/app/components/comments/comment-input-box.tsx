@@ -89,12 +89,7 @@ export const CommentInputBox = forwardRef<
           <Text tw="py-2 text-xs font-bold">{`Reply to @${getUsername(
             selectedComment
           )}`}</Text>
-          <Button
-            variant="text"
-            size="small"
-            tw="mr-4"
-            onPress={handleOnClearPress}
-          >
+          <Button variant="text" size="small" onPress={handleOnClearPress}>
             <Close color={"black"} width={16} height={16} />
           </Button>
         </View>

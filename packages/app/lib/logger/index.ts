@@ -10,4 +10,9 @@ export const Logger = {
       console.error(...args);
     }
   },
+  warn: (...args: any) => {
+    if (__DEV__) {
+      console.warn(...args);
+    }
+  },
 };

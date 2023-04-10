@@ -21,34 +21,33 @@ const CONTAINER_HEIGHT_TW = {
 
 const CONTAINER_BACKGROUND_MAPPER = {
   primary: {
-    // default: [colors.gray[900], colors.white],
-    default: "bg-gray-800 dark:bg-white",
-    // pressed: [colors.gray[700], colors.gray[200]],
-    pressed: "bg-gray-700 dark:bg-gray-200",
+    default: ["bg-gray-800", "bg-white"],
+    pressed: ["bg-gray-700", "bg-gray-200"],
   },
   secondary: {
-    // default: [colors.white, colors.black],
-    default: "bg-white dark:bg-black",
-    // pressed: [colors.gray[200], colors.gray[800]],
-    pressed: "bg-gray-200 dark:bg-gray-800",
+    default: ["bg-white", "bg-black"],
+    pressed: ["bg-gray-200", "bg-gray-800"],
   },
   tertiary: {
-    // default: [colors.gray[100], colors.gray[900]],
-    default: "bg-gray-100 dark:bg-gray-800",
-    // pressed: [colors.gray[300], colors.gray[700]],
-    pressed: "bg-gray-300 dark:bg-gray-700",
+    default: ["bg-gray-100", "bg-gray-800"],
+    pressed: ["bg-gray-300", "bg-gray-700"],
   },
   danger: {
-    // default: [colors.red[500], colors.red[500]],
-    default: "bg-red-500 dark:bg-red-500",
-    // pressed: [colors.red[700], colors.red[700]],
-    pressed: "bg-red-700 dark:bg-red-700",
+    default: ["bg-red-500", "bg-red-500"],
+    pressed: ["bg-red-700", "bg-red-700"],
   },
   outlined: {
-    default: "bg-transparent border border-gray-700 dark:border-gray-400",
-    pressed: "bg-transparent border border-gray-700 dark:border-gray-400",
+    default: [
+      "bg-transparent border border-gray-700",
+      "bg-transparent border border-gray-400",
+    ],
+    pressed: [
+      "bg-transparent border border-gray-700",
+      "bg-transparent border border-gray-400",
+    ],
   },
 };
+
 const LABEL_SIZE_TW = {
   small: "text-xs",
   regular: "text-sm",

@@ -1,7 +1,8 @@
 import { useCallback, useReducer, Suspense, useMemo } from "react";
-import { Platform, StatusBar } from "react-native";
+import { Platform } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
+import { setStatusBarStyle } from "expo-status-bar";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -106,11 +107,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
   );
   useFocusEffect(
     useCallback(() => {
-      StatusBar.setBarStyle("light-content");
+      setStatusBarStyle("light");
       return () => {
-        !isDark && StatusBar.setBarStyle("dark-content");
+        setStatusBarStyle("auto");
       };
-    }, [isDark])
+    }, [])
   );
 
   const emptyBodyComponent = useMemo(() => {

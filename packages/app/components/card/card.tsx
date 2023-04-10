@@ -154,7 +154,7 @@ const CardLargeScreen = ({
     chainName: nft?.chain_name,
   });
   return (
-    <LikeContextProvider nft={nft} key={nft.nft_id}>
+    <LikeContextProvider nft={nft}>
       <View
         // @ts-ignore
         // TODO: add accessibility types for RNW
@@ -170,7 +170,7 @@ const CardLargeScreen = ({
           tw,
         ]}
       >
-        <View tw="pb-4" shouldRasterizeIOS={true}>
+        <View tw="pb-4">
           <View tw="flex-row items-center justify-between px-4">
             <Creator nft={nft} shouldShowDateCreated={false} />
             <ErrorBoundary renderFallback={() => null}>
@@ -196,7 +196,7 @@ const CardLargeScreen = ({
             />
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (
-              <View tw="z-9 absolute left-5 top-5">
+              <View tw="z-9 absolute left-4 top-5">
                 <MuteButton />
               </View>
             ) : null}
@@ -223,11 +223,13 @@ const CardLargeScreen = ({
               </View>
             ) : null}
           </View>
-          <ClaimedBy
-            claimersList={detailData?.data.item?.multiple_owners_list}
-            nft={nft}
-            tw="px-4"
-          />
+          <View tw="h-5">
+            <ClaimedBy
+              claimersList={detailData?.data.item?.multiple_owners_list}
+              nft={nft}
+              tw="px-4"
+            />
+          </View>
         </View>
       </View>
     </LikeContextProvider>

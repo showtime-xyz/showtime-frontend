@@ -2,7 +2,6 @@ import { Children, cloneElement, useMemo } from "react";
 
 import { LinearGradient } from "expo-linear-gradient";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -27,9 +26,9 @@ export function Button({
   iconOnly = false,
   iconColor = ["white", "black"],
   children,
+  isDark,
   ...props
 }: BaseButtonProps) {
-  const isDarkMode = useIsDarkMode();
   const containerTW = useMemo(
     () =>
       [
@@ -67,19 +66,20 @@ export function Button({
         ],
         style: labelStyle,
         color:
-          typeof iconColor === "string"
-            ? iconColor
-            : iconColor[isDarkMode ? 1 : 0],
+          typeof iconColor === "string" ? iconColor : iconColor[isDark ? 1 : 0],
         ...ICON_SIZE_TW[size],
         ...child?.props,
       });
     });
-  }, [size, iconColor, labelTW, children, isDarkMode, labelStyle]);
+  }, [size, iconColor, labelTW, children, isDark, labelStyle]);
 
   return (
     <PressableHover
       {...props}
-      tw={[containerTW, backgroundColors ? backgroundColors["default"] : ""]}
+      tw={[
+        containerTW,
+        backgroundColors ? backgroundColors["default"][isDark ? 1 : 0] : "",
+      ]}
     >
       {renderChildren}
     </PressableHover>
@@ -93,10 +93,9 @@ export function GradientButton({
   iconOnly = false,
   iconColor = ["white", "black"],
   children,
+  isDark,
   ...props
 }: BaseButtonProps) {
-  const isDarkMode = useIsDarkMode();
-
   const containerTW = useMemo(
     () =>
       [
@@ -132,14 +131,12 @@ export function GradientButton({
             : child?.props?.tw,
         ],
         color:
-          typeof iconColor === "string"
-            ? iconColor
-            : iconColor[isDarkMode ? 1 : 0],
+          typeof iconColor === "string" ? iconColor : iconColor[isDark ? 1 : 0],
         ...ICON_SIZE_TW[size],
         ...child?.props,
       });
     });
-  }, [size, iconColor, labelTW, children, isDarkMode]);
+  }, [size, iconColor, labelTW, children, isDark]);
 
   return (
     <View tw={[containerTW, "overflow-hidden"]}>

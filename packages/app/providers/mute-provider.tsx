@@ -112,7 +112,7 @@ export const MuteProvider = ({ children }: { children: any }) => {
   const setValue = values[1];
 
   // auto play with sound on web with first interaction
-  useAutoPlayWithSound(values);
+  //useAutoPlayWithSound(values);
 
   // on web, mute the video when the user navigates away from the page (tab change, etc.)
   useMuteOnVisbilityChange(values);
