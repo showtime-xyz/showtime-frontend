@@ -298,7 +298,7 @@ const AppleMusicSaveButton = ({
   if (edition.apple_music_track_name) {
     return (
       <Button
-        onPress={() => claimAppleMusicGatedDrop()}
+        onPress={() => claimAppleMusicGatedDrop({ closeModal: () => {} })}
         // disabled={disabled}
         // style={[backgroundColor, style]}
         // size={size}
