@@ -35,13 +35,20 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
           return res;
         }
       } else {
-        let appleMusicToken = await connectAppleMusic();
-
+        let appleMusicToken;
+        try {
+          appleMusicToken = await connectAppleMusic();
+        } catch (error: any) {
+          if (error?.response?.status === 400) {
+            loginPromise();
+            return;
+          }
+        }
         if (appleMusicToken) {
           await axios({
-            url: "/v1/applemusic/gate",
+            url: "/v1/apple_music/gate",
             data: {
-              music_user_token: appleMusicToken,
+              token: appleMusicToken,
               edition_address: edition.contract_address,
             },
             method: "POST",
@@ -60,8 +67,8 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
         }
       }
     } catch (error: any) {
-      Alert.alert("Something went wrong", error.response?.data.error.message);
       Logger.error("claimAppleMusicGatedDrop failed", error);
+      Alert.alert("Something went wrong", error.response?.data.error.message);
     }
   };
 

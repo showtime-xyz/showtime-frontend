@@ -1,3 +1,5 @@
+import { useAlert } from "@showtime-xyz/universal.alert";
+
 import { useOnboardingPromise } from "app/components/onboarding";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import { Analytics, EVENTS } from "app/lib/analytics";
@@ -15,14 +17,15 @@ import { useUser } from "./use-user";
 export const useSpotifyGatedClaim = (edition: IEdition) => {
   const user = useUser();
   const { claimNFT } = useClaimNFT(edition);
+  const Alert = useAlert();
   const { connectSpotify } = useConnectSpotify();
   const { loginPromise } = useLogInPromise();
   const { onboardingPromise } = useOnboardingPromise();
   const { saveSpotifyToken } = useSaveSpotifyToken();
 
   const claimSpotifyGatedDrop = async (closeModal?: () => void) => {
-    if (user.isAuthenticated) {
-      try {
+    try {
+      if (user.isAuthenticated) {
         let spotifyConnected = user?.user?.data.profile.has_spotify_token;
         if (!spotifyConnected) {
           spotifyConnected = !!(await connectSpotify());
@@ -31,11 +34,7 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
           const res = claimNFT({ closeModal });
           return res;
         }
-      } catch (error: any) {
-        Logger.error("claimSpotifyGatedDrop failed", error);
-      }
-    } else {
-      try {
+      } else {
         let spotifyToken = await connectSpotify();
 
         if (spotifyToken) {
@@ -62,9 +61,10 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
           });
           await claimNFT({ closeModal });
         }
-      } catch (error: any) {
-        Logger.error("claimSpotifyGatedDrop failed", error);
       }
+    } catch (error: any) {
+      Logger.error("claimSpotifyGatedDrop failed", error);
+      Alert.alert("Something went wrong", error.response?.data.error.message);
     }
   };
 
