@@ -96,12 +96,6 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 size="regular"
                 theme="dark"
               />
-              <ClaimedShareButton
-                tw="ml-3 w-1/3"
-                edition={edition}
-                size="regular"
-                theme="dark"
-              />
             </View>
           ) : (
             <View tw="mt-4 h-12" />
