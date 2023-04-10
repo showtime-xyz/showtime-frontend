@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useRef, Fragment } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  Fragment,
+  useEffect,
+  useState,
+} from "react";
 import {
   Platform,
   StyleSheet,
@@ -18,9 +25,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
-import { useStableFocusEffect } from "app/hooks/use-stable-focus-effect";
 import { useUser } from "app/hooks/use-user";
-import { useIsFocused } from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
@@ -41,18 +46,26 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
   const commentInputRef = useRef<TextInput>(null);
+  const [mounted, setMounted] = useState(false);
+  const [handleInset, setHandleInset] = useState(false);
+
+  useEffect(() => {
+    // we need to use this to prevent a flicker on ios due to InputAccessoryView
+    const handle = setTimeout(() => {
+      setMounted(true);
+      setTimeout(() => {
+        // we need to let RN handle the inset with a delay or it will shift the start offset
+        setHandleInset(true);
+      }, 300);
+    }, 16); // 1 frame
+
+    return () => {
+      // Clean up
+      clearTimeout(handle);
+    };
+  }, []);
   //#endregion
 
-  //#region effects
-  const isFocused = useIsFocused();
-  useStableFocusEffect(() => {
-    if (Platform.OS !== "web") {
-      setTimeout(() => {
-        isFocused && commentInputRef.current?.focus?.();
-      }, 600);
-    }
-  });
-  //#region hooks
   const { isAuthenticated } = useUser();
   const {
     data,
@@ -167,29 +180,38 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
     () => <View style={{ height: Math.max(bottom, 20) }} />,
     [bottom]
   );
+  // run two recycling pools to optimize performance
+  const getItemType = useCallback((item: CommentType) => {
+    if (item.replies && item.replies?.length > 0) {
+      return "reply";
+    }
+    return "comment";
+  }, []);
+
   return (
     <View style={styles.container}>
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
-        <View tw="web:pt-4 flex-1">
+        <View tw="web:pt-4 flex-grow">
           <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             estimatedItemSize={70}
-            overscan={98}
+            overscan={100}
             keyboardDismissMode="interactive"
             ListFooterComponent={listFooterComponent}
-            automaticallyAdjustKeyboardInsets
+            automaticallyAdjustKeyboardInsets={handleInset}
             automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
             contentContainerStyle={styles.contentContainer}
+            getItemType={getItemType}
             {...modalListProps}
           />
           {listEmptyComponent()}
-          {isAuthenticated && (
+          {isAuthenticated && mounted && !isLoading && (
             <PlatformInputAccessoryView
               {...Platform.select({
                 ios: {
@@ -215,11 +237,9 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // Notes: for `FlashList's rendered size is not usable` warning on Android.
-    minHeight: 200,
+    flexGrow: 1,
   },
   contentContainer: {
-    paddingTop: 20,
+    paddingBottom: 80,
   },
 });

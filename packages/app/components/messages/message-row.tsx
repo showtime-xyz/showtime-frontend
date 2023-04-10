@@ -118,7 +118,8 @@ interface MessageRowProps {
    */
   onUserPress?: (username: string) => void;
 }
-const PlatformSwipeable = Platform.OS === "web" ? View : memo(Swipeable);
+//const PlatformSwipeable = Platform.OS === "web" ? View : memo(Swipeable);
+const PlatformSwipeable = View;
 function MessageRowComponent({
   address,
   username = "",
@@ -144,6 +145,7 @@ function MessageRowComponent({
   //#region variables
   const swipeRef = useRef<Swipeable>(null);
 
+  /*
   const deleteComment = useCallback(async () => {
     if (onDeletePress) {
       try {
@@ -157,6 +159,7 @@ function MessageRowComponent({
       }
     }
   }, [onDeletePress]);
+  */
 
   const createdAtText = useMemo(() => {
     if (!createdAt) return undefined;
@@ -193,6 +196,7 @@ function MessageRowComponent({
     }
   }, [onUserPress, username]);
 
+  /*
   const renderLeftActions = useCallback(() => {
     return (
       <View tw="h-[94%] flex-1 items-end justify-center bg-red-500 px-3">
@@ -202,17 +206,18 @@ function MessageRowComponent({
       </View>
     );
   }, []);
+  */
 
   return (
     <PlatformSwipeable
       ref={swipeRef}
-      renderRightActions={renderLeftActions}
-      onSwipeableOpen={deleteComment}
-      friction={2}
-      rightThreshold={80}
-      enabled={!!onDeletePress && Platform.OS !== "web"}
+      //renderRightActions={renderLeftActions}
+      //onSwipeableOpen={deleteComment}
+      //friction={2}
+      //rightThreshold={80}
+      //enabled={!!onDeletePress && Platform.OS !== "web"}
     >
-      <View tw="flex flex-row items-start bg-white px-4 py-1.5 dark:bg-black md:dark:bg-gray-900">
+      <View tw="flex flex-row items-start px-4 py-1.5">
         {hasParent && <View tw="ml-4" collapsable={true} />}
         <View tw="justify-start">
           <Link href={`/@${username || address}`} tw="-mb-1 -mt-1">
@@ -287,7 +292,7 @@ function MessageRowComponent({
                 {likedByMe ? <HeartFilled /> : <Heart />}
                 <Text tw="text-[12px] text-sm">{` ${likeCount}`}</Text>
               </Button>
-              {Platform.OS === "web" && onDeletePress ? (
+              {onDeletePress ? (
                 <Button
                   variant="text"
                   tw="px-0 font-thin"
