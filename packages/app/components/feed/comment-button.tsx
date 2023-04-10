@@ -55,6 +55,8 @@ export function CommentButton({ nft, vertical, ...rest }: CommentButtonProps) {
       text={
         nft?.comment_count > 0
           ? `${vertical ? "" : " "}${formatNumber(nft?.comment_count)}`
+          : vertical
+          ? "0"
           : " " // this is a non-breaking space to prevent jumps
       }
       {...rest}

@@ -54,13 +54,13 @@ export const EngagementIcons = memo<EngagementIconsProps>(
             tw="border"
             size={36}
           />
-          <View tw="h-7" />
+          <View tw="h-5" />
           <Like vertical nft={nft} />
           <View tw="h-4" />
           <CommentButton vertical nft={nft} />
-          <View tw="h-4" />
+          <View tw="h-5" />
           <GiftButtonVertical vertical nft={nft} />
-          <View tw="h-8" />
+          <View tw="h-6" />
           <SocialButton onPress={() => shareNFT(nft)}>
             <Share height={32} width={32} color="#FFF" />
           </SocialButton>

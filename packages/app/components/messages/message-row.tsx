@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useRef } from "react";
+import { useMemo, useCallback, useRef, memo } from "react";
 import { Platform } from "react-native";
 
 import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
@@ -118,8 +118,9 @@ interface MessageRowProps {
    */
   onUserPress?: (username: string) => void;
 }
-const PlatformSwipeable = Platform.OS === "web" ? View : Swipeable;
-export function MessageRow({
+//const PlatformSwipeable = Platform.OS === "web" ? View : memo(Swipeable);
+const PlatformSwipeable = View;
+function MessageRowComponent({
   address,
   username = "",
   userAvatar,
@@ -144,6 +145,7 @@ export function MessageRow({
   //#region variables
   const swipeRef = useRef<Swipeable>(null);
 
+  /*
   const deleteComment = useCallback(async () => {
     if (onDeletePress) {
       try {
@@ -157,6 +159,7 @@ export function MessageRow({
       }
     }
   }, [onDeletePress]);
+  */
 
   const createdAtText = useMemo(() => {
     if (!createdAt) return undefined;
@@ -177,7 +180,7 @@ export function MessageRow({
     return onTagPress
       ? linkifyDescription(
           limitLineBreaks(cleanUserTextInput(content)),
-          "font-bold text-xs text-gray-900 dark:text-gray-100"
+          "font-bold text-sm text-gray-900 dark:text-gray-100"
         )
       : limitLineBreaks(cleanUserTextInput(content));
   }, [content, onTagPress]);
@@ -193,6 +196,7 @@ export function MessageRow({
     }
   }, [onUserPress, username]);
 
+  /*
   const renderLeftActions = useCallback(() => {
     return (
       <View tw="h-[94%] flex-1 items-end justify-center bg-red-500 px-3">
@@ -202,17 +206,18 @@ export function MessageRow({
       </View>
     );
   }, []);
+  */
 
   return (
     <PlatformSwipeable
       ref={swipeRef}
-      renderRightActions={renderLeftActions}
-      onSwipeableOpen={deleteComment}
-      friction={2}
-      rightThreshold={80}
-      enabled={!!onDeletePress && Platform.OS !== "web"}
+      //renderRightActions={renderLeftActions}
+      //onSwipeableOpen={deleteComment}
+      //friction={2}
+      //rightThreshold={80}
+      //enabled={!!onDeletePress && Platform.OS !== "web"}
     >
-      <View tw="flex flex-row items-start px-4 py-1">
+      <View tw="flex flex-row items-start px-4 py-1.5">
         {hasParent && <View tw="ml-4" collapsable={true} />}
         <View tw="justify-start">
           <Link href={`/@${username || address}`} tw="-mb-1 -mt-1">
@@ -233,11 +238,11 @@ export function MessageRow({
           </Link>
         </View>
         <View tw={["ml-2 flex-1", isLastReply ? "mb-1" : "-mb-0.5"]}>
-          <Text tw="web:pr-12 pr-7 text-xs text-gray-900 dark:text-gray-100">
+          <Text tw="web:pr-12 pr-7 text-sm text-gray-900 dark:text-gray-100">
             <Link href={`/@${username || address}`}>
               <View tw="mr-3 flex-row items-center">
                 <Text
-                  tw="text-xs font-bold text-gray-900 dark:text-white"
+                  tw="text-sm font-bold text-gray-900 dark:text-white"
                   onPress={handleOnPressUser}
                 >
                   {userNameText}
@@ -287,7 +292,7 @@ export function MessageRow({
                 {likedByMe ? <HeartFilled /> : <Heart />}
                 <Text tw="text-[12px] text-sm">{` ${likeCount}`}</Text>
               </Button>
-              {Platform.OS === "web" && onDeletePress ? (
+              {onDeletePress ? (
                 <Button
                   variant="text"
                   tw="px-0 font-thin"
@@ -304,3 +309,6 @@ export function MessageRow({
     </PlatformSwipeable>
   );
 }
+
+export const MessageRow = memo(MessageRowComponent);
+MessageRow.displayName = "MessageRow";

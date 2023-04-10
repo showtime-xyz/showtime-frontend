@@ -22,6 +22,8 @@ export function LikeButton({
       text={
         likeCount > 0
           ? `${!vertical ? " " : ""}${formatNumber(likeCount)}`
+          : vertical
+          ? "0"
           : " " // this is a non-breaking space to prevent jumps
       }
       onPress={onPress}

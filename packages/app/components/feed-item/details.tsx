@@ -1,12 +1,10 @@
 import { useMemo } from "react";
-import { Text as RNText } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimButton } from "app/components/claim/claim-button";
-import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { linkifyDescription } from "app/lib/linkify";
@@ -43,12 +41,12 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
       <View tw="flex flex-row justify-between">
         <View tw="flex-1 flex-col justify-end">
           <View>
-            <View tw="-mt-5 mb-3 h-6 flex-row justify-start space-x-2">
+            <View tw="-ml-1 -mt-5 mb-3 h-6 flex-row justify-start space-x-2">
               <RaffleTooltip edition={edition} theme="dark" />
               <ContentTypeTooltip edition={edition} theme="dark" />
             </View>
 
-            <View tw="mb-3 flex flex-row items-center justify-between">
+            <View tw="mb-2.5 flex flex-row items-center justify-between">
               <Text
                 tw="flex-1 text-sm font-bold text-white dark:text-white md:text-gray-900"
                 numberOfLines={2}
@@ -56,26 +54,27 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 {nft.token_name}
               </Text>
             </View>
-
-            <Text>
+            <Text key={nft.nft_id}>
+              {/* Even though `key` is usually not allowed with FlashList, it is ok in this case, since we have single item lists */}
               <TextLink
                 href={`/@${nft.creator_username ?? nft.creator_address}`}
                 tw="web:inline flex text-xs font-semibold text-white dark:text-white md:text-gray-900"
               >
                 {getCreatorUsernameFromNFT(nft)}
-              </TextLink>
-              <RNText>
-                {` `}
                 {nft.creator_verified ? (
-                  <VerificationBadge
-                    size={12}
-                    fillColor="#000"
-                    bgColor="#FFF"
-                    className="web:inline"
-                  />
+                  <>
+                    {` `}
+                    <VerificationBadge
+                      size={12}
+                      fillColor="#000"
+                      bgColor="#FFF"
+                      className="web:inline"
+                    />
+                    {`  `}
+                  </>
                 ) : null}
-                {` `}
-              </RNText>
+              </TextLink>
+
               <Text tw="text-xs text-gray-200 dark:text-gray-200 md:text-gray-600">
                 {description}
               </Text>
@@ -92,12 +91,6 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             <View tw="mt-4 flex-row">
               <ClaimButton
                 tw="flex-1"
-                edition={edition}
-                size="regular"
-                theme="dark"
-              />
-              <ClaimedShareButton
-                tw="ml-3 w-1/3"
                 edition={edition}
                 size="regular"
                 theme="dark"
