@@ -48,7 +48,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
 
             <View tw="mb-2.5 flex flex-row items-center justify-between">
               <Text
-                tw="flex-1 text-sm font-bold text-white dark:text-white md:text-gray-900"
+                tw="flex-1 text-base font-bold leading-6 text-white dark:text-white md:text-gray-900"
                 numberOfLines={2}
               >
                 {nft.token_name}
@@ -58,7 +58,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
               {/* Even though `key` is usually not allowed with FlashList, it is ok in this case, since we have single item lists */}
               <TextLink
                 href={`/@${nft.creator_username ?? nft.creator_address}`}
-                tw="web:inline flex text-xs font-semibold text-white dark:text-white md:text-gray-900"
+                tw="web:inline flex text-sm font-semibold leading-5 text-white dark:text-white md:text-gray-900"
               >
                 {getCreatorUsernameFromNFT(nft)}
                 {nft.creator_verified ? (
@@ -75,7 +75,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 ) : null}
               </TextLink>
 
-              <Text tw="text-xs text-gray-200 dark:text-gray-200 md:text-gray-600">
+              <Text tw="text-sm text-gray-200 dark:text-gray-200 md:text-gray-600">
                 {description}
               </Text>
             </Text>

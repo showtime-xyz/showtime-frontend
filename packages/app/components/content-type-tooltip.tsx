@@ -79,7 +79,7 @@ export const ContentTypeTooltip = ({
               {/* @ts-expect-error className not supported */}
               <Icon color="white" width={20} height={20} className="z-10" />
               {edition.presave_release_date ? (
-                <Text tw="px-1 text-xs font-semibold text-white">
+                <Text tw="px-1 text-sm font-semibold text-white">
                   Available on{" "}
                   {new Date(edition.presave_release_date).toLocaleString(
                     "default",

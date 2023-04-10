@@ -46,7 +46,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
   const commentInputRef = useRef<TextInput>(null);
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(Platform.OS !== "ios");
   const [handleInset, setHandleInset] = useState(false);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         // we need to let RN handle the inset with a delay or it will shift the start offset
         setHandleInset(true);
       }, 300);
-    }, 16); // 1 frame
+    }, 600);
 
     return () => {
       // Clean up
@@ -211,7 +211,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             {...modalListProps}
           />
           {listEmptyComponent()}
-          {isAuthenticated && mounted && !isLoading && (
+          {isAuthenticated && mounted && (
             <PlatformInputAccessoryView
               {...Platform.select({
                 ios: {
@@ -240,6 +240,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   contentContainer: {
+    paddingTop: 10,
     paddingBottom: 80,
   },
 });
