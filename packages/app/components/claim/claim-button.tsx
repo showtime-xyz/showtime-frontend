@@ -10,8 +10,10 @@ import { Check, Hourglass } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimContext } from "app/context/claim-context";
+import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useRedirectToRaffleResult } from "app/hooks/use-redirect-to-raffle-result";
@@ -268,16 +270,44 @@ export const ClaimButton = ({
   }, [bgIsGreen, isExpired]);
 
   return (
-    <Button
-      onPress={onClaimPress}
-      disabled={disabled}
-      style={[backgroundColor, style]}
-      size={size}
-      tw={[opacityTw, tw]}
-      theme={theme}
-      {...rest}
-    >
-      {content}
-    </Button>
+    <View>
+      <Button
+        onPress={onClaimPress}
+        disabled={disabled}
+        style={[backgroundColor, style]}
+        size={size}
+        tw={[opacityTw, tw]}
+        theme={theme}
+        {...rest}
+      >
+        {content}
+      </Button>
+      <AppleMusicSaveButton edition={edition} />
+    </View>
   );
+};
+
+const AppleMusicSaveButton = ({
+  edition,
+}: {
+  edition: CreatorEditionResponse;
+}) => {
+  const { claimAppleMusicGatedDrop } = useAppleMusicGatedClaim(
+    edition.creator_airdrop_edition
+  );
+  if (edition.apple_music_track_name) {
+    return (
+      <Button
+        onPress={() => claimAppleMusicGatedDrop()}
+        // disabled={disabled}
+        // style={[backgroundColor, style]}
+        // size={size}
+        // tw={[opacityTw, tw]}
+      >
+        Save on Apple Music
+      </Button>
+    );
+  }
+
+  return null;
 };

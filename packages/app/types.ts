@@ -235,6 +235,7 @@ export type MyInfo = {
     follows: Array<{ profile_id: number }>;
     profile: Profile & {
       has_spotify_token: boolean;
+      has_apple_music_token: boolean;
       spotify_artist_id: null | number;
     };
     likes_nft: number[];
@@ -254,6 +255,7 @@ export type MyInfo = {
 };
 
 export type GatingType =
+  | "spotify_save"
   | "multi_provider_music_save"
   | "password"
   | "location"

@@ -15,7 +15,7 @@ function useSaveAppleMusicToken() {
   const saveAppleMusicToken = useCallback(
     async ({ token }: Params) => {
       await axios({
-        url: `/v1/applemusic/save-token`,
+        url: `/v1/apple_music/save-token`,
         method: "POST",
         data: {
           token,

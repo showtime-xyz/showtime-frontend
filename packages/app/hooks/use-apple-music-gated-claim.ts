@@ -1,3 +1,5 @@
+import { useAlert } from "@showtime-xyz/universal.alert";
+
 import { useOnboardingPromise } from "app/components/onboarding";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import { axios } from "app/lib/axios";
@@ -13,6 +15,7 @@ import { useUser } from "./use-user";
 
 export const useAppleMusicGatedClaim = (edition: IEdition) => {
   const user = useUser();
+  const Alert = useAlert();
   const { claimNFT } = useClaimNFT(edition);
   const { connectAppleMusic } = useConnectAppleMusic();
   const { loginPromise } = useLogInPromise();
@@ -20,9 +23,10 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
   const { saveAppleMusicToken } = useSaveAppleMusicToken();
 
   const claimAppleMusicGatedDrop = async (closeModal?: () => void) => {
-    if (user.isAuthenticated) {
-      try {
-        let appleMusicConnected = user?.user?.data.profile.has_apple_music;
+    try {
+      if (user.isAuthenticated) {
+        let appleMusicConnected =
+          user?.user?.data.profile.has_apple_music_token;
         if (!appleMusicConnected) {
           appleMusicConnected = !!(await connectAppleMusic());
         }
@@ -30,11 +34,7 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
           const res = claimNFT({ closeModal });
           return res;
         }
-      } catch (error: any) {
-        Logger.error("claimAppleMusicGatedDrop failed", error);
-      }
-    } else {
-      try {
+      } else {
         let appleMusicToken = await connectAppleMusic();
 
         if (appleMusicToken) {
@@ -58,9 +58,10 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
           });
           await claimNFT({ closeModal });
         }
-      } catch (error: any) {
-        Logger.error("claimAppleMusicGatedDrop failed", error);
       }
+    } catch (error: any) {
+      Alert.alert("Something went wrong", error.response?.data.error.message);
+      Logger.error("claimAppleMusicGatedDrop failed", error);
     }
   };
 
