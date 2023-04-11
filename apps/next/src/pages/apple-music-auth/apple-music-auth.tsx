@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
-import { useAppleMusicToken } from "app/hooks/use-apple-music-token";
+import { useGetAppleMusicToken } from "app/hooks/use-connect-apple-music/use-get-apple-music-token";
 
 export default function AppleMusicAuth() {
-  const { getUserToken } = useAppleMusicToken();
+  const { getAppleMusicToken } = useGetAppleMusicToken();
   useEffect(() => {
     function newOpen(url) {
       window.location.href = url;
@@ -13,11 +13,11 @@ export default function AppleMusicAuth() {
     window.open = newOpen;
 
     (async function getToken() {
-      const token = await getUserToken();
+      const token = await getAppleMusicToken();
       //@ts-ignore
       window.ReactNativeWebView.postMessage(token);
     })();
-  }, [getUserToken]);
+  }, [getAppleMusicToken]);
 
   return (
     <div

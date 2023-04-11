@@ -2,7 +2,7 @@ import { WebView } from "react-native-webview";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { tokenPromiseCallbacks } from "../hooks/use-apple-music-token/utils";
+import { tokenPromiseCallbacks } from "../hooks/use-connect-apple-music/utils";
 
 const webAppleMusicScreenURL =
   "http://192.168.0.241:3000/apple-music-auth/apple-music-auth?wed=2344";
