@@ -7758,7 +7758,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-doctor@npm:^9.2.1":
+"@react-native-community/cli-doctor@npm:^9.2.1, @react-native-community/cli-doctor@npm:^9.3.0":
   version: 9.3.0
   resolution: "@react-native-community/cli-doctor@npm:9.3.0"
   dependencies:
@@ -7782,7 +7782,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-hermes@npm:^9.2.1":
+"@react-native-community/cli-hermes@npm:^9.2.1, @react-native-community/cli-hermes@npm:^9.3.1":
   version: 9.3.1
   resolution: "@react-native-community/cli-hermes@npm:9.3.1"
   dependencies:
@@ -7810,7 +7810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-platform-android@npm:^9.3.1":
+"@react-native-community/cli-platform-android@npm:9.3.1, @react-native-community/cli-platform-android@npm:^9.3.1":
   version: 9.3.1
   resolution: "@react-native-community/cli-platform-android@npm:9.3.1"
   dependencies:
@@ -7838,7 +7838,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/cli-platform-ios@npm:^9.3.0":
+"@react-native-community/cli-platform-ios@npm:9.3.0, @react-native-community/cli-platform-ios@npm:^9.3.0":
   version: 9.3.0
   resolution: "@react-native-community/cli-platform-ios@npm:9.3.0"
   dependencies:
@@ -7936,6 +7936,33 @@ __metadata:
   bin:
     react-native: build/bin.js
   checksum: 9dfe8d258e9f36d339b8e9ebe22d276003b00a035d20ff4a3328ce3b923cd090e94f6a53aaab9869c9c29d46e5aa12317bae3f806890880a7f0235a01825e5e3
+  languageName: node
+  linkType: hard
+
+"@react-native-community/cli@npm:9.3.2":
+  version: 9.3.2
+  resolution: "@react-native-community/cli@npm:9.3.2"
+  dependencies:
+    "@react-native-community/cli-clean": ^9.2.1
+    "@react-native-community/cli-config": ^9.2.1
+    "@react-native-community/cli-debugger-ui": ^9.0.0
+    "@react-native-community/cli-doctor": ^9.3.0
+    "@react-native-community/cli-hermes": ^9.3.1
+    "@react-native-community/cli-plugin-metro": ^9.2.1
+    "@react-native-community/cli-server-api": ^9.2.1
+    "@react-native-community/cli-tools": ^9.2.1
+    "@react-native-community/cli-types": ^9.1.0
+    chalk: ^4.1.2
+    commander: ^9.4.0
+    execa: ^1.0.0
+    find-up: ^4.1.0
+    fs-extra: ^8.1.0
+    graceful-fs: ^4.1.3
+    prompts: ^2.4.0
+    semver: ^6.3.0
+  bin:
+    react-native: build/bin.js
+  checksum: 474711ebfad0834e34026889004bc823b79817fc50fb9b614e987755b7073e251643d1078884d3b49f195c83b18bc32b0e608c512e3928fb0dec8dd6be42e180
   languageName: node
   linkType: hard
 
@@ -8686,7 +8713,7 @@ __metadata:
     dotenv: ^10.0.0
     esbuild: ^0.14.50
     events: ^3.3.0
-    expo: ~47.0.12
+    expo: ~47.0.14
     expo-app-loading: ~2.1.1
     expo-application: ~5.0.1
     expo-av: 13.0.3
@@ -8735,13 +8762,13 @@ __metadata:
     react: 18.1.0
     react-dom: 18.2.0
     react-hook-form: ^7.27.1
-    react-native: 0.70.5
+    react-native: 0.70.8
     react-native-avoid-softinput: ^3.0.4
     react-native-bignumber: ^0.1.9
     react-native-blob-jsi-helper: ^0.2.3
     react-native-blurhash: ^1.1.10
     react-native-cronet: ^0.5.0
-    react-native-gesture-handler: ~2.9.0
+    react-native-gesture-handler: 2.9.0
     react-native-image-colors: ^1.5.2
     react-native-ios-context-menu: ^1.15.3
     react-native-level-fs: ^3.0.0
@@ -8924,7 +8951,6 @@ __metadata:
     react-dom: 18.2.0
     react-native: 0.70.5
     react-native-blob-jsi-helper: ^0.2.2
-    react-native-gesture-handler: ~2.9.0
     react-native-ios-context-menu: ^1.15.1
     react-native-mmkv: 2.5.1
     react-native-pager-view: 6.0.1
@@ -21090,6 +21116,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo@npm:~47.0.14":
+  version: 47.0.14
+  resolution: "expo@npm:47.0.14"
+  dependencies:
+    "@babel/runtime": ^7.14.0
+    "@expo/cli": 0.4.11
+    "@expo/config": 7.0.3
+    "@expo/config-plugins": 5.0.4
+    "@expo/vector-icons": ^13.0.0
+    babel-preset-expo: ~9.2.2
+    cross-spawn: ^6.0.5
+    expo-application: ~5.0.1
+    expo-asset: ~8.7.0
+    expo-constants: ~14.0.2
+    expo-error-recovery: ~4.0.1
+    expo-file-system: ~15.1.1
+    expo-font: ~11.0.1
+    expo-keep-awake: ~11.0.1
+    expo-modules-autolinking: 1.0.2
+    expo-modules-core: 1.1.1
+    fbemitter: ^3.0.0
+    getenv: ^1.0.0
+    invariant: ^2.2.4
+    md5-file: ^3.2.3
+    node-fetch: ^2.6.7
+    pretty-format: ^26.5.2
+    uuid: ^3.4.0
+  dependenciesMeta:
+    expo-error-recovery:
+      optional: true
+  bin:
+    expo: bin/cli.js
+  checksum: be9e76703bc841449d2ac2719abb4a99e7a5a9937b8461b5ecf80146fe471dba56ef4bcd8258eb5800527c73ed68071f5a20c0a9a35751c21af51faf10c3c393
+  languageName: node
+  linkType: hard
+
 "export-from-json@npm:^1.7.2":
   version: 1.7.2
   resolution: "export-from-json@npm:1.7.2"
@@ -30311,7 +30373,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"promise@npm:^8.0.3":
+"promise@npm:^8.0.3, promise@npm:^8.3.0":
   version: 8.3.0
   resolution: "promise@npm:8.3.0"
   dependencies:
@@ -31140,7 +31202,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:~2.9.0":
+"react-native-gesture-handler@npm:2.9.0":
   version: 2.9.0
   resolution: "react-native-gesture-handler@npm:2.9.0"
   dependencies:
@@ -31573,6 +31635,50 @@ __metadata:
   bin:
     react-native: cli.js
   checksum: 5aca6e1dba32c450078117c874e368efa7e291fbf37263a30935e395475343ad78f87d4e41d12742cc16d9fcaebd5175a631962fc5d620daa312079782d0a66c
+  languageName: node
+  linkType: hard
+
+"react-native@npm:0.70.8":
+  version: 0.70.8
+  resolution: "react-native@npm:0.70.8"
+  dependencies:
+    "@jest/create-cache-key-function": ^27.0.1
+    "@react-native-community/cli": 9.3.2
+    "@react-native-community/cli-platform-android": 9.3.1
+    "@react-native-community/cli-platform-ios": 9.3.0
+    "@react-native/assets": 1.0.0
+    "@react-native/normalize-color": 2.0.0
+    "@react-native/polyfills": 2.0.0
+    abort-controller: ^3.0.0
+    anser: ^1.4.9
+    base64-js: ^1.1.2
+    event-target-shim: ^5.0.1
+    invariant: ^2.2.4
+    jsc-android: ^250230.2.1
+    memoize-one: ^5.0.0
+    metro-react-native-babel-transformer: 0.72.3
+    metro-runtime: 0.72.3
+    metro-source-map: 0.72.3
+    mkdirp: ^0.5.1
+    nullthrows: ^1.1.1
+    pretty-format: ^26.5.2
+    promise: ^8.3.0
+    react-devtools-core: 4.24.0
+    react-native-codegen: ^0.70.6
+    react-native-gradle-plugin: ^0.70.3
+    react-refresh: ^0.4.0
+    react-shallow-renderer: ^16.15.0
+    regenerator-runtime: ^0.13.2
+    scheduler: ^0.22.0
+    stacktrace-parser: ^0.1.3
+    use-sync-external-store: ^1.0.0
+    whatwg-fetch: ^3.0.0
+    ws: ^6.1.4
+  peerDependencies:
+    react: 18.1.0
+  bin:
+    react-native: cli.js
+  checksum: 6cd9d8a187ff71a992c90e49c0be1b0351dce5234d198b2e5999686ab3f1cfc30a2485b3e577329c066943888ee06bc546c3c69f3eae9e721c28280e2eaf12f6
   languageName: node
   linkType: hard
 
