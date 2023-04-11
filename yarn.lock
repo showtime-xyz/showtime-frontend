@@ -9080,7 +9080,6 @@ __metadata:
     react-string-replace: 1.1.0
     react-test-renderer: 18.2.0
     readable-stream: 4.3.0
-    recyclerlistview: ^4.2.0
     semver: ^7.4.0
     sentry-expo: ~6.1.0
     solito: 3.2.0
@@ -32786,7 +32785,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"recyclerlistview@npm:4.2.0, recyclerlistview@npm:^4.2.0":
+"recyclerlistview@npm:4.2.0":
   version: 4.2.0
   resolution: "recyclerlistview@npm:4.2.0"
   dependencies:
