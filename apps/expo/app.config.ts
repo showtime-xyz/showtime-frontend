@@ -135,8 +135,6 @@ const expoConfig: ExpoConfig = {
       },
     ],
     "expo-localization",
-    // Detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
-    ...(process.env.DETOX ? ["@config-plugins/detox"] : []),
     [
       "expo-image-picker",
       {
