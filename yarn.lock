@@ -21371,7 +21371,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-linear-gradient@npm:~12.1.2":
+"expo-linear-gradient@npm:12.1.2":
   version: 12.1.2
   resolution: "expo-linear-gradient@npm:12.1.2"
   peerDependencies:
@@ -32082,16 +32082,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-mmkv@npm:2.4.3":
-  version: 2.4.3
-  resolution: "react-native-mmkv@npm:2.4.3"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: d01cda411babfaabd6389c26d0ea403b36b5203d82b8a4fe4800317d4192aaa805fcafedd5945692c7893c6c95b01e1d57e8871a76dcd92ab594ed9c84c5faa3
-  languageName: node
-  linkType: hard
-
 "react-native-mmkv@npm:2.8.0":
   version: 2.8.0
   resolution: "react-native-mmkv@npm:2.8.0"
@@ -32269,7 +32259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^3.20.0":
+"react-native-screens@npm:3.20.0":
   version: 3.20.0
   resolution: "react-native-screens@npm:3.20.0"
   dependencies:
@@ -32308,16 +32298,6 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: f4fe1c9e802d7ea86b9efef74313a80fb75d486f40ca79aaa04d42ffd3f6e462a3f37ee54018fae9fd1efdc2d8b005d1e71b02bb266c0ab8baec70d9a5730892
-  languageName: node
-  linkType: hard
-
-"react-native-svg@npm:9.6.4":
-  version: 9.6.4
-  resolution: "react-native-svg@npm:9.6.4"
-  peerDependencies:
-    react: "*"
-    react-native: ">=0.50.0"
-  checksum: 6b62cf6dc6b6e1f434d643d4b1de8d01469f3ab50985e79b1c3a77c743cb5e830b04b7765dd791af7cdcce1245ebc8dba86380ee6c6849532ba9d4d2be8fc532
   languageName: node
   linkType: hard
 
