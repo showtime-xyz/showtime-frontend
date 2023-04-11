@@ -120,12 +120,11 @@ export const ClaimButton = ({
     return isSelf && isRaffleHasWinner;
   }, [edition.raffles, isRaffleDrop, isSelf]);
 
-  const handleCollectPress = () => {
-    if (isCanViewRaffleResult) {
-      redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
-      return;
-    }
-    console.log("efejfof");
+  const handleRaffleResultPress = () => {
+    redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
+  };
+
+  const handleCollectPress = (type: "free" | "appleMusic" | "spotify") => {
     if (
       claimStates.status === "loading" &&
       claimStates.signaturePrompt === false
@@ -134,50 +133,48 @@ export const ClaimButton = ({
       return;
     }
     dispatch({ type: "initial" });
+
     if (
       (edition.gating_type === "music_presave" ||
         edition.gating_type === "spotify_save" ||
         edition.gating_type === "multi_provider_music_save") &&
       !isAuthenticated
     ) {
-      Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
-      claimSpotifyGatedDrop();
+      if (type === "spotify") {
+        Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
+        claimSpotifyGatedDrop();
+      } else if (type === "appleMusic") {
+        claimAppleMusicGatedDrop();
+      }
     } else {
-      redirectToClaimDrop(edition.creator_airdrop_edition.contract_address);
+      redirectToClaimDrop(
+        edition.creator_airdrop_edition.contract_address,
+        type
+      );
     }
   };
 
-  let isExpired = false;
-  if (typeof edition?.time_limit === "string") {
-    isExpired = new Date() > new Date(edition.time_limit);
-  }
-
   const status = getClaimStatus(edition);
-
-  const disabled = isCanViewRaffleResult
-    ? false
-    : status === ClaimStatus.Claimed ||
-      status === ClaimStatus.Soldout ||
-      isExpired ||
-      isProgress;
 
   const bgIsGreen =
     status === ClaimStatus.Claimed || status === ClaimStatus.Soldout;
 
   const buttonProps = {
-    onPress: handleCollectPress,
-    disabled,
     style: [
       bgIsGreen
         ? { backgroundColor: colors.green[600] }
-        : isExpired && !bgIsGreen
+        : status === ClaimStatus.Expired && !bgIsGreen
         ? { backgroundColor: colors.gray[500] }
         : {},
       style,
     ],
     size,
     tw: [
-      isProgress ? "opacity-50" : isExpired && !bgIsGreen ? "opacity-100" : "",
+      isProgress
+        ? "opacity-50"
+        : status === ClaimStatus.Expired && !bgIsGreen
+        ? "opacity-100"
+        : "",
       tw,
     ],
     theme,
@@ -186,7 +183,7 @@ export const ClaimButton = ({
 
   if (isCanViewRaffleResult) {
     return (
-      <Button {...buttonProps}>
+      <Button {...buttonProps} onPress={handleRaffleResultPress}>
         <>
           <Text tw="text-sm font-semibold text-white">
             Announce your raffle
@@ -206,7 +203,7 @@ export const ClaimButton = ({
     );
   } else if (status === ClaimStatus.Claimed) {
     return (
-      <Button {...buttonProps}>
+      <Button {...buttonProps} disabled>
         <>
           <Check color="white" width={18} height={18} />
           <Text tw="ml-1 text-sm font-semibold text-white">Collected</Text>
@@ -215,7 +212,7 @@ export const ClaimButton = ({
     );
   } else if (status === ClaimStatus.Soldout) {
     return (
-      <Button {...buttonProps}>
+      <Button {...buttonProps} disabled>
         <>
           <Check color="white" width={20} height={20} />
           <Text tw="ml-1 text-sm font-semibold text-white">Sold out</Text>
@@ -224,7 +221,7 @@ export const ClaimButton = ({
     );
   } else if (status === ClaimStatus.Expired) {
     return (
-      <Button {...buttonProps}>
+      <Button {...buttonProps} disabled>
         <>
           <Hourglass color="white" width={16} height={16} />
           <Text tw="ml-1 text-sm font-semibold text-white">Time out</Text>
@@ -233,7 +230,7 @@ export const ClaimButton = ({
     );
   } else if (isProgress) {
     return (
-      <Button {...buttonProps}>
+      <Button {...buttonProps} disabled>
         <Text tw="text-sm font-bold">
           Collecting
           <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
@@ -242,7 +239,7 @@ export const ClaimButton = ({
     );
   } else if (edition?.gating_type === "spotify_save") {
     return (
-      <Button {...buttonProps}>
+      <Button {...buttonProps} onPress={() => handleCollectPress("spotify")}>
         <>
           <Spotify
             color={isDark ? colors.black : colors.white}
@@ -264,7 +261,7 @@ export const ClaimButton = ({
         {edition?.apple_music_track_url ? (
           <Button
             {...buttonProps}
-            onPress={() => claimAppleMusicGatedDrop({ closeModal: () => {} })}
+            onPress={() => handleCollectPress("appleMusic")}
             tw="flex-1 flex-row justify-center"
           >
             <AppleMusic width={20} height={20} />
@@ -280,7 +277,11 @@ export const ClaimButton = ({
         {edition?.spotify_track_url ? (
           <>
             <View tw="w-2" />
-            <Button {...buttonProps} tw="flex-1 flex-row justify-center">
+            <Button
+              {...buttonProps}
+              onPress={() => handleCollectPress("spotify")}
+              tw="flex-1 flex-row justify-center"
+            >
               <Spotify
                 color={isDark ? colors.black : colors.white}
                 width={20}
@@ -299,7 +300,7 @@ export const ClaimButton = ({
     );
   } else if (edition?.gating_type === "music_presave") {
     return (
-      <Button {...buttonProps}>
+      <Button {...buttonProps} onPress={() => handleCollectPress("spotify")}>
         <>
           <Spotify
             color={isDark ? colors.black : colors.white}
@@ -317,7 +318,16 @@ export const ClaimButton = ({
     );
   }
 
-  return <Button {...buttonProps}>Collect</Button>;
+  return (
+    <Button
+      {...buttonProps}
+      onPress={() => {
+        handleCollectPress("free");
+      }}
+    >
+      Collect
+    </Button>
+  );
 };
 
 // const AppleMusicSaveButton = ({
