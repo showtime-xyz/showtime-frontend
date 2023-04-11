@@ -252,11 +252,8 @@ export const useDropNFT = () => {
         royalty_bps: params.royalty * 100,
         claim_window_duration_seconds: params.duration,
         nsfw: params.notSafeForWork,
-        // spotify_url: params.spotifyUrl,
+        spotify_url: params.spotifyUrl,
         apple_music_track_id: params.appleMusicTrackId,
-        //@ts-ignore TODO: remove this once backend is deployed
-        apple_music_artist_id: user?.data.profile.apple_music_artist_id,
-        // spotify_artist_id: user?.data.profile.spotify_artist_id,
         gating_type: gatingType,
         password: params.password !== "" ? params.password : undefined,
         ...locationGating,

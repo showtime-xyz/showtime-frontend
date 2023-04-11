@@ -63,7 +63,8 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
             });
 
             toast.success(
-              "You just saved this song to your library! Sign in now to collect this drop."
+              "You just saved this song to your library! Sign in now to collect this drop.",
+              { duration: 5 }
             );
             await loginPromise();
             await onboardingPromise();
