@@ -8,7 +8,6 @@ import { useUser } from "app/hooks/use-user";
 
 import { BottomTabbar } from "./bottom-tab-bar";
 import {
-  CreateTabBarIcon,
   HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
@@ -56,7 +55,7 @@ export function BottomTabNavigator() {
           name="createTab"
           component={CreateNavigator}
           options={{
-            tabBarIcon: CreateTabBarIcon,
+            tabBarButton: () => null,
           }}
         />
       )}

@@ -2,6 +2,7 @@ import { useState, useLayoutEffect, useRef } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import type { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -11,9 +12,10 @@ type Props = {
   title?: string;
   cardMaxWidth?: number;
   disableTooltip?: boolean;
+  tw?: TW;
 };
 
-export function Title({ title, disableTooltip = false }: Props) {
+export function Title({ title, disableTooltip = false, tw }: Props) {
   const isDark = useIsDarkMode();
   const [isUseTooltip, setIsOverflow] = useState(
     Platform.OS === "web" && !disableTooltip
@@ -36,7 +38,7 @@ export function Title({ title, disableTooltip = false }: Props) {
   if (!title) return null;
 
   return (
-    <View ref={textRef} tw="px-4 pt-4">
+    <View ref={textRef} tw={tw ?? "px-4 pt-4"}>
       {isUseTooltip ? (
         <Tooltip.Root>
           <Tooltip.Trigger>

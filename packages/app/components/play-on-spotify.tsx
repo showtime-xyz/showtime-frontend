@@ -30,15 +30,12 @@ export const PlayOnSpotify = ({
         }
       }}
     >
-      <View
-        tw="rounded-xl bg-gray-800/80"
-        style={StyleSheet.absoluteFillObject}
-      />
+      <View tw="rounded-sm bg-black/60" style={StyleSheet.absoluteFillObject} />
       <View tw="flex-row items-center">
         <Spotify color="white" width={20} height={20} />
         <Text
           style={{ lineHeight: 18 }}
-          tw="ml-1 text-xs font-semibold text-white"
+          tw="ml-1 text-sm font-semibold text-white"
         >
           Play on Spotify
         </Text>

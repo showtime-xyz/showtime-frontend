@@ -11,14 +11,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
-import {
-  WEB_HEADER_HEIGHT,
-  MOBILE_WEB_HEADER_HEIGHT,
-} from "app/constants/layout";
+import { WEB_HEADER_HEIGHT } from "app/constants/layout";
+import { SWIPE_LIST_SCREENS } from "app/lib/constants";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
-
-import { breakpoints } from "design-system/theme";
 
 import { withColorScheme } from "../memo-with-theme";
 import { HeaderLeft } from "./header-left";
@@ -96,14 +92,15 @@ export const NotificationsInHeader = () => {
 
 export const Header = withColorScheme(
   ({ canGoBack }: { canGoBack: boolean }) => {
-    const { width } = useWindowDimensions();
     const { isHeaderHidden } = useNavigationElements();
     const isDark = useIsDarkMode();
-    const isMdWidth = width >= breakpoints["md"];
-
-    if (isMdWidth) {
-      return (
-        <View tw="fixed left-0 right-0 top-0 z-50 w-screen items-center bg-white/60 stroke-inherit backdrop-blur-md dark:bg-black/60">
+    const router = useRouter();
+    if (isHeaderHidden) {
+      return null;
+    }
+    return (
+      <>
+        <View tw="fixed left-0 right-0 top-0 z-50 hidden w-screen items-center bg-white/60 stroke-inherit backdrop-blur-md dark:bg-black/60 md:flex">
           <View
             style={{
               height: WEB_HEADER_HEIGHT,
@@ -111,33 +108,24 @@ export const Header = withColorScheme(
             tw="w-full max-w-screen-2xl flex-row justify-between px-4 py-2"
           >
             <View tw="items-start">
-              <HeaderCenter isDark={isDark} isMdWidth={isMdWidth} />
+              <HeaderCenter isDark={isDark} />
             </View>
             <View tw="items-end">
               <HeaderRight />
             </View>
           </View>
         </View>
-      );
-    }
-
-    if (isHeaderHidden) {
-      return null;
-    }
-
-    return (
-      <View
-        style={{ height: MOBILE_WEB_HEADER_HEIGHT }}
-        tw="fixed left-0 right-0 top-0 z-50 h-16 w-full flex-row items-center justify-between px-4 py-2"
-      >
-        <View tw="w-20 items-start">
-          <HeaderLeft withBackground={!isMdWidth} canGoBack={canGoBack} />
-        </View>
-
-        <View tw="w-20 items-end">
-          <HeaderRight withBackground={!isMdWidth} />
-        </View>
-      </View>
+        <>
+          <View tw={["fixed left-4 top-2 z-10 flex md:hidden"]}>
+            <HeaderLeft withBackground canGoBack={canGoBack} />
+          </View>
+          {!SWIPE_LIST_SCREENS.includes(router.pathname) && (
+            <View tw={["fixed right-4 top-2 z-10 flex md:hidden"]}>
+              <HeaderRight withBackground />
+            </View>
+          )}
+        </>
+      </>
     );
   }
 );

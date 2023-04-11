@@ -27,7 +27,7 @@ export const Trending = () => {
     }: SceneRendererProps & {
       route: Route;
     }) => {
-      return <TabListContainer days={Number(key)} index={sceneIndex} />;
+      return <TabListContainer filter={key} index={sceneIndex} />;
     },
     []
   );
@@ -65,7 +65,6 @@ export const Trending = () => {
         initialLayout={{
           width: contentWidth,
         }}
-        // renderSceneHeader={renderSceneHeader}
       />
     </TrendingContext.Provider>
   );

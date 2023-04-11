@@ -23,6 +23,7 @@ import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { ProfileScreen } from "app/screens/profile";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
+import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
@@ -68,6 +69,8 @@ export function RootStackNavigator() {
             animation: "none",
           }}
         />
+        <Stack.Screen name="nft" component={NftScreen} />
+        <Stack.Screen name="dropSlug" component={NftScreen} />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -107,9 +110,6 @@ export function RootStackNavigator() {
           options={{ headerTitle: "Comments" }}
           component={CommentsScreen}
         />
-
-        <Stack.Screen name="nft" component={NftScreen} />
-        <Stack.Screen name="dropSlug" component={NftScreen} />
         <Stack.Screen
           name="dropUpdate"
           options={{ headerTitle: "Update Spotify Link" }}
@@ -146,6 +146,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="dropPrivate" component={DropPrivateScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
+        <Stack.Screen name="raffle" component={RaffleScreen} />
       </Stack.Group>
       <Stack.Group
         screenOptions={{

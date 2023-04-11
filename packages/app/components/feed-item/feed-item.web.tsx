@@ -1,10 +1,5 @@
 import { memo, useState, useMemo, useRef } from "react";
-import {
-  StyleProp,
-  StyleSheet,
-  useWindowDimensions,
-  ViewStyle,
-} from "react-native";
+import { StyleProp, useWindowDimensions, ViewStyle } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
 import { ResizeMode } from "expo-av";
@@ -16,12 +11,13 @@ import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { BlurView } from "app/lib/blurview";
 import type { NFT } from "app/types";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
+import { NFTDropdown } from "../nft-dropdown";
 import { NFTDetails } from "./details";
+import { EngagementIcons } from "./engagement-icons";
 import { FeedItemMD } from "./feed-item.md";
 import { NSFWGate } from "./nsfw-gate";
 
@@ -41,6 +37,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const bottomHeight = usePlatformBottomHeight();
+  const { data: detailData } = useNFTDetailByTokenId({
+    contractAddress: nft?.contract_address,
+    tokenId: nft?.token_id,
+    chainName: nft?.chain_name,
+  });
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
@@ -85,8 +86,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }
 
   return (
-    <>
-      <LikeContextProvider nft={nft} key={nft.nft_id}>
+    <View tw="bg-black">
+      <LikeContextProvider nft={nft}>
         {nft?.mime_type?.startsWith("video") ? (
           <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
             <MuteButton variant="mobile-web" />
@@ -97,7 +98,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           style={{ height: itemHeight, overflow: "hidden" }}
         >
           <View
-            tw="duration-200"
+            tw="animate-fade-in-500"
             style={{
               paddingTop,
             }}
@@ -123,7 +124,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             </FeedItemTapGesture>
           </View>
           <View
-            tw="absolute bottom-0 w-full bg-white/60 backdrop-blur-md dark:bg-black/60"
+            tw="z-1 pointer-events-none absolute bottom-0 w-full"
             style={{
               paddingBottom: bottomHeight,
             }}
@@ -135,21 +136,30 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               setDetailHeight(height);
             }}
           >
-            <BlurView
-              blurRadius={15}
-              style={StyleSheet.absoluteFillObject}
-              overlayColor="transparent"
+            <NFTDetails
+              edition={edition}
+              nft={nft}
+              detail={detailData?.data?.item}
             />
+          </View>
+          <EngagementIcons nft={nft} bottomPadding={bottomHeight} />
 
-            <View tw="z-9 absolute -top-[40px] left-2.5">
-              <ContentTypeTooltip edition={edition} />
-            </View>
-            <NFTDetails edition={edition} nft={nft} />
+          <View
+            tw="absolute right-4 z-50"
+            style={{
+              top: 8,
+            }}
+          >
+            <NFTDropdown
+              nft={detailData?.data?.item ?? nft}
+              edition={edition}
+              tw="rounded-full bg-black/60 px-1 py-1"
+            />
           </View>
         </View>
       </LikeContextProvider>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
-    </>
+    </View>
   );
 });
 FeedItem.displayName = "FeedItem";

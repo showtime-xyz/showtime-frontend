@@ -15,9 +15,9 @@ export const MuteButton = memo(function MuteButton({
   variant,
 }: MuteButtonProps) {
   const [muted, setMuted] = useMuted();
-  const size = useMemo(() => (variant === "mobile-web" ? 22 : 16), [variant]);
+  const size = useMemo(() => (variant === "mobile-web" ? 22 : 18), [variant]);
 
-  if (Platform.OS !== "web" || !muted) return null;
+  if (Platform.OS !== "web" || (Platform.OS !== "web" && !muted)) return null;
 
   return (
     <Pressable
@@ -34,7 +34,7 @@ export const MuteButton = memo(function MuteButton({
       {muted ? (
         <Muted nativeID="12344" color="#fff" width={size} height={size} />
       ) : (
-        <Unmuted nativeID="12344" color="#fff" width={16} height={16} />
+        <Unmuted nativeID="12344" color="#fff" width={size} height={size} />
       )}
     </Pressable>
   );

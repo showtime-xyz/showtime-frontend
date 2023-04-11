@@ -9,11 +9,12 @@ export const useSocialColor = () => {
   const isDark = useIsDarkMode();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+
   return {
-    iconColor: isDark
-      ? isMdWidth
+    iconColor: isMdWidth
+      ? isDark
         ? colors.gray[400]
-        : colors.white
-      : colors.gray[900],
+        : colors.gray[900]
+      : colors.white,
   };
 };

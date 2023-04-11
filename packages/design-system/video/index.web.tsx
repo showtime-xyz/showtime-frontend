@@ -68,7 +68,7 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
           alt={"Video Poster"}
         />
       ) : (
-        <View>
+        <View style={{ height: "inherit", width: "inherit" }}>
           <Image
             tw={tw}
             style={style as ImageStyle}

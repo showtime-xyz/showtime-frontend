@@ -1,4 +1,6 @@
-const resolveDesignSystemPackages = require("../../plugins/resolve-design-system-packages");
+const {
+  resolveDesignSystemPackages,
+} = require("../../plugins/resolve-design-system-packages");
 
 module.exports = function (api) {
   api.cache(true);

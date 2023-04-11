@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useRef } from "react";
 import { Dimensions, Platform, useWindowDimensions } from "react-native";
 
+import { toggleColorScheme } from "@showtime-xyz/universal.color-scheme";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 
@@ -8,7 +10,10 @@ import { FeedItem } from "app/components/feed-item";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useScrollToTop } from "app/lib/react-navigation/native";
+import {
+  useFocusEffect,
+  useScrollToTop,
+} from "app/lib/react-navigation/native";
 import type { NFT } from "app/types";
 
 const { height: screenHeight } = Dimensions.get("screen");
@@ -24,7 +29,6 @@ type Props = {
   initialScrollIndex?: number;
   bottomPadding?: number;
 };
-
 export const SwipeList = ({
   data,
   fetchMore,
@@ -34,6 +38,7 @@ export const SwipeList = ({
   bottomPadding = 0,
 }: Props) => {
   const listRef = useRef<any>(null);
+  const isDark = useIsDarkMode();
   const headerHeight = useHeaderHeight();
   useScrollToTop(listRef);
   const { height: safeAreaFrameHeight } = useSafeAreaFrame();
@@ -71,6 +76,17 @@ export const SwipeList = ({
     }),
     []
   );
+  useFocusEffect(
+    useCallback(() => {
+      // The reason for adding setTimeout is that the profile screen has a useFocusEffect hook, which will be affected by this hook.
+      setTimeout(() => {
+        toggleColorScheme(true);
+      }, 100);
+      return () => {
+        toggleColorScheme(isDark);
+      };
+    }, [isDark])
+  );
 
   const extendedState = useMemo(() => ({ bottomPadding }), [bottomPadding]);
 
@@ -78,7 +94,6 @@ export const SwipeList = ({
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      {/* <Header disableBlur canGoBack={false} color="#FFF" /> */}
       <ViewabilityInfiniteScrollList
         data={data}
         onEndReached={fetchMore}

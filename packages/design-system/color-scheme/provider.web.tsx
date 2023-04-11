@@ -14,6 +14,9 @@ import {
 } from "./store";
 import { getDisabledSystemTheme } from "./store";
 
+// eslint-disable-next-line unused-imports/no-unused-vars
+export const toggleColorScheme = (isDark?: boolean) => {};
+
 export function ColorSchemeProvider({
   children,
 }: {
