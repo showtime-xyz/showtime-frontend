@@ -50,8 +50,6 @@ export default {
     favicon: "./assets/favicon.png",
   },
   plugins: [
-    // Detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
-    process.env.DETOX ? "@config-plugins/detox" : (x) => x,
     [
       "expo-image-picker",
       {
