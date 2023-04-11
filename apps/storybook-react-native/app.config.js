@@ -71,15 +71,14 @@ export default {
     ],
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
-    "./plugins/react-native-cronet.js",
     [
       "expo-build-properties",
       {
         android: {
-          compileSdkVersion: 32,
-          targetSdkVersion: 32,
-          buildToolsVersion: "32.0.0",
-          kotlinVersion: "1.6.10",
+          compileSdkVersion: 33,
+          targetSdkVersion: 33,
+          buildToolsVersion: "33.0.0",
+          kotlinVersion: "1.6.20",
         },
         ios: {
           deploymentTarget: "13.0",
