@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-gesture-handler/lib/commonjs/components/GestureComponents.web.js b/node_modules/react-native-gesture-handler/lib/commonjs/components/GestureComponents.web.js
+index 0a879ab..fde7cb6 100644
+--- a/node_modules/react-native-gesture-handler/lib/commonjs/components/GestureComponents.web.js
++++ b/node_modules/react-native-gesture-handler/lib/commonjs/components/GestureComponents.web.js
+@@ -36,7 +36,7 @@ const DrawerLayoutAndroid = (0, _createNativeWrapper.default)(_reactNative.Drawe
+ }); // @ts-ignore -- TODO(TS) to investigate if it's needed
+ 
+ exports.DrawerLayoutAndroid = DrawerLayoutAndroid;
+-DrawerLayoutAndroid.positions = _reactNative.DrawerLayoutAndroid.positions; // RefreshControl is implemented as a functional component, rendering a View
++// DrawerLayoutAndroid.positions = _reactNative.DrawerLayoutAndroid.positions; // RefreshControl is implemented as a functional component, rendering a View
+ // NativeViewGestureHandler needs to set a ref on its child, which cannot be done
+ // on functional components
+ 

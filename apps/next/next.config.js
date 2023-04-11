@@ -10,10 +10,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 const cache = require("./workbox-cache");
-const {
-  getDesignSystemPackages,
-  resolveAliasDesignSystemPackages,
-} = require("../../plugins/resolve-design-system-packages");
+
 const withPWA = require("next-pwa")({
   dest: "public",
   disable: isDev,
@@ -108,6 +105,8 @@ const nextConfig = {
         "react-native-web/dist/vendor/react-native/emitter/EventEmitter",
       "react-native/Libraries/EventEmitter/NativeEventEmitter$":
         "react-native-web/dist/vendor/react-native/NativeEventEmitter",
+      "react-native-web/dist/cjs/exports/DrawerLayoutAndroid":
+        "react-native-web/dist/cjs/modules/UnimplementedView",
     };
 
     config.resolve.extensions = [
