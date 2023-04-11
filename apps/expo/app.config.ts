@@ -161,6 +161,7 @@ const expoConfig: ExpoConfig = {
     "./plugins/react-native-cronet.js",
     "./plugins/with-spotify-sdk.js",
     "./plugins/with-android-splash-screen.js",
+    "./plugins/with-disabled-force-dark-mode.js",
     [
       withInfoPlist,
       (config) => {
