@@ -62,8 +62,6 @@
     "@showtime-xyz/date-picker": "^0.2.0",
     "@stripe/react-stripe-js": "2.1.0",
     "@stripe/stripe-js": "^1.52.1",
-    "@testing-library/jest-native": "^4.0.4",
-    "@testing-library/react-native": "^9.1.0",
     "@tradle/react-native-http": "^2.0.1",
     "@types/tinycolor2": "^1.4.3",
     "@walletconnect/react-native-dapp": "^1.8.0",
@@ -259,9 +257,6 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-native/extend-expect"
-    ],
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|@sentry/.*|native-base|react-native-svg|@walletconnect/.*|@motify/.*|solito|moti|@biconomy/.*|@react-three/.*|@babel/.*)"
     ]
