@@ -52,7 +52,8 @@ LogBox.ignoreLogs([
 ]);
 
 function App() {
-  const [notification, setNotification] = useState(null);
+  const [notification, setNotification] =
+    useState<Notifications.Notification | null>(null);
 
   useEffect(() => {
     AvoidSoftInput.setEnabled(true);
@@ -108,7 +109,9 @@ function App() {
           try {
             await Image.clearMemoryCache();
             Logger.log("did receive memory warning and cleared");
-          } catch {}
+          } catch {
+            // do nothing
+          }
         }
         clearFastImageMemory();
       }
@@ -120,6 +123,7 @@ function App() {
   }, []);
 
   // Listeners registered by this method will be called whenever a user interacts with a notification (eg. taps on it).
+  /*
   useEffect(() => {
     const responseListener =
       Notifications.addNotificationResponseReceivedListener((response) => {
@@ -135,6 +139,7 @@ function App() {
 
     return () => Notifications.removeNotificationSubscription(responseListener);
   }, []);
+  */
 
   return (
     <AppProviders>
