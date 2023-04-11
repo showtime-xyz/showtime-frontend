@@ -78,7 +78,7 @@
     "universal-tooltip": "^0.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.4",
+    "@babel/core": "^7.19.3",
     "@types/three": "0.150.1",
     "typescript": "5.0.4"
   },
