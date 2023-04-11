@@ -68,7 +68,6 @@
     "react-hot-toast": "^2.4.0",
     "react-native-reanimated-swc-plugin": "^0.2.0",
     "react-native-web": "0.19.2",
-    "react-native-web-lite": "^1.14.3",
     "react-remove-scroll": "^2.5.5",
     "react-remove-scroll-bar": "^2.3.4",
     "react-stickynode": "^4.0.0",
