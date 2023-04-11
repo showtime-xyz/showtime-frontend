@@ -152,9 +152,9 @@ export class ReactNativeWebMain {
        */
       reactNative.overrideDependencies({
         devDependencies: {
-          "@babel/core": "^7.18.9",
-          "@babel/runtime": "^7.18.9",
-          "babel-preset-expo": "^9.3.1",
+          "@babel/core": "^7.20.12",
+          "@babel/runtime": "^7.20.13",
+          "babel-preset-expo": "^9.3.2",
           "@storybook/react": "6.5.9",
         },
       }),
