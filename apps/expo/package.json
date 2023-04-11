@@ -41,7 +41,7 @@
     "@coinbase/wallet-mobile-sdk": "^1.0.5",
     "@ethersproject/shims": "^5.7.0",
     "@gorhom/bottom-sheet": "4.4.5",
-    "@hcaptcha/react-native-hcaptcha": "https://github.com/hCaptcha/react-native-hcaptcha#1.5.1",
+    "@hcaptcha/react-native-hcaptcha": "^1.5.1",
     "@hookform/resolvers": "^3.0.1",
     "@magic-ext/react-native-expo-oauth": "^8.1.0",
     "@magic-sdk/react-native-expo": "^14.1.0",
