@@ -198,11 +198,11 @@ const expoConfig: ExpoConfig = {
       "expo-build-properties",
       {
         android: {
-          compileSdkVersion: 32,
-          targetSdkVersion: 32,
+          compileSdkVersion: 33,
+          targetSdkVersion: 33,
           minSdkVersion: 23,
-          buildToolsVersion: "32.0.0",
-          kotlinVersion: "1.6.10",
+          buildToolsVersion: "33.0.0",
+          kotlinVersion: "1.6.20",
         },
         ios: {
           deploymentTarget: "13.0",
