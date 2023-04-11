@@ -1,4 +1,4 @@
-import { useContext, useMemo, useCallback } from "react";
+import { useContext, useMemo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
 import { formatDistanceToNowStrict } from "date-fns";
@@ -6,8 +6,12 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check, Hourglass } from "@showtime-xyz/universal.icon";
-import { Spotify, Apple } from "@showtime-xyz/universal.icon";
+import {
+  Spotify,
+  AppleMusic,
+  Check,
+  Hourglass,
+} from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -62,7 +66,9 @@ export const ClaimButton = ({
 }: ClaimButtonProps) => {
   const isDarkMode = useIsDarkMode();
   const isDark = theme === "dark" || (theme === "light" ? false : isDarkMode);
-
+  const { claimAppleMusicGatedDrop } = useAppleMusicGatedClaim(
+    edition.creator_airdrop_edition
+  );
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const redirectToRaffleResult = useRedirectToRaffleResult();
   const {
@@ -119,6 +125,7 @@ export const ClaimButton = ({
       redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
       return;
     }
+    console.log("efejfof");
     if (
       claimStates.status === "loading" &&
       claimStates.signaturePrompt === false
@@ -129,7 +136,8 @@ export const ClaimButton = ({
     dispatch({ type: "initial" });
     if (
       (edition.gating_type === "music_presave" ||
-        edition.gating_type === "spotify_save") &&
+        edition.gating_type === "spotify_save" ||
+        edition.gating_type === "multi_provider_music_save") &&
       !isAuthenticated
     ) {
       Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
@@ -160,13 +168,11 @@ export const ClaimButton = ({
     onPress: handleCollectPress,
     disabled,
     style: [
-      {
-        backgroundColor: bgIsGreen
-          ? colors.green[600]
-          : isExpired && !bgIsGreen
-          ? colors.gray[500]
-          : undefined,
-      },
+      bgIsGreen
+        ? { backgroundColor: colors.green[600] }
+        : isExpired && !bgIsGreen
+        ? { backgroundColor: colors.gray[500] }
+        : {},
       style,
     ],
     size,
@@ -210,8 +216,10 @@ export const ClaimButton = ({
   } else if (status === ClaimStatus.Soldout) {
     return (
       <Button {...buttonProps}>
-        <Check color="white" width={20} height={20} />
-        <Text tw="ml-1 text-sm font-semibold text-white">Sold out</Text>
+        <>
+          <Check color="white" width={20} height={20} />
+          <Text tw="ml-1 text-sm font-semibold text-white">Sold out</Text>
+        </>
       </Button>
     );
   } else if (status === ClaimStatus.Expired) {
@@ -252,24 +260,41 @@ export const ClaimButton = ({
     );
   } else if (edition?.gating_type === "multi_provider_music_save") {
     return (
-      <View tw="flex-row">
-        <AppleMusicSaveButton {...buttonProps} edition={edition} />
-        <View tw="w-2" />
-        <Button {...buttonProps}>
-          <>
-            <Spotify
-              color={isDark ? colors.black : colors.white}
-              width={20}
-              height={20}
-            />
+      <View tw="w-full flex-row">
+        {edition?.apple_music_track_url ? (
+          <Button
+            {...buttonProps}
+            onPress={() => claimAppleMusicGatedDrop({ closeModal: () => {} })}
+            tw="flex-1 flex-row justify-center"
+          >
+            <AppleMusic width={20} height={20} />
             <Text
               tw="ml-1 text-sm font-semibold"
               style={{ color: isDark ? colors.black : colors.white }}
             >
-              {isAuthenticated ? "Save to Collect" : "Save on Spotify"}
+              Apple Music
             </Text>
+          </Button>
+        ) : null}
+
+        {edition?.spotify_track_url ? (
+          <>
+            <View tw="w-2" />
+            <Button {...buttonProps} tw="flex-1 flex-row justify-center">
+              <Spotify
+                color={isDark ? colors.black : colors.white}
+                width={20}
+                height={20}
+              />
+              <Text
+                tw="ml-1 text-sm font-semibold"
+                style={{ color: isDark ? colors.black : colors.white }}
+              >
+                Spotify
+              </Text>
+            </Button>
           </>
-        </Button>
+        ) : null}
       </View>
     );
   } else if (edition?.gating_type === "music_presave") {
@@ -295,42 +320,35 @@ export const ClaimButton = ({
   return <Button {...buttonProps}>Collect</Button>;
 };
 
-const AppleMusicSaveButton = ({
-  edition,
-  ...rest
-}: {
-  edition: CreatorEditionResponse;
-}) => {
-  const isDark = useIsDarkMode();
+// const AppleMusicSaveButton = ({
+//   edition,
+//   ...rest
+// }: {
+//   edition: CreatorEditionResponse;
+// }) => {
+//   const isDark = useIsDarkMode();
 
-  const { claimAppleMusicGatedDrop, isMutating } = useAppleMusicGatedClaim(
-    edition.creator_airdrop_edition
-  );
+//   const { claimAppleMusicGatedDrop, isMutating } = useAppleMusicGatedClaim(
+//     edition.creator_airdrop_edition
+//   );
 
-  if (edition.apple_music_track_name) {
-    return (
-      <Button
-        {...rest}
-        onPress={() => claimAppleMusicGatedDrop({ closeModal: () => {} })}
-        disabled={isMutating}
-        size="regular"
-      >
-        <>
-          <Apple
-            color={isDark ? colors.black : colors.white}
-            width={20}
-            height={20}
-          />
-          <Text
-            tw="ml-1 text-sm font-semibold"
-            style={{ color: isDark ? colors.black : colors.white }}
-          >
-            Save on Apple Music
-          </Text>
-        </>
-      </Button>
-    );
-  }
+//   if (edition.apple_music_track_name) {
+//     return (
+//       <Button
+//         {...rest}
+//         onPress={() => claimAppleMusicGatedDrop({ closeModal: () => {} })}
+//         disabled={isMutating}
+//         size="regular"
+//       >
+//         <>
+//           <AppleMusic width={20} height={20} />
+//           <Text tw="ml-1 text-sm font-semibold text-white dark:text-black">
+//             Apple Music
+//           </Text>
+//         </>
+//       </Button>
+//     );
+//   }
 
-  return null;
-};
+//   return null;
+// };
