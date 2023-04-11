@@ -163,7 +163,6 @@ const expoConfig: ExpoConfig = {
     "./plugins/react-native-cronet.js",
     "./plugins/with-spotify-sdk.js",
     "./plugins/with-android-splash-screen.js",
-    "./plugins/fix-deployment-target.js",
     [
       withInfoPlist,
       (config) => {

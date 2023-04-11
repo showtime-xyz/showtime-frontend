@@ -16,7 +16,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
-    "react-native-web": "~0.18.10"
+    "react-native-web": "~0.18.12"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
@@ -28,7 +28,7 @@
     "@storybook/manager-webpack5": "~6.5.9",
     "@storybook/react": "~6.5.9",
     "@types/node": "16.11.9",
-    "@types/react": "18.0.24",
+    "@types/react": "18.0.34",
     "autoprefixer": "^10.4.14",
     "babel-loader": "^8.2.3",
     "babel-plugin-react-native-web": "^0.17.5",
