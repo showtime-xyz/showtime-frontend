@@ -203,7 +203,7 @@
     "semver": "^7.4.0",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4",
-    "zx": "4.3.0"
+    "zx": "^7.2.1"
   },
   "private": true,
   "version": "1.0.0",
