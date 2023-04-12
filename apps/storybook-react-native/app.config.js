@@ -73,6 +73,15 @@ export default {
     "./plugins/with-hermes-ios-m1-workaround.js",
     "./plugins/react-native-cronet.js",
     [
+      "@bacons/link-assets",
+      [
+        "./assets/fonts/Inter-Bold.otf",
+        "./assets/fonts/Inter-Medium.otf",
+        "./assets/fonts/Inter-Regular.otf",
+        "./assets/fonts/Inter-SemiBold.otf",
+      ],
+    ],
+    [
       "expo-build-properties",
       {
         android: {
