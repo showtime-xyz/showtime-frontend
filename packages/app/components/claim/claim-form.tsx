@@ -181,31 +181,22 @@ export const ClaimForm = ({
 
   const linkifiedDescription = useMemo(
     () =>
-      linkifyDescription(
-        limitLineBreaks(
-          cleanUserTextInput(
-            removeTags(edition.creator_airdrop_edition.description)
+      edition?.creator_airdrop_edition?.description
+        ? linkifyDescription(
+            limitLineBreaks(
+              cleanUserTextInput(
+                removeTags(edition.creator_airdrop_edition.description)
+              )
+            )
           )
-        )
-      ),
-    [edition.creator_airdrop_edition.description]
+        : "",
+    [edition?.creator_airdrop_edition?.description]
   );
   const isDisableButton =
     state.status === "loading" ||
     (edition.gating_type === "multi" && !location && !password) ||
     (edition.gating_type === "password" && !password) ||
     (edition.gating_type === "location" && !location?.coords);
-  // const [ensName, setEnsName] = React.useState<string | null>(null);
-  // React.useEffect(() => {
-  //   web3
-  //     ?.getSigner()
-  //     .getAddress()
-  //     .then((addr) => {
-  //       web3?.lookupAddress(addr).then((name) => {
-  //         setEnsName(name);
-  //       });
-  //     });
-  // }, [web3]);
 
   if (isIncompletedProfile) {
     return null;

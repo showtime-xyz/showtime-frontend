@@ -103,9 +103,13 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const [showFullScreen, setShowFullScreen] = useState(false);
   const description = useMemo(
     () =>
-      linkifyDescription(
-        limitLineBreaks(cleanUserTextInput(removeTags(nft?.token_description)))
-      ),
+      nft?.token_description
+        ? linkifyDescription(
+            limitLineBreaks(
+              cleanUserTextInput(removeTags(nft?.token_description))
+            )
+          )
+        : "",
     [nft?.token_description]
   );
 
