@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { View } from "@showtime-xyz/universal.view";
 
 import type { Activity, TableProps } from "./nft-activity.types";
@@ -25,7 +25,7 @@ const ActivityTable = ({ data }: TableProps) => {
         showsHorizontalScrollIndicator={false}
       >
         <TableHead />
-        <InfiniteScrollList
+        <InfiniteScrollListV2
           data={data}
           useWindowScroll={false}
           renderItem={handleRenderItem}

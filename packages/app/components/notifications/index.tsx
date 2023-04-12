@@ -4,7 +4,7 @@ import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -106,7 +106,7 @@ export const Notifications = ({
 
   return (
     <>
-      <InfiniteScrollList
+      <InfiniteScrollListV2
         useWindowScroll={false}
         data={data}
         ListHeaderComponent={Platform.select({

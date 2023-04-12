@@ -17,7 +17,10 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import {
+  InfiniteScrollList,
+  InfiniteScrollListV2,
+} from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -194,7 +197,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
         <View tw="web:pt-4 flex-grow">
-          <InfiniteScrollList
+          <InfiniteScrollListV2
             data={dataReversed}
             refreshing={isLoading}
             renderItem={renderItem}

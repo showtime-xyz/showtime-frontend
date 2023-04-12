@@ -16,7 +16,7 @@ import Animated, {
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check } from "@showtime-xyz/universal.icon";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -67,7 +67,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
         tw={["flex-1 bg-white dark:bg-black", props?.tw ?? ""]}
         style={props.style}
       >
-        <InfiniteScrollList
+        <InfiniteScrollListV2
           useWindowScroll={false}
           data={props.data ?? data}
           keyExtractor={keyExtractor}
@@ -75,10 +75,7 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
           ItemSeparatorComponent={ItemSeparatorComponent}
           keyboardShouldPersistTaps="handled"
           estimatedItemSize={64}
-          overscan={{
-            main: 64,
-            reverse: 64,
-          }}
+          style={{ flex: 1 }}
         />
       </View>
     </PickerContext.Provider>

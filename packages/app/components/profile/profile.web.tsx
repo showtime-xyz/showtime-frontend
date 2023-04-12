@@ -17,7 +17,7 @@ import type { ParsedUrlQuery } from "querystring";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -293,7 +293,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 user?.data?.profile?.profile_id === profileId ? type : undefined
               }
             >
-              <InfiniteScrollList
+              <InfiniteScrollListV2
                 useWindowScroll={isMdWidth}
                 ListHeaderComponent={Header}
                 numColumns={1}
@@ -301,10 +301,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
                 estimatedItemSize={contentWidth / numColumns}
-                overscan={{
-                  main: contentWidth / numColumns,
-                  reverse: contentWidth / numColumns,
-                }}
                 style={{
                   height: screenHeight - 64,
                 }}

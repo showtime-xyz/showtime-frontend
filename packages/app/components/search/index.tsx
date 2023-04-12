@@ -10,7 +10,7 @@ import {
   Search as SearchIcon,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -119,7 +119,7 @@ export const Search = () => {
         </View>
       </View>
       {data ? (
-        <InfiniteScrollList
+        <InfiniteScrollListV2
           data={data}
           renderItem={renderItem}
           ItemSeparatorComponent={Separator}

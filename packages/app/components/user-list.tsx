@@ -4,7 +4,7 @@ import { Chip } from "@showtime-xyz/universal.chip";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import {
-  InfiniteScrollList,
+  InfiniteScrollListV2,
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -56,7 +56,8 @@ export const UserList = ({
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: UserItemType }) => {
+    ({ item, index }: { item: UserItemType }) => {
+      console.log("iutem ", item, index);
       return (
         <FollowingListUser item={item} follow={follow} unFollow={unfollow} />
       );
@@ -78,7 +79,7 @@ export const UserList = ({
   }
 
   return (
-    <InfiniteScrollList
+    <InfiniteScrollListV2
       data={users}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
