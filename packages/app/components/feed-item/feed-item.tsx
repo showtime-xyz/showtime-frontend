@@ -37,6 +37,7 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
@@ -64,6 +65,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   setMomentumScrollCallback,
 }) {
   const lastItemId = useRef(nft.nft_id);
+  const { isAuthenticated } = useUser();
   const detailViewRef = useRef<Reanimated.View>(null);
   const headerHeight = useHeaderHeight();
   const { top } = useSafeAreaInsets();
@@ -263,23 +265,29 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 detail={detailData?.data?.item}
               />
             </View>
-            <EngagementIcons nft={nft} bottomPadding={bottomPadding} />
-          </Reanimated.View>
-          <View
-            tw="absolute right-4 z-50"
-            style={{
-              top: Platform.select({
-                android: top + 10,
-                default: top + 6,
-              }),
-            }}
-          >
-            <NFTDropdown
-              nft={detailData?.data?.item ?? nft}
+            <EngagementIcons
+              nft={nft}
+              bottomPadding={bottomPadding}
               edition={edition}
-              tw="rounded-full bg-black/60 px-1 py-1"
             />
-          </View>
+          </Reanimated.View>
+          {isAuthenticated && (
+            <View
+              tw="absolute right-4 z-50"
+              style={{
+                top: Platform.select({
+                  android: top + 10,
+                  default: top + 6,
+                }),
+              }}
+            >
+              <NFTDropdown
+                nft={detailData?.data?.item ?? nft}
+                edition={edition}
+                tw="rounded-full bg-black/60 px-1 py-1"
+              />
+            </View>
+          )}
         </View>
       </LikeContextProvider>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
