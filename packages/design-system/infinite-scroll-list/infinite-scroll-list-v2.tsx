@@ -1,4 +1,4 @@
-import { useEffect, useRef, MutableRefObject } from "react";
+import { useEffect, useRef, MutableRefObject, useLayoutEffect } from "react";
 
 import type { FlashListProps, ViewToken } from "@shopify/flash-list";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
@@ -21,11 +21,21 @@ export function InfiniteScrollListV2<Item>(props: FlashListProps<Item>) {
   if (numColumns) {
     count = Math.ceil(count / numColumns);
   }
+
+  const viewableItems = useRef<ViewToken[]>([]);
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const parentOffsetRef = useRef(0);
+
+  useLayoutEffect(() => {
+    parentOffsetRef.current = parentRef.current?.offsetTop ?? 0;
+  }, []);
+
   const rowVirtualizer = useWindowVirtualizer({
     count,
     estimateSize: () => estimatedItemSize ?? 0,
+    scrollMargin: parentOffsetRef.current,
   });
-  const viewableItems = useRef<ViewToken[]>([]);
 
   const renderedItems = rowVirtualizer.getVirtualItems();
 
@@ -41,66 +51,80 @@ export function InfiniteScrollListV2<Item>(props: FlashListProps<Item>) {
   }, [data, onEndReached, renderedItems]);
 
   return (
-    <>
-      {renderedItems.map((virtualItem) => {
-        return (
-          <div
-            key={virtualItem.key}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: `${virtualItem.size}px`,
-              transform: `translateY(${virtualItem.start}px)`,
-            }}
-          >
-            {typeof data?.[virtualItem.index] !== "undefined" ? (
+    <div ref={parentRef}>
+      <div
+        style={{
+          height: rowVirtualizer.getTotalSize(),
+          width: "100%",
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            transform: `translateY(${
+              renderedItems[0].start - rowVirtualizer.options.scrollMargin
+            }px)`,
+          }}
+        >
+          {renderedItems.map((virtualItem) => {
+            return (
               <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "space-between",
-                }}
+                key={virtualItem.key}
+                data-index={virtualItem.index}
+                ref={rowVirtualizer.measureElement}
               >
-                {data
-                  .slice(
-                    virtualItem.index * numColumns,
-                    virtualItem.index * numColumns + numColumns
-                  )
-                  .map((item, i) => {
-                    const realIndex = virtualItem.index * numColumns + i;
-                    return (
-                      <ViewabilityTracker
-                        key={realIndex}
-                        index={realIndex}
-                        itemVisiblePercentThreshold={
-                          viewabilityConfig?.itemVisiblePercentThreshold ??
-                          DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
-                        }
-                        item={data[realIndex]}
-                        viewableItems={viewableItems}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                      >
-                        {renderItem?.({
-                          index: realIndex,
-                          item,
-                          extraData,
-                          target: "Cell",
-                        }) ?? null}
-                        {realIndex < data.length - 1 &&
-                        ItemSeparatorComponent ? (
-                          <ItemSeparatorComponent />
-                        ) : null}
-                      </ViewabilityTracker>
-                    );
-                  })}
+                {typeof data?.[virtualItem.index] !== "undefined" ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    {data
+                      .slice(
+                        virtualItem.index * numColumns,
+                        virtualItem.index * numColumns + numColumns
+                      )
+                      .map((item, i) => {
+                        const realIndex = virtualItem.index * numColumns + i;
+                        return (
+                          <ViewabilityTracker
+                            key={realIndex}
+                            index={realIndex}
+                            itemVisiblePercentThreshold={
+                              viewabilityConfig?.itemVisiblePercentThreshold ??
+                              DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
+                            }
+                            item={data[realIndex]}
+                            viewableItems={viewableItems}
+                            onViewableItemsChanged={onViewableItemsChanged}
+                          >
+                            {renderItem?.({
+                              index: realIndex,
+                              item,
+                              extraData,
+                              target: "Cell",
+                            }) ?? null}
+                            {realIndex < data.length - 1 &&
+                            ItemSeparatorComponent ? (
+                              <ItemSeparatorComponent />
+                            ) : null}
+                          </ViewabilityTracker>
+                        );
+                      })}
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-          </div>
-        );
-      })}
-    </>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
 
