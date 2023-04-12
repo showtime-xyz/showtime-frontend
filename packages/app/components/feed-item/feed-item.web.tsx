@@ -96,10 +96,9 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           </View>
         ) : null}
         <View
-          tw="max-h-[100svh] w-full"
+          tw="max-h-[100svh] min-h-[100dvh] w-full"
           style={{
             height: itemHeight,
-            minHeight: itemHeight,
             overflow: "hidden",
           }}
         >
