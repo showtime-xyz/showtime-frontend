@@ -15,9 +15,14 @@ export function InfiniteScrollListV2<Item>(props: FlashListProps<Item>) {
     ItemSeparatorComponent,
     estimatedItemSize,
     onEndReached,
+    numColumns = 1,
   } = props;
+  let count = data?.length ?? 0;
+  if (numColumns) {
+    count = Math.ceil(count / numColumns);
+  }
   const rowVirtualizer = useWindowVirtualizer({
-    count: data?.length ?? 0,
+    count,
     estimateSize: () => estimatedItemSize ?? 0,
   });
   const viewableItems = useRef<ViewToken[]>([]);
@@ -37,42 +42,64 @@ export function InfiniteScrollListV2<Item>(props: FlashListProps<Item>) {
 
   return (
     <>
-      {rowVirtualizer.getVirtualItems().map((virtualItem) => (
-        <div
-          key={virtualItem.key}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: `${virtualItem.size}px`,
-            transform: `translateY(${virtualItem.start}px)`,
-          }}
-        >
-          {typeof data?.[virtualItem.index] !== "undefined" ? (
-            <ViewabilityTracker
-              index={virtualItem.index}
-              itemVisiblePercentThreshold={
-                viewabilityConfig?.itemVisiblePercentThreshold ??
-                DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
-              }
-              item={data[virtualItem.index]}
-              viewableItems={viewableItems}
-              onViewableItemsChanged={onViewableItemsChanged}
-            >
-              {renderItem?.({
-                index: virtualItem.index,
-                item: data[virtualItem.index],
-                extraData,
-                target: "Cell",
-              })}
-              {virtualItem.index < data.length - 1 && ItemSeparatorComponent ? (
-                <ItemSeparatorComponent />
-              ) : null}
-            </ViewabilityTracker>
-          ) : null}
-        </div>
-      ))}
+      {renderedItems.map((virtualItem) => {
+        return (
+          <div
+            key={virtualItem.key}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: `${virtualItem.size}px`,
+              transform: `translateY(${virtualItem.start}px)`,
+            }}
+          >
+            {typeof data?.[virtualItem.index] !== "undefined" ? (
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                {data
+                  .slice(
+                    virtualItem.index * numColumns,
+                    virtualItem.index * numColumns + numColumns
+                  )
+                  .map((item, i) => {
+                    const realIndex = virtualItem.index * numColumns + i;
+                    return (
+                      <ViewabilityTracker
+                        key={realIndex}
+                        index={realIndex}
+                        itemVisiblePercentThreshold={
+                          viewabilityConfig?.itemVisiblePercentThreshold ??
+                          DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
+                        }
+                        item={data[realIndex]}
+                        viewableItems={viewableItems}
+                        onViewableItemsChanged={onViewableItemsChanged}
+                      >
+                        {renderItem?.({
+                          index: realIndex,
+                          item,
+                          extraData,
+                          target: "Cell",
+                        }) ?? null}
+                        {realIndex < data.length - 1 &&
+                        ItemSeparatorComponent ? (
+                          <ItemSeparatorComponent />
+                        ) : null}
+                      </ViewabilityTracker>
+                    );
+                  })}
+              </div>
+            ) : null}
+          </div>
+        );
+      })}
     </>
   );
 }
