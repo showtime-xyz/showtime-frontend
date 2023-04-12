@@ -9235,6 +9235,7 @@ __metadata:
     babel-plugin-dynamic-import-node: ^2.3.3
     babel-plugin-inline-dotenv: ^1.7.0
     blurhash: 2.0.5
+    bn.js: ^5.2.1
     browserify-zlib: ~0.2.0
     buffer: ^6.0.3
     burnt: ^0.10.0
@@ -9441,7 +9442,6 @@ __metadata:
   resolution: "@showtime/storybook-react-native@workspace:apps/storybook-react-native"
   dependencies:
     "@babel/core": ^7.19.3
-    "@coinbase/wallet-mobile-sdk": ^1.0.5
     "@expo/vector-icons": ^13.0.0
     "@react-native-async-storage/async-storage": ~1.18.1
     "@react-native-community/datetimepicker": 7.0.1
@@ -9449,7 +9449,6 @@ __metadata:
     "@react-native-menu/menu": ^0.7.3
     "@react-navigation/bottom-tabs": ^6.5.7
     "@react-navigation/native-stack": ^6.9.12
-    "@react-three/fiber": ^8.12.0
     "@shopify/flash-list": 1.4.2
     "@storybook/addon-actions": ~6.5.16
     "@storybook/addon-controls": ~6.3.12
@@ -9468,7 +9467,6 @@ __metadata:
     expo-constants: ~14.2.1
     expo-dev-client: ~2.1.6
     expo-font: ~11.1.1
-    expo-gl: ~12.4.0
     expo-haptics: ~12.2.1
     expo-image: ^1.0.0
     expo-image-picker: ~14.1.1
@@ -9480,6 +9478,7 @@ __metadata:
     expo-system-ui: ~2.2.1
     expo-updates: ~0.16.4
     expo-web-browser: ~12.1.1
+    nativewind: ^2.0.11
     react: 18.2.0
     react-dom: 18.2.0
     react-native: 0.71.6
@@ -9495,7 +9494,6 @@ __metadata:
     react-native-screens: ^3.20.0
     react-native-svg: 13.9.0
     react-native-web: ~0.18.12
-    three: ^0.151.3
     typescript: ^5.0.4
     universal-tooltip: ^0.2.0
   languageName: unknown
@@ -16632,10 +16630,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bn.js@npm:5.2.1":
+"bn.js@npm:4.11.6":
+  version: 4.11.6
+  resolution: "bn.js@npm:4.11.6"
+  checksum: db23047bf06fdf9cf74401c8e76bca9f55313c81df382247d2c753868b368562e69171716b81b7038ada8860af18346fd4bcd1cf9d4963f923fe8e54e61cb58a
+  languageName: node
+  linkType: hard
+
+"bn.js@npm:4.11.8":
+  version: 4.11.8
+  resolution: "bn.js@npm:4.11.8"
+  checksum: 80d4709cd58a21f0be8201e9e5859fea5ef133318e9800c8454cd334625c6e1caea593ca21f9b9a085fb560fbc12fb2fb3514363f8604258db924237fd039139
+  languageName: node
+  linkType: hard
+
+"bn.js@npm:5.2.1, bn.js@npm:^5.0.0, bn.js@npm:^5.1.1, bn.js@npm:^5.1.2, bn.js@npm:^5.2.0, bn.js@npm:^5.2.1":
   version: 5.2.1
   resolution: "bn.js@npm:5.2.1"
   checksum: 3dd8c8d38055fedfa95c1d5fc3c99f8dd547b36287b37768db0abab3c239711f88ff58d18d155dd8ad902b0b0cee973747b7ae20ea12a09473272b0201c9edd3
+  languageName: node
+  linkType: hard
+
+"bn.js@npm:^4.0.0, bn.js@npm:^4.1.0, bn.js@npm:^4.11.0, bn.js@npm:^4.11.6, bn.js@npm:^4.11.8, bn.js@npm:^4.11.9":
+  version: 4.12.0
+  resolution: "bn.js@npm:4.12.0"
+  checksum: 39afb4f15f4ea537b55eaf1446c896af28ac948fdcf47171961475724d1bb65118cca49fa6e3d67706e4790955ec0e74de584e45c8f1ef89f46c812bee5b5a12
   languageName: node
   linkType: hard
 

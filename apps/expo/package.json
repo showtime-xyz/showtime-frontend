@@ -70,6 +70,7 @@
     "assert": "^2.0.0",
     "babel-plugin-inline-dotenv": "^1.7.0",
     "blurhash": "2.0.5",
+    "bn.js": "^5.2.1",
     "browserify-zlib": "~0.2.0",
     "buffer": "^6.0.3",
     "burnt": "^0.10.0",
