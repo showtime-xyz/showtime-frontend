@@ -167,7 +167,12 @@ function App({ Component, pageProps, router }: AppProps) {
               router.pathname.split("/").length - 1 >= 2
             }
           />
-          <View tw="items-center" style={{ minHeight: "100svh" }}>
+          <View
+            tw="items-center"
+            style={{
+              minHeight: "100svh",
+            }}
+          >
             <Component {...pageProps} />
           </View>
           <Footer />
