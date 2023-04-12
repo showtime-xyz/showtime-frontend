@@ -37,6 +37,7 @@
     "@sentry/nextjs": "7.7.0",
     "@stripe/react-stripe-js": "^1.16.4",
     "@stripe/stripe-js": "^1.46.0",
+    "@tanstack/react-virtual": "^3.0.0-alpha.0",
     "@types/dom-to-image": "^2.6.4",
     "@types/react-datepicker": "^4.8.0",
     "@types/react-dropzone": "^5.1.0",

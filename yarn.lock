@@ -8825,6 +8825,7 @@ __metadata:
     "@sentry/nextjs": 7.7.0
     "@stripe/react-stripe-js": ^1.16.4
     "@stripe/stripe-js": ^1.46.0
+    "@tanstack/react-virtual": ^3.0.0-alpha.0
     "@types/dom-to-image": ^2.6.4
     "@types/react-datepicker": ^4.8.0
     "@types/react-dropzone": ^5.1.0
@@ -11196,6 +11197,24 @@ __metadata:
     react-native:
       optional: true
   checksum: ba9e2f175c58bde592c0ad14285f289585474763f8d68072d651fa75263a3a7f75eead5b62aa3140db133b95468498bc58817d07513f6f857be2bd8031b491da
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-virtual@npm:^3.0.0-alpha.0":
+  version: 3.0.0-beta.54
+  resolution: "@tanstack/react-virtual@npm:3.0.0-beta.54"
+  dependencies:
+    "@tanstack/virtual-core": 3.0.0-beta.54
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: ddeb3cb46db89365609d5bc402b8a8d410dc7e5f38ee579f39e5589c62a2123799ba36586939a5a6ad1a701650a5b169f657fd24687687bf08f4827b0099bc75
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.0.0-beta.54":
+  version: 3.0.0-beta.54
+  resolution: "@tanstack/virtual-core@npm:3.0.0-beta.54"
+  checksum: a58cb30e1bbf8a0420caea8693df11c909c1190908163fef75aeddfa11bba621ca993ab218f4e7537c05c1651f9398e61016f3e3d374093c87029b52c868f0e7
   languageName: node
   linkType: hard
 
