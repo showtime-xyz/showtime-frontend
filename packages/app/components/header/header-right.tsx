@@ -87,7 +87,7 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
                     onPress={() => {
                       navigateToLogin();
                     }}
-                    tw="h-8 items-center justify-center rounded-full bg-black/30 px-4"
+                    tw="h-8 items-center justify-center rounded-full bg-black/60 px-4"
                   >
                     <Text tw="text-sm font-semibold text-white">Sign In</Text>
                   </Pressable>
