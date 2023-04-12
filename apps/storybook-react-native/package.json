@@ -37,7 +37,7 @@
     "@storybook/addon-ondevice-backgrounds": "next",
     "@storybook/addon-ondevice-controls": "next",
     "@storybook/addon-ondevice-notes": "next",
-    "@storybook/react-native": "next",
+    "@storybook/react-native": "^6.5.3",
     "burnt": "^0.10.0",
     "design-system": "*",
     "expo": "~48.0.10",
