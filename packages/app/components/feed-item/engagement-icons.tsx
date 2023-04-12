@@ -73,11 +73,7 @@ export const EngagementIcons = memo<EngagementIconsProps>(
           {!isAuthenticated && (
             <>
               <View tw="h-6" />
-              <NFTDropdown
-                nft={nft}
-                edition={edition}
-                tw="items-center rounded-full bg-black/60 py-1"
-              />
+              <NFTDropdown nft={nft} edition={edition} tw="items-center py-1" />
             </>
           )}
         </View>
