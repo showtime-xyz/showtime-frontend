@@ -1,32 +1,22 @@
-import { Suspense, useMemo, RefObject } from "react";
+import { useMemo, RefObject } from "react";
 import { Platform } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
-import dynamic from "next/dynamic";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
-import { Props as ModelProps } from "design-system/model";
 import { Video } from "design-system/video";
 
 import { ContentTypeIcon } from "../content-type-tooltip";
-
-const Dynamic3dModel = dynamic<ModelProps>(
-  () => import("design-system/model").then((mod) => mod.Model),
-  {
-    ssr: false,
-  }
-);
 
 type Props = {
   item?: NFT & { loading?: boolean };
@@ -139,21 +129,26 @@ function MediaImplementation({
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
-        <ErrorBoundary>
-          <Suspense fallback={null}>
-            <Dynamic3dModel
-              url={item?.source_url}
-              // TODO: update this to get a preview from CDN v2
-              fallbackUrl={item?.still_preview_url}
-              numColumns={numColumns}
-              style={sizeStyle}
-              blurhash={item?.blurhash}
-              resizeMode={resizeMode}
-              width={width}
-              height={height}
-            />
-          </Suspense>
-        </ErrorBoundary>
+        // This is a legacy 3D model, we don't support it anymore and fallback to image
+        <PinchToZoom
+          onPinchStart={onPinchStart}
+          onPinchEnd={onPinchEnd}
+          disabled={numColumns > 1}
+        >
+          <Image
+            source={{
+              uri: item?.still_preview_url,
+            }}
+            recyclingKey={mediaUri}
+            blurhash={item?.blurhash}
+            data-test-id={Platform.select({ web: "nft-card-media-model" })}
+            width={width}
+            height={height}
+            style={sizeStyle}
+            resizeMode={resizeMode}
+            alt={item?.token_name}
+          />
+        </PinchToZoom>
       ) : null}
     </View>
   );
