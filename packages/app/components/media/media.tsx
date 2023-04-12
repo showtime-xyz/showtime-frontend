@@ -1,4 +1,4 @@
-import { Suspense, useMemo, RefObject } from "react";
+import { useMemo, RefObject } from "react";
 import { Platform } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
@@ -8,7 +8,6 @@ import { Image, ResizeMode } from "@showtime-xyz/universal.image";
 import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ErrorBoundary } from "app/components/error-boundary";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
