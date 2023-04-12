@@ -1,0 +1,257 @@
+diff --git a/node_modules/react-native/Libraries/Blob/BlobManager.js b/node_modules/react-native/Libraries/Blob/BlobManager.js
+index 98e6911..c8e1718 100644
+--- a/node_modules/react-native/Libraries/Blob/BlobManager.js
++++ b/node_modules/react-native/Libraries/Blob/BlobManager.js
+@@ -12,6 +12,7 @@ import type {BlobCollector, BlobData, BlobOptions} from './BlobTypes';
+ 
+ import NativeBlobModule from './NativeBlobModule';
+ import invariant from 'invariant';
++import { getBlobForArrayBuffer } from 'react-native-blob-jsi-helper'; 
+ 
+ const Blob = require('./Blob');
+ const BlobRegistry = require('./BlobRegistry');
+@@ -70,9 +71,7 @@ class BlobManager {
+         part instanceof ArrayBuffer ||
+         (global.ArrayBufferView && part instanceof global.ArrayBufferView)
+       ) {
+-        throw new Error(
+-          "Creating blobs from 'ArrayBuffer' and 'ArrayBufferView' are not supported",
+-        );
++        return getBlobForArrayBuffer(part);
+       }
+       if (part instanceof Blob) {
+         return {
+diff --git a/node_modules/react-native/Libraries/Blob/FileReader.js b/node_modules/react-native/Libraries/Blob/FileReader.js
+index 57b3093..4b33915 100644
+--- a/node_modules/react-native/Libraries/Blob/FileReader.js
++++ b/node_modules/react-native/Libraries/Blob/FileReader.js
+@@ -13,6 +13,7 @@ import type Blob from './Blob';
+ import NativeFileReaderModule from './NativeFileReaderModule';
+ 
+ const EventTarget = require('event-target-shim');
++const { toByteArray } = require('react-native-quick-base64');
+ 
+ type ReadyState =
+   | 0 // EMPTY
+@@ -75,7 +76,32 @@ class FileReader extends (EventTarget(...READER_EVENTS): any) {
+   }
+ 
+   readAsArrayBuffer(): any {
+-    throw new Error('FileReader.readAsArrayBuffer is not implemented');
++    this._aborted = false;
++
++    if (blob == null) {
++      throw new TypeError(
++        "Failed to execute 'readAsArrayBuffer' on 'FileReader': parameter 1 is not of type 'Blob'",
++      );
++    }
++
++    NativeFileReaderModule.readAsDataURL(blob.data).then(
++      (dataUrl: string) => {
++        if (this._aborted) {
++          return;
++        }
++        const base64 = dataUrl.split(',')[1];
++        const buffer = toByteArray(base64);
++        this._result = buffer;
++        this._setReadyState(DONE);
++      },
++      error => {
++        if (this._aborted) {
++          return;
++        }
++        this._error = error;
++        this._setReadyState(DONE);
++      }
++    );
+   }
+ 
+   readAsDataURL(blob: ?Blob): void {
+diff --git a/node_modules/react-native/scripts/.packager.env b/node_modules/react-native/scripts/.packager.env
+new file mode 100644
+index 0000000..361f5fb
+--- /dev/null
++++ b/node_modules/react-native/scripts/.packager.env
+@@ -0,0 +1 @@
++export RCT_METRO_PORT=8081
+diff --git a/node_modules/react-native/sdks/hermes/hermes-engine.podspec b/node_modules/react-native/sdks/hermes/hermes-engine.podspec
+new file mode 100644
+index 0000000..b800547
+--- /dev/null
++++ b/node_modules/react-native/sdks/hermes/hermes-engine.podspec
+@@ -0,0 +1,143 @@
++# Copyright (c) Meta Platforms, Inc. and affiliates.
++#
++# This source code is licensed under the MIT license found in the
++# LICENSE file in the root directory of this source tree.
++
++require "json"
++require_relative "./hermes-utils.rb"
++
++react_native_path = File.join(__dir__, "..", "..")
++
++# Whether Hermes is built for Release or Debug is determined by the PRODUCTION envvar.
++build_type = ENV['PRODUCTION'] == "1" ? :release : :debug
++
++# package.json
++package = JSON.parse(File.read(File.join(react_native_path, "package.json")))
++version = package['version']
++
++# sdks/.hermesversion
++hermestag_file = File.join(react_native_path, "sdks", ".hermesversion")
++isInCI = ENV['REACT_NATIVE_CI'] === 'true'
++
++source = {}
++git = "https://github.com/facebook/hermes.git"
++
++isInMain = version.include?('1000.0.0')
++isNightly = version.start_with?('0.0.0-')
++
++if ENV.has_key?('HERMES_ENGINE_TARBALL_PATH')
++  if !File.exist?(ENV['HERMES_ENGINE_TARBALL_PATH'])
++    abort "[Hermes] HERMES_ENGINE_TARBALL_PATH is set, but points to a non-existing file: \"#{ENV['HERMES_ENGINE_TARBALL_PATH']}\"\nIf you don't want to use tarball, run `unset HERMES_ENGINE_TARBALL_PATH`"
++  end
++end
++
++if ENV.has_key?('HERMES_ENGINE_TARBALL_PATH')
++  Pod::UI.puts "[Hermes] Using pre-built Hermes binaries from local path: #{ENV['HERMES_ENGINE_TARBALL_PATH']}".yellow if Object.const_defined?("Pod::UI")
++  source[:http] = "file://#{ENV['HERMES_ENGINE_TARBALL_PATH']}"
++elsif isInMain
++  Pod::UI.puts '[Hermes] Installing hermes-engine may take slightly longer, building Hermes compiler from source...'.yellow if Object.const_defined?("Pod::UI")
++  source[:git] = git
++  source[:commit] = `git ls-remote https://github.com/facebook/hermes main | cut -f 1`.strip
++elsif isNightly
++  Pod::UI.puts '[Hermes] Nightly version, download pre-built for Hermes'.yellow if Object.const_defined?("Pod::UI")
++  destination_path = download_nightly_hermes(react_native_path, version)
++  # set tarball as hermes engine
++  source[:http] = "file://#{destination_path}"
++elsif File.exist?(hermestag_file) && isInCI
++  Pod::UI.puts '[Hermes] Detected that you are on a React Native release branch, building Hermes from source but fetched from tag...'.yellow if Object.const_defined?("Pod::UI")
++  hermestag = File.read(hermestag_file).strip
++  source[:git] = git
++  source[:tag] = hermestag
++else
++  # Sample url from Maven:
++  # https://repo1.maven.org/maven2/com/facebook/react/react-native-artifacts/0.71.0/react-native-artifacts-0.71.0-hermes-ios-debug.tar.gz
++  source[:http] = "https://repo1.maven.org/maven2/com/facebook/react/react-native-artifacts/#{version}/react-native-artifacts-#{version}-hermes-ios-#{build_type.to_s}.tar.gz"
++end
++
++Pod::Spec.new do |spec|
++  spec.name        = "hermes-engine"
++  spec.version     = version
++  spec.summary     = "Hermes is a small and lightweight JavaScript engine optimized for running React Native."
++  spec.description = "Hermes is a JavaScript engine optimized for fast start-up of React Native apps. It features ahead-of-time static optimization and compact bytecode."
++  spec.homepage    = "https://hermesengine.dev"
++  spec.license     = package['license']
++  spec.author      = "Facebook"
++  spec.source      = source
++  spec.platforms   = { :osx => "10.13", :ios => "12.4" }
++
++  spec.preserve_paths      = '**/*.*'
++  spec.source_files        = ''
++
++  spec.xcconfig = {
++                    "CLANG_CXX_LANGUAGE_STANDARD" => "c++17",
++                    "CLANG_CXX_LIBRARY" => "compiler-default"
++                  }.merge!(build_type == :debug ? { "GCC_PREPROCESSOR_DEFINITIONS" => "HERMES_ENABLE_DEBUGGER=1" } : {})
++
++  if source[:http] then
++
++    spec.subspec 'Pre-built' do |ss|
++      ss.preserve_paths = ["destroot/bin/*"].concat(build_type == :debug ? ["**/*.{h,c,cpp}"] : [])
++      ss.source_files = "destroot/include/**/*.h"
++      ss.exclude_files = ["destroot/include/jsi/jsi/JSIDynamic.{h,cpp}", "destroot/include/jsi/jsi/jsilib-*.{h,cpp}"]
++      ss.header_mappings_dir = "destroot/include"
++      ss.ios.vendored_frameworks = "destroot/Library/Frameworks/universal/hermes.xcframework"
++      ss.osx.vendored_frameworks = "destroot/Library/Frameworks/macosx/hermes.framework"
++    end
++
++  elsif source[:git] then
++
++    spec.subspec 'Hermes' do |ss|
++      ss.source_files = ''
++      ss.public_header_files = 'API/hermes/*.h'
++      ss.header_dir = 'hermes'
++    end
++
++    spec.subspec 'JSI' do |ss|
++      ss.source_files = ''
++      ss.public_header_files = 'API/jsi/jsi/*.h'
++      ss.header_dir = 'jsi'
++    end
++
++    spec.subspec 'Public' do |ss|
++      ss.source_files = ''
++      ss.public_header_files = 'public/hermes/Public/*.h'
++      ss.header_dir = 'hermes/Public'
++    end
++
++    hermesc_path = ""
++
++    if ENV.has_key?('HERMES_OVERRIDE_HERMESC_PATH') && File.exist?(ENV['HERMES_OVERRIDE_HERMESC_PATH']) then
++      hermesc_path = ENV['HERMES_OVERRIDE_HERMESC_PATH']
++    else
++      # Keep hermesc_path synchronized with .gitignore entry.
++      ENV['REACT_NATIVE_PATH'] = react_native_path
++      hermesc_path = "${REACT_NATIVE_PATH}/sdks/hermes-engine/build_host_hermesc"
++      # NOTE: Prepare command is not run  if the pod is not downloaded.
++      spec.prepare_command = ". #{react_native_path}/sdks/hermes-engine/utils/build-hermesc-xcode.sh #{hermesc_path}"
++    end
++
++    spec.user_target_xcconfig = {
++      'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/hermes-engine/destroot/Library/Frameworks/iphoneos" ' +
++                                  '"$(PODS_ROOT)/hermes-engine/destroot/Library/Frameworks/iphonesimulator" ' +
++                                  '"$(PODS_ROOT)/hermes-engine/destroot/Library/Frameworks/macosx" ' +
++                                  '"$(PODS_ROOT)/hermes-engine/destroot/Library/Frameworks/catalyst"',
++      'OTHER_LDFLAGS' => '-framework "hermes"',
++      'HERMES_CLI_PATH' => "#{hermesc_path}/bin/hermesc"
++    }
++
++    spec.script_phases = [
++      {
++        :name => 'Build Hermes',
++        :script => <<-EOS
++        . ${PODS_ROOT}/../.xcode.env
++        export CMAKE_BINARY=${CMAKE_BINARY:-#{%x(command -v cmake | tr -d '\n')}}
++        . ${REACT_NATIVE_PATH}/sdks/hermes-engine/utils/build-hermes-xcode.sh #{version} #{hermesc_path}/ImportHermesc.cmake
++        EOS
++      },
++      {
++        :name => 'Copy Hermes Framework',
++        :script => ". ${REACT_NATIVE_PATH}/sdks/hermes-engine/utils/copy-hermes-xcode.sh"
++      }
++    ]
++  end
++end
+diff --git a/node_modules/react-native/sdks/hermes/hermes-utils.rb b/node_modules/react-native/sdks/hermes/hermes-utils.rb
+new file mode 100644
+index 0000000..0842496
+--- /dev/null
++++ b/node_modules/react-native/sdks/hermes/hermes-utils.rb
+@@ -0,0 +1,26 @@
++# Copyright (c) Meta Platforms, Inc. and affiliates.
++#
++# This source code is licensed under the MIT license found in the
++# LICENSE file in the root directory of this source tree.
++
++require 'net/http'
++require 'rexml/document'
++
++# This function downloads the nightly prebuilt version of Hermes based on the passed version
++# and save it in the node_module/react_native/sdks/downloads folder
++# It then returns the path to the hermes tarball
++#
++# Parameters
++# - react_native_path: the path to the React Native folder in node modules. It is used as root path to store the Hermes tarball
++# - version: the version of React Native that requires the Hermes tarball
++# Returns: the path to the downloaded Hermes tarball
++def download_nightly_hermes(react_native_path, version)
++    params = "r=snapshots\&g=com.facebook.react\&a=react-native-artifacts\&c=hermes-ios-debug\&e=tar.gz\&v=#{version}-SNAPSHOT"
++    tarball_url = "http://oss.sonatype.org/service/local/artifact/maven/redirect\?#{params}"
++
++    destination_folder = "#{react_native_path}/sdks/downloads"
++    destination_path = "#{destination_folder}/hermes-ios.tar.gz"
++
++    `mkdir -p "#{destination_folder}" && curl "#{tarball_url}" -Lo "#{destination_path}"`
++    return destination_path
++end
