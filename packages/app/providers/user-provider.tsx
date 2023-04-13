@@ -19,6 +19,10 @@ export function UserProvider({ children }: UserProviderProps) {
   //#region hooks
   const { authenticationStatus, accessToken } = useAuth();
   const router = useRouter();
+  const userStateRef = useRef({
+    isAuthenticated: false,
+    isIncompletedProfile: false,
+  });
 
   const { data, error, mutate } = useMyInfo();
   //#endregion
@@ -41,6 +45,7 @@ export function UserProvider({ children }: UserProviderProps) {
       isLoading,
       isAuthenticated: accessToken != undefined,
       isIncompletedProfile,
+      userStateRef,
     }),
     [data, mutate, error, isLoading, accessToken, isIncompletedProfile]
   );

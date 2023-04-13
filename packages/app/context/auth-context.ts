@@ -10,6 +10,11 @@ type AuthContextType = {
 
   login: (endpoint: string, payload: object) => Promise<MyInfo>;
   logout: () => Promise<void>;
+
+  authStateRef: React.MutableRefObject<{
+    isAuthenticated: boolean;
+    isIncompletedProfile: boolean | undefined;
+  }>;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
