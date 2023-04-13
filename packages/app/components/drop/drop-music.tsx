@@ -554,7 +554,7 @@ export const DropMusic = () => {
                   }}
                 />
               </Hidden>
-              {/* <View tw="mt-4">
+              <View tw="mt-4">
                 <Controller
                   key="raffle"
                   control={control}
@@ -579,7 +579,7 @@ export const DropMusic = () => {
                     );
                   }}
                 />
-              </View> */}
+              </View>
               <View tw="z-10 mt-4 flex-row">
                 <Controller
                   key="releaseDate"

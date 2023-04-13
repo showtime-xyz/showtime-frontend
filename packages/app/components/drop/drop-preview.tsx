@@ -14,7 +14,6 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Description } from "app/components/card/rows";
 import { Preview } from "app/components/preview";
 import { useDropNFT } from "app/hooks/use-drop-nft";
 import { useUser } from "app/hooks/use-user";
@@ -85,10 +84,10 @@ export const DropPreview = memo(function DropPreview({
       </Button>
     );
   }, [state.status, state.transactionHash, onPressCTA, buttonProps, ctaCopy]);
-  const size = isSmWidth ? height * 0.3 : width - 32;
+  const size = isSmWidth ? 300 : width - 32;
   return (
     <View tw={["animate-fade-in-250 items-center px-4", tw]}>
-      <View tw="shadow-light dark:shadow-dark ios:border android:border web:py-8 ios:pb-4 android:pb-4 overflow-hidden rounded-3xl border-gray-100 dark:border-gray-900 sm:w-[30svh]">
+      <View tw="shadow-light dark:shadow-dark ios:border android:border web:py-8 ios:pb-4 android:pb-4 overflow-hidden rounded-3xl border-gray-100 dark:border-gray-900 sm:w-[300px]">
         <View>
           <Preview
             file={file}
@@ -129,7 +128,7 @@ export const DropPreview = memo(function DropPreview({
             </Pressable>
           )}
         </View>
-        <View tw="px-2">
+        <View tw="px-4">
           <View tw="flex-row py-4">
             <View tw="rounded-full border border-gray-200 dark:border-gray-700">
               <Avatar alt="Avatar" url={userProfile?.data.profile.img_url} />
