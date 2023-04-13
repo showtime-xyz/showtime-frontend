@@ -29,7 +29,7 @@
     "@react-native-menu/menu": "^0.7.3",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native-stack": "^6.9.12",
-    "@shopify/flash-list": "1.4.2",
+    "@shopify/flash-list": "^1.4.2",
     "@storybook/addon-actions": "^7.0.4",
     "@storybook/addon-controls": "^7.0.4",
     "@storybook/addon-ondevice-actions": "^6.5.3",
