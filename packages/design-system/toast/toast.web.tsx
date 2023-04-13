@@ -38,6 +38,7 @@ const Toaster = () => {
 toast.custom = (message: any, options?: any): string => {
   return toast(message, {
     icon: options.web,
+    duration: options?.duration,
   });
 };
 export { Toaster, toast };
