@@ -47,7 +47,7 @@ export const NSFWGate = ({
         }}
       >
         <View tw="flex-1 justify-between">
-          <View tw="mt-auto mb-auto items-center justify-center text-center">
+          <View tw="mb-auto mt-auto items-center justify-center text-center">
             <EyeOff color="white" fontSize={30} width={30} height={30} />
           </View>
         </View>
@@ -66,7 +66,7 @@ export const NSFWGate = ({
       }}
     >
       <View tw="flex-1 justify-between">
-        <View tw="mt-auto mb-auto items-center justify-center px-12 text-center">
+        <View tw="mb-auto mt-auto items-center justify-center px-12 text-center">
           <EyeOff color="white" fontSize={30} width={30} height={30} />
           <View tw="mt-4">
             <Text tw="text-center text-lg font-bold text-white">

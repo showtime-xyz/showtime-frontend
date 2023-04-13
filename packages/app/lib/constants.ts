@@ -123,7 +123,7 @@ export const MINT_TYPES = [
 export const MINT_FORMATS = {
   image: [".png", ".gif", ".jpg"],
   video: [".mp4", ".mov"],
-  model: [".glb", ".gltf"],
+  // model: [".glb", ".gltf"],
   // audio: ['.mp3', '.flac', '.wav'],
   // text: ['.txt', '.md'],
   // file: ['.pdf', '.psd', '.ai'],

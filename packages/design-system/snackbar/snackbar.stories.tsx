@@ -13,7 +13,7 @@ export default {
   component: SnackbarProvider,
   title: "Components/Snackbar",
 } as Meta;
-export const Basic: React.VFC<{}> = () => {
+export const Basic: React.FC<{}> = () => {
   const snackbar = useSnackbar();
   const isDark = useIsDarkMode();
   const toggleSnackbar = (cb: () => void) => {

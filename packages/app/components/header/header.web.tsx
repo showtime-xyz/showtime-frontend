@@ -12,6 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { WEB_HEADER_HEIGHT } from "app/constants/layout";
+import { useUser } from "app/hooks/use-user";
 import { SWIPE_LIST_SCREENS } from "app/lib/constants";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
@@ -95,6 +96,8 @@ export const Header = withColorScheme(
     const { isHeaderHidden } = useNavigationElements();
     const isDark = useIsDarkMode();
     const router = useRouter();
+    const { isAuthenticated } = useUser();
+
     if (isHeaderHidden) {
       return null;
     }
@@ -119,7 +122,8 @@ export const Header = withColorScheme(
           <View tw={["fixed left-4 top-2 z-10 flex md:hidden"]}>
             <HeaderLeft withBackground canGoBack={canGoBack} />
           </View>
-          {!SWIPE_LIST_SCREENS.includes(router.pathname) && (
+          {(!SWIPE_LIST_SCREENS.includes(router.pathname) ||
+            !isAuthenticated) && (
             <View tw={["fixed right-4 top-2 z-10 flex md:hidden"]}>
               <HeaderRight withBackground />
             </View>

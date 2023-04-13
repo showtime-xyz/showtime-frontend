@@ -63,10 +63,7 @@ export function UserProvider({ children }: UserProviderProps) {
   useEffect(() => {
     const identifyAndRegisterPushNotification = async () => {
       if (data) {
-        // Handle registration for push notification
-        if (Platform.OS !== "web") {
-          await registerForPushNotificationsAsync();
-        }
+        await registerForPushNotificationsAsync();
       }
     };
 

@@ -1,5 +1,3 @@
-import "./shim";
-
 import { registerRootComponent } from "expo";
 import "expo-dev-client";
 import "expo-dev-launcher";
