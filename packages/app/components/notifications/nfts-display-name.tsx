@@ -9,7 +9,7 @@ type NotificationDescriptionProps = {
   nfts: NotificationNFT[];
 };
 
-const getNFTLink = (nft: NotificationNFT) =>
+export const getNFTLink = (nft: NotificationNFT) =>
   `/nft/${findTokenChainName(nft?.chain_identifier)}/${nft?.contract_address}/${
     nft?.token_identifier
   }`;
@@ -38,7 +38,6 @@ export const NFTSDisplayName = ({ nfts }: NotificationDescriptionProps) => {
         onPress={() => {
           router.push(getNFTLink(nft));
         }}
-        key={nft.id}
         tw="text-13 font-bold text-black dark:text-white"
       >
         {nft.display_name}
