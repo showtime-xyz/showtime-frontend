@@ -208,6 +208,7 @@ const expoConfig: ExpoConfig = {
         },
       },
     ],
+    "./plugins/with-android-codegen-path.js",
   ],
   hooks: {
     postPublish: [
