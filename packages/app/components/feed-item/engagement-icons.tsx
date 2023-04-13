@@ -52,7 +52,7 @@ export const EngagementIcons = memo<EngagementIconsProps>(
           locations={[0.01, 0.8]}
           colors={["rgba(0,0,0,0)", "rgba(0,0,0,.8)"]}
         ></LinearGradient>
-        <View tw="relative -top-8 z-10">
+        <View tw="relative -top-6 z-10">
           <AvatarHoverCard
             username={nft?.creator_username || nft?.creator_address_nonens}
             url={nft.creator_img_url}
