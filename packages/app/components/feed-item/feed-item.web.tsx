@@ -13,6 +13,7 @@ import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useUser } from "app/hooks/use-user";
 import type { NFT } from "app/types";
 
 import { NFTDropdown } from "../nft-dropdown";
@@ -35,6 +36,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   itemHeight,
 }) {
   const [detailHeight, setDetailHeight] = useState(0);
+  const { isAuthenticated } = useUser();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const bottomHeight = usePlatformBottomHeight();
   const { data: detailData } = useNFTDetailByTokenId({
@@ -94,8 +96,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           </View>
         ) : null}
         <View
-          tw="max-h-[100svh] min-h-[100svh] w-full"
-          style={{ height: itemHeight, overflow: "hidden" }}
+          tw="max-h-[100svh] min-h-[100dvh] w-full"
+          style={{
+            height: itemHeight,
+            overflow: "hidden",
+          }}
         >
           <View
             tw="animate-fade-in-500"
@@ -142,20 +147,26 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               detail={detailData?.data?.item}
             />
           </View>
-          <EngagementIcons nft={nft} bottomPadding={bottomHeight} />
+          <EngagementIcons
+            nft={nft}
+            bottomPadding={bottomHeight}
+            edition={edition}
+          />
 
-          <View
-            tw="absolute right-4 z-50"
-            style={{
-              top: 8,
-            }}
-          >
-            <NFTDropdown
-              nft={detailData?.data?.item ?? nft}
-              edition={edition}
-              tw="rounded-full bg-black/60 px-1 py-1"
-            />
-          </View>
+          {isAuthenticated && (
+            <View
+              tw="absolute right-4 z-50"
+              style={{
+                top: 8,
+              }}
+            >
+              <NFTDropdown
+                nft={detailData?.data?.item ?? nft}
+                edition={edition}
+                tw="rounded-full bg-black/60 px-1 py-1"
+              />
+            </View>
+          )}
         </View>
       </LikeContextProvider>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />

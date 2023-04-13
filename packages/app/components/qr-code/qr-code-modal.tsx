@@ -449,7 +449,8 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
   });
   const brandColor = imageColors?.isDark ? "#FFF" : "#000";
   const ContentType = useCallback(() => {
-    if (!edition?.gating_type) return null;
+    if (!edition?.gating_type || !contentGatingType[edition?.gating_type])
+      return null;
     const Icon = contentGatingType[edition?.gating_type].icon;
     return (
       <View tw="flex-row items-center justify-center">

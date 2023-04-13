@@ -169,7 +169,9 @@ function App({ Component, pageProps, router }: AppProps) {
           />
           <View
             tw="items-center"
-            style={{ minHeight: `calc(100vh - ${MOBILE_WEB_TABS_HEIGHT}px)` }}
+            style={{
+              minHeight: "100svh",
+            }}
           >
             <Component {...pageProps} />
           </View>
