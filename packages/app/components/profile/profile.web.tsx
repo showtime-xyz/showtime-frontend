@@ -297,7 +297,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 useWindowScroll={isMdWidth}
                 ListHeaderComponent={Header}
                 numColumns={1}
-                data={isBlocked ? [] : chuckList}
+                data={[]}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
                 estimatedItemSize={contentWidth / numColumns}

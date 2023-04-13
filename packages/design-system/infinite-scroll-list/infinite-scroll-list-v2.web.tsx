@@ -31,6 +31,7 @@ function InfiniteScrollListV2Impl<Item>(
     estimatedItemSize,
     ListHeaderComponent,
     ListFooterComponent,
+    ListEmptyComponent,
     onEndReached,
     numColumns = 1,
     style,
@@ -43,11 +44,12 @@ function InfiniteScrollListV2Impl<Item>(
 
   const viewableItems = useRef<ViewToken[]>([]);
   const parentRef = useRef<HTMLDivElement>(null);
+  const scrollMarginOffseRef = useRef<HTMLDivElement>(null);
 
   const parentOffsetRef = useRef(0);
 
   useLayoutEffect(() => {
-    parentOffsetRef.current = parentRef.current?.offsetTop ?? 0;
+    parentOffsetRef.current = scrollMarginOffseRef.current?.offsetTop ?? 0;
   }, []);
   let rowVirtualizer: Virtualizer<any, any>;
   if (useWindowScroll) {
@@ -63,6 +65,7 @@ function InfiniteScrollListV2Impl<Item>(
       count,
       estimateSize: () => estimatedItemSize ?? 0,
       getScrollElement: () => parentRef.current,
+      scrollMargin: parentOffsetRef.current,
     });
   }
 
@@ -82,97 +85,113 @@ function InfiniteScrollListV2Impl<Item>(
   return (
     <>
       {/* @ts-ignore */}
-      {ListHeaderComponent ? <ListHeaderComponent /> : null}
-      <div
-        ref={parentRef}
-        style={
-          !useWindowScroll
-            ? {
-                overflowY: "auto",
-                contain: "strict",
-                //@ts-ignore
-                ...style,
-              }
-            : {}
-        }
-      >
+      {ListHeaderComponent && useWindowScroll ? <ListHeaderComponent /> : null}
+      <div style={{ height: "100%" }}>
+        {data?.length === 0 && ListEmptyComponent ? (
+          //@ts-ignore
+          <ListEmptyComponent />
+        ) : null}
         <div
-          style={{
-            height: rowVirtualizer.getTotalSize(),
-            width: "100%",
-            position: "relative",
-          }}
+          ref={parentRef}
+          style={
+            !useWindowScroll
+              ? {
+                  overflowY: "auto",
+                  contain: "strict",
+                  //@ts-ignore
+                  ...style,
+                }
+              : {}
+          }
         >
+          {ListHeaderComponent && !useWindowScroll ? (
+            //@ts-ignore
+            <ListHeaderComponent />
+          ) : null}
           <div
+            ref={scrollMarginOffseRef}
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
+              height: rowVirtualizer.getTotalSize(),
               width: "100%",
-              transform: `translateY(${
-                renderedItems[0]?.start - rowVirtualizer.options.scrollMargin
-              }px)`,
+              position: "relative",
             }}
           >
-            {renderedItems.map((virtualItem) => {
-              return (
-                <div
-                  key={virtualItem.key}
-                  data-index={virtualItem.index}
-                  ref={rowVirtualizer.measureElement}
-                  style={{ width: "100%" }}
-                >
-                  {typeof data?.[virtualItem.index] !== "undefined" ? (
-                    <div
-                      style={{
-                        display: "flex",
-                        width: "100%",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      {data
-                        .slice(
-                          virtualItem.index * numColumns,
-                          virtualItem.index * numColumns + numColumns
-                        )
-                        .map((item, i) => {
-                          const realIndex = virtualItem.index * numColumns + i;
-                          return (
-                            <ViewabilityTracker
-                              key={realIndex}
-                              index={realIndex}
-                              itemVisiblePercentThreshold={
-                                viewabilityConfig?.itemVisiblePercentThreshold ??
-                                DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
-                              }
-                              item={data[realIndex]}
-                              viewableItems={viewableItems}
-                              onViewableItemsChanged={onViewableItemsChanged}
-                            >
-                              {renderItem?.({
-                                index: realIndex,
-                                item,
-                                extraData,
-                                target: "Cell",
-                              }) ?? null}
-                              {realIndex < data.length - 1 &&
-                              ItemSeparatorComponent ? (
-                                //@ts-ignore
-                                <ItemSeparatorComponent />
-                              ) : null}
-                            </ViewabilityTracker>
-                          );
-                        })}
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${
+                  renderedItems[0]?.start - rowVirtualizer.options.scrollMargin
+                }px)`,
+              }}
+            >
+              {renderedItems.map((virtualItem) => {
+                return (
+                  <div
+                    key={virtualItem.key}
+                    data-index={virtualItem.index}
+                    ref={rowVirtualizer.measureElement}
+                    style={{ width: "100%" }}
+                  >
+                    {typeof data?.[virtualItem.index] !== "undefined" ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {data
+                          .slice(
+                            virtualItem.index * numColumns,
+                            virtualItem.index * numColumns + numColumns
+                          )
+                          .map((item, i) => {
+                            const realIndex =
+                              virtualItem.index * numColumns + i;
+                            return (
+                              <ViewabilityTracker
+                                key={realIndex}
+                                index={realIndex}
+                                itemVisiblePercentThreshold={
+                                  viewabilityConfig?.itemVisiblePercentThreshold ??
+                                  DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
+                                }
+                                item={data[realIndex]}
+                                viewableItems={viewableItems}
+                                onViewableItemsChanged={onViewableItemsChanged}
+                              >
+                                {renderItem?.({
+                                  index: realIndex,
+                                  item,
+                                  extraData,
+                                  target: "Cell",
+                                }) ?? null}
+                                {realIndex < data.length - 1 &&
+                                ItemSeparatorComponent ? (
+                                  //@ts-ignore
+                                  <ItemSeparatorComponent />
+                                ) : null}
+                              </ViewabilityTracker>
+                            );
+                          })}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
           </div>
+          {ListFooterComponent && !useWindowScroll ? (
+            //@ts-ignore
+            <ListFooterComponent />
+          ) : null}
         </div>
       </div>
       {/* @ts-ignore */}
-      {ListFooterComponent ? <ListFooterComponent /> : null}
+      {ListFooterComponent && useWindowScroll ? <ListFooterComponent /> : null}
     </>
   );
 }
