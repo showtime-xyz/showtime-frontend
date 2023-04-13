@@ -16,7 +16,6 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
       }}
       incognito
       onMessage={(event) => {
-        console.log("Received message from webview: ", event.nativeEvent.data);
         tokenPromiseCallbacks.resolve(event.nativeEvent.data);
         router.pop();
       }}
