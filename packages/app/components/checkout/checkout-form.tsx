@@ -40,7 +40,7 @@ export function CheckoutForm({ clientSecret }: { clientSecret: string }) {
   );
 
   return stripeOptions?.clientSecret ? (
-    <Elements stripe={stripePromise} options={stripeOptions}>
+    <Elements stripe={stripePromise()} options={stripeOptions}>
       <CheckoutFormStripe />
     </Elements>
   ) : null;

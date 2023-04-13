@@ -30,7 +30,7 @@ export const CheckoutReturn = () => {
       window.location.search
     ).get("setAsDefaultPaymentMethod");
 
-    const stripe = await stripePromise;
+    const stripe = await stripePromise();
 
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
