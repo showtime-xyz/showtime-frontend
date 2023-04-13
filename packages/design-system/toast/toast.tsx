@@ -64,7 +64,7 @@ toast.custom = (title: string, options: CustomOption) => {
     icon: {
       ios: options.ios,
     },
-    ...options,
+    duration: options.duration,
   });
 };
 
