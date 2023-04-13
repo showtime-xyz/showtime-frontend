@@ -508,7 +508,7 @@ export const DropFree = () => {
                 }}
               />
             </Hidden>
-            {/* <View tw="mt-4">
+            <View tw="mt-4">
               <Controller
                 key="raffle"
                 control={control}
@@ -529,7 +529,7 @@ export const DropFree = () => {
                   );
                 }}
               />
-            </View> */}
+            </View>
             <View>
               <Accordion.Root
                 value={accordionValue}

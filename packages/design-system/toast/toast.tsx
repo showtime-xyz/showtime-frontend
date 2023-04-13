@@ -7,7 +7,12 @@ import type { ToasterProps } from "react-hot-toast";
 
 import { CustomOption, ValueOrFunction } from "./type";
 
-type ToastOptions = Omit<BurntToastOptions, "title" | "preset"> & {};
+type ToastOptions = Omit<BurntToastOptions, "title" | "preset" | "duration"> & {
+  /**
+   * Duration in milliseconds.
+   */
+  duration?: number;
+};
 
 type AlertOptions = Omit<BurntAlertOptions, "title"> & {};
 
@@ -16,6 +21,9 @@ function getPreset<T = string>(title: string, preset: T) {
 }
 
 const toast = (title: string, options?: ToastOptions) => {
+  if (typeof options?.duration === "number") {
+    options.duration = options.duration / 1000;
+  }
   return Burnt.toast({
     title: title,
     preset: "none",
@@ -24,6 +32,9 @@ const toast = (title: string, options?: ToastOptions) => {
 };
 
 toast.error = (title: string, options?: ToastOptions) => {
+  if (typeof options?.duration === "number") {
+    options.duration = options.duration / 1000;
+  }
   return Burnt.toast({
     title: title,
     preset: getPreset(title, "error"),
@@ -32,6 +43,9 @@ toast.error = (title: string, options?: ToastOptions) => {
   });
 };
 toast.success = (title: string, options?: ToastOptions) => {
+  if (typeof options?.duration === "number") {
+    options.duration = options.duration / 1000;
+  }
   return Burnt.toast({
     title: title,
     preset: getPreset(title, "done"),
@@ -41,12 +55,16 @@ toast.success = (title: string, options?: ToastOptions) => {
 };
 
 toast.custom = (title: string, options: CustomOption) => {
+  if (typeof options?.duration === "number") {
+    options.duration = options.duration / 1000;
+  }
   return Burnt.toast({
     title: title,
     preset: "custom",
     icon: {
       ios: options.ios,
     },
+    duration: options.duration,
   });
 };
 
@@ -61,6 +79,9 @@ toast.promise = function <T>(
   },
   options?: AlertOptions
 ) {
+  if (typeof options?.duration === "number") {
+    options.duration = options.duration / 1000;
+  }
   Burnt.alert({
     title: msgs.loading,
     preset: "spinner",
