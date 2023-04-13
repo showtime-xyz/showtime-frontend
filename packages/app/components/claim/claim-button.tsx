@@ -14,6 +14,7 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimContext } from "app/context/claim-context";
 import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
@@ -24,7 +25,6 @@ import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
 
-import { View } from "design-system";
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
@@ -66,9 +66,8 @@ export const ClaimButton = ({
 }: ClaimButtonProps) => {
   const isDarkMode = useIsDarkMode();
   const isDark = theme === "dark" || (theme === "light" ? false : isDarkMode);
-  const { claimAppleMusicGatedDrop } = useAppleMusicGatedClaim(
-    edition.creator_airdrop_edition
-  );
+  const { claimAppleMusicGatedDrop, isMutating: isAppleMusicCollectLoading } =
+    useAppleMusicGatedClaim(edition.creator_airdrop_edition);
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const redirectToRaffleResult = useRedirectToRaffleResult();
   const {
@@ -80,9 +79,8 @@ export const ClaimButton = ({
     claimStates.status === "loading" &&
     claimStates.signaturePrompt === false &&
     contractAddress === edition.creator_airdrop_edition.contract_address;
-  const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
-    edition.creator_airdrop_edition
-  );
+  const { claimSpotifyGatedDrop, isMutating: isSpotifyCollectLoading } =
+    useSpotifyGatedClaim(edition.creator_airdrop_edition);
   const { isAuthenticated, user } = useUser();
   const isSelf =
     user?.data?.profile.profile_id ===
@@ -263,13 +261,14 @@ export const ClaimButton = ({
             {...buttonProps}
             onPress={() => handleCollectPress("appleMusic")}
             tw="flex-1 flex-row justify-center"
+            disabled={isAppleMusicCollectLoading}
           >
             <AppleMusic width={20} height={20} />
             <Text
               tw="ml-1 text-sm font-semibold"
               style={{ color: isDark ? colors.black : colors.white }}
             >
-              Apple Music
+              {isAppleMusicCollectLoading ? "Loading..." : "Apple Music"}
             </Text>
           </Button>
         ) : null}
@@ -281,6 +280,7 @@ export const ClaimButton = ({
               {...buttonProps}
               onPress={() => handleCollectPress("spotify")}
               tw="flex-1 flex-row justify-center"
+              disabled={isSpotifyCollectLoading}
             >
               <Spotify
                 color={isDark ? colors.black : colors.white}
@@ -291,7 +291,7 @@ export const ClaimButton = ({
                 tw="ml-1 text-sm font-semibold"
                 style={{ color: isDark ? colors.black : colors.white }}
               >
-                Spotify
+                {isSpotifyCollectLoading ? "Loading..." : "Spotify"}
               </Text>
             </Button>
           </>

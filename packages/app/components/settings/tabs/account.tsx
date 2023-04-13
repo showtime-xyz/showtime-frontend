@@ -120,7 +120,6 @@ const ConnectAppleMusic = () => {
             disconnectAppleMusic();
           } else {
             const res = await connectAppleMusic();
-            console.log("connected ", res);
             if (res) {
               toast.success("Apple Music connected");
             }
