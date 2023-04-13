@@ -1,5 +1,5 @@
-import { useAuth } from "app/hooks/auth/use-auth";
 import { useStableCallback } from "app/hooks/use-stable-callback";
+import { useUser } from "app/hooks/use-user";
 import { Logger } from "app/lib/logger/index";
 import { useNavigateToOnboarding } from "app/navigation/use-navigate-to";
 
@@ -9,13 +9,13 @@ export let onboardingPromiseCallbacks = {
 };
 
 export const useOnboardingPromise = () => {
-  const { authStateRef } = useAuth();
+  const { isIncompletedProfile, isAuthenticated } = useUser();
   const navigateToOnboarding = useNavigateToOnboarding();
   const onboardingPromise = useStableCallback(
     () =>
       new Promise((resolve, reject) => {
-        if (authStateRef.current.isAuthenticated) {
-          if (authStateRef.current.isIncompletedProfile) {
+        if (isAuthenticated) {
+          if (isIncompletedProfile) {
             navigateToOnboarding();
             onboardingPromiseCallbacks.resolve = resolve;
             onboardingPromiseCallbacks.reject = reject;

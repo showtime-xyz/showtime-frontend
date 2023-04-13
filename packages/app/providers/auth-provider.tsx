@@ -29,7 +29,6 @@ import { useMagic } from "app/lib/magic";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { useWalletConnect } from "app/lib/walletconnect";
 import type { AuthenticationStatus, MyInfo } from "app/types";
-import { isProfileIncomplete } from "app/utilities";
 
 import { MY_INFO_ENDPOINT } from "./user-provider";
 
@@ -48,10 +47,6 @@ export function AuthProvider({
   const initialRefreshTokenRequestSent = useRef(false);
   const lastRefreshTokenSuccessTimestamp = useRef<number | null>(null);
   const appState = useRef(AppState.currentState);
-  const authStateRef = useRef({
-    isAuthenticated: false,
-    isIncompletedProfile: false as undefined | boolean,
-  });
 
   //#region state
   const [authenticationStatus, setAuthenticationStatus] =
@@ -93,10 +88,6 @@ export function AuthProvider({
       });
 
       if (validResponse && res) {
-        authStateRef.current.isIncompletedProfile = isProfileIncomplete(
-          res?.data?.profile
-        );
-        authStateRef.current.isAuthenticated = true;
         setTokens(accessToken, refreshToken);
         loginStorage.setLogin(Date.now().toString());
         mutate(MY_INFO_ENDPOINT, res);
@@ -133,8 +124,6 @@ export function AuthProvider({
       deleteAppCache();
       deleteRefreshToken();
       deleteAccessToken();
-      authStateRef.current.isIncompletedProfile = false;
-      authStateRef.current.isAuthenticated = false;
 
       if (connector && connector.connected) {
         connector.killSession();
@@ -189,7 +178,6 @@ export function AuthProvider({
       setAuthenticationStatus,
       login,
       logout,
-      authStateRef,
     }),
     [authenticationStatus, accessToken, setAuthenticationStatus, login, logout]
   );
