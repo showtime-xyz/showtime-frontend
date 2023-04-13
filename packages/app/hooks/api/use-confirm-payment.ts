@@ -66,7 +66,7 @@ export const useConfirmPayment = () => {
         try {
           setMessage("Your payment is processing.");
           setPaymentStatus("processing");
-          const stripe = await stripePromise;
+          const stripe = await stripePromise();
 
           const paymentResponse = await stripe?.confirmCardPayment(
             clientSecret,
