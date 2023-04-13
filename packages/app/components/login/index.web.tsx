@@ -47,7 +47,7 @@ export function Login() {
             </Text>
           </View>
         ) : showSignMessage ? (
-          <View tw="py-20 px-10">
+          <View tw="px-10 py-20">
             <Text tw="text-center text-base text-gray-900 dark:text-gray-50">
               Showtime uses this signature to verify you own this address. This
               doesn't cost gas fees.

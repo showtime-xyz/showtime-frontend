@@ -3,7 +3,7 @@ import { ListRenderItemInfo } from "react-native";
 
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 
-import { BottomSheet } from "design-system/bottom-sheet";
+import { BottomSheet } from "@showtime-xyz/universal.bottom-sheet";
 
 import { SelectButton } from "./lib/select-button";
 import { SelectItem } from "./lib/select-item";
