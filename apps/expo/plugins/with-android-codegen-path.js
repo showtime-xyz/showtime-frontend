@@ -10,6 +10,9 @@ const { withAppBuildGradle } = require("@expo/config-plugins");
 const withAndroidCodegenPath = (config) => {
   function addCodegenPath(buildGradle) {
     const newLine = `    codegenDir = new File(["node", "--print", "require.resolve('react-native-codegen/package.json')"].execute(null, rootDir).text.trim()).getParentFile().getAbsoluteFile()\n`;
+
+    if (buildGradle.includes(newLine)) return buildGradle;
+
     const regex = /reactNativeDir =.*\n/;
     const modifiedBuildGradle = buildGradle.replace(regex, `$&${newLine}`);
     if (modifiedBuildGradle.length === buildGradle.length) {
