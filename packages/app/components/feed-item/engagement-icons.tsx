@@ -70,11 +70,13 @@ export const EngagementIcons = memo<EngagementIconsProps>(
           <SocialButton onPress={() => shareNFT(nft)}>
             <Share height={32} width={32} color="#FFF" />
           </SocialButton>
-          {!isAuthenticated && (
+          {!isAuthenticated ? (
             <>
               <View tw="h-6" />
               <NFTDropdown nft={nft} edition={edition} tw="items-center py-1" />
             </>
+          ) : (
+            <View tw="h-2" />
           )}
         </View>
       </View>
