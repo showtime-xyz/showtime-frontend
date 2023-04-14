@@ -300,7 +300,11 @@ const ListCardLargeScreen = ({
             }}
           >
             <View tw="h-full min-h-[240px] w-60 items-center">
-              <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
+              <ListMedia
+                item={nft}
+                resizeMode={ResizeMode.COVER}
+                optimizedWidth={480}
+              />
               <NSFWGate
                 show={nft.nsfw}
                 nftId={nft.nft_id}

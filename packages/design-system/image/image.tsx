@@ -51,13 +51,14 @@ function StyledImage({
     Logger.warn("Image source is not a valid uri", source);
     return null;
   }
+
   return (
     <StyledExpoImage
       style={[{ height, width, borderRadius }, style as any]}
       contentFit={contentFit ?? resizeMode}
       placeholder={{ blurhash, width, height }}
       source={imageSource}
-      cachePolicy={Platform.OS === "ios" ? "memory-disk" : "disk"}
+      cachePolicy={"disk"}
       {...rest}
     />
   );

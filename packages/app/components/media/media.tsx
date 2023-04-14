@@ -33,6 +33,7 @@ type Props = {
   edition?: CreatorEditionResponse;
   videoRef?: RefObject<ExpoVideo>;
   theme?: "light" | "dark";
+  optimizedWidth?: number;
 };
 
 function MediaImplementation({
@@ -45,6 +46,7 @@ function MediaImplementation({
   isMuted,
   edition,
   videoRef,
+  optimizedWidth = 800,
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
@@ -82,7 +84,7 @@ function MediaImplementation({
         >
           <Image
             source={{
-              uri: mediaUri,
+              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=70`,
             }}
             recyclingKey={mediaUri}
             blurhash={item?.blurhash}
