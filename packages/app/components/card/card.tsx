@@ -11,9 +11,9 @@ import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
 import {
-  PressableScale,
-  Props as PressableScaleProps,
-} from "@showtime-xyz/universal.pressable-scale";
+  Pressable,
+  Props as PressableProps,
+} from "@showtime-xyz/universal.pressable";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -24,7 +24,7 @@ import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
-import { Media } from "app/components/media";
+import { GridMedia, Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
@@ -43,7 +43,7 @@ const RouteComponent = ({
   children,
   onPress,
   ...rest
-}: (LinkProps | PressableScaleProps) & {
+}: (LinkProps | PressableProps) & {
   onPress: () => void;
   children: ReactNode;
 }) => {
@@ -51,9 +51,9 @@ const RouteComponent = ({
     return <Link {...(rest as LinkProps)}>{children}</Link>;
   }
   return (
-    <PressableScale onPress={onPress} {...(rest as PressableScaleProps)}>
+    <Pressable onPress={onPress} {...(rest as PressableProps)}>
       {children}
-    </PressableScale>
+    </Pressable>
   );
 };
 
@@ -111,7 +111,7 @@ function Card(props: Props) {
         style={[style as any, { marginBottom: GAP }]}
         onPress={handleOnPress}
       >
-        <Media
+        <GridMedia
           item={nft}
           tw={tw}
           numColumns={numColumns}
