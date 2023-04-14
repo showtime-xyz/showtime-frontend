@@ -1,6 +1,8 @@
 import { useState, useRef, useMemo } from "react";
 import { Platform } from "react-native";
 
+import { Image } from "expo-image";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
 import {
@@ -61,6 +63,13 @@ export function NavigationProvider({
         enabled: true,
         formatter: (options) =>
           options?.title ? `${options.title} | Showtime` : "Showtime",
+      }}
+      onStateChange={() => {
+        // this is a temporary workaround to reduce crashes.
+        // Once we have optimized images and pull from disk, we can remove this
+        // Currently we're collecting images into memory until the app crashes,
+        // therefore we want to clear it on every screen change
+        Image.clearMemoryCache();
       }}
     >
       <NavigationElementsProvider
