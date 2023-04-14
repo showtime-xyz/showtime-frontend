@@ -19,9 +19,14 @@ type Props = {
   isMuted?: boolean;
   edition?: CreatorEditionResponse;
   videoRef?: RefObject<ExpoVideo>;
+  optimizedWidth?: number;
 };
 
-function ListMediaImpl({ item, resizeMode: propResizeMode }: Props) {
+function ListMediaImpl({
+  item,
+  resizeMode: propResizeMode,
+  optimizedWidth = 300,
+}: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
   const mediaUri = useMemo(
@@ -43,7 +48,7 @@ function ListMediaImpl({ item, resizeMode: propResizeMode }: Props) {
       item?.mime_type !== "image/gif" ? (
         <Image
           source={{
-            uri: mediaUri,
+            uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=70`,
           }}
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}

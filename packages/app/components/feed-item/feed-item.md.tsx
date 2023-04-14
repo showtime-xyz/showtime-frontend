@@ -268,6 +268,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                     width: mediaWidth,
                   }}
                   resizeMode={ResizeMode.CONTAIN}
+                  optimizedWidth={1200}
                 />
               </FeedItemTapGesture>
               <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />

@@ -193,6 +193,7 @@ const CardLargeScreen = ({
                 height: sizeStyle?.height ?? cardMaxWidth,
               }}
               resizeMode={ResizeMode.COVER}
+              optimizedWidth={600}
             />
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (

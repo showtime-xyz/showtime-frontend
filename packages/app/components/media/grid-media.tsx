@@ -42,10 +42,7 @@ function GridMediaImpl({
   const resizeMode = propResizeMode ?? "cover";
 
   const mediaUri = useMemo(
-    () =>
-      item?.loading
-        ? item?.source_url
-        : getMediaUrl({ nft: item, stillPreview: false }),
+    () => getMediaUrl({ nft: item, stillPreview: false }),
     [item]
   );
   const mediaStillPreviewUri = useMemo(
@@ -77,7 +74,7 @@ function GridMediaImpl({
       item?.mime_type !== "image/gif" ? (
         <Image
           source={{
-            uri: mediaUri,
+            uri: `${mediaUri}?optimizer=image&width=300&quality=70`,
           }}
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}
