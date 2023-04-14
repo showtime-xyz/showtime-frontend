@@ -2,8 +2,6 @@ const path = require("path");
 
 module.exports = {
   stories: [
-    "../stories/**/*.stories.@(js|jsx|ts|tsx|mdx)",
-    "../../../packages/app/**/*.stories.@(js|jsx|ts|tsx|mdx)",
     "../../../packages/design-system/**/*.stories.@(js|jsx|ts|tsx|mdx)",
   ],
   addons: [
@@ -32,11 +30,4 @@ module.exports = {
     builder: "webpack5",
   },
   typescript: { reactDocgen: false },
-  webpackFinal: async (config, { configType }) => {
-    config.resolve.fallback = {
-      stream: require.resolve("stream-browserify"),
-      crypto: require.resolve("crypto-browserify"),
-    };
-    return config;
-  },
 };

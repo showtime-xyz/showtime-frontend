@@ -17,7 +17,6 @@ export function Button({ variant = "primary", theme, ...rest }: ButtonProps) {
   const isDark = theme === "dark" || (theme === "light" ? false : isDarkMode);
 
   const props = useMemo(() => ({ isDark, ...rest }), [isDark, rest]);
-
   switch (variant) {
     case "primary":
       return <PrimaryButton {...props} />;

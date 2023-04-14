@@ -17,7 +17,5 @@ export const Primary: React.VFC<{}> = () => (
       borderRadius: 9999,
       backgroundColor: "blue",
     }}
-  >
-    <Text tw="text-center text-white dark:text-black">Press Me</Text>
-  </PressableScale>
+  ></PressableScale>
 );
