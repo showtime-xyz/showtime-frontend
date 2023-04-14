@@ -164,6 +164,7 @@ export const ClaimButton = ({
         </>
       );
     }
+
     if (raffleConcludedAt) {
       return (
         <>
@@ -173,7 +174,6 @@ export const ClaimButton = ({
         </>
       );
     }
-
     if (status === ClaimStatus.Claimed) {
       return (
         <>
@@ -197,10 +197,12 @@ export const ClaimButton = ({
       );
     } else if (isProgress) {
       return (
-        <Text tw="text-sm font-bold">
-          Collecting
-          <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
-        </Text>
+        <>
+          <Text tw="text-sm font-bold">
+            Collecting
+            <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
+          </Text>
+        </>
       );
     } else if (edition?.gating_type === "spotify_save") {
       return (
