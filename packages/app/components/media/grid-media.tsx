@@ -69,7 +69,7 @@ function GridMediaImpl({
       }}
     >
       {Boolean(edition) && (
-        <View tw="absolute bottom-0.5 left-0.5 z-10">
+        <View tw="absolute bottom-2.5 left-2 z-10">
           <ContentTypeIcon edition={edition} />
         </View>
       )}
@@ -94,7 +94,7 @@ function GridMediaImpl({
       item?.mime_type === "image/gif" ? (
         <>
           {numColumns > 1 && (
-            <View tw="absolute bottom-2.5 right-2.5 z-10 bg-transparent">
+            <View tw="absolute bottom-2 right-1 z-10 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
           )}
