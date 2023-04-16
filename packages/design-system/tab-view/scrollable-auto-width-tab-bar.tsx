@@ -12,7 +12,7 @@ import {
   NavigationState,
   SceneRendererProps,
   TabBar,
-} from "react-native-tab-view-next";
+} from "react-native-tab-view";
 
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -45,7 +45,7 @@ export const ScollableAutoWidthTabBar = ({
   }>({});
 
   const getActiveOpacityText = (
-    position: Animated.AnimatedInterpolation,
+    position: Animated.AnimatedInterpolation<number>,
     routes: Route[],
     tabIndex: number
   ) => {
@@ -62,7 +62,7 @@ export const ScollableAutoWidthTabBar = ({
   };
 
   const getTranslateX = (
-    position: Animated.AnimatedInterpolation,
+    position: Animated.AnimatedInterpolation<number>,
     routes: Route[]
   ) => {
     if (
@@ -95,7 +95,7 @@ export const ScollableAutoWidthTabBar = ({
   };
 
   const getIndicatorScaleX = (
-    position: Animated.AnimatedInterpolation,
+    position: Animated.AnimatedInterpolation<number>,
     routes: Route[]
   ) => {
     if (

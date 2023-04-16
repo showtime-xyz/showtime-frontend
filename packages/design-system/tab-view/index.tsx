@@ -1,10 +1,7 @@
 import { useCallback, memo } from "react";
 import { Platform, StatusBar, StyleProp, ViewStyle } from "react-native";
 
-import {
-  SceneRendererProps,
-  NavigationState,
-} from "react-native-tab-view-next";
+import { SceneRendererProps, NavigationState } from "react-native-tab-view";
 
 import {
   Route,
@@ -25,7 +22,7 @@ import { ScollableTabBar } from "./scrollable-tab-bar";
 
 export * from "@showtime-xyz/universal.collapsible-tab-view";
 export * from "./tab-flash-list";
-export * from "react-native-tab-view-next";
+export * from "react-native-tab-view";
 export * from "./tab-flash-list-scroll-view";
 export * from "./tab-bar-single";
 export * from "./scrollable-auto-width-tab-bar";

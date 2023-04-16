@@ -68,7 +68,7 @@ export const useSceneInfo = (curIndexValue: Animated.SharedValue<number>) => {
       return curIndexValue.value;
     },
     () => {
-      runOnJS(updateIsReady)();
+      // runOnJS(updateIsReady)();
     },
     [updateIsReady]
   );

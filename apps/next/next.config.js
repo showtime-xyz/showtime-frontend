@@ -85,7 +85,7 @@ const nextConfig = {
     "react-native-safe-area-context",
     "react-native-mmkv",
     "@react-native-community/slider",
-    "react-native-tab-view-next",
+    "react-native-tab-view",
     "universal-tooltip",
     "showtime-tab-view",
     "react-native-image-colors",

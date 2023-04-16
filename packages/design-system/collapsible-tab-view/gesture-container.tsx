@@ -25,14 +25,14 @@ import Animated, {
   withDecay,
   withTiming,
 } from "react-native-reanimated";
-import type { SceneRendererProps } from "react-native-tab-view-next";
+import type { SceneRendererProps } from "react-native-tab-view";
 
 import { HeaderTabContext } from "./context";
 import { useRefreshDerivedValue } from "./hooks/use-refresh-value";
 import { useSceneInfo } from "./hooks/use-scene-info";
 import RefreshControlContainer from "./refresh-control";
 import type { GestureContainerProps, Route } from "./types";
-import { animateToRefresh, mScrollTo } from "./utils";
+import { animateToRefresh, isIOS, mScrollTo } from "./utils";
 
 const { width } = Dimensions.get("window");
 
@@ -69,7 +69,7 @@ export const GestureContainer = React.forwardRef<
     refreshControlTop = 0,
     emptyBodyComponent,
     navigationState,
-    renderSceneHeader,
+    renderSceneHeader: renderSceneHeaderProp,
   },
   forwardedRef
 ) {
@@ -161,7 +161,7 @@ export const GestureContainer = React.forwardRef<
     mScrollTo(
       childScrollRef[curIndexValue.value],
       0,
-      childScrollYTrans[curIndexValue.value].value + 0.1,
+      childScrollYTrans[curIndexValue.value]!.value + 0.1,
       false
     );
   };
@@ -181,16 +181,16 @@ export const GestureContainer = React.forwardRef<
     slideIndex.value = -1;
     dragIndex.value = -1;
 
-    const handleSceneSync = (sIndex: number) => {
-      if (!childScrollYTrans[sIndex]) return;
+    const handleSceneSync = (index: number) => {
+      if (!childScrollYTrans[index]) return;
       const syncPosition = Math.min(shareAnimatedValue.value, calcHeight);
       if (
-        childScrollYTrans[sIndex].value >= calcHeight &&
+        childScrollYTrans[index]!.value >= calcHeight &&
         shareAnimatedValue.value >= calcHeight
       )
         return;
 
-      mScrollTo(childScrollRef[sIndex], 0, syncPosition, false);
+      mScrollTo(childScrollRef[index], 0, syncPosition, false);
     };
 
     for (const key in childScrollRef) {
@@ -238,7 +238,7 @@ export const GestureContainer = React.forwardRef<
       },
     }: LayoutChangeEvent) => {
       if (overflowHeight > height) {
-        console.warn("overflowHeight must be less than the tabbar height");
+        console.warn("overflowHeight preferably less than the tabbar height");
       }
       if (Math.abs(tabbarHeight - height) < 1) return;
       setTabbarHeight(height);
@@ -266,7 +266,7 @@ export const GestureContainer = React.forwardRef<
       if (isSlidingHeader.value === false) {
         slideIndex.value = curIndexValue.value;
         headerTransStartY.value =
-          childScrollYTrans[curIndexValue.value].value + event.translationY;
+          childScrollYTrans[curIndexValue.value]!.value + event.translationY;
 
         isSlidingHeader.value = true;
       }
@@ -322,7 +322,7 @@ export const GestureContainer = React.forwardRef<
           return (
             refreshHeight -
             tabsTrans.value +
-            childScrollYTrans[curIndexValue.value].value
+            childScrollYTrans[curIndexValue.value]!.value
           );
         }
       };
@@ -339,7 +339,7 @@ export const GestureContainer = React.forwardRef<
         );
       } else {
         if (
-          childScrollYTrans[curIndexValue.value].value !== 0 ||
+          childScrollYTrans[curIndexValue.value]!.value !== 0 ||
           event.translationY <= 0
         )
           return;
@@ -353,7 +353,7 @@ export const GestureContainer = React.forwardRef<
           refreshHeight - (event.translationY - basyY.value);
         if (!isPullEnough.value && tabsRefreshTrans.value < 0 && onPullEnough) {
           isPullEnough.value = true;
-          runOnJS(onPullEnough)();
+          // runOnJS(onPullEnough)();
         }
       }
     })
@@ -426,29 +426,17 @@ export const GestureContainer = React.forwardRef<
     [refreshHeight, tabsRefreshTrans]
   );
 
-  // isRefreshing
   useAnimatedReaction(
     () => {
-      return (
-        tabsRefreshTrans.value > refreshHeight &&
-        isRefreshingWithAnimation.value
-      );
+      return shareAnimatedValue.value;
     },
-    (isStart) => {
-      if (!isStart) return;
-      if (!childScrollRef[curIndexValue.value]) return;
-      const transY = tabsRefreshTrans.value - refreshHeight;
-
-      if (childScrollYTrans[curIndexValue.value].value === transY) return;
-      mScrollTo(childScrollRef[curIndexValue.value], 0, transY, false);
+    (scrollY) => {
+      // for scrollview bounces effect on iOS
+      if (isIOS && animationHeaderPosition && scrollY < calcHeight) {
+        animationHeaderPosition.value = -scrollY;
+      }
     },
-    [
-      tabsRefreshTrans,
-      curIndexValue,
-      isRefreshingWithAnimation,
-      childScrollRef,
-      refreshHeight,
-    ]
+    [calcHeight]
   );
 
   // slide header
@@ -463,7 +451,7 @@ export const GestureContainer = React.forwardRef<
     (start) => {
       if (!start) return;
       if (!childScrollRef[curIndexValue.value]) return;
-      if (childScrollYTrans[curIndexValue.value].value === headerTrans.value)
+      if (childScrollYTrans[curIndexValue.value]!.value === headerTrans.value)
         return;
 
       mScrollTo(
@@ -495,7 +483,7 @@ export const GestureContainer = React.forwardRef<
       if (!childScrollRef[curIndexValue.value]) return;
       const transY = tabsRefreshTrans.value - refreshHeight;
 
-      if (childScrollYTrans[curIndexValue.value].value === transY) return;
+      if (childScrollYTrans[curIndexValue.value]!.value === transY) return;
       mScrollTo(childScrollRef[curIndexValue.value], 0, transY, false);
     },
     [
@@ -510,7 +498,7 @@ export const GestureContainer = React.forwardRef<
   // drag
   useAnimatedReaction(
     () => {
-      // The dragIndex judgment is added to avoid TAB switching confusion
+      // added this for avoid tab view confusion when switching
       return (
         tabsRefreshTrans.value < refreshHeight &&
         shareAnimatedValue.value !== 0 &&
@@ -542,11 +530,17 @@ export const GestureContainer = React.forwardRef<
       [0, -calcHeight],
       Extrapolation.CLAMP
     );
-
-    if (animationHeaderPosition && headerTransY < calcHeight) {
-      animationHeaderPosition.value = headerTransY;
+    // for iOS scrollview bounces prop spring effect.
+    if (isIOS) {
+      return shareAnimatedValue.value > 0
+        ? headerTransY
+        : -shareAnimatedValue.value;
+    } else {
+      if (animationHeaderPosition && headerTransY < calcHeight) {
+        animationHeaderPosition.value = headerTransY;
+      }
+      return headerTransY;
     }
-    return headerTransY;
   });
 
   const tabbarAnimateStyle = useAnimatedStyle(() => {
@@ -581,6 +575,7 @@ export const GestureContainer = React.forwardRef<
       opacity: opacityValue.value,
     };
   });
+
   const headerStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -592,7 +587,7 @@ export const GestureContainer = React.forwardRef<
   });
   //#endregion
 
-  const _renderTabBarContainer = (children: React.ReactElement) => {
+  const renderTabBarContainer = (children: React.ReactElement) => {
     return (
       <Animated.View style={[styles.tabbarStyle, tabbarAnimateStyle]}>
         <GestureDetector gesture={gestureHandlerHeader}>
@@ -617,12 +612,12 @@ export const GestureContainer = React.forwardRef<
       </Animated.View>
     );
   };
-  const _renderSceneHeader = (
+  const renderSceneHeader = (
     children: React.ReactElement,
     props: SceneRendererProps & { route: Route }
   ) => {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={styles.header}>
         {children}
         <Animated.View
           onLayout={({
@@ -640,7 +635,7 @@ export const GestureContainer = React.forwardRef<
             headerStyle,
           ]}
         >
-          {renderSceneHeader?.(props.route)}
+          {renderSceneHeaderProp?.(props.route)}
         </Animated.View>
       </View>
     );
@@ -687,8 +682,8 @@ export const GestureContainer = React.forwardRef<
             onLayout={containerOnLayout}
           >
             {renderTabView({
-              renderTabBarContainer: _renderTabBarContainer,
-              renderSceneHeader: _renderSceneHeader,
+              renderTabBarContainer: renderTabBarContainer,
+              renderSceneHeader: renderSceneHeader,
             })}
           </Animated.View>
           {renderRefreshControl()}
@@ -702,6 +697,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     overflow: "hidden",
+  },
+  header: {
+    flex: 1,
   },
   tabbarStyle: {
     left: 0,

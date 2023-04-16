@@ -40,7 +40,7 @@ export const animateToRefresh = ({
     return;
   isRefreshing.value = isToRefresh;
   if (isToRefresh && onStartRefresh) {
-    runOnJS(onStartRefresh)();
+    // runOnJS(onStartRefresh)();
   }
 
   if (transRefreshing.value === destPoi) {
