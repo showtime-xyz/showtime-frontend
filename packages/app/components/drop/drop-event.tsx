@@ -11,12 +11,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion } from "@showtime-xyz/universal.accordion";
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -343,7 +343,7 @@ export const DropEvent = () => {
                             {errors.file?.message ? (
                               <View tw="mt-2">
                                 <Text tw="text-center text-sm text-red-500">
-                                  {errors?.file?.message}
+                                  {`${errors?.file?.message}`}
                                 </Text>
                               </View>
                             ) : null}
