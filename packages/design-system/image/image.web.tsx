@@ -22,7 +22,7 @@ type Props = Pick<ImageNativeProps, "source" | "onLoad" | "recyclingKey"> &
   Omit<NextImageProps, "src"> & {
     className: string;
     source: ImageURISource;
-    loading: "lazy" | "eager";
+    loading?: "lazy" | "eager";
     width: number;
     height: number;
     borderRadius?: number;

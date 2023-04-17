@@ -34,6 +34,7 @@ type Props = {
   videoRef?: RefObject<ExpoVideo>;
   theme?: "light" | "dark";
   optimizedWidth?: number;
+  loading?: "eager" | "lazy";
 };
 
 function MediaImplementation({
@@ -47,6 +48,7 @@ function MediaImplementation({
   edition,
   videoRef,
   optimizedWidth = 800,
+  loading = "lazy",
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
@@ -94,6 +96,7 @@ function MediaImplementation({
             style={sizeStyle}
             resizeMode={resizeMode}
             alt={item?.token_name}
+            loading={loading}
           />
         </PinchToZoom>
       ) : null}
@@ -149,6 +152,7 @@ function MediaImplementation({
             style={sizeStyle}
             resizeMode={resizeMode}
             alt={item?.token_name}
+            loading={loading}
           />
         </PinchToZoom>
       ) : null}
