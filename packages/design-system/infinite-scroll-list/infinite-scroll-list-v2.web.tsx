@@ -3,6 +3,7 @@ import {
   useRef,
   MutableRefObject,
   useLayoutEffect,
+  isValidElement,
   forwardRef,
 } from "react";
 
@@ -12,9 +13,19 @@ import {
   useVirtualizer,
   Virtualizer,
 } from "@tanstack/react-virtual";
+import { useRouter } from "next/router";
+
+import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
+import { useStableCallback } from "app/hooks/use-stable-callback";
+import { delay } from "app/utilities";
 
 const DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE = 80;
 
+const renderComponent = (Component: any) => {
+  if (!Component) return null;
+  if (isValidElement(Component)) return Component;
+  return <Component />;
+};
 function InfiniteScrollListV2Impl<Item>(
   props: FlashListProps<Item> & {
     useWindowScroll?: boolean;
@@ -47,6 +58,8 @@ function InfiniteScrollListV2Impl<Item>(
   const scrollMarginOffseRef = useRef<HTMLDivElement>(null);
 
   const parentOffsetRef = useRef(0);
+  const router = useRouter();
+  const key = "myapp-scroll-restoration-" + router.asPath;
 
   useLayoutEffect(() => {
     parentOffsetRef.current = scrollMarginOffseRef.current?.offsetTop ?? 0;
@@ -69,6 +82,23 @@ function InfiniteScrollListV2Impl<Item>(
     });
   }
 
+  const scrollToLastSavedPosition = useStableCallback(async () => {
+    const pos = sessionStorage.getItem(key);
+    if (pos) {
+      const parsedPos = Number(pos);
+
+      const req = requestAnimationFrame(() => {
+        if (window.scrollY < parsedPos) {
+          window.scrollTo(0, parsedPos);
+        } else {
+          cancelAnimationFrame(req);
+        }
+      });
+
+      sessionStorage.removeItem(key);
+    }
+  });
+
   const renderedItems = rowVirtualizer.getVirtualItems();
 
   useEffect(() => {
@@ -82,15 +112,27 @@ function InfiniteScrollListV2Impl<Item>(
     }
   }, [data, onEndReached, renderedItems]);
 
+  const scrollOffsetRef = useLatestValueRef<number>(
+    rowVirtualizer.scrollOffset
+  );
+
+  useEffect(() => {
+    scrollToLastSavedPosition();
+  }, [scrollToLastSavedPosition]);
+
+  useEffect(() => {
+    return () => {
+      // save position on unmount
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      sessionStorage.setItem(key, scrollOffsetRef.current.toString());
+    };
+  }, [rowVirtualizer, key, scrollOffsetRef]);
+
   return (
     <>
-      {/* @ts-ignore */}
-      {ListHeaderComponent && useWindowScroll ? <ListHeaderComponent /> : null}
+      {useWindowScroll && renderComponent(ListHeaderComponent)}
       <div style={{ height: "100%" }}>
-        {data?.length === 0 && ListEmptyComponent ? (
-          //@ts-ignore
-          <ListEmptyComponent />
-        ) : null}
+        {data?.length === 0 && renderComponent(ListEmptyComponent)}
         <div
           ref={parentRef}
           style={
@@ -104,10 +146,7 @@ function InfiniteScrollListV2Impl<Item>(
               : {}
           }
         >
-          {ListHeaderComponent && !useWindowScroll ? (
-            //@ts-ignore
-            <ListHeaderComponent />
-          ) : null}
+          {!useWindowScroll && renderComponent(ListHeaderComponent)}
           <div
             ref={scrollMarginOffseRef}
             style={{
@@ -170,10 +209,7 @@ function InfiniteScrollListV2Impl<Item>(
                                   target: "Cell",
                                 }) ?? null}
                                 {realIndex < data.length - 1 &&
-                                ItemSeparatorComponent ? (
-                                  //@ts-ignore
-                                  <ItemSeparatorComponent />
-                                ) : null}
+                                  renderComponent(ItemSeparatorComponent)}
                               </ViewabilityTracker>
                             );
                           })}
@@ -184,14 +220,10 @@ function InfiniteScrollListV2Impl<Item>(
               })}
             </div>
           </div>
-          {ListFooterComponent && !useWindowScroll ? (
-            //@ts-ignore
-            <ListFooterComponent />
-          ) : null}
+          {!useWindowScroll && renderComponent(ListFooterComponent)}
         </div>
       </div>
-      {/* @ts-ignore */}
-      {ListFooterComponent && useWindowScroll ? <ListFooterComponent /> : null}
+      {useWindowScroll && renderComponent(ListFooterComponent)}
     </>
   );
 }

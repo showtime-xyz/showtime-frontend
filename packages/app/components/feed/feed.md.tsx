@@ -6,7 +6,7 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -35,7 +35,7 @@ const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
 const ViewabilityInfiniteScrollList =
-  withViewabilityInfiniteScrollList(InfiniteScrollList);
+  withViewabilityInfiniteScrollList(InfiniteScrollListV2);
 
 const FeedMd = () => {
   return (
@@ -119,10 +119,6 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
         <ViewabilityInfiniteScrollList
           data={data}
           renderItem={renderItem}
-          overscan={{
-            main: CARD_HEIGHT,
-            reverse: CARD_HEIGHT,
-          }}
           estimatedItemSize={CARD_HEIGHT}
           onEndReached={fetchMore}
           ListEmptyComponent={

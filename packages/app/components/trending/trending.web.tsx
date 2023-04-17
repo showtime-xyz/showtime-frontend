@@ -127,11 +127,6 @@ export const Trending = () => {
             data={list}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            estimatedItemSize={screenHeight}
-            overscan={{
-              main: screenHeight,
-              reverse: screenHeight,
-            }}
             style={{
               height: screenHeight - bottomBarHeight,
             }}
