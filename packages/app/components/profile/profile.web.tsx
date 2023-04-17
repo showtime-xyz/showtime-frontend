@@ -300,7 +300,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 data={isBlocked ? [] : chuckList}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
-                estimatedItemSize={contentWidth / numColumns}
                 style={{
                   height: screenHeight - 64,
                 }}
