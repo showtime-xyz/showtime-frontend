@@ -74,6 +74,7 @@ function ListMediaImpl({
           blurhash={item?.blurhash}
           isMuted={true}
           resizeMode={resizeMode as any}
+          loading={loading}
         />
       ) : null}
     </>

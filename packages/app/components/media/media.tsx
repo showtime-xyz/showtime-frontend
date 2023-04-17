@@ -127,6 +127,7 @@ function MediaImplementation({
             blurhash={item?.blurhash}
             isMuted={numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode as any}
+            loading={loading}
             //@ts-ignore
             dataset={Platform.select({ web: { testId: "nft-card-media" } })}
           />
