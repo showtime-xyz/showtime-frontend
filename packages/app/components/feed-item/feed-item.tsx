@@ -95,7 +95,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     lastItemId.current = nft.nft_id;
     // since we are recycling, onLayout will not be called again, therefore we need to measure the height manually
     detailViewRef.current?.measure((a, b, width, height) => {
-      setDetailHeight(height);
+      const cleanedHeight = height && typeof height === "number" ? height : 0;
+      setDetailHeight(cleanedHeight);
     });
   }
 
@@ -177,6 +178,12 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   useEffect(() => {
     setMomentumScrollCallback?.(showHeader);
   }, [setMomentumScrollCallback, showHeader]);
+
+  const mediaUrl = useMemo(
+    () => ({ uri: getMediaUrl({ nft, stillPreview: true }) }),
+    [nft]
+  );
+
   return (
     <>
       <LikeContextProvider nft={nft}>
@@ -187,10 +194,8 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           <Image
             tw="h-full w-full"
             blurhash={nft.blurhash}
-            source={{
-              uri: getMediaUrl({ nft, stillPreview: true }),
-            }}
-            recyclingKey={getMediaUrl({ nft, stillPreview: true })}
+            source={mediaUrl}
+            recyclingKey={mediaUrl.uri}
             alt={nft.token_name}
           />
 

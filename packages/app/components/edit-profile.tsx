@@ -34,7 +34,6 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
-import { useLinkOptions } from "app/hooks/use-link-options";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUser } from "app/hooks/use-user";
 import { useValidateUsername } from "app/hooks/use-validate-username";

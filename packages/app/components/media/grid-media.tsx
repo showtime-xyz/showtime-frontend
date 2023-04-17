@@ -5,7 +5,6 @@ import { Video as ExpoVideo } from "expo-av";
 
 import { Play } from "@showtime-xyz/universal.icon";
 import { Image, ResizeMode } from "@showtime-xyz/universal.image";
-import { PinchToZoom } from "@showtime-xyz/universal.pinch-to-zoom";
 import { View } from "@showtime-xyz/universal.view";
 
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
@@ -13,8 +12,6 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
-
-import { Video } from "design-system/video";
 
 import { ContentTypeIcon } from "../content-type-tooltip";
 
@@ -33,27 +30,25 @@ type Props = {
   edition?: CreatorEditionResponse;
   videoRef?: RefObject<ExpoVideo>;
   theme?: "light" | "dark";
-  optimizedWidth?: number;
 };
 
-function MediaImplementation({
+function GridMediaImpl({
   item,
   numColumns = 1,
   sizeStyle = {},
   resizeMode: propResizeMode,
-  onPinchStart,
-  onPinchEnd,
-  isMuted,
   edition,
-  videoRef,
-  optimizedWidth = 800,
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
-  const mediaUri = item?.loading
-    ? item?.source_url
-    : getMediaUrl({ nft: item, stillPreview: false });
-  const mediaStillPreviewUri = getMediaUrl({ nft: item, stillPreview: true });
+  const mediaUri = useMemo(
+    () => getMediaUrl({ nft: item, stillPreview: false }),
+    [item]
+  );
+  const mediaStillPreviewUri = useMemo(
+    () => getMediaUrl({ nft: item, stillPreview: true }),
+    [item]
+  );
   const contentWidth = useContentWidth();
 
   const size = useMemo(() => {
@@ -71,23 +66,40 @@ function MediaImplementation({
       }}
     >
       {Boolean(edition) && (
-        <View tw="absolute bottom-0.5 left-0.5 z-10">
+        <View tw="absolute bottom-2.5 left-2 z-10">
           <ContentTypeIcon edition={edition} />
         </View>
       )}
       {item?.mime_type?.startsWith("image") &&
       item?.mime_type !== "image/gif" ? (
-        <PinchToZoom
-          onPinchStart={onPinchStart}
-          onPinchEnd={onPinchEnd}
-          disabled={numColumns > 1}
-        >
+        <Image
+          source={{
+            uri: `${mediaUri}?optimizer=image&width=300&quality=70`,
+          }}
+          recyclingKey={mediaUri}
+          blurhash={item?.blurhash}
+          data-test-id={Platform.select({ web: "nft-card-media" })}
+          width={width}
+          height={height}
+          style={sizeStyle}
+          resizeMode={resizeMode}
+          alt={item?.token_name}
+        />
+      ) : null}
+
+      {item?.mime_type?.startsWith("video") ||
+      item?.mime_type === "image/gif" ? (
+        <>
+          {numColumns > 1 && (
+            <View tw="absolute bottom-2 right-1 z-10 bg-transparent">
+              <Play height={24} width={24} color="white" />
+            </View>
+          )}
           <Image
             source={{
-              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=70`,
+              uri: mediaStillPreviewUri,
             }}
             recyclingKey={mediaUri}
-            blurhash={item?.blurhash}
             data-test-id={Platform.select({ web: "nft-card-media" })}
             width={width}
             height={height}
@@ -95,67 +107,30 @@ function MediaImplementation({
             resizeMode={resizeMode}
             alt={item?.token_name}
           />
-        </PinchToZoom>
-      ) : null}
-
-      {item?.mime_type?.startsWith("video") ||
-      item?.mime_type === "image/gif" ? (
-        <PinchToZoom
-          onPinchStart={onPinchStart}
-          onPinchEnd={onPinchEnd}
-          disabled={numColumns > 1}
-        >
-          {numColumns > 1 && (
-            <View tw="absolute bottom-2.5 right-2.5 z-10 bg-transparent">
-              <Play height={24} width={24} color="white" />
-            </View>
-          )}
-          <Video
-            ref={videoRef}
-            source={{
-              uri: mediaUri,
-            }}
-            posterSource={{
-              uri: mediaStillPreviewUri,
-            }}
-            width={width}
-            height={height}
-            style={sizeStyle}
-            blurhash={item?.blurhash}
-            isMuted={numColumns > 1 ? true : isMuted}
-            resizeMode={resizeMode as any}
-            //@ts-ignore
-            dataset={Platform.select({ web: { testId: "nft-card-media" } })}
-          />
-        </PinchToZoom>
+        </>
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
         // This is a legacy 3D model, we don't support it anymore and fallback to image
-        <PinchToZoom
-          onPinchStart={onPinchStart}
-          onPinchEnd={onPinchEnd}
-          disabled={numColumns > 1}
-        >
-          <Image
-            source={{
-              uri: item?.still_preview_url,
-            }}
-            recyclingKey={mediaUri}
-            blurhash={item?.blurhash}
-            data-test-id={Platform.select({ web: "nft-card-media-model" })}
-            width={width}
-            height={height}
-            style={sizeStyle}
-            resizeMode={resizeMode}
-            alt={item?.token_name}
-          />
-        </PinchToZoom>
+
+        <Image
+          source={{
+            uri: item?.still_preview_url,
+          }}
+          recyclingKey={mediaUri}
+          blurhash={item?.blurhash}
+          data-test-id={Platform.select({ web: "nft-card-media-model" })}
+          width={width}
+          height={height}
+          style={sizeStyle}
+          resizeMode={resizeMode}
+          alt={item?.token_name}
+        />
       ) : null}
     </View>
   );
 }
 
-export const Media = withMemoAndColorScheme<typeof MediaImplementation, Props>(
-  MediaImplementation
+export const GridMedia = withMemoAndColorScheme<typeof GridMediaImpl, Props>(
+  GridMediaImpl
 );

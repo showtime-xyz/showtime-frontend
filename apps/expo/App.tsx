@@ -49,11 +49,11 @@ LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you're using an old API with gesture components",
   "Sending `onAnimatedValueUpdate` with no listeners registered.", // `react-native-tab-view` waring issue.
   "Did not receive response to shouldStartLoad in time", // warning from @magic-sdk/react-native's react-native-webview dependency. https://github.com/react-native-webview/react-native-webview/issues/124
-  "Warning: Failed prop type: Invalid prop `externalScrollView` of type `object`", // recyclerlistview type issue
 ]);
 
 function App() {
-  const [notification, setNotification] = useState(null);
+  const [notification, setNotification] =
+    useState<Notifications.Notification | null>(null);
 
   useEffect(() => {
     AvoidSoftInput.setEnabled(true);
@@ -109,7 +109,9 @@ function App() {
           try {
             await Image.clearMemoryCache();
             Logger.log("did receive memory warning and cleared");
-          } catch {}
+          } catch {
+            // ignore
+          }
         }
         clearFastImageMemory();
       }

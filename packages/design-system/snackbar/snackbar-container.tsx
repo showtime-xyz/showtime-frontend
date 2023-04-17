@@ -1,10 +1,6 @@
-import { View, Platform } from "react-native";
-
-import { FullWindowOverlay } from "react-native-screens";
+import { View } from "react-native";
 
 import { Snackbar, SnackbarProps, SNACKBAR_HEIGHT } from "./snackbar";
-
-const OverLayView = Platform.OS === "ios" ? FullWindowOverlay : View;
 
 export const SnackbarContainer = ({
   show,
@@ -14,17 +10,16 @@ export const SnackbarContainer = ({
   return (
     <>
       {show && (
-        <OverLayView
+        <View
           style={{
             position: "absolute",
             height: SNACKBAR_HEIGHT,
             width: "100%",
             bottom: snackbar.bottom,
-            backgroundColor: "red",
           }}
         >
           <Snackbar show={show} snackbar={snackbar} {...rest} />
-        </OverLayView>
+        </View>
       )}
     </>
   );

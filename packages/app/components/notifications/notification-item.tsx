@@ -1,6 +1,4 @@
-import { memo, useMemo } from "react";
-
-import { Link } from "solito/link";
+import { memo, useMemo, useCallback } from "react";
 
 import {
   HeartFilled,
@@ -10,6 +8,8 @@ import {
   GiftSolid,
   Spotify,
 } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -17,11 +17,13 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
-import { useUser } from "app/hooks/use-user";
 import { getFormatDistanceStrictToWeek } from "app/utilities";
 
-import { NFTSDisplayName, NFTSDisplayNameText } from "./nfts-display-name";
-import { UpdateSpotifyDetails } from "./update-spotify-details";
+import {
+  NFTSDisplayName,
+  NFTSDisplayNameText,
+  getNFTLink,
+} from "./nfts-display-name";
 
 export type NotificationItemProp = {
   notification: NotificationType;
@@ -50,21 +52,56 @@ const NOTIFICATION_TYPE_COPY = new Map([
 
 export const NotificationItem = memo(
   ({ notification, setUsers }: NotificationItemProp) => {
-    const myProfile = useUser();
+    const router = useRouter();
     const icon = useMemo(
       () => getNotificationIcon(notification.type_name),
       [notification.type_name]
     );
-    const actor =
-      notification.actors?.length > 0 ? notification?.actors[0] : null;
-    const avatarLink =
-      "/@" +
-      (actor?.wallet_address
-        ? `${actor?.username || actor?.wallet_address}`
-        : `${
-            myProfile?.user?.data.profile.username ||
-            myProfile?.user?.data.profile.wallet_addresses[0]
-          }`);
+
+    const notificationPressHandler = useCallback(() => {
+      let path = "";
+      switch (notification.type_name) {
+        case "FOLLOW":
+          path = `/@${
+            notification.actors[0]?.username ||
+            notification.actors[0]?.wallet_address
+          }`;
+          break;
+
+        case "LIKE_ON_CREATED_NFT":
+        case "LIKE_ON_OWNED_NFT":
+        case "COMMENT_ON_CREATED_NFT":
+        case "COMMENT_ON_OWNED_NFT":
+        case "COMMENT_MENTION":
+        case "LIKE_ON_COMMENT":
+        case "NFT_SALE":
+        case "NEW_CREATOR_AIRDROP_FROM_FOLLOWING":
+        case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
+        case "CREATED_EDITION_SOLD_OUT":
+        case "CREATED_EDITION_EXPIRED":
+          if (notification.nfts && notification.nfts.length > 0) {
+            path = getNFTLink(notification.nfts[0]);
+          }
+          break;
+        case "MISSING_MUSIC_RELEASE_METADATA":
+          if (notification.nfts && notification.nfts.length > 0) {
+            path = `/drop/update/${notification.nfts[0].contract_address}`;
+          }
+          break;
+        case "RELEASE_SAVED_TO_SPOTIFY":
+          // to determine, currently disabled
+          break;
+      }
+
+      if (!path) return;
+
+      router.push(path);
+    }, [
+      notification.actors,
+      notification.nfts,
+      notification.type_name,
+      router,
+    ]);
 
     if (
       NOTIFICATION_TYPE_COPY.get(notification.type_name) === undefined ||
@@ -75,9 +112,16 @@ export const NotificationItem = memo(
 
     return (
       <View tw="flex-row items-center p-4">
-        {icon}
-        <View tw="mx-2">
-          <Link href={avatarLink}>
+        <Pressable
+          onPress={notificationPressHandler}
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          {icon}
+          <View tw="mx-2">
             <AvatarHoverCard
               url={notification.img_url}
               size={24}
@@ -87,12 +131,12 @@ export const NotificationItem = memo(
               }
               alt="Notification Avatar"
             />
-          </Link>
-        </View>
-        <NotificationDescription
-          notification={notification}
-          setUsers={setUsers}
-        />
+          </View>
+          <NotificationDescription
+            notification={notification}
+            setUsers={setUsers}
+          />
+        </Pressable>
       </View>
     );
   }
@@ -113,20 +157,18 @@ const NotificationDescription = memo(
 
     if (notification.type_name === "MISSING_MUSIC_RELEASE_METADATA") {
       return (
-        <UpdateSpotifyDetails nfts={notification.nfts}>
-          <View tw="flex-1 flex-row justify-between">
-            <Text
-              tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] self-center text-gray-600 dark:text-gray-400"
-              ellipsizeMode="tail"
-            >
-              Tap here to enter <NFTSDisplayNameText nfts={notification.nfts} />{" "}
-              {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
-            </Text>
-            {Boolean(formatDistance) && (
-              <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
-            )}
-          </View>
-        </UpdateSpotifyDetails>
+        <View tw="flex-1 flex-row justify-between">
+          <Text
+            tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] self-center text-gray-600 dark:text-gray-400"
+            ellipsizeMode="tail"
+          >
+            Tap here to enter <NFTSDisplayNameText nfts={notification.nfts} />{" "}
+            {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
+          </Text>
+          {Boolean(formatDistance) && (
+            <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+          )}
+        </View>
       );
     }
 
@@ -150,7 +192,7 @@ const NotificationDescription = memo(
     return (
       <View tw="flex-1 flex-row justify-between">
         <Text
-          tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] text-gray-600 dark:text-gray-400"
+          tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] self-center text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
         >
           <Actors actors={notification.actors} setUsers={setUsers} />

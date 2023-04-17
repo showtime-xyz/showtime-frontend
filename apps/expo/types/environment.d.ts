@@ -11,7 +11,4 @@ declare global {
       E2E: string;
     }
   }
-  interface Window {
-    hcaptcha?: string;
-  }
 }

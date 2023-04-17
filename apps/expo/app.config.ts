@@ -1,3 +1,5 @@
+import type { ExpoConfig } from "@expo/config-types";
+
 const path = require("path");
 const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
@@ -40,7 +42,7 @@ const config = envConfig[STAGE];
 const version = packageJSON.version;
 const majorVersion = semver.major(version);
 
-export default {
+const expoConfig: ExpoConfig = {
   name: "Showtime",
   description: "The web3 social network",
   slug: "showtime",
@@ -132,8 +134,7 @@ export default {
         isAccessMediaLocationEnabled: true,
       },
     ],
-    // Detox adds network config xml in android. We don't need it during development. It can cause issues while connecting to metro server
-    process.env.DETOX ? "@config-plugins/detox" : (x) => x,
+    "expo-localization",
     [
       "expo-image-picker",
       {
@@ -160,7 +161,7 @@ export default {
     "./plugins/react-native-cronet.js",
     "./plugins/with-spotify-sdk.js",
     "./plugins/with-android-splash-screen.js",
-    "./plugins/fix-deployment-target.js",
+    "./plugins/with-disabled-force-dark-mode.js",
     [
       withInfoPlist,
       (config) => {
@@ -196,17 +197,18 @@ export default {
       "expo-build-properties",
       {
         android: {
-          compileSdkVersion: 32,
-          targetSdkVersion: 32,
+          compileSdkVersion: 33,
+          targetSdkVersion: 33,
           minSdkVersion: 23,
-          buildToolsVersion: "32.0.0",
-          kotlinVersion: "1.6.10",
+          buildToolsVersion: "33.0.0",
+          kotlinVersion: "1.6.20",
         },
         ios: {
           deploymentTarget: "13.0",
         },
       },
     ],
+    "./plugins/with-android-codegen-path.js",
   ],
   hooks: {
     postPublish: [
@@ -221,3 +223,5 @@ export default {
     ],
   },
 };
+
+export default expoConfig;
