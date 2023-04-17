@@ -80,6 +80,7 @@ function Img({
           ...style,
         }}
         loading={loading}
+        priority={loading === "eager"}
         width={width}
         height={height}
         onLoadingComplete={onLoadingComplete}
@@ -102,6 +103,7 @@ function Img({
       <Image
         src={source}
         loading={loading}
+        priority={loading === "eager"}
         width={width}
         height={height}
         fill={!hasHeightOrWidth}

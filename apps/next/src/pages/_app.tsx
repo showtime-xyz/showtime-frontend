@@ -126,6 +126,8 @@ function App({ Component, pageProps, router }: AppProps) {
           <>
             <link rel="preconnect" href="//showtimenft.wl.r.appspot.com" />
             <link rel="dns-prefect" href="//showtimenft.wl.r.appspot.com" />
+            <link rel="preconnect" href="//showtime.b-cdn.net" />
+            <link rel="dns-prefect" href="//showtime.b-cdn.net" />
             <link rel="preconnect" href="//lh3.googleusercontent.com" />
             <link rel="dns-prefect" href="//lh3.googleusercontent.com" />
             <link rel="preconnect" href="//res.cloudinary.com" />
