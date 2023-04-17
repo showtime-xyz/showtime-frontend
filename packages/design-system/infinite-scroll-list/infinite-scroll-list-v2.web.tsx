@@ -60,6 +60,7 @@ function InfiniteScrollListV2Impl<Item>(
   const parentOffsetRef = useRef(0);
   const router = useRouter();
   const key = "myapp-scroll-restoration-" + router.asPath;
+  const restoring = useRef(false);
 
   useLayoutEffect(() => {
     parentOffsetRef.current = scrollMarginOffseRef.current?.offsetTop ?? 0;
@@ -83,19 +84,24 @@ function InfiniteScrollListV2Impl<Item>(
   }
 
   const scrollToLastSavedPosition = useStableCallback(async () => {
+    if (!useWindowScroll) return;
+
     const pos = sessionStorage.getItem(key);
     if (pos) {
       const parsedPos = Number(pos);
-
-      const req = requestAnimationFrame(() => {
-        if (window.scrollY < parsedPos) {
-          window.scrollTo(0, parsedPos);
-        } else {
+      const restoreScroll = () => {
+        restoring.current = true;
+        window.scrollTo(0, parsedPos);
+        if (window.scrollY >= parsedPos) {
           cancelAnimationFrame(req);
+          sessionStorage.removeItem(key);
+        } else {
+          requestAnimationFrame(restoreScroll);
         }
-      });
+        restoring.current = false;
+      };
 
-      sessionStorage.removeItem(key);
+      const req = requestAnimationFrame(restoreScroll);
     }
   });
 
@@ -112,21 +118,24 @@ function InfiniteScrollListV2Impl<Item>(
     }
   }, [data, onEndReached, renderedItems]);
 
-  const scrollOffsetRef = useLatestValueRef<number>(
-    rowVirtualizer.scrollOffset
-  );
-
   useEffect(() => {
     scrollToLastSavedPosition();
   }, [scrollToLastSavedPosition]);
 
   useEffect(() => {
-    return () => {
-      // save position on unmount
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      sessionStorage.setItem(key, scrollOffsetRef.current.toString());
+    const savePos = () => {
+      if (restoring.current) return;
+      sessionStorage.setItem(key, window.scrollY.toString());
     };
-  }, [rowVirtualizer, key, scrollOffsetRef]);
+    if (useWindowScroll) {
+      window.addEventListener("scroll", savePos);
+    }
+    return () => {
+      if (useWindowScroll) {
+        window.removeEventListener("scroll", savePos);
+      }
+    };
+  }, [key, useWindowScroll]);
 
   return (
     <>
