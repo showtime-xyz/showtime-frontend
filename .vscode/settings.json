@@ -23,5 +23,12 @@
   "explorer.autoRevealExclude": {
     "**/node_modules": false,
     "**/bower_components": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/.yarn/plugins/@yarnpkg": true,
+    "**/.yarn/releases": true
   }
 }
