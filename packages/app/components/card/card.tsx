@@ -67,6 +67,7 @@ type Props = {
   showClaimButton?: Boolean;
   sizeStyle?: { width: number; height: number };
   style?: StyleProp<ViewStyle>;
+  index: number;
 };
 
 export const GAP = StyleSheet.hairlineWidth;
@@ -144,6 +145,7 @@ const CardLargeScreen = ({
   showClaimButton,
   handleOnPress,
   cardMaxWidth,
+  index,
 }: Props & { handleOnPress: any; cardMaxWidth: number }) => {
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
@@ -194,6 +196,7 @@ const CardLargeScreen = ({
               }}
               resizeMode={ResizeMode.COVER}
               optimizedWidth={600}
+              loading={index > 0 ? "lazy" : "eager"}
             />
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (

@@ -1,4 +1,4 @@
-import { StyleSheet, ImageStyle } from "react-native";
+import { StyleSheet } from "react-native";
 
 import {
   Video as ExpoVideo,
@@ -6,7 +6,7 @@ import {
   ResizeMode as AVResizeMode,
 } from "expo-av";
 
-import { Image, ResizeMode } from "@showtime-xyz/universal.image";
+import { ResizeMode } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -16,6 +16,7 @@ type VideoProps = Omit<AVVideoProps, "resizeMode"> & {
   width: number;
   height: number;
   resizeMode: ResizeMode;
+  loading?: "eager" | "lazy";
 };
 const contentFitToresizeMode = (resizeMode: ResizeMode) => {
   switch (resizeMode) {

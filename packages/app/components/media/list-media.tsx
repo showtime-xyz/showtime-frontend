@@ -20,12 +20,14 @@ type Props = {
   edition?: CreatorEditionResponse;
   videoRef?: RefObject<ExpoVideo>;
   optimizedWidth?: number;
+  loading?: "eager" | "lazy";
 };
 
 function ListMediaImpl({
   item,
   resizeMode: propResizeMode,
   optimizedWidth = 300,
+  loading = "lazy",
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
@@ -56,6 +58,7 @@ function ListMediaImpl({
           resizeMode={resizeMode}
           alt={item?.token_name}
           style={{ height: "100%", width: "100%" }}
+          loading={loading}
         />
       ) : null}
 
@@ -71,6 +74,7 @@ function ListMediaImpl({
           blurhash={item?.blurhash}
           isMuted={true}
           resizeMode={resizeMode as any}
+          loading={loading}
         />
       ) : null}
     </>
