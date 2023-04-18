@@ -130,11 +130,21 @@ export const getMediaUrl = ({
     return "";
   }
 
-  const cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
+  let cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
     nft.chain_name
   }/${nft.contract_address}/${nft.token_id}?cache_key=1${
     stillPreview ? "&still_preview=true" : ""
   }`;
+
+  if (nft?.mime_type?.startsWith("image") && nft?.mime_type !== "image/gif") {
+    if (nft.chain_name === "polygon") {
+      cdnUrl = `https://showtime.b-cdn.net/cdnv2/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
+    } else {
+      cdnUrl = `https://showtime-test.b-cdn.net/cdnv2/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
+    }
+  }
+
+  //console.log(cdnUrl);
 
   return cdnUrl;
 };

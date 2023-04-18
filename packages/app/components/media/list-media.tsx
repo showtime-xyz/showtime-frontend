@@ -19,9 +19,16 @@ type Props = {
   isMuted?: boolean;
   edition?: CreatorEditionResponse;
   videoRef?: RefObject<ExpoVideo>;
+  optimizedWidth?: number;
+  loading?: "eager" | "lazy";
 };
 
-function ListMediaImpl({ item, resizeMode: propResizeMode }: Props) {
+function ListMediaImpl({
+  item,
+  resizeMode: propResizeMode,
+  optimizedWidth = 300,
+  loading = "lazy",
+}: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
   const mediaUri = useMemo(
@@ -43,7 +50,7 @@ function ListMediaImpl({ item, resizeMode: propResizeMode }: Props) {
       item?.mime_type !== "image/gif" ? (
         <Image
           source={{
-            uri: mediaUri,
+            uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=70`,
           }}
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}
@@ -51,6 +58,7 @@ function ListMediaImpl({ item, resizeMode: propResizeMode }: Props) {
           resizeMode={resizeMode}
           alt={item?.token_name}
           style={{ height: "100%", width: "100%" }}
+          loading={loading}
         />
       ) : null}
 
@@ -66,6 +74,7 @@ function ListMediaImpl({ item, resizeMode: propResizeMode }: Props) {
           blurhash={item?.blurhash}
           isMuted={true}
           resizeMode={resizeMode as any}
+          loading={loading}
         />
       ) : null}
     </>

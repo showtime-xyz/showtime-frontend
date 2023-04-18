@@ -97,6 +97,7 @@ export const Trending = () => {
             href={`${getNFTSlug(
               item
             )}?initialScrollIndex=${index}&filter=${filter}&type=trendingNFTs`}
+            index={index}
           />
         </View>
       );

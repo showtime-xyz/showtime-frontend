@@ -21,6 +21,7 @@ type VideoProps = Omit<AVVideoProps, "resizeMode"> & {
   width: number;
   height: number;
   resizeMode: ResizeMode;
+  loading?: "eager" | "lazy";
 };
 const contentFitToresizeMode = (resizeMode: ResizeMode) => {
   switch (resizeMode) {
@@ -43,6 +44,7 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
     isMuted: isMutedProp,
     width,
     height,
+    loading = "lazy",
     ...props
   }: VideoProps,
   ref
@@ -66,6 +68,7 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
           width={width}
           height={height}
           alt={"Video Poster"}
+          loading={loading}
         />
       ) : (
         <View style={{ height: "inherit", width: "inherit" }}>
@@ -78,6 +81,7 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
             width={width}
             height={height}
             alt={"Video Background"}
+            loading={loading}
           />
           <View tw="absolute inset-0 backdrop-blur-md" />
           <ExpoVideo
