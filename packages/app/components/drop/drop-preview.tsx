@@ -25,7 +25,7 @@ import { breakpoints } from "design-system/theme";
 
 import { PolygonScanButton } from "../polygon-scan-button";
 
-type DropPreviewProps = {
+export type DropPreviewProps = {
   file: any;
   title: string;
   description: string;
@@ -35,6 +35,11 @@ type DropPreviewProps = {
   ctaCopy?: string;
   tw?: string;
   buttonProps?: ButtonProps;
+  preivewComponent?: ({
+    size,
+  }: {
+    size: number;
+  }) => React.ReactNode | JSX.Element;
 };
 
 export const DropPreview = memo(function DropPreview({
@@ -47,6 +52,7 @@ export const DropPreview = memo(function DropPreview({
   ctaCopy,
   tw = "",
   buttonProps,
+  preivewComponent,
 }: DropPreviewProps) {
   const { user: userProfile } = useUser();
   const [muted] = useMuted();
@@ -85,22 +91,27 @@ export const DropPreview = memo(function DropPreview({
     );
   }, [state.status, state.transactionHash, onPressCTA, buttonProps, ctaCopy]);
   const size = isSmWidth ? 300 : width - 32;
+
   return (
     <View tw={["animate-fade-in-250 items-center px-4", tw]}>
       <View tw="shadow-light dark:shadow-dark ios:border android:border web:py-8 ios:pb-4 android:pb-4 overflow-hidden rounded-3xl border-gray-100 dark:border-gray-900 sm:w-[300px]">
         <View>
-          <Preview
-            file={file}
-            width={size}
-            height={size}
-            isMuted={muted}
-            showMuteButton
-            isLooping
-            style={{
-              width: size,
-              height: size,
-            }}
-          />
+          {preivewComponent ? (
+            preivewComponent({ size })
+          ) : (
+            <Preview
+              file={file}
+              width={size}
+              height={size}
+              isMuted={muted}
+              showMuteButton
+              isLooping
+              style={{
+                width: size,
+                height: size,
+              }}
+            />
+          )}
           {(Boolean(spotifyUrl) || Boolean(releaseDate)) && (
             <Pressable
               onPress={onPressSpotify}

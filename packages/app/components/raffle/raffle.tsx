@@ -216,11 +216,11 @@ export const Raffle = (props?: RaffleModalParams) => {
     Linking.openURL(
       getTwitterIntent({
         url: "",
-        message: `Congratulations @${getTwitterIntentUsername(
+        message: `Congratulations to @${getTwitterIntentUsername(
           winnerProfile
-        )} on winning the ${
+        )}: you just won the raffle for "${
           edition?.creator_airdrop_edition.name
-        } raffle on @showtime_xyz! \nDM me for more details!`,
+        }" on @showtime_xyz ✦ \nDM me for more details.`,
       })
     );
   }, [edition?.creator_airdrop_edition.name, winnerProfile]);
@@ -263,11 +263,18 @@ export const Raffle = (props?: RaffleModalParams) => {
                       👑
                     </Text>
                     <Pressable
-                      onPress={() =>
-                        router.push(
-                          `/profile/${winner?.username ?? winner?.profile_id}`
-                        )
-                      }
+                      onPress={() => {
+                        if (Platform.OS !== "web") {
+                          router.pop();
+                          router.push(
+                            `/@${winner?.username ?? winner?.profile_id}`
+                          );
+                        } else {
+                          router.replace(
+                            `/@${winner?.username ?? winner?.profile_id}`
+                          );
+                        }
+                      }}
                       tw="-top-4 self-center rounded-full bg-white p-4 shadow-lg shadow-black/10 dark:bg-black dark:shadow-white/20"
                     >
                       <Text tw="text-lg font-bold text-black dark:text-white">

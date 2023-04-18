@@ -13,6 +13,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropUpdateScreen } from "app/screens/drop-update";
+import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
@@ -133,7 +134,6 @@ export function RootStackNavigator() {
           component={OnboardingScreen}
           options={{ gestureEnabled: false }}
         />
-
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen
           name="verifyPhoneNumber"
@@ -146,6 +146,10 @@ export function RootStackNavigator() {
         <Stack.Screen name="dropPrivate" component={DropPrivateScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
+        <Stack.Screen
+          name="dropViewShareModal"
+          component={DropViewShareScreen}
+        />
         <Stack.Screen name="raffle" component={RaffleScreen} />
       </Stack.Group>
       <Stack.Group

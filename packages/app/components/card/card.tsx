@@ -223,7 +223,7 @@ const CardLargeScreen = ({
             edition ? (
               <View tw="flex-row">
                 <ClaimButton edition={edition} />
-                <ClaimedShareButton tw="ml-3" edition={edition} />
+                <ClaimedShareButton tw="ml-3" edition={edition} nft={nft} />
               </View>
             ) : null}
           </View>

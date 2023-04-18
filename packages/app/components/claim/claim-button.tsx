@@ -6,7 +6,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check, Hourglass } from "@showtime-xyz/universal.icon";
+import { Check, Hourglass, Raffle } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -157,8 +157,9 @@ export const ClaimButton = ({
     if (isCanViewRaffleResult) {
       return (
         <>
-          <Text tw="text-sm font-semibold text-white">
-            Announce your raffle
+          <Raffle color="white" width={20} height={20} />
+          <Text tw="ml-1 text-sm font-semibold text-white">
+            Announce the raffle winner
           </Text>
         </>
       );
