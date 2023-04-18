@@ -206,7 +206,8 @@ function InfiniteScrollListImpl<Item>(
 
                     {typeof data?.[virtualItem.index] !== "undefined" &&
                     !isFooter &&
-                    !isHeader ? (
+                    !isHeader &&
+                    !isEmpty ? (
                       <div
                         style={{
                           display: "flex",
