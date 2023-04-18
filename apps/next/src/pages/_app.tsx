@@ -16,7 +16,6 @@ import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import { withColorScheme } from "app/components/memo-with-theme";
-import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { CheckoutScreen } from "app/screens/checkout";
@@ -31,6 +30,7 @@ import { DropEventScreen } from "app/screens/drop-event";
 import { DropFreeScreen } from "app/screens/drop-free";
 import { DropMusicScreen } from "app/screens/drop-music";
 import { DropPrivateScreen } from "app/screens/drop-private";
+import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
@@ -199,6 +199,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <CheckoutScreen />
         <CheckoutReturnScreen />
         <QRCodeShareScreen />
+        <DropViewShareScreen />
 
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />

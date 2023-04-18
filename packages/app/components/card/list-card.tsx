@@ -376,6 +376,7 @@ const ListCardLargeScreen = ({
                 tw="ml-3 hidden lg:flex"
                 edition={edition}
                 size="regular"
+                nft={nft}
               />
             </View>
           ) : null}

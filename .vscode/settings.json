@@ -11,7 +11,9 @@
   "tailwindCSS.experimental.classRegex": [
     "tw=\"([^\"]*)", // <View tw="..." />
     "tw={\"([^\"}]*)", // <View tw={"..."} />
-    "tw={`([^`}]*)" // <View tw={`...`} />
+    "tw={`([^`}]*)", // <View tw={`...`} />
+    "tw:\"([^\"]*)", // tw:"..."
+    "tw: \"([^\"]*)" // tw: "..."
   ],
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
