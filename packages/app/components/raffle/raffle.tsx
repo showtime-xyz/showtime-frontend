@@ -216,11 +216,11 @@ export const Raffle = (props?: RaffleModalParams) => {
     Linking.openURL(
       getTwitterIntent({
         url: "",
-        message: `Congratulations to ${getTwitterIntentUsername(
+        message: `Congratulations to @${getTwitterIntentUsername(
           winnerProfile
         )}: you just won the raffle for "${
           edition?.creator_airdrop_edition.name
-        }" on @showtime_xyz ✦ \nDM me for more details.`,
+        }" on @showtime_xyz ✦\n\nDM me for more details.`,
       })
     );
   }, [edition?.creator_airdrop_edition.name, winnerProfile]);
