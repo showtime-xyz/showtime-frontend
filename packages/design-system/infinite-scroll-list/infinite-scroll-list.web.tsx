@@ -73,6 +73,7 @@ function InfiniteScrollListImpl<Item>(
       count,
       estimateSize: () => estimatedItemSize ?? 0,
       scrollMargin: parentOffsetRef.current,
+      overscan: 2,
     });
   } else {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -81,6 +82,7 @@ function InfiniteScrollListImpl<Item>(
       estimateSize: () => estimatedItemSize ?? 0,
       getScrollElement: () => parentRef.current,
       scrollMargin: parentOffsetRef.current,
+      overscan: 2,
     });
   }
 
