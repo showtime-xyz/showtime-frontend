@@ -4,7 +4,7 @@ import { Chip } from "@showtime-xyz/universal.chip";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import {
-  InfiniteScrollListV2,
+  InfiniteScrollList,
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -79,8 +79,9 @@ export const UserList = ({
   }
 
   return (
-    <InfiniteScrollListV2
+    <InfiniteScrollList
       data={users}
+      preserveScrollPosition
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       estimatedItemSize={64}

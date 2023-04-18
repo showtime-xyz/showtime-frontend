@@ -6,7 +6,7 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Close, Search } from "@showtime-xyz/universal.icon";
-import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -104,7 +104,7 @@ const SearchInHeader = () => {
       >
         <View tw="mt-2 w-[350px] overflow-hidden rounded-3xl bg-white dark:bg-black">
           {data ? (
-            <InfiniteScrollListV2
+            <InfiniteScrollList
               useWindowScroll={false}
               data={data}
               renderItem={renderItem}

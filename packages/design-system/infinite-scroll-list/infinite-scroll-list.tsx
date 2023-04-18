@@ -23,6 +23,8 @@ export type InfiniteScrollListProps<T> = FlashListProps<T> &
     ListFooterComponent?: ComponentType<{
       context?: unknown;
     }>;
+
+    preserveScrollPosition?: boolean;
   };
 
 function FlashListComponent<T>(

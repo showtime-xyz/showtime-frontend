@@ -3,7 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
@@ -122,10 +122,11 @@ export const Trending = () => {
     <TrendingHeaderContext.Provider value={contextValues}>
       <View tw="w-full pb-8 md:pt-20">
         <ErrorBoundary>
-          <InfiniteScrollListV2
+          <InfiniteScrollList
             useWindowScroll={isMdWidth}
             ListHeaderComponent={Header}
             data={list}
+            preserveScrollPosition
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             style={{

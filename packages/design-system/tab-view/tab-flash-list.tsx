@@ -5,7 +5,7 @@ import { FlashList } from "@shopify/flash-list";
 
 import { useHeaderTabContext } from "@showtime-xyz/universal.collapsible-tab-view";
 import {
-  InfiniteScrollListV2,
+  InfiniteScrollList,
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 
@@ -24,7 +24,7 @@ function TabInfiniteScrollListComponent<T>(
 ) {
   const { scrollViewPaddingTop } = useHeaderTabContext();
   return (
-    <InfiniteScrollListV2
+    <InfiniteScrollList
       {...props}
       {...Platform.select({
         web: {},
