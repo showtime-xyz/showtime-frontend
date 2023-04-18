@@ -75,7 +75,6 @@ export const CountryCodePicker = (props: CountryCodePickerProps) => {
           ItemSeparatorComponent={ItemSeparatorComponent}
           keyboardShouldPersistTaps="handled"
           estimatedItemSize={64}
-          style={{ flex: 1 }}
         />
       </View>
     </PickerContext.Provider>

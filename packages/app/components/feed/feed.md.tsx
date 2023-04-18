@@ -6,7 +6,7 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
-import { InfiniteScrollListV2 } from "@showtime-xyz/universal.infinite-scroll-list";
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -35,7 +35,7 @@ const LEFT_SLIDE_WIDTH = 320;
 const LEFT_SLIDE_MARGIN = 64 - HORIZONTAL_GAPS / 2;
 
 const ViewabilityInfiniteScrollList =
-  withViewabilityInfiniteScrollList(InfiniteScrollListV2);
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
 
 const FeedMd = () => {
   return (

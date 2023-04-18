@@ -148,6 +148,7 @@ function InfiniteScrollListImpl<Item>(
                   flexDirection: "column",
                   overflowY: "auto",
                   contain: "strict",
+                  flexGrow: 1,
                   //@ts-ignore
                   ...style,
                 }
