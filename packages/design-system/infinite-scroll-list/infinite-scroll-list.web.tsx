@@ -55,6 +55,7 @@ function InfiniteScrollListImpl<Item>(
 
   const HeaderComponent = renderComponent(ListHeaderComponent);
   const FooterComponent = renderComponent(ListFooterComponent);
+  const EmptyComponent = renderComponent(ListEmptyComponent);
 
   if (HeaderComponent) {
     count += 1;
@@ -149,7 +150,6 @@ function InfiniteScrollListImpl<Item>(
           flexDirection: "column",
         }}
       >
-        {data?.length === 0 && renderComponent(ListEmptyComponent)}
         <div
           ref={parentRef}
           style={
@@ -189,6 +189,7 @@ function InfiniteScrollListImpl<Item>(
                 const isHeader = virtualItem.index === 0 && HeaderComponent;
                 const isFooter =
                   virtualItem.index === count - 1 && FooterComponent;
+                const isEmpty = data?.length === 0 && EmptyComponent;
 
                 return (
                   <div
@@ -200,6 +201,8 @@ function InfiniteScrollListImpl<Item>(
                     {isHeader && HeaderComponent}
 
                     {isFooter && FooterComponent}
+
+                    {isEmpty && EmptyComponent}
 
                     {typeof data?.[virtualItem.index] !== "undefined" &&
                     !isFooter &&
