@@ -39,10 +39,6 @@ const TabScene = ({ route }: any) => {
         );
       }}
       estimatedItemSize={ITEM_HEIGHT}
-      overscan={{
-        main: ITEM_HEIGHT,
-        reverse: ITEM_HEIGHT,
-      }}
     />
   );
 };

@@ -200,7 +200,6 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             estimatedItemSize={70}
-            overscan={100}
             keyboardDismissMode="interactive"
             ListFooterComponent={listFooterComponent}
             automaticallyAdjustKeyboardInsets={handleInset}

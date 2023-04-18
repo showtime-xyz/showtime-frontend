@@ -28,7 +28,6 @@ const renderComponent = (Component: any) => {
 function InfiniteScrollListImpl<Item>(
   props: FlashListProps<Item> & {
     useWindowScroll?: boolean;
-    overscan?: number;
     preserveScrollPosition?: boolean;
   }
 ) {

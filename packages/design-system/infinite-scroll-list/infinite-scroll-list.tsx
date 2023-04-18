@@ -73,7 +73,6 @@ export const InfiniteScrollList = React.forwardRef(FlashListComponent) as <T>(
   props: InfiniteScrollListProps<T> & {
     ref?: React.Ref<FlashList<T>>;
     useWindowScroll?: boolean;
-    overscan?: number;
     preserveScrollPosition?: boolean;
   }
 ) => React.ReactElement;
