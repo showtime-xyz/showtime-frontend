@@ -13,6 +13,7 @@ import {
   useVirtualizer,
   Virtualizer,
 } from "@tanstack/react-virtual";
+import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
 
 import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
@@ -89,9 +90,11 @@ function InfiniteScrollListV2Impl<Item>(
     const pos = sessionStorage.getItem(key);
     if (pos) {
       const parsedPos = Number(pos);
-      const restoreScroll = () => {
+      const restoreScroll = async () => {
         restoring.current = true;
         window.scrollTo(0, parsedPos);
+        // TODO: hack, not sure why window.scrollTo sometimes sets scrollY to < than parsedPos. I think it's because of height is less. Need to investigate
+        await delay(10);
         if (window.scrollY >= parsedPos) {
           cancelAnimationFrame(req);
           sessionStorage.removeItem(key);
@@ -123,10 +126,10 @@ function InfiniteScrollListV2Impl<Item>(
   }, [scrollToLastSavedPosition]);
 
   useEffect(() => {
-    const savePos = () => {
+    const savePos = debounce(() => {
       if (restoring.current) return;
       sessionStorage.setItem(key, window.scrollY.toString());
-    };
+    }, 100);
     if (useWindowScroll) {
       window.addEventListener("scroll", savePos);
     }
