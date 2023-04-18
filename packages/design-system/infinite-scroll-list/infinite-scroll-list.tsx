@@ -6,26 +6,24 @@ import {
   FlashListProps,
   ListRenderItemInfo,
 } from "@shopify/flash-list";
-import type { VirtuosoGridProps } from "react-virtuoso";
 
-export type InfiniteScrollListProps<T> = FlashListProps<T> &
-  Pick<VirtuosoGridProps<T>, "overscan" | "useWindowScroll"> & {
-    index?: number;
-    /**
-     * Grid layout item view props, only valid when numColumns > 1
-     * @default undefined
-     */
-    gridItemProps?: ViewProps | null;
-    // override this type, avoid some style code that cause the web to be re-rendered.
-    ListHeaderComponent?: ComponentType<{
-      context?: unknown;
-    }>;
-    ListFooterComponent?: ComponentType<{
-      context?: unknown;
-    }>;
+export type InfiniteScrollListProps<T> = FlashListProps<T> & {
+  index?: number;
+  /**
+   * Grid layout item view props, only valid when numColumns > 1
+   * @default undefined
+   */
+  gridItemProps?: ViewProps | null;
+  // override this type, avoid some style code that cause the web to be re-rendered.
+  ListHeaderComponent?: ComponentType<{
+    context?: unknown;
+  }>;
+  ListFooterComponent?: ComponentType<{
+    context?: unknown;
+  }>;
 
-    preserveScrollPosition?: boolean;
-  };
+  preserveScrollPosition?: boolean;
+};
 
 function FlashListComponent<T>(
   {
