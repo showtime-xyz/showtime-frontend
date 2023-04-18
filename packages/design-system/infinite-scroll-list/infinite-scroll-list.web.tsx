@@ -14,9 +14,7 @@ import {
 } from "@tanstack/react-virtual";
 import { useRouter } from "next/router";
 
-import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
-import { useStableCallback } from "app/hooks/use-stable-callback";
-import { delay } from "app/utilities";
+const measurementsCache: any = {};
 
 const DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE = 80;
 
@@ -72,7 +70,6 @@ function InfiniteScrollListImpl<Item>(
   const parentOffsetRef = useRef(0);
   const router = useRouter();
   const key = `myapp-scroll-restoration-${router.asPath}-window-scroll-${useWindowScroll}`;
-  const restoring = useRef(false);
 
   useLayoutEffect(() => {
     parentOffsetRef.current = scrollMarginOffseRef.current?.offsetTop ?? 0;
@@ -85,6 +82,16 @@ function InfiniteScrollListImpl<Item>(
       estimateSize: () => estimatedItemSize ?? 0,
       scrollMargin: parentOffsetRef.current,
       overscan: 2,
+      initialOffset: (() => {
+        if (!preserveScrollPosition) return;
+        const pos = sessionStorage.getItem(key);
+        if (pos) {
+          const parsedPos = Number(pos);
+          return parsedPos;
+        }
+        return 0;
+      })(),
+      initialMeasurementsCache: measurementsCache[key],
     });
   } else {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -94,31 +101,18 @@ function InfiniteScrollListImpl<Item>(
       getScrollElement: () => parentRef.current,
       scrollMargin: parentOffsetRef.current,
       overscan: 2,
+      initialOffset: (() => {
+        if (!preserveScrollPosition) return;
+        const pos = sessionStorage.getItem(key);
+        if (pos) {
+          const parsedPos = Number(pos);
+          return parsedPos;
+        }
+        return 0;
+      })(),
+      initialMeasurementsCache: measurementsCache[key],
     });
   }
-
-  const scrollToLastSavedPosition = useStableCallback(async () => {
-    if (!preserveScrollPosition) return;
-    const pos = sessionStorage.getItem(key);
-    if (pos) {
-      const parsedPos = Number(pos);
-      const restoreScroll = async () => {
-        restoring.current = true;
-        rowVirtualizer.scrollToOffset(parsedPos);
-        // TODO: hack, not sure why scrollElement.scrollTo sometimes sets scrollY to < than parsedPos. I think it's because of height is less. Need to investigate
-        await delay(10);
-        if (rowVirtualizer.scrollOffset >= parsedPos) {
-          cancelAnimationFrame(req);
-          sessionStorage.removeItem(key);
-        } else {
-          requestAnimationFrame(restoreScroll);
-        }
-        restoring.current = false;
-      };
-
-      const req = requestAnimationFrame(restoreScroll);
-    }
-  });
 
   const renderedItems = rowVirtualizer.getVirtualItems();
 
@@ -134,13 +128,15 @@ function InfiniteScrollListImpl<Item>(
   }, [data, onEndReached, renderedItems]);
 
   useEffect(() => {
-    scrollToLastSavedPosition();
-  }, [scrollToLastSavedPosition]);
-
-  useEffect(() => {
-    if (restoring.current || !preserveScrollPosition) return;
+    if (!preserveScrollPosition) return;
     sessionStorage.setItem(key, rowVirtualizer.scrollOffset.toString());
-  }, [key, rowVirtualizer.scrollOffset, preserveScrollPosition]);
+    measurementsCache[key] = rowVirtualizer.measurementsCache;
+  }, [
+    key,
+    rowVirtualizer.scrollOffset,
+    preserveScrollPosition,
+    rowVirtualizer.measurementsCache,
+  ]);
   return (
     <>
       <div
