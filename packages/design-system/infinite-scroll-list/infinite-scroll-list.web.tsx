@@ -100,7 +100,7 @@ function InfiniteScrollListImpl<Item>(
       estimateSize: () => estimatedItemSize ?? 0,
       getScrollElement: () => parentRef.current,
       scrollMargin: parentOffsetRef.current,
-      overscan: 2,
+      overscan: 4,
       initialOffset: (() => {
         if (!preserveScrollPosition) return;
         const pos = sessionStorage.getItem(key);
