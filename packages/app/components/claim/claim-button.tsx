@@ -54,7 +54,6 @@ export const ClaimButton = ({
   edition,
   size = "small",
   tw = "",
-  style,
   theme,
   ...rest
 }: ClaimButtonProps) => {
