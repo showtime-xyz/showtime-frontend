@@ -137,6 +137,7 @@ function InfiniteScrollListImpl<Item>(
     preserveScrollPosition,
     rowVirtualizer.measurementsCache,
   ]);
+
   return (
     <>
       <div
@@ -181,11 +182,17 @@ function InfiniteScrollListImpl<Item>(
                 }px)`,
               }}
             >
+              {renderedItems.length === 0 && EmptyComponent}
               {renderedItems.map((virtualItem) => {
                 const isHeader = virtualItem.index === 0 && HeaderComponent;
                 const isFooter =
                   virtualItem.index === count - 1 && FooterComponent;
                 const isEmpty = data?.length === 0 && EmptyComponent;
+
+                let actualItemIndex = virtualItem.index;
+                if (HeaderComponent && actualItemIndex > 0) {
+                  actualItemIndex -= 1;
+                }
 
                 return (
                   <div
@@ -200,7 +207,7 @@ function InfiniteScrollListImpl<Item>(
 
                     {isEmpty && EmptyComponent}
 
-                    {typeof data?.[virtualItem.index] !== "undefined" &&
+                    {typeof data?.[actualItemIndex] !== "undefined" &&
                     !isFooter &&
                     !isHeader &&
                     !isEmpty ? (
@@ -213,12 +220,11 @@ function InfiniteScrollListImpl<Item>(
                       >
                         {data
                           .slice(
-                            virtualItem.index * numColumns,
-                            virtualItem.index * numColumns + numColumns
+                            actualItemIndex * numColumns,
+                            actualItemIndex * numColumns + numColumns
                           )
                           .map((item, i) => {
-                            const realIndex =
-                              virtualItem.index * numColumns + i;
+                            const realIndex = actualItemIndex * numColumns + i;
                             return (
                               <ViewabilityTracker
                                 key={realIndex}
