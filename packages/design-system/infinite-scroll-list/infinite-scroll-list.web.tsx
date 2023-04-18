@@ -85,6 +85,15 @@ function InfiniteScrollListImpl<Item>(
       estimateSize: () => estimatedItemSize ?? 0,
       scrollMargin: parentOffsetRef.current,
       overscan: 2,
+      initialOffset: (() => {
+        if (!preserveScrollPosition) return;
+        const pos = sessionStorage.getItem(key);
+        if (pos) {
+          const parsedPos = Number(pos);
+          return parsedPos;
+        }
+        return 0;
+      })(),
     });
   } else {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -94,31 +103,17 @@ function InfiniteScrollListImpl<Item>(
       getScrollElement: () => parentRef.current,
       scrollMargin: parentOffsetRef.current,
       overscan: 2,
+      initialOffset: (() => {
+        if (!preserveScrollPosition) return;
+        const pos = sessionStorage.getItem(key);
+        if (pos) {
+          const parsedPos = Number(pos);
+          return parsedPos;
+        }
+        return 0;
+      })(),
     });
   }
-
-  const scrollToLastSavedPosition = useStableCallback(async () => {
-    if (!preserveScrollPosition) return;
-    const pos = sessionStorage.getItem(key);
-    if (pos) {
-      const parsedPos = Number(pos);
-      const restoreScroll = async () => {
-        restoring.current = true;
-        rowVirtualizer.scrollToOffset(parsedPos);
-        // TODO: hack, not sure why scrollElement.scrollTo sometimes sets scrollY to < than parsedPos. I think it's because of height is less. Need to investigate
-        await delay(10);
-        if (rowVirtualizer.scrollOffset >= parsedPos) {
-          cancelAnimationFrame(req);
-          sessionStorage.removeItem(key);
-        } else {
-          requestAnimationFrame(restoreScroll);
-        }
-        restoring.current = false;
-      };
-
-      const req = requestAnimationFrame(restoreScroll);
-    }
-  });
 
   const renderedItems = rowVirtualizer.getVirtualItems();
 
@@ -132,10 +127,6 @@ function InfiniteScrollListImpl<Item>(
       onEndReached?.();
     }
   }, [data, onEndReached, renderedItems]);
-
-  useEffect(() => {
-    scrollToLastSavedPosition();
-  }, [scrollToLastSavedPosition]);
 
   useEffect(() => {
     if (restoring.current || !preserveScrollPosition) return;
