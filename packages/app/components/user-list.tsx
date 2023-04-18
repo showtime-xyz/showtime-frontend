@@ -80,7 +80,6 @@ export const UserList = ({
   return (
     <InfiniteScrollList
       data={users}
-      preserveScrollPosition
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       estimatedItemSize={64}
