@@ -60,7 +60,7 @@ function InfiniteScrollListV2Impl<Item>(
 
   const parentOffsetRef = useRef(0);
   const router = useRouter();
-  const key = "myapp-scroll-restoration-" + router.asPath;
+  const key = `myapp-scroll-restoration-${router.asPath}-window-scroll-${useWindowScroll}`;
   const restoring = useRef(false);
 
   useLayoutEffect(() => {
@@ -85,17 +85,15 @@ function InfiniteScrollListV2Impl<Item>(
   }
 
   const scrollToLastSavedPosition = useStableCallback(async () => {
-    if (!useWindowScroll) return;
-
     const pos = sessionStorage.getItem(key);
     if (pos) {
       const parsedPos = Number(pos);
       const restoreScroll = async () => {
         restoring.current = true;
-        window.scrollTo(0, parsedPos);
-        // TODO: hack, not sure why window.scrollTo sometimes sets scrollY to < than parsedPos. I think it's because of height is less. Need to investigate
+        rowVirtualizer.scrollToOffset(parsedPos);
+        // TODO: hack, not sure why scrollElement.scrollTo sometimes sets scrollY to < than parsedPos. I think it's because of height is less. Need to investigate
         await delay(10);
-        if (window.scrollY >= parsedPos) {
+        if (rowVirtualizer.scrollOffset >= parsedPos) {
           cancelAnimationFrame(req);
           sessionStorage.removeItem(key);
         } else {
@@ -126,20 +124,9 @@ function InfiniteScrollListV2Impl<Item>(
   }, [scrollToLastSavedPosition]);
 
   useEffect(() => {
-    const savePos = debounce(() => {
-      if (restoring.current) return;
-      sessionStorage.setItem(key, window.scrollY.toString());
-    }, 100);
-    if (useWindowScroll) {
-      window.addEventListener("scroll", savePos);
-    }
-    return () => {
-      if (useWindowScroll) {
-        window.removeEventListener("scroll", savePos);
-      }
-    };
-  }, [key, useWindowScroll]);
-
+    if (restoring.current) return;
+    sessionStorage.setItem(key, rowVirtualizer.scrollOffset.toString());
+  }, [key, rowVirtualizer.scrollOffset]);
   return (
     <>
       {useWindowScroll && renderComponent(ListHeaderComponent)}
