@@ -22,6 +22,7 @@ type ImageProps = Omit<ImgProps, "resizeMode"> & {
   alt?: string;
   blurhash?: string;
   resizeMode?: ResizeMode;
+  loading?: "eager" | "lazy";
 };
 
 function StyledImage({

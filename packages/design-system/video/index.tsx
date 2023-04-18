@@ -16,6 +16,7 @@ type VideoProps = {
   blurhash?: string;
   width: number;
   height: number;
+  loading?: "eager" | "lazy";
 } & ComponentProps<typeof ExpoVideo>;
 
 const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
