@@ -220,7 +220,7 @@ export const Raffle = (props?: RaffleModalParams) => {
           winnerProfile
         )}: you just won the raffle for "${
           edition?.creator_airdrop_edition.name
-        }" on @showtime_xyz ✦ \nDM me for more details.`,
+        }" on @showtime_xyz ✦\n\nDM me for more details.`,
       })
     );
   }, [edition?.creator_airdrop_edition.name, winnerProfile]);
