@@ -25,7 +25,7 @@ const renderComponent = (Component: any) => {
   if (isValidElement(Component)) return Component;
   return <Component />;
 };
-function InfiniteScrollListV2Impl<Item>(
+function InfiniteScrollListImpl<Item>(
   props: FlashListProps<Item> & {
     useWindowScroll?: boolean;
     overscan?: number;
