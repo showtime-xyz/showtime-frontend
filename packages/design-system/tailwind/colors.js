@@ -1,4 +1,4 @@
-export const colors = {
+const colors = {
   black: "#000",
   white: "#fff",
   twitter: "#1DA1F2",
@@ -156,7 +156,7 @@ export const colors = {
     200: "#bbf7d0",
     300: "#86efac",
     400: "#4ade80",
-    500: "#22c55e",
+    500: "#0CB504",
     600: "#16a34a",
     700: "#15803d",
     800: "#166534",
@@ -283,4 +283,7 @@ export const colors = {
     800: "#1e293b",
     900: "#0f172a",
   },
+};
+module.exports = {
+  colors,
 };

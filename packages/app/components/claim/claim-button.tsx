@@ -261,22 +261,32 @@ export const ClaimButton = ({
 
   const backgroundColor = useMemo(() => {
     if (bgIsGreen) {
-      return { backgroundColor: "#0CB504" };
+      return {
+        backgroundColors: {
+          default: ["bg-green-500", "bg-green-500"],
+          pressed: ["bg-green-500", "bg-green-500"],
+        },
+      };
     }
     if (isExpired && !bgIsGreen) {
-      return { backgroundColor: colors.gray[500] };
+      return {
+        backgroundColors: {
+          default: ["bg-gray-500", "bg-gray-500"],
+          pressed: ["bg-gray-500", "bg-gray-500"],
+        },
+      };
     }
-    return {};
+    return null;
   }, [bgIsGreen, isExpired]);
 
   return (
     <Button
       onPress={onClaimPress}
       disabled={disabled}
-      style={[backgroundColor, style]}
       size={size}
       tw={[opacityTw, tw]}
       theme={theme}
+      {...backgroundColor}
       {...rest}
     >
       {content}
