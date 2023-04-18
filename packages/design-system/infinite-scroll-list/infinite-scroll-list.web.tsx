@@ -72,7 +72,6 @@ function InfiniteScrollListImpl<Item>(
   const parentOffsetRef = useRef(0);
   const router = useRouter();
   const key = `myapp-scroll-restoration-${router.asPath}-window-scroll-${useWindowScroll}`;
-  const restoring = useRef(false);
 
   useLayoutEffect(() => {
     parentOffsetRef.current = scrollMarginOffseRef.current?.offsetTop ?? 0;
@@ -129,7 +128,7 @@ function InfiniteScrollListImpl<Item>(
   }, [data, onEndReached, renderedItems]);
 
   useEffect(() => {
-    if (restoring.current || !preserveScrollPosition) return;
+    if (!preserveScrollPosition) return;
     sessionStorage.setItem(key, rowVirtualizer.scrollOffset.toString());
   }, [key, rowVirtualizer.scrollOffset, preserveScrollPosition]);
   return (
