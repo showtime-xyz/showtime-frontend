@@ -58,15 +58,16 @@ export function Button({
       }
       const childTypeName = (child.type?.name as string) ?? "";
       // We only want to pass the icon prop to the SvgIcon component.
-      const svgIconProps = childTypeName.includes("Svg")
-        ? {
-            ...ICON_SIZE_TW[size],
-            color:
-              typeof iconColor === "string"
-                ? iconColor
-                : iconColor[isDark ? 1 : 0],
-          }
-        : {};
+      const svgIconProps =
+        childTypeName.includes("Svg") || iconOnly
+          ? {
+              ...ICON_SIZE_TW[size],
+              color:
+                typeof iconColor === "string"
+                  ? iconColor
+                  : iconColor[isDark ? 1 : 0],
+            }
+          : {};
       return cloneElement(child, {
         tw: [
           ...labelTW,
@@ -79,7 +80,7 @@ export function Button({
         ...child?.props,
       });
     });
-  }, [size, iconColor, labelTW, children, isDark, labelStyle]);
+  }, [children, iconOnly, size, iconColor, isDark, labelTW, labelStyle]);
 
   return (
     <PressableHover
