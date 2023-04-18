@@ -53,6 +53,17 @@ function InfiniteScrollListImpl<Item>(
     count = Math.ceil(count / numColumns);
   }
 
+  const HeaderComponent = renderComponent(ListHeaderComponent);
+  const FooterComponent = renderComponent(ListFooterComponent);
+
+  if (HeaderComponent) {
+    count += 1;
+  }
+
+  if (FooterComponent) {
+    count += 1;
+  }
+
   const viewableItems = useRef<ViewToken[]>([]);
   const parentRef = useRef<HTMLDivElement>(null);
   const scrollMarginOffseRef = useRef<HTMLDivElement>(null);
@@ -131,7 +142,6 @@ function InfiniteScrollListImpl<Item>(
   }, [key, rowVirtualizer.scrollOffset, preserveScrollPosition]);
   return (
     <>
-      {useWindowScroll && renderComponent(ListHeaderComponent)}
       <div
         style={{
           flex: 1,
@@ -156,7 +166,6 @@ function InfiniteScrollListImpl<Item>(
               : {}
           }
         >
-          {!useWindowScroll && renderComponent(ListHeaderComponent)}
           <div
             ref={scrollMarginOffseRef}
             style={{
@@ -177,6 +186,10 @@ function InfiniteScrollListImpl<Item>(
               }}
             >
               {renderedItems.map((virtualItem) => {
+                const isHeader = virtualItem.index === 0 && HeaderComponent;
+                const isFooter =
+                  virtualItem.index === count - 1 && FooterComponent;
+
                 return (
                   <div
                     key={virtualItem.key}
@@ -184,7 +197,13 @@ function InfiniteScrollListImpl<Item>(
                     ref={rowVirtualizer.measureElement}
                     style={{ width: "100%" }}
                   >
-                    {typeof data?.[virtualItem.index] !== "undefined" ? (
+                    {isHeader && HeaderComponent}
+
+                    {isFooter && FooterComponent}
+
+                    {typeof data?.[virtualItem.index] !== "undefined" &&
+                    !isFooter &&
+                    !isHeader ? (
                       <div
                         style={{
                           display: "flex",
@@ -230,10 +249,8 @@ function InfiniteScrollListImpl<Item>(
               })}
             </div>
           </div>
-          {!useWindowScroll && renderComponent(ListFooterComponent)}
         </div>
       </div>
-      {useWindowScroll && renderComponent(ListFooterComponent)}
     </>
   );
 }
