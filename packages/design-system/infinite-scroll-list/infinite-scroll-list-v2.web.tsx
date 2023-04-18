@@ -16,8 +16,6 @@ import {
 import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
 
-import { View } from "@showtime-xyz/universal.view";
-
 import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
 import { useStableCallback } from "app/hooks/use-stable-callback";
 import { delay } from "app/utilities";
@@ -132,9 +130,9 @@ function InfiniteScrollListV2Impl<Item>(
   return (
     <>
       {useWindowScroll && renderComponent(ListHeaderComponent)}
-      <View style={{ flex: 1 }}>
+      <div style={{ height: "100%" }}>
         {data?.length === 0 && renderComponent(ListEmptyComponent)}
-        <View
+        <div
           ref={parentRef}
           style={
             !useWindowScroll
@@ -222,8 +220,8 @@ function InfiniteScrollListV2Impl<Item>(
             </div>
           </div>
           {!useWindowScroll && renderComponent(ListFooterComponent)}
-        </View>
-      </View>
+        </div>
+      </div>
       {useWindowScroll && renderComponent(ListFooterComponent)}
     </>
   );
