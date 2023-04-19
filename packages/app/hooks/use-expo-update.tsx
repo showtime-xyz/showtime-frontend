@@ -5,6 +5,7 @@ import * as Updates from "expo-updates";
 import { useSnackbar } from "@showtime-xyz/universal.snackbar";
 
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 
 // import { MMKV } from "react-native-mmkv";
@@ -32,9 +33,12 @@ export function useExpoUpdate() {
         const update = await Updates.checkForUpdateAsync();
         if (!update.isAvailable) return;
         const result = await Updates.fetchUpdateAsync();
+        Logger.log("New update downloaded success");
         if (result.isNew) {
           if (isAutoUpdate) {
+            Logger.log("Performing auto update");
             await Updates.reloadAsync();
+            Logger.log("Auto update succeeded");
           } else {
             snackbar?.show({
               text: "New update available 🎉",
