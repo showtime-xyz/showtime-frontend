@@ -53,7 +53,6 @@ export const SwipeList = ({
   useScrollToTop(listRef);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
-  const initialURLSet = useRef(false);
   const isSwiped = useRef(false);
 
   const visibleItems = useSharedValue<any[]>([
@@ -88,10 +87,24 @@ export const SwipeList = ({
         e.activeIndex,
         e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
-
+      if (isSwipeListScreen) {
+        router.replace(
+          {
+            pathname: "/profile/[username]/[dropSlug]",
+            query: {
+              ...router.query,
+              initialScrollIndex: e.activeIndex,
+              username: data[e.activeIndex].creator_username,
+              dropSlug: data[e.activeIndex].slug,
+            },
+          },
+          getNFTSlug(data[e.activeIndex]),
+          { shallow: true }
+        );
+      }
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, data, router]
+    [visibleItems, data, router, isSwipeListScreen]
   );
 
   if (data.length === 0) return null;
