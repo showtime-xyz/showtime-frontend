@@ -9143,7 +9143,7 @@ __metadata:
     "@sentry/nextjs": 7.7.0
     "@stripe/react-stripe-js": 2.1.0
     "@stripe/stripe-js": ^1.52.1
-    "@tanstack/react-virtual": ^3.0.0-alpha.0
+    "@tanstack/react-virtual": 3.0.0-beta.54
     "@types/dom-to-image": ^2.6.4
     "@types/react-datepicker": ^4.10.0
     "@types/react-dropzone": ^5.1.0
@@ -11317,7 +11317,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-virtual@npm:^3.0.0-alpha.0":
+"@tanstack/react-virtual@npm:3.0.0-beta.54":
   version: 3.0.0-beta.54
   resolution: "@tanstack/react-virtual@npm:3.0.0-beta.54"
   dependencies:
