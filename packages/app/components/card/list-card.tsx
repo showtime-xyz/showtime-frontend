@@ -181,6 +181,7 @@ const ListCardSmallScreen = ({
                   height: "100%",
                 },
               }}
+              as={as}
               href={href}
               onPress={handleOnPress}
             >
@@ -251,6 +252,7 @@ const ListCardLargeScreen = ({
   href = "",
   showClaimButton,
   onPress,
+  as,
   index,
 }: Props) => {
   const { width } = useWindowDimensions();
@@ -307,6 +309,7 @@ const ListCardLargeScreen = ({
                 height: "100%",
               },
             }}
+            as={as}
           >
             <View tw="h-full min-h-[240px] w-60 items-center">
               <ListMedia
