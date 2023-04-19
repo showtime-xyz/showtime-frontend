@@ -110,10 +110,6 @@ const SearchInHeader = () => {
               renderItem={renderItem}
               keyboardShouldPersistTaps="handled"
               estimatedItemSize={64}
-              overscan={{
-                main: 64,
-                reverse: 64,
-              }}
               style={Platform.select({
                 web: { height: "calc(50vh - 64px)" },
                 default: {},

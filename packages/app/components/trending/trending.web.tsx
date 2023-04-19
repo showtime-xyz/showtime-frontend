@@ -126,13 +126,9 @@ export const Trending = () => {
             useWindowScroll={isMdWidth}
             ListHeaderComponent={Header}
             data={list}
+            preserveScrollPosition
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            estimatedItemSize={screenHeight}
-            overscan={{
-              main: screenHeight,
-              reverse: screenHeight,
-            }}
             style={{
               height: screenHeight - bottomBarHeight,
             }}

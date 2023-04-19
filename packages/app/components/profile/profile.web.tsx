@@ -298,14 +298,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 useWindowScroll={isMdWidth}
                 ListHeaderComponent={Header}
                 numColumns={1}
+                preserveScrollPosition
                 data={isBlocked ? [] : chuckList}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
-                estimatedItemSize={contentWidth / numColumns}
-                overscan={{
-                  main: contentWidth / numColumns,
-                  reverse: contentWidth / numColumns,
-                }}
                 style={{
                   height: screenHeight - 64,
                 }}
