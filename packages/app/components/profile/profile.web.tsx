@@ -232,6 +232,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}
+              as={getNFTSlug(item)}
               href={`${getNFTSlug(item)}?initialScrollIndex=${
                 itemIndex * numColumns + chuckItemIndex
               }&tabType=${type}&profileId=${profileId}&collectionId=${

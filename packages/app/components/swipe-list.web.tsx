@@ -71,32 +71,6 @@ export const SwipeList = ({
     []
   );
 
-  useEffect(() => {
-    if (
-      !initialURLSet.current &&
-      isSwipeListScreen &&
-      typeof initialParamProp !== "undefined"
-    ) {
-      const nft = data[Number(initialParamProp)];
-      if (nft) {
-        router.replace(
-          {
-            pathname: "/profile/[username]/[dropSlug]",
-            query: {
-              ...router.query,
-              username: nft.creator_username,
-              dropSlug: nft.slug,
-            },
-          },
-          getNFTSlug(nft),
-          { shallow: true }
-        );
-      }
-
-      initialURLSet.current = true;
-    }
-  }, [data, isSwipeListScreen, initialParamProp, router]);
-
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
       if (
@@ -114,24 +88,10 @@ export const SwipeList = ({
         e.activeIndex,
         e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
-      if (isSwipeListScreen) {
-        router.replace(
-          {
-            pathname: "/profile/[username]/[dropSlug]",
-            query: {
-              ...router.query,
-              initialScrollIndex: e.activeIndex,
-              username: data[e.activeIndex].creator_username,
-              dropSlug: data[e.activeIndex].slug,
-            },
-          },
-          getNFTSlug(data[e.activeIndex]),
-          { shallow: true }
-        );
-      }
+
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, data, router, isSwipeListScreen]
+    [visibleItems, data, router]
   );
 
   if (data.length === 0) return null;
