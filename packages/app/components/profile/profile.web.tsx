@@ -228,9 +228,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <View tw="mx-auto mb-px max-w-screen-xl flex-row space-x-px px-0 md:space-x-6 md:px-4 lg:space-x-8">
           {chuckItem.map((item, chuckItemIndex) => (
             <Card
+              index={itemIndex}
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}
+              as={getNFTSlug(item)}
               href={`${getNFTSlug(item)}?initialScrollIndex=${
                 itemIndex * numColumns + chuckItemIndex
               }&tabType=${type}&profileId=${profileId}&collectionId=${
@@ -297,14 +299,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 useWindowScroll={isMdWidth}
                 ListHeaderComponent={Header}
                 numColumns={1}
+                preserveScrollPosition
                 data={isBlocked ? [] : chuckList}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
-                estimatedItemSize={contentWidth / numColumns}
-                overscan={{
-                  main: contentWidth / numColumns,
-                  reverse: contentWidth / numColumns,
-                }}
                 style={{
                   height: screenHeight - 64,
                 }}

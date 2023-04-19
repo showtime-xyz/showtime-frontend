@@ -357,7 +357,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               {isCreatorDrop && edition ? (
                 <View tw="flex-row">
                   <ClaimButton tw="flex-1" edition={edition} />
-                  <ClaimedShareButton tw="ml-3 w-1/3" edition={edition} />
+                  <ClaimedShareButton
+                    tw="ml-3 w-1/4"
+                    edition={edition}
+                    nft={nft}
+                  />
                 </View>
               ) : null}
             </View>

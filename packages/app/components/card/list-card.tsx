@@ -81,10 +81,12 @@ type Props = {
   onPress?: () => void;
   tw?: string;
   variant?: "nft" | "activity" | "market";
+  as?: string;
   href?: string;
   showClaimButton?: Boolean;
   sizeStyle?: { width: number; height: number };
   style?: StyleProp<ViewStyle>;
+  index: number;
 };
 
 function ListCard(props: Props) {
@@ -104,6 +106,8 @@ const ListCardSmallScreen = ({
   sizeStyle,
   href = "",
   onPress,
+  as,
+  index,
 }: Props) => {
   const isDark = useIsDarkMode();
 
@@ -134,7 +138,7 @@ const ListCardSmallScreen = ({
   );
 
   return (
-    <RouteComponentNative href={href} onPress={handleOnPress}>
+    <RouteComponentNative href={href} as={as} onPress={handleOnPress}>
       <View
         // @ts-expect-error TODO: add accessibility types for RNW
         dataset={Platform.select({ web: { testId: "nft-card-list" } })}
@@ -181,7 +185,11 @@ const ListCardSmallScreen = ({
               onPress={handleOnPress}
             >
               <View tw="h-36 w-36 items-center justify-center bg-gray-300 dark:bg-gray-700">
-                <ListMedia item={nft} resizeMode={ResizeMode.COVER} />
+                <ListMedia
+                  item={nft}
+                  resizeMode={ResizeMode.COVER}
+                  loading={index > 0 ? "lazy" : "eager"}
+                />
                 <NSFWGate
                   show={nft.nsfw}
                   nftId={nft.nft_id}
@@ -243,6 +251,7 @@ const ListCardLargeScreen = ({
   href = "",
   showClaimButton,
   onPress,
+  index,
 }: Props) => {
   const { width } = useWindowDimensions();
   const isLgWidth = width >= breakpoints["lg"];
@@ -304,6 +313,7 @@ const ListCardLargeScreen = ({
                 item={nft}
                 resizeMode={ResizeMode.COVER}
                 optimizedWidth={480}
+                loading={index > 0 ? "lazy" : "eager"}
               />
               <NSFWGate
                 show={nft.nsfw}
@@ -368,6 +378,7 @@ const ListCardLargeScreen = ({
                 tw="ml-3 hidden lg:flex"
                 edition={edition}
                 size="regular"
+                nft={nft}
               />
             </View>
           ) : null}

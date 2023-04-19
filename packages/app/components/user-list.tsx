@@ -56,7 +56,7 @@ export const UserList = ({
   );
 
   const renderItem = useCallback(
-    ({ item }: { item: UserItemType }) => {
+    ({ item, index }: { item: UserItemType }) => {
       return (
         <FollowingListUser item={item} follow={follow} unFollow={unfollow} />
       );
@@ -83,7 +83,6 @@ export const UserList = ({
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       estimatedItemSize={64}
-      overscan={64}
       ListEmptyComponent={listEmptyComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
       {...modalListProps}

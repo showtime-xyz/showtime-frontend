@@ -443,9 +443,11 @@ export const getTwitterIntentUsername = (profile?: Profile) => {
     return `@${twitterUsername.replace(/@/g, "")}`;
   }
 
-  return profile.username
-    ? profile.username
-    : profile.name
+  if (profile.username) {
+    // because we don't have a real Twitter username, we need to silently mention on Twitter intent.
+    return `@\u2060${profile.username}`;
+  }
+  return profile.name
     ? profile.name
     : profile.wallet_addresses_v2?.[0]?.ens_domain
     ? profile.wallet_addresses_v2[0].ens_domain

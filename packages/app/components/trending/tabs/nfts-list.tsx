@@ -48,7 +48,13 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
 
     const renderItem = useCallback(
       ({ item, index }: ListRenderItemInfo<NFT>) => {
-        return <ListCard nft={item} onPress={() => onItemPress(item, index)} />;
+        return (
+          <ListCard
+            nft={item}
+            index={index}
+            onPress={() => onItemPress(item, index)}
+          />
+        );
       },
       [onItemPress]
     );
@@ -64,10 +70,6 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         renderItem={renderItem}
         viewabilityConfig={{ itemVisiblePercentThreshold: 85 }}
         estimatedItemSize={200}
-        overscan={{
-          main: contentWidth * 3,
-          reverse: contentWidth * 3,
-        }}
         style={{ margin: -GAP }}
         ListFooterComponent={ListFooterComponent}
         index={index}

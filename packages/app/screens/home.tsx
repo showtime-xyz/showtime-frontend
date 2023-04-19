@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Feed } from "app/components/feed";
 import { withColorScheme } from "app/components/memo-with-theme";
-import { useAuth } from "app/hooks/auth/use-auth";
 import { useTrackPageViewed } from "app/lib/analytics";
 
 import { Hidden } from "design-system/hidden";

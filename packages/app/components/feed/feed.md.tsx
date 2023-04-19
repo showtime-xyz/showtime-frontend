@@ -99,11 +99,13 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
     return (
       <View tw="p-2">
         <Card
+          as={getNFTSlug(item)}
           href={`${getNFTSlug(item)}?initialScrollIndex=${index}&type=feed`}
           nft={item}
           sizeStyle={{ width: CARD_WIDTH, height: CARD_WIDTH }}
           tw="mb-4"
           showClaimButton
+          index={index}
         />
       </View>
     );
@@ -119,12 +121,9 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
         <ViewabilityInfiniteScrollList
           data={data}
           renderItem={renderItem}
-          overscan={{
-            main: CARD_HEIGHT,
-            reverse: CARD_HEIGHT,
-          }}
           estimatedItemSize={CARD_HEIGHT}
           onEndReached={fetchMore}
+          preserveScrollPosition
           ListEmptyComponent={
             isLoading ? (
               <View tw="mx-auto p-10">
@@ -153,10 +152,28 @@ const SuggestedUsers = () => {
       <View tw="mt-8 rounded-2xl bg-white dark:bg-black">
         <Text tw="p-4 text-lg dark:text-white">Suggested</Text>
         {loading ? (
-          <View tw="m-4">
-            <Skeleton colorMode={colorScheme as any} width={100} height={20} />
-            <View tw="h-4" />
-            <Skeleton colorMode={colorScheme as any} width={90} height={15} />
+          <View tw="m-4 p-2">
+            <View tw="h-16">
+              <Skeleton
+                colorMode={colorScheme as any}
+                width={100}
+                height={20}
+              />
+            </View>
+            <View tw="h-16">
+              <Skeleton
+                colorMode={colorScheme as any}
+                width={100}
+                height={20}
+              />
+            </View>
+            <View tw="h-16">
+              <Skeleton
+                colorMode={colorScheme as any}
+                width={100}
+                height={20}
+              />
+            </View>
           </View>
         ) : null}
         {data?.map((user, index) => {

@@ -34,6 +34,7 @@ type Props = {
   videoRef?: RefObject<ExpoVideo>;
   theme?: "light" | "dark";
   optimizedWidth?: number;
+  loading?: "eager" | "lazy";
 };
 
 function MediaImplementation({
@@ -47,6 +48,7 @@ function MediaImplementation({
   edition,
   videoRef,
   optimizedWidth = 800,
+  loading = "lazy",
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
@@ -94,6 +96,7 @@ function MediaImplementation({
             style={sizeStyle}
             resizeMode={resizeMode}
             alt={item?.token_name}
+            loading={loading}
           />
         </PinchToZoom>
       ) : null}
@@ -122,8 +125,9 @@ function MediaImplementation({
             height={height}
             style={sizeStyle}
             blurhash={item?.blurhash}
-            isMuted={numColumns > 1 ? true : isMuted}
+            isMuted={isMuted ?? numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode as any}
+            loading={loading}
             //@ts-ignore
             dataset={Platform.select({ web: { testId: "nft-card-media" } })}
           />
@@ -149,6 +153,7 @@ function MediaImplementation({
             style={sizeStyle}
             resizeMode={resizeMode}
             alt={item?.token_name}
+            loading={loading}
           />
         </PinchToZoom>
       ) : null}

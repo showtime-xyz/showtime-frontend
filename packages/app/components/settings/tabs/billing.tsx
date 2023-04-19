@@ -286,7 +286,6 @@ export const BillingTab = ({ index = 0 }: BillingTabProps) => {
           useWindowScroll={isMdWidth}
           estimatedItemSize={60}
           ListHeaderComponent={Header}
-          overscan={60}
           style={{
             height: isMdWidth ? undefined : screenHeight - 200,
             minHeight: isMdWidth ? 400 : undefined,

@@ -94,9 +94,11 @@ export const Trending = () => {
           <ListCard
             nft={item}
             showClaimButton
+            as={getNFTSlug(item)}
             href={`${getNFTSlug(
               item
             )}?initialScrollIndex=${index}&filter=${filter}&type=trendingNFTs`}
+            index={index}
           />
         </View>
       );
@@ -125,13 +127,9 @@ export const Trending = () => {
             useWindowScroll={isMdWidth}
             ListHeaderComponent={Header}
             data={list}
+            preserveScrollPosition
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            estimatedItemSize={screenHeight}
-            overscan={{
-              main: screenHeight,
-              reverse: screenHeight,
-            }}
             style={{
               height: screenHeight - bottomBarHeight,
             }}

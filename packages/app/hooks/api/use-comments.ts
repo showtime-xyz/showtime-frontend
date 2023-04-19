@@ -39,6 +39,7 @@ export interface CommentType {
 export interface Data {
   comments: CommentType[];
   has_more: boolean;
+  count: number;
 }
 
 export interface CommentsPayload {
@@ -72,7 +73,7 @@ export const useComments = (nftId?: number) => {
     mutate: mutateComments,
   } = useInfiniteListQuerySWR<CommentsPayload>(fetchCommentsURL);
   const commentsCount = useMemo(() => {
-    return data?.[0].data?.comments?.length ?? 0;
+    return data?.[0].data?.count ?? 0;
   }, [data]);
   //#endregion
 
@@ -89,7 +90,7 @@ export const useComments = (nftId?: number) => {
         Analytics.track(EVENTS.USER_LIKED_COMMENT);
 
         // mutate customer info
-        mutate(
+        mutate<any>(
           MY_INFO_ENDPOINT,
           (data?: UserType) => {
             if (data) {
@@ -122,7 +123,7 @@ export const useComments = (nftId?: number) => {
         Analytics.track(EVENTS.USER_UNLIKED_COMMENT);
 
         // mutate local data
-        mutate(
+        mutate<any>(
           MY_INFO_ENDPOINT,
           (data?: UserType) => {
             if (data) {
