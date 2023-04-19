@@ -25,7 +25,7 @@ const withRewrites = (unparsedPath: string): string => {
   return unparsedPath;
 };
 
-const linking: LinkingOptions<ReactNavigation.RootParamList> = {
+export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   prefixes: [
     Linking.createURL("/"),
     `https://${url}/`,
@@ -124,5 +124,3 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     };
   },
 };
-
-export { linking };

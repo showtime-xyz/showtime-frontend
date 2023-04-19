@@ -4,18 +4,18 @@ import { useOnboardingPromise } from "app/components/onboarding";
 import { useUser } from "app/hooks/use-user";
 import { useLogInPromise } from "app/lib/login-promise";
 
-export const useRedirectToScreen = ({
-  redirectedCallback,
-  pathname,
-}: {
-  redirectedCallback?: () => void;
-  pathname?: string;
-}) => {
+export const useRedirectToScreen = () => {
   const { isAuthenticated } = useUser();
   const { loginPromise } = useLogInPromise();
   const { onboardingPromise } = useOnboardingPromise();
   const router = useRouter();
-  const redirectToLogin = async () => {
+  const redirectToLogin = async ({
+    redirectedCallback,
+    pathname,
+  }: {
+    redirectedCallback?: () => void;
+    pathname?: string;
+  }) => {
     if (isAuthenticated) {
       pathname && router.push(pathname);
       redirectedCallback?.();

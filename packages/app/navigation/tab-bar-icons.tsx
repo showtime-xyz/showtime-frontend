@@ -163,11 +163,15 @@ export const NotificationsTabBarIcon = ({
   color,
   focused,
 }: TabBarIconProps) => {
-  const redirectToLogin = useRedirectToScreen({
-    pathname: "/notifications",
-  });
+  const redirectToScrssn = useRedirectToScreen();
   return (
-    <TabBarIcon onPress={redirectToLogin}>
+    <TabBarIcon
+      onPress={() =>
+        redirectToScrssn({
+          pathname: "/notifications",
+        })
+      }
+    >
       {focused ? (
         <BellFilled
           style={{ zIndex: 1 }}
@@ -201,12 +205,16 @@ const UnreadNotificationIndicator = () => {
 export const ProfileTabBarIcon = ({ color }: TabBarIconProps) => {
   const { user } = useUser();
   const { userAddress } = useCurrentUserAddress();
-  const redirectToLogin = useRedirectToScreen({
-    pathname: `/@${user?.data?.profile?.username ?? userAddress}`,
-  });
+  const redirectToScrssn = useRedirectToScreen();
 
   return (
-    <TabBarIcon onPress={redirectToLogin}>
+    <TabBarIcon
+      onPress={() =>
+        redirectToScrssn({
+          pathname: `/@${user?.data?.profile?.username ?? userAddress}`,
+        })
+      }
+    >
       <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
     </TabBarIcon>
   );
