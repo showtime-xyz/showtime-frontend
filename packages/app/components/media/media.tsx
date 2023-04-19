@@ -125,7 +125,7 @@ function MediaImplementation({
             height={height}
             style={sizeStyle}
             blurhash={item?.blurhash}
-            isMuted={isMuted ?? numColumns > 1}
+            isMuted={isMuted ?? numColumns > 1 ? true : isMuted}
             resizeMode={resizeMode as any}
             loading={loading}
             //@ts-ignore
