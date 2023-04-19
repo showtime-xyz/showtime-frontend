@@ -41,11 +41,7 @@ const Footer = () => {
     return <WebFooter />;
   }
 
-  if (
-    !isAuthenticated ||
-    isTabBarHidden ||
-    HIDE_LINK_FOOTER_ROUTER_LIST.includes(router.pathname)
-  ) {
+  if (!isAuthenticated || isTabBarHidden) {
     return null;
   }
 
