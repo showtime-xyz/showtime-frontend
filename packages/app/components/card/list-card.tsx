@@ -81,6 +81,7 @@ type Props = {
   onPress?: () => void;
   tw?: string;
   variant?: "nft" | "activity" | "market";
+  as?: string;
   href?: string;
   showClaimButton?: Boolean;
   sizeStyle?: { width: number; height: number };
@@ -105,6 +106,7 @@ const ListCardSmallScreen = ({
   sizeStyle,
   href = "",
   onPress,
+  as,
   index,
 }: Props) => {
   const isDark = useIsDarkMode();
@@ -136,7 +138,7 @@ const ListCardSmallScreen = ({
   );
 
   return (
-    <RouteComponentNative href={href} onPress={handleOnPress}>
+    <RouteComponentNative href={href} as={as} onPress={handleOnPress}>
       <View
         // @ts-expect-error TODO: add accessibility types for RNW
         dataset={Platform.select({ web: { testId: "nft-card-list" } })}
@@ -179,6 +181,7 @@ const ListCardSmallScreen = ({
                   height: "100%",
                 },
               }}
+              as={as}
               href={href}
               onPress={handleOnPress}
             >
@@ -249,6 +252,7 @@ const ListCardLargeScreen = ({
   href = "",
   showClaimButton,
   onPress,
+  as,
   index,
 }: Props) => {
   const { width } = useWindowDimensions();
@@ -305,6 +309,7 @@ const ListCardLargeScreen = ({
                 height: "100%",
               },
             }}
+            as={as}
           >
             <View tw="h-full min-h-[240px] w-60 items-center">
               <ListMedia
