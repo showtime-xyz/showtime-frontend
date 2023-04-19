@@ -27,6 +27,7 @@ function InfiniteScrollListImpl<Item>(
   props: FlashListProps<Item> & {
     useWindowScroll?: boolean;
     preserveScrollPosition?: boolean;
+    overscan?: number;
   }
 ) {
   const {
@@ -42,6 +43,7 @@ function InfiniteScrollListImpl<Item>(
     ListEmptyComponent,
     onEndReached,
     numColumns = 1,
+    overscan,
     style,
     useWindowScroll = true,
     preserveScrollPosition = false,
@@ -81,7 +83,7 @@ function InfiniteScrollListImpl<Item>(
       count,
       estimateSize: () => estimatedItemSize ?? 0,
       scrollMargin: parentOffsetRef.current,
-      overscan: 2,
+      overscan: overscan ?? 2,
       initialOffset: (() => {
         if (!preserveScrollPosition) return;
         const pos = sessionStorage.getItem(key);
@@ -100,7 +102,7 @@ function InfiniteScrollListImpl<Item>(
       estimateSize: () => estimatedItemSize ?? 0,
       getScrollElement: () => parentRef.current,
       scrollMargin: parentOffsetRef.current,
-      overscan: 4,
+      overscan: overscan ?? 4,
       initialOffset: (() => {
         if (!preserveScrollPosition) return;
         const pos = sessionStorage.getItem(key);
