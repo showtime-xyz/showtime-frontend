@@ -81,7 +81,7 @@ function Card(props: Props) {
     sizeStyle,
     onPress,
     href = "",
-    as = "",
+    as,
     style,
   } = props;
   const { width } = useWindowDimensions();
@@ -145,7 +145,7 @@ const CardLargeScreen = ({
   tw = "",
   sizeStyle,
   href = "",
-  as = "",
+  as,
   showClaimButton,
   handleOnPress,
   cardMaxWidth,
