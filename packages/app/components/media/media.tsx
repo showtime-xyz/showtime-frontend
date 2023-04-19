@@ -79,83 +79,61 @@ function MediaImplementation({
       )}
       {item?.mime_type?.startsWith("image") &&
       item?.mime_type !== "image/gif" ? (
-        <PinchToZoom
-          onPinchStart={onPinchStart}
-          onPinchEnd={onPinchEnd}
-          disabled={numColumns > 1}
-        >
-          <Image
-            source={{
-              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=70`,
-            }}
-            recyclingKey={mediaUri}
-            blurhash={item?.blurhash}
-            data-test-id={Platform.select({ web: "nft-card-media" })}
-            width={width}
-            height={height}
-            style={sizeStyle}
-            resizeMode={resizeMode}
-            alt={item?.token_name}
-            loading={loading}
-          />
-        </PinchToZoom>
+        <Image
+          source={{
+            uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=70`,
+          }}
+          recyclingKey={mediaUri}
+          blurhash={item?.blurhash}
+          data-test-id={Platform.select({ web: "nft-card-media" })}
+          width={width}
+          height={height}
+          style={sizeStyle}
+          resizeMode={resizeMode}
+          alt={item?.token_name}
+          loading={loading}
+        />
       ) : null}
 
       {item?.mime_type?.startsWith("video") ||
       item?.mime_type === "image/gif" ? (
-        <PinchToZoom
-          onPinchStart={onPinchStart}
-          onPinchEnd={onPinchEnd}
-          disabled={numColumns > 1}
-        >
-          {numColumns > 1 && (
-            <View tw="absolute bottom-2.5 right-2.5 z-10 bg-transparent">
-              <Play height={24} width={24} color="white" />
-            </View>
-          )}
-          <Video
-            ref={videoRef}
-            source={{
-              uri: mediaUri,
-            }}
-            posterSource={{
-              uri: mediaStillPreviewUri,
-            }}
-            width={width}
-            height={height}
-            style={sizeStyle}
-            blurhash={item?.blurhash}
-            isMuted={isMuted ?? numColumns > 1 ? true : isMuted}
-            resizeMode={resizeMode as any}
-            loading={loading}
-            //@ts-ignore
-            dataset={Platform.select({ web: { testId: "nft-card-media" } })}
-          />
-        </PinchToZoom>
+        <Video
+          ref={videoRef}
+          source={{
+            uri: mediaUri,
+          }}
+          posterSource={{
+            uri: mediaStillPreviewUri,
+          }}
+          width={width}
+          height={height}
+          style={sizeStyle}
+          blurhash={item?.blurhash}
+          isMuted={isMuted ?? numColumns > 1 ? true : isMuted}
+          resizeMode={resizeMode as any}
+          loading={loading}
+          //@ts-ignore
+          dataset={Platform.select({ web: { testId: "nft-card-media" } })}
+        />
       ) : null}
 
       {item?.mime_type?.startsWith("model") ? (
         // This is a legacy 3D model, we don't support it anymore and fallback to image
-        <PinchToZoom
-          onPinchStart={onPinchStart}
-          onPinchEnd={onPinchEnd}
-          disabled={numColumns > 1}
-        >
-          <Image
-            source={{
-              uri: item?.still_preview_url,
-            }}
-            recyclingKey={mediaUri}
-            blurhash={item?.blurhash}
-            data-test-id={Platform.select({ web: "nft-card-media-model" })}
-            width={width}
-            height={height}
-            style={sizeStyle}
-            resizeMode={resizeMode}
-            alt={item?.token_name}
-            loading={loading}
-          />
-        </PinchToZoom>
+
+        <Image
+          source={{
+            uri: item?.still_preview_url,
+          }}
+          recyclingKey={mediaUri}
+          blurhash={item?.blurhash}
+          data-test-id={Platform.select({ web: "nft-card-media-model" })}
+          width={width}
+          height={height}
+          style={sizeStyle}
+          resizeMode={resizeMode}
+          alt={item?.token_name}
+          loading={loading}
+        />
       ) : null}
     </View>
   );
