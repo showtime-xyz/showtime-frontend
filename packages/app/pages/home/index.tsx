@@ -9,6 +9,9 @@ function HomeNavigator() {
     <HomeStack.Navigator
       screenOptions={{
         headerShown: false,
+        contentStyle: {
+          backgroundColor: "black",
+        },
       }}
     >
       <HomeStack.Screen name="home" component={HomeScreen} />

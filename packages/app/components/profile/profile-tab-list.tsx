@@ -94,6 +94,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             nft={item}
             onPress={() => onItemPress(item, itemIndex)}
             numColumns={NUM_COLUMNS}
+            index={itemIndex}
           />
         );
       },

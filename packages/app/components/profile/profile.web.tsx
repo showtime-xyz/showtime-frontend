@@ -228,6 +228,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <View tw="mx-auto mb-px max-w-screen-xl flex-row space-x-px px-0 md:space-x-6 md:px-4 lg:space-x-8">
           {chuckItem.map((item, chuckItemIndex) => (
             <Card
+              index={itemIndex}
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}

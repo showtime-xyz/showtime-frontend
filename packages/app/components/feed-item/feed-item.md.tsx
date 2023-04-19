@@ -268,6 +268,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                     width: mediaWidth,
                   }}
                   resizeMode={ResizeMode.CONTAIN}
+                  optimizedWidth={1200}
                 />
               </FeedItemTapGesture>
               <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
@@ -356,7 +357,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               {isCreatorDrop && edition ? (
                 <View tw="flex-row">
                   <ClaimButton tw="flex-1" edition={edition} />
-                  <ClaimedShareButton tw="ml-3 w-1/3" edition={edition} />
+                  <ClaimedShareButton
+                    tw="ml-3 w-1/4"
+                    edition={edition}
+                    nft={nft}
+                  />
                 </View>
               ) : null}
             </View>

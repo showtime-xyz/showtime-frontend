@@ -326,7 +326,6 @@ export const DropMusic = () => {
       <DropViewShare
         title={getValues("title")}
         description={getValues("description")}
-        onPressCTA={() => setShowPreview(false)}
         file={getValues("file")}
         contractAddress={state.edition?.contract_address}
       />

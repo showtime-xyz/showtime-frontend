@@ -9,6 +9,7 @@ import type { TW } from "@showtime-xyz/universal.tailwind";
 type VideoProps = {
   tw?: TW;
   blurhash?: string;
+  loading?: "eager" | "lazy";
 } & ComponentProps<typeof ExpoVideo>;
 
 export function ListVideo({ posterSource, ...props }: VideoProps) {

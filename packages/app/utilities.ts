@@ -130,11 +130,21 @@ export const getMediaUrl = ({
     return "";
   }
 
-  const cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
+  let cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
     nft.chain_name
   }/${nft.contract_address}/${nft.token_id}?cache_key=1${
     stillPreview ? "&still_preview=true" : ""
   }`;
+
+  if (nft?.mime_type?.startsWith("image") && nft?.mime_type !== "image/gif") {
+    if (nft.chain_name === "polygon") {
+      cdnUrl = `https://showtime.b-cdn.net/cdnv2/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
+    } else {
+      cdnUrl = `https://showtime-test.b-cdn.net/cdnv2/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
+    }
+  }
+
+  //console.log(cdnUrl);
 
   return cdnUrl;
 };
@@ -433,9 +443,11 @@ export const getTwitterIntentUsername = (profile?: Profile) => {
     return `@${twitterUsername.replace(/@/g, "")}`;
   }
 
-  return profile.username
-    ? profile.username
-    : profile.name
+  if (profile.username) {
+    // because we don't have a real Twitter username, we need to silently mention on Twitter intent.
+    return `@\u2060${profile.username}`;
+  }
+  return profile.name
     ? profile.name
     : profile.wallet_addresses_v2?.[0]?.ens_domain
     ? profile.wallet_addresses_v2[0].ens_domain

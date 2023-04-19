@@ -16,13 +16,7 @@ type CardSkeletonProps = {
 };
 
 export const CardSkeleton = memo<CardSkeletonProps>(
-  ({
-    squareSize,
-    height: propHeight,
-    width: propWidth,
-    spacing = 0,
-    tw = "",
-  }) => {
+  ({ squareSize, tw = "" }) => {
     const { colorScheme } = useColorScheme();
     const { width } = useWindowDimensions();
     const isMdWidth = width >= breakpoints["md"];

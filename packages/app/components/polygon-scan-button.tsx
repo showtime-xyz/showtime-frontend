@@ -28,10 +28,7 @@ export const PolygonScanButton = ({
       variant="tertiary"
       size="regular"
     >
-      <PolygonScan
-        style={{ borderRadius: 8, overflow: "hidden" }}
-        color={isDark ? "#FFF" : "#000"}
-      />
+      <PolygonScan color={isDark ? "#FFF" : "#000"} />
       <Text tw="pl-2 text-sm font-semibold text-black dark:text-white">
         View on Polygon Scan
       </Text>

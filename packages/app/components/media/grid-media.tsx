@@ -42,10 +42,7 @@ function GridMediaImpl({
   const resizeMode = propResizeMode ?? "cover";
 
   const mediaUri = useMemo(
-    () =>
-      item?.loading
-        ? item?.source_url
-        : getMediaUrl({ nft: item, stillPreview: false }),
+    () => getMediaUrl({ nft: item, stillPreview: false }),
     [item]
   );
   const mediaStillPreviewUri = useMemo(
@@ -69,7 +66,7 @@ function GridMediaImpl({
       }}
     >
       {Boolean(edition) && (
-        <View tw="absolute bottom-0.5 left-0.5 z-10">
+        <View tw="absolute bottom-2.5 left-2 z-10">
           <ContentTypeIcon edition={edition} />
         </View>
       )}
@@ -77,7 +74,7 @@ function GridMediaImpl({
       item?.mime_type !== "image/gif" ? (
         <Image
           source={{
-            uri: mediaUri,
+            uri: `${mediaUri}?optimizer=image&width=300&quality=70`,
           }}
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}
@@ -94,7 +91,7 @@ function GridMediaImpl({
       item?.mime_type === "image/gif" ? (
         <>
           {numColumns > 1 && (
-            <View tw="absolute bottom-2.5 right-2.5 z-10 bg-transparent">
+            <View tw="absolute bottom-2 right-1 z-10 bg-transparent">
               <Play height={24} width={24} color="white" />
             </View>
           )}

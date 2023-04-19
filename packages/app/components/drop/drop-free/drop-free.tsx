@@ -322,7 +322,6 @@ export const DropFree = () => {
       <DropViewShare
         title={getValues("title")}
         description={getValues("description")}
-        onPressCTA={() => setShowPreview(false)}
         file={getValues("file")}
         contractAddress={state.edition?.contract_address}
       />
