@@ -156,7 +156,7 @@ export const FeedItemTapGesture = ({
 
   return (
     <>
-      <GestureDetector gesture={gesture}>{children}</GestureDetector>
+      {children}
       <Animated.View
         style={[heartContainerStyle, heartStyle, topOffset]}
         pointerEvents="none"
