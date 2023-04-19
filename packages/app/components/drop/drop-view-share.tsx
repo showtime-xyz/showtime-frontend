@@ -73,7 +73,7 @@ export const DropViewShare = memo(function DropViewShare({
   };
   const shareButtons = [
     {
-      title: "Share on Twitte",
+      title: "Share on Twitter",
       Icon: TwitterOutline,
       onPress: shareWithTwitterIntent,
     },
