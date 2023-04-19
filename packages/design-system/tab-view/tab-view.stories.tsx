@@ -39,10 +39,6 @@ const TabScene = ({ route }: any) => {
         );
       }}
       estimatedItemSize={ITEM_HEIGHT}
-      overscan={{
-        main: ITEM_HEIGHT,
-        reverse: ITEM_HEIGHT,
-      }}
     />
   );
 };
@@ -104,7 +100,7 @@ export const Basic: React.FC = () => {
         Header: support any custom touch or gesture event.
       </Text>
       <Text style={{ color: "#fff", fontSize: 16 }}>
-        List: use react-virtuoso on web, use FlashList on native.
+        List: use @tanstack/virtual on web, use FlashList on native.
       </Text>
       <Text style={{ color: "#fff", fontSize: 16 }}>
         Tabbar: support sticky on web.

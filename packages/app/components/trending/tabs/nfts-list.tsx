@@ -70,10 +70,6 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         renderItem={renderItem}
         viewabilityConfig={{ itemVisiblePercentThreshold: 85 }}
         estimatedItemSize={200}
-        overscan={{
-          main: contentWidth * 3,
-          reverse: contentWidth * 3,
-        }}
         style={{ margin: -GAP }}
         ListFooterComponent={ListFooterComponent}
         index={index}

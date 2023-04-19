@@ -23,24 +23,17 @@ import { getTwitterIntent } from "app/utilities";
 import { toast } from "design-system/toast";
 
 import { QRCode } from "../qr-code";
-import { DropPreview } from "./drop-preview";
+import { DropPreview, DropPreviewProps } from "./drop-preview";
 
-const BUTTON_HEIGHT = 40;
-type DropPreviewProps = {
-  file: any;
-  title: string;
-  description: string;
-  onPressCTA: () => void;
-  spotifyUrl?: string;
-  releaseDate?: string;
-  ctaCopy?: string;
+const BUTTON_HEIGHT = 48;
+type DropPreviewShareProps = Omit<DropPreviewProps, "onPressCTA"> & {
   contractAddress?: string;
 };
 
 export const DropViewShare = memo(function DropViewShare({
   contractAddress,
   ...rest
-}: DropPreviewProps) {
+}: DropPreviewShareProps) {
   const { bottom } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
@@ -65,7 +58,7 @@ export const DropViewShare = memo(function DropViewShare({
     Linking.openURL(
       getTwitterIntent({
         url: qrCodeUrl.toString(),
-        message: `Just dropped "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
+        message: `Just collected "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
       })
     );
   }, [nft?.token_name, qrCodeUrl]);
@@ -80,7 +73,7 @@ export const DropViewShare = memo(function DropViewShare({
   };
   const shareButtons = [
     {
-      title: "Twitter",
+      title: "Share on Twitte",
       Icon: TwitterOutline,
       onPress: shareWithTwitterIntent,
     },
@@ -90,7 +83,7 @@ export const DropViewShare = memo(function DropViewShare({
       onPress: onCopyLink,
     },
     {
-      title: "QR Code",
+      title: "Share QR Code",
       Icon: QrCode,
       onPress: showQRCode,
     },
@@ -112,7 +105,6 @@ export const DropViewShare = memo(function DropViewShare({
               }}
             >
               <DropPreview
-                {...rest}
                 ctaCopy="View"
                 buttonProps={{ variant: "primary" }}
                 tw="web:mb-[80px] mt-2"
@@ -125,12 +117,18 @@ export const DropViewShare = memo(function DropViewShare({
                     router.replace(getNFTSlug(nft));
                   }
                 }}
+                {...rest}
               />
             </BottomSheetScrollView>
           </BottomSheetModalProvider>
           <View
             tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black"
-            style={{ paddingBottom: Math.max(bottom, 8) }}
+            style={{
+              paddingBottom: Platform.select({
+                default: Math.max(bottom, 8),
+                web: 0,
+              }),
+            }}
           >
             {shareButtons.map(({ onPress, Icon, title }) => (
               <Pressable
@@ -138,7 +136,7 @@ export const DropViewShare = memo(function DropViewShare({
                   Haptics.impactAsync();
                   onPress();
                 }}
-                tw="flex-1 flex-col items-center justify-center pb-0 pt-4 sm:flex-row"
+                tw="flex-1 flex-col items-center justify-end sm:flex-row sm:justify-center sm:pt-4"
                 key={title}
                 style={{ height: BUTTON_HEIGHT }}
               >

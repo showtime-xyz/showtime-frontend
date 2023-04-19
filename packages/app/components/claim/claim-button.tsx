@@ -6,7 +6,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Check, Hourglass } from "@showtime-xyz/universal.icon";
+import { Check, Hourglass, Raffle } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -54,7 +54,6 @@ export const ClaimButton = ({
   edition,
   size = "small",
   tw = "",
-  style,
   theme,
   ...rest
 }: ClaimButtonProps) => {
@@ -158,8 +157,9 @@ export const ClaimButton = ({
     if (isCanViewRaffleResult) {
       return (
         <>
-          <Text tw="text-sm font-semibold text-white">
-            Announce your raffle
+          <Raffle color="white" width={20} height={20} />
+          <Text tw="ml-1 text-sm font-semibold text-white">
+            Announce the raffle winner
           </Text>
         </>
       );
@@ -261,22 +261,32 @@ export const ClaimButton = ({
 
   const backgroundColor = useMemo(() => {
     if (bgIsGreen) {
-      return { backgroundColor: "#0CB504" };
+      return {
+        backgroundColors: {
+          default: ["bg-green-500", "bg-green-500"],
+          pressed: ["bg-green-500", "bg-green-500"],
+        },
+      };
     }
     if (isExpired && !bgIsGreen) {
-      return { backgroundColor: colors.gray[500] };
+      return {
+        backgroundColors: {
+          default: ["bg-gray-500", "bg-gray-500"],
+          pressed: ["bg-gray-500", "bg-gray-500"],
+        },
+      };
     }
-    return {};
+    return null;
   }, [bgIsGreen, isExpired]);
 
   return (
     <Button
       onPress={onClaimPress}
       disabled={disabled}
-      style={[backgroundColor, style]}
       size={size}
       tw={[opacityTw, tw]}
       theme={theme}
+      {...backgroundColor}
       {...rest}
     >
       {content}

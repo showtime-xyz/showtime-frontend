@@ -98,6 +98,7 @@ type RootStackNavigatorParams = {
   verifyPhoneNumber: undefined;
   drop: undefined;
   qrCodeShare: undefined;
+  dropViewShareModal: undefined;
   raffle: undefined;
   claim: undefined;
   collectors: undefined;

@@ -120,12 +120,9 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
         <ViewabilityInfiniteScrollList
           data={data}
           renderItem={renderItem}
-          overscan={{
-            main: CARD_HEIGHT,
-            reverse: CARD_HEIGHT,
-          }}
           estimatedItemSize={CARD_HEIGHT}
           onEndReached={fetchMore}
+          preserveScrollPosition
           ListEmptyComponent={
             isLoading ? (
               <View tw="mx-auto p-10">

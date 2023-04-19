@@ -60,7 +60,7 @@ export const QRCode = ({ value, size, ...rest }: Props) => {
   return (
     <View {...rest}>
       <View ref={viewRef as any} tw="rounded-lg bg-white p-2 dark:bg-black">
-        <ReactQRCode size={size} value={value} />
+        <ReactQRCode size={size} value={value} ecl="H" />
       </View>
       <Button tw="mt-8 self-center" onPress={onDownload}>
         Download QR Code

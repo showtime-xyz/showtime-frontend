@@ -9143,6 +9143,7 @@ __metadata:
     "@sentry/nextjs": 7.7.0
     "@stripe/react-stripe-js": 2.1.0
     "@stripe/stripe-js": ^1.52.1
+    "@tanstack/react-virtual": 3.0.0-beta.54
     "@types/dom-to-image": ^2.6.4
     "@types/react-datepicker": ^4.10.0
     "@types/react-dropzone": ^5.1.0
@@ -9183,7 +9184,6 @@ __metadata:
     react-remove-scroll-bar: ^2.3.4
     react-stickynode: ^4.1.0
     react-string-replace: 1.1.0
-    react-virtuoso: ^4.2.1
     resize-observer-polyfill: ^1.5.1
     screenfull: ^6.0.2
     setimmediate: ^1.0.5
@@ -11314,6 +11314,24 @@ __metadata:
     react-native:
       optional: true
   checksum: 39417ffd3a6298b376f1d739dc2fe4c042c416902c216f61dff9b26dc80d68872770c90ac276db581c1094368f0b9038a34fab8b7df89b018f3960c938d73a57
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-virtual@npm:3.0.0-beta.54":
+  version: 3.0.0-beta.54
+  resolution: "@tanstack/react-virtual@npm:3.0.0-beta.54"
+  dependencies:
+    "@tanstack/virtual-core": 3.0.0-beta.54
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: ddeb3cb46db89365609d5bc402b8a8d410dc7e5f38ee579f39e5589c62a2123799ba36586939a5a6ad1a701650a5b169f657fd24687687bf08f4827b0099bc75
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.0.0-beta.54":
+  version: 3.0.0-beta.54
+  resolution: "@tanstack/virtual-core@npm:3.0.0-beta.54"
+  checksum: a58cb30e1bbf8a0420caea8693df11c909c1190908163fef75aeddfa11bba621ca993ab218f4e7537c05c1651f9398e61016f3e3d374093c87029b52c868f0e7
   languageName: node
   linkType: hard
 
@@ -31708,16 +31726,6 @@ __metadata:
     global: ^4.3.0
     react-proxy: ^1.1.7
   checksum: e4909d3dee64bfdacfc53fbfb19ae1b5e3a0d550a99b3f59aa31acc1ce75079c7584e6d3bae2a1124f582a272fe3aa104f578bb7a6ef7a9c36f47338b237cc3f
-  languageName: node
-  linkType: hard
-
-"react-virtuoso@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "react-virtuoso@npm:4.2.1"
-  peerDependencies:
-    react: ">=16 || >=17 || >= 18"
-    react-dom: ">=16 || >=17 || >= 18"
-  checksum: 9f3c7aafe354573dc65c227c8d97c163556eebce304a69a848227f4710e759c2577246d0b7794af75c41674b65c888ad8fe7e2720be3dc95eeb9d620a1a59038
   languageName: node
   linkType: hard
 

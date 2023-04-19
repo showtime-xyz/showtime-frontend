@@ -105,10 +105,6 @@ export const SwipeList = ({
         onMomentumScrollEnd={momentumScrollCallback.current}
         refreshing={isRefreshing}
         pagingEnabled
-        overscan={{
-          main: itemHeight,
-          reverse: itemHeight,
-        }}
         renderItem={renderItem}
         estimatedItemSize={itemHeight}
       />

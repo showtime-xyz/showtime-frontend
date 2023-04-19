@@ -31,7 +31,6 @@ const ActivityTable = ({ data }: TableProps) => {
           renderItem={handleRenderItem}
           ItemSeparatorComponent={handleRenderSeparator}
           keyExtractor={(_, index) => index.toString()}
-          overscan={50}
           estimatedItemSize={50}
         />
       </ScrollView>

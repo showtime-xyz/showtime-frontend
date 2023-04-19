@@ -43,11 +43,11 @@ export function Button({ variant = "primary", theme, ...rest }: ButtonProps) {
 export function PrimaryButton({ isDark, ...rest }: BaseButtonProps) {
   return (
     <BaseButton
-      {...rest}
       isDark={isDark}
+      backgroundColors={CONTAINER_BACKGROUND_MAPPER.primary}
       labelStyle={{ color: isDark ? "#000" : "#FFF" }}
       iconColor={ICON_COLOR_MAPPER.primary}
-      backgroundColors={CONTAINER_BACKGROUND_MAPPER.primary}
+      {...rest}
     />
   );
 }
@@ -55,11 +55,11 @@ export function PrimaryButton({ isDark, ...rest }: BaseButtonProps) {
 export function SecondaryButton({ isDark, ...rest }: BaseButtonProps) {
   return (
     <BaseButton
-      {...rest}
       isDark={isDark}
       labelStyle={{ color: isDark ? "#FFF" : colors.gray[900] }}
       iconColor={ICON_COLOR_MAPPER.secondary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.secondary}
+      {...rest}
     />
   );
 }
@@ -67,11 +67,11 @@ export function SecondaryButton({ isDark, ...rest }: BaseButtonProps) {
 export function TertiaryButton({ isDark, ...rest }: BaseButtonProps) {
   return (
     <BaseButton
-      {...rest}
       isDark={isDark}
       labelStyle={{ color: isDark ? "#FFF" : colors.gray[900] }}
       iconColor={ICON_COLOR_MAPPER.tertiary}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.tertiary}
+      {...rest}
     />
   );
 }
@@ -79,10 +79,10 @@ export function TertiaryButton({ isDark, ...rest }: BaseButtonProps) {
 export function DangerButton(props: BaseButtonProps) {
   return (
     <BaseButton
-      {...props}
       labelStyle={{ color: "#FFF" }}
       iconColor={ICON_COLOR_MAPPER.danger}
       backgroundColors={CONTAINER_BACKGROUND_MAPPER.danger}
+      {...props}
     />
   );
 }

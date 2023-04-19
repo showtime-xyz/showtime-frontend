@@ -5,8 +5,10 @@ import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
+import { NFT } from "app/types";
 
 type ClaimedShareButtonProps = Pick<ButtonProps, "size" | "theme"> & {
+  nft?: NFT;
   edition: CreatorEditionResponse;
   tw?: string;
   style?: StyleProp<ViewStyle>;
@@ -17,12 +19,13 @@ export const ClaimedShareButton = ({
   size = "small",
   tw = "",
   style,
+  nft,
   ...rest
 }: ClaimedShareButtonProps) => {
   const router = useRouter();
-  const onClaimPress = () => {
+  const onPress = () => {
     const contractAddress = edition.creator_airdrop_edition.contract_address;
-    const as = `/qr-code-share/${contractAddress}`;
+    const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/share`;
     router.push(
       Platform.select({
         native: as,
@@ -31,7 +34,9 @@ export const ClaimedShareButton = ({
           query: {
             ...router.query,
             contractAddress,
-            qrCodeShareModal: true,
+            tokenId: nft?.token_id,
+            chainName: nft?.chain_name,
+            dropViewShareModal: true,
           },
         } as any,
       }),
@@ -45,7 +50,7 @@ export const ClaimedShareButton = ({
 
   if (!edition || !edition.is_already_claimed) return null;
   return (
-    <Button onPress={onClaimPress} size={size} style={style} tw={tw} {...rest}>
+    <Button onPress={onPress} size={size} style={style} tw={tw} {...rest}>
       Share
     </Button>
   );
