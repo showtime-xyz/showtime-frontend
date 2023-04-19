@@ -7,14 +7,10 @@ import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 
 import { breakpoints } from "design-system/theme";
 
-import { useUser } from "./use-user";
-
 export const usePlatformBottomHeight = () => {
-  const { isAuthenticated } = useUser();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const nativeBottomTabBarHeight = useBottomTabBarHeight();
-  if (!isAuthenticated) return 0;
 
   if (Platform.OS === "web") {
     const mobileWebBottomHeight = insets.bottom + MOBILE_WEB_TABS_HEIGHT;

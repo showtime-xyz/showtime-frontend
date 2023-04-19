@@ -5,11 +5,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
-import { useUser } from "app/hooks/use-user";
-import {
-  HIDE_LINK_FOOTER_ROUTER_LIST,
-  SWIPE_LIST_SCREENS,
-} from "app/lib/constants";
+import { SWIPE_LIST_SCREENS } from "app/lib/constants";
 import {
   CreateTabBarIcon,
   HomeTabBarIcon,
@@ -34,14 +30,13 @@ const Footer = () => {
     : "#000";
 
   const { width } = useWindowDimensions();
-  const { isAuthenticated } = useUser();
   const { isTabBarHidden } = useNavigationElements();
 
   if (width >= 768) {
     return <WebFooter />;
   }
 
-  if (!isAuthenticated || isTabBarHidden) {
+  if (isTabBarHidden) {
     return null;
   }
 
@@ -73,7 +68,7 @@ const Footer = () => {
         color={color}
         focused={router.pathname === "/notifications"}
       />
-      <ProfileTabBarIcon />
+      <ProfileTabBarIcon color={color} />
     </View>
   );
 };
