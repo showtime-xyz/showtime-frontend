@@ -91,18 +91,16 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             </View>
           </View>
 
-          {edition ? (
-            <View tw="mt-4 flex-row">
+          <View tw="mt-4 h-12 flex-row">
+            {edition ? (
               <ClaimButton
                 tw="flex-1"
                 edition={edition}
                 size="regular"
                 theme="dark"
               />
-            </View>
-          ) : (
-            <View tw="mt-4 h-12" />
-          )}
+            ) : null}
+          </View>
         </View>
       </View>
     </View>
