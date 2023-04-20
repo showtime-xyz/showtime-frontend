@@ -151,7 +151,8 @@ function NFTDropdown({
             </DropdownMenuItem>
           ) : null}
 
-          {edition?.gating_type === "spotify_presave" &&
+          {(edition?.gating_type === "spotify_presave" ||
+            edition?.gating_type === "music_presave") &&
           nft.creator_username === user?.data.profile.username ? (
             <DropdownMenuItem
               onSelect={() => {
