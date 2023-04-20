@@ -271,10 +271,9 @@ export const ClaimButton = ({
             <View tw="ml-1">
               <Text
                 style={{
-                  fontSize: 9,
                   color: isDark ? colors.black : colors.white,
                 }}
-                tw="font-semibold"
+                tw="text-[10px] font-semibold md:text-[9px]"
               >
                 Pre-add on
               </Text>
