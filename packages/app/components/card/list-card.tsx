@@ -230,13 +230,11 @@ const ListCardSmallScreen = ({
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
               />
-              {!!nft.creator_airdrop_edition_address && edition ? (
-                <View tw="mt-3.5 flex-row">
+              <View tw="mt-3.5 h-8 flex-row">
+                {!!nft.creator_airdrop_edition_address && edition ? (
                   <ClaimButton edition={edition} size="small" />
-                </View>
-              ) : (
-                <View tw="mt-3.5 h-8" />
-              )}
+                ) : null}
+              </View>
             </View>
           </View>
         </View>
@@ -372,19 +370,21 @@ const ListCardLargeScreen = ({
           </View>
         </View>
         <View tw="ml-8 mr-4 min-w-[140px] self-center lg:min-w-[200px]">
-          {showClaimButton &&
-          !!nft.creator_airdrop_edition_address &&
-          edition ? (
-            <View tw="flex-row self-end">
-              <ClaimButton edition={edition} size="regular" />
-              <ClaimedShareButton
-                tw="ml-3 hidden lg:flex"
-                edition={edition}
-                size="regular"
-                nft={nft}
-              />
-            </View>
-          ) : null}
+          <View tw="flex-row self-end">
+            {showClaimButton &&
+            !!nft.creator_airdrop_edition_address &&
+            edition ? (
+              <>
+                <ClaimButton edition={edition} size="regular" />
+                <ClaimedShareButton
+                  tw="ml-3 hidden lg:flex"
+                  edition={edition}
+                  size="regular"
+                  nft={nft}
+                />{" "}
+              </>
+            ) : null}
+          </View>
         </View>
         <View tw="self-center">
           <ErrorBoundary renderFallback={() => null}>
