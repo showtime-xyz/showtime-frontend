@@ -6,7 +6,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-export function mScrollTo(ref: any, x: number, y: number, animated: boolean) {
+export function _ScrollTo(ref: any, x: number, y: number, animated: boolean) {
   "worklet";
   if (!ref) return;
   scrollTo(ref, x, y, animated);
@@ -40,7 +40,7 @@ export const animateToRefresh = ({
     return;
   isRefreshing.value = isToRefresh;
   if (isToRefresh && onStartRefresh) {
-    // runOnJS(onStartRefresh)();
+    runOnJS(onStartRefresh)();
   }
 
   if (transRefreshing.value === destPoi) {

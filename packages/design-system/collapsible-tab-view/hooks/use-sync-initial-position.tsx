@@ -5,7 +5,7 @@ import type Animated from "react-native-reanimated";
 import { runOnUI, useSharedValue } from "react-native-reanimated";
 
 import { useHeaderTabContext } from "../context";
-import { mScrollTo } from "../utils";
+import { _ScrollTo } from "../utils";
 
 export const useSyncInitialPosition = (
   ref: React.RefObject<Animated.ScrollView>
@@ -18,7 +18,7 @@ export const useSyncInitialPosition = (
     (position: number) => {
       if (!isInitiated.current) return;
       isInitiated.current = false;
-      runOnUI(mScrollTo)(
+      runOnUI(_ScrollTo)(
         ref,
         0,
         Math.min(position, headerHeight - minHeaderHeight),

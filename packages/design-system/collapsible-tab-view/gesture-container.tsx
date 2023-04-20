@@ -32,7 +32,7 @@ import { useRefreshDerivedValue } from "./hooks/use-refresh-value";
 import { useSceneInfo } from "./hooks/use-scene-info";
 import RefreshControlContainer from "./refresh-control";
 import type { GestureContainerProps, Route } from "./types";
-import { animateToRefresh, isIOS, mScrollTo } from "./utils";
+import { animateToRefresh, isIOS, _ScrollTo } from "./utils";
 
 const { width } = Dimensions.get("window");
 
@@ -158,7 +158,7 @@ export const GestureContainer = React.forwardRef<
   const stopScrollView = () => {
     "worklet";
     if (!sceneIsReady.value[curIndexValue.value]) return;
-    mScrollTo(
+    _ScrollTo(
       childScrollRef[curIndexValue.value],
       0,
       childScrollYTrans[curIndexValue.value]!.value + 0.1,
@@ -190,7 +190,7 @@ export const GestureContainer = React.forwardRef<
       )
         return;
 
-      mScrollTo(childScrollRef[index], 0, syncPosition, false);
+      _ScrollTo(childScrollRef[index], 0, syncPosition, false);
     };
 
     for (const key in childScrollRef) {
@@ -353,7 +353,7 @@ export const GestureContainer = React.forwardRef<
           refreshHeight - (event.translationY - basyY.value);
         if (!isPullEnough.value && tabsRefreshTrans.value < 0 && onPullEnough) {
           isPullEnough.value = true;
-          // runOnJS(onPullEnough)();
+          runOnJS(onPullEnough)();
         }
       }
     })
@@ -454,7 +454,7 @@ export const GestureContainer = React.forwardRef<
       if (childScrollYTrans[curIndexValue.value]!.value === headerTrans.value)
         return;
 
-      mScrollTo(
+      _ScrollTo(
         childScrollRef[curIndexValue.value],
         0,
         headerTrans.value || 0,
@@ -484,7 +484,7 @@ export const GestureContainer = React.forwardRef<
       const transY = tabsRefreshTrans.value - refreshHeight;
 
       if (childScrollYTrans[curIndexValue.value]!.value === transY) return;
-      mScrollTo(childScrollRef[curIndexValue.value], 0, transY, false);
+      _ScrollTo(childScrollRef[curIndexValue.value], 0, transY, false);
     },
     [
       tabsRefreshTrans,
@@ -508,7 +508,7 @@ export const GestureContainer = React.forwardRef<
     },
     (isStart) => {
       if (!isStart) return;
-      mScrollTo(childScrollRef[curIndexValue.value], 0, 0, false);
+      _ScrollTo(childScrollRef[curIndexValue.value], 0, 0, false);
     },
     [
       tabsRefreshTrans,
