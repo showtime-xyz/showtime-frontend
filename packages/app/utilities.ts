@@ -132,8 +132,8 @@ export const getMediaUrl = ({
 
   let cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
     nft.chain_name
-  }/${nft.contract_address}/${nft.token_id}?cache_key=1${
-    stillPreview ? "&still_preview=true" : ""
+  }/${nft.contract_address}/${nft.token_id}${
+    stillPreview ? "?still_preview=true&cache_key=1" : "?cache_key=1"
   }`;
 
   if (nft?.mime_type?.startsWith("image") && nft?.mime_type !== "image/gif") {
