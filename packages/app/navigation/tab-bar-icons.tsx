@@ -163,15 +163,20 @@ export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
 export const NotificationsTabBarIcon = ({
   color,
   focused,
+  onPress,
 }: TabBarIconProps) => {
   const redirectToScreen = useRedirectToScreen();
   return (
     <TabBarIcon
-      onPress={() =>
-        redirectToScreen({
-          pathname: "/notifications",
-        })
-      }
+      onPress={() => {
+        if (onPress) {
+          onPress();
+        } else {
+          redirectToScreen({
+            pathname: "/notifications",
+          });
+        }
+      }}
     >
       {focused ? (
         <BellFilled
