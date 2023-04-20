@@ -257,19 +257,11 @@ function InfiniteScrollListImpl<Item>(
                   </div>
                 );
               })}
+              {!useWindowScroll && FooterComponent}
             </div>
           </div>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              transform: `translateY(${rowVirtualizer.getTotalSize()}px)`,
-            }}
-          >
-            {FooterComponent}
-          </div>
+
+          {useWindowScroll && FooterComponent}
         </div>
       </div>
     </>
