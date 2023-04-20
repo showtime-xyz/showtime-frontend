@@ -70,14 +70,6 @@ function InfiniteScrollListImpl<Item>(
     [ListEmptyComponent]
   );
 
-  if (HeaderComponent) {
-    count += 1;
-  }
-
-  if (FooterComponent) {
-    count += 1;
-  }
-
   const viewableItems = useRef<ViewToken[]>([]);
   const parentRef = useRef<HTMLDivElement>(null);
   const scrollMarginOffseRef = useRef<HTMLDivElement>(null);
@@ -192,6 +184,7 @@ function InfiniteScrollListImpl<Item>(
               : {}
           }
         >
+          {HeaderComponent}
           <div
             ref={scrollMarginOffseRef}
             style={{
@@ -211,35 +204,17 @@ function InfiniteScrollListImpl<Item>(
                 }px)`,
               }}
             >
-              {renderedItems.length === 0 && EmptyComponent}
+              {data?.length === 0 && EmptyComponent}
               {renderedItems.map((virtualItem) => {
-                const isHeader = virtualItem.index === 0 && HeaderComponent;
-                const isFooter =
-                  virtualItem.index === count - 1 && FooterComponent;
-                const isEmpty = data?.length === 0 && EmptyComponent;
-
-                let actualItemIndex = virtualItem.index;
-                if (HeaderComponent && actualItemIndex > 0) {
-                  actualItemIndex -= 1;
-                }
-
+                const index = virtualItem.index;
                 return (
                   <div
                     key={virtualItem.key}
-                    data-index={virtualItem.index}
+                    data-index={index}
                     ref={rowVirtualizer.measureElement}
                     style={{ width: "100%" }}
                   >
-                    {isHeader && HeaderComponent}
-
-                    {isFooter && FooterComponent}
-
-                    {isEmpty && EmptyComponent}
-
-                    {typeof data?.[actualItemIndex] !== "undefined" &&
-                    !isFooter &&
-                    !isHeader &&
-                    !isEmpty ? (
+                    {typeof data?.[index] !== "undefined" ? (
                       <div
                         style={{
                           display: "flex",
@@ -249,11 +224,11 @@ function InfiniteScrollListImpl<Item>(
                       >
                         {data
                           .slice(
-                            actualItemIndex * numColumns,
-                            actualItemIndex * numColumns + numColumns
+                            index * numColumns,
+                            index * numColumns + numColumns
                           )
                           .map((item, i) => {
-                            const realIndex = actualItemIndex * numColumns + i;
+                            const realIndex = index * numColumns + i;
                             return (
                               <ViewabilityTracker
                                 key={realIndex}
@@ -282,8 +257,11 @@ function InfiniteScrollListImpl<Item>(
                   </div>
                 );
               })}
+              {!useWindowScroll && FooterComponent}
             </div>
           </div>
+
+          {useWindowScroll && FooterComponent}
         </div>
       </div>
     </>
