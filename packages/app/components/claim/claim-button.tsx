@@ -270,8 +270,11 @@ export const ClaimButton = ({
             />
             <View tw="ml-1">
               <Text
-                style={{ fontSize: 9 }}
-                tw="font-semibold text-white dark:text-black"
+                style={{
+                  fontSize: 9,
+                  color: isDark ? colors.black : colors.white,
+                }}
+                tw="font-semibold"
               >
                 Pre-add on
               </Text>
@@ -303,9 +306,10 @@ export const ClaimButton = ({
                 height={22}
               />
               <Text
-                tw="ml-1 text-sm font-semibold text-white dark:text-black"
+                tw="ml-1 text-sm font-semibold"
                 style={{
                   fontSize: 12,
+                  color: isDark ? colors.black : colors.white,
                 }}
               >
                 {isSpotifyCollectLoading ? "Loading..." : "Save on Spotify"}
