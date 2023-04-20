@@ -14,6 +14,7 @@ import {
   HotFilled,
   Plus,
   Showtime,
+  User,
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -203,7 +204,7 @@ const UnreadNotificationIndicator = () => {
 };
 
 export const ProfileTabBarIcon = ({ color }: TabBarIconProps) => {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
   const redirectToScrssn = useRedirectToScreen();
 
@@ -215,7 +216,15 @@ export const ProfileTabBarIcon = ({ color }: TabBarIconProps) => {
         })
       }
     >
-      <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
+      {isAuthenticated ? (
+        <Avatar
+          url={user?.data?.profile?.img_url}
+          size={28}
+          alt={"Profile Avatar"}
+        />
+      ) : (
+        <User color={color} width={24} height={24} />
+      )}
     </TabBarIcon>
   );
 };

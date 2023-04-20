@@ -22,7 +22,6 @@ import { BlurView } from "app/lib/blurview";
 import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
 import { useBottomTabBarHeightCallback } from "app/lib/react-navigation/bottom-tabs";
 
-import { linking } from "./linking";
 import { CreateTabBarIcon } from "./tab-bar-icons";
 import { useNavigationElements } from "./use-navigation-elements";
 
