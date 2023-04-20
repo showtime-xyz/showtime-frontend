@@ -164,11 +164,11 @@ export const NotificationsTabBarIcon = ({
   color,
   focused,
 }: TabBarIconProps) => {
-  const redirectToScrssn = useRedirectToScreen();
+  const redirectToScreen = useRedirectToScreen();
   return (
     <TabBarIcon
       onPress={() =>
-        redirectToScrssn({
+        redirectToScreen({
           pathname: "/notifications",
         })
       }
@@ -206,12 +206,12 @@ const UnreadNotificationIndicator = () => {
 export const ProfileTabBarIcon = ({ color }: TabBarIconProps) => {
   const { user, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
-  const redirectToScrssn = useRedirectToScreen();
+  const redirectToScreen = useRedirectToScreen();
 
   return (
     <TabBarIcon
       onPress={() =>
-        redirectToScrssn({
+        redirectToScreen({
           pathname: `/@${user?.data?.profile?.username ?? userAddress}`,
         })
       }
