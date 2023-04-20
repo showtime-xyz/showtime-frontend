@@ -260,16 +260,27 @@ export const ClaimButton = ({
           <Button
             {...buttonProps}
             onPress={() => handleCollectPress("appleMusic")}
-            tw="flex-1 flex-row justify-center"
+            tw="flex-1 flex-row items-center justify-center"
             disabled={isAppleMusicCollectLoading}
           >
-            <AppleMusic width={20} height={20} />
-            <Text
-              tw="ml-1 text-sm font-semibold"
-              style={{ color: isDark ? colors.black : colors.white }}
-            >
-              {isAppleMusicCollectLoading ? "Loading..." : "Apple Music"}
-            </Text>
+            <AppleMusic width={22} height={22} />
+            <View tw="ml-1">
+              <Text
+                style={{ fontSize: 9 }}
+                tw="font-semibold text-white dark:text-black"
+              >
+                Pre-add on
+              </Text>
+              <Text
+                tw="font-semibold text-white dark:text-black"
+                style={{
+                  color: isDark ? colors.black : colors.white,
+                  fontSize: 11,
+                }}
+              >
+                {isAppleMusicCollectLoading ? "Loading..." : "Apple Music"}
+              </Text>
+            </View>
           </Button>
         ) : null}
 
@@ -284,14 +295,16 @@ export const ClaimButton = ({
             >
               <Spotify
                 color={isDark ? colors.black : colors.white}
-                width={20}
-                height={20}
+                width={22}
+                height={22}
               />
               <Text
-                tw="ml-1 text-sm font-semibold"
-                style={{ color: isDark ? colors.black : colors.white }}
+                tw="ml-1 text-sm font-semibold text-white dark:text-black"
+                style={{
+                  fontSize: 12,
+                }}
               >
-                {isSpotifyCollectLoading ? "Loading..." : "Spotify"}
+                {isSpotifyCollectLoading ? "Loading..." : "Save on Spotify"}
               </Text>
             </Button>
           </>
@@ -329,36 +342,3 @@ export const ClaimButton = ({
     </Button>
   );
 };
-
-// const AppleMusicSaveButton = ({
-//   edition,
-//   ...rest
-// }: {
-//   edition: CreatorEditionResponse;
-// }) => {
-//   const isDark = useIsDarkMode();
-
-//   const { claimAppleMusicGatedDrop, isMutating } = useAppleMusicGatedClaim(
-//     edition.creator_airdrop_edition
-//   );
-
-//   if (edition.apple_music_track_name) {
-//     return (
-//       <Button
-//         {...rest}
-//         onPress={() => claimAppleMusicGatedDrop({ closeModal: () => {} })}
-//         disabled={isMutating}
-//         size="regular"
-//       >
-//         <>
-//           <AppleMusic width={20} height={20} />
-//           <Text tw="ml-1 text-sm font-semibold text-white dark:text-black">
-//             Apple Music
-//           </Text>
-//         </>
-//       </Button>
-//     );
-//   }
-
-//   return null;
-// };
