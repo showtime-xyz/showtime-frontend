@@ -3,6 +3,7 @@ import {
   useRef,
   MutableRefObject,
   useLayoutEffect,
+  useMemo,
   isValidElement,
 } from "react";
 
@@ -12,7 +13,10 @@ import {
   useVirtualizer,
   Virtualizer,
 } from "@tanstack/react-virtual";
+import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
+
+import { useStableCallback } from "app/hooks/use-stable-callback";
 
 const measurementsCache: any = {};
 
@@ -53,9 +57,18 @@ function InfiniteScrollListImpl<Item>(
     count = Math.ceil(count / numColumns);
   }
 
-  const HeaderComponent = renderComponent(ListHeaderComponent);
-  const FooterComponent = renderComponent(ListFooterComponent);
-  const EmptyComponent = renderComponent(ListEmptyComponent);
+  const HeaderComponent = useMemo(
+    () => renderComponent(ListHeaderComponent),
+    [ListHeaderComponent]
+  );
+  const FooterComponent = useMemo(
+    () => renderComponent(ListFooterComponent),
+    [ListFooterComponent]
+  );
+  const EmptyComponent = useMemo(
+    () => renderComponent(ListEmptyComponent),
+    [ListEmptyComponent]
+  );
 
   if (HeaderComponent) {
     count += 1;
@@ -119,7 +132,7 @@ function InfiniteScrollListImpl<Item>(
   const renderedItems = rowVirtualizer.getVirtualItems();
 
   useEffect(() => {
-    const [lastItem] = [...renderedItems].reverse();
+    const lastItem = renderedItems[renderedItems.length - 1];
     if (!lastItem) {
       return;
     }
@@ -129,15 +142,29 @@ function InfiniteScrollListImpl<Item>(
     }
   }, [data, onEndReached, renderedItems]);
 
-  useEffect(() => {
-    if (!preserveScrollPosition) return;
+  const saveScrollPosition = useStableCallback(() => {
     sessionStorage.setItem(key, rowVirtualizer.scrollOffset.toString());
     measurementsCache[key] = rowVirtualizer.measurementsCache;
+  });
+
+  useEffect(() => {
+    if (!preserveScrollPosition) return;
+
+    const debouncedCallback = debounce(saveScrollPosition, 100);
+    rowVirtualizer.scrollElement?.addEventListener("scroll", debouncedCallback);
+
+    return () => {
+      if (!preserveScrollPosition) return;
+
+      rowVirtualizer.scrollElement?.removeEventListener(
+        "scroll",
+        debouncedCallback
+      );
+    };
   }, [
-    key,
-    rowVirtualizer.scrollOffset,
+    rowVirtualizer.scrollElement,
+    saveScrollPosition,
     preserveScrollPosition,
-    rowVirtualizer.measurementsCache,
   ]);
 
   return (
