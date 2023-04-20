@@ -14,6 +14,7 @@ import {
   HotFilled,
   Plus,
   Showtime,
+  User,
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -23,6 +24,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
@@ -161,10 +163,16 @@ export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
 export const NotificationsTabBarIcon = ({
   color,
   focused,
-  onPress,
 }: TabBarIconProps) => {
+  const redirectToScreen = useRedirectToScreen();
   return (
-    <TabBarIcon tab="/notifications" onPress={onPress}>
+    <TabBarIcon
+      onPress={() =>
+        redirectToScreen({
+          pathname: "/notifications",
+        })
+      }
+    >
       {focused ? (
         <BellFilled
           style={{ zIndex: 1 }}
@@ -195,13 +203,28 @@ const UnreadNotificationIndicator = () => {
   );
 };
 
-export const ProfileTabBarIcon = () => {
-  const { user } = useUser();
+export const ProfileTabBarIcon = ({ color }: TabBarIconProps) => {
+  const { user, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
+  const redirectToScreen = useRedirectToScreen();
 
   return (
-    <TabBarIcon tab={`/@${user?.data?.profile?.username ?? userAddress}`}>
-      <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
+    <TabBarIcon
+      onPress={() =>
+        redirectToScreen({
+          pathname: `/@${user?.data?.profile?.username ?? userAddress}`,
+        })
+      }
+    >
+      {isAuthenticated ? (
+        <Avatar
+          url={user?.data?.profile?.img_url}
+          size={28}
+          alt={"Profile Avatar"}
+        />
+      ) : (
+        <User color={color} width={24} height={24} />
+      )}
     </TabBarIcon>
   );
 };

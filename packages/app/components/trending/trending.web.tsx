@@ -42,11 +42,13 @@ const Header = () => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
 
-  const tabIndex = useMemo(
-    () => TRENDING_ROUTE.findIndex((item) => item.key === filter),
-    [filter]
-  );
-
+  const tabIndex = useMemo(() => {
+    const index = TRENDING_ROUTE.findIndex((item) => item.key === filter);
+    if (index === -1) {
+      return 0;
+    }
+    return index;
+  }, [filter]);
   return (
     <View tw="mx-auto mb-4 w-full max-w-screen-xl">
       <View tw="w-full flex-row justify-center self-center px-4 py-4 md:justify-between md:pb-8">
@@ -67,19 +69,21 @@ const Header = () => {
     </View>
   );
 };
+const INITIAL_FILTER = "music";
 export const Trending = () => {
   const { height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
   const bottomBarHeight = usePlatformBottomHeight();
   const isMdWidth = contentWidth >= breakpoints["md"];
-  const [filter, setFilter] = useParam("filter", { initial: "music" });
+  const [filter, setFilter] = useParam("filter", { initial: INITIAL_FILTER });
+
   const contextValues = useMemo(
-    () => ({ filter, setFilter }),
+    () => ({ filter: filter, setFilter }),
     [filter, setFilter]
   );
 
   const { data: list, isLoading } = useTrendingNFTS({
-    filter: filter,
+    filter: filter ?? INITIAL_FILTER,
   });
 
   const keyExtractor = useCallback(

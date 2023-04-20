@@ -16,6 +16,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
 import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
@@ -33,8 +34,10 @@ export const ThemeBottomTabbar = ({
   descriptors,
   dark,
 }: ThemeBottomTabBarProps) => {
+  const { isAuthenticated } = useUser();
   const { width } = useWindowDimensions();
   const isDarkMode = useIsDarkMode();
+  const redirectToScreen = useRedirectToScreen();
   const isDark = dark !== undefined ? dark : isDarkMode;
 
   const color = isDark ? colors.gray[100] : colors.gray[900];
@@ -60,11 +63,27 @@ export const ThemeBottomTabbar = ({
           }
 
           if (!focused && !event.defaultPrevented) {
-            navigation.navigate({
-              name: route.name,
-              merge: true,
-              params: route.params,
-            });
+            if (
+              (route.name === "notificationsTab" ||
+                route.name === "profileTab") &&
+              !isAuthenticated
+            ) {
+              redirectToScreen({
+                redirectedCallback: () => {
+                  navigation.navigate({
+                    name: route.name,
+                    merge: true,
+                    params: route.params,
+                  });
+                },
+              });
+            } else {
+              navigation.navigate({
+                name: route.name,
+                merge: true,
+                params: route.params,
+              });
+            }
           }
         };
         const onLongPress = () => {
@@ -108,10 +127,9 @@ export const ThemeBottomTabbar = ({
 
 export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
   const { isTabBarHidden } = useNavigationElements();
-  const { isAuthenticated } = useUser();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const nativeBottomTabBarHeightCallback = useBottomTabBarHeightCallback();
-  const isHiddenBottomTabbar = !isAuthenticated || isTabBarHidden;
+  const isHiddenBottomTabbar = isTabBarHidden;
   const isDark = useIsDarkMode();
   const isHome = useDerivedValue(() => {
     return state.index === 0 ? 1 : 0;
