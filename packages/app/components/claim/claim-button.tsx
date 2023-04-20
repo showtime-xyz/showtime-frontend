@@ -263,7 +263,11 @@ export const ClaimButton = ({
             tw="flex-1 flex-row items-center justify-center"
             disabled={isAppleMusicCollectLoading}
           >
-            <AppleMusic width={22} height={22} />
+            <AppleMusic
+              width={22}
+              height={22}
+              color={isDark ? colors.black : colors.white}
+            />
             <View tw="ml-1">
               <Text
                 style={{ fontSize: 9 }}
