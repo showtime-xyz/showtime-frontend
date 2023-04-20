@@ -259,7 +259,7 @@ export const useDropNFT = () => {
             : undefined,
       };
 
-      if (params.releaseDate && params.gatingType === "music_presave") {
+      if (params.releaseDate && params.gatingType === "spotify_presave") {
         requestData.release_date = params.releaseDate;
       }
       const relayerResponse = await axios({

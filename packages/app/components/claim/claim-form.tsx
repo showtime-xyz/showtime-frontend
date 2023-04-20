@@ -156,7 +156,8 @@ export const ClaimForm = ({
 
     if (
       edition.gating_type === "spotify_save" ||
-      edition.gating_type === "music_presave"
+      edition.gating_type === "spotify_presave" ||
+      edition?.gating_type === "music_presave"
     ) {
       success = await claimSpotifyGatedDrop(closeModal);
     } else if (edition.gating_type === "password") {
@@ -258,7 +259,8 @@ export const ClaimForm = ({
             </Text>
           </View>
           {edition.gating_type === "spotify_save" ||
-          edition.gating_type === "music_presave" ? (
+          edition?.gating_type === "music_presave" ||
+          edition.gating_type === "spotify_presave" ? (
             <>
               <View tw="mt-4 flex-row items-center">
                 {user.data.profile.has_spotify_token ? (
@@ -372,7 +374,8 @@ export const ClaimForm = ({
               ) : state.status === "error" ? (
                 "Failed. Retry!"
               ) : edition.gating_type === "spotify_save" ||
-                edition.gating_type === "music_presave" ? (
+                edition.gating_type === "spotify_presave" ||
+                edition?.gating_type === "music_presave" ? (
                 <View tw="w-full flex-row items-center justify-center">
                   <Spotify color={isDark ? "#000" : "#fff"} />
                   <Text tw="ml-2 font-semibold text-white dark:text-black">
