@@ -151,7 +151,8 @@ function NFTDropdown({
             </DropdownMenuItem>
           ) : null}
 
-          {edition?.gating_type === "music_presave" &&
+          {(edition?.gating_type === "spotify_presave" ||
+            edition?.gating_type === "music_presave") &&
           nft.creator_username === user?.data.profile.username ? (
             <DropdownMenuItem
               onSelect={() => {
@@ -191,12 +192,7 @@ function NFTDropdown({
               }}
               key="open-in-app"
             >
-              <MenuItemIcon
-                Icon={Showtime}
-                ios={{
-                  name: isBlocked ? "circle" : "circle.slash",
-                }}
-              />
+              <MenuItemIcon Icon={Showtime} />
 
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
                 Open in app
@@ -342,7 +338,7 @@ function NFTDropdown({
                 <MenuItemIcon
                   Icon={Slash}
                   ios={{
-                    name: isBlocked ? "circle" : "circle.slash",
+                    name: isBlocked ? "circle" : ("circle.slash" as any),
                   }}
                 />
                 <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">

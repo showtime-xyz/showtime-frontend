@@ -299,7 +299,7 @@ export const DropMusic = () => {
           ...values,
           gatingType: isSaveDrop
             ? "multi_provider_music_save"
-            : "music_presave",
+            : "spotify_presave",
           editionSize: isUnlimited ? 0 : values.editionSize,
           releaseDate: isSaveDrop
             ? undefined
