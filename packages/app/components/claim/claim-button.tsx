@@ -83,7 +83,7 @@ export const ClaimButton = ({
   const raffleConcludedAt = useMemo(() => {
     if (!isSelf || !isRaffleDrop) return null;
     if (
-      edition.gating_type === "music_presave" &&
+      edition.gating_type === "spotify_presave" &&
       edition?.presave_release_date
     ) {
       return formatDistanceToNowStrict(
@@ -125,7 +125,7 @@ export const ClaimButton = ({
     }
     dispatch({ type: "initial" });
     if (
-      (edition.gating_type === "music_presave" ||
+      (edition.gating_type === "spotify_presave" ||
         edition.gating_type === "spotify_save") &&
       !isAuthenticated
     ) {
@@ -220,7 +220,7 @@ export const ClaimButton = ({
           </Text>
         </>
       );
-    } else if (edition?.gating_type === "music_presave") {
+    } else if (edition?.gating_type === "spotify_presave") {
       return (
         <>
           <Spotify

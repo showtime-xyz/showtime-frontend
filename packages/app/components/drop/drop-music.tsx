@@ -297,7 +297,7 @@ export const DropMusic = () => {
       await dropNFT(
         {
           ...values,
-          gatingType: isSaveDrop ? "spotify_save" : "music_presave",
+          gatingType: isSaveDrop ? "spotify_save" : "spotify_presave",
           editionSize: isUnlimited ? 0 : values.editionSize,
           releaseDate: isSaveDrop
             ? undefined

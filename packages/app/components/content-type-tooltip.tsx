@@ -35,7 +35,7 @@ export const contentGatingType = {
     text: "Enter password & location to collect",
     typeName: "Password & Location",
   },
-  music_presave: {
+  spotify_presave: {
     icon: Spotify,
     text: "Pre-Save to collect",
     typeName: "Pre-Save",
@@ -52,7 +52,7 @@ export const ContentTypeTooltip = ({
   }
 
   if (
-    edition?.gating_type === "music_presave" &&
+    edition?.gating_type === "spotify_presave" &&
     edition?.spotify_track_url &&
     edition?.presave_release_date &&
     new Date() >= new Date(edition?.presave_release_date)

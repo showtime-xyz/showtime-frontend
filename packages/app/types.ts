@@ -257,4 +257,4 @@ export type GatingType =
   | "password"
   | "location"
   | "multi"
-  | "music_presave";
+  | "spotify_presave";
