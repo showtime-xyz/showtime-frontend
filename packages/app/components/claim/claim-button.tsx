@@ -260,7 +260,7 @@ export const ClaimButton = ({
           <Button
             {...buttonProps}
             onPress={() => handleCollectPress("appleMusic")}
-            tw="flex-row items-center justify-center"
+            tw="flex-1 flex-row items-center justify-center"
             disabled={isAppleMusicCollectLoading}
           >
             <AppleMusic
