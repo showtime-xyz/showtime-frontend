@@ -350,25 +350,23 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Owner nft={nft} price={false} />
             </View>
 
-            <View tw="pb-4">
-              <View tw="mt mb-4">
-                <ClaimedBy
-                  claimersList={detailData?.data.item?.multiple_owners_list}
-                  nft={nft}
-                />
-              </View>
-              <View tw="h-4 flex-row">
-                {isCreatorDrop && edition ? (
-                  <>
-                    <ClaimButton tw="flex-1" edition={edition} />
-                    <ClaimedShareButton
-                      tw="ml-3 w-1/4"
-                      edition={edition}
-                      nft={nft}
-                    />
-                  </>
-                ) : null}
-              </View>
+            <View tw="mt mb-4 h-5">
+              <ClaimedBy
+                claimersList={detailData?.data.item?.multiple_owners_list}
+                nft={nft}
+              />
+            </View>
+            <View tw="h-8 flex-row">
+              {isCreatorDrop && edition ? (
+                <>
+                  <ClaimButton tw="flex-1" edition={edition} />
+                  <ClaimedShareButton
+                    tw="ml-3 w-1/4"
+                    edition={edition}
+                    nft={nft}
+                  />
+                </>
+              ) : null}
             </View>
           </View>
           <TabBarSingle
