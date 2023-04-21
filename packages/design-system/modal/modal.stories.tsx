@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Meta } from "@storybook/react";
 
+import { BottomSheetScrollView } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Close } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";

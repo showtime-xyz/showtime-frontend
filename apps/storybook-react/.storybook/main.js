@@ -14,7 +14,6 @@ module.exports = {
       name: "@storybook/addon-react-native-web",
       options: {
         modulesToTranspile: [
-          "@gorhom/bottom-sheet",
           "@gorhom/portal",
           "moti",
           "zeego",

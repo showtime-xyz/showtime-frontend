@@ -1,9 +1,9 @@
 import React, { memo, useCallback, useMemo, useState } from "react";
 import { Linking, Platform } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import * as Clipboard from "expo-clipboard";
 
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Link, QrCode, TwitterOutline } from "@showtime-xyz/universal.icon";

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 

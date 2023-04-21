@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { AnimatePresence } from "moti";
 
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { View } from "@showtime-xyz/universal.view";
 

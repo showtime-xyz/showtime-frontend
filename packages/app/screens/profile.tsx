@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withColorScheme } from "app/components/memo-with-theme";

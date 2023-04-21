@@ -11,12 +11,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";

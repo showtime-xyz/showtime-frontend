@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { Keyboard, Platform, ScrollView, ScrollViewProps } from "react-native";
 
-import { BottomSheetScrollView as BottomSheetScrollViewComponent } from "@gorhom/bottom-sheet";
+import { BottomSheetScrollView as BottomSheetScrollViewComponent } from "@showtime-xyz/universal.bottom-sheet";
 
 // https://github.com/facebook/react-native/issues/23364#issuecomment-642518054
 // PR - https://github.com/facebook/react-native/pull/31943
