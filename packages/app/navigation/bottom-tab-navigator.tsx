@@ -30,7 +30,7 @@ export function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="homeTab"
+      initialRouteName="trendingTab"
       screenOptions={{
         headerShown: false,
       }}

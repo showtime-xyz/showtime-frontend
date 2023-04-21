@@ -150,7 +150,7 @@ export const CreateTabBarIcon = ({
 
 export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/trending">
+    <TabBarIcon tab="/">
       {focused ? (
         <HotFilled style={{ zIndex: 1 }} width={24} height={24} color={color} />
       ) : (

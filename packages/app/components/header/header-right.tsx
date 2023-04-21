@@ -37,12 +37,14 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
         <View tw="flex-row items-center">
           {isAuthenticated && isMdWidth && (
             <>
-              <View tw="mx-2">
+              {/* <View tw="mx-2">
                 <TrendingTabBarIcon
                   color={isDark ? "white" : "black"}
-                  focused={router.pathname === "/trending"}
+                  focused={
+                    router.pathname === "/trending" || router.pathname === "/"
+                  }
                 />
-              </View>
+              </View> */}
               <View tw="mx-2">
                 <NotificationsInHeader />
               </View>
