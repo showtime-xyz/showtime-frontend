@@ -34,6 +34,7 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { createParam } from "app/navigation/use-param";
@@ -156,6 +157,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   } = useUserProfile({ address: username });
   const profileId = profileData?.data?.profile.profile_id;
   const { getIsBlocked } = useBlock();
+  const bottomBarHeight = usePlatformBottomHeight();
   const isBlocked = getIsBlocked(profileId);
   const { user } = useUser();
 
@@ -304,7 +306,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
                 style={{
-                  height: screenHeight - 64,
+                  height: screenHeight - bottomBarHeight,
                 }}
                 ListEmptyComponent={ListEmptyComponent}
                 ListFooterComponent={ListFooterComponent}
