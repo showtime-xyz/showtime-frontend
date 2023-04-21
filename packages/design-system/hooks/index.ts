@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useEffect, useState, useMemo, useLayoutEffect } from "react";
 import { LayoutChangeEvent, Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -7,7 +7,8 @@ import { useSharedValue } from "react-native-reanimated";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { getScrollParent } from "@showtime-xyz/universal.utils";
 
-import { useIsomorphicLayoutEffect } from "app/hooks/use-isomorphic-layout-effect";
+export const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export type PlatformRect = Pick<
   DOMRect,
