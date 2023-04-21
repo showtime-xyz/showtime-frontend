@@ -7,6 +7,8 @@ import {
 } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
+import type { FieldError, Merge, FieldErrorsImpl } from "react-hook-form";
+
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useId } from "@showtime-xyz/universal.input";
@@ -25,7 +27,7 @@ const PlatformAnimateHeight =
   Platform.OS === "web" || Platform.OS === "android" ? Fragment : AnimateHeight;
 
 export type FieldsetProps = {
-  errorText?: string;
+  errorText?: any;
   label?: string | JSX.Element;
   helperText?: string;
   disabled?: boolean;
@@ -168,7 +170,7 @@ export const ErrorText = ({
   children,
   nativeID,
 }: {
-  children: string;
+  children: any;
   nativeID?: string;
 }) => {
   return (

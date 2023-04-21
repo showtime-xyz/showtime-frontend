@@ -1,8 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
-import type { BottomSheetProps } from "@gorhom/bottom-sheet";
-
+import type { GorhomBottomSheetProps } from "@showtime-xyz/universal.bottom-sheet";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export interface ModalMethods {
@@ -26,7 +25,7 @@ export interface ModalProps {
    * to snap to. It accepts array of number, string or mix.
    * @default ["90%", "100%"]
    */
-  mobile_snapPoints?: BottomSheetProps["snapPoints"];
+  mobile_snapPoints?: GorhomBottomSheetProps["snapPoints"];
 
   /**
    * **WEB ONLY**: Defines the modal container height.
