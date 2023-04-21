@@ -34,7 +34,7 @@ export function CameraButtons({
   const isDark = useIsDarkMode();
 
   return (
-    <View tw="flex-row items-center justify-between py-8 px-6">
+    <View tw="flex-row items-center justify-between px-6 py-8">
       {isLoading ? (
         <Animated.View
           entering={SlideInDown}
