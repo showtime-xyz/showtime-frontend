@@ -49,15 +49,11 @@ const Footer = () => {
     >
       <HomeTabBarIcon
         color={color}
-        focused={
-          router.pathname === "/" ||
-          router.pathname === "/home" ||
-          router.pathname === "/foryou"
-        }
+        focused={router.pathname === "/" || router.pathname === "/trending"}
       />
       <TrendingTabBarIcon
         color={color}
-        focused={router.pathname === "/trending"}
+        focused={router.pathname === "/home" || router.pathname === "/foryou"}
       />
       <CreateTabBarIcon
         color={buttonColor}

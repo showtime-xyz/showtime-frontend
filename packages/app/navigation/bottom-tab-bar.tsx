@@ -132,7 +132,7 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
   const isHiddenBottomTabbar = isTabBarHidden;
   const isDark = useIsDarkMode();
   const isHome = useDerivedValue(() => {
-    return state.index === 0 ? 1 : 0;
+    return state.index === 1 ? 1 : 0;
   }, [state.index]);
 
   const activeAnimatedStyle = useAnimatedStyle(() => {
@@ -142,12 +142,12 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
   }, [isHome.value]);
 
   const overlayColor =
-    state.index === 0
+    state.index === 1
       ? "rgba(0,0,0,.8)"
       : isDark
       ? "rgba(0,0,0,.8)"
       : "rgba(255, 255, 255, 0.8)";
-  const blurType = state.index === 0 ? "dark" : isDark ? "dark" : "light";
+  const blurType = state.index === 1 ? "dark" : isDark ? "dark" : "light";
 
   return (
     <View

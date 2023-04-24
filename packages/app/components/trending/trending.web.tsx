@@ -3,6 +3,8 @@ import { useWindowDimensions } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
@@ -15,7 +17,9 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { getNFTSlug } from "app/hooks/use-share-nft";
+import { Link } from "app/navigation/link";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
 
@@ -39,6 +43,7 @@ const { useParam } = createParam<Query>();
 const Header = () => {
   const context = useContext(TrendingHeaderContext);
   const { filter, setFilter } = context;
+  const isDark = useIsDarkMode();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
 
@@ -51,11 +56,52 @@ const Header = () => {
   }, [filter]);
   return (
     <View tw="mx-auto mb-4 w-full max-w-screen-xl">
-      <View tw="w-full flex-row justify-center self-center px-4 py-4 md:justify-between md:pb-8">
-        <Text tw="self-center text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
+      <View tw="w-full flex-row justify-center px-4 py-4 md:hidden">
+        <Text tw="text-lg font-extrabold text-gray-900 dark:text-white">
           Trending
         </Text>
       </View>
+      <View tw="mx-12 my-4 hidden items-center md:flex">
+        <Text tw="text-center text-3xl font-bold text-gray-900 dark:text-white">
+          Earn free collectibles for supporting artists.
+        </Text>
+        <View tw="mt-8 flex-row items-center">
+          <Link
+            href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
+            target="_blank"
+          >
+            <Image
+              source={{
+                uri: isDark
+                  ? "/assets/AppStoreDark.png"
+                  : "/assets/AppStoreLight.png",
+              }}
+              width={144}
+              height={42}
+              tw="rounded-md duration-150 hover:scale-105"
+              alt="App Store"
+            />
+          </Link>
+          <View tw="w-8" />
+          <Link
+            href="https://play.google.com/store/apps/details?id=io.showtime"
+            target="_blank"
+          >
+            <Image
+              source={{
+                uri: isDark
+                  ? "/assets/GooglePlayDark.png"
+                  : "/assets/GooglePlayLight.png",
+              }}
+              width={144}
+              height={42}
+              tw="rounded-md duration-150 hover:scale-105"
+              alt="Google Play"
+            />
+          </Link>
+        </View>
+      </View>
+
       <View tw="web:min-h-[43px]">
         <TabBarSingle
           onPress={(index: number) => {
@@ -74,7 +120,9 @@ export const Trending = () => {
   const { height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
   const bottomBarHeight = usePlatformBottomHeight();
-  const isMdWidth = contentWidth >= breakpoints["md"];
+  const { width } = useScrollbarSize();
+  const isMdWidth = contentWidth + width > breakpoints["md"];
+
   const [filter, setFilter] = useParam("filter", { initial: INITIAL_FILTER });
 
   const contextValues = useMemo(
