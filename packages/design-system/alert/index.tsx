@@ -136,3 +136,4 @@ export const useCustomAlert = () => {
   }
   return Alert;
 };
+export default AlertProvider;

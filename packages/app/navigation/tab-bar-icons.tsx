@@ -159,6 +159,18 @@ export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
     </TabBarIcon>
   );
 };
+// This icon is temporary until we have creator channel feature
+export const HotTabBarIconTemp = ({ color, focused }: TabBarIconProps) => {
+  return (
+    <TabBarIcon tab="/foryou">
+      {focused ? (
+        <HotFilled style={{ zIndex: 1 }} width={24} height={24} color={color} />
+      ) : (
+        <Hot style={{ zIndex: 1 }} width={24} height={24} color={color} />
+      )}
+    </TabBarIcon>
+  );
+};
 
 export const NotificationsTabBarIcon = ({
   color,

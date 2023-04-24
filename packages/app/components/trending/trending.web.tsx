@@ -18,7 +18,7 @@ import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { getNFTSlug } from "app/hooks/use-share-nft";
-import { TextLink } from "app/navigation/link";
+import { Link } from "app/navigation/link";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
 
@@ -55,46 +55,49 @@ const Header = () => {
   }, [filter]);
   return (
     <View tw="mx-auto mb-4 w-full max-w-screen-xl">
-      <View tw="mx-12 my-4 items-center pl-2 sm:pl-2">
-        <Text tw="text-lg font-bold text-gray-900 dark:text-white sm:text-4xl">
+      <View tw="w-full flex-row justify-center px-4 py-4 sm:hidden">
+        <Text tw="text-lg font-extrabold text-gray-900 dark:text-white">
+          Trending
+        </Text>
+      </View>
+      <View tw="mx-12 my-4 hidden items-center pl-2 sm:flex">
+        <Text tw="text-4xl font-bold text-gray-900 dark:text-white">
           Earn free collectibles for supporting artists.
         </Text>
-        <View tw="mt-6 hidden flex-row items-center px-2 py-4 sm:flex">
-          <TextLink
-            tw="text-base font-bold dark:text-white"
+        <View tw="mt-8 flex-row items-center">
+          <Link
             href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
             target="_blank"
           >
             <Image
               source={{
-                uri: !isDark
+                uri: isDark
                   ? "/assets/AppStoreDark.png"
                   : "/assets/AppStoreLight.png",
               }}
               width={144}
               height={42}
-              tw="rounded-md bg-black duration-150 hover:scale-105 dark:bg-white"
+              tw="rounded-md duration-150 hover:scale-105"
               alt="App Store"
             />
-          </TextLink>
+          </Link>
           <View tw="w-8" />
-          <TextLink
-            tw="text-base font-bold dark:text-white"
+          <Link
             href="https://play.google.com/store/apps/details?id=io.showtime"
             target="_blank"
           >
             <Image
               source={{
-                uri: !isDark
+                uri: isDark
                   ? "/assets/GooglePlayDark.png"
                   : "/assets/GooglePlayLight.png",
               }}
               width={144}
               height={42}
-              tw="rounded-md bg-black duration-150 hover:scale-105 dark:bg-white"
+              tw="rounded-md duration-150 hover:scale-105"
               alt="Google Play"
             />
-          </TextLink>
+          </Link>
         </View>
       </View>
 

@@ -12,7 +12,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
-import { TrendingTabBarIcon } from "app/navigation/tab-bar-icons";
+import {
+  HotTabBarIconTemp,
+  TrendingTabBarIcon,
+} from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import { breakpoints } from "design-system/theme";
@@ -37,14 +40,14 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
         <View tw="flex-row items-center">
           {isAuthenticated && isMdWidth && (
             <>
-              {/* <View tw="mx-2">
-                <TrendingTabBarIcon
+              <View tw="mx-2">
+                <HotTabBarIconTemp
                   color={isDark ? "white" : "black"}
                   focused={
-                    router.pathname === "/trending" || router.pathname === "/"
+                    router.pathname === "/home" || router.pathname === "/foryou"
                   }
                 />
-              </View> */}
+              </View>
               <View tw="mx-2">
                 <NotificationsInHeader />
               </View>
