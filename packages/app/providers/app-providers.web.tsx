@@ -1,7 +1,7 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import dynamic from "next/dynamic";
 
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";

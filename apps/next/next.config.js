@@ -45,7 +45,6 @@ const nextConfig = {
     "app",
     "desing-system",
     "@showtime-xyz",
-    "@gorhom/bottom-sheet",
     "@gorhom/portal",
     "moti",
     "zeego",
