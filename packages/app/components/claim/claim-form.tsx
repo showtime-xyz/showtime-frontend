@@ -168,7 +168,7 @@ export const ClaimForm = ({
 
     if (edition.gating_type === "multi_provider_music_save") {
       if (claimType === "spotify") {
-        success = await claimSpotifyGatedDrop(closeModal);
+        success = await claimSpotifyGatedDrop({ closeModal });
       } else if (claimType === "appleMusic") {
         success = await claimAppleMusicGatedDrop({ closeModal });
       } else {
@@ -179,7 +179,7 @@ export const ClaimForm = ({
       edition.gating_type === "spotify_presave" ||
       edition?.gating_type === "music_presave"
     ) {
-      success = await claimSpotifyGatedDrop(closeModal);
+      success = await claimSpotifyGatedDrop({ closeModal });
     } else if (edition.gating_type === "password") {
       success = await claimNFT({ password: password.trim(), closeModal });
     } else if (edition.gating_type === "location") {
