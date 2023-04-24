@@ -40,7 +40,9 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
               <View tw="mx-2">
                 <TrendingTabBarIcon
                   color={isDark ? "white" : "black"}
-                  focused={router.pathname === "/trending"}
+                  focused={
+                    router.pathname === "/home" || router.pathname === "/foryou"
+                  }
                 />
               </View>
               <View tw="mx-2">
@@ -78,24 +80,20 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
                   <View tw="mx-3">
                     <TrendingTabBarIcon
                       color={isDark ? "white" : "black"}
-                      focused={router.pathname === "/trending"}
+                      focused={router.pathname === "/foryou"}
                     />
                   </View>
                 )}
                 {withBackground ? (
-                  <Pressable
-                    onPress={() => {
-                      navigateToLogin();
-                    }}
-                    tw="h-8 items-center justify-center rounded-full bg-black/60 px-4"
+                  <Button
+                    onPress={navigateToLogin}
+                    style={{ backgroundColor: "rgba(0,0,0,.6)" }}
                   >
-                    <Text tw="text-sm font-semibold text-white">Sign In</Text>
-                  </Pressable>
+                    Sign In
+                  </Button>
                 ) : (
                   <Button
-                    onPress={() => {
-                      navigateToLogin();
-                    }}
+                    onPress={navigateToLogin}
                     variant="primary"
                     size="regular"
                     labelTW="font-semibold"

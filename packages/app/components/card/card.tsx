@@ -201,6 +201,7 @@ const CardLargeScreen = ({
               resizeMode={ResizeMode.COVER}
               optimizedWidth={600}
               loading={index > 0 ? "lazy" : "eager"}
+              withVideoBackdrop
             />
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (

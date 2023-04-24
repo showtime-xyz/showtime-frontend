@@ -61,7 +61,7 @@ type DropRequestData = {
   claim_window_duration_seconds: number;
   nsfw: boolean;
   spotify_url?: string;
-  apple_music_track_id?: string;
+  apple_music_url?: string;
   gating_type?: GatingType;
   release_date?: string;
   password?: string;
@@ -127,7 +127,7 @@ export type UseDropNFT = {
   animationHash?: string;
   imageHash?: string;
   spotifyUrl?: string;
-  appleMusicTrackId?: string;
+  appleMusicTrackUrl?: string;
   gatingType?: GatingType;
   password?: string;
   googleMapsUrl?: string;
@@ -253,7 +253,7 @@ export const useDropNFT = () => {
         claim_window_duration_seconds: params.duration,
         nsfw: params.notSafeForWork,
         spotify_url: params.spotifyUrl,
-        apple_music_track_id: params.appleMusicTrackId,
+        apple_music_url: params.appleMusicTrackUrl,
         gating_type: gatingType,
         password: params.password !== "" ? params.password : undefined,
         ...locationGating,

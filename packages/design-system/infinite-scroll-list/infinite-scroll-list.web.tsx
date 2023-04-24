@@ -3,6 +3,7 @@ import {
   useRef,
   MutableRefObject,
   useLayoutEffect,
+  useMemo,
   isValidElement,
 } from "react";
 
@@ -12,7 +13,10 @@ import {
   useVirtualizer,
   Virtualizer,
 } from "@tanstack/react-virtual";
+import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
+
+import { useStableCallback } from "app/hooks/use-stable-callback";
 
 const measurementsCache: any = {};
 
@@ -53,17 +57,18 @@ function InfiniteScrollListImpl<Item>(
     count = Math.ceil(count / numColumns);
   }
 
-  const HeaderComponent = renderComponent(ListHeaderComponent);
-  const FooterComponent = renderComponent(ListFooterComponent);
-  const EmptyComponent = renderComponent(ListEmptyComponent);
-
-  if (HeaderComponent) {
-    count += 1;
-  }
-
-  if (FooterComponent) {
-    count += 1;
-  }
+  const HeaderComponent = useMemo(
+    () => renderComponent(ListHeaderComponent),
+    [ListHeaderComponent]
+  );
+  const FooterComponent = useMemo(
+    () => renderComponent(ListFooterComponent),
+    [ListFooterComponent]
+  );
+  const EmptyComponent = useMemo(
+    () => renderComponent(ListEmptyComponent),
+    [ListEmptyComponent]
+  );
 
   const viewableItems = useRef<ViewToken[]>([]);
   const parentRef = useRef<HTMLDivElement>(null);
@@ -119,7 +124,7 @@ function InfiniteScrollListImpl<Item>(
   const renderedItems = rowVirtualizer.getVirtualItems();
 
   useEffect(() => {
-    const [lastItem] = [...renderedItems].reverse();
+    const lastItem = renderedItems[renderedItems.length - 1];
     if (!lastItem) {
       return;
     }
@@ -129,15 +134,29 @@ function InfiniteScrollListImpl<Item>(
     }
   }, [data, onEndReached, renderedItems]);
 
-  useEffect(() => {
-    if (!preserveScrollPosition) return;
+  const saveScrollPosition = useStableCallback(() => {
     sessionStorage.setItem(key, rowVirtualizer.scrollOffset.toString());
     measurementsCache[key] = rowVirtualizer.measurementsCache;
+  });
+
+  useEffect(() => {
+    if (!preserveScrollPosition) return;
+
+    const debouncedCallback = debounce(saveScrollPosition, 100);
+    rowVirtualizer.scrollElement?.addEventListener("scroll", debouncedCallback);
+
+    return () => {
+      if (!preserveScrollPosition) return;
+
+      rowVirtualizer.scrollElement?.removeEventListener(
+        "scroll",
+        debouncedCallback
+      );
+    };
   }, [
-    key,
-    rowVirtualizer.scrollOffset,
+    rowVirtualizer.scrollElement,
+    saveScrollPosition,
     preserveScrollPosition,
-    rowVirtualizer.measurementsCache,
   ]);
 
   return (
@@ -165,6 +184,7 @@ function InfiniteScrollListImpl<Item>(
               : {}
           }
         >
+          {HeaderComponent}
           <div
             ref={scrollMarginOffseRef}
             style={{
@@ -184,35 +204,17 @@ function InfiniteScrollListImpl<Item>(
                 }px)`,
               }}
             >
-              {renderedItems.length === 0 && EmptyComponent}
+              {data?.length === 0 && EmptyComponent}
               {renderedItems.map((virtualItem) => {
-                const isHeader = virtualItem.index === 0 && HeaderComponent;
-                const isFooter =
-                  virtualItem.index === count - 1 && FooterComponent;
-                const isEmpty = data?.length === 0 && EmptyComponent;
-
-                let actualItemIndex = virtualItem.index;
-                if (HeaderComponent && actualItemIndex > 0) {
-                  actualItemIndex -= 1;
-                }
-
+                const index = virtualItem.index;
                 return (
                   <div
                     key={virtualItem.key}
-                    data-index={virtualItem.index}
+                    data-index={index}
                     ref={rowVirtualizer.measureElement}
                     style={{ width: "100%" }}
                   >
-                    {isHeader && HeaderComponent}
-
-                    {isFooter && FooterComponent}
-
-                    {isEmpty && EmptyComponent}
-
-                    {typeof data?.[actualItemIndex] !== "undefined" &&
-                    !isFooter &&
-                    !isHeader &&
-                    !isEmpty ? (
+                    {typeof data?.[index] !== "undefined" ? (
                       <div
                         style={{
                           display: "flex",
@@ -222,11 +224,11 @@ function InfiniteScrollListImpl<Item>(
                       >
                         {data
                           .slice(
-                            actualItemIndex * numColumns,
-                            actualItemIndex * numColumns + numColumns
+                            index * numColumns,
+                            index * numColumns + numColumns
                           )
                           .map((item, i) => {
-                            const realIndex = actualItemIndex * numColumns + i;
+                            const realIndex = index * numColumns + i;
                             return (
                               <ViewabilityTracker
                                 key={realIndex}
@@ -255,8 +257,11 @@ function InfiniteScrollListImpl<Item>(
                   </div>
                 );
               })}
+              {!useWindowScroll && FooterComponent}
             </div>
           </div>
+
+          {useWindowScroll && FooterComponent}
         </div>
       </div>
     </>

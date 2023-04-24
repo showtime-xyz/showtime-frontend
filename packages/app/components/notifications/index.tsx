@@ -24,6 +24,8 @@ import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
+import { EmptyPlaceholder } from "../empty-placeholder";
+
 const Header = () => {
   const headerHeight = useHeaderHeight();
 
@@ -96,11 +98,10 @@ export const Notifications = ({
 
   if (!isLoading && data.length === 0) {
     return (
-      <View tw="flex-1 items-center justify-center">
-        <Text tw="font-medium text-gray-900 dark:text-gray-100">
-          You have no notifications yet
-        </Text>
-      </View>
+      <EmptyPlaceholder
+        title="You have no notifications yet."
+        tw="min-h-[70vh]"
+      />
     );
   }
 

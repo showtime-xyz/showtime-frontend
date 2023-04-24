@@ -12,12 +12,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
@@ -39,7 +39,6 @@ import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -51,7 +50,6 @@ import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary"
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { QRCodeModal } from "app/components/qr-code";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
@@ -117,71 +115,71 @@ export const DropMusic = () => {
   const dropValidationSchema = useMemo(
     () =>
       yup.lazy((values) => {
-        const baseSchema = yup.object({
-          file: yup.mixed().required("Media is required"),
-          title: yup
-            .string()
-            .label("Title")
-            .required("Title is a required field")
-            .max(55),
-          description: yup
-            .string()
-            .max(280)
-            .required("Description is a required field"),
-          editionSize: yup
-            .number()
-            .required()
-            .typeError("Please enter a valid number")
-            .min(1)
-            .max(100000)
-            .default(defaultValues.editionSize),
-          royalty: yup
-            .number()
-            .required()
-            .typeError("Please enter a valid number")
-            .max(69)
-            .default(defaultValues.royalty),
-          hasAcceptedTerms: yup
-            .boolean()
-            .default(defaultValues.hasAcceptedTerms)
-            .required()
-            .isTrue("You must accept the terms and conditions."),
-          notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
-          googleMapsUrl: yup.string().url(),
-          radius: yup.number().min(0.01).max(10),
-          ...(isSaveDrop
-            ? {}
-            : {
-                releaseDate: yup
-                  .date()
-                  .min(
-                    getDefaultDate(),
-                    "The date you entered is invalid. Please enter a date that is at least 24 hours from now and after the next occurrence of 12:00 AM (midnight)"
-                  ),
-              }),
-          spotifyUrl: yup
-            .string()
-            .test(
-              "no-album-or-playlist",
-              "Spotify Album and Playlist URLs are not allowed.",
-              (value) => {
-                if (!value) return true;
-                return !/(album|playlist)/i.test(value);
-              }
-            ),
-        });
+        const baseSchema = yup
+          .object({
+            file: yup.mixed().required("Media is required"),
+            title: yup
+              .string()
+              .label("Title")
+              .required("Title is a required field")
+              .max(55),
+            description: yup
+              .string()
+              .max(280)
+              .required("Description is a required field"),
+            editionSize: yup
+              .number()
+              .required()
+              .typeError("Please enter a valid number")
+              .min(1)
+              .max(100000)
+              .default(defaultValues.editionSize),
+            royalty: yup
+              .number()
+              .required()
+              .typeError("Please enter a valid number")
+              .max(69)
+              .default(defaultValues.royalty),
+            hasAcceptedTerms: yup
+              .boolean()
+              .default(defaultValues.hasAcceptedTerms)
+              .required()
+              .isTrue("You must accept the terms and conditions."),
+            notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
+            googleMapsUrl: yup.string().url(),
+            radius: yup.number().min(0.01).max(10),
+            ...(isSaveDrop
+              ? {}
+              : {
+                  releaseDate: yup
+                    .date()
+                    .min(
+                      getDefaultDate(),
+                      "The date you entered is invalid. Please enter a date that is at least 24 hours from now and after the next occurrence of 12:00 AM (midnight)"
+                    ),
+                }),
+            spotifyUrl: yup
+              .string()
+              .test(
+                "no-album-or-playlist",
+                "Spotify Album and Playlist URLs are not allowed.",
+                (value) => {
+                  if (!value) return true;
+                  return !/(album|playlist)/i.test(value);
+                }
+              ),
+            appleMusicTrackUrl: yup.string(),
+          })
+          .test({
+            name: "apple-music-or-spotify",
+            message: "Please enter either an Apple Music or Spotify URL.",
+            test: (value) => {
+              if (!isSaveDrop) return true;
+              return Boolean(value.spotifyUrl || value.appleMusicTrackUrl);
+            },
+          });
 
-        if (isSaveDrop) {
-          return baseSchema.concat(
-            yup.object({
-              spotifyUrl: yup.string(),
-              appleMusicTrackId: yup.string(),
-              // .required("Spotify Song URL is required for saved drops."),
-            })
-          );
-        } else {
-          return baseSchema;
-        }
+        return baseSchema;
       }),
     [isSaveDrop]
   );
@@ -304,7 +302,9 @@ export const DropMusic = () => {
           releaseDate: isSaveDrop
             ? undefined
             : values.releaseDate ?? getDefaultDate().toISOString(),
-          appleMusicTrackId: isSaveDrop ? values.appleMusicTrackId : undefined,
+          appleMusicTrackUrl: isSaveDrop
+            ? values.appleMusicTrackUrl
+            : undefined,
         },
         clearStorage
       );
@@ -711,7 +711,9 @@ export const DropMusic = () => {
                         placeholder={
                           "e.g. https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
                         }
-                        errorText={errors.spotifyUrl?.message}
+                        errorText={
+                          errors.spotifyUrl?.message || errors[""]?.message
+                        }
                       />
                     );
                   }}
@@ -721,7 +723,7 @@ export const DropMusic = () => {
                 <View tw="mt-4">
                   <Controller
                     control={control}
-                    name="appleMusicTrackId"
+                    name="appleMusicTrackUrl"
                     render={({ field: { onChange, onBlur, value, ref } }) => {
                       return (
                         <Fieldset
@@ -729,7 +731,7 @@ export const DropMusic = () => {
                           label={
                             <View tw="flex-row">
                               <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
-                                Apple Music Track Id
+                                Apple Music Song Link
                                 <Text tw="text-red-600">*</Text>
                               </Label>
                             </View>
@@ -737,8 +739,13 @@ export const DropMusic = () => {
                           onBlur={onBlur}
                           onChangeText={onChange}
                           value={value}
-                          placeholder={"e.g. 1673804556"}
-                          errorText={errors.appleMusicTrackId?.message}
+                          placeholder={
+                            "e.g. https://music.apple.com/in/album/i-feel-it-coming-feat-daft-punk/1440870373?i=1440870397"
+                          }
+                          errorText={
+                            errors.appleMusicTrackUrl?.message ||
+                            errors[""]?.message
+                          }
                         />
                       );
                     }}

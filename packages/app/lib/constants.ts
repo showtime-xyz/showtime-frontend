@@ -185,7 +185,7 @@ export const HIDE_LINK_FOOTER_ROUTER_LIST = [
   "/profile/[username]/[dropSlug]",
 ];
 export const SWIPE_LIST_SCREENS = [
-  "/",
+  "/home",
   "/foryou",
   "/profile/[username]/[dropSlug]",
   "/nft/[chainName]/[contractAddress]/[tokenId]",

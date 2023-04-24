@@ -146,7 +146,7 @@ const SuggestedUsers = () => {
   return (
     <>
       <View tw="h-16 justify-center">
-        <Text tw="text-2xl text-black dark:text-white">Home</Text>
+        <Text tw="text-2xl text-black dark:text-white">For you</Text>
       </View>
 
       <View tw="mt-8 rounded-2xl bg-white dark:bg-black">

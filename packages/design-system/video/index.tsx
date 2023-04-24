@@ -17,11 +17,12 @@ type VideoProps = {
   width: number;
   height: number;
   loading?: "eager" | "lazy";
+  withVideoBackdrop?: boolean;
 } & ComponentProps<typeof ExpoVideo>;
 
 const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
   {
-    tw,
+    tw = "",
     blurhash,
     style,
     width,
@@ -81,7 +82,6 @@ const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
               style={StyleSheet.absoluteFill}
               useNativeControls={videoConfig?.useNativeControls}
               resizeMode={ResizeMode.COVER}
-              posterSource={posterSource}
               isMuted={isMuted}
             />
           </>
