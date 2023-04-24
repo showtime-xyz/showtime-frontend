@@ -12,10 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
-import {
-  HotTabBarIconTemp,
-  TrendingTabBarIcon,
-} from "app/navigation/tab-bar-icons";
+import { TrendingTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import { breakpoints } from "design-system/theme";
@@ -41,7 +38,7 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
           {isAuthenticated && isMdWidth && (
             <>
               <View tw="mx-2">
-                <HotTabBarIconTemp
+                <TrendingTabBarIcon
                   color={isDark ? "white" : "black"}
                   focused={
                     router.pathname === "/home" || router.pathname === "/foryou"
@@ -81,26 +78,22 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
               <>
                 {isMdWidth && (
                   <View tw="mx-3">
-                    <HotTabBarIconTemp
+                    <TrendingTabBarIcon
                       color={isDark ? "white" : "black"}
                       focused={router.pathname === "/foryou"}
                     />
                   </View>
                 )}
                 {withBackground ? (
-                  <Pressable
-                    onPress={() => {
-                      navigateToLogin();
-                    }}
-                    tw="h-8 items-center justify-center rounded-full bg-black/60 px-4"
+                  <Button
+                    onPress={navigateToLogin}
+                    style={{ backgroundColor: "rgba(0,0,0,.6)" }}
                   >
-                    <Text tw="text-sm font-semibold text-white">Sign In</Text>
-                  </Pressable>
+                    Sign In
+                  </Button>
                 ) : (
                   <Button
-                    onPress={() => {
-                      navigateToLogin();
-                    }}
+                    onPress={navigateToLogin}
                     variant="primary"
                     size="regular"
                     labelTW="font-semibold"

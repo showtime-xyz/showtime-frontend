@@ -62,7 +62,7 @@ const Header = () => {
         </Text>
       </View>
       <View tw="mx-12 my-4 hidden items-center md:flex">
-        <Text tw="text-center text-4xl font-bold text-gray-900 dark:text-white">
+        <Text tw="text-center text-3xl font-bold text-gray-900 dark:text-white">
           Earn free collectibles for supporting artists.
         </Text>
         <View tw="mt-8 flex-row items-center">

@@ -78,7 +78,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
 
 export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab={Platform.OS === "web" ? "/foryou" : "/"}>
+    <TabBarIcon tab="/">
       {focused ? (
         <HomeFilled
           style={{ zIndex: 1 }}
@@ -88,23 +88,6 @@ export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
         />
       ) : (
         <Home style={{ zIndex: 1 }} width={24} height={24} color={color} />
-      )}
-    </TabBarIcon>
-  );
-};
-
-export const MarketplaceTabBarIcon = ({ color, focused }: TabBarIconProps) => {
-  return (
-    <TabBarIcon tab="/marketplace">
-      {focused ? (
-        <CompassFilled
-          style={{ zIndex: 1 }}
-          width={24}
-          height={24}
-          color={color}
-        />
-      ) : (
-        <Compass style={{ zIndex: 1 }} width={24} height={24} color={color} />
       )}
     </TabBarIcon>
   );
@@ -150,7 +133,7 @@ export const CreateTabBarIcon = ({
 
 export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/">
+    <TabBarIcon tab="/foryou">
       {focused ? (
         <HotFilled style={{ zIndex: 1 }} width={24} height={24} color={color} />
       ) : (

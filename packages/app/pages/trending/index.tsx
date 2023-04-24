@@ -24,11 +24,8 @@ const HeaderRight = () => {
         // worry about the web router.
         router.push("/login");
       }}
-      variant="primary"
-      size="small"
-      labelTW="font-semibold"
     >
-      Sign&nbsp;In
+      Sign In
     </Button>
   );
 };

@@ -73,11 +73,11 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       blockedList: "settings/blocked-list",
       swipeList: "list",
       bottomTabs: {
-        initialRouteName: "trending",
+        initialRouteName: "homeTab",
         screens: {
           // Bottom Tab Navigator
-          homeTab: "home",
-          trendingTab: "",
+          homeTab: "",
+          trendingTab: "trending",
           notificationsTab: "notifications",
           profileTab: "profile",
         },

@@ -30,7 +30,7 @@ export function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="trendingTab"
+      initialRouteName="homeTab"
       screenOptions={{
         headerShown: false,
       }}
@@ -38,14 +38,14 @@ export function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="homeTab"
-        component={HomeNavigator}
+        component={TrendingNavigator}
         options={{
           tabBarIcon: HomeTabBarIcon,
         }}
       />
       <BottomTab.Screen
         name="trendingTab"
-        component={TrendingNavigator}
+        component={HomeNavigator}
         options={{
           tabBarIcon: TrendingTabBarIcon,
         }}
