@@ -7,16 +7,13 @@ import {
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
-import { useUser } from "app/hooks/use-user";
 import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 const useBottomTabBarHeight = () => {
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const { isTabBarHidden } = useNavigationElements();
-  const { isAuthenticated } = useUser();
-
-  if (isTabBarHidden || !isAuthenticated) {
+  if (isTabBarHidden) {
     return 0;
   }
   return safeAreaBottom + BOTTOM_TABBAR_BASE_HEIGHT ?? 0;

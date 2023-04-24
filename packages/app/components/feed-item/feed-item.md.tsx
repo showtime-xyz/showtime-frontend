@@ -333,7 +333,9 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Social nft={nft} />
               <RaffleTooltip edition={edition} tw="mr-1" />
             </View>
-            <LikedBy nft={nft} tw="mt-4" />
+            <View tw="mt-4 min-h-[12px]">
+              <LikedBy nft={nft} max={1} />
+            </View>
             <View tw="my-4 mr-4 flex-row items-center">
               <Text tw="text-xl font-bold text-black dark:text-white">
                 {nft.token_name}
@@ -343,26 +345,27 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               {description}
             </Text>
 
-            <View tw="flex-row items-center justify-between">
+            <View tw="mt-6 flex-row items-center justify-between">
               <Creator nft={nft} />
               <Owner nft={nft} price={false} />
             </View>
 
-            <View tw="pb-4">
+            <View tw="mt mb-4 h-5">
               <ClaimedBy
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
-                tw="mb-4 mt-2"
               />
+            </View>
+            <View tw="h-8 flex-row">
               {isCreatorDrop && edition ? (
-                <View tw="flex-row">
+                <>
                   <ClaimButton tw="flex-1" edition={edition} />
                   <ClaimedShareButton
                     tw="ml-3 w-1/4"
                     edition={edition}
                     nft={nft}
                   />
-                </View>
+                </>
               ) : null}
             </View>
           </View>

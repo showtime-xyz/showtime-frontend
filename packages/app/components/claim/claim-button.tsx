@@ -90,7 +90,8 @@ export const ClaimButton = ({
   const raffleConcludedAt = useMemo(() => {
     if (!isSelf || !isRaffleDrop) return null;
     if (
-      edition.gating_type === "music_presave" &&
+      (edition.gating_type === "spotify_presave" ||
+        edition?.gating_type === "music_presave") &&
       edition?.presave_release_date
     ) {
       return formatDistanceToNowStrict(
@@ -133,9 +134,9 @@ export const ClaimButton = ({
     dispatch({ type: "initial" });
 
     if (
-      (edition.gating_type === "music_presave" ||
+      (edition.gating_type === "spotify_presave" ||
         edition.gating_type === "spotify_save" ||
-        edition.gating_type === "multi_provider_music_save") &&
+        edition?.gating_type === "music_presave") &&
       !isAuthenticated
     ) {
       if (type === "spotify") {
@@ -318,7 +319,10 @@ export const ClaimButton = ({
         ) : null}
       </View>
     );
-  } else if (edition?.gating_type === "music_presave") {
+  } else if (
+    edition?.gating_type === "music_presave" ||
+    edition?.gating_type === "spotify_presave"
+  ) {
     return (
       <Button {...buttonProps} onPress={() => handleCollectPress("spotify")}>
         <>

@@ -3,6 +3,7 @@ import { createContext, useState, useContext } from "react";
 
 import { Magic } from "magic-sdk";
 
+import { Logger } from "app/lib/logger";
 import { OAuthExtension } from "app/lib/magic-oauth-ext";
 
 export const MagicContext = createContext({
@@ -24,7 +25,7 @@ export const MagicProvider = ({ children }: any) => {
       };
 
       if (isMumbai) {
-        console.log("Magic network is connecting to Mumbai testnet");
+        Logger.log("Magic network is connecting to Mumbai testnet");
         customNodeOptions.rpcUrl =
           "https://polygon-mumbai.g.alchemy.com/v2/kh3WGQQaRugQsUXXLN8LkOBdIQzh86yL";
         customNodeOptions.chainId = 80001;

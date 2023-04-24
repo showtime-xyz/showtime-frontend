@@ -370,19 +370,21 @@ const ListCardLargeScreen = ({
           </View>
         </View>
         <View tw="ml-8 mr-4 min-w-[140px] self-center lg:min-w-[200px]">
-          {showClaimButton &&
-          !!nft.creator_airdrop_edition_address &&
-          edition ? (
-            <View tw="flex-row self-end">
-              <ClaimButton edition={edition} size="regular" />
-              <ClaimedShareButton
-                tw="ml-3 hidden lg:flex"
-                edition={edition}
-                size="regular"
-                nft={nft}
-              />
-            </View>
-          ) : null}
+          <View tw="flex-row self-end">
+            {showClaimButton &&
+            !!nft.creator_airdrop_edition_address &&
+            edition ? (
+              <>
+                <ClaimButton edition={edition} size="regular" />
+                <ClaimedShareButton
+                  tw="ml-3 hidden lg:flex"
+                  edition={edition}
+                  size="regular"
+                  nft={nft}
+                />{" "}
+              </>
+            ) : null}
+          </View>
         </View>
         <View tw="self-center">
           <ErrorBoundary renderFallback={() => null}>

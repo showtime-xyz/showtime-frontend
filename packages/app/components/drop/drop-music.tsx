@@ -12,12 +12,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
@@ -297,7 +297,7 @@ export const DropMusic = () => {
           ...values,
           gatingType: isSaveDrop
             ? "multi_provider_music_save"
-            : "music_presave",
+            : "spotify_presave",
           editionSize: isUnlimited ? 0 : values.editionSize,
           releaseDate: isSaveDrop
             ? undefined

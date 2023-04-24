@@ -14,10 +14,10 @@ import {
   View as RNView,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
