@@ -81,9 +81,9 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
               <>
                 {isMdWidth && (
                   <View tw="mx-3">
-                    <TrendingTabBarIcon
+                    <HotTabBarIconTemp
                       color={isDark ? "white" : "black"}
-                      focused={router.pathname === "/trending"}
+                      focused={router.pathname === "/foryou"}
                     />
                   </View>
                 )}

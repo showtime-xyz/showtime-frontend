@@ -17,6 +17,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { Link } from "app/navigation/link";
 import { createParam } from "app/navigation/use-param";
@@ -55,12 +56,12 @@ const Header = () => {
   }, [filter]);
   return (
     <View tw="mx-auto mb-4 w-full max-w-screen-xl">
-      <View tw="w-full flex-row justify-center px-4 py-4 sm:hidden">
+      <View tw="w-full flex-row justify-center px-4 py-4 md:hidden">
         <Text tw="text-lg font-extrabold text-gray-900 dark:text-white">
           Trending
         </Text>
       </View>
-      <View tw="mx-12 my-4 hidden items-center pl-2 sm:flex">
+      <View tw="mx-12 my-4 hidden items-center md:flex">
         <Text tw="text-4xl font-bold text-gray-900 dark:text-white">
           Earn free collectibles for supporting artists.
         </Text>
@@ -119,7 +120,9 @@ export const Trending = () => {
   const { height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
   const bottomBarHeight = usePlatformBottomHeight();
-  const isMdWidth = contentWidth >= breakpoints["md"];
+  const { width } = useScrollbarSize();
+  const isMdWidth = contentWidth + width > breakpoints["md"];
+
   const [filter, setFilter] = useParam("filter", { initial: INITIAL_FILTER });
 
   const contextValues = useMemo(
