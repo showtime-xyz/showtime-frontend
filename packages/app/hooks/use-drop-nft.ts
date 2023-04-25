@@ -16,6 +16,7 @@ import { toast } from "design-system/toast";
 
 import { DropContext } from "../context/drop-context";
 import { useSendFeedback } from "./use-send-feedback";
+import { useUser } from "./use-user";
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -60,6 +61,7 @@ type DropRequestData = {
   claim_window_duration_seconds: number;
   nsfw: boolean;
   spotify_url?: string;
+  apple_music_url?: string;
   gating_type?: GatingType;
   release_date?: string;
   password?: string;
@@ -125,6 +127,7 @@ export type UseDropNFT = {
   animationHash?: string;
   imageHash?: string;
   spotifyUrl?: string;
+  appleMusicTrackUrl?: string;
   gatingType?: GatingType;
   password?: string;
   googleMapsUrl?: string;
@@ -140,7 +143,7 @@ export const useDropNFT = () => {
   const { state, dispatch } = useContext(DropContext);
   const mutate = useMatchMutate();
   const { onSendFeedback } = useSendFeedback();
-
+  const { user } = useUser();
   const pollTransaction = async ({
     transactionId,
   }: {
@@ -250,6 +253,7 @@ export const useDropNFT = () => {
         claim_window_duration_seconds: params.duration,
         nsfw: params.notSafeForWork,
         spotify_url: params.spotifyUrl,
+        apple_music_url: params.appleMusicTrackUrl,
         gating_type: gatingType,
         password: params.password !== "" ? params.password : undefined,
         ...locationGating,

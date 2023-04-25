@@ -38,6 +38,8 @@ export const useNavigateToOnboarding = () => {
     if (params?.replace) {
       router.replace("/profile/onboarding");
     } else {
+      // TODO: rewrite the way we handle modals, if we don't remove the below param, login modal will stay mounted
+      delete router.query.loginModal;
       router.push(
         Platform.select({
           native: "/profile/onboarding",

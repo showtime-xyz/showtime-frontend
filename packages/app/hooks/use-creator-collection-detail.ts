@@ -29,6 +29,8 @@ export type CreatorEditionResponse = {
   gating_type: GatingType;
   spotify_track_name: string | null;
   spotify_track_url: string | null;
+  apple_music_track_name: string | null;
+  apple_music_track_url: string | null;
   spinamp_track_url: string | null; // this will be removed after the airdrop
   presave_release_date: string | null;
   raffles?: Raffle[];

@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
+import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
@@ -129,6 +130,10 @@ export function RootStackNavigator() {
         <Stack.Screen name="login" component={LoginScreen} />
         <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
+        <Stack.Screen
+          name="appleMusicAuthNativeWebView"
+          component={AppleMusicAuthNativeWebViewScreen}
+        />
         <Stack.Screen
           name="onboarding"
           component={OnboardingScreen}

@@ -230,13 +230,13 @@ const ListCardSmallScreen = ({
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
               />
-              <View tw="mt-3.5 h-8 flex-row">
-                {!!nft.creator_airdrop_edition_address && edition ? (
-                  <ClaimButton edition={edition} size="small" />
-                ) : null}
-              </View>
             </View>
           </View>
+        </View>
+        <View tw="h-8 flex-row px-2 pb-10">
+          {!!nft.creator_airdrop_edition_address && edition ? (
+            <ClaimButton edition={edition} size="small" tw="flex-1" />
+          ) : null}
         </View>
       </View>
     </RouteComponentNative>
