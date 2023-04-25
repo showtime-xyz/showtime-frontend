@@ -46,4 +46,5 @@ export const EVENTS = {
   PLAY_ON_APPLE_MUSIC_PRESSED: "Play on Apple Music Pressed",
   SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN: "Spotify Save Pressed Before Login",
   SPOTIFY_SAVE_SUCCESS_BEFORE_LOGIN: "Spotify Save Success Before Login",
+  APPLE_MUSIC_AUTH_FAILED: "Apple Music Auth Failed",
 };

@@ -279,7 +279,7 @@ export const ClaimButton = ({
             <Button
               {...buttonProps}
               onPress={() => handleCollectPress("spotify")}
-              tw="flex-1 flex-row justify-center"
+              tw="flex-row justify-center"
               disabled={isSpotifyCollectLoading}
             >
               <Spotify

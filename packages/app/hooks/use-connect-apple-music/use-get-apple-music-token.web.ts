@@ -1,5 +1,8 @@
 import useSWRMutation from "swr/mutation";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 
@@ -7,6 +10,7 @@ import { useScript } from "../use-script";
 
 export const useGetAppleMusicToken = () => {
   useScript("https://js-cdn.music.apple.com/musickit/v3/musickit.js");
+  const Alert = useAlert();
 
   const fetcher = async () => {
     const res = await axios({
@@ -24,8 +28,17 @@ export const useGetAppleMusicToken = () => {
       },
     });
 
-    const token = await music.authorize();
-    return token;
+    try {
+      const token = await music.authorize();
+      return token;
+    } catch (e) {
+      Analytics.track(EVENTS.APPLE_MUSIC_AUTH_FAILED);
+      Alert.alert(
+        "Error connecting to Apple Music",
+        "Please make sure you have an active Apple Music subscription."
+      );
+      throw e;
+    }
   };
 
   const state = useSWRMutation(MY_INFO_ENDPOINT, fetcher);
