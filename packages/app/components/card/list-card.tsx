@@ -233,11 +233,11 @@ const ListCardSmallScreen = ({
             </View>
           </View>
         </View>
-      </View>
-      <View tw="h-8 flex-row px-4 pb-4">
-        {!!nft.creator_airdrop_edition_address && edition ? (
-          <ClaimButton edition={edition} size="small" tw="flex-1" />
-        ) : null}
+        <View tw="h-8 flex-row px-2 pb-10">
+          {!!nft.creator_airdrop_edition_address && edition ? (
+            <ClaimButton edition={edition} size="small" tw="flex-1" />
+          ) : null}
+        </View>
       </View>
     </RouteComponentNative>
   );

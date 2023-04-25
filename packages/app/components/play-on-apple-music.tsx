@@ -29,9 +29,16 @@ export const PlayOnAppleMusic = ({
         }
       }}
     >
-      <View tw="rounded-sm bg-black/60" style={StyleSheet.absoluteFillObject} />
-      <View tw="flex-row">
-        <ListenOnAppleMusic height={22} color="white" />
+      <View
+        tw="items-center justify-center rounded-sm bg-black/60"
+        style={StyleSheet.absoluteFillObject}
+      />
+      <View tw="mt-[1px] h-full flex-row items-center justify-center">
+        <ListenOnAppleMusic
+          height={20}
+          width={(20 * 125.1) / 27.78}
+          color="white"
+        />
       </View>
     </Pressable>
   );
