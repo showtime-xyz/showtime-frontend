@@ -274,13 +274,29 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <ProfileError error={error} isBlocked={isBlocked} username={username} />
       );
     }
-    if (chuckList.length === 0 && !isLoading && !error && !isBlocked) {
+
+    if (
+      chuckList.length === 0 &&
+      !isLoading &&
+      !profileIsLoading &&
+      !error &&
+      type &&
+      !isBlocked
+    ) {
       return (
         <EmptyPlaceholder tw="h-[50vh]" title="No drops, yet." hideLoginBtn />
       );
     }
     return null;
-  }, [isLoading, error, chuckList.length, isBlocked, username]);
+  }, [
+    error,
+    isBlocked,
+    chuckList.length,
+    isLoading,
+    profileIsLoading,
+    type,
+    username,
+  ]);
 
   return (
     <ProfileHeaderContext.Provider
