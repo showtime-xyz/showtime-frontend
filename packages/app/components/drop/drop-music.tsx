@@ -743,7 +743,7 @@ export const DropMusic = () => {
                           onChangeText={onChange}
                           value={value}
                           placeholder={
-                            "https://music.apple.com/us/album/i-feel-it-coming-feat-daft-punk/1440870373?i=1440870397"
+                            "https://music.apple.com/album/i-feel-it-coming-feat-daft-punk/1440870373?i=1440870397"
                           }
                           errorText={
                             errors.appleMusicTrackUrl?.message ||

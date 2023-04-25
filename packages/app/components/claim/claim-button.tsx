@@ -8,9 +8,9 @@ import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Spotify,
-  AppleMusic,
   Check,
   Hourglass,
+  PreAddAppleMusic,
 } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -255,39 +255,21 @@ export const ClaimButton = ({
       </Button>
     );
   } else if (edition?.gating_type === "multi_provider_music_save") {
+    const preAddIconheight = buttonProps.size === "small" ? 24 : 26;
     return (
       <View tw="w-full flex-row">
         {edition?.apple_music_track_url ? (
           <Button
             {...buttonProps}
             onPress={() => handleCollectPress("appleMusic")}
-            tw="flex-1 flex-row items-center justify-center"
+            tw="flex-1 flex-row items-center justify-center bg-black dark:bg-white"
             disabled={isAppleMusicCollectLoading}
           >
-            <AppleMusic
-              width={22}
-              height={22}
-              color={isDark ? colors.black : colors.white}
+            <PreAddAppleMusic
+              height={preAddIconheight}
+              width={(preAddIconheight * 125) / 27}
+              color={isDark ? "black" : "white"}
             />
-            <View tw="ml-1">
-              <Text
-                style={{
-                  color: isDark ? colors.black : colors.white,
-                }}
-                tw="text-[10px] font-semibold md:text-[9px]"
-              >
-                Pre-add on
-              </Text>
-              <Text
-                tw="font-semibold text-white dark:text-black"
-                style={{
-                  color: isDark ? colors.black : colors.white,
-                  fontSize: 11,
-                }}
-              >
-                {isAppleMusicCollectLoading ? "Loading..." : "Apple Music"}
-              </Text>
-            </View>
           </Button>
         ) : null}
 
@@ -302,8 +284,8 @@ export const ClaimButton = ({
             >
               <Spotify
                 color={isDark ? colors.black : colors.white}
-                width={22}
-                height={22}
+                width={preAddIconheight}
+                height={preAddIconheight}
               />
               <Text
                 tw="ml-1 text-sm font-semibold"
