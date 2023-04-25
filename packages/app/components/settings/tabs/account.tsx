@@ -94,6 +94,7 @@ const ConnectSpotify = () => {
 
 const ConnectAppleMusic = () => {
   const user = useUser();
+  const isDark = useIsDarkMode();
 
   const { disconnectAppleMusic, isMutating: isDisconnecting } =
     useDisconnectAppleMusic();
@@ -105,7 +106,7 @@ const ConnectAppleMusic = () => {
   return (
     <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
       <View tw="flex-row items-center">
-        <AppleMusic height={20} width={20} />
+        <AppleMusic height={20} width={20} color={isDark ? "white" : "black"} />
         <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
           Apple Music
         </Text>

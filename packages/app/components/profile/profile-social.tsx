@@ -8,6 +8,7 @@ import {
   Link as LinkIcon,
   Instagram,
   Spotify,
+  AppleMusic,
 } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -33,6 +34,10 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
 
   const spotifyUrl = profile?.spotify_artist_id
     ? `https://open.spotify.com/artist/${profile?.spotify_artist_id}`
+    : null;
+
+  const appleMusicUrl = profile?.spotify_artist_id
+    ? `https://music.apple.com/artist/${profile?.apple_music_artist_id}`
     : null;
 
   const websiteLink = useMemo(
@@ -76,7 +81,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         )}
       </Hidden>
 
-      <View tw="mt-2 w-full max-w-[150px] flex-row items-center justify-end sm:mt-0 sm:w-auto">
+      <View tw="mt-2 w-full max-w-[150px] flex-row items-center justify-end gap-2 sm:mt-0 sm:w-auto">
         {spotifyUrl && (
           <PressableScale
             onPress={() => onPressLink(spotifyUrl)}
@@ -90,12 +95,26 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             />
           </PressableScale>
         )}
+
+        {appleMusicUrl && (
+          <PressableScale
+            onPress={() => onPressLink(appleMusicUrl)}
+            accessibilityLabel="Apple Music"
+            accessibilityRole="link"
+          >
+            <AppleMusic
+              width={17}
+              height={17}
+              color={isDark ? "#FFF" : colors.gray[900]}
+            />
+          </PressableScale>
+        )}
+
         {twitter && (
           <PressableScale
             onPress={() => onPressLink(`https://twitter.com/${twitter}`)}
             accessibilityLabel="Twitter"
             accessibilityRole="link"
-            style={{ marginLeft: spotifyUrl ? 16 : 0 }}
           >
             <Twitter
               width={20}
@@ -106,7 +125,6 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         )}
         {instagram && (
           <PressableScale
-            style={{ marginLeft: twitter || spotifyUrl ? 16 : 0 }}
             onPress={() => onPressLink(`https://instagram.com/${instagram}`)}
             accessibilityLabel="Instagram"
             accessibilityRole="link"
