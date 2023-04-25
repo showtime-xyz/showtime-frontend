@@ -67,10 +67,9 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const lastItemId = useRef(nft.nft_id);
   const { isAuthenticated } = useUser();
   const detailViewRef = useRef<Reanimated.View>(null);
-  const headerHeight = useHeaderHeight();
   const { top } = useSafeAreaInsets();
   const videoRef = useRef<ExpoVideo | null>(null);
-  const headerHeightRef = useRef(headerHeight);
+
   const { data: detailData } = useNFTDetailByTokenId({
     contractAddress: nft?.contract_address,
     tokenId: nft?.token_id,
@@ -79,6 +78,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const bottomHeight = usePlatformBottomHeight();
+
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
@@ -108,7 +108,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
         ? 1
         : Number(nft.token_aspect_ratio));
 
-    if (actualHeight < windowHeight - bottomHeight - headerHeightRef.current) {
+    if (actualHeight < windowHeight - bottomHeight) {
       return Math.min(actualHeight, maxContentHeight);
     }
 
@@ -133,14 +133,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     } else {
       return 0;
     }
-  }, [
-    detailHeight,
-    headerHeightRef,
-    mediaHeight,
-    maxContentHeight,
-    top,
-    windowHeight,
-  ]);
+  }, [detailHeight, mediaHeight, maxContentHeight, top, windowHeight]);
 
   const detailStyle = useAnimatedStyle(() => {
     return {
@@ -203,7 +196,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             videoRef={videoRef}
             toggleHeader={toggleHeader}
             showHeader={showHeader}
-            mediaOffset={-detailHeight + headerHeightRef.current + bottomHeight}
             isVideo={nft?.mime_type?.startsWith("video")}
           >
             <Animated.View

@@ -47,11 +47,11 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { createParam } from "app/navigation/use-param";
@@ -163,7 +163,7 @@ export const DropFree = () => {
 
   const shouldProceedToCheckout = watch("editionSize") === 0;
 
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
