@@ -143,6 +143,7 @@ export const ClaimButton = ({
         Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
         claimSpotifyGatedDrop({});
       } else if (type === "appleMusic") {
+        Analytics.track(EVENTS.APPLE_MUSIC_SAVE_PRESSED_BEFORE_LOGIN);
         claimAppleMusicGatedDrop({});
       }
     } else {
