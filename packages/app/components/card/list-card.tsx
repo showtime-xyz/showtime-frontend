@@ -203,7 +203,7 @@ const ListCardSmallScreen = ({
           <View tw="flex-1 justify-between">
             <View tw="px-2">
               <View tw="py-2">
-                <RouteComponent href={href} onPress={handleOnPress}>
+                <RouteComponent as={as} href={href} onPress={handleOnPress}>
                   <Text
                     tw="overflow-ellipsis whitespace-nowrap text-base font-bold text-black dark:text-white"
                     numberOfLines={1}
@@ -333,7 +333,7 @@ const ListCardLargeScreen = ({
           <View tw="pr-6">
             <View tw="px-4">
               <Creator nft={nft} shouldShowDateCreated={false} />
-              <RouteComponent href={href!} onPress={handleOnPress}>
+              <RouteComponent as={as} href={href!} onPress={handleOnPress}>
                 <View tw="inline flex-grow-0">
                   <Text
                     tw="inline-block overflow-ellipsis whitespace-nowrap text-lg font-bold text-black dark:text-white"

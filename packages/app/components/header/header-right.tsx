@@ -3,15 +3,14 @@ import { useWindowDimensions } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Plus } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
+import { SWIPE_LIST_SCREENS } from "app/lib/constants";
 import { TrendingTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
@@ -87,7 +86,11 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
                 {withBackground ? (
                   <Button
                     onPress={navigateToLogin}
-                    style={{ backgroundColor: "rgba(0,0,0,.6)" }}
+                    theme={
+                      SWIPE_LIST_SCREENS.includes(router.pathname)
+                        ? "dark"
+                        : undefined
+                    }
                   >
                     Sign In
                   </Button>
