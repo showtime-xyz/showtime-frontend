@@ -107,7 +107,7 @@ export const DropViewShare = memo(function DropViewShare({
               <DropPreview
                 ctaCopy="View"
                 buttonProps={{ variant: "primary" }}
-                tw="web:mb-[80px] mt-2"
+                tw="web:mb-5 mt-2"
                 onPressCTA={() => {
                   if (!nft) return;
                   if (Platform.OS !== "web") {
@@ -122,7 +122,7 @@ export const DropViewShare = memo(function DropViewShare({
             </BottomSheetScrollView>
           </BottomSheetModalProvider>
           <View
-            tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black"
+            tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black sm:px-4"
             style={{
               paddingBottom: Platform.select({
                 default: Math.max(bottom, 8),
