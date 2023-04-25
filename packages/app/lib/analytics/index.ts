@@ -43,6 +43,7 @@ export const EVENTS = {
   USER_FOLLOWED_PROFILE: "User Followed Profile",
   USER_UNFOLLOWED_PROFILE: "User Unfollowed Profile",
   PLAY_ON_SPOTIFY_PRESSED: "Play on Spotify Pressed",
+  PLAY_ON_APPLE_MUSIC_PRESSED: "Play on Apple Music Pressed",
   SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN: "Spotify Save Pressed Before Login",
   SPOTIFY_SAVE_SUCCESS_BEFORE_LOGIN: "Spotify Save Success Before Login",
 };

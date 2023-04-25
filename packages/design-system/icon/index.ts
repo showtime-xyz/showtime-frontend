@@ -140,5 +140,6 @@ export { default as Github } from "./Github";
 export { default as TwitterOutline } from "./TwitterOutline";
 export { default as AppleMusic } from "./AppleMusic";
 export { default as PreAddAppleMusic } from "./PreAddAppleMusic";
+export { default as ListenOnAppleMusic } from "./ListenOnAppleMusic";
 
 //#endregion
