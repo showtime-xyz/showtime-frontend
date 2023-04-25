@@ -78,6 +78,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   const [detailHeight, setDetailHeight] = useState(0);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const bottomHeight = usePlatformBottomHeight();
+
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
