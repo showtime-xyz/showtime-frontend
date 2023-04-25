@@ -29,10 +29,12 @@ import {
 } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
+  AppleMusic,
   FlipIcon,
   Image as ImageIcon,
   InformationCircle,
   Raffle,
+  Spotify,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
@@ -192,7 +194,6 @@ export const DropMusic = () => {
     formState: { errors },
     watch,
     setValue,
-    trigger,
     getValues,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema),
@@ -234,14 +235,6 @@ export const DropMusic = () => {
   const descHelperText = isSaveDrop
     ? "You cannot edit this after the drop is created."
     : "Tell your fans what the reward is. You cannot edit this after the drop is created";
-
-  // this effect should be triggered when the user changes the drop type
-  // it will revalidate the form and show the errors if any
-  const previousIsSaveDrop = useRef(isSaveDrop);
-  useEffect(() => {
-    if (isSaveDrop !== previousIsSaveDrop.current) trigger();
-    previousIsSaveDrop.current = isSaveDrop;
-  }, [isSaveDrop, trigger]);
 
   useEffect(() => {
     resetDropState();
@@ -674,8 +667,13 @@ export const DropMusic = () => {
                             : "Please note that Album or Playlist URI is not allowed. Track URI is optional: you can drop now and enter the song link once it's out on Spotify instead. To obtain your track URI, you may need to contact your distributor for assistance."
                         }
                         label={
-                          <View tw="flex-row">
-                            <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                          <View tw="flex-row gap-1">
+                            <Spotify
+                              height={22}
+                              width={22}
+                              color={isDark ? "white" : "black"}
+                            />
+                            <Label tw="font-bold text-gray-900 dark:text-white">
                               {isSaveDrop
                                 ? "Spotify Song Link"
                                 : "Spotify Track URI "}
@@ -709,7 +707,7 @@ export const DropMusic = () => {
                         onChangeText={onChange}
                         value={value}
                         placeholder={
-                          "e.g. https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
+                          "https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
                         }
                         errorText={
                           errors.spotifyUrl?.message || errors[""]?.message
@@ -729,7 +727,12 @@ export const DropMusic = () => {
                         <Fieldset
                           ref={ref}
                           label={
-                            <View tw="flex-row">
+                            <View tw="flex-row items-center gap-1">
+                              <AppleMusic
+                                height={20}
+                                width={20}
+                                color={isDark ? "white" : "black"}
+                              />
                               <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
                                 Apple Music Song Link
                                 <Text tw="text-red-600">*</Text>
@@ -740,7 +743,7 @@ export const DropMusic = () => {
                           onChangeText={onChange}
                           value={value}
                           placeholder={
-                            "e.g. https://music.apple.com/in/album/i-feel-it-coming-feat-daft-punk/1440870373?i=1440870397"
+                            "https://music.apple.com/us/album/i-feel-it-coming-feat-daft-punk/1440870373?i=1440870397"
                           }
                           errorText={
                             errors.appleMusicTrackUrl?.message ||
