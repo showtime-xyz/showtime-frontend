@@ -263,14 +263,16 @@ export const ClaimButton = ({
           <Button
             {...buttonProps}
             onPress={() => handleCollectPress("appleMusic")}
-            tw="flex-1 flex-row items-center justify-center bg-black dark:bg-white"
+            tw="flex-row items-center justify-center bg-black dark:bg-white"
             disabled={isAppleMusicCollectLoading}
           >
-            <PreAddAppleMusic
-              height={preAddIconheight}
-              width={(preAddIconheight * 125) / 27}
-              color={isDark ? "black" : "white"}
-            />
+            <View tw="mt-[2px]">
+              <PreAddAppleMusic
+                height={preAddIconheight}
+                width={(preAddIconheight * 125) / 27}
+                color={isDark ? "black" : "white"}
+              />
+            </View>
           </Button>
         ) : null}
 
