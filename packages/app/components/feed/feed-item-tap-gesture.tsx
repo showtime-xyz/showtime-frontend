@@ -17,12 +17,16 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { useLike } from "app/context/like-context";
 
+const ICON_SIZE = 90;
 const heartContainerStyle: ViewStyle = {
   position: "absolute",
   alignItems: "center",
   justifyContent: "center",
   height: "100%",
   width: "100%",
+};
+const shadowStyle: ViewStyle = {
+  backgroundColor: "rgba(0,0,0,0)",
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
@@ -149,7 +153,7 @@ export const FeedItemTapGesture = ({
 
   const topOffset = useMemo(
     () => ({
-      top: mediaOffset ?? 0,
+      top: mediaOffset ?? -ICON_SIZE,
     }),
     [mediaOffset]
   );
@@ -161,7 +165,12 @@ export const FeedItemTapGesture = ({
         style={[heartContainerStyle, heartStyle, topOffset]}
         pointerEvents="none"
       >
-        <HeartFilled width={90} height={90} color={colors.rose[500]} />
+        <HeartFilled
+          style={shadowStyle}
+          width={ICON_SIZE}
+          height={ICON_SIZE}
+          color={colors.rose[500]}
+        />
       </Animated.View>
       {isVideo ? (
         <>
