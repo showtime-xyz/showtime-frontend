@@ -45,6 +45,7 @@ import { formatProfileRoutes } from "app/utilities";
 import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
 
+import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { ProfileError } from "./profile-error";
 import { ProfileTop } from "./profile-top";
@@ -268,13 +269,34 @@ const Profile = ({ username }: ProfileScreenProps) => {
   }, [contentWidth, isDark, isLoadingMore, profileIsLoading, error]);
 
   const ListEmptyComponent = useCallback(() => {
-    if ((isLoading || profileIsLoading || !type) && !error) {
-      return null;
+    if (error || isBlocked) {
+      return (
+        <ProfileError error={error} isBlocked={isBlocked} username={username} />
+      );
     }
-    return (
-      <ProfileError error={error} isBlocked={isBlocked} username={username} />
-    );
-  }, [isBlocked, isLoading, profileIsLoading, type, username, error]);
+
+    if (
+      chuckList.length === 0 &&
+      !isLoading &&
+      !profileIsLoading &&
+      !error &&
+      type &&
+      !isBlocked
+    ) {
+      return (
+        <EmptyPlaceholder tw="h-[50vh]" title="No drops, yet." hideLoginBtn />
+      );
+    }
+    return null;
+  }, [
+    error,
+    isBlocked,
+    chuckList.length,
+    isLoading,
+    profileIsLoading,
+    type,
+    username,
+  ]);
 
   return (
     <ProfileHeaderContext.Provider
