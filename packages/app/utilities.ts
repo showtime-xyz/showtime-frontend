@@ -13,7 +13,7 @@ import { SORT_FIELDS } from "app/lib/constants";
 import { removeMd } from "app/lib/remove-markdown";
 
 import { ProfileTabsAPI } from "./hooks/api-hooks";
-import { NFT, Profile } from "./types";
+import { BunnyVideoUrls, NFT, Profile } from "./types";
 
 export const formatAddressShort = (address?: string | null) => {
   if (!address) return null;
@@ -118,17 +118,80 @@ export function formatToUSNumber(number: number) {
   }
 }
 
+function getVideoUrlByClosestWidth(
+  videoData: BunnyVideoUrls,
+  targetWidth: number = 1280
+) {
+  const qualities = [
+    { key: "mp4_720", width: 1280 },
+    { key: "mp4_480", width: 854 },
+    { key: "mp4_360", width: 640 },
+    { key: "mp4_240", width: 426 },
+    { key: "original", width: Infinity },
+  ];
+
+  // Sort the qualities based on the difference between the target width and the quality width.
+  qualities.sort((a, b) => {
+    return Math.abs(a.width - targetWidth) - Math.abs(b.width - targetWidth);
+  });
+
+  for (let i = 0; i < qualities.length; i++) {
+    const quality = qualities[i].key;
+
+    if (videoData[quality]) {
+      return videoData[quality];
+    }
+  }
+
+  return videoData.original;
+}
+
+function getVideoUrl(
+  videoData: BunnyVideoUrls,
+  preferredQualities: string[] = []
+) {
+  const defaultQualities = [
+    "mp4_720",
+    "mp4_480",
+    "mp4_360",
+    "mp4_240",
+    "original",
+  ];
+  const qualities = preferredQualities.concat(
+    defaultQualities.filter((quality) => !preferredQualities.includes(quality))
+  );
+
+  for (let i = 0; i < qualities.length; i++) {
+    const quality = qualities[i];
+
+    if (videoData[quality]) {
+      return videoData[quality];
+    }
+  }
+
+  return videoData.original;
+}
+
 export const getMediaUrl = ({
   nft,
   stillPreview,
+  animated,
 }: {
   nft?: NFT;
   stillPreview: boolean;
+  animated?: boolean;
 }) => {
   if (!nft || (!nft.chain_name && !nft.contract_address && !nft.token_id)) {
     console.warn("NFT is missing fields to get media URL");
     return "";
   }
+
+  const cdnImageBase =
+    nft.chain_name === "polygon"
+      ? "https://showtime.b-cdn.net/cdnv2" // prod
+      : "https://showtime-test.b-cdn.net/cdnv2"; // dev
+
+  console.log(nft);
 
   let cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
     nft.chain_name
@@ -136,12 +199,44 @@ export const getMediaUrl = ({
     stillPreview ? "?still_preview=true&cache_key=1" : "?cache_key=1"
   }`;
 
+  // if the nft is a video, we need to get the video url and replace the cdn url
+  // this is temporary, will be fully removed once we move to the new media server
+  if (
+    stillPreview &&
+    (nft?.mime_type?.startsWith("video") || nft?.mime_type === "image/gif")
+  ) {
+    const url = animated
+      ? nft?.video_urls?.preview_animation ??
+        nft?.video_urls?.thumbnail ??
+        nft?.cloudinary_thumbnail_url
+      : nft?.video_urls?.thumbnail ?? nft?.cloudinary_thumbnail_url;
+
+    cdnUrl = url ?? cdnUrl;
+    // some videos come from google storage, so we need to replace the url
+    cdnUrl = cdnUrl.replace(
+      "https://storage.googleapis.com/showtime-cdn/cdnv2",
+      cdnImageBase
+    );
+
+    // some videos come from cloudinary, so we need to manipulate the url a bit for reduced quality
+    cdnUrl = cdnUrl.replace("/upload/f_webp", "/upload/f_webp,w_500,q_60");
+  }
+
+  // videos but no stills
+  // this is temporary, will be fully removed once we move to the new media server
+  if (
+    !stillPreview &&
+    (nft?.mime_type?.startsWith("video") || nft?.mime_type === "image/gif")
+  ) {
+    cdnUrl = nft?.video_urls
+      ? getVideoUrl(nft?.video_urls) ?? nft?.cloudinary_video_url ?? cdnUrl
+      : nft?.cloudinary_video_url ?? cdnUrl;
+  }
+
   if (nft?.mime_type?.startsWith("image") && nft?.mime_type !== "image/gif") {
-    if (nft.chain_name === "polygon") {
-      cdnUrl = `https://showtime.b-cdn.net/cdnv2/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
-    } else {
-      cdnUrl = `https://showtime-test.b-cdn.net/cdnv2/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
-    }
+    cdnUrl = nft.image_url
+      ? "https://" + nft.image_url
+      : `${cdnImageBase}/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
   }
 
   //console.log(cdnUrl);
