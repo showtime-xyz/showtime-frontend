@@ -263,7 +263,7 @@ export const ClaimButton = ({
           <Button
             {...buttonProps}
             onPress={() => handleCollectPress("appleMusic")}
-            tw="flex-row items-center justify-center bg-black dark:bg-white"
+            tw="grow flex-row items-center justify-center bg-black dark:bg-white"
             disabled={isAppleMusicCollectLoading}
           >
             <View tw="mt-[2px]">
@@ -282,7 +282,7 @@ export const ClaimButton = ({
             <Button
               {...buttonProps}
               onPress={() => handleCollectPress("spotify")}
-              tw="flex-row justify-center"
+              tw="grow flex-row justify-center"
               disabled={isSpotifyCollectLoading}
             >
               <Spotify
