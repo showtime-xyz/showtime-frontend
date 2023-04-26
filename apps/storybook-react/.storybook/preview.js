@@ -28,7 +28,7 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <View tw="flex-1 h-full justify-center dark:bg-gray-900 bg-gray-50">
+    <View tw="dark:bg-gray-900 bg-gray-50">
       <BottomSheetModalProvider>
         <SafeAreaProvider>
           <ColorSchemeProvider>
