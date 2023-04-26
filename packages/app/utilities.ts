@@ -206,9 +206,10 @@ const getAvailableVideoUrl = (nft: NFT, stillPreview: boolean) => {
 };
 
 const getImageUrl = (nft: NFT, cdnImageBase: string) => {
-  return nft.image_url
-    ? "https://" + nft.image_url
-    : `${cdnImageBase}/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
+  return (
+    nft.image_url ??
+    `${cdnImageBase}/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`
+  );
 };
 
 export const getMediaUrl = ({
