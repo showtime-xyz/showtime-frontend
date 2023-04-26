@@ -172,6 +172,45 @@ function getVideoUrl(
   return videoData.original;
 }
 
+const getCdnImageBase = (chainName?: string) => {
+  return chainName === "polygon"
+    ? "https://showtime.b-cdn.net/cdnv2" // prod
+    : "https://showtime-test.b-cdn.net/cdnv2"; // dev
+};
+
+const buildCdnUrl = (nft: NFT, stillPreview?: boolean) => {
+  return `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
+    nft.chain_name
+  }/${nft.contract_address}/${nft.token_id}${
+    stillPreview ? "?still_preview=true&cache_key=1" : "?cache_key=1"
+  }`;
+};
+
+const getVideoOrGifUrl = (nft: NFT, animated?: boolean) => {
+  return animated
+    ? nft?.video_urls?.preview_animation ??
+        nft?.video_urls?.thumbnail ??
+        nft?.cloudinary_thumbnail_url
+    : nft?.video_urls?.thumbnail ?? nft?.cloudinary_thumbnail_url;
+};
+
+const getAvailableVideoUrl = (nft: NFT, stillPreview: boolean) => {
+  if (!stillPreview) {
+    return nft?.video_urls
+      ? getVideoUrl(nft?.video_urls) ??
+          nft?.cloudinary_video_url ??
+          buildCdnUrl(nft, stillPreview)
+      : nft?.cloudinary_video_url ?? buildCdnUrl(nft, stillPreview);
+  }
+  return "";
+};
+
+const getImageUrl = (nft: NFT, cdnImageBase: string) => {
+  return nft.image_url
+    ? "https://" + nft.image_url
+    : `${cdnImageBase}/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
+};
+
 export const getMediaUrl = ({
   nft,
   stillPreview,
@@ -186,58 +225,27 @@ export const getMediaUrl = ({
     return "";
   }
 
-  const cdnImageBase =
-    nft.chain_name === "polygon"
-      ? "https://showtime.b-cdn.net/cdnv2" // prod
-      : "https://showtime-test.b-cdn.net/cdnv2"; // dev
+  const cdnImageBase = getCdnImageBase(nft.chain_name);
+  let cdnUrl = buildCdnUrl(nft, stillPreview);
 
-  let cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
-    nft.chain_name
-  }/${nft.contract_address}/${nft.token_id}${
-    stillPreview ? "?still_preview=true&cache_key=1" : "?cache_key=1"
-  }`;
-
-  // if the nft is a video, we need to get the video url and replace the cdn url
-  // this is temporary, will be fully removed once we move to the new media server
   if (
     stillPreview &&
     (nft?.mime_type?.startsWith("video") || nft?.mime_type === "image/gif")
   ) {
-    const url = animated
-      ? nft?.video_urls?.preview_animation ??
-        nft?.video_urls?.thumbnail ??
-        nft?.cloudinary_thumbnail_url
-      : nft?.video_urls?.thumbnail ?? nft?.cloudinary_thumbnail_url;
-
+    const url = getVideoOrGifUrl(nft, animated);
     cdnUrl = url ?? cdnUrl;
-    // some videos come from google storage, so we need to replace the url
     cdnUrl = cdnUrl.replace(
       "https://storage.googleapis.com/showtime-cdn/cdnv2",
       cdnImageBase
     );
-
-    // some videos come from cloudinary, so we need to manipulate the url a bit for reduced quality
     cdnUrl = cdnUrl.replace("/upload/f_webp", "/upload/f_webp,w_500,q_60");
   }
 
-  // videos but no stills
-  // this is temporary, will be fully removed once we move to the new media server
-  if (
-    !stillPreview &&
-    (nft?.mime_type?.startsWith("video") || nft?.mime_type === "image/gif")
-  ) {
-    cdnUrl = nft?.video_urls
-      ? getVideoUrl(nft?.video_urls) ?? nft?.cloudinary_video_url ?? cdnUrl
-      : nft?.cloudinary_video_url ?? cdnUrl;
-  }
+  cdnUrl = getAvailableVideoUrl(nft, stillPreview) || cdnUrl;
 
   if (nft?.mime_type?.startsWith("image") && nft?.mime_type !== "image/gif") {
-    cdnUrl = nft.image_url
-      ? "https://" + nft.image_url
-      : `${cdnImageBase}/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
+    cdnUrl = getImageUrl(nft, cdnImageBase);
   }
-
-  //console.log(cdnUrl);
 
   return cdnUrl;
 };
