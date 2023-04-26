@@ -196,7 +196,7 @@ export const DropMusic = () => {
     setValue,
     getValues,
   } = useForm<any>({
-    resolver: yupResolver(dropValidationSchema),
+    resolver: yupResolver(dropValidationSchema as any),
     mode: "onBlur",
     shouldFocusError: true,
     reValidateMode: "onChange",
@@ -448,7 +448,7 @@ export const DropMusic = () => {
                                 {errors.file?.message ? (
                                   <View tw="mt-2">
                                     <Text tw="text-center text-sm text-red-500">
-                                      {errors?.file?.message}
+                                      {errors?.file?.message as string}
                                     </Text>
                                   </View>
                                 ) : null}
@@ -476,7 +476,6 @@ export const DropMusic = () => {
                       return (
                         <Fieldset
                           ref={ref}
-                          tw={windowWidth <= 768 ? "flex-1" : ""}
                           label="Title"
                           placeholder="Sweet"
                           onBlur={onBlur}
@@ -983,7 +982,7 @@ export const DropMusic = () => {
             />
           )}
         </BottomSheetScrollView>
-        <AnimateHeight delay={0}>
+        <AnimateHeight>
           <View tw="px-4">
             <Button
               variant="primary"

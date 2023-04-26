@@ -176,7 +176,6 @@ export const DropFree = () => {
   });
   const modalScreenContext = useModalScreenContext();
 
-  const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
@@ -342,10 +341,9 @@ export const DropFree = () => {
 
   return (
     <BottomSheetModalProvider>
-      {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
       <BottomSheetScrollView
         ref={scrollViewRef}
-        style={{ padding: 16 }}
+        style={{ paddingHorizontal: 16 }}
         contentContainerStyle={{ paddingBottom: bottomBarHeight }}
       >
         {!showPreview ? (
@@ -410,7 +408,7 @@ export const DropFree = () => {
                               {errors.file?.message ? (
                                 <View tw="mt-2">
                                   <Text tw="text-center text-sm text-red-500">
-                                    {errors?.file?.message}
+                                    {errors?.file?.message as string}
                                   </Text>
                                 </View>
                               ) : null}
@@ -438,7 +436,6 @@ export const DropFree = () => {
                     return (
                       <Fieldset
                         ref={ref}
-                        tw={windowWidth <= 768 ? "flex-1" : ""}
                         label="Title"
                         placeholder="Sweet"
                         onBlur={onBlur}
@@ -460,8 +457,8 @@ export const DropFree = () => {
                         return (
                           <Fieldset
                             ref={ref}
-                            tw="flex-1"
                             label="Description"
+                            tw="flex-1"
                             multiline
                             textAlignVertical="top"
                             placeholder={descPlaceholder}
@@ -739,7 +736,7 @@ export const DropFree = () => {
           />
         )}
       </BottomSheetScrollView>
-      <AnimateHeight delay={0}>
+      <AnimateHeight>
         <View tw="px-4">
           <Button
             variant="primary"
