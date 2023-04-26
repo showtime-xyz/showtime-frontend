@@ -191,8 +191,6 @@ export const getMediaUrl = ({
       ? "https://showtime.b-cdn.net/cdnv2" // prod
       : "https://showtime-test.b-cdn.net/cdnv2"; // dev
 
-  console.log(nft);
-
   let cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
     nft.chain_name
   }/${nft.contract_address}/${nft.token_id}${

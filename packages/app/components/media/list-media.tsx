@@ -40,7 +40,7 @@ function ListMediaImpl({
   );
 
   const mediaStillPreviewUri = useMemo(
-    () => getMediaUrl({ nft: item, stillPreview: true }),
+    () => getMediaUrl({ nft: item, stillPreview: true, animated: true }),
     [item]
   );
 
@@ -66,7 +66,7 @@ function ListMediaImpl({
       item?.mime_type === "image/gif" ? (
         <Image
           source={{
-            uri: mediaStillPreviewUri,
+            uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=70`,
           }}
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}

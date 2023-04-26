@@ -123,7 +123,7 @@ function MediaImplementation({
               uri: mediaUri,
             }}
             posterSource={{
-              uri: mediaStillPreviewUri,
+              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=70`,
             }}
             width={width}
             height={height}
