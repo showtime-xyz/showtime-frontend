@@ -97,7 +97,7 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
             useNativeControls={videoConfig?.useNativeControls}
             resizeMode={contentFitToresizeMode(resizeMode)}
             posterSource={posterSource}
-            usePoster={true}
+            usePoster={!withVideoBackdrop}
             source={props.source}
             ref={(innerRef) => {
               if (videoRef) {
