@@ -77,7 +77,9 @@ export const useFullscreen = (
         try {
           screenfull.off("change", onChange);
           screenfull.exit();
-        } catch {}
+        } catch {
+          // do nothing
+        }
       } else if (video && video.current && video.current.webkitExitFullscreen) {
         video.current.removeEventListener(
           "webkitendfullscreen",

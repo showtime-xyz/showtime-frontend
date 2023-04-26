@@ -56,7 +56,7 @@ export const DropPreview = memo(function DropPreview({
 }: DropPreviewProps) {
   const { user: userProfile } = useUser();
   const [muted] = useMuted();
-  const { width, height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const isSmWidth = width >= breakpoints["sm"];
   const { state } = useDropNFT();
   const onPressSpotify = useCallback(

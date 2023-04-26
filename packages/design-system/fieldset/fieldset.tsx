@@ -7,8 +7,6 @@ import {
 } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
-import type { FieldError, Merge, FieldErrorsImpl } from "react-hook-form";
-
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useId } from "@showtime-xyz/universal.input";
@@ -59,7 +57,6 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
     selectOnly,
     switchOnly,
     required,
-    componentRef,
     Component = TextInput,
     containerStyle,
     ...textInputProps

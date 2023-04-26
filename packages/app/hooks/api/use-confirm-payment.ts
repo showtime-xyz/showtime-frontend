@@ -16,6 +16,7 @@ export const useConfirmPayment = () => {
 
   const confirmPaymentStatus = useCallback(
     async function confirmPaymentStatus(paymentIntentId: string) {
+      // eslint-disable-next-line no-async-promise-executor
       return new Promise<void>(async (resolve, reject) => {
         try {
           setMessage("Your payment is processing.");
@@ -62,6 +63,7 @@ export const useConfirmPayment = () => {
       clientSecret: string,
       paymentMethodId: string
     ) {
+      // eslint-disable-next-line no-async-promise-executor
       return new Promise<void>(async (resolve, reject) => {
         try {
           setMessage("Your payment is processing.");

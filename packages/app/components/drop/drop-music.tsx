@@ -116,7 +116,7 @@ export const DropMusic = () => {
 
   const dropValidationSchema = useMemo(
     () =>
-      yup.lazy((values) => {
+      yup.lazy(() => {
         const baseSchema = yup
           .object({
             file: yup.mixed().required("Media is required"),
@@ -196,7 +196,7 @@ export const DropMusic = () => {
     setValue,
     getValues,
   } = useForm<any>({
-    resolver: yupResolver(dropValidationSchema),
+    resolver: yupResolver(dropValidationSchema as any),
     mode: "onBlur",
     shouldFocusError: true,
     reValidateMode: "onChange",
@@ -448,7 +448,7 @@ export const DropMusic = () => {
                                 {errors.file?.message ? (
                                   <View tw="mt-2">
                                     <Text tw="text-center text-sm text-red-500">
-                                      {errors?.file?.message}
+                                      {errors?.file?.message as string}
                                     </Text>
                                   </View>
                                 ) : null}

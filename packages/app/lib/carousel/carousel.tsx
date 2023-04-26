@@ -79,7 +79,7 @@ const PaginationItem: React.FC<{
   length: number;
   animValue: Animated.SharedValue<number>;
   isRotate?: boolean;
-}> = ({ animValue, index, length, isRotate }) => {
+}> = ({ animValue, index, length }) => {
   const width = 8;
   const isDark = useIsDarkMode();
   const animStyle = useAnimatedStyle(() => {

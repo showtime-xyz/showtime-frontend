@@ -10,7 +10,7 @@ type Props = {
   tw?: string;
 };
 
-function Owner({ price, nft, tw = "" }: Props) {
+function Owner({ nft, tw = "" }: Props) {
   if (!nft) return null;
 
   return (
