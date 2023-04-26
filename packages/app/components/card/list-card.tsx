@@ -324,7 +324,7 @@ const ListCardLargeScreen = ({
             </View>
           </RouteComponent>
 
-          <View tw="z-9 absolute bottom-4 left-4 ">
+          <View tw="z-9 absolute bottom-3 left-2">
             <ContentTypeTooltip edition={edition} />
           </View>
         </View>
