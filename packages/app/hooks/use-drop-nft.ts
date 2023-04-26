@@ -16,7 +16,6 @@ import { toast } from "design-system/toast";
 
 import { DropContext } from "../context/drop-context";
 import { useSendFeedback } from "./use-send-feedback";
-import { useUser } from "./use-user";
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
 
@@ -143,7 +142,6 @@ export const useDropNFT = () => {
   const { state, dispatch } = useContext(DropContext);
   const mutate = useMatchMutate();
   const { onSendFeedback } = useSendFeedback();
-  const { user } = useUser();
   const pollTransaction = async ({
     transactionId,
   }: {

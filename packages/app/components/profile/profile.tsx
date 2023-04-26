@@ -5,7 +5,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import { setStatusBarStyle } from "expo-status-bar";
 import { useSharedValue } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
@@ -64,7 +63,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     error,
   } = useUserProfile({ address: username });
   const [type] = useParam("type");
-  const isDark = useIsDarkMode();
   const contentWidth = useContentWidth();
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,

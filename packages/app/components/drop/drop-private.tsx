@@ -206,9 +206,6 @@ export const DropPrivate = () => {
   // }, [state.transactionId])
 
   const pickFile = useFilePicker();
-  const share = useShare();
-  const router = useRouter();
-  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
 
   // if (state.transactionHash) {
   //   return <View>
@@ -342,7 +339,7 @@ export const DropPrivate = () => {
                             {errors.file?.message ? (
                               <View tw="mt-2">
                                 <Text tw="text-center text-sm text-red-500">
-                                  {errors?.file?.message}
+                                  {errors?.file?.message as string}
                                 </Text>
                               </View>
                             ) : null}
