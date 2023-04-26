@@ -5,11 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import {
-  Platform,
-  ScrollView as RNScrollView,
-  useWindowDimensions,
-} from "react-native";
+import { ScrollView as RNScrollView, useWindowDimensions } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
@@ -52,7 +48,6 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { createParam } from "app/navigation/use-param";
 import { formatAddressShort } from "app/utilities";
@@ -344,7 +339,9 @@ export const DropFree = () => {
       <BottomSheetScrollView
         ref={scrollViewRef}
         style={{ paddingHorizontal: 16 }}
-        contentContainerStyle={{ paddingBottom: bottomBarHeight }}
+        contentContainerStyle={{
+          paddingBottom: Math.max(bottomBarHeight, 16),
+        }}
       >
         {!showPreview ? (
           <View>
