@@ -239,7 +239,7 @@ export const getMediaUrl = ({
       "https://storage.googleapis.com/showtime-cdn/cdnv2",
       cdnImageBase
     );
-    cdnUrl = cdnUrl.replace("/upload/f_webp", "/upload/f_webp,w_500,q_60");
+    cdnUrl = cdnUrl.replace("/upload/f_webp", "/upload/f_webp,w_300,q_60");
   }
 
   cdnUrl = getAvailableVideoUrl(nft, stillPreview) || cdnUrl;
