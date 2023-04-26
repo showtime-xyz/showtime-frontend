@@ -1,5 +1,18 @@
 import { DropPlan } from "./hooks/use-paid-drop-plans";
 
+export type BunnyVideoUrls = {
+  direct?: string | null;
+  hls_playlist?: string | null;
+  mp4_240?: string | null;
+  mp4_360?: string | null;
+  mp4_480?: string | null;
+  mp4_720?: string | null;
+  original?: string | null;
+  preview_animation?: string | null;
+  thumbnail?: string | null;
+  [key: string]: string | null | undefined;
+};
+
 export type NFT = {
   nft_id: number;
   is_user_owner: boolean;
@@ -54,6 +67,11 @@ export type NFT = {
   listing?: Listing;
   chain_name?: string;
   nsfw?: boolean;
+  cloudinary_thumbnail_url: string | null;
+  cloudinary_video_url: string | null;
+  image_url: string | null;
+  image_path: string | null;
+  video_urls: BunnyVideoUrls | null;
 };
 
 export type Creator = {
