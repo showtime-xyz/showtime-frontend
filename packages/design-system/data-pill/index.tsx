@@ -42,7 +42,7 @@ export const DataPill = (props: DataPillProps) => {
 
   return (
     <View
-      tw={["items-center justify-center rounded-full py-2 px-3", bgColorTw, tw]}
+      tw={["items-center justify-center rounded-full px-3 py-2", bgColorTw, tw]}
     >
       <Text tw={["text-xs font-medium", textColorTw, textTw]}>{label}</Text>
     </View>

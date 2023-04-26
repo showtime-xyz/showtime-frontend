@@ -1,6 +1,4 @@
 //@ts-nocheck
-
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as WebBrowser from "expo-web-browser";
 import { Extension } from "magic-sdk";
 

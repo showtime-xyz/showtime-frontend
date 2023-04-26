@@ -41,7 +41,7 @@ export const Basic: React.FC<{}> = () => {
               },
             })}
             classNmae
-            tw="cursor-pointer items-center justify-center rounded-lg bg-black py-2 px-4"
+            tw="cursor-pointer items-center justify-center rounded-lg bg-black px-4 py-2"
           >
             <Text tw="text-sm text-white">
               {Platform.OS === "web" ? "Hover to open it" : "Open it"}
