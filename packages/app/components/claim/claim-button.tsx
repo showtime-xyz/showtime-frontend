@@ -263,7 +263,7 @@ export const ClaimButton = ({
           <Button
             {...buttonProps}
             onPress={() => handleCollectPress("appleMusic")}
-            tw="grow flex-row items-center justify-center bg-black dark:bg-white"
+            tw="flex-row items-center justify-center bg-black dark:bg-white"
             disabled={isAppleMusicCollectLoading}
           >
             <View tw="mt-[2px]">
@@ -282,7 +282,7 @@ export const ClaimButton = ({
             <Button
               {...buttonProps}
               onPress={() => handleCollectPress("spotify")}
-              tw="grow flex-row justify-center"
+              tw="flex-row justify-center"
               disabled={isSpotifyCollectLoading}
             >
               <Spotify
@@ -293,7 +293,6 @@ export const ClaimButton = ({
               <Text
                 tw="ml-1 text-sm font-semibold"
                 style={{
-                  fontSize: 12,
                   color: isDark ? colors.black : colors.white,
                 }}
               >
@@ -320,7 +319,7 @@ export const ClaimButton = ({
             tw="ml-1 text-sm font-semibold leading-5"
             style={{ color: isDark ? colors.black : colors.white }}
           >
-            {isAuthenticated ? "Pre-Save to Collect" : "Pre-Save on Spotify"}
+            Pre-Save on Spotify
           </Text>
         </>
       </Button>
