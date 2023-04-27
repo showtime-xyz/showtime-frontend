@@ -218,8 +218,7 @@ const ListCardSmallScreen = ({
                       tw="text-xs text-gray-600 dark:text-gray-400"
                       numberOfLines={2}
                     >
-                      {description} fwekfjnwekfjnwekfjnwek jwne kjwnefkjwe
-                      nfkwejnfkwjefn kwejfn wekjfnkw jefn
+                      {description}
                     </Text>
                   </View>
                 ) : null}
