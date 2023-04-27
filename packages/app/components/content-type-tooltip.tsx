@@ -140,7 +140,7 @@ export const ContentTypeIcon = ({ edition }: ContentTypeTooltipProps) => {
           style={StyleSheet.absoluteFillObject}
         />
         <View tw="z-10">
-          {Icon ? <Icon color="#fff" width={20} height={20} /> : null}
+          <Icon color="#fff" width={20} height={20} />
         </View>
       </View>
     );
