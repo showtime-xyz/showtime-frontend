@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <script src="https://js-cdn.music.apple.com/musickit/v3/musickit.js"></script>
+    <script>
+      function newOpen(url) {
+        window.location.href = url;
+      }
+
+      window.open = newOpen;
+
+      async function getToken() {
+        try {
+          const res = await fetch("/api/apple-music-developer-token");
+          const v = await res.json();
+          const developerToken = v.developer_token;
+
+          const music = await window.MusicKit.configure({
+            developerToken,
+            app: {
+              name: "Showtime",
+              build: "1978.4.1",
+            },
+          });
+          const token = await music.authorize();
+          window.ReactNativeWebView.postMessage(token);
+        } catch (e) {
+          // TODO: report error to sentry
+        }
+      }
+
+      getToken();
+    </script>
+  </head>
+</html>
