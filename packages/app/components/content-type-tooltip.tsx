@@ -41,6 +41,11 @@ export const contentGatingType = {
     text: "Pre-Save to collect",
     typeName: "Pre-Save",
   },
+  multi_provider_music_save: {
+    icon: Spotify,
+    text: "Save on Spotify or Apple Music to collect",
+    typeName: "Music",
+  },
   music_presave: {
     icon: Spotify,
     text: "Pre-Save to collect",
