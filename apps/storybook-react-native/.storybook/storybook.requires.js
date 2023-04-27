@@ -29,7 +29,6 @@ const getStories = () => {
     require("../../../packages/design-system/pressable/pressable.stories.tsx"),
     require("../../../packages/design-system/pressable-hover/pressable-hover.stories.tsx"),
     require("../../../packages/design-system/pressable-scale/pressable-scale.stories.tsx"),
-    require("../../../packages/design-system/segmented-control/segmented-control.stories.tsx"),
     require("../../../packages/design-system/select/select.stories.tsx"),
     require("../../../packages/design-system/skeleton/skeleton.stories.tsx"),
     require("../../../packages/design-system/spinner/spinner.stories.tsx"),

@@ -18,12 +18,9 @@ import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { withColorScheme } from "../memo-with-theme";
+import HeaderCenter from "./header-center";
 import { HeaderLeft } from "./header-left";
 import { HeaderRight } from "./header-right";
-
-const HeaderCenter = dynamic(() => import("./header-center"), {
-  ssr: false,
-});
 
 const NOTIFICATION_LIST_HEIGHT = "calc(50vh - 64px)";
 export const NotificationsInHeader = () => {

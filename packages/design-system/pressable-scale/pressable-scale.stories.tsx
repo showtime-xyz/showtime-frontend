@@ -1,5 +1,3 @@
-import { Meta } from "@storybook/react";
-
 import { Text } from "@showtime-xyz/universal.text";
 
 import { PressableScale } from "./index";
@@ -7,9 +5,9 @@ import { PressableScale } from "./index";
 export default {
   component: PressableScale,
   title: "Components/PressableScale",
-} as Meta;
+};
 
-export const Primary: React.VFC<{}> = () => (
+export const Primary = () => (
   <PressableScale
     style={{
       padding: 8,

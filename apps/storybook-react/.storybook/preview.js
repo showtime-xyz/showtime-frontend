@@ -1,45 +1,29 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { enableScreens } from "react-native-screens";
-
-import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
+import { AlertProvider } from "@showtime-xyz/universal.alert";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
-
-import { AlertProvider } from "design-system/alert";
-import { SnackbarProvider } from "design-system/snackbar";
-import { View } from "design-system/view";
+import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
+import { View } from "@showtime-xyz/universal.view";
 
 import "../styles/globals.css";
 
-enableScreens(true);
-
-const Stack = createNativeStackNavigator();
-
-export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
-    },
-  },
-};
+// TODO: remove this once Reanimated ship a fix
+if (typeof window !== "undefined") {
+  // @ts-ignore
+  window._frameTimestamp = null;
+}
 
 export const decorators = [
   (Story) => (
-    <View tw="flex-1 h-full justify-center dark:bg-gray-900 bg-gray-50">
-      <BottomSheetModalProvider>
-        <SafeAreaProvider>
-          <ColorSchemeProvider>
-            <AlertProvider>
-              <SnackbarProvider>
-                <Story />
-              </SnackbarProvider>
-            </AlertProvider>
-          </ColorSchemeProvider>
-        </SafeAreaProvider>
-      </BottomSheetModalProvider>
+    <View tw="dark:bg-gray-900 bg-gray-50 min-h-screen">
+      <SafeAreaProvider>
+        <ColorSchemeProvider>
+          <AlertProvider>
+            <SnackbarProvider>
+              <Story />
+            </SnackbarProvider>
+          </AlertProvider>
+        </ColorSchemeProvider>
+      </SafeAreaProvider>
     </View>
   ),
 ];

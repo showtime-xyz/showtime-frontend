@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Platform, Text, View } from "react-native";
 
-import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
 
 import { HeaderTabView } from "./index";
@@ -15,7 +14,7 @@ const HEADER_HEIGHT = 300;
 export default {
   component: HeaderTabView,
   title: "Components/HeaderTabView",
-} as Meta;
+};
 
 const TabScene = ({ route }: any) => {
   return (
