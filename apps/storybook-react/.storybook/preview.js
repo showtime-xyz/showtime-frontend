@@ -13,16 +13,6 @@ if (typeof window !== "undefined") {
   window._frameTimestamp = null;
 }
 
-export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
-    },
-  },
-};
-
 export const decorators = [
   (Story) => (
     <View tw="dark:bg-gray-900 bg-gray-50 min-h-screen">
