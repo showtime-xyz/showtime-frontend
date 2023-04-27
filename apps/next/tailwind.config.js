@@ -102,13 +102,9 @@ module.exports = {
         ".text-3xl": textSizes["text-3xl"],
         ".text-4xl": textSizes["text-4xl"],
         ".safe-top": {
-          paddingTop: "constant(safe-area-inset-top)",
-          // eslint-disable-next-line no-dupe-keys
           paddingTop: "env(safe-area-inset-top)",
         },
         ".safe-bottom": {
-          paddingBottom: "constant(safe-area-inset-bottom)",
-          // eslint-disable-next-line no-dupe-keys
           paddingBottom: "env(safe-area-inset-bottom)",
         },
       });

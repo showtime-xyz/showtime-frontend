@@ -1,15 +1,15 @@
-import { Dimensions, StyleSheet, Image } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
-import { Meta } from "@storybook/react";
-
-import { View } from "@showtime-xyz/universal.view";
+import { View, Image } from "@showtime-xyz/universal";
 
 import { LightBoxProvider, LightBox } from "./index";
 
+const URL =
+  "https://lh3.googleusercontent.com/4NZDQhHbwkjrewCLnnuvmsXOrjNMrBCZ4xg3cS7FyJAPiT6T2vrdo3ZkVE8RwkQ-4ticjxTVjyGehJS0xOG3SW1UMEKz7qVFIjj1";
 export default {
   component: LightBox,
   title: "Components/LightBox",
-} as Meta;
+};
 
 const { width } = Dimensions.get("window");
 const LightBoxBasic = () => {
@@ -23,15 +23,16 @@ const LightBoxBasic = () => {
       >
         <Image
           source={{
-            uri: "https://storage.googleapis.com/showtime-test/cdnv2/ethereum/0x495f947276749ce646f68ac8c248420045cb7b5e/114091279957330982022734478648167430968491445987545800607311341400684004114433",
+            uri: URL,
           }}
-          style={[StyleSheet.absoluteFillObject, { width: 120, height: 120 }]}
+          width={500}
+          height={500}
         />
       </LightBox>
     </View>
   );
 };
-export const Basic: React.FC<{}> = () => {
+export const Basic = () => {
   return (
     <LightBoxProvider>
       <LightBoxBasic />

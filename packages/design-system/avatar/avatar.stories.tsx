@@ -1,5 +1,3 @@
-import { Meta } from "@storybook/react";
-
 import { View } from "@showtime-xyz/universal.view";
 
 import { Avatar } from "./index";
@@ -10,9 +8,9 @@ const URL =
 export default {
   component: Avatar,
   title: "Components/Avatar",
-} as Meta;
+};
 
-export const Basic: React.FC<{}> = () => (
+export const Basic = () => (
   <View tw="flex-1 items-center justify-center">
     <Avatar url={URL} alt="Avatar" />
     <View tw="h-2" />

@@ -1,5 +1,3 @@
-import { Meta } from "@storybook/react";
-
 import { View } from "@showtime-xyz/universal.view";
 
 import { Text } from "./index";
@@ -7,26 +5,26 @@ import { Text } from "./index";
 export default {
   component: Text,
   title: "Components/Text",
-} as Meta;
+};
 
-export const TextXS: React.VFC<{}> = () => (
+export const TextXS = () => (
   <Text tw="text-xs text-black dark:text-white">Hello World!</Text>
 );
 
-export const TextXSCapsize: React.VFC<{}> = () => (
+export const TextXSCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-xs text-black dark:text-white">Hello World!</Text>
     <Text tw="text-xs text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
-export const TextXSBoldAndPurple: React.VFC<{}> = () => (
+export const TextXSBoldAndPurple = () => (
   <Text tw="text-xs font-bold text-black dark:text-white">
     Hello <Text tw="text-xs text-purple-800">World</Text>
   </Text>
 );
 
-export const TextXSBoldAndPurpleCapsize: React.VFC<{}> = () => (
+export const TextXSBoldAndPurpleCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-xs font-bold text-black dark:text-white">
       Hello <Text tw="text-xs text-purple-800">World</Text>
@@ -37,72 +35,72 @@ export const TextXSBoldAndPurpleCapsize: React.VFC<{}> = () => (
   </View>
 );
 
-export const TextSM: React.VFC<{}> = () => (
+export const TextSM = () => (
   <Text tw="text-sm text-black dark:text-white">Hello World!</Text>
 );
 
-export const TextSMCapsize: React.VFC<{}> = () => (
+export const TextSMCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-sm text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
-export const TextBase: React.VFC<{}> = () => (
+export const TextBase = () => (
   <Text tw="text-base text-black dark:text-white">Hello World!</Text>
 );
 
-export const TextBaseCapsize: React.VFC<{}> = () => (
+export const TextBaseCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-base text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
-export const TextLG: React.VFC<{}> = () => (
+export const TextLG = () => (
   <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
 );
 
-export const TextLGCapsize: React.VFC<{}> = () => (
+export const TextLGCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
     <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
-export const TextXL: React.VFC<{}> = () => (
+export const TextXL = () => (
   <Text tw="text-xl text-black dark:text-white">Hello World!</Text>
 );
 
-export const TextXLCapsize: React.VFC<{}> = () => (
+export const TextXLCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-xl text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
-export const Text2XL: React.VFC<{}> = () => (
+export const Text2XL = () => (
   <Text tw="text-2xl text-black dark:text-white">Hello World!</Text>
 );
 
-export const Text2XLCapsize: React.VFC<{}> = () => (
+export const Text2XLCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-2xl text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
-export const Text3XL: React.VFC<{}> = () => (
+export const Text3XL = () => (
   <Text tw="text-3xl text-black dark:text-white">Hello World!</Text>
 );
 
-export const Text3XLCapsize: React.VFC<{}> = () => (
+export const Text3XLCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-3xl text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
-export const Text4XL: React.VFC<{}> = () => (
+export const Text4XL = () => (
   <Text tw="text-4xl text-black dark:text-white">Hello World!</Text>
 );
 
-export const Text4XLCapsize: React.VFC<{}> = () => (
+export const Text4XLCapsize = () => (
   <View tw="bg-black">
     <Text tw="text-4xl text-black dark:text-white">Hello World!</Text>
   </View>

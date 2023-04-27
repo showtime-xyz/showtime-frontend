@@ -1,4 +1,3 @@
-import { Meta } from "@storybook/react";
 import { Svg, Path } from "react-native-svg";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -102,4 +101,4 @@ const Spacer = () => {
 export default {
   component: Input,
   title: "Components/Input",
-} as Meta;
+};

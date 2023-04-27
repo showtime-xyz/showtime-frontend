@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react";
+import { View, Text } from "@showtime-xyz/universal";
 
 import { View, Text } from "@showtime-xyz/universal";
 
@@ -7,7 +7,7 @@ import { Skeleton } from "./index";
 export default {
   component: Skeleton,
   title: "Components/Skeleton",
-} as Meta;
+};
 
 export const SkeletonBasic = () => {
   return (
