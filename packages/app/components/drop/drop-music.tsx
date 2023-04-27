@@ -639,7 +639,7 @@ export const DropMusic = () => {
                     onChange={() => {
                       setIsSaveDrop(!isSaveDrop);
                     }}
-                    accesibilityLabel="Live Now"
+                    aria-label="Live Now"
                   />
                   <Text
                     tw="ml-2 font-bold text-black dark:text-white"
@@ -847,7 +847,7 @@ export const DropMusic = () => {
                                   setIsUnlimited((isUnlimited) => !isUnlimited)
                                 }
                                 checked={isUnlimited}
-                                accesibilityLabel="unlimited editions for drop"
+                                aria-label="unlimited editions for drop"
                               />
                             </Pressable>
                           </View>
@@ -952,7 +952,7 @@ export const DropMusic = () => {
                           <Checkbox
                             onChange={(v) => onChange(v)}
                             checked={value}
-                            accesibilityLabel="I agree to the terms and conditions"
+                            aria-label="I agree to the terms and conditions"
                           />
 
                           <Text tw="px-4 text-gray-600 dark:text-gray-400">

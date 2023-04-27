@@ -41,7 +41,6 @@ export type FieldsetProps = {
 function FieldsetImpl(props: FieldsetProps, ref: any) {
   const {
     errorText,
-    accessibilityLabel,
     helperText,
     label,
     disabled,
@@ -102,7 +101,6 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
               ref={ref}
               editable={!disabled}
               id={inputId}
-              accessibilityLabel={accessibilityLabel}
               multiline={textInputProps.multiline}
               numberOfLines={textInputProps.numberOfLines ?? 1}
               blurOnSubmit={textInputProps.blurOnSubmit}

@@ -160,7 +160,7 @@ export const SelectPicture = () => {
                 <DropFileZone onChange={({ file }) => onChange(file)}>
                   <>
                     <Pressable
-                      accessibilityLabel="Pick profile photo"
+                      aria-label="Pick profile photo"
                       testID="profile_photo_picker"
                       onPress={async () => {
                         const file = await pickFile({

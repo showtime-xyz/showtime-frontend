@@ -160,7 +160,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
             <Checkbox
               checked={selectDefault}
               onChange={() => setSelectDefault(!selectDefault)}
-              accesibilityLabel="Select default payment method"
+              aria-label="Select default payment method"
             />
             <Text
               tw="ml-2 text-gray-900 dark:text-gray-50"

@@ -135,8 +135,8 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
               style={{ marginLeft: "auto" }}
             >
               <PressableScale
-                accessibilityLabel="View"
-                accessibilityRole="button"
+                aria-label="View"
+                role="button"
                 onPress={snackbar.action?.onPress}
               >
                 {snackbar.action?.element ? (

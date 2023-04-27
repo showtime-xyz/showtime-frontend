@@ -12,7 +12,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
-type InputProps = {
+type InputProps = Pick<TextInputProps, "aria-label"> & {
   leftElement?: JSX.Element;
   rightElement?: JSX.Element;
   placeholder?: string;
@@ -25,7 +25,6 @@ type InputProps = {
   label?: string;
   errorText?: string;
   helperText?: string;
-  accessibilityLabel?: string;
   autoFocus?: boolean;
   inputStyle?: StyleProp<TextStyle>;
   autocomplete?: "on" | "off";
@@ -59,9 +58,9 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     disabled,
     type,
     isInvalid,
-    accessibilityLabel,
     autoFocus,
     autocomplete,
+    ...rest
   } = props;
   const { onFocus, onBlur, focused } = useOnFocus();
   const isDark = useIsDarkMode();
@@ -141,7 +140,6 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           keyboardType={type}
           disabled={disabled}
           autoFocus={autoFocus}
-          accessibilityLabel={accessibilityLabel}
           accessibilityDescribedBy={Platform.select({
             web: helperText ? helperTextId : undefined,
             default: undefined,
@@ -156,6 +154,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           })}
           ref={ref}
           autocomplete={autocomplete}
+          {...rest}
         />
         {rightElement && (
           <View style={{ marginLeft: "auto" }}>{rightElement}</View>

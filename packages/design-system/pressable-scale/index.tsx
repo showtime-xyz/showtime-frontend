@@ -2,11 +2,16 @@ import { ComponentProps, useMemo } from "react";
 
 import { MotiPressable } from "moti/interactions";
 
-export type Props = ComponentProps<typeof MotiPressable> & {
+export type PressableScaleProps = ComponentProps<typeof MotiPressable> & {
   scaleTo?: number;
+  role?: string;
 };
 
-export function PressableScale({ scaleTo = 0.95, ...props }: Props) {
+export function PressableScale({
+  scaleTo = 0.95,
+  role,
+  ...props
+}: PressableScaleProps) {
   return (
     <MotiPressable
       {...props}

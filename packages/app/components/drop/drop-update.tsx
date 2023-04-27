@@ -211,7 +211,7 @@ export const DropUpdate = ({
                 onChange={() => {
                   setIsLive(!isLive);
                 }}
-                accesibilityLabel="Live Now"
+                aria-label="Live Now"
               />
               <Text
                 tw="ml-2 font-bold text-black dark:text-white"

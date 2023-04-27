@@ -16,7 +16,7 @@ export const Primary = () => {
     <View tw="flex-row items-center">
       <Checkbox
         id="checkbox"
-        accesibilityLabel="I agree"
+        aria-label="I agree"
         checked={checked}
         onChange={setChecked}
       />

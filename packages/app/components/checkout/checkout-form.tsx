@@ -127,7 +127,7 @@ const CheckoutFormStripe = () => {
               onChange={() =>
                 setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
               }
-              accesibilityLabel="Set as default payment method"
+              aria-label="Set as default payment method"
             />
             <Text
               tw="ml-2 text-gray-900 dark:text-gray-50"

@@ -651,7 +651,7 @@ export const DropEvent = () => {
                       <Checkbox
                         onChange={(v) => onChange(v)}
                         checked={value}
-                        accesibilityLabel="I agree to the terms and conditions"
+                        aria-label="I agree to the terms and conditions"
                       />
 
                       <Text tw="px-4 text-gray-600 dark:text-gray-400">
