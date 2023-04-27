@@ -204,7 +204,6 @@ export const DropEvent = () => {
   // }, [state.transactionId])
 
   const pickFile = useFilePicker();
-  const router = useRouter();
 
   /*
   const share = useShare();

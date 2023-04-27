@@ -35,6 +35,7 @@ export class FileStorage {
   }
 
   public async saveFile(file: File, id: string) {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise<any>(async (resolve) => {
       if (!this.db) {
         this.db = await this.getOrInitialiseDB();
@@ -56,6 +57,7 @@ export class FileStorage {
   }
 
   public async clearStorage() {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise<void>(async (resolve) => {
       if (!this.db) {
         this.db = await this.getOrInitialiseDB();
@@ -68,6 +70,7 @@ export class FileStorage {
   }
 
   public async getFile(id: any) {
+    // eslint-disable-next-line no-async-promise-executor
     return new Promise<File>(async (resolve) => {
       if (!this.db) {
         this.db = await this.getOrInitialiseDB();

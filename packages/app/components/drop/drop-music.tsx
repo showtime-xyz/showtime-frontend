@@ -59,7 +59,6 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
 
@@ -116,7 +115,7 @@ export const DropMusic = () => {
 
   const dropValidationSchema = useMemo(
     () =>
-      yup.lazy((values) => {
+      yup.lazy(() => {
         const baseSchema = yup
           .object({
             file: yup.mixed().required("Media is required"),
@@ -196,7 +195,7 @@ export const DropMusic = () => {
     setValue,
     getValues,
   } = useForm<any>({
-    resolver: yupResolver(dropValidationSchema),
+    resolver: yupResolver(dropValidationSchema as any),
     mode: "onBlur",
     shouldFocusError: true,
     reValidateMode: "onChange",
@@ -213,7 +212,6 @@ export const DropMusic = () => {
     redirectIfProfileIncomplete: true,
   });
 
-  const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
@@ -375,11 +373,12 @@ export const DropMusic = () => {
   return (
     <ClientSideOnly>
       <BottomSheetModalProvider>
-        {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
         <BottomSheetScrollView
           ref={scrollViewRef}
-          style={{ padding: 16 }}
-          contentContainerStyle={{ paddingBottom: bottomBarHeight }}
+          style={{ paddingHorizontal: 16 }}
+          contentContainerStyle={{
+            paddingBottom: Math.max(bottomBarHeight, 16),
+          }}
         >
           {!showPreview ? (
             <View>
@@ -448,7 +447,7 @@ export const DropMusic = () => {
                                 {errors.file?.message ? (
                                   <View tw="mt-2">
                                     <Text tw="text-center text-sm text-red-500">
-                                      {errors?.file?.message}
+                                      {errors?.file?.message as string}
                                     </Text>
                                   </View>
                                 ) : null}
@@ -476,7 +475,6 @@ export const DropMusic = () => {
                       return (
                         <Fieldset
                           ref={ref}
-                          tw={windowWidth <= 768 ? "flex-1" : ""}
                           label="Title"
                           placeholder="Sweet"
                           onBlur={onBlur}
@@ -983,7 +981,7 @@ export const DropMusic = () => {
             />
           )}
         </BottomSheetScrollView>
-        <AnimateHeight delay={0}>
+        <AnimateHeight>
           <View tw="px-4">
             <Button
               variant="primary"
