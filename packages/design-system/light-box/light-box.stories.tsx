@@ -1,6 +1,7 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions } from "react-native";
 
-import { View, Image } from "@showtime-xyz/universal";
+import { Image } from "@showtime-xyz/universal.image";
+import { View } from "@showtime-xyz/universal.view";
 
 import { LightBoxProvider, LightBox } from "./index";
 
