@@ -102,6 +102,8 @@ const nextConfig = {
         "react-native-web/dist/vendor/react-native/emitter/EventEmitter",
       "react-native/Libraries/EventEmitter/NativeEventEmitter$":
         "react-native-web/dist/vendor/react-native/NativeEventEmitter",
+      "react-native-web/dist/cjs/exports/DrawerLayoutAndroid":
+        "react-native-web/dist/cjs/modules/UnimplementedView",
     };
 
     config.resolve.extensions = [
