@@ -71,7 +71,7 @@ function TextLink({
           variant,
           tw,
           role: "link",
-          selectable: false,
+          userSelect: false,
           onPress,
         }),
         [variant, tw, textProps, onPress]
