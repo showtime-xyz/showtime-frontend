@@ -163,12 +163,16 @@ function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <AppProviders>
         <Container>
-          <Header
-            canGoBack={
-              router.pathname === "/search" ||
-              router.pathname.split("/").length - 1 >= 2
-            }
-          />
+          {/* @ts-ignore */}
+          {!Component.hideHeader && (
+            <Header
+              canGoBack={
+                router.pathname === "/search" ||
+                router.pathname.split("/").length - 1 >= 2
+              }
+            />
+          )}
+
           <View
             tw="items-center"
             style={{

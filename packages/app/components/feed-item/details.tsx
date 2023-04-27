@@ -46,7 +46,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
         <View tw="flex-1 flex-col justify-end">
           <View>
             <View tw="-ml-1 -mt-5 mb-3 h-6 flex-row justify-start">
-              <RaffleTooltip edition={edition} theme="dark" tw="mr-3" />
+              <RaffleTooltip edition={edition} theme="dark" tw="mr-1" />
               <ContentTypeTooltip edition={edition} theme="dark" />
             </View>
 

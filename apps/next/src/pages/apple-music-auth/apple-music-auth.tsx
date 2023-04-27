@@ -21,3 +21,5 @@ export default function AppleMusicAuth() {
 
   return null;
 }
+
+AppleMusicAuth.hideHeader = true;

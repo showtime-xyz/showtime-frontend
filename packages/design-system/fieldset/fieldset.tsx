@@ -2,12 +2,9 @@ import {
   MutableRefObject,
   ComponentType,
   forwardRef,
-  Fragment,
   isValidElement,
 } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
-
-import type { FieldError, Merge, FieldErrorsImpl } from "react-hook-form";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -22,9 +19,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import type { TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
-
-const PlatformAnimateHeight =
-  Platform.OS === "web" || Platform.OS === "android" ? Fragment : AnimateHeight;
 
 export type FieldsetProps = {
   errorText?: any;
@@ -59,7 +53,6 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
     selectOnly,
     switchOnly,
     required,
-    componentRef,
     Component = TextInput,
     containerStyle,
     ...textInputProps
@@ -68,6 +61,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
   const inputId = useId();
   const helperTextId = useId();
   const errorTextId = useId();
+  console.log(123);
 
   return (
     <View
@@ -143,12 +137,12 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
         </View>
       ) : null}
 
-      <PlatformAnimateHeight>
+      <AnimateHeight>
         {errorText ? (
           <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
         ) : null}
-      </PlatformAnimateHeight>
-      <PlatformAnimateHeight>
+      </AnimateHeight>
+      <AnimateHeight>
         {helperText ? (
           <>
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
@@ -161,7 +155,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
             </Text>
           </>
         ) : null}
-      </PlatformAnimateHeight>
+      </AnimateHeight>
     </View>
   );
 }

@@ -56,7 +56,7 @@ export const UserList = ({
   );
 
   const renderItem = useCallback(
-    ({ item, index }: { item: UserItemType }) => {
+    ({ item }: { item: UserItemType }) => {
       return (
         <FollowingListUser item={item} follow={follow} unFollow={unfollow} />
       );

@@ -4,7 +4,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import { tokenPromiseCallbacks } from "../hooks/use-connect-apple-music/utils";
 
-const webAppleMusicScreenURL = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/apple-music-auth/apple-music-auth`;
+const webAppleMusicScreenURL = `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/apple-music-auth-native-webview/apple-music-auth-native-webview.html`;
 
 export const AppleMusicAuthNativeWebViewScreen = () => {
   const router = useRouter();

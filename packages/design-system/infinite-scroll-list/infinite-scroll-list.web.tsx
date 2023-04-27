@@ -5,6 +5,7 @@ import {
   useLayoutEffect,
   useMemo,
   isValidElement,
+  forwardRef,
 } from "react";
 
 import type { FlashListProps, ViewToken } from "@shopify/flash-list";
@@ -32,7 +33,8 @@ function InfiniteScrollListImpl<Item>(
     useWindowScroll?: boolean;
     preserveScrollPosition?: boolean;
     overscan?: number;
-  }
+  },
+  ref: any
 ) {
   const {
     data,
@@ -169,7 +171,13 @@ function InfiniteScrollListImpl<Item>(
         }}
       >
         <div
-          ref={parentRef}
+          ref={(v) => {
+            // @ts-ignore
+            parentRef.current = v;
+            if (ref) {
+              ref.current = v;
+            }
+          }}
           style={
             !useWindowScroll
               ? {
@@ -351,6 +359,6 @@ const ViewabilityTracker = ({
   );
 };
 
-const InfiniteScrollList = InfiniteScrollListImpl;
+const InfiniteScrollList = forwardRef(InfiniteScrollListImpl);
 
 export { InfiniteScrollList };

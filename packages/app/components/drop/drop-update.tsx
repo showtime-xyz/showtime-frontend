@@ -155,7 +155,7 @@ export const DropUpdate = ({
 
                 return (
                   <View
-                    tw="mb-4 rounded-xl bg-gray-100 py-4 px-4 dark:bg-gray-900"
+                    tw="mb-4 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-900"
                     style={{
                       opacity: isLive ? 0.3 : 1,
                     }}

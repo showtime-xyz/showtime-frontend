@@ -41,6 +41,11 @@ export const contentGatingType = {
     text: "Pre-Save to collect",
     typeName: "Pre-Save",
   },
+  multi_provider_music_save: {
+    icon: Spotify,
+    text: "Save on Spotify or Apple Music to collect",
+    typeName: "Music",
+  },
   music_presave: {
     icon: Spotify,
     text: "Pre-Save to collect",
@@ -103,7 +108,7 @@ export const ContentTypeTooltip = ({
               {/* @ts-expect-error className not supported */}
               <Icon color="white" width={20} height={20} className="z-10" />
               {edition.presave_release_date ? (
-                <Text tw="px-1 text-sm font-semibold text-white">
+                <Text tw="px-1 text-xs font-medium text-white">
                   Available on{" "}
                   {new Date(edition.presave_release_date).toLocaleString(
                     "default",
