@@ -357,7 +357,7 @@ const ListCardLargeScreen = ({
             </View>
           </View>
 
-          <View tw="mb-4 mt-4 justify-between space-y-2 px-4">
+          <View tw="mb-4 mt-4 h-12 justify-between space-y-2 px-4">
             {detailData?.data?.item?.multiple_owners_list &&
             detailData.data.item.multiple_owners_list.length > 0 ? (
               <ClaimedByReduced
@@ -365,9 +365,7 @@ const ListCardLargeScreen = ({
                 nft={nft}
                 size="regular"
               />
-            ) : (
-              <View tw="h-12" />
-            )}
+            ) : null}
           </View>
         </View>
         <View tw="ml-8 mr-4 min-w-[140px] self-center lg:min-w-[200px]">
