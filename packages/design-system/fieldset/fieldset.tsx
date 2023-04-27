@@ -101,7 +101,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
               style={[{ fontSize: 16 }]}
               ref={ref}
               editable={!disabled}
-              nativeID={inputId}
+              id={inputId}
               accessibilityLabel={accessibilityLabel}
               multiline={textInputProps.multiline}
               numberOfLines={textInputProps.numberOfLines ?? 1}
@@ -137,9 +137,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
       ) : null}
 
       <AnimateHeight>
-        {errorText ? (
-          <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
-        ) : null}
+        {errorText ? <ErrorText id={errorTextId}>{errorText}</ErrorText> : null}
       </AnimateHeight>
       <AnimateHeight>
         {helperText ? (
@@ -147,7 +145,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
             <View tw="h-4" />
             <Text
-              nativeID={helperTextId}
+              id={helperTextId}
               tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
             >
               {helperText}
@@ -159,20 +157,11 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
   );
 }
 
-export const ErrorText = ({
-  children,
-  nativeID,
-}: {
-  children: any;
-  nativeID?: string;
-}) => {
+export const ErrorText = ({ children, id }: { children: any; id?: string }) => {
   return (
     <>
       <View tw="h-4" />
-      <Text
-        nativeID={nativeID}
-        tw="text-sm font-semibold leading-6 text-red-500"
-      >
+      <Text id={id} tw="text-sm font-semibold leading-6 text-red-500">
         {children}
       </Text>
     </>

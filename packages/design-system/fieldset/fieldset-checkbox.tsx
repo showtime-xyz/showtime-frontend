@@ -52,9 +52,7 @@ function FieldsetCheckboxImpl({
         />
       </Pressable>
       <PlatformAnimateHeight>
-        {errorText ? (
-          <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
-        ) : null}
+        {errorText ? <ErrorText id={errorTextId}>{errorText}</ErrorText> : null}
       </PlatformAnimateHeight>
       <PlatformAnimateHeight>
         {helperText ? (
@@ -62,7 +60,7 @@ function FieldsetCheckboxImpl({
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
             <View tw="h-4" />
             <Text
-              nativeID={helperTextId}
+              id={helperTextId}
               tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
             >
               {helperText}

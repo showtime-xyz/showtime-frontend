@@ -32,9 +32,9 @@ export const MuteButton = memo(function MuteButton({
       }}
     >
       {muted ? (
-        <Muted nativeID="12344" color="#fff" width={size} height={size} />
+        <Muted id="12344" color="#fff" width={size} height={size} />
       ) : (
-        <Unmuted nativeID="12344" color="#fff" width={size} height={size} />
+        <Unmuted id="12344" color="#fff" width={size} height={size} />
       )}
     </Pressable>
   );

@@ -108,7 +108,7 @@ const CheckoutFormStripe = () => {
   };
   return (
     <>
-      <View tw="min-h-[380px] justify-end" nativeID="payment-form">
+      <View tw="min-h-[380px] justify-end" id="payment-form">
         <View tw="justify-end p-4">
           <LinkAuthenticationElement
             className="PaymentElement"

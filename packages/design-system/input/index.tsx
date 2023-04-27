@@ -136,7 +136,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           editable={!disabled}
           onFocus={onFocus}
           onBlur={onBlur}
-          nativeID={inputId}
+          id={inputId}
           selectionColor={isDark ? colors.gray["300"] : colors.gray["700"]}
           keyboardType={type}
           disabled={disabled}
@@ -163,7 +163,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       </View>
       {helperText ? (
         <Text
-          nativeID={helperTextId}
+          id={helperTextId}
           tw="text-sm text-gray-600 dark:text-gray-400"
           style={{ marginTop: 4, fontWeight: "600" }}
         >
@@ -172,7 +172,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       ) : null}
       {errorText ? (
         <Text
-          nativeID={errorTextId}
+          id={errorTextId}
           tw="text-sm text-red-500"
           style={{ marginTop: 4, fontWeight: "600" }}
         >
