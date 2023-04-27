@@ -162,9 +162,8 @@ const CardLargeScreen = ({
   return (
     <LikeContextProvider nft={nft}>
       <View
+        role="article"
         // @ts-ignore
-        // TODO: add accessibility types for RNW
-        accessibilityRole="article"
         dataset={Platform.select({ web: { testId: "nft-card" } })}
         style={[sizeStyle]}
         tw={[

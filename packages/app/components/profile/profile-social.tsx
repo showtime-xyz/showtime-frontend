@@ -59,7 +59,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             alignItems: "center",
           }}
           accessibilityLabel="Profile website"
-          accessibilityRole="link"
+          // @ts-ignore
+          role="link"
         >
           <LinkIcon
             color={isDark ? "#FFF" : colors.gray[900]}

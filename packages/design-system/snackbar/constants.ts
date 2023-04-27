@@ -1,12 +1,10 @@
-import { ViewStyle } from "react-native";
-
 import { MotiProps } from "moti";
 
 export type SnackbarTransitionType = "slide" | "scale" | "fade";
 
 export const PRESET_TRANSITION_MAP = new Map<
   SnackbarTransitionType,
-  Pick<MotiProps<ViewStyle>, "animate" | "from" | "exit">
+  Pick<MotiProps<any>, "animate" | "from" | "exit">
 >([
   [
     "fade",

@@ -33,7 +33,7 @@ export const Switch = (props: SwitchProps) => {
           onChange(!checked);
         }
       }, [onChange, checked])}
-      accessibilityRole="switch"
+      role="switch"
       accessibilityState={{ checked }}
       accessibilityLabel={accessibilityLabel}
     >

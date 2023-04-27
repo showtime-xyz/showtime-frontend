@@ -19,7 +19,7 @@ export type Props = {
   | "children"
   | "selectable"
   | "id"
-  | "accessibilityRole"
+  | "role"
   | "numberOfLines"
   | "ellipsizeMode"
   | "onPress"
@@ -40,7 +40,7 @@ export const Text = forwardRef<TextType, Props>(
       tw = "",
       id,
       htmlFor,
-      accessibilityRole,
+      role,
       numberOfLines,
       ellipsizeMode,
       pointerEvents,
@@ -57,7 +57,7 @@ export const Text = forwardRef<TextType, Props>(
         selectable={selectable}
         onLayout={onLayout}
         onTextLayout={onTextLayout}
-        accessibilityRole={accessibilityRole}
+        role={role}
         numberOfLines={numberOfLines}
         ellipsizeMode={ellipsizeMode}
         onPress={onPress}

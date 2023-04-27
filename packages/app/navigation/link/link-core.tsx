@@ -29,7 +29,7 @@ function LinkCore({
 
   return (
     <Component
-      accessibilityRole="link"
+      role="link"
       hitSlop={hitSlop}
       {...componentProps}
       onPress={async (e?: any) => {

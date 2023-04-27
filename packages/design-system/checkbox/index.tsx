@@ -51,12 +51,11 @@ export const Checkbox = ({
   return (
     <Pressable
       onPress={handleChange}
-      //@ts-ignore - web only prop
       onHoverIn={onHoverIn}
       onHoverOut={onHoverOut}
       onFocus={onFocus}
       onBlur={onBlur}
-      accessibilityRole="checkbox"
+      role="checkbox"
       accessibilityState={{ checked }}
       accessibilityLabel={accesibilityLabel}
       disabled={disabled}

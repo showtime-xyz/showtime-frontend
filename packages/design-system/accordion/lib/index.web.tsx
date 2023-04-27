@@ -54,12 +54,7 @@ const Root = (props: RootProps) => {
 
 const TriggerPressable = forwardRef<unknown, any>((props, ref) => {
   return (
-    <Pressable
-      accessibilityRole="button"
-      ref={ref}
-      {...props}
-      onPress={props.onClick}
-    >
+    <Pressable role="button" ref={ref} {...props} onPress={props.onClick}>
       {props.children}
     </Pressable>
   );
