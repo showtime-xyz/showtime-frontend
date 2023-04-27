@@ -5,6 +5,7 @@
     "module": "esnext",
     "noUnusedLocals": true,
     "paths": {
+      "@showtime-xyz/universal": ["./design-system"],
       "@showtime-xyz/universal.tailwind": ["./design-system/tailwind"],
       "@showtime-xyz/universal.view": ["./design-system/view"],
       "@showtime-xyz/universal.text": ["./design-system/text"],
