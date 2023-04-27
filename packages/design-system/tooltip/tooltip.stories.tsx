@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Platform, TouchableHighlight } from "react-native";
 
-import { Meta } from "@storybook/react";
-
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -11,11 +9,11 @@ import * as Tooltip from "./index";
 export default {
   component: View,
   title: "Components/Tooltip",
-} as Meta;
+};
 
 const TriggerView = Platform.OS === "web" ? View : (TouchableHighlight as any);
 
-export const Basic: React.FC<{}> = () => {
+export const Basic = () => {
   const [open, setOpen] = useState(false);
   return (
     <View tw="flex-1 items-center justify-center">
@@ -41,7 +39,7 @@ export const Basic: React.FC<{}> = () => {
               },
             })}
             classNmae
-            tw="cursor-pointer items-center justify-center rounded-lg bg-black py-2 px-4"
+            tw="cursor-pointer items-center justify-center rounded-lg bg-black px-4 py-2"
           >
             <Text tw="text-sm text-white">
               {Platform.OS === "web" ? "Hover to open it" : "Open it"}

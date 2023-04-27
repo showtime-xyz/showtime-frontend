@@ -1,7 +1,5 @@
 import { Dimensions, StyleSheet, Image } from "react-native";
 
-import { Meta } from "@storybook/react";
-
 import { View } from "@showtime-xyz/universal.view";
 
 import { LightBoxProvider, LightBox } from "./index";
@@ -9,7 +7,7 @@ import { LightBoxProvider, LightBox } from "./index";
 export default {
   component: LightBox,
   title: "Components/LightBox",
-} as Meta;
+};
 
 const { width } = Dimensions.get("window");
 const LightBoxBasic = () => {
@@ -31,7 +29,7 @@ const LightBoxBasic = () => {
     </View>
   );
 };
-export const Basic: React.FC<{}> = () => {
+export const Basic = () => {
   return (
     <LightBoxProvider>
       <LightBoxBasic />

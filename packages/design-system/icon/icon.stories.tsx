@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Meta } from "@storybook/react";
-
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -9,7 +7,7 @@ import * as Icon from "./index";
 
 export default {
   title: "Components/Icon",
-} as Meta;
+};
 
 type IconItemProps = {
   icon: any;

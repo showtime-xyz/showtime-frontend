@@ -30,8 +30,6 @@
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native-stack": "^6.9.12",
     "@shopify/flash-list": "^1.4.2",
-    "@storybook/addon-actions": "^7.0.4",
-    "@storybook/addon-controls": "^7.0.4",
     "@storybook/addon-ondevice-actions": "^6.5.3",
     "@storybook/addon-ondevice-backgrounds": "^6.5.3",
     "@storybook/addon-ondevice-controls": "^6.5.3",

@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { Meta } from "@storybook/react";
-
 import { View } from "@showtime-xyz/universal.view";
 
 import { Fieldset } from "./index";
@@ -9,7 +7,7 @@ import { Fieldset } from "./index";
 export default {
   component: Fieldset,
   title: "Components/Fieldset",
-} as Meta;
+};
 
 const options = [
   {
@@ -25,7 +23,7 @@ const options = [
     label: "Option C",
   },
 ];
-export const Primary: React.VFC<{}> = () => {
+export const Primary = () => {
   const [value, setValue] = useState(0);
   return (
     <View tw="flex-1 dark:bg-gray-300">
