@@ -185,7 +185,7 @@ const ListCardSmallScreen = ({
               href={href}
               onPress={handleOnPress}
             >
-              <View tw="h-36 w-36 items-center justify-center bg-gray-300 dark:bg-gray-700">
+              <View tw="h-24 w-24 items-center justify-center bg-gray-300 dark:bg-gray-700 sm:h-36 sm:w-36">
                 <ListMedia
                   item={nft}
                   resizeMode={ResizeMode.COVER}
@@ -218,14 +218,15 @@ const ListCardSmallScreen = ({
                       tw="text-xs text-gray-600 dark:text-gray-400"
                       numberOfLines={2}
                     >
-                      {description}
+                      {description} fwekfjnwekfjnwekfjnwek jwne kjwnefkjwe
+                      nfkwejnfkwjefn kwejfn wekjfnkw jefn
                     </Text>
                   </View>
                 ) : null}
               </View>
             </View>
 
-            <View tw="mb-2 mt-1 justify-between px-2">
+            <View tw="h-6 justify-between px-2">
               <ClaimedByReduced
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
@@ -233,7 +234,7 @@ const ListCardSmallScreen = ({
             </View>
           </View>
         </View>
-        <View tw="h-8 flex-row px-2 pb-10">
+        <View tw="h-12 flex-row items-center bg-gray-200 px-2 dark:bg-gray-800">
           {!!nft.creator_airdrop_edition_address && edition ? (
             <ClaimButton edition={edition} size="small" tw="flex-1" />
           ) : null}
