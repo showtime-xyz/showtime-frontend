@@ -1,5 +1,4 @@
 import { AlertProvider } from "@showtime-xyz/universal.alert";
-import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
@@ -16,17 +15,15 @@ if (typeof window !== "undefined") {
 export const decorators = [
   (Story) => (
     <View tw="dark:bg-gray-900 bg-gray-50 min-h-screen">
-      <BottomSheetModalProvider>
-        <SafeAreaProvider>
-          <ColorSchemeProvider>
-            <AlertProvider>
-              <SnackbarProvider>
-                <Story />
-              </SnackbarProvider>
-            </AlertProvider>
-          </ColorSchemeProvider>
-        </SafeAreaProvider>
-      </BottomSheetModalProvider>
+      <SafeAreaProvider>
+        <ColorSchemeProvider>
+          <AlertProvider>
+            <SnackbarProvider>
+              <Story />
+            </SnackbarProvider>
+          </AlertProvider>
+        </ColorSchemeProvider>
+      </SafeAreaProvider>
     </View>
   ),
 ];

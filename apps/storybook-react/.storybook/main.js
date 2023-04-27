@@ -1,8 +1,5 @@
 const path = require("path");
 const webpack = require("webpack");
-const {
-  resolveDesignSystemPackages,
-} = require("../../../plugins/resolve-design-system-packages");
 
 const getModule = (name) => path.join("node_modules", name);
 const INCLUDES = [
@@ -98,14 +95,6 @@ module.exports = {
           "@babel/plugin-proposal-class-properties",
           "@babel/plugin-proposal-export-namespace-from",
           "react-native-reanimated/plugin",
-          [
-            "module-resolver",
-            {
-              alias: {
-                ...resolveDesignSystemPackages(),
-              },
-            },
-          ],
         ],
       },
     });

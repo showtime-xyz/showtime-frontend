@@ -8267,7 +8267,6 @@ __metadata:
   resolution: "@showtime/storybook-react@workspace:apps/storybook-react"
   dependencies:
     "@babel/core": ^7.19.3
-    "@storybook/builder-webpack5": ~7.0.7
     "@storybook/nextjs": ^7.0.7
     "@storybook/react": ~7.0.7
     "@storybook/react-webpack5": ~7.0.7
@@ -8285,7 +8284,6 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hot-toast: ^2.4.0
-    react-native-reanimated: ~2.14.4
     react-native-web: ~0.18.12
     storybook: ^7.0.7
     tailwindcss: ^3.3.1
@@ -8840,7 +8838,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/builder-webpack5@npm:7.0.7, @storybook/builder-webpack5@npm:~7.0.7":
+"@storybook/builder-webpack5@npm:7.0.7":
   version: 7.0.7
   resolution: "@storybook/builder-webpack5@npm:7.0.7"
   dependencies:
