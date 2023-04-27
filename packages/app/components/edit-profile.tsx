@@ -497,7 +497,7 @@ export const EditProfile = () => {
                     ref={ref}
                     tw="mt-4"
                     label="Website"
-                    keyboardType="url"
+                    inputMode="url"
                     textContentType="URL"
                     placeholder="Your URL"
                     testID="website_url"

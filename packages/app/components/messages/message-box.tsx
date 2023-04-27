@@ -80,14 +80,15 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       <View tw="web:pb-0 flex-row items-center px-4 py-2" style={style}>
         <View tw="mr-2 flex-1">
           <TextInput
-            //@ts-ignore
-            ref={inputRef}
+            ref={inputRef as any}
             value={value}
             editable={!submitting}
             placeholder="Add a comment..."
             placeholderTextColor={isDark ? colors.gray[300] : colors.gray[500]}
             multiline={true}
-            keyboardType="twitter"
+            {...(Platform.OS === "ios"
+              ? { keyboardType: "twitter" }
+              : { inputMode: "text" })}
             tw="web:max-h-40 max-h-32 rounded-[32px] bg-gray-100 py-3 pl-[44px] pr-3 text-sm text-black dark:bg-gray-700 dark:text-white"
             onChangeText={handleTextChange}
             onFocus={onFocus}

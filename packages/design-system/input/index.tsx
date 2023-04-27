@@ -5,7 +5,7 @@ import { useOnFocus, useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Label } from "@showtime-xyz/universal.label";
 import {
   PressableScale,
-  Props as PressableProps,
+  PressableScaleProps,
 } from "@showtime-xyz/universal.pressable-scale";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -21,7 +21,7 @@ type InputProps = Pick<TextInputProps, "aria-label"> & {
   isInvalid?: boolean;
   id?: string;
   disabled?: boolean;
-  type?: TextInputProps["keyboardType"];
+  type?: TextInputProps["inputMode"];
   label?: string;
   errorText?: string;
   helperText?: string;
@@ -137,7 +137,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           onBlur={onBlur}
           id={inputId}
           selectionColor={isDark ? colors.gray["300"] : colors.gray["700"]}
-          keyboardType={type}
+          inputMode={type}
           disabled={disabled}
           autoFocus={autoFocus}
           accessibilityDescribedBy={Platform.select({
@@ -186,6 +186,6 @@ Input.displayName = "Input";
 
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement
-export const InputPressable = (props: PressableProps) => {
+export const InputPressable = (props: PressableScaleProps) => {
   return <PressableScale style={{ padding: 8 }} {...props} />;
 };

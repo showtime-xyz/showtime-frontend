@@ -57,7 +57,7 @@ export const AddEmailModal = () => {
           onSubmit={submitEmail}
           label="Email address"
           submitButtonLabel="Send"
-          keyboardType="email-address"
+          inputMode="email"
           textContentType="emailAddress"
           placeholder="Enter your email address"
         />
