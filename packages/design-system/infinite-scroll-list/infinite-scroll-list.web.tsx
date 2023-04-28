@@ -196,7 +196,9 @@ function InfiniteScrollListImpl<Item>(
           <div
             ref={scrollMarginOffseRef}
             style={{
-              height: rowVirtualizer.getTotalSize(),
+              height: rowVirtualizer.getTotalSize()
+                ? rowVirtualizer.getTotalSize()
+                : "100%",
               width: "100%",
               position: "relative",
             }}
@@ -204,8 +206,7 @@ function InfiniteScrollListImpl<Item>(
             <div
               style={{
                 position: "absolute",
-                top: 0,
-                left: 0,
+                inset: 0,
                 width: "100%",
                 transform: `translateY(${
                   renderedItems[0]?.start - rowVirtualizer.options.scrollMargin
