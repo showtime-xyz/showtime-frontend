@@ -90,7 +90,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             {...(Platform.OS === "ios"
               ? { keyboardType: "twitter" }
               : { inputMode: "text" })}
-            tw="ios:pb-1 max-h-20 w-full text-sm text-black dark:text-white"
+            tw="ios:pb-1 max-h-20 w-full flex-1 text-sm text-black dark:text-white"
             onChangeText={handleTextChange}
             onFocus={onFocus}
             onBlur={onBlur}
