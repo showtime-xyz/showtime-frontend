@@ -1,7 +1,7 @@
 import React from "react";
 import { Linking, Platform, StyleSheet } from "react-native";
 
-import { Spotify } from "@showtime-xyz/universal.icon";
+import { SpotifyPure } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -32,7 +32,7 @@ export const PlayOnSpotify = ({
     >
       <View tw="rounded-sm bg-black/60" style={StyleSheet.absoluteFillObject} />
       <View tw="flex-row items-center">
-        <Spotify color="white" width={20} height={20} />
+        <SpotifyPure color="white" width={20} height={20} />
         <Text
           style={{ lineHeight: 18 }}
           tw="ml-1 text-xs font-medium text-white"
