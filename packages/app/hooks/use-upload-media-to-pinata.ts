@@ -1,18 +1,10 @@
-import axios from "axios";
-import { v4 as uuid } from "uuid";
-
+import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException, captureMessage } from "app/lib/sentry";
-import { getFileFormData, getPinataToken } from "app/utilities";
+import { getFileFormData } from "app/utilities";
 
 export const useUploadMediaToPinata = () => {
-  const uploadMedia = async ({
-    file,
-    notSafeForWork,
-  }: {
-    file: File | string;
-    notSafeForWork: boolean;
-  }) => {
+  const uploadMedia = async ({ file }: { file: File | string }) => {
     try {
       const formData = new FormData();
       const fileFormData = await getFileFormData(file);
@@ -22,32 +14,17 @@ export const useUploadMediaToPinata = () => {
       }
 
       formData.append("file", fileFormData);
-      formData.append(
-        "pinataMetadata",
-        JSON.stringify({
-          name: uuid(),
-        })
-      );
-      if (notSafeForWork) {
-        formData.append(
-          "pinataContent",
-          JSON.stringify({ attributes: [{ value: "NSFW" }] })
-        );
-      }
 
-      const pinataToken = await getPinataToken();
-      const res = await axios.post(
-        "https://api.pinata.cloud/pinning/pinFileToIPFS",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${pinataToken}`,
-            "Content-Type": `multipart/form-data`,
-          },
-        }
-      );
+      const res = await axios({
+        url: `/v1/media/upload`,
+        method: "POST",
+        headers: {
+          "Content-Type": `multipart/form-data`,
+        },
+        data: formData,
+      });
 
-      return res.data.IpfsHash;
+      return res.ipfs_hash;
     } catch (error) {
       captureMessage("ipfs upload failed");
       captureException(error);
