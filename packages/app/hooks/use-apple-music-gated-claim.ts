@@ -9,6 +9,7 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+import { formatAPIErrorMessage } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -79,7 +80,7 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
       }
     } catch (error: any) {
       Logger.error("claimAppleMusicGatedDrop failed", error);
-      Alert.alert("Something went wrong", error.response?.data.error.message);
+      Alert.alert("Something went wrong", formatAPIErrorMessage(error));
       throw error;
     }
   });

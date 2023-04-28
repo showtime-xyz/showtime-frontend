@@ -64,7 +64,7 @@ export const ContentTypeTooltip = ({
 
   if (edition?.apple_music_track_url && edition?.spotify_track_url) {
     return (
-      <View tw="flex-row gap-1">
+      <View tw="flex-row" style={{ columnGap: 4 }}>
         <PlayOnSpotify edition={edition} />
         <PlayOnAppleMusic edition={edition} />
       </View>
