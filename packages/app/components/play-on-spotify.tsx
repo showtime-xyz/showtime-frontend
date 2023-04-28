@@ -16,7 +16,7 @@ export const PlayOnSpotify = ({
 }) => {
   return (
     <Pressable
-      tw="items-center justify-center px-1"
+      tw="items-center justify-center px-1 py-0.5"
       onPress={(e) => {
         if (Platform.OS === "web") {
           e.preventDefault();
@@ -30,7 +30,7 @@ export const PlayOnSpotify = ({
         }
       }}
     >
-      <View tw="rounded-sm bg-black/60" style={StyleSheet.absoluteFillObject} />
+      <View tw="rounded bg-black/60" style={StyleSheet.absoluteFillObject} />
       <View tw="flex-row items-center">
         <SpotifyPure color="white" width={18.11} height={18.11} />
         <Text
