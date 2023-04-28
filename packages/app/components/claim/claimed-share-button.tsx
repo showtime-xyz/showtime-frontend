@@ -7,11 +7,12 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { NFT } from "app/types";
 
-type ClaimedShareButtonProps = Pick<ButtonProps, "size" | "theme"> & {
+type ClaimedShareButtonProps = Pick<ButtonProps, "theme"> & {
   nft?: NFT;
   edition: CreatorEditionResponse;
   tw?: string;
   style?: StyleProp<ViewStyle>;
+  size?: ButtonProps["size"];
 };
 
 export const ClaimedShareButton = ({

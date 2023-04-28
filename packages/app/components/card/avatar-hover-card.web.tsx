@@ -6,7 +6,6 @@ import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -37,7 +36,6 @@ export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
   const bio = profileData?.profile.bio;
   const profileId = profileData?.profile.profile_id;
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
-  const { colorScheme } = useColorScheme();
 
   const isSelf = userId === profileId;
   const { onToggleFollow } = useFollow({
@@ -51,7 +49,6 @@ export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
           height={CARD_WIDTH / 3}
           width={CARD_WIDTH}
           show={isLoading}
-          colorMode={colorScheme as any}
           radius={0}
         >
           {profileData?.profile.cover_url && (

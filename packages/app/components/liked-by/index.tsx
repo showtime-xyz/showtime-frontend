@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import { Platform } from "react-native";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -21,11 +20,10 @@ export function LikedBy({ nft, max = 2, tw = "" }: Props) {
   //#region hooks
   const { data, loading } = useLikes(nft?.nft_id);
   const router = useRouter();
-  const { colorScheme } = useColorScheme();
   //#endregion
 
   if (!data && loading) {
-    return <Skeleton colorMode={colorScheme as any} width={100} height={8} />;
+    return <Skeleton width={100} height={8} />;
   }
 
   if (!nft || nft.like_count === 0 || !data || data?.likers?.length === 0) {

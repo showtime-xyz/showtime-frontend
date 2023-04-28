@@ -82,7 +82,8 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
           <TextInput
             ref={inputRef as any}
             value={value}
-            editable={!submitting}
+            // @ts-ignore
+            readOnly={submitting}
             placeholder="Add a comment..."
             placeholderTextColor={isDark ? colors.gray[300] : colors.gray[500]}
             multiline={true}

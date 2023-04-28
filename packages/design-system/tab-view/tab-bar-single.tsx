@@ -85,11 +85,7 @@ export const TabBarSingle = memo<IndependentTabBarProps>(function TabBarSingle({
           tw="animate-fade-in absolute bottom-0 h-[2px] bg-gray-900 transition-all dark:bg-white"
           style={{
             width: tabsWidth[propIndex],
-            transform: [
-              {
-                translateX: outputRange[propIndex],
-              },
-            ],
+            transform: `translateX:${outputRange[propIndex]}` as any,
           }}
         />
       </View>

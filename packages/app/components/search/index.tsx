@@ -3,7 +3,6 @@ import { Keyboard, Platform, TextInput } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Close as CloseIcon,
@@ -198,35 +197,18 @@ export const SearchItem = ({
 };
 
 export const SearchItemSkeleton = () => {
-  const { colorScheme } = useColorScheme();
-
   return (
     <View tw="px-4 pb-4">
       {[1, 2, 3].map((v) => {
         return (
           <View tw="flex-row pt-4" key={v}>
             <View tw="mr-2 overflow-hidden rounded-full">
-              <Skeleton
-                width={32}
-                height={32}
-                show
-                colorMode={colorScheme as any}
-              />
+              <Skeleton width={32} height={32} show />
             </View>
             <View>
-              <Skeleton
-                width={100}
-                height={14}
-                show
-                colorMode={colorScheme as any}
-              />
+              <Skeleton width={100} height={14} show />
               <View tw="h-1" />
-              <Skeleton
-                width={80}
-                height={14}
-                show
-                colorMode={colorScheme as any}
-              />
+              <Skeleton width={80} height={14} show />
             </View>
           </View>
         );

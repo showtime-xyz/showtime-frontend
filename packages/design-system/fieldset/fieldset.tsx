@@ -99,7 +99,8 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
               tw="flex-1 text-black outline-none focus-visible:ring-1 dark:text-white"
               style={[{ fontSize: 16 }]}
               ref={ref}
-              editable={!disabled}
+              // @ts-ignore
+              readOnly={disabled}
               id={inputId}
               multiline={textInputProps.multiline}
               numberOfLines={textInputProps.numberOfLines ?? 1}
