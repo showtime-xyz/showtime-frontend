@@ -271,15 +271,16 @@ export const useClaimNFT = (edition: IEdition) => {
       } else {
         Alert.alert(
           "Oops. An error occurred.",
-          formatAPIErrorMessage(e) ??
-            "Please contact us at help@showtime.xyz if this persists. Thanks!",
+          formatAPIErrorMessage(e) +
+            ". Please contact us at help@showtime.xyz if this persists. Thanks!",
           [
             {
               text: "Cancel",
               style: "cancel",
             },
             {
-              text: "Okay",
+              text: "Contact",
+              onPress: onSendFeedback,
             },
           ]
         );
