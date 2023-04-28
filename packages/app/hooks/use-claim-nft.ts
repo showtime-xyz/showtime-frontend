@@ -209,7 +209,8 @@ export const useClaimNFT = (edition: IEdition) => {
         return true;
       }
     } catch (e: any) {
-      dispatch({ type: "error", error: e?.message });
+      const errorMessage = formatAPIErrorMessage(e);
+      dispatch({ type: "error", error: errorMessage });
       forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
 
@@ -271,7 +272,7 @@ export const useClaimNFT = (edition: IEdition) => {
       } else {
         Alert.alert(
           "Oops. An error occurred.",
-          formatAPIErrorMessage(e) +
+          errorMessage +
             ". Please contact us at help@showtime.xyz if this persists. Thanks!",
           [
             {
