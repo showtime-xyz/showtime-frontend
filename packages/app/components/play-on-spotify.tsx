@@ -16,7 +16,7 @@ export const PlayOnSpotify = ({
 }) => {
   return (
     <Pressable
-      tw="px-1 py-0.5"
+      tw="items-center justify-center px-1"
       onPress={(e) => {
         if (Platform.OS === "web") {
           e.preventDefault();
