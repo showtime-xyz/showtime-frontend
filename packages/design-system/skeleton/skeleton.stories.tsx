@@ -1,7 +1,5 @@
 import { View, Text } from "@showtime-xyz/universal";
 
-import { View, Text } from "@showtime-xyz/universal";
-
 import { Skeleton } from "./index";
 
 export default {
