@@ -17,7 +17,7 @@ import { toast } from "design-system/toast";
 import { DropContext } from "../context/drop-context";
 import { useSendFeedback } from "./use-send-feedback";
 
-export const MAX_FILE_SIZE = 50 * 1024 * 1024; // in bytes
+export const MAX_FILE_SIZE = 30 * 1024 * 1024; // in bytes
 
 type IEdition = {
   contract_address: string;
@@ -197,13 +197,12 @@ export const useDropNFT = () => {
 
       const ipfsHash = await uploadMedia({
         file: params.file,
-        notSafeForWork: params.notSafeForWork,
       });
 
       if (!ipfsHash) {
         dispatch({
           type: "error",
-          error: "Failed to upload the media on IPFS. Please try again!",
+          error: "Failed to upload the media onto IPFS. Please try again!",
         });
         return;
       }
