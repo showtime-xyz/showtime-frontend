@@ -842,15 +842,17 @@ export const getWebImageSize = (file: File) => {
 };
 
 export const formatAPIErrorMessage = (error: AxiosError | Error) => {
+  let messages = [];
   if (axios.isAxiosError(error)) {
     const res = error.response?.data;
-    let messages = [];
     if (res.errors) {
       messages = res.errors.map((e: any) => e.message);
     } else if (res.error) {
       messages.push(res.error.message);
     }
-
-    return messages.join("\n");
+  } else if (error.message) {
+    messages.push(error.message);
   }
+
+  return messages.join("\n");
 };

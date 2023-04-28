@@ -268,7 +268,7 @@ export const useClaimNFT = (edition: IEdition) => {
         }
       } else if (e?.response?.status === 440) {
         Alert.alert("Wrong password or wrong location", "Please try again!");
-      } else if (e?.response?.status === 500) {
+      } else {
         Alert.alert(
           "Oops. An error occurred.",
           formatAPIErrorMessage(e) ??
