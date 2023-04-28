@@ -34,7 +34,7 @@ export const PlayOnSpotify = ({
       <View tw="flex-row items-center">
         <SpotifyPure color="white" width={18.11} height={18.11} />
         <Text
-          style={{ lineHeight: 18 }}
+          style={{ marginTop: 0, marginBottom: 0 }}
           tw="ml-1 text-xs font-medium text-white"
         >
           Play on Spotify
