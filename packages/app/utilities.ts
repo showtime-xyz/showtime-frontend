@@ -1,6 +1,7 @@
 import React from "react";
 import { Platform } from "react-native";
 
+import axios, { AxiosError } from "axios";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
@@ -838,4 +839,18 @@ export const getWebImageSize = (file: File) => {
     img.onerror = reject;
   });
   return promise;
+};
+
+export const formatAPIErrorMessage = (error: AxiosError | Error) => {
+  if (axios.isAxiosError(error)) {
+    const res = error.response?.data;
+    let messages = [];
+    if (res.errors) {
+      messages = res.errors.map((e: any) => e.message);
+    } else if (res.error) {
+      messages.push(res.error.message);
+    }
+
+    return messages.join("\n");
+  }
 };

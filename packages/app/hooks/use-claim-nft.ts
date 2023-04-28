@@ -15,7 +15,11 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { IEdition } from "app/types";
-import { getFormatDistanceToNowStrict, ledgerWalletHack } from "app/utilities";
+import {
+  formatAPIErrorMessage,
+  getFormatDistanceToNowStrict,
+  ledgerWalletHack,
+} from "app/utilities";
 
 import { useSendFeedback } from "./use-send-feedback";
 import { useWallet } from "./use-wallet";
@@ -267,15 +271,15 @@ export const useClaimNFT = (edition: IEdition) => {
       } else if (e?.response?.status === 500) {
         Alert.alert(
           "Oops. An error occurred.",
-          "Please contact us at help@showtime.xyz if this persists. Thanks!",
+          formatAPIErrorMessage(e) ??
+            "Please contact us at help@showtime.xyz if this persists. Thanks!",
           [
             {
               text: "Cancel",
               style: "cancel",
             },
             {
-              text: "Contact",
-              onPress: onSendFeedback,
+              text: "Okay",
             },
           ]
         );
