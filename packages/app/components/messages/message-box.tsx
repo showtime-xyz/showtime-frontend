@@ -78,29 +78,26 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     );
     return (
       <View tw="web:pb-0 flex-row items-center px-4 py-2" style={style}>
-        <View tw="mr-2 flex-1">
+        <View tw="mr-2 flex-1 flex-row items-center rounded-[32px] bg-gray-100 p-2 pl-3 dark:bg-gray-700">
+          <Avatar alt="Avatar" tw="mr-2" size={24} url={userAvatar} />
           <TextInput
             ref={inputRef as any}
             value={value}
-            // @ts-ignore
-            readOnly={submitting}
             placeholder="Add a comment..."
+            enterkeyhint="send"
             placeholderTextColor={isDark ? colors.gray[300] : colors.gray[500]}
             multiline={true}
             {...(Platform.OS === "ios"
               ? { keyboardType: "twitter" }
               : { inputMode: "text" })}
-            tw="web:max-h-40 max-h-32 rounded-[32px] bg-gray-100 py-3 pl-[44px] pr-3 text-sm text-black dark:bg-gray-700 dark:text-white"
+            tw="web:max-h-40 ios:pb-1 max-h-32 text-sm text-black dark:text-white"
             onChangeText={handleTextChange}
             onFocus={onFocus}
             onBlur={onBlur}
             maxLength={500}
-          />
-          <Avatar
-            alt="Avatar"
-            tw="absolute left-3 top-1.5"
-            size={24}
-            url={userAvatar}
+            // @ts-ignore RNW >= v19 & RN >= 0.71 supports these props
+            readOnly={submitting}
+            rows={1}
           />
         </View>
         <Button

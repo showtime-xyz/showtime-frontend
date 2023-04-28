@@ -8,11 +8,11 @@ import { SkeletonProps } from "./type";
 const StyledSkeleton = styled(MotiSkeleton);
 
 function Skeleton({ tw, colorMode: colorModeProps, ...props }: SkeletonProps) {
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
 
   return (
     <StyledSkeleton
-      colorMode={colorModeProps ?? (colorMode as any)}
+      colorMode={colorModeProps ?? colorScheme ?? "light"}
       {...props}
       tw={Array.isArray(tw) ? tw.join(" ") : tw}
     />

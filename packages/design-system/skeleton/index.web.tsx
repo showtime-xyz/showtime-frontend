@@ -16,13 +16,13 @@ function Skeleton({
   width,
   height,
   show = true,
-  colorMode: colorModeProps = "dark",
+  colorMode: colorModeProps,
   children,
   radius = 8,
   backgroundColor,
   ...props
 }: Props) {
-  const colorMode = useColorScheme();
+  const { colorScheme } = useColorScheme();
   if (!show) {
     return children;
   }
@@ -35,7 +35,8 @@ function Skeleton({
         width,
         height,
         borderRadius: radius,
-        backgroundColor: baseColors[colorModeProps ?? colorMode].secondary,
+        backgroundColor:
+          baseColors[colorModeProps ?? colorScheme ?? "light"].secondary,
       }}
     />
   );
