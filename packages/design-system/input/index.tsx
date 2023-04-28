@@ -133,7 +133,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           onChangeText={onChangeText}
           placeholder={placeholder}
           // @ts-ignore
-          readOnly={!disabled}
+          readOnly={disabled}
           onFocus={onFocus}
           onBlur={onBlur}
           id={inputId}
