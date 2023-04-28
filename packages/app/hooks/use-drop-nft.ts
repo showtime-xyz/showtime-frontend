@@ -10,7 +10,7 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { GatingType } from "app/types";
-import { delay, getFileMeta } from "app/utilities";
+import { delay, formatAPIErrorMessage, getFileMeta } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -276,7 +276,8 @@ export const useDropNFT = () => {
       });
       callback?.();
     } catch (e: any) {
-      dispatch({ type: "error", error: e?.message });
+      const errorMessage = formatAPIErrorMessage(e);
+      dispatch({ type: "error", error: errorMessage });
       Logger.error("nft drop failed", e);
 
       if (e?.response?.status === 420) {
@@ -284,12 +285,11 @@ export const useDropNFT = () => {
           "Wow, you love drops!",
           "Only one drop per day is allowed. Come back tomorrow!"
         );
-      }
-
-      if (e?.response?.status === 500) {
+      } else {
         Alert.alert(
           "Oops. An error occurred.",
-          "Please contact us at help@showtime.xyz if this persists. Thanks!",
+          errorMessage +
+            ". Please contact us at help@showtime.xyz if this persists. Thanks!",
           [
             {
               text: "Cancel",
