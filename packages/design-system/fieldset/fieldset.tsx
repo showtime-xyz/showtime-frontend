@@ -23,7 +23,7 @@ import { View } from "@showtime-xyz/universal.view";
 export type FieldsetProps = {
   errorText?: any;
   label?: string | JSX.Element;
-  helperText?: string;
+  helperText?: string | JSX.Element;
   helperTextTw?: string;
   disabled?: boolean;
   tw?: string;
