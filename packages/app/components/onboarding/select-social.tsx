@@ -62,7 +62,7 @@ export const SelectSocial = () => {
             type="twitter"
             isConnected={user?.data?.profile?.social_login_connections?.twitter}
           />
-          <ConnectButton
+          {/* <ConnectButton
             title="Connect Instagram"
             titleConnected="Connected Instagram"
             icon={<InstagramColorful color="#4A99E9" width={20} height={20} />}
@@ -70,7 +70,7 @@ export const SelectSocial = () => {
             isConnected={
               user?.data?.profile?.social_login_connections?.instagram
             }
-          />
+          /> */}
 
           <SkipButton />
         </View>
