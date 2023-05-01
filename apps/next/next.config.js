@@ -29,7 +29,7 @@ const nextConfig = {
     scrollRestoration: true,
     swcPlugins: [
       // ["react-native-reanimated-swc-plugin"],
-      ["@nissy-dev/swc-plugin-react-native-web", { commonjs: false }],
+      ["@nissy-dev/swc-plugin-react-native-web", { commonjs: true }],
     ],
     fontLoaders: [
       { loader: "@next/font/google", options: { subsets: ["latin"] } },
@@ -70,6 +70,7 @@ const nextConfig = {
     "react-native-reanimated",
     "react-native-gesture-handler",
     "react-native-svg",
+    "react-native-avoid-softinput",
     "react-native-safe-area-context",
     "react-native-mmkv",
     "react-native-tab-view-next",

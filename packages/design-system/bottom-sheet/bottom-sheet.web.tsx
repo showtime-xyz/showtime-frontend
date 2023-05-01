@@ -1,5 +1,3 @@
 import { Fragment } from "react";
 
-export const BottomSheet = Fragment;
-
-export const BottomSheetTextInput = Fragment;
+export { Fragment as BottomSheet, Fragment as BottomSheetTextInput };
