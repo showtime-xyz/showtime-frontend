@@ -679,11 +679,18 @@ export const DropMusic = () => {
                       <Fieldset
                         ref={ref}
                         helperText={
-                          isSaveDrop
-                            ? "Press the ⓘ button to learn how to get that link. Please note that providing a Playlist link is not allowed."
-                            : `Go to Spotify for Artists → Music → Upcoming. Click "Copy URI" and paste it here. Track URI also allowed.`
+                          isSaveDrop ? (
+                            "Press the ⓘ button to learn how to get that link. Please note that providing a Playlist link is not allowed."
+                          ) : (
+                            <Text tw="text-sm leading-6 text-gray-700 dark:text-gray-300">
+                              <Text tw="text-sm font-bold leading-6 text-gray-700 dark:text-gray-300">
+                                {`Go to Spotify for Artists → Music → Upcoming. `}
+                              </Text>
+                              Click "Copy URI" and paste it here. Track URI also
+                              allowed.
+                            </Text>
+                          )
                         }
-                        helperTextTw="font-semibold"
                         label={
                           <View tw="flex-row gap-1">
                             <Spotify
