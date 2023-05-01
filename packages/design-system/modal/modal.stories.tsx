@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { Meta } from "@storybook/react";
-
 import { BottomSheetScrollView } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Close } from "@showtime-xyz/universal.icon";
@@ -14,13 +12,13 @@ import { ModalHeader } from "./modal.header";
 export default {
   component: ModalHeader,
   title: "Components/Modal",
-} as Meta;
+};
 
 const Container = (props: any) => {
   return <View tw={"bg-black p-10 dark:bg-white"}>{props.children}</View>;
 };
 
-export const HeaderDefault: React.VFC<{}> = () => {
+export const HeaderDefault = () => {
   return (
     <Container>
       <ModalHeader title="Modal Header Title" tw={"bg-white dark:bg-black"} />
@@ -28,7 +26,7 @@ export const HeaderDefault: React.VFC<{}> = () => {
   );
 };
 
-export const HeaderWithEndContent: React.VFC<{}> = () => {
+export const HeaderWithEndContent = () => {
   return (
     <Container>
       <ModalHeader
@@ -44,7 +42,7 @@ export const HeaderWithEndContent: React.VFC<{}> = () => {
   );
 };
 
-export const Default: React.VFC<{}> = () => {
+export const Default = () => {
   const [visible, setVisible] = useState(false);
 
   const onClose = () => {
@@ -66,7 +64,7 @@ export const Default: React.VFC<{}> = () => {
   );
 };
 
-export const WithScrollable: React.VFC<{}> = () => {
+export const WithScrollable = () => {
   const [visible, setVisible] = useState(false);
 
   const onClose = () => {

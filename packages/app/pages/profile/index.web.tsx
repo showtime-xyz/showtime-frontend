@@ -1,13 +1,11 @@
 import { useEffect } from "react";
 
-import dynamic from "next/dynamic";
 import { SWRConfig } from "swr";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
-const ProfileScreen = dynamic(() => import("app/screens/profile"), {
-  ssr: false,
-});
+import ProfileScreen from "app/screens/profile";
+
 function ProfileRouter({ fallback = {} }: { fallback?: object }) {
   const router = useRouter();
 

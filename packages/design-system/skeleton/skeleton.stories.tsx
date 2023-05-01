@@ -1,10 +1,22 @@
-import { Meta } from "@storybook/react";
+import { View, Text } from "@showtime-xyz/universal";
 
 import { Skeleton } from "./index";
 
 export default {
   component: Skeleton,
   title: "Components/Skeleton",
-} as Meta;
+};
 
-export const SkeletonBlack: React.VFC<{}> = () => <Skeleton />;
+export const SkeletonBasic = () => {
+  return (
+    <View tw="flex-1 items-center justify-center">
+      <Text tw="text-2xl">Dark</Text>
+      <View tw="h-2" />
+      <Skeleton width={220} height={220} colorMode="dark" />
+      <View tw="h-8" />
+      <Text tw="text-2xl">Light</Text>
+      <View tw="h-2" />
+      <Skeleton width={220} height={220} colorMode="light" />
+    </View>
+  );
+};

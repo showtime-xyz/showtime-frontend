@@ -1,8 +1,6 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 
-import { Meta } from "@storybook/react";
-
 import { DateTimePicker } from "./date-time-picker";
 
 export default {
@@ -11,9 +9,9 @@ export default {
   parameters: {
     chromatic: { disableSnapshot: true },
   },
-} as Meta;
+};
 
-export const Basic: React.FC<{}> = () => {
+export const Basic = () => {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState(new Date());
 

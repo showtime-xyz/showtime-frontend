@@ -61,7 +61,6 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
   const inputId = useId();
   const helperTextId = useId();
   const errorTextId = useId();
-  console.log(123);
 
   return (
     <View

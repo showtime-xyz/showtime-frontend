@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Platform, StatusBar, Text, View } from "react-native";
 
-import { Meta } from "@storybook/react";
 import { useSharedValue } from "react-native-reanimated";
 
 import { CollapsibleTabView } from "./index";
@@ -11,7 +10,7 @@ import { Route } from "./types";
 export default {
   component: CollapsibleTabView,
   title: "Components/CollapsibleTabView",
-} as Meta;
+};
 
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
 const TabScene = ({ route }: any) => {
@@ -85,7 +84,7 @@ export const Basic: React.FC = () => {
       onIndexChange={setIndex}
       lazy
       renderScrollHeader={renderHeader}
-      minHeaderHeight={44 + StatusBarHeight}
+      minHeaderHeight={Platform.OS === "web" ? 0 : 44 + StatusBarHeight}
       animationHeaderPosition={animationHeaderPosition}
       animationHeaderHeight={animationHeaderHeight}
       style={Platform.select({

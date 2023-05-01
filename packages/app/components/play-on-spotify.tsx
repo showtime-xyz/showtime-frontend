@@ -1,7 +1,7 @@
 import React from "react";
 import { Linking, Platform, StyleSheet } from "react-native";
 
-import { Spotify } from "@showtime-xyz/universal.icon";
+import { SpotifyPure } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -16,7 +16,7 @@ export const PlayOnSpotify = ({
 }) => {
   return (
     <Pressable
-      tw="px-1 py-0.5"
+      tw="items-center justify-center px-1 py-0.5"
       onPress={(e) => {
         if (Platform.OS === "web") {
           e.preventDefault();
@@ -30,11 +30,11 @@ export const PlayOnSpotify = ({
         }
       }}
     >
-      <View tw="rounded-sm bg-black/60" style={StyleSheet.absoluteFillObject} />
+      <View tw="rounded bg-black/60" style={StyleSheet.absoluteFillObject} />
       <View tw="flex-row items-center">
-        <Spotify color="white" width={20} height={20} />
+        <SpotifyPure color="white" width={18.11} height={18.11} />
         <Text
-          style={{ lineHeight: 18 }}
+          style={{ marginTop: 0, marginBottom: 0 }}
           tw="ml-1 text-xs font-medium text-white"
         >
           Play on Spotify

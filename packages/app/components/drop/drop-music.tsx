@@ -162,11 +162,11 @@ export const DropMusic = () => {
             spotifyUrl: yup
               .string()
               .test(
-                "no-album-or-playlist",
-                "Spotify Album and Playlist URLs are not allowed.",
+                "no-playlist",
+                "Spotify Playlist URLs are not allowed.",
                 (value) => {
                   if (!value) return true;
-                  return !/(album|playlist)/i.test(value);
+                  return !/(playlist)/i.test(value);
                 }
               ),
             appleMusicTrackUrl: yup.string(),
@@ -662,8 +662,8 @@ export const DropMusic = () => {
                         ref={ref}
                         helperText={
                           isSaveDrop
-                            ? "Press the ⓘ button to learn how to get that link. Please note that providing an Album or Playlist link is not allowed."
-                            : "Please note that Album or Playlist URI is not allowed. Track URI is optional: you can drop now and enter the song link once it's out on Spotify instead. To obtain your track URI, you may need to contact your distributor for assistance."
+                            ? "Press the ⓘ button to learn how to get that link. Please note that providing an Playlist link is not allowed."
+                            : "Please note that Playlist URI is not allowed. Track URI is optional: you can drop now and enter the song link once it's out on Spotify instead. To obtain your track URI, you may need to contact your distributor for assistance."
                         }
                         label={
                           <View tw="flex-row gap-1">

@@ -1,5 +1,3 @@
-import { Meta } from "@storybook/react";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowRight } from "@showtime-xyz/universal.icon";
@@ -12,8 +10,8 @@ import { SnackbarProvider, useSnackbar } from "./index";
 export default {
   component: SnackbarProvider,
   title: "Components/Snackbar",
-} as Meta;
-export const Basic: React.FC<{}> = () => {
+};
+export const Basic = () => {
   const snackbar = useSnackbar();
   const isDark = useIsDarkMode();
   const toggleSnackbar = (cb: () => void) => {

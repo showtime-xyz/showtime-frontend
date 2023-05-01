@@ -221,7 +221,7 @@ function MessageRowComponent({
       <View tw="flex flex-row items-start px-4 py-1.5">
         {hasParent && <View tw="ml-4" collapsable={true} />}
         <View tw="justify-start">
-          <Link href={`/@${username || address}`} tw="-mb-1 -mt-1">
+          <View tw="-mb-1 -mt-1">
             <Button
               variant="secondary"
               size="small"
@@ -236,7 +236,7 @@ function MessageRowComponent({
                 alt="MessageRow Avatar"
               />
             </Button>
-          </Link>
+          </View>
         </View>
         <View tw={["ml-2 flex-1", isLastReply ? "mb-1" : "-mb-0.5"]}>
           <Text tw="web:pr-12 pr-7 text-sm text-gray-900 dark:text-gray-100">

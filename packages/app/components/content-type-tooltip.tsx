@@ -41,6 +41,11 @@ export const contentGatingType = {
     text: "Pre-Save to collect",
     typeName: "Pre-Save",
   },
+  multi_provider_music_save: {
+    icon: Spotify,
+    text: "Save on Spotify or Apple Music to collect",
+    typeName: "Music",
+  },
   music_presave: {
     icon: Spotify,
     text: "Pre-Save to collect",
@@ -59,7 +64,7 @@ export const ContentTypeTooltip = ({
 
   if (edition?.apple_music_track_url && edition?.spotify_track_url) {
     return (
-      <View tw="flex-row gap-1">
+      <View tw="flex-row" style={{ columnGap: 4 }}>
         <PlayOnSpotify edition={edition} />
         <PlayOnAppleMusic edition={edition} />
       </View>
@@ -68,10 +73,6 @@ export const ContentTypeTooltip = ({
 
   if (edition?.apple_music_track_url) {
     return <PlayOnAppleMusic edition={edition} />;
-  }
-
-  if (edition?.spotify_track_url) {
-    return <PlayOnSpotify edition={edition} />;
   }
 
   if (
