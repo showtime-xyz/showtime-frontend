@@ -680,9 +680,10 @@ export const DropMusic = () => {
                         ref={ref}
                         helperText={
                           isSaveDrop
-                            ? "Press the ⓘ button to learn how to get that link. Please note that providing an Playlist link is not allowed."
+                            ? "Press the ⓘ button to learn how to get that link. Please note that providing a Playlist link is not allowed."
                             : `Go to Spotify for Artists → Music → Upcoming. Click "Copy URI" and paste it here. Track URI also allowed.`
                         }
+                        helperTextTw="font-semibold"
                         label={
                           <View tw="flex-row gap-1">
                             <Spotify
@@ -725,8 +726,8 @@ export const DropMusic = () => {
                         value={value}
                         placeholder={
                           isSaveDrop
-                            ? "spotify:album:27ftYHLeunzcSzb33Wk1hf"
-                            : "https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
+                            ? "https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
+                            : "spotify:album:27ftYHLeunzcSzb33Wk1hf"
                         }
                         errorText={
                           errors.spotifyUrl?.message || errors[""]?.message

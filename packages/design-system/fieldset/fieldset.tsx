@@ -24,6 +24,7 @@ export type FieldsetProps = {
   errorText?: any;
   label?: string | JSX.Element;
   helperText?: string;
+  helperTextTw?: string;
   disabled?: boolean;
   tw?: string;
   select?: SelectProps;
@@ -43,6 +44,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
     errorText,
     accessibilityLabel,
     helperText,
+    helperTextTw = "",
     label,
     disabled,
     select,
@@ -153,7 +155,10 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
             <View tw="h-4" />
             <Text
               nativeID={helperTextId}
-              tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
+              tw={[
+                "text-sm leading-6 text-gray-700 dark:text-gray-300",
+                helperTextTw,
+              ]}
             >
               {helperText}
             </Text>
