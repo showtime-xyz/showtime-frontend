@@ -141,7 +141,12 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
           <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
         ) : null}
       </AnimateHeight>
-      <AnimateHeight>
+      <AnimateHeight
+        extraHeight={Platform.select({
+          ios: 0,
+          default: 4,
+        })}
+      >
         {helperText ? (
           <>
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
