@@ -75,10 +75,6 @@ export const ContentTypeTooltip = ({
     return <PlayOnAppleMusic edition={edition} />;
   }
 
-  if (edition?.spotify_track_url) {
-    return <PlayOnSpotify edition={edition} />;
-  }
-
   if (
     (edition?.gating_type === "spotify_presave" ||
       edition?.gating_type === "music_presave") &&

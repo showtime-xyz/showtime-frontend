@@ -30,13 +30,13 @@ export const PlayOnAppleMusic = ({
       }}
     >
       <View
-        tw="items-center justify-center rounded-sm bg-black/60"
+        tw="items-center justify-center rounded bg-black/60"
         style={StyleSheet.absoluteFillObject}
       />
       <View tw="mt-[1px] h-full flex-row items-center justify-center">
         <ListenOnAppleMusic
           height={20}
-          width={(20 * 125.1) / 27.78}
+          width={20 * (125.1 / 27.78)}
           color="white"
         />
       </View>

@@ -8040,7 +8040,6 @@ __metadata:
     expo-media-library: ~15.2.3
     expo-modules-core: ~1.2.6
     expo-navigation-bar: ~2.1.1
-    expo-next-react-navigation: ^2.0.2
     expo-notifications: ~0.18.1
     expo-splash-screen: ~0.18.2
     expo-status-bar: ~1.4.4
@@ -8100,7 +8099,7 @@ __metadata:
     readable-stream: 4.3.0
     semver: ^7.4.0
     sentry-expo: ~6.1.1
-    solito: 3.2.0
+    solito: ~3.2.4
     stream-browserify: ^3.0.0
     string_decoder: ~1.3.0
     timers-browserify: ^2.0.12
@@ -19413,25 +19412,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-navigation-core@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "expo-navigation-core@npm:2.0.0"
-  dependencies:
-    lodash.get: ^4.4.2
-  checksum: 4d979266fb5b90a78dc1317b8004d6f43088393decb311c91e3426e8e408a9fc474e51969469e0d8dc875042829141eeb342e297c405bab8f0d11c55d80a89c2
-  languageName: node
-  linkType: hard
-
-"expo-next-react-navigation@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "expo-next-react-navigation@npm:2.0.2"
-  dependencies:
-    expo-navigation-core: ^2.0.0
-    lodash.get: ^4.4.2
-  checksum: ef0a173a5b09192b9b8c65698f201001d7c926958106b0f8640c8af116b680e7a94711bfb8177f95186a60bff86077b23bbec12e19f67cb38f80636c146a5323
-  languageName: node
-  linkType: hard
-
 "expo-notifications@npm:~0.18.1":
   version: 0.18.1
   resolution: "expo-notifications@npm:0.18.1"
@@ -24416,13 +24396,6 @@ __metadata:
   version: 4.5.0
   resolution: "lodash.foreach@npm:4.5.0"
   checksum: a940386b158ca0d62994db41fc16529eb8ae67138f29ced38e91f912cb5435d1b0ed34b18e6f7b9ddfc32ab676afc6dfec60d1e22633d8e3e4b33413402ab4ad
-  languageName: node
-  linkType: hard
-
-"lodash.get@npm:^4.4.2":
-  version: 4.4.2
-  resolution: "lodash.get@npm:4.4.2"
-  checksum: e403047ddb03181c9d0e92df9556570e2b67e0f0a930fcbbbd779370972368f5568e914f913e93f3b08f6d492abc71e14d4e9b7a18916c31fa04bd2306efe545
   languageName: node
   linkType: hard
 
@@ -31148,10 +31121,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"solito@npm:3.2.0":
-  version: 3.2.0
-  resolution: "solito@npm:3.2.0"
-  checksum: 5bcb3c93a3f8bfc9ef5a35b893c61ab067dfeec68e04ecdd232139d237615906e46c941087dcfc2569262bc87a689e501e9547b5f724ee4a16bd6ab9964e76fa
+"solito@npm:~3.2.4":
+  version: 3.2.6
+  resolution: "solito@npm:3.2.6"
+  checksum: c8ff1732b969748b7be71037a284927d7e57965fca1b405d168a6bf288ea9810baa8e19413752d06d71edc51799879db657ec894ebb9a354d3cf57fa4d7c629a
   languageName: node
   linkType: hard
 

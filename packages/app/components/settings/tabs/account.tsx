@@ -51,7 +51,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
         <ConnectSpotify />
         <ConnectAppleMusic />
         <WalletSocialAccounts />
-        <ConnectInstagram providerId={instagramProviderId} />
+        {/* <ConnectInstagram providerId={instagramProviderId} /> */}
       </View>
     </SettingScrollComponent>
   );

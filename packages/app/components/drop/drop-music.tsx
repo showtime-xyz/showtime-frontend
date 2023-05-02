@@ -92,20 +92,38 @@ const durationOptions = [
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
 const getDefaultDate = () => {
-  // Get a JavaScript date that represents the next occurrence of 12:00 AM (midnight)
-  // that is at least 24 hours from the current time.
   const now = new Date();
-  const targetDate = new Date(
-    Date.UTC(
+  const day = now.getDay();
+  // Local time 12:00AM the upcoming Friday is ideal.
+  const minus = 5 - day;
+
+  if (day <= 4) {
+    const thisWeek = new Date(
+      new Date(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() + 1,
+        0,
+        0,
+        0
+      )
+    );
+    const thisWeekFriday = thisWeek.setDate(thisWeek.getDate() + minus);
+    return new Date(thisWeekFriday);
+  }
+  // If not, fallback to 12:00AM local time the next week
+  const nextweek = new Date(
+    new Date(
       now.getUTCFullYear(),
       now.getUTCMonth(),
-      now.getUTCDate() + 2,
+      now.getUTCDate() + 1,
       0,
       0,
       0
     )
   );
-  return targetDate;
+  const nextFriday = nextweek.setDate(nextweek.getDate() + minus + 7);
+  return new Date(nextFriday);
 };
 
 export const DropMusic = () => {
@@ -162,11 +180,11 @@ export const DropMusic = () => {
             spotifyUrl: yup
               .string()
               .test(
-                "no-album-or-playlist",
-                "Spotify Album and Playlist URLs are not allowed.",
+                "no-playlist",
+                "Please only enter Track URI. You can fill this later.",
                 (value) => {
                   if (!value) return true;
-                  return !/(album|playlist)/i.test(value);
+                  return !/(playlist)/i.test(value);
                 }
               ),
             appleMusicTrackUrl: yup.string(),
@@ -661,9 +679,17 @@ export const DropMusic = () => {
                       <Fieldset
                         ref={ref}
                         helperText={
-                          isSaveDrop
-                            ? "Press the ⓘ button to learn how to get that link. Please note that providing an Album or Playlist link is not allowed."
-                            : "Please note that Album or Playlist URI is not allowed. Track URI is optional: you can drop now and enter the song link once it's out on Spotify instead. To obtain your track URI, you may need to contact your distributor for assistance."
+                          isSaveDrop ? (
+                            "Press the ⓘ button to learn how to get that link. Please note that providing a Playlist link is not allowed."
+                          ) : (
+                            <Text tw="text-sm leading-6 text-gray-700 dark:text-gray-300">
+                              <Text tw="text-sm font-bold leading-6 text-gray-700 dark:text-gray-300">
+                                {`Go to Spotify for Artists → Music → Upcoming. `}
+                              </Text>
+                              Click "Copy URI" and paste it here. Track URI also
+                              allowed.
+                            </Text>
+                          )
                         }
                         label={
                           <View tw="flex-row gap-1">
@@ -675,7 +701,7 @@ export const DropMusic = () => {
                             <Label tw="font-bold text-gray-900 dark:text-white">
                               {isSaveDrop
                                 ? "Spotify Song Link"
-                                : "Spotify Track URI "}
+                                : "Spotify URI "}
                               {isSaveDrop ? (
                                 <Text tw="text-red-600">*</Text>
                               ) : (
@@ -706,7 +732,9 @@ export const DropMusic = () => {
                         onChangeText={onChange}
                         value={value}
                         placeholder={
-                          "https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
+                          isSaveDrop
+                            ? "https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
+                            : "spotify:album:27ftYHLeunzcSzb33Wk1hf"
                         }
                         errorText={
                           errors.spotifyUrl?.message || errors[""]?.message

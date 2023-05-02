@@ -188,7 +188,9 @@ export const ProfileTop = ({
                   width={coverWidth}
                   height={coverHeight}
                   style={Platform.select({
-                    web: {},
+                    web: {
+                      height: "100%",
+                    },
                     default: { ...StyleSheet.absoluteFillObject },
                   })}
                 />

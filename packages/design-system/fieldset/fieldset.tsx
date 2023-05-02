@@ -23,7 +23,8 @@ import { View } from "@showtime-xyz/universal.view";
 export type FieldsetProps = {
   errorText?: any;
   label?: string | JSX.Element;
-  helperText?: string;
+  helperText?: string | JSX.Element;
+  helperTextTw?: string;
   disabled?: boolean;
   tw?: string;
   select?: SelectProps;
@@ -42,6 +43,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
   const {
     errorText,
     helperText,
+    helperTextTw = "",
     label,
     disabled,
     select,
@@ -138,14 +140,22 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
       <AnimateHeight>
         {errorText ? <ErrorText id={errorTextId}>{errorText}</ErrorText> : null}
       </AnimateHeight>
-      <AnimateHeight>
+      <AnimateHeight
+        extraHeight={Platform.select({
+          ios: 0,
+          default: 4,
+        })}
+      >
         {helperText ? (
           <>
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
             <View tw="h-4" />
             <Text
               id={helperTextId}
-              tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
+              tw={[
+                "text-sm leading-6 text-gray-700 dark:text-gray-300",
+                helperTextTw,
+              ]}
             >
               {helperText}
             </Text>

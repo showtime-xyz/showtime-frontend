@@ -6,11 +6,11 @@ import {
   useCallback,
   forwardRef,
   useImperativeHandle,
+  Fragment,
 } from "react";
 
-import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
+import { Transition } from "@headlessui/react";
 
-import { useLockBodyScroll } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import { WEB_HEIGHT } from "./constants";
@@ -19,7 +19,7 @@ import { ModalHeader } from "./modal.header";
 import type { ModalContainerProps, ModalMethods } from "./types";
 
 const CONTAINER_TW = [
-  "top-0 right-0 bottom-0 left-0 fixed z-[999]",
+  "fixed z-[999] inset-0",
   "flex items-center justify-end sm:justify-center",
 ];
 
@@ -33,7 +33,6 @@ const MODAL_CONTAINER_TW = [
 
 const MODAL_BODY_TW = "flex-1 overflow-auto";
 
-const noop = () => {};
 const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
   function ModalContainerComponent(
     {
@@ -46,13 +45,10 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       disableBackdropPress,
       tw: propTw = "",
       headerShown = true,
+      visible,
     }: ModalContainerProps,
     ref
   ) {
-    const modalContainerTW = useMemo(
-      () => [...MODAL_CONTAINER_TW, web_height, propTw],
-      [web_height, propTw]
-    );
     useImperativeHandle(
       ref,
       () => ({
@@ -61,27 +57,47 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       []
     );
 
-    useEscapeKeydown((event) => {
-      event.preventDefault();
-
-      return disableBackdropPress ? noop() : onClose?.();
-    });
-
-    // Prevent scrolling the body when the modal is open
-    useLockBodyScroll();
-
     return (
-      <FocusTrap aria-modal>
-        <View tw={CONTAINER_TW}>
-          <ModalBackdrop onClose={disableBackdropPress ? noop : onClose} />
-          <View tw={modalContainerTW} style={style}>
-            {headerShown && <ModalHeader title={title} onClose={onClose} />}
-            <View tw={MODAL_BODY_TW} style={bodyStyle} accessibilityViewIsModal>
-              {children}
+      <Transition.Root show={visible} as={Fragment}>
+        <View className={CONTAINER_TW.join(" ")}>
+          <Transition.Child
+            enter="ease-out duration-150"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-150"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <ModalBackdrop
+              onClose={onClose}
+              disableBackdropPress={disableBackdropPress}
+            />
+          </Transition.Child>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enterTo="opacity-100 translate-y-0 sm:scale-100"
+            leave="ease-in duration-150"
+            leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+            leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          >
+            <View
+              tw={[...MODAL_CONTAINER_TW, web_height, propTw]}
+              style={style}
+            >
+              {headerShown && <ModalHeader title={title} onClose={onClose} />}
+              <View
+                tw={MODAL_BODY_TW}
+                style={bodyStyle}
+                accessibilityViewIsModal
+              >
+                {children}
+              </View>
             </View>
-          </View>
+          </Transition.Child>
         </View>
-      </FocusTrap>
+      </Transition.Root>
     );
   }
 );
