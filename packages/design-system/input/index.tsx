@@ -141,15 +141,15 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           inputMode={type}
           disabled={disabled}
           autoFocus={autoFocus}
-          accessibilityDescribedBy={Platform.select({
+          aria-describedby={Platform.select({
             web: helperText ? helperTextId : undefined,
             default: undefined,
           })}
-          accessibilityErrorMessage={Platform.select({
+          aria-errormessage={Platform.select({
             web: errorText ? errorTextId : undefined,
             default: undefined,
           })}
-          accessibilityInvalid={Platform.select({
+          aria-invalid={Platform.select({
             web: isInvalid,
             default: undefined,
           })}

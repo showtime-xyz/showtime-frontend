@@ -101,8 +101,6 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
               tw="flex-1 text-black outline-none focus-visible:ring-1 dark:text-white"
               style={[{ fontSize: 16 }]}
               ref={ref}
-              // @ts-ignore
-              readOnly={disabled}
               id={inputId}
               multiline={textInputProps.multiline}
               numberOfLines={textInputProps.numberOfLines ?? 1}
@@ -112,20 +110,21 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
                 isDark ? colors.gray[400] : colors.gray[600]
               }
               selectionColor={isDark ? colors.gray[300] : colors.gray[700]}
-              //@ts-ignore - web only
-              accessibilityDescribedBy={Platform.select({
+              aria-describedby={Platform.select({
                 web: helperText ? helperTextId : undefined,
                 default: undefined,
               })}
-              accessibilityErrorMessage={Platform.select({
+              aria-errormessage={Platform.select({
                 web: errorText ? errorTextId : undefined,
                 default: undefined,
               })}
-              accessibilityRequired={required}
-              accessibilityInvalid={Platform.select({
+              aria-required={true}
+              aria-invalid={Platform.select({
                 web: errorText ? true : false,
                 default: undefined,
               })}
+              // @ts-ignore
+              readOnly={disabled}
               {...textInputProps}
             />
           ) : null}

@@ -37,22 +37,18 @@ export const Onboarding = () => {
   const value = useMemo(() => ({ step, setStep, user }), [step, user]);
 
   return (
-    <ClientSideOnly>
-      <OnboardingStepContext.Provider value={value}>
-        <BottomSheetModalProvider>
-          <View tw="mt-8 flex-1">
-            <AnimatePresence exitBeforeEnter>
-              {step === OnboardingStep.Username && (
-                <SelectUsername key="username" />
-              )}
-              {step === OnboardingStep.Picture && (
-                <SelectPicture key="picture" />
-              )}
-              {step === OnboardingStep.Social && <SelectSocial key="social" />}
-            </AnimatePresence>
-          </View>
-        </BottomSheetModalProvider>
-      </OnboardingStepContext.Provider>
-    </ClientSideOnly>
+    <OnboardingStepContext.Provider value={value}>
+      <BottomSheetModalProvider>
+        <View tw="mt-8 flex-1">
+          <AnimatePresence exitBeforeEnter>
+            {step === OnboardingStep.Username && (
+              <SelectUsername key="username" />
+            )}
+            {step === OnboardingStep.Picture && <SelectPicture key="picture" />}
+            {step === OnboardingStep.Social && <SelectSocial key="social" />}
+          </AnimatePresence>
+        </View>
+      </BottomSheetModalProvider>
+    </OnboardingStepContext.Provider>
   );
 };
