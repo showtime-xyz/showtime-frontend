@@ -66,7 +66,6 @@ const nextConfig = {
     "expo-location",
     "expo-mail-composer",
     "expo-media-library",
-    "expo-next-react-navigation",
     "expo-splash-screen",
     "expo-status-bar",
     "expo-system-ui",
