@@ -366,7 +366,7 @@ export const DropMusic = () => {
     }
     if (size && size > MAX_FILE_SIZE) {
       Alert.alert(
-        "Oops, this file is too large (>50MB). Please upload a smaller file."
+        "Oops, this file is too large (>30MB). Please upload a smaller file."
       );
       setError("file", {
         type: "custom",

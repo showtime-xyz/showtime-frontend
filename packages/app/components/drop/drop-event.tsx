@@ -24,7 +24,6 @@ import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
@@ -256,7 +255,7 @@ export const DropEvent = () => {
     }
     if (size && size > MAX_FILE_SIZE) {
       Alert.alert(
-        "Oops, this file is too large (>50MB). Please upload a smaller file."
+        "Oops, this file is too large (>30MB). Please upload a smaller file."
       );
       setError("file", {
         type: "custom",

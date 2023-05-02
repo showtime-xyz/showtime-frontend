@@ -461,6 +461,7 @@ export const getFileMeta = async (file?: File | string) => {
         return {
           name: fileName,
           type: "image/" + fileExtension,
+          // @ts-expect-error - size is not defined in type
           size: fileInfo.size,
         };
       } else if (
@@ -470,6 +471,7 @@ export const getFileMeta = async (file?: File | string) => {
         return {
           name: fileName,
           type: "video/" + fileExtension,
+          // @ts-expect-error - size is not defined in type
           size: fileInfo.size,
         };
       }
@@ -499,14 +501,6 @@ function dataURLtoFile(dataurl: string, filename: string) {
 
   return new File([u8arr], filename, { type: mime });
 }
-
-export const getPinataToken = async () => {
-  return showtimeAPIAxios({
-    url: "/v1/pinata/key",
-    method: "POST",
-    data: {},
-  }).then((res) => res.token);
-};
 
 export async function delay(ms: number) {
   return await new Promise((resolve) => setTimeout(resolve, ms));
