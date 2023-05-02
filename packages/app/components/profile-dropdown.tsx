@@ -12,7 +12,6 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useBlock } from "app/hooks/use-block";
-import { useReport } from "app/hooks/use-report";
 import { useShare } from "app/hooks/use-share";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import type { Profile } from "app/types";
@@ -31,7 +30,6 @@ type Props = {
 };
 
 function ProfileDropdown({ user, tw = "" }: Props) {
-  const { report } = useReport();
   const { getIsBlocked, toggleBlock } = useBlock();
   const router = useRouter();
   const share = useShare();
@@ -100,6 +98,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
           <MenuItemIcon
             Icon={Slash}
             ios={{
+              // @ts-expect-error TODO: fix this @Alan
               name: isBlocked ? "circle" : "circle.slash",
             }}
           />

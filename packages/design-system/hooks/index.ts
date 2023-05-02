@@ -7,7 +7,7 @@ import { useSharedValue } from "react-native-reanimated";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { getScrollParent } from "@showtime-xyz/universal.utils";
 
-const useIsomorphicLayoutEffect =
+export const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export type PlatformRect = Pick<

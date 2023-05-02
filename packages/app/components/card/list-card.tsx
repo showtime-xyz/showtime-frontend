@@ -81,6 +81,7 @@ type Props = {
   onPress?: () => void;
   tw?: string;
   variant?: "nft" | "activity" | "market";
+  as?: string;
   href?: string;
   showClaimButton?: Boolean;
   sizeStyle?: { width: number; height: number };
@@ -105,6 +106,7 @@ const ListCardSmallScreen = ({
   sizeStyle,
   href = "",
   onPress,
+  as,
   index,
 }: Props) => {
   const isDark = useIsDarkMode();
@@ -136,7 +138,7 @@ const ListCardSmallScreen = ({
   );
 
   return (
-    <RouteComponentNative href={href} onPress={handleOnPress}>
+    <RouteComponentNative href={href} as={as} onPress={handleOnPress}>
       <View
         // @ts-expect-error TODO: add accessibility types for RNW
         dataset={Platform.select({ web: { testId: "nft-card-list" } })}
@@ -179,10 +181,11 @@ const ListCardSmallScreen = ({
                   height: "100%",
                 },
               }}
+              as={as}
               href={href}
               onPress={handleOnPress}
             >
-              <View tw="h-36 w-36 items-center justify-center bg-gray-300 dark:bg-gray-700">
+              <View tw="h-24 w-24 items-center justify-center bg-gray-300 dark:bg-gray-700 sm:h-36 sm:w-36">
                 <ListMedia
                   item={nft}
                   resizeMode={ResizeMode.COVER}
@@ -200,7 +203,7 @@ const ListCardSmallScreen = ({
           <View tw="flex-1 justify-between">
             <View tw="px-2">
               <View tw="py-2">
-                <RouteComponent href={href} onPress={handleOnPress}>
+                <RouteComponent as={as} href={href} onPress={handleOnPress}>
                   <Text
                     tw="overflow-ellipsis whitespace-nowrap text-base font-bold text-black dark:text-white"
                     numberOfLines={1}
@@ -222,20 +225,18 @@ const ListCardSmallScreen = ({
               </View>
             </View>
 
-            <View tw="mb-2 mt-1 justify-between px-2">
+            <View tw="h-6 justify-between px-2">
               <ClaimedByReduced
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
               />
-              {!!nft.creator_airdrop_edition_address && edition ? (
-                <View tw="mt-3.5 flex-row">
-                  <ClaimButton edition={edition} size="small" />
-                </View>
-              ) : (
-                <View tw="mt-3.5 h-8" />
-              )}
             </View>
           </View>
+        </View>
+        <View tw="h-12 flex-row items-center bg-gray-200 px-2 dark:bg-gray-800">
+          {!!nft.creator_airdrop_edition_address && edition ? (
+            <ClaimButton edition={edition} size="small" tw="flex-1" />
+          ) : null}
         </View>
       </View>
     </RouteComponentNative>
@@ -249,6 +250,7 @@ const ListCardLargeScreen = ({
   href = "",
   showClaimButton,
   onPress,
+  as,
   index,
 }: Props) => {
   const { width } = useWindowDimensions();
@@ -305,6 +307,7 @@ const ListCardLargeScreen = ({
                 height: "100%",
               },
             }}
+            as={as}
           >
             <View tw="h-full min-h-[240px] w-60 items-center">
               <ListMedia
@@ -321,7 +324,7 @@ const ListCardLargeScreen = ({
             </View>
           </RouteComponent>
 
-          <View tw="z-9 absolute bottom-4 left-4 ">
+          <View tw="z-9 absolute bottom-3 left-2">
             <ContentTypeTooltip edition={edition} />
           </View>
         </View>
@@ -330,7 +333,7 @@ const ListCardLargeScreen = ({
           <View tw="pr-6">
             <View tw="px-4">
               <Creator nft={nft} shouldShowDateCreated={false} />
-              <RouteComponent href={href!} onPress={handleOnPress}>
+              <RouteComponent as={as} href={href!} onPress={handleOnPress}>
                 <View tw="inline flex-grow-0">
                   <Text
                     tw="inline-block overflow-ellipsis whitespace-nowrap text-lg font-bold text-black dark:text-white"
@@ -353,7 +356,7 @@ const ListCardLargeScreen = ({
             </View>
           </View>
 
-          <View tw="mb-4 mt-4 justify-between space-y-2 px-4">
+          <View tw="mb-4 mt-4 h-12 justify-between space-y-2 px-4">
             {detailData?.data?.item?.multiple_owners_list &&
             detailData.data.item.multiple_owners_list.length > 0 ? (
               <ClaimedByReduced
@@ -361,25 +364,25 @@ const ListCardLargeScreen = ({
                 nft={nft}
                 size="regular"
               />
-            ) : (
-              <View tw="h-12" />
-            )}
+            ) : null}
           </View>
         </View>
         <View tw="ml-8 mr-4 min-w-[140px] self-center lg:min-w-[200px]">
-          {showClaimButton &&
-          !!nft.creator_airdrop_edition_address &&
-          edition ? (
-            <View tw="flex-row self-end">
-              <ClaimButton edition={edition} size="regular" />
-              <ClaimedShareButton
-                tw="ml-3 hidden lg:flex"
-                edition={edition}
-                size="regular"
-                nft={nft}
-              />
-            </View>
-          ) : null}
+          <View tw="flex-row self-end">
+            {showClaimButton &&
+            !!nft.creator_airdrop_edition_address &&
+            edition ? (
+              <>
+                <ClaimButton edition={edition} size="regular" />
+                <ClaimedShareButton
+                  tw="ml-3 hidden lg:flex"
+                  edition={edition}
+                  size="regular"
+                  nft={nft}
+                />{" "}
+              </>
+            ) : null}
+          </View>
         </View>
         <View tw="self-center">
           <ErrorBoundary renderFallback={() => null}>

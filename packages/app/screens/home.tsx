@@ -1,16 +1,11 @@
-import dynamic from "next/dynamic";
-
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Feed } from "app/components/feed";
+import FeedDesktop from "app/components/feed/feed.md";
 import { withColorScheme } from "app/components/memo-with-theme";
-import { useAuth } from "app/hooks/auth/use-auth";
 import { useTrackPageViewed } from "app/lib/analytics";
 
 import { Hidden } from "design-system/hidden";
 
-const FeedDesktop = dynamic(() => import("app/components/feed/feed.md"), {
-  ssr: false,
-});
 const HomeScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Home" });
 

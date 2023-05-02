@@ -61,6 +61,7 @@ type Props = {
   nft: NFT & { loading?: boolean };
   numColumns?: number;
   onPress?: () => void;
+  as?: string;
   tw?: string;
   variant?: "nft" | "activity" | "market";
   href?: string;
@@ -80,6 +81,7 @@ function Card(props: Props) {
     sizeStyle,
     onPress,
     href = "",
+    as,
     style,
   } = props;
   const { width } = useWindowDimensions();
@@ -108,6 +110,7 @@ function Card(props: Props) {
     return (
       <RouteComponent
         href={href}
+        as={as}
         viewProps={{ style: [{ flex: 1 }, style] }}
         style={[style as any, { marginBottom: GAP }]}
         onPress={handleOnPress}
@@ -142,6 +145,7 @@ const CardLargeScreen = ({
   tw = "",
   sizeStyle,
   href = "",
+  as,
   showClaimButton,
   handleOnPress,
   cardMaxWidth,
@@ -186,7 +190,7 @@ const CardLargeScreen = ({
             </ErrorBoundary>
           </View>
 
-          <RouteComponent href={href!} onPress={handleOnPress}>
+          <RouteComponent href={href!} as={as} onPress={handleOnPress}>
             <Media
               item={nft}
               numColumns={numColumns}
@@ -197,6 +201,7 @@ const CardLargeScreen = ({
               resizeMode={ResizeMode.COVER}
               optimizedWidth={600}
               loading={index > 0 ? "lazy" : "eager"}
+              withVideoBackdrop
             />
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             {numColumns === 1 && nft?.mime_type?.includes("video") ? (

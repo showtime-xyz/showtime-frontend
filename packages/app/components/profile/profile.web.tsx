@@ -34,6 +34,7 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { createParam } from "app/navigation/use-param";
@@ -44,6 +45,7 @@ import { formatProfileRoutes } from "app/utilities";
 import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
 
+import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { ProfileError } from "./profile-error";
 import { ProfileTop } from "./profile-top";
@@ -156,6 +158,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   } = useUserProfile({ address: username });
   const profileId = profileData?.data?.profile.profile_id;
   const { getIsBlocked } = useBlock();
+  const bottomBarHeight = usePlatformBottomHeight();
   const isBlocked = getIsBlocked(profileId);
   const { user } = useUser();
 
@@ -232,6 +235,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}
+              as={getNFTSlug(item)}
               href={`${getNFTSlug(item)}?initialScrollIndex=${
                 itemIndex * numColumns + chuckItemIndex
               }&tabType=${type}&profileId=${profileId}&collectionId=${
@@ -265,13 +269,34 @@ const Profile = ({ username }: ProfileScreenProps) => {
   }, [contentWidth, isDark, isLoadingMore, profileIsLoading, error]);
 
   const ListEmptyComponent = useCallback(() => {
-    if ((isLoading || profileIsLoading || !type) && !error) {
-      return null;
+    if (error || isBlocked) {
+      return (
+        <ProfileError error={error} isBlocked={isBlocked} username={username} />
+      );
     }
-    return (
-      <ProfileError error={error} isBlocked={isBlocked} username={username} />
-    );
-  }, [isBlocked, isLoading, profileIsLoading, type, username, error]);
+
+    if (
+      chuckList.length === 0 &&
+      !isLoading &&
+      !profileIsLoading &&
+      !error &&
+      type &&
+      !isBlocked
+    ) {
+      return (
+        <EmptyPlaceholder tw="h-[50vh]" title="No drops, yet." hideLoginBtn />
+      );
+    }
+    return null;
+  }, [
+    error,
+    isBlocked,
+    chuckList.length,
+    isLoading,
+    profileIsLoading,
+    type,
+    username,
+  ]);
 
   return (
     <ProfileHeaderContext.Provider
@@ -298,16 +323,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 useWindowScroll={isMdWidth}
                 ListHeaderComponent={Header}
                 numColumns={1}
+                preserveScrollPosition
                 data={isBlocked ? [] : chuckList}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
-                estimatedItemSize={contentWidth / numColumns}
-                overscan={{
-                  main: contentWidth / numColumns,
-                  reverse: contentWidth / numColumns,
-                }}
                 style={{
-                  height: screenHeight - 64,
+                  height: screenHeight - bottomBarHeight,
                 }}
                 ListEmptyComponent={ListEmptyComponent}
                 ListFooterComponent={ListFooterComponent}

@@ -8,7 +8,6 @@ import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CreditCard, Check, Trash } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -166,7 +165,6 @@ const HistoryItem = memo(function HistoryItem({
 const Header = memo(function Header() {
   const { data, isLoading, removePayment, setPaymentByDefault } =
     usePaymentsManage();
-  const router = useRouter();
   const onDowloadAllHistory = useCallback(() => {
     if (!data) return;
     // Todo: waiting for backend to confirm whether exporting from the frontend is possible and also for the final data format.
@@ -286,7 +284,6 @@ export const BillingTab = ({ index = 0 }: BillingTabProps) => {
           useWindowScroll={isMdWidth}
           estimatedItemSize={60}
           ListHeaderComponent={Header}
-          overscan={60}
           style={{
             height: isMdWidth ? undefined : screenHeight - 200,
             minHeight: isMdWidth ? 400 : undefined,

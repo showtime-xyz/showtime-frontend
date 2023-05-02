@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const ClientSideOnly = ({ children }: any) => {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [clientSide, setClientSide] = useState(false);
+  if (typeof window !== "undefined" && clientSide === false) {
+    setClientSide(true);
+  }
 
-  return mounted ? children : false;
+  return clientSide ? children : false;
 };

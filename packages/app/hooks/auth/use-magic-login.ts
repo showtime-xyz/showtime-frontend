@@ -5,6 +5,7 @@ import {
   BYPASS_EMAIL,
   BYPASS_EMAIL_WITH_INSECURE_KEYS,
 } from "app/lib/constants";
+import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
 
 import { useAuth } from "./use-auth";
@@ -59,7 +60,7 @@ export function useMagicLogin() {
         };
 
         if (isMumbai) {
-          console.log("Magic network is connecting to Mumbai testnet");
+          Logger.log("Magic network is connecting to Mumbai testnet");
           customNodeOptions.rpcUrl =
             "https://polygon-mumbai.g.alchemy.com/v2/kh3WGQQaRugQsUXXLN8LkOBdIQzh86yL";
           customNodeOptions.chainId = 80001;

@@ -10,7 +10,7 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
-import { ListVideo } from "design-system/list-video";
+//import { ListVideo } from "design-system/list-video";
 
 type Props = {
   item?: NFT & { loading?: boolean };
@@ -40,7 +40,7 @@ function ListMediaImpl({
   );
 
   const mediaStillPreviewUri = useMemo(
-    () => getMediaUrl({ nft: item, stillPreview: true }),
+    () => getMediaUrl({ nft: item, stillPreview: true, animated: false }),
     [item]
   );
 
@@ -64,6 +64,23 @@ function ListMediaImpl({
 
       {item?.mime_type?.startsWith("video") ||
       item?.mime_type === "image/gif" ? (
+        <Image
+          source={{
+            uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=70`,
+          }}
+          recyclingKey={mediaUri}
+          blurhash={item?.blurhash}
+          data-test-id={Platform.select({ web: "nft-card-media" })}
+          resizeMode={resizeMode}
+          alt={item?.token_name}
+          style={{ height: "100%", width: "100%" }}
+          loading={loading}
+        />
+      ) : null}
+
+      {/* TODO: Add back once we deliver videos from BunnyCDN
+      {item?.mime_type?.startsWith("video") ||
+      item?.mime_type === "image/gif" ? (
         <ListVideo
           source={{
             uri: mediaUri,
@@ -77,6 +94,7 @@ function ListMediaImpl({
           loading={loading}
         />
       ) : null}
+     */}
     </>
   );
 }

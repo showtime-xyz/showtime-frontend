@@ -1,4 +1,4 @@
-import { useState, useCallback, useLayoutEffect, useEffect } from "react";
+import { useState, useCallback } from "react";
 
 import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -8,13 +8,11 @@ import { View } from "@showtime-xyz/universal.view";
 import { stripePromise } from "app/components/checkout//stripe";
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { setPaymentByDefaultFetch } from "app/hooks/api/use-payments-manage";
+import { useIsomorphicLayoutEffect } from "app/hooks/use-isomorphic-layout-effect";
 
 import { toast } from "design-system/toast";
 
 import { DropFree as OriginDropFree } from "./drop-free";
-
-const useIsomorphicLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export const DropFree = () => {
   const [isHasPaymentIntentId, setIsHasPaymentIntentId] = useState(false);

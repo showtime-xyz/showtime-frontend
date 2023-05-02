@@ -5,6 +5,7 @@ import { formatDistanceToNowStrict, differenceInSeconds } from "date-fns";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { HeartFilled, Heart, Trash } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -144,7 +145,7 @@ function MessageRowComponent({
 }: MessageRowProps) {
   //#region variables
   const swipeRef = useRef<Swipeable>(null);
-
+  const isDark = useIsDarkMode();
   /*
   const deleteComment = useCallback(async () => {
     if (onDeletePress) {
@@ -220,7 +221,7 @@ function MessageRowComponent({
       <View tw="flex flex-row items-start px-4 py-1.5">
         {hasParent && <View tw="ml-4" collapsable={true} />}
         <View tw="justify-start">
-          <Link href={`/@${username || address}`} tw="-mb-1 -mt-1">
+          <View tw="-mb-1 -mt-1">
             <Button
               variant="secondary"
               size="small"
@@ -235,7 +236,7 @@ function MessageRowComponent({
                 alt="MessageRow Avatar"
               />
             </Button>
-          </Link>
+          </View>
         </View>
         <View tw={["ml-2 flex-1", isLastReply ? "mb-1" : "-mb-0.5"]}>
           <Text tw="web:pr-12 pr-7 text-sm text-gray-900 dark:text-gray-100">
@@ -289,7 +290,11 @@ function MessageRowComponent({
                 onPress={onLikePress}
                 style={{ padding: 0 }}
               >
-                {likedByMe ? <HeartFilled /> : <Heart />}
+                {likedByMe ? (
+                  <HeartFilled color={isDark ? colors.white : colors.black} />
+                ) : (
+                  <Heart color={colors.gray[500]} />
+                )}
                 <Text tw="text-[12px] text-sm">{` ${likeCount}`}</Text>
               </Button>
               {onDeletePress ? (
@@ -298,6 +303,7 @@ function MessageRowComponent({
                   tw="px-0 font-thin"
                   onPress={onDeletePress}
                   style={{ padding: 0 }}
+                  iconOnly
                 >
                   <Trash />
                 </Button>

@@ -122,10 +122,6 @@ export const Notifications = ({
             ios: windowHeight,
           }),
         }}
-        overscan={{
-          main: 100,
-          reverse: 100,
-        }}
         // for blur effect on Native
         contentContainerStyle={Platform.select({
           ios: {

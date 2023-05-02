@@ -1,4 +1,4 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 
 import { createParam } from "app/navigation/use-param";
 

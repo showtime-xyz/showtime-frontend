@@ -18,6 +18,8 @@ const getBase64Blurhash = (blurhash: string): string => {
   return src;
 };
 
+const noop = () => {};
+
 type Props = Pick<ImageNativeProps, "source" | "onLoad" | "recyclingKey"> &
   Omit<NextImageProps, "src"> & {
     className: string;
@@ -83,7 +85,7 @@ function Img({
         priority={loading === "eager"}
         width={width}
         height={height}
-        onLoadingComplete={onLoadingComplete}
+        onLoadingComplete={onLoad ? onLoadingComplete : noop}
         placeholder={width > 40 && props.blurhash ? "blur" : "empty"}
         blurDataURL={
           width > 40 && props.blurhash

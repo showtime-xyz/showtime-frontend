@@ -7,22 +7,20 @@ import {
   Suspense,
 } from "react";
 import {
-  Dimensions,
   Linking,
   Platform,
   useWindowDimensions,
   View as RNView,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors, styled } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -48,8 +46,6 @@ import { breakpoints } from "design-system/theme";
 import { ShowtimeBrandLogo } from "../showtime-brand";
 import { StarBottomLeft, StarBottomRight, StarTop } from "./decoration-icons";
 import { ShareButton } from "./share-button";
-
-const { width: windowWidth } = Dimensions.get("window");
 
 type RaffleModalParams = {
   contractAddress?: string | undefined;

@@ -1,5 +1,18 @@
 import { DropPlan } from "./hooks/use-paid-drop-plans";
 
+export type BunnyVideoUrls = {
+  direct?: string | null;
+  hls_playlist?: string | null;
+  mp4_240?: string | null;
+  mp4_360?: string | null;
+  mp4_480?: string | null;
+  mp4_720?: string | null;
+  original?: string | null;
+  preview_animation?: string | null;
+  thumbnail?: string | null;
+  [key: string]: string | null | undefined;
+};
+
 export type NFT = {
   nft_id: number;
   is_user_owner: boolean;
@@ -54,6 +67,11 @@ export type NFT = {
   listing?: Listing;
   chain_name?: string;
   nsfw?: boolean;
+  cloudinary_thumbnail_url: string | null;
+  cloudinary_video_url: string | null;
+  image_url: string | null;
+  image_path: string | null;
+  video_urls: BunnyVideoUrls | null;
 };
 
 export type Creator = {
@@ -133,6 +151,7 @@ export interface Profile {
   has_verified_phone_number: boolean;
   has_spotify_token: boolean;
   spotify_artist_id?: string;
+  apple_music_artist_id?: string;
   captcha_completed_at: Date | null;
   has_social_login: boolean;
   social_login_connections: SocialLoginConnections;
@@ -234,6 +253,7 @@ export type MyInfo = {
     follows: Array<{ profile_id: number }>;
     profile: Profile & {
       has_spotify_token: boolean;
+      has_apple_music_token: boolean;
       spotify_artist_id: null | number;
     };
     likes_nft: number[];
@@ -254,7 +274,10 @@ export type MyInfo = {
 
 export type GatingType =
   | "spotify_save"
+  | "multi_provider_music_save"
   | "password"
   | "location"
   | "multi"
+  | "spotify_presave"
+  // This is for compatibility with the old spotify_presave
   | "music_presave";

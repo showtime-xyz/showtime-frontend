@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Meta } from "@storybook/react";
-
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { Label } from "@showtime-xyz/universal.label";
 import { View } from "@showtime-xyz/universal.view";
@@ -9,9 +7,9 @@ import { View } from "@showtime-xyz/universal.view";
 export default {
   component: Checkbox,
   title: "Components/Checkbox",
-} as Meta;
+};
 
-export const Primary: React.VFC<{}> = () => {
+export const Primary = () => {
   const [checked, setChecked] = React.useState(false);
 
   return (

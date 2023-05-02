@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { Platform } from "react-native";
 
 import { Image, ImageProps as ExpoImageProps, ImageSource } from "expo-image";
 

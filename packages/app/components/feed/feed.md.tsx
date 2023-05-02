@@ -99,6 +99,7 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
     return (
       <View tw="p-2">
         <Card
+          as={getNFTSlug(item)}
           href={`${getNFTSlug(item)}?initialScrollIndex=${index}&type=feed`}
           nft={item}
           sizeStyle={{ width: CARD_WIDTH, height: CARD_WIDTH }}
@@ -120,12 +121,9 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
         <ViewabilityInfiniteScrollList
           data={data}
           renderItem={renderItem}
-          overscan={{
-            main: CARD_HEIGHT,
-            reverse: CARD_HEIGHT,
-          }}
           estimatedItemSize={CARD_HEIGHT}
           onEndReached={fetchMore}
+          preserveScrollPosition
           ListEmptyComponent={
             isLoading ? (
               <View tw="mx-auto p-10">
@@ -148,7 +146,7 @@ const SuggestedUsers = () => {
   return (
     <>
       <View tw="h-16 justify-center">
-        <Text tw="text-2xl text-black dark:text-white">Home</Text>
+        <Text tw="text-2xl text-black dark:text-white">For you</Text>
       </View>
 
       <View tw="mt-8 rounded-2xl bg-white dark:bg-black">

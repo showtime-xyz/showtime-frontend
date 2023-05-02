@@ -8,6 +8,7 @@ import {
   Apple,
   GoogleOriginal,
   Twitter,
+  AppleMusic,
   InstagramColorful,
 } from "@showtime-xyz/universal.icon";
 import { TabScrollView } from "@showtime-xyz/universal.tab-view";
@@ -16,7 +17,9 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
+import { useConnectAppleMusic } from "app/hooks/use-connect-apple-music";
 import { useConnectSpotify } from "app/hooks/use-connect-spotify";
+import { useDisconnectAppleMusic } from "app/hooks/use-disconnect-apple-music";
 import { useDisconnectInstagram } from "app/hooks/use-disconnect-instagram";
 import { useDisconnectSpotify } from "app/hooks/use-disconnect-spotify";
 import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
@@ -46,8 +49,9 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
       />
       <View tw="mt-6 px-4 md:px-0">
         <ConnectSpotify />
+        <ConnectAppleMusic />
         <WalletSocialAccounts />
-        <ConnectInstagram providerId={instagramProviderId} />
+        {/* <ConnectInstagram providerId={instagramProviderId} /> */}
       </View>
     </SettingScrollComponent>
   );
@@ -83,6 +87,51 @@ const ConnectSpotify = () => {
         }}
       >
         {user.user?.data.profile.has_spotify_token ? "Disconnect" : "Connect"}
+      </Button>
+    </View>
+  );
+};
+
+const ConnectAppleMusic = () => {
+  const user = useUser();
+  const isDark = useIsDarkMode();
+
+  const { disconnectAppleMusic, isMutating: isDisconnecting } =
+    useDisconnectAppleMusic();
+  const { connectAppleMusic, isMutating: isConnecting } =
+    useConnectAppleMusic();
+
+  const isLoading = isConnecting || isDisconnecting;
+
+  return (
+    <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
+      <View tw="flex-row items-center">
+        <AppleMusic height={20} width={20} color={isDark ? "white" : "black"} />
+        <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
+          Apple Music
+        </Text>
+      </View>
+      <Button
+        variant={
+          user.user?.data.profile.has_apple_music_token ? "danger" : "tertiary"
+        }
+        disabled={isLoading}
+        onPress={async () => {
+          if (user.user?.data.profile.has_apple_music_token) {
+            disconnectAppleMusic();
+          } else {
+            const res = await connectAppleMusic();
+            if (res) {
+              toast.success("Apple Music connected");
+            }
+          }
+        }}
+      >
+        {isLoading
+          ? "Loading..."
+          : user.user?.data.profile.has_apple_music_token
+          ? "Disconnect"
+          : "Connect"}
       </Button>
     </View>
   );

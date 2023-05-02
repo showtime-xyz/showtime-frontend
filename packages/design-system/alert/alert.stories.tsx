@@ -1,7 +1,5 @@
 import { Platform } from "react-native";
 
-import { Meta } from "@storybook/react";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -10,9 +8,9 @@ import { AlertProvider, useCustomAlert, Alert } from "./index";
 export default {
   component: AlertProvider,
   title: "Components/Alert",
-} as Meta;
+};
 
-export const Basic: React.FC<{}> = () => {
+export const Basic = () => {
   const customAlert = useCustomAlert();
 
   return (

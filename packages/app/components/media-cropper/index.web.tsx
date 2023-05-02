@@ -18,6 +18,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { getCroppedImg } from "app/lib/canvas-utils";
+import { Logger } from "app/lib/logger";
 
 import { MediaCropperProps } from ".";
 
@@ -67,7 +68,7 @@ export const MediaCropper = ({
 
       croppedImage && onApply?.(croppedImage);
     } catch (e) {
-      console.error(e, "showCroppedImage");
+      Logger.error(e, "showCroppedImage");
     }
   }, [src, croppedAreaPixels, rotation, onApply]);
 

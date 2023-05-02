@@ -35,6 +35,7 @@ import { QRCodeModal } from "app/components/qr-code";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
+import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -45,6 +46,7 @@ import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
+import { createParam } from "app/navigation/use-param";
 import {
   cleanUserTextInput,
   formatAddressShort,
@@ -52,6 +54,12 @@ import {
   limitLineBreaks,
   removeTags,
 } from "app/utilities";
+
+type Query = {
+  type: "appleMusic" | "spotify" | "free";
+};
+
+const { useParam } = createParam<Query>();
 
 export const ClaimForm = ({
   edition,
@@ -62,9 +70,13 @@ export const ClaimForm = ({
 }) => {
   const { state } = useContext(ClaimContext);
 
+  const [claimType] = useParam("type");
   const isDark = useIsDarkMode();
   const { claimNFT } = useClaimNFT(edition.creator_airdrop_edition);
   const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
+    edition.creator_airdrop_edition
+  );
+  const { claimAppleMusicGatedDrop } = useAppleMusicGatedClaim(
     edition.creator_airdrop_edition
   );
 
@@ -154,11 +166,20 @@ export const ClaimForm = ({
 
     let success: boolean | undefined | void = false;
 
-    if (
+    if (edition.gating_type === "multi_provider_music_save") {
+      if (claimType === "spotify") {
+        success = await claimSpotifyGatedDrop({ closeModal });
+      } else if (claimType === "appleMusic") {
+        success = await claimAppleMusicGatedDrop({ closeModal });
+      } else {
+        success = await claimNFT({ closeModal });
+      }
+    } else if (
       edition.gating_type === "spotify_save" ||
-      edition.gating_type === "music_presave"
+      edition.gating_type === "spotify_presave" ||
+      edition?.gating_type === "music_presave"
     ) {
-      success = await claimSpotifyGatedDrop(closeModal);
+      success = await claimSpotifyGatedDrop({ closeModal });
     } else if (edition.gating_type === "password") {
       success = await claimNFT({ password: password.trim(), closeModal });
     } else if (edition.gating_type === "location") {
@@ -258,7 +279,8 @@ export const ClaimForm = ({
             </Text>
           </View>
           {edition.gating_type === "spotify_save" ||
-          edition.gating_type === "music_presave" ? (
+          edition?.gating_type === "music_presave" ||
+          edition.gating_type === "spotify_presave" ? (
             <>
               <View tw="mt-4 flex-row items-center">
                 {user.data.profile.has_spotify_token ? (
@@ -287,6 +309,59 @@ export const ClaimForm = ({
                       } to your Spotify library`}
                 </Text>
               </View>
+            </>
+          ) : null}
+
+          {edition.gating_type === "multi_provider_music_save" ? (
+            <>
+              {claimType === "appleMusic" ? (
+                <>
+                  <View tw="mt-4 flex-row items-center">
+                    {user.data.profile.has_apple_music_token ? (
+                      <CheckIcon />
+                    ) : (
+                      <View tw="rounded-full border-[1px] border-gray-800 p-3 dark:border-gray-100" />
+                    )}
+                    <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                      Connect your Apple Music account
+                    </Text>
+                  </View>
+                  <View tw="mt-4 flex-row items-center">
+                    <CheckIcon />
+                    <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                      You will save{" "}
+                      {edition.spotify_track_name
+                        ? '"' + edition.spotify_track_name + '"'
+                        : "this song"}{" "}
+                      to your Apple Music library
+                    </Text>
+                  </View>
+                </>
+              ) : null}
+              {claimType === "spotify" ? (
+                <>
+                  <View tw="mt-4 flex-row items-center">
+                    {user.data.profile.has_spotify_token ? (
+                      <CheckIcon />
+                    ) : (
+                      <View tw="rounded-full border-[1px] border-gray-800 p-3 dark:border-gray-100" />
+                    )}
+                    <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                      Connect your Spotify account
+                    </Text>
+                  </View>
+                  <View tw="mt-4 flex-row items-center">
+                    <CheckIcon />
+                    <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                      You will save{" "}
+                      {edition.spotify_track_name
+                        ? '"' + edition.spotify_track_name + '"'
+                        : "this song"}{" "}
+                      to your Spotify library
+                    </Text>
+                  </View>
+                </>
+              ) : null}
             </>
           ) : null}
 
@@ -372,7 +447,8 @@ export const ClaimForm = ({
               ) : state.status === "error" ? (
                 "Failed. Retry!"
               ) : edition.gating_type === "spotify_save" ||
-                edition.gating_type === "music_presave" ? (
+                edition.gating_type === "spotify_presave" ||
+                edition?.gating_type === "music_presave" ? (
                 <View tw="w-full flex-row items-center justify-center">
                   <Spotify color={isDark ? "#000" : "#fff"} />
                   <Text tw="ml-2 font-semibold text-white dark:text-black">

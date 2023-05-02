@@ -11,12 +11,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion } from "@showtime-xyz/universal.accordion";
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -38,11 +38,11 @@ import { QRCodeModal } from "app/components/qr-code";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
@@ -136,7 +136,7 @@ export const DropEvent = () => {
   });
 
   const insets = useSafeAreaInsets();
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
 
   const { state, dropNFT } = useDropNFT();
   const user = useUser({
@@ -204,11 +204,9 @@ export const DropEvent = () => {
   // }, [state.transactionId])
 
   const pickFile = useFilePicker();
-  const router = useRouter();
 
   /*
   const share = useShare();
-  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
   */
 
   // if (state.transactionHash) {
@@ -343,7 +341,7 @@ export const DropEvent = () => {
                             {errors.file?.message ? (
                               <View tw="mt-2">
                                 <Text tw="text-center text-sm text-red-500">
-                                  {errors?.file?.message}
+                                  {`${errors?.file?.message}`}
                                 </Text>
                               </View>
                             ) : null}

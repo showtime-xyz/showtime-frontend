@@ -21,7 +21,7 @@ export const AddWalletOrSetPrimary = ({
     <View tw="items-center p-2">
       <View tw="h-8" />
       <Text tw="text-center text-xl text-black dark:text-white">{title} </Text>
-      <View tw="mt-8 mb-10">
+      <View tw="mb-10 mt-8">
         <Text tw="text-center text-base text-black dark:text-white">
           {description}
         </Text>

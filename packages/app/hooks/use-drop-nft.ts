@@ -10,7 +10,7 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 import { GatingType } from "app/types";
-import { delay, getFileMeta } from "app/utilities";
+import { delay, formatAPIErrorMessage, getFileMeta } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -60,6 +60,7 @@ type DropRequestData = {
   claim_window_duration_seconds: number;
   nsfw: boolean;
   spotify_url?: string;
+  apple_music_url?: string;
   gating_type?: GatingType;
   release_date?: string;
   password?: string;
@@ -125,6 +126,7 @@ export type UseDropNFT = {
   animationHash?: string;
   imageHash?: string;
   spotifyUrl?: string;
+  appleMusicTrackUrl?: string;
   gatingType?: GatingType;
   password?: string;
   googleMapsUrl?: string;
@@ -140,7 +142,6 @@ export const useDropNFT = () => {
   const { state, dispatch } = useContext(DropContext);
   const mutate = useMatchMutate();
   const { onSendFeedback } = useSendFeedback();
-
   const pollTransaction = async ({
     transactionId,
   }: {
@@ -250,6 +251,7 @@ export const useDropNFT = () => {
         claim_window_duration_seconds: params.duration,
         nsfw: params.notSafeForWork,
         spotify_url: params.spotifyUrl,
+        apple_music_url: params.appleMusicTrackUrl,
         gating_type: gatingType,
         password: params.password !== "" ? params.password : undefined,
         ...locationGating,
@@ -259,7 +261,7 @@ export const useDropNFT = () => {
             : undefined,
       };
 
-      if (params.releaseDate && params.gatingType === "music_presave") {
+      if (params.releaseDate && params.gatingType === "spotify_presave") {
         requestData.release_date = params.releaseDate;
       }
       const relayerResponse = await axios({
@@ -274,7 +276,8 @@ export const useDropNFT = () => {
       });
       callback?.();
     } catch (e: any) {
-      dispatch({ type: "error", error: e?.message });
+      const errorMessage = formatAPIErrorMessage(e);
+      dispatch({ type: "error", error: errorMessage });
       Logger.error("nft drop failed", e);
 
       if (e?.response?.status === 420) {
@@ -282,12 +285,11 @@ export const useDropNFT = () => {
           "Wow, you love drops!",
           "Only one drop per day is allowed. Come back tomorrow!"
         );
-      }
-
-      if (e?.response?.status === 500) {
+      } else {
         Alert.alert(
           "Oops. An error occurred.",
-          "Please contact us at help@showtime.xyz if this persists. Thanks!",
+          errorMessage +
+            ". Please contact us at help@showtime.xyz if this persists. Thanks!",
           [
             {
               text: "Cancel",

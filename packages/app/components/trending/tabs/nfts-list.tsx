@@ -12,7 +12,6 @@ import { GAP } from "app/components/card";
 import { ListCard } from "app/components/card/list-card";
 import { ListFooter } from "app/components/footer/list-footer";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
-import { useContentWidth } from "app/hooks/use-content-width";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { NFT } from "app/types";
@@ -27,7 +26,6 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
     });
     const listRef = useRef(null);
     useScrollToTop(listRef);
-    const contentWidth = useContentWidth();
     useImperativeHandle(ref, () => ({
       refresh: mutate,
     }));
@@ -70,10 +68,6 @@ export const NFTSList = forwardRef<TrendingTabListRef, TrendingTabListProps>(
         renderItem={renderItem}
         viewabilityConfig={{ itemVisiblePercentThreshold: 85 }}
         estimatedItemSize={200}
-        overscan={{
-          main: contentWidth * 3,
-          reverse: contentWidth * 3,
-        }}
         style={{ margin: -GAP }}
         ListFooterComponent={ListFooterComponent}
         index={index}

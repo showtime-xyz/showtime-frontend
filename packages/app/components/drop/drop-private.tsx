@@ -11,12 +11,12 @@ import {
   useWindowDimensions,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion } from "@showtime-xyz/universal.accordion";
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -37,14 +37,13 @@ import { Preview } from "app/components/preview";
 import { QRCodeModal } from "app/components/qr-code";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useModalScreenViewStyle } from "app/hooks/use-modal-screen-view-style";
 import { usePersistForm } from "app/hooks/use-persist-form";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { formatAddressShort } from "app/utilities";
@@ -139,7 +138,7 @@ export const DropPrivate = () => {
 
   const insets = useSafeAreaInsets();
 
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
 
   const { state, dropNFT } = useDropNFT();
   const user = useUser({
@@ -207,9 +206,6 @@ export const DropPrivate = () => {
   // }, [state.transactionId])
 
   const pickFile = useFilePicker();
-  const share = useShare();
-  const router = useRouter();
-  const modalScreenViewStyle = useModalScreenViewStyle({ mode: "margin" });
 
   // if (state.transactionHash) {
   //   return <View>
@@ -343,7 +339,7 @@ export const DropPrivate = () => {
                             {errors.file?.message ? (
                               <View tw="mt-2">
                                 <Text tw="text-center text-sm text-red-500">
-                                  {errors?.file?.message}
+                                  {errors?.file?.message as string}
                                 </Text>
                               </View>
                             ) : null}

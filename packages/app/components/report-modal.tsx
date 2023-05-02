@@ -39,7 +39,7 @@ export const ReportModal = () => {
   const reportOption = nftId ? NFT_REPORT_LIST : PROFILE_REPORT_LIST;
   return (
     <View>
-      <View tw="px-4 pt-4 pb-8">
+      <View tw="px-4 pb-8 pt-4">
         <Text tw="text-lg text-gray-900 dark:text-white">
           Why are you reporting this?
         </Text>

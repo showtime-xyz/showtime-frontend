@@ -1,7 +1,7 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
+import dynamic from "next/dynamic";
 
-import { AlertProvider } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
 import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
@@ -20,6 +20,10 @@ import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
+
+const AlertProvider = dynamic(() => import("@showtime-xyz/universal.alert"), {
+  ssr: false,
+});
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (

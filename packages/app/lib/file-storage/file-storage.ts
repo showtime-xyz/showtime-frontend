@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+// @ts-nocheck
 export class FileStorage {
   private readonly dbName: string;
   private db?: IDBDatabase;

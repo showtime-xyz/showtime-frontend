@@ -97,7 +97,7 @@ function GridMediaImpl({
           )}
           <Image
             source={{
-              uri: mediaStillPreviewUri,
+              uri: `${mediaStillPreviewUri}?&optimizer=image&width=300&quality=70`,
             }}
             recyclingKey={mediaUri}
             data-test-id={Platform.select({ web: "nft-card-media" })}

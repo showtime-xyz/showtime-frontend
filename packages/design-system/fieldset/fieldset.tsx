@@ -2,7 +2,6 @@ import {
   MutableRefObject,
   ComponentType,
   forwardRef,
-  Fragment,
   isValidElement,
 } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
@@ -21,13 +20,11 @@ import { TextInput } from "@showtime-xyz/universal.text-input";
 import type { TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
-const PlatformAnimateHeight =
-  Platform.OS === "web" || Platform.OS === "android" ? Fragment : AnimateHeight;
-
 export type FieldsetProps = {
-  errorText?: string;
+  errorText?: any;
   label?: string | JSX.Element;
-  helperText?: string;
+  helperText?: string | JSX.Element;
+  helperTextTw?: string;
   disabled?: boolean;
   tw?: string;
   select?: SelectProps;
@@ -47,6 +44,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
     errorText,
     accessibilityLabel,
     helperText,
+    helperTextTw = "",
     label,
     disabled,
     select,
@@ -57,7 +55,6 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
     selectOnly,
     switchOnly,
     required,
-    componentRef,
     Component = TextInput,
     containerStyle,
     ...textInputProps
@@ -141,25 +138,33 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
         </View>
       ) : null}
 
-      <PlatformAnimateHeight>
+      <AnimateHeight>
         {errorText ? (
           <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
         ) : null}
-      </PlatformAnimateHeight>
-      <PlatformAnimateHeight>
+      </AnimateHeight>
+      <AnimateHeight
+        extraHeight={Platform.select({
+          ios: 0,
+          default: 4,
+        })}
+      >
         {helperText ? (
           <>
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
             <View tw="h-4" />
             <Text
               nativeID={helperTextId}
-              tw="text-sm leading-6 text-gray-700 dark:text-gray-300"
+              tw={[
+                "text-sm leading-6 text-gray-700 dark:text-gray-300",
+                helperTextTw,
+              ]}
             >
               {helperText}
             </Text>
           </>
         ) : null}
-      </PlatformAnimateHeight>
+      </AnimateHeight>
     </View>
   );
 }
@@ -168,7 +173,7 @@ export const ErrorText = ({
   children,
   nativeID,
 }: {
-  children: string;
+  children: any;
   nativeID?: string;
 }) => {
   return (

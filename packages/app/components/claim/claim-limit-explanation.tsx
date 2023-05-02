@@ -1,5 +1,4 @@
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 

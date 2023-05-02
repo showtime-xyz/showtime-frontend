@@ -25,7 +25,7 @@ const withRewrites = (unparsedPath: string): string => {
   return unparsedPath;
 };
 
-const linking: LinkingOptions<ReactNavigation.RootParamList> = {
+export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
   prefixes: [
     Linking.createURL("/"),
     `https://${url}/`,
@@ -72,6 +72,7 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       notificationSettings: "settings/notifications",
       blockedList: "settings/blocked-list",
       swipeList: "list",
+      appleMusicAuthNativeWebView: "appleMusicAuthNativeWebView",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {
@@ -124,5 +125,3 @@ const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     };
   },
 };
-
-export { linking };

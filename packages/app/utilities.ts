@@ -1,6 +1,7 @@
 import React from "react";
 import { Platform } from "react-native";
 
+import axios, { AxiosError } from "axios";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
@@ -13,7 +14,7 @@ import { SORT_FIELDS } from "app/lib/constants";
 import { removeMd } from "app/lib/remove-markdown";
 
 import { ProfileTabsAPI } from "./hooks/api-hooks";
-import { NFT, Profile } from "./types";
+import { BunnyVideoUrls, NFT, Profile } from "./types";
 
 export const formatAddressShort = (address?: string | null) => {
   if (!address) return null;
@@ -118,33 +119,135 @@ export function formatToUSNumber(number: number) {
   }
 }
 
+function getVideoUrlByClosestWidth(
+  videoData: BunnyVideoUrls,
+  targetWidth: number = 1280
+) {
+  const qualities = [
+    { key: "mp4_720", width: 1280 },
+    { key: "mp4_480", width: 854 },
+    { key: "mp4_360", width: 640 },
+    { key: "mp4_240", width: 426 },
+    { key: "original", width: Infinity },
+  ];
+
+  // Sort the qualities based on the difference between the target width and the quality width.
+  qualities.sort((a, b) => {
+    return Math.abs(a.width - targetWidth) - Math.abs(b.width - targetWidth);
+  });
+
+  for (let i = 0; i < qualities.length; i++) {
+    const quality = qualities[i].key;
+
+    if (videoData[quality]) {
+      return videoData[quality];
+    }
+  }
+
+  return videoData.original;
+}
+
+function getVideoUrl(
+  videoData: BunnyVideoUrls,
+  preferredQualities: string[] = []
+) {
+  const defaultQualities = [
+    "mp4_720",
+    "mp4_480",
+    "mp4_360",
+    "mp4_240",
+    "original",
+  ];
+  const qualities = preferredQualities.concat(
+    defaultQualities.filter((quality) => !preferredQualities.includes(quality))
+  );
+
+  for (let i = 0; i < qualities.length; i++) {
+    const quality = qualities[i];
+
+    if (videoData[quality]) {
+      return videoData[quality];
+    }
+  }
+
+  return videoData.original;
+}
+
+const getCdnImageBase = (chainName?: string) => {
+  return chainName === "polygon"
+    ? "https://showtime.b-cdn.net/cdnv2" // prod
+    : "https://showtime-test.b-cdn.net/cdnv2"; // dev
+};
+
+const buildCdnUrl = (nft: NFT, stillPreview?: boolean) => {
+  return `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
+    nft.chain_name
+  }/${nft.contract_address}/${nft.token_id}${
+    stillPreview ? "?still_preview=true&cache_key=1" : "?cache_key=1"
+  }`;
+};
+
+const getVideoOrGifUrl = (nft: NFT, animated?: boolean) => {
+  return animated
+    ? nft?.video_urls?.preview_animation ??
+        nft?.video_urls?.thumbnail ??
+        nft?.cloudinary_thumbnail_url
+    : nft?.video_urls?.thumbnail ?? nft?.cloudinary_thumbnail_url;
+};
+
+const getAvailableVideoUrl = (nft: NFT, stillPreview: boolean) => {
+  if (!stillPreview) {
+    return nft?.video_urls
+      ? getVideoUrl(nft?.video_urls) ??
+          nft?.cloudinary_video_url ??
+          buildCdnUrl(nft, stillPreview)
+      : nft?.cloudinary_video_url ?? buildCdnUrl(nft, stillPreview);
+  }
+  return "";
+};
+
+const getImageUrl = (nft: NFT, cdnImageBase: string) => {
+  return (
+    nft.image_url ??
+    `${cdnImageBase}/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`
+  );
+};
+
 export const getMediaUrl = ({
   nft,
   stillPreview,
+  animated,
 }: {
   nft?: NFT;
   stillPreview: boolean;
+  animated?: boolean;
 }) => {
   if (!nft || (!nft.chain_name && !nft.contract_address && !nft.token_id)) {
     console.warn("NFT is missing fields to get media URL");
     return "";
   }
 
-  let cdnUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/media/nft/${
-    nft.chain_name
-  }/${nft.contract_address}/${nft.token_id}?cache_key=1${
-    stillPreview ? "&still_preview=true" : ""
-  }`;
+  const cdnImageBase = getCdnImageBase(nft.chain_name);
+  let cdnUrl = buildCdnUrl(nft, stillPreview);
 
-  if (nft?.mime_type?.startsWith("image") && nft?.mime_type !== "image/gif") {
-    if (nft.chain_name === "polygon") {
-      cdnUrl = `https://showtime.b-cdn.net/cdnv2/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
-    } else {
-      cdnUrl = `https://showtime-test.b-cdn.net/cdnv2/${nft.chain_name}/${nft.contract_address}/${nft.token_id}`;
-    }
+  if (
+    stillPreview &&
+    (nft?.mime_type?.startsWith("video") || nft?.mime_type === "image/gif")
+  ) {
+    const url = getVideoOrGifUrl(nft, animated);
+    cdnUrl = url ?? cdnUrl;
+    cdnUrl = cdnUrl.replace(
+      "https://storage.googleapis.com/showtime-cdn/cdnv2",
+      cdnImageBase
+    );
+    cdnUrl = cdnUrl.replace("/upload/f_webp", "/upload/f_webp,w_300,q_60");
   }
 
-  //console.log(cdnUrl);
+  cdnUrl = getAvailableVideoUrl(nft, stillPreview) || cdnUrl;
+
+  if (nft?.mime_type?.startsWith("image") && nft?.mime_type !== "image/gif") {
+    cdnUrl = getImageUrl(nft, cdnImageBase);
+  }
 
   return cdnUrl;
 };
@@ -736,4 +839,20 @@ export const getWebImageSize = (file: File) => {
     img.onerror = reject;
   });
   return promise;
+};
+
+export const formatAPIErrorMessage = (error: AxiosError | Error) => {
+  let messages = [];
+  if (axios.isAxiosError(error)) {
+    const res = error.response?.data;
+    if (res.errors) {
+      messages = res.errors.map((e: any) => e.message);
+    } else if (res.error) {
+      messages.push(res.error.message);
+    }
+  } else if (error.message) {
+    messages.push(error.message);
+  }
+
+  return messages.join("\n");
 };

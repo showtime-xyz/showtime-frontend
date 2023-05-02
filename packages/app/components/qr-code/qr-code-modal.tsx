@@ -8,7 +8,6 @@ import {
 } from "react";
 import { Dimensions, Linking, Platform, View as RNView } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { BlurView } from "expo-blur";
 import * as Clipboard from "expo-clipboard";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,6 +15,7 @@ import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";

@@ -35,6 +35,7 @@ export const AlertContext = createContext<AlertContextType>({
 });
 export let Alert: AlertContextType = Platform.select({
   web: {
+    // eslint-disable-next-line unused-imports/no-unused-vars
     alert: (...params: Parameters<AlertStatic["alert"]>) => undefined,
   } as RNAlert,
   default: RNAlert,
@@ -136,3 +137,4 @@ export const useCustomAlert = () => {
   }
   return Alert;
 };
+export default AlertProvider;

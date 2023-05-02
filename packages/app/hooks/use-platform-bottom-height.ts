@@ -4,34 +4,30 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
-import { HIDE_LINK_FOOTER_ROUTER_LIST } from "app/lib/constants";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
+import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
+import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { breakpoints } from "design-system/theme";
 
-import { useUser } from "./use-user";
-
 export const usePlatformBottomHeight = () => {
-  const { isAuthenticated } = useUser();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  const nativeBottomTabBarHeight = useBottomTabBarHeight();
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const { isTabBarHidden } = useNavigationElements();
   const router = useRouter();
-  if (!isAuthenticated) return 0;
-
+  if (isTabBarHidden) {
+    return 0;
+  }
   if (Platform.OS === "web") {
-    const mobileWebBottomHeight = HIDE_LINK_FOOTER_ROUTER_LIST.includes(
-      router.pathname
-    )
-      ? 0
-      : insets.bottom + MOBILE_WEB_TABS_HEIGHT;
-
+    const mobileWebBottomHeight = insets.bottom + MOBILE_WEB_TABS_HEIGHT;
     const isMdWidth = width >= breakpoints["md"];
     const webBottomTabBarHeight = isMdWidth
       ? insets.bottom
       : mobileWebBottomHeight;
     return webBottomTabBarHeight;
   }
-
-  return nativeBottomTabBarHeight;
+  if (router.pathname !== "/") {
+    return Math.max(safeAreaBottom, 8);
+  }
+  return safeAreaBottom + BOTTOM_TABBAR_BASE_HEIGHT;
 };

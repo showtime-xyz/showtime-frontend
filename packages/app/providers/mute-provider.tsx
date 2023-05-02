@@ -19,6 +19,7 @@ export const MuteContext = createContext([true, () => {}] as
 
 type MuteState = [boolean, Dispatch<SetStateAction<boolean>>];
 
+/*
 const useAutoPlayWithSound = (values: MuteState) => {
   useEffect(() => {
     const handleClick = (event: PointerEvent | MouseEvent) => {
@@ -68,6 +69,7 @@ const useAutoPlayWithSound = (values: MuteState) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
+*/
 
 const useMuteOnVisbilityChange = (values: MuteState) => {
   const wasMuted = useRef(values[0]);

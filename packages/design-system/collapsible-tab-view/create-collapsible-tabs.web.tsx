@@ -41,17 +41,7 @@ export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
 export function createCollapsibleTabsComponent() {
   return React.forwardRef(CollapsibleHeaderTabView);
 }
-enum StatusCode {
-  /** The default status, located at the original position. */
-  STATUS_ORIGINAL = 0,
 
-  /**
-   * The released status, located at somewhere on document, but not
-   * default one.
-   */
-  STATUS_RELEASED = 1,
-  STATUS_FIXED = 2,
-}
 function CollapsibleHeaderTabView<T extends Route>(
   {
     renderTabBar,

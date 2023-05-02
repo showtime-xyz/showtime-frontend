@@ -3,15 +3,14 @@ import { useWindowDimensions } from "react-native";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Plus } from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
+import { SWIPE_LIST_SCREENS } from "app/lib/constants";
 import { TrendingTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
@@ -40,7 +39,9 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
               <View tw="mx-2">
                 <TrendingTabBarIcon
                   color={isDark ? "white" : "black"}
-                  focused={router.pathname === "/trending"}
+                  focused={
+                    router.pathname === "/home" || router.pathname === "/foryou"
+                  }
                 />
               </View>
               <View tw="mx-2">
@@ -78,24 +79,24 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
                   <View tw="mx-3">
                     <TrendingTabBarIcon
                       color={isDark ? "white" : "black"}
-                      focused={router.pathname === "/trending"}
+                      focused={router.pathname === "/foryou"}
                     />
                   </View>
                 )}
                 {withBackground ? (
-                  <Pressable
-                    onPress={() => {
-                      navigateToLogin();
-                    }}
-                    tw="h-8 items-center justify-center rounded-full bg-black/60 px-4"
+                  <Button
+                    onPress={navigateToLogin}
+                    theme={
+                      SWIPE_LIST_SCREENS.includes(router.pathname)
+                        ? "dark"
+                        : undefined
+                    }
                   >
-                    <Text tw="text-sm font-semibold text-white">Sign In</Text>
-                  </Pressable>
+                    Sign In
+                  </Button>
                 ) : (
                   <Button
-                    onPress={() => {
-                      navigateToLogin();
-                    }}
+                    onPress={navigateToLogin}
                     variant="primary"
                     size="regular"
                     labelTW="font-semibold"

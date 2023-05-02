@@ -53,7 +53,6 @@ export const SwipeList = ({
   useScrollToTop(listRef);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
-  const initialURLSet = useRef(false);
   const isSwiped = useRef(false);
 
   const visibleItems = useSharedValue<any[]>([
@@ -70,32 +69,6 @@ export const SwipeList = ({
     }),
     []
   );
-
-  useEffect(() => {
-    if (
-      !initialURLSet.current &&
-      isSwipeListScreen &&
-      typeof initialParamProp !== "undefined"
-    ) {
-      const nft = data[Number(initialParamProp)];
-      if (nft) {
-        router.replace(
-          {
-            pathname: "/profile/[username]/[dropSlug]",
-            query: {
-              ...router.query,
-              username: nft.creator_username,
-              dropSlug: nft.slug,
-            },
-          },
-          getNFTSlug(nft),
-          { shallow: true }
-        );
-      }
-
-      initialURLSet.current = true;
-    }
-  }, [data, isSwipeListScreen, initialParamProp, router]);
 
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {

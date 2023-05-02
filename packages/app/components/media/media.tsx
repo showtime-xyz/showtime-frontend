@@ -35,6 +35,7 @@ type Props = {
   theme?: "light" | "dark";
   optimizedWidth?: number;
   loading?: "eager" | "lazy";
+  withVideoBackdrop?: boolean;
 };
 
 function MediaImplementation({
@@ -49,6 +50,7 @@ function MediaImplementation({
   videoRef,
   optimizedWidth = 800,
   loading = "lazy",
+  withVideoBackdrop = false,
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
@@ -70,6 +72,8 @@ function MediaImplementation({
     <View
       style={{
         opacity: item?.loading ? 0.5 : 1,
+        height: Platform.OS === "web" ? "inherit" : height,
+        width: Platform.OS === "web" ? "inherit" : width,
       }}
     >
       {Boolean(edition) && (
@@ -119,7 +123,7 @@ function MediaImplementation({
               uri: mediaUri,
             }}
             posterSource={{
-              uri: mediaStillPreviewUri,
+              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=70`,
             }}
             width={width}
             height={height}
@@ -130,6 +134,7 @@ function MediaImplementation({
             loading={loading}
             //@ts-ignore
             dataset={Platform.select({ web: { testId: "nft-card-media" } })}
+            withVideoBackdrop={withVideoBackdrop}
           />
         </PinchToZoom>
       ) : null}

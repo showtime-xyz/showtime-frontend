@@ -31,9 +31,6 @@ type InputProps = {
   autocomplete?: "on" | "off";
 };
 
-const BOX_SHADOW_LIGNT = "#E4E4E7 0px 0px 0px 4px";
-const BOX_SHADOW_DARK = "#52525B 0px 0px 0px 4px";
-
 let idCounter = 0;
 // Replace this with useId from React 18. Currently we're doing client side rendering, so probably this is safe!
 export const useId = (id?: string) => {

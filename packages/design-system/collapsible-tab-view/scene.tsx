@@ -36,7 +36,6 @@ export function SceneComponent<P extends object>({
     shareAnimatedValue,
     headerHeight,
     expectHeight,
-    curIndexValue,
     refHasChanged,
     updateSceneInfo,
     scrollViewPaddingTop,

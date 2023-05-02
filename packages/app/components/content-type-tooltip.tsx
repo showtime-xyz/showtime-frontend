@@ -6,6 +6,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 
+import { PlayOnAppleMusic } from "./play-on-apple-music";
 import { PlayOnSpotify } from "./play-on-spotify";
 import { PlayOnSpinamp } from "./spinamp/play-on-spinamp";
 import { TextTooltip } from "./text-tooltip";
@@ -35,6 +36,16 @@ export const contentGatingType = {
     text: "Enter password & location to collect",
     typeName: "Password & Location",
   },
+  spotify_presave: {
+    icon: Spotify,
+    text: "Pre-Save to collect",
+    typeName: "Pre-Save",
+  },
+  multi_provider_music_save: {
+    icon: Spotify,
+    text: "Save on Spotify or Apple Music to collect",
+    typeName: "Music",
+  },
   music_presave: {
     icon: Spotify,
     text: "Pre-Save to collect",
@@ -51,8 +62,22 @@ export const ContentTypeTooltip = ({
     return <PlayOnSpinamp url={edition?.spinamp_track_url} />;
   }
 
+  if (edition?.apple_music_track_url && edition?.spotify_track_url) {
+    return (
+      <View tw="flex-row" style={{ columnGap: 4 }}>
+        <PlayOnSpotify edition={edition} />
+        <PlayOnAppleMusic edition={edition} />
+      </View>
+    );
+  }
+
+  if (edition?.apple_music_track_url) {
+    return <PlayOnAppleMusic edition={edition} />;
+  }
+
   if (
-    edition?.gating_type === "music_presave" &&
+    (edition?.gating_type === "spotify_presave" ||
+      edition?.gating_type === "music_presave") &&
     edition?.spotify_track_url &&
     edition?.presave_release_date &&
     new Date() >= new Date(edition?.presave_release_date)
@@ -79,7 +104,7 @@ export const ContentTypeTooltip = ({
               {/* @ts-expect-error className not supported */}
               <Icon color="white" width={20} height={20} className="z-10" />
               {edition.presave_release_date ? (
-                <Text tw="px-1 text-sm font-semibold text-white">
+                <Text tw="px-1 text-xs font-medium text-white">
                   Available on{" "}
                   {new Date(edition.presave_release_date).toLocaleString(
                     "default",

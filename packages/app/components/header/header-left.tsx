@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Search } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -17,6 +19,7 @@ export const HeaderLeft = ({
   const router = useRouter();
 
   const canGoHome = router.pathname.split("/").length - 1 >= 2;
+
   const Icon = canGoBack || canGoHome ? ArrowLeft : Search;
 
   return (
@@ -34,9 +37,13 @@ export const HeaderLeft = ({
       ]}
       onPress={() => {
         if (canGoBack) {
-          router.pop();
+          if (Platform.OS === "web" && history?.length <= 1) {
+            router.push("/");
+          } else {
+            router.pop();
+          }
         } else if (canGoHome) {
-          router.push("/home");
+          router.push("/");
         } else {
           router.push("/search");
         }

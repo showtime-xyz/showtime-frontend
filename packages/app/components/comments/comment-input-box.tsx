@@ -12,6 +12,8 @@ import { CommentType } from "app/hooks/api/use-comments";
 import { useUser } from "app/hooks/use-user";
 import { formatAddressShort } from "app/utilities";
 
+import { useOnboardingPromise } from "../onboarding/onboarding-promise";
+
 interface CommentInputBoxProps {
   submitting?: boolean;
   style?: ViewStyle;
@@ -36,6 +38,8 @@ export const CommentInputBox = forwardRef<
     null
   );
   const { user } = useUser();
+  const { onboardingPromise } = useOnboardingPromise();
+
   //#endregion
 
   //#region callbacks
@@ -43,6 +47,7 @@ export const CommentInputBox = forwardRef<
     async function handleOnSubmitComment(text: string) {
       const _newComment = async () => {
         try {
+          await onboardingPromise();
           await submit(text, selectedComment?.comment_id);
           commentInputRef?.current?.reset();
         } catch (error) {
@@ -64,7 +69,13 @@ export const CommentInputBox = forwardRef<
 
       setSelectedComment(null);
     },
-    [Alert, submit, selectedComment, commentInputRef]
+    [
+      onboardingPromise,
+      submit,
+      selectedComment?.comment_id,
+      commentInputRef,
+      Alert,
+    ]
   );
 
   const handleOnClearPress = useCallback(() => {

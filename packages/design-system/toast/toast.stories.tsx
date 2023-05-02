@@ -1,5 +1,3 @@
-import { Meta } from "@storybook/react";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -8,9 +6,9 @@ import { toast, Toaster } from "./index";
 export default {
   component: View,
   title: "Components/Toast",
-} as Meta;
+};
 
-export const Primary: React.FC<{}> = () => {
+export const Primary = () => {
   return (
     <View tw="flex-1 items-center justify-center">
       <Button onPress={() => toast("Gm friends!")}>Toast</Button>

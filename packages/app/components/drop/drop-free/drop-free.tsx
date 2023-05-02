@@ -5,18 +5,14 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import {
-  Platform,
-  ScrollView as RNScrollView,
-  useWindowDimensions,
-} from "react-native";
+import { ScrollView as RNScrollView, useWindowDimensions } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 
 import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Alert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -47,12 +43,11 @@ import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
-import { useBottomTabBarHeight } from "app/lib/react-navigation/bottom-tabs";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { yup } from "app/lib/yup";
 import { createParam } from "app/navigation/use-param";
 import { formatAddressShort } from "app/utilities";
@@ -163,7 +158,7 @@ export const DropFree = () => {
 
   const shouldProceedToCheckout = watch("editionSize") === 0;
 
-  const bottomBarHeight = useBottomTabBarHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
   // const [transactionId, setTransactionId] = useParam('transactionId')
 
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
@@ -176,7 +171,6 @@ export const DropFree = () => {
   });
   const modalScreenContext = useModalScreenContext();
 
-  const headerHeight = useHeaderHeight();
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const scrollViewRef = useRef<RNScrollView>(null);
   const windowWidth = useWindowDimensions().width;
@@ -342,11 +336,12 @@ export const DropFree = () => {
 
   return (
     <BottomSheetModalProvider>
-      {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
       <BottomSheetScrollView
         ref={scrollViewRef}
-        style={{ padding: 16 }}
-        contentContainerStyle={{ paddingBottom: bottomBarHeight }}
+        style={{ paddingHorizontal: 16 }}
+        contentContainerStyle={{
+          paddingBottom: Math.max(bottomBarHeight, 16),
+        }}
       >
         {!showPreview ? (
           <View>
@@ -410,7 +405,7 @@ export const DropFree = () => {
                               {errors.file?.message ? (
                                 <View tw="mt-2">
                                   <Text tw="text-center text-sm text-red-500">
-                                    {errors?.file?.message}
+                                    {errors?.file?.message as string}
                                   </Text>
                                 </View>
                               ) : null}
@@ -438,7 +433,6 @@ export const DropFree = () => {
                     return (
                       <Fieldset
                         ref={ref}
-                        tw={windowWidth <= 768 ? "flex-1" : ""}
                         label="Title"
                         placeholder="Sweet"
                         onBlur={onBlur}
@@ -460,8 +454,8 @@ export const DropFree = () => {
                         return (
                           <Fieldset
                             ref={ref}
-                            tw="flex-1"
                             label="Description"
+                            tw="flex-1"
                             multiline
                             textAlignVertical="top"
                             placeholder={descPlaceholder}
@@ -739,7 +733,7 @@ export const DropFree = () => {
           />
         )}
       </BottomSheetScrollView>
-      <AnimateHeight delay={0}>
+      <AnimateHeight>
         <View tw="px-4">
           <Button
             variant="primary"

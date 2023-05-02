@@ -125,10 +125,6 @@ export const Search = () => {
           ItemSeparatorComponent={Separator}
           keyboardShouldPersistTaps="handled"
           estimatedItemSize={64}
-          overscan={{
-            main: 64,
-            reverse: 64,
-          }}
           {...keyboardDismissProp}
         />
       ) : loading && term ? (

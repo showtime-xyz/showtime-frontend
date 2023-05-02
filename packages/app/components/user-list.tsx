@@ -83,7 +83,7 @@ export const UserList = ({
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       estimatedItemSize={64}
-      overscan={64}
+      overscan={8}
       ListEmptyComponent={listEmptyComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
       {...modalListProps}

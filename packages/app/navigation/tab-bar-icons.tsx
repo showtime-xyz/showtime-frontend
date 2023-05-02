@@ -14,6 +14,7 @@ import {
   HotFilled,
   Plus,
   Showtime,
+  User,
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -23,6 +24,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
@@ -76,7 +78,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
 
 export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab={Platform.OS === "web" ? "/foryou" : "/"}>
+    <TabBarIcon tab="/">
       {focused ? (
         <HomeFilled
           style={{ zIndex: 1 }}
@@ -86,23 +88,6 @@ export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
         />
       ) : (
         <Home style={{ zIndex: 1 }} width={24} height={24} color={color} />
-      )}
-    </TabBarIcon>
-  );
-};
-
-export const MarketplaceTabBarIcon = ({ color, focused }: TabBarIconProps) => {
-  return (
-    <TabBarIcon tab="/marketplace">
-      {focused ? (
-        <CompassFilled
-          style={{ zIndex: 1 }}
-          width={24}
-          height={24}
-          color={color}
-        />
-      ) : (
-        <Compass style={{ zIndex: 1 }} width={24} height={24} color={color} />
       )}
     </TabBarIcon>
   );
@@ -148,7 +133,19 @@ export const CreateTabBarIcon = ({
 
 export const TrendingTabBarIcon = ({ color, focused }: TabBarIconProps) => {
   return (
-    <TabBarIcon tab="/trending">
+    <TabBarIcon tab="/foryou">
+      {focused ? (
+        <HotFilled style={{ zIndex: 1 }} width={24} height={24} color={color} />
+      ) : (
+        <Hot style={{ zIndex: 1 }} width={24} height={24} color={color} />
+      )}
+    </TabBarIcon>
+  );
+};
+// This icon is temporary until we have creator channel feature
+export const HotTabBarIconTemp = ({ color, focused }: TabBarIconProps) => {
+  return (
+    <TabBarIcon tab="/foryou">
       {focused ? (
         <HotFilled style={{ zIndex: 1 }} width={24} height={24} color={color} />
       ) : (
@@ -163,8 +160,19 @@ export const NotificationsTabBarIcon = ({
   focused,
   onPress,
 }: TabBarIconProps) => {
+  const redirectToScreen = useRedirectToScreen();
   return (
-    <TabBarIcon tab="/notifications" onPress={onPress}>
+    <TabBarIcon
+      onPress={() => {
+        if (onPress) {
+          onPress();
+        } else {
+          redirectToScreen({
+            pathname: "/notifications",
+          });
+        }
+      }}
+    >
       {focused ? (
         <BellFilled
           style={{ zIndex: 1 }}
@@ -195,13 +203,28 @@ const UnreadNotificationIndicator = () => {
   );
 };
 
-export const ProfileTabBarIcon = () => {
-  const { user } = useUser();
+export const ProfileTabBarIcon = ({ color }: TabBarIconProps) => {
+  const { user, isAuthenticated } = useUser();
   const { userAddress } = useCurrentUserAddress();
+  const redirectToScreen = useRedirectToScreen();
 
   return (
-    <TabBarIcon tab={`/@${user?.data?.profile?.username ?? userAddress}`}>
-      <Avatar url={user?.data?.profile?.img_url} alt={"Profile Avatar"} />
+    <TabBarIcon
+      onPress={() =>
+        redirectToScreen({
+          pathname: `/@${user?.data?.profile?.username ?? userAddress}`,
+        })
+      }
+    >
+      {isAuthenticated ? (
+        <Avatar
+          url={user?.data?.profile?.img_url}
+          size={28}
+          alt={"Profile Avatar"}
+        />
+      ) : (
+        <User color={color} width={24} height={24} />
+      )}
     </TabBarIcon>
   );
 };

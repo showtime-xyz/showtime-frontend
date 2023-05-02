@@ -73,7 +73,6 @@
         "zeego": "1.0.2"
       },
       "peerDependencies": {
-        "@gorhom/bottom-sheet": "*",
         "moti": "*",
         "next": "*",
         "react-native-gesture-handler": ">=2.0.0",
@@ -96,9 +95,7 @@
      **/
     "*": {
       "teambit.pkg/pkg": {
-        "packageManagerPublishArgs": [
-          "--access public"
-        ],
+        "packageManagerPublishArgs": ["--access public"],
         "packageJson": {
           "private": false,
           "name": "@showtime-xyz/{scope}.{name}"

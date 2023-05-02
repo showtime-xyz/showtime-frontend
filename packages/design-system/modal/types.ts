@@ -1,8 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
-import type { BottomSheetProps } from "@gorhom/bottom-sheet";
-
+import type { GorhomBottomSheetProps } from "@showtime-xyz/universal.bottom-sheet";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export interface ModalMethods {
@@ -26,7 +25,7 @@ export interface ModalProps {
    * to snap to. It accepts array of number, string or mix.
    * @default ["90%", "100%"]
    */
-  mobile_snapPoints?: BottomSheetProps["snapPoints"];
+  mobile_snapPoints?: GorhomBottomSheetProps["snapPoints"];
 
   /**
    * **WEB ONLY**: Defines the modal container height.
@@ -34,7 +33,11 @@ export interface ModalProps {
    * @default "max-h-[85vh] web:max-h-[99svh] md:max-h-[82vh]"
    */
   web_height?: string;
-
+  /**
+   * **WEB ONLY**: Whether to show the modal.
+   * @default true
+   */
+  visible?: boolean;
   /**
    * Defines the modal container
    * tailwind style.
@@ -129,6 +132,7 @@ export interface ModalContainerProps
     | "children"
     | "mobile_snapPoints"
     | "web_height"
+    | "visible"
     | "style"
   > {
   close: () => void;
@@ -144,4 +148,6 @@ export interface ModalFooterProps {
   children: JSX.Element;
 }
 
-export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> {}
+export interface ModalBackdropProps extends Pick<ModalProps, "onClose"> {
+  disableBackdropPress?: boolean;
+}

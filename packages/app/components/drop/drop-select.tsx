@@ -18,7 +18,9 @@ export const DropSelect = () => {
     redirectTo: "/login",
     redirectIfProfileIncomplete: true,
   });
-  const canCreateMusicDrop = !!user.user?.data.profile.spotify_artist_id;
+  const canCreateMusicDrop =
+    !!user.user?.data.profile.spotify_artist_id ||
+    !!user.user?.data.profile.apple_music_artist_id;
   const isDark = useIsDarkMode();
 
   if (user.isIncompletedProfile) {

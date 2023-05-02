@@ -151,10 +151,6 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             estimatedItemSize={contentWidth / NUM_COLUMNS}
-            overscan={{
-              main: contentWidth / NUM_COLUMNS,
-              reverse: contentWidth / NUM_COLUMNS,
-            }}
             style={{ margin: -GAP }}
             ListFooterComponent={ListFooterComponent}
             onEndReached={fetchMore}

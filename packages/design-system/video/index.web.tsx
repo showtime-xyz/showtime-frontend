@@ -22,6 +22,7 @@ type VideoProps = Omit<AVVideoProps, "resizeMode"> & {
   height: number;
   resizeMode: ResizeMode;
   loading?: "eager" | "lazy";
+  withVideoBackdrop?: boolean;
 };
 const contentFitToresizeMode = (resizeMode: ResizeMode) => {
   switch (resizeMode) {
@@ -45,6 +46,7 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
     width,
     height,
     loading = "lazy",
+    withVideoBackdrop,
     ...props
   }: VideoProps,
   ref
@@ -72,23 +74,30 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
         />
       ) : (
         <View style={{ height: "inherit", width: "inherit" }}>
-          <Image
-            tw={tw}
-            style={style as ImageStyle}
-            resizeMode={resizeMode}
-            blurhash={blurhash}
-            source={posterSource}
-            width={width}
-            height={height}
-            alt={"Video Background"}
-            loading={loading}
-          />
-          <View tw="absolute inset-0 backdrop-blur-md" />
+          {withVideoBackdrop ? (
+            <>
+              <Image
+                tw={"blur-lg"}
+                style={style as ImageStyle}
+                resizeMode={resizeMode}
+                blurhash={blurhash}
+                source={posterSource}
+                width={width}
+                height={height}
+                alt={"Video Background"}
+                loading={loading}
+              />
+            </>
+          ) : (
+            <View style={{ width, height }} />
+          )}
+
           <ExpoVideo
             style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}
             useNativeControls={videoConfig?.useNativeControls}
             resizeMode={contentFitToresizeMode(resizeMode)}
             posterSource={posterSource}
+            usePoster={!withVideoBackdrop}
             source={props.source}
             ref={(innerRef) => {
               if (videoRef) {

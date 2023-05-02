@@ -17,10 +17,13 @@ export const useRedirectToClaimDrop = () => {
 
   const [password] = useParam("password");
 
-  const redirectToClaimDrop = async (editionContractAddress: string) => {
+  const redirectToClaimDrop = async (
+    editionContractAddress: string,
+    type: string
+  ) => {
     await loginPromise();
     await onboardingPromise();
-    const as = `/claim/${editionContractAddress}`;
+    const as = `/claim/${editionContractAddress}?type=${type}`;
     router.push(
       Platform.select({
         native: as,
@@ -31,6 +34,7 @@ export const useRedirectToClaimDrop = () => {
             contractAddress: editionContractAddress,
             password,
             claimModal: true,
+            type,
           },
         } as any,
       }),

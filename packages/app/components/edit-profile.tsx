@@ -7,11 +7,11 @@ import {
   Keyboard,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -530,7 +530,7 @@ export const EditProfile = () => {
                       }
                     />
                   </View>
-                  <View tw="mt-4 flex-row items-center justify-between">
+                  {/* <View tw="mt-4 flex-row items-center justify-between">
                     <View tw="flex-row items-center">
                       <InstagramColorful width={20} height={20} />
                       <Text tw="ml-2 text-sm font-bold text-gray-700 dark:text-white">
@@ -546,7 +546,7 @@ export const EditProfile = () => {
                         user?.data?.profile?.social_login_handles?.instagram
                       }
                     />
-                  </View>
+                  </View> */}
                 </View>
               </View>
               {/* End Social */}

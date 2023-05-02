@@ -10,10 +10,6 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 const cache = require("./workbox-cache");
-const {
-  getDesignSystemPackages,
-  resolveAliasDesignSystemPackages,
-} = require("../../plugins/resolve-design-system-packages");
 const withPWA = require("next-pwa")({
   dest: "public",
   disable: isDev,
@@ -45,7 +41,6 @@ const nextConfig = {
     "app",
     "desing-system",
     "@showtime-xyz",
-    "@gorhom/bottom-sheet",
     "@gorhom/portal",
     "moti",
     "zeego",
@@ -71,7 +66,6 @@ const nextConfig = {
     "expo-location",
     "expo-mail-composer",
     "expo-media-library",
-    "expo-next-react-navigation",
     "expo-splash-screen",
     "expo-status-bar",
     "expo-system-ui",
