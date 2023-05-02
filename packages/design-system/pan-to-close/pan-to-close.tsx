@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { FC } from "react";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -46,21 +46,20 @@ export const PanToClose: FC<PanToCloseProps> = ({
       ],
     };
   });
-
-  const snapToPoint = useCallback(
-    (y: number) => {
-      "worklet";
-      transY.value = withSpring(y, SPRING_CONFIG, () => {
-        if (y !== 0) {
-          if (propOnClose) runOnJS(propOnClose)();
-          setTimeout(() => {
-            transY.value = 0;
-          }, closeDuration);
-        }
-      });
-    },
-    [transY, propOnClose, closeDuration]
-  );
+  const onClose = () => {
+    propOnClose();
+    setTimeout(() => {
+      transY.value = 0;
+    }, closeDuration);
+  };
+  const snapToPoint = (y: number) => {
+    "worklet";
+    transY.value = withSpring(y, SPRING_CONFIG, () => {
+      if (y !== 0) {
+        runOnJS(onClose)();
+      }
+    });
+  };
   const panGesture = Gesture.Pan()
     .onStart(({ velocityY, velocityX }) => {
       panIsVertical.value = Math.abs(velocityY) >= Math.abs(velocityX);
