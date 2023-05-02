@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -17,7 +16,6 @@ type CardSkeletonProps = {
 
 export const CardSkeleton = memo<CardSkeletonProps>(
   ({ squareSize, tw = "" }) => {
-    const { colorScheme } = useColorScheme();
     const { width } = useWindowDimensions();
     const isMdWidth = width >= breakpoints["md"];
     if (isMdWidth) {
@@ -25,57 +23,19 @@ export const CardSkeleton = memo<CardSkeletonProps>(
         <View tw={["mb-4 flex-1 overflow-hidden rounded-2xl", tw]}>
           <View tw="px-4 py-2">
             <View tw="flex-row">
-              <Skeleton
-                width={32}
-                height={32}
-                radius={32}
-                show
-                // @ts-ignore
-                colorMode={colorScheme}
-              />
+              <Skeleton width={32} height={32} radius={32} show />
               <View tw="ml-2">
-                <Skeleton
-                  width={140}
-                  height={14}
-                  show
-                  // @ts-ignore
-                  colorMode={colorScheme}
-                />
+                <Skeleton width={140} height={14} show />
                 <View tw="mt-1" />
-                <Skeleton
-                  width={90}
-                  height={14}
-                  show
-                  // @ts-ignore
-                  colorMode={colorScheme}
-                />
+                <Skeleton width={90} height={14} show />
               </View>
             </View>
           </View>
-          <Skeleton
-            width={squareSize}
-            height={squareSize}
-            show
-            // @ts-ignore
-            colorMode={colorScheme}
-            radius={0}
-          />
+          <Skeleton width={squareSize} height={squareSize} show radius={0} />
           <View tw="px-4 py-2">
-            <Skeleton
-              width={140}
-              height={16}
-              show
-              // @ts-ignore
-              colorMode={colorScheme}
-            />
+            <Skeleton width={140} height={16} show />
             <View tw="h-2" />
-            <Skeleton
-              width={90}
-              height={14}
-              show
-              // @ts-ignore
-              colorMode={colorScheme}
-            />
+            <Skeleton width={90} height={14} show />
           </View>
         </View>
       );
@@ -86,14 +46,7 @@ export const CardSkeleton = memo<CardSkeletonProps>(
           width: squareSize,
         }}
       >
-        <Skeleton
-          width={squareSize}
-          height={squareSize}
-          show
-          // @ts-ignore
-          colorMode={colorScheme}
-          radius={0}
-        />
+        <Skeleton width={squareSize} height={squareSize} show radius={0} />
       </View>
     );
   }

@@ -66,7 +66,7 @@ export const DropFree = () => {
   }, [confirmPaymentStatus, handlePaymentSuccess]);
 
   return (
-    <ClientSideOnly>
+    <>
       <OriginDropFree />
       {isHasPaymentIntentId && paymentStatus !== "success" && (
         <View tw="absolute inset-0 items-center justify-center bg-black/30 p-4">
@@ -75,6 +75,6 @@ export const DropFree = () => {
           </View>
         </View>
       )}
-    </ClientSideOnly>
+    </>
   );
 };

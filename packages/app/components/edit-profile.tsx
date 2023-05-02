@@ -275,7 +275,7 @@ export const EditProfile = () => {
               render={({ field: { onChange, value } }) => (
                 <DropFileZone onChange={({ file }) => onChange(file)}>
                   <Pressable
-                    accessibilityLabel="Pick profile photo"
+                    aria-label="Pick profile photo"
                     testID="profile_photo_picker"
                     onPress={async () => {
                       const file = await pickFile({
@@ -325,7 +325,7 @@ export const EditProfile = () => {
                   <DropFileZone onChange={({ file }) => onChange(file)}>
                     <>
                       <Pressable
-                        accessibilityLabel="Pick profile photo"
+                        aria-label="Pick profile photo"
                         testID="profile_photo_picker"
                         onPress={async () => {
                           const file = await pickFile({
@@ -497,7 +497,7 @@ export const EditProfile = () => {
                     ref={ref}
                     tw="mt-4"
                     label="Website"
-                    keyboardType="url"
+                    inputMode="url"
                     textContentType="URL"
                     placeholder="Your URL"
                     testID="website_url"

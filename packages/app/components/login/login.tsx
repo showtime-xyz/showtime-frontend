@@ -76,7 +76,7 @@ export function LoginComponent({
           validationSchema={emailValidationSchema}
           label="Email address"
           placeholder="Enter your email address"
-          keyboardType="email-address"
+          inputMode="email"
           textContentType="emailAddress"
           signInButtonLabel="Send Email"
           onSubmit={handleSubmitEmail}

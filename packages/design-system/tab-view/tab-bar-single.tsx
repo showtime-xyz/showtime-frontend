@@ -40,59 +40,49 @@ export const TabBarSingle = memo<IndependentTabBarProps>(function TabBarSingle({
   );
 
   return (
-    <ClientSideOnly>
-      <View
-        tw={["no-scrollbar flex-row overflow-x-auto overflow-y-hidden", tw]}
-      >
-        {routes.map((item, index) => (
-          <PressableHover
-            onPress={() => onPress?.(index)}
-            style={{
-              paddingHorizontal: PADDING_X,
-            }}
-            key={item.key}
-            tw={disableScrollableBar ? "flex-1" : ""}
-          >
-            <View
-              onLayout={({
-                nativeEvent: {
-                  layout: { width },
-                },
-              }) => {
-                const tabs = Object.assign(tabsWidth, {
-                  [index]: width,
-                });
-                if (Object.keys(tabsWidth).length === routes.length) {
-                  setTabsWidth({ ...tabs });
-                }
-              }}
-              tw={["py-4", disableScrollableBar ? "items-center" : ""]}
-            >
-              <Text
-                tw={["text-sm font-bold", getTextColor(propIndex === index)]}
-              >
-                {item.title}
-                {Boolean(item.subtitle) && (
-                  <Text tw="text-xs font-semibold text-gray-500">
-                    {` ${item.subtitle}`}
-                  </Text>
-                )}
-              </Text>
-            </View>
-          </PressableHover>
-        ))}
-        <View
-          tw="animate-fade-in absolute bottom-0 h-[2px] bg-gray-900 transition-all dark:bg-white"
+    <View tw={["no-scrollbar flex-row overflow-x-auto overflow-y-hidden", tw]}>
+      {routes.map((item, index) => (
+        <PressableHover
+          onPress={() => onPress?.(index)}
           style={{
-            width: tabsWidth[propIndex],
-            transform: [
-              {
-                translateX: outputRange[propIndex],
-              },
-            ],
+            paddingHorizontal: PADDING_X,
           }}
-        />
-      </View>
-    </ClientSideOnly>
+          key={item.key}
+          tw={disableScrollableBar ? "flex-1" : ""}
+        >
+          <View
+            onLayout={({
+              nativeEvent: {
+                layout: { width },
+              },
+            }) => {
+              const tabs = Object.assign(tabsWidth, {
+                [index]: width,
+              });
+              if (Object.keys(tabsWidth).length === routes.length) {
+                setTabsWidth({ ...tabs });
+              }
+            }}
+            tw={["py-4", disableScrollableBar ? "items-center" : ""]}
+          >
+            <Text tw={["text-sm font-bold", getTextColor(propIndex === index)]}>
+              {item.title}
+              {Boolean(item.subtitle) && (
+                <Text tw="text-xs font-semibold text-gray-500">
+                  {` ${item.subtitle}`}
+                </Text>
+              )}
+            </Text>
+          </View>
+        </PressableHover>
+      ))}
+      <View
+        tw="animate-fade-in absolute bottom-0 h-[2px] bg-gray-900 transition-all dark:bg-white"
+        style={{
+          width: tabsWidth[propIndex],
+          transform: `translateX(${outputRange[propIndex]}px)` as any,
+        }}
+      />
+    </View>
   );
 });

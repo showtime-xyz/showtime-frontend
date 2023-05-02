@@ -5,14 +5,14 @@ import { useOnFocus, useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Label } from "@showtime-xyz/universal.label";
 import {
   PressableScale,
-  Props as PressableProps,
+  PressableScaleProps,
 } from "@showtime-xyz/universal.pressable-scale";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
-type InputProps = {
+type InputProps = Pick<TextInputProps, "aria-label"> & {
   leftElement?: JSX.Element;
   rightElement?: JSX.Element;
   placeholder?: string;
@@ -21,11 +21,10 @@ type InputProps = {
   isInvalid?: boolean;
   id?: string;
   disabled?: boolean;
-  type?: TextInputProps["keyboardType"];
+  type?: TextInputProps["inputMode"];
   label?: string;
   errorText?: string;
   helperText?: string;
-  accessibilityLabel?: string;
   autoFocus?: boolean;
   inputStyle?: StyleProp<TextStyle>;
   autocomplete?: "on" | "off";
@@ -59,9 +58,9 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     disabled,
     type,
     isInvalid,
-    accessibilityLabel,
     autoFocus,
     autocomplete,
+    ...rest
   } = props;
   const { onFocus, onBlur, focused } = useOnFocus();
   const isDark = useIsDarkMode();
@@ -133,29 +132,30 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          editable={!disabled}
+          // @ts-ignore
+          readOnly={disabled}
           onFocus={onFocus}
           onBlur={onBlur}
-          nativeID={inputId}
+          id={inputId}
           selectionColor={isDark ? colors.gray["300"] : colors.gray["700"]}
-          keyboardType={type}
+          inputMode={type}
           disabled={disabled}
           autoFocus={autoFocus}
-          accessibilityLabel={accessibilityLabel}
-          accessibilityDescribedBy={Platform.select({
+          aria-describedby={Platform.select({
             web: helperText ? helperTextId : undefined,
             default: undefined,
           })}
-          accessibilityErrorMessage={Platform.select({
+          aria-errormessage={Platform.select({
             web: errorText ? errorTextId : undefined,
             default: undefined,
           })}
-          accessibilityInvalid={Platform.select({
+          aria-invalid={Platform.select({
             web: isInvalid,
             default: undefined,
           })}
           ref={ref}
           autocomplete={autocomplete}
+          {...rest}
         />
         {rightElement && (
           <View style={{ marginLeft: "auto" }}>{rightElement}</View>
@@ -163,7 +163,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       </View>
       {helperText ? (
         <Text
-          nativeID={helperTextId}
+          id={helperTextId}
           tw="text-sm text-gray-600 dark:text-gray-400"
           style={{ marginTop: 4, fontWeight: "600" }}
         >
@@ -172,7 +172,7 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       ) : null}
       {errorText ? (
         <Text
-          nativeID={errorTextId}
+          id={errorTextId}
           tw="text-sm text-red-500"
           style={{ marginTop: 4, fontWeight: "600" }}
         >
@@ -187,6 +187,6 @@ Input.displayName = "Input";
 
 // This component adds appropriate padding to match our design system and increase the pressable area
 // Usage - with rightElement and leftElement
-export const InputPressable = (props: PressableProps) => {
+export const InputPressable = (props: PressableScaleProps) => {
   return <PressableScale style={{ padding: 8 }} {...props} />;
 };

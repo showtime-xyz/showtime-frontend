@@ -169,7 +169,6 @@ export const ProfileTop = ({
           height={coverHeight}
           width={coverWidth}
           show={isLoading}
-          colorMode={colorScheme as any}
           radius={0}
         >
           <>
@@ -231,7 +230,6 @@ export const ProfileTop = ({
                 height={avatarSize}
                 width={avatarSize}
                 show={isLoading}
-                colorMode={colorScheme as any}
                 radius={0}
               >
                 {profileData && (
@@ -333,19 +331,9 @@ export const ProfileTop = ({
         <View tw="px-2 py-3">
           {isLoading ? (
             <>
-              <Skeleton
-                height={24}
-                width={150}
-                show={true}
-                colorMode={colorScheme as any}
-              />
+              <Skeleton height={24} width={150} show={true} />
               <View tw="h-2" />
-              <Skeleton
-                height={12}
-                width={100}
-                show={true}
-                colorMode={colorScheme as any}
-              />
+              <Skeleton height={12} width={100} show={true} />
             </>
           ) : (
             <View tw="flex-row items-start justify-between">

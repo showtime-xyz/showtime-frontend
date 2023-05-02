@@ -58,8 +58,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             flexDirection: "row",
             alignItems: "center",
           }}
-          accessibilityLabel="Profile website"
-          accessibilityRole="link"
+          aria-label="Profile website"
+          role="link"
         >
           <LinkIcon
             color={isDark ? "#FFF" : colors.gray[900]}
@@ -85,8 +85,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         {spotifyUrl && (
           <PressableScale
             onPress={() => onPressLink(spotifyUrl)}
-            accessibilityLabel="Spotify"
-            accessibilityRole="link"
+            aria-label="Spotify"
+            role="link"
           >
             <Spotify
               width={20}
@@ -99,8 +99,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         {appleMusicUrl && (
           <PressableScale
             onPress={() => onPressLink(appleMusicUrl)}
-            accessibilityLabel="Apple Music"
-            accessibilityRole="link"
+            aria-label="Apple Music"
+            role="link"
           >
             <AppleMusic
               width={17}
@@ -113,8 +113,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         {twitter && (
           <PressableScale
             onPress={() => onPressLink(`https://twitter.com/${twitter}`)}
-            accessibilityLabel="Twitter"
-            accessibilityRole="link"
+            aria-label="Twitter"
+            role="link"
           >
             <Twitter
               width={20}
@@ -126,8 +126,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         {instagram && (
           <PressableScale
             onPress={() => onPressLink(`https://instagram.com/${instagram}`)}
-            accessibilityLabel="Instagram"
-            accessibilityRole="link"
+            aria-label="Instagram"
+            role="link"
           >
             <Instagram
               width={20}

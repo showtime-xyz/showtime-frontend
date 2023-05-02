@@ -107,7 +107,7 @@ function NFTDropdown({
     <>
       <DropdownMenuRoot>
         <DropdownMenuTrigger>
-          <Pressable tw={tw} accessibilityLabel="nft card item menu">
+          <Pressable tw={tw} aria-label="nft card item menu">
             <MoreHorizontal
               width={iconSize}
               height={iconSize}

@@ -4,7 +4,6 @@ import { Dimensions, Platform, useWindowDimensions } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { SWRConfig } from "swr";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import {
   useSafeAreaFrame,
   useSafeAreaInsets,
@@ -121,7 +120,6 @@ const NFTDetail = () => {
 
 const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
   useTrackPageViewed({ name: "NFT" });
-  const { colorScheme } = useColorScheme();
   const [showClaim] = useParam("showClaim", {
     initial: false,
     parse: (v) => Boolean(v),
@@ -158,19 +156,9 @@ const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
               <Suspense
                 fallback={
                   <View tw="items-center">
-                    <Skeleton
-                      //@ts-ignore
-                      colorMode={colorScheme}
-                      height={screenHeight - 300}
-                      width={screenWidth}
-                    />
+                    <Skeleton height={screenHeight - 300} width={screenWidth} />
                     <View tw="h-2" />
-                    <Skeleton
-                      //@ts-ignore
-                      colorMode={colorScheme}
-                      height={300}
-                      width={screenWidth}
-                    />
+                    <Skeleton height={300} width={screenWidth} />
                   </View>
                 }
               >

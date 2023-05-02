@@ -166,13 +166,11 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
   const listEmptyComponent = useCallback(
     () =>
       !isLoading && !error && !dataReversed.length ? (
-        <View tw="absolute h-full w-full flex-1 items-center justify-center">
-          <EmptyPlaceholder
-            text="Be the first to add a comment!"
-            title="💬 No comments yet..."
-            tw="-mt-20"
-          />
-        </View>
+        <EmptyPlaceholder
+          text="Be the first to add a comment!"
+          title="💬 No comments yet..."
+          tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] -mt-5 h-full flex-1"
+        />
       ) : null,
     [isLoading, dataReversed.length, error]
   );
@@ -207,9 +205,9 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             contentInsetAdjustmentBehavior="never"
             contentContainerStyle={styles.contentContainer}
             getItemType={getItemType}
+            ListEmptyComponent={listEmptyComponent}
             {...modalListProps}
           />
-          {listEmptyComponent()}
           {isAuthenticated && mounted && (
             <PlatformInputAccessoryView
               {...Platform.select({
