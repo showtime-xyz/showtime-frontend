@@ -294,7 +294,8 @@ export const GestureContainer = React.forwardRef<
           isSlidingHeader.value = false;
         }
       );
-    });
+    })
+    .runOnJS(true);
 
   const gestureHandler = Gesture.Pan()
     .simultaneousWithExternalGesture(gestureHandlerHeader, ...childGestures)
@@ -381,7 +382,8 @@ export const GestureContainer = React.forwardRef<
       } else {
         tabsRefreshTrans.value < 0 ? onTabsStartRefresh() : onTabsEndRefresh();
       }
-    });
+    })
+    .runOnJS(true);
   //#endregion
 
   useEffect(() => {

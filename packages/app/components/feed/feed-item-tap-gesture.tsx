@@ -105,7 +105,8 @@ export const FeedItemTapGesture = ({
         .numberOfTaps(1)
         .onEnd(() => {
           runOnJS(toggleVideoPlayback)();
-        }),
+        })
+        .runOnJS(true),
 
     [toggleVideoPlayback]
   );
@@ -121,7 +122,8 @@ export const FeedItemTapGesture = ({
             withDelay(200, withSpring(0))
           );
           runOnJS(doubleTapHandleOnJS)();
-        }),
+        })
+        .runOnJS(true),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [doubleTapHandleOnJS]
   );
@@ -142,7 +144,8 @@ export const FeedItemTapGesture = ({
           if (toggleHeader) {
             runOnJS(toggleHeader)();
           }
-        }),
+        })
+        .runOnJS(true),
     [toggleHeader]
   );
 
