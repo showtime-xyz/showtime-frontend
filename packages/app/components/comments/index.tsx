@@ -169,7 +169,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
         <EmptyPlaceholder
           text="Be the first to add a comment!"
           title="💬 No comments yet..."
-          tw="ios:min-h-[60vh] android:min-h-[70vh] -mt-5 h-full flex-1"
+          tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] -mt-5 h-full flex-1"
         />
       ) : null,
     [isLoading, dataReversed.length, error]
