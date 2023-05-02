@@ -412,8 +412,7 @@ export const DropFree = () => {
 
                               <View tw="mt-2 hidden md:flex">
                                 <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                  Tap to upload a JPG, PNG, GIF, WebM or MP4
-                                  file.
+                                  {`Tap to upload a JPG, PNG, GIF, WebM or MP4 file.\nMax file size: 30MB`}
                                 </Text>
                               </View>
                             </View>

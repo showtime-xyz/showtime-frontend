@@ -36,7 +36,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
     ? `https://open.spotify.com/artist/${profile?.spotify_artist_id}`
     : null;
 
-  const appleMusicUrl = profile?.spotify_artist_id
+  const appleMusicUrl = profile?.apple_music_artist_id
     ? `https://music.apple.com/artist/${profile?.apple_music_artist_id}`
     : null;
 
