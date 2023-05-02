@@ -51,14 +51,14 @@ export const FeedItemTapGesture = ({
   const heartStyle = useAnimatedStyle(() => {
     return {
       opacity: heartAnimation.value,
-      transform: `scale(${heartAnimation.value})` as any,
+      transform: [{ scale: heartAnimation.value }],
     };
   }, [heartAnimation]);
 
   const playStyle = useAnimatedStyle(() => {
     return {
       opacity: playAnimation.value,
-      transform: `scale(${heartAnimation.value})` as any,
+      transform: [{ scale: playAnimation.value }],
     };
   }, [playAnimation]);
 
