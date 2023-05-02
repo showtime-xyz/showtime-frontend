@@ -127,7 +127,8 @@ export function PinchToZoom(props: PinchToZoomProps) {
         panTranslateY.value = 0;
 
         if (onPinchEnd) runOnJS(onPinchEnd)();
-      });
+      })
+      .runOnJS(true);
 
     return pinch;
 
