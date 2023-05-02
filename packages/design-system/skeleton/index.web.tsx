@@ -1,3 +1,4 @@
+import { Transition } from "@headlessui/react";
 import { baseColors } from "moti/build/skeleton/shared";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -23,22 +24,29 @@ function Skeleton({
   ...props
 }: Props) {
   const { colorScheme } = useColorScheme();
-  if (!show) {
-    return children;
-  }
 
   return (
     <View
       {...props}
-      tw={["animate-pulse", tw].join(" ")}
+      tw={["overflow-hidden", tw].join(" ")}
       style={{
         width,
         height,
         borderRadius: radius,
-        backgroundColor:
-          baseColors[colorModeProps ?? colorScheme ?? "light"].secondary,
       }}
-    />
+    >
+      {show ? (
+        <View
+          tw="absolute inset-0 animate-pulse"
+          style={{
+            backgroundColor:
+              baseColors[colorModeProps ?? colorScheme ?? "light"].secondary,
+          }}
+        />
+      ) : (
+        children
+      )}
+    </View>
   );
 }
 
