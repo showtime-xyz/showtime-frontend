@@ -11,7 +11,7 @@ export function ModalSheet({
   children,
   ...rest
 }: ModalSheetProps) {
-  return visible ? (
+  return (
     <Modal
       key={`modalsheet-${title}`}
       title={title}
@@ -21,9 +21,10 @@ export function ModalSheet({
         close?.();
         onClose?.();
       }}
+      visible={visible}
       {...rest}
     >
       {children}
     </Modal>
-  ) : null;
+  );
 }

@@ -11,6 +11,5 @@ export const DropScreen = withModalScreen(DropModal, {
   matchingPathname: "/drop",
   matchingQueryParam: "dropModal",
   tw: "w-full lg:w-[800px] web:lg:pb-8",
-  disableBackdropPress: true,
   snapPoints: ["100%"],
 });
