@@ -9,6 +9,7 @@ export const useValidateUsername = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const debounceTimeout = useRef<any>(null);
+  const lastInput = useRef<string | null>(null);
 
   async function validateUsername(value: string) {
     const username = value ? value.trim() : null;
@@ -39,6 +40,10 @@ export const useValidateUsername = () => {
   }
 
   function debouncedValidate(value: string) {
+    if (value !== lastInput.current && !isLoading) {
+      setIsLoading(true);
+    }
+
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
@@ -46,6 +51,8 @@ export const useValidateUsername = () => {
     debounceTimeout.current = setTimeout(() => {
       validateUsername(value);
     }, 400);
+
+    lastInput.current = value;
   }
 
   return {

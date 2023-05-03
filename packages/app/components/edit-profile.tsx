@@ -113,7 +113,7 @@ export const EditProfile = () => {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { isValid, validate } = useValidateUsername();
+  const { isValid, validate, isLoading } = useValidateUsername();
   const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
   const [cropViewHeight, setCropViewHeight] = useState(400);
@@ -167,7 +167,7 @@ export const EditProfile = () => {
   }, [reset, defaultValues]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
-    if (!isValid || !formIsValid) return;
+    if (!isValid || !formIsValid || isLoading) return;
 
     const newValues = {
       name: values.name?.trim() || null,
@@ -554,8 +554,12 @@ export const EditProfile = () => {
           </BottomSheetScrollView>
           <View tw="my-2.5 mb-4 px-4">
             <Button
-              disabled={isSubmitting}
-              tw={isSubmitting || !formIsValid || !isValid ? "opacity-50" : ""}
+              disabled={isSubmitting || !formIsValid || !isValid || isLoading}
+              tw={
+                isSubmitting || !formIsValid || !isValid || isLoading
+                  ? "opacity-50"
+                  : ""
+              }
               onPress={handleSubmit(handleSubmitForm)}
               size="regular"
             >
