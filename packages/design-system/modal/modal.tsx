@@ -1,4 +1,4 @@
-import { forwardRef, memo, useCallback, useRef } from "react";
+import { forwardRef, memo, useCallback } from "react";
 
 import debounce from "lodash/debounce";
 

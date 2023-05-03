@@ -1,10 +1,12 @@
 import { memo } from "react";
-import { Platform } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Close } from "@showtime-xyz/universal.icon";
+import { CloseLarge } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { breakpoints } from "design-system/theme";
 
 import type { ModalHeaderProps } from "./types";
 
@@ -18,7 +20,8 @@ function ModalHeaderComponent({
   tw = "",
   onClose,
 }: ModalHeaderProps) {
-  const iconSize = Platform.OS === "web" ? 24 : 20;
+  const { width } = useWindowDimensions();
+  const isLgWidth = width >= breakpoints["lg"];
   return (
     <View
       tw={[MODAL_HEADER_CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
@@ -28,21 +31,18 @@ function ModalHeaderComponent({
       ) : (
         <Button
           variant="tertiary"
-          size="regular"
+          size={isLgWidth ? "regular" : "small"}
           onPress={onClose}
           iconOnly
           hitSlop={10}
-          tw="ios:h-8 ios:w-8 android:h-8 android:w-8"
+          tw="mr-2"
         >
-          <Close width={iconSize} height={iconSize} />
+          <CloseLarge />
         </Button>
       )}
 
       <Text
-        tw={[
-          MODAL_HEADER_TITLE_TW,
-          "ios:pl-8 android:pl-8 max-w-[90%] text-base font-bold",
-        ]}
+        tw={[MODAL_HEADER_TITLE_TW, "flex-1 text-base font-bold sm:text-lg"]}
       >
         {title}
       </Text>
@@ -50,7 +50,7 @@ function ModalHeaderComponent({
       {EndContentComponent ? (
         <EndContentComponent />
       ) : (
-        <View tw="w-12" collapsable={true} />
+        <View tw="ml-2 w-12" collapsable={true} />
       )}
     </View>
   );

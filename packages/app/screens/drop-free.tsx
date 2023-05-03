@@ -9,4 +9,6 @@ export const DropFreeScreen = withModalScreen(DropFree, {
   tw: "w-full lg:w-[800px]",
   disableBackdropPress: true,
   snapPoints: ["100%"],
+  enableContentPanningGesture: false,
+  enableHandlePanningGesture: false,
 });
