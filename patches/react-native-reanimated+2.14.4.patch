@@ -187,3 +187,47 @@ index 46e3e88..b2af463 100644
 +    return isWebNode(value) || isWebElement(value);
 +  }
 \ No newline at end of file
+diff --git a/node_modules/react-native-reanimated/lib/reanimated2/js-reanimated/index.js b/node_modules/react-native-reanimated/lib/reanimated2/js-reanimated/index.js
+index 8ee42b1..5d54951 100644
+--- a/node_modules/react-native-reanimated/lib/reanimated2/js-reanimated/index.js
++++ b/node_modules/react-native-reanimated/lib/reanimated2/js-reanimated/index.js
+@@ -1,4 +1,7 @@
+ import JSReanimated from './JSReanimated';
++import createReactDOMStyle from 'react-native-web/dist/exports/StyleSheet/compiler/createReactDOMStyle';
++import { createTransformValue } from 'react-native-web/dist/exports/StyleSheet/preprocess';
++
+ const reanimatedJS = new JSReanimated();
+ export const _updatePropsJS = (updates, viewRef) => {
+     if (viewRef._component) {
+@@ -9,8 +12,8 @@ export const _updatePropsJS = (updates, viewRef) => {
+             acc[index][key] = value;
+             return acc;
+         }, [{}, {}]);
+-        if (typeof component.setNativeProps === 'function') {
+-            setNativeProps(component, rawStyles);
++        if (component.style !== undefined) {
++            updatePropsDOM(component, rawStyles);
+         }
+         else if (Object.keys(component.props).length > 0) {
+             Object.keys(component.props).forEach((key) => {
+@@ -26,10 +29,18 @@ export const _updatePropsJS = (updates, viewRef) => {
+         }
+     }
+ };
+-const setNativeProps = (component, style) => {
++const updatePropsDOM = (component, style) => {
+     const previousStyle = component.previousStyle ? component.previousStyle : {};
+     const currentStyle = Object.assign(Object.assign({}, previousStyle), style);
+     component.previousStyle = currentStyle;
+-    component.setNativeProps({ style: currentStyle });
++    const domStyle = createReactDOMStyle(currentStyle);
++    for (const key in domStyle) {
++      if(key === 'transform') {
++          (component.style).transform = createTransformValue(domStyle[key]);
++      }else{
++          (component.style)[key] = domStyle[key];
++      }
++    }
++   
+ };
+ export default reanimatedJS;
