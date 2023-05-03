@@ -1,4 +1,12 @@
-import { memo, useMemo, Suspense, useRef, useState, useContext } from "react";
+import {
+  memo,
+  useMemo,
+  Suspense,
+  useRef,
+  useCallback,
+  useState,
+  useContext,
+} from "react";
 import React from "react";
 import { useWindowDimensions } from "react-native";
 
@@ -67,13 +75,15 @@ const MEDIA_PADDING = 160;
 const MEDIA_HEADER_HEIGHT = 80;
 type TabProps = {
   nft: NFT;
+  ListHeaderComponent?: React.ComponentType<any>;
 };
-const Collectors = ({ nft }: TabProps) => {
+const Collectors = ({ nft, ListHeaderComponent }: TabProps) => {
   return (
     <UserList
       style={{ minHeight: "50vh" }}
       loading={false}
       users={nft?.multiple_owners_list || []}
+      ListHeaderComponent={ListHeaderComponent}
     />
   );
 };
@@ -184,7 +194,71 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
       }
     }
   };
-  const TabScene = useMemo(() => TAB_SCENES_MAP.get(index), [index]);
+  const TabScene = TAB_SCENES_MAP.get(index);
+
+  const ListHeaderComponent = useCallback(() => {
+    return (
+      <>
+        <View tw="px-4">
+          <View tw="flex-row items-center justify-between pt-4">
+            <Social nft={nft} />
+            <RaffleTooltip edition={edition} tw="mr-1" />
+          </View>
+          <View tw="mt-4 min-h-[12px]">
+            <LikedBy nft={nft} max={1} />
+          </View>
+          <View tw="my-4 mr-4 flex-row items-center">
+            <Text tw="text-xl font-bold text-black dark:text-white">
+              {nft.token_name}
+            </Text>
+          </View>
+          <Text tw="text-sm text-gray-600 dark:text-gray-200">
+            {description}
+          </Text>
+
+          <View tw="mt-6 flex-row items-center justify-between">
+            <Creator nft={nft} />
+            <Owner nft={nft} price={false} />
+          </View>
+
+          <View tw="mt mb-4 h-5">
+            <ClaimedBy
+              claimersList={detailData?.data.item?.multiple_owners_list}
+              nft={nft}
+            />
+          </View>
+          <View tw="h-8 flex-row">
+            {isCreatorDrop && edition ? (
+              <>
+                <ClaimButton tw="flex-1" edition={edition} />
+                <ClaimedShareButton
+                  tw="ml-3 w-1/4"
+                  edition={edition}
+                  nft={nft}
+                />
+              </>
+            ) : null}
+          </View>
+        </View>
+        <TabBarSingle
+          onPress={(i) => {
+            setIndex(i);
+          }}
+          routes={routes}
+          index={index}
+        />
+        <View tw="h-4" />
+      </>
+    );
+  }, [
+    description,
+    detailData?.data.item?.multiple_owners_list,
+    edition,
+    index,
+    isCreatorDrop,
+    nft,
+    routes,
+  ]);
 
   return (
     <LikeContextProvider nft={nft}>
@@ -328,54 +402,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             width: NFT_DETAIL_WIDTH,
           }}
         >
-          <View tw="px-4">
-            <View tw="flex-row items-center justify-between pt-4">
-              <Social nft={nft} />
-              <RaffleTooltip edition={edition} tw="mr-1" />
-            </View>
-            <View tw="mt-4 min-h-[12px]">
-              <LikedBy nft={nft} max={1} />
-            </View>
-            <View tw="my-4 mr-4 flex-row items-center">
-              <Text tw="text-xl font-bold text-black dark:text-white">
-                {nft.token_name}
-              </Text>
-            </View>
-            <Text tw="text-sm text-gray-600 dark:text-gray-200">
-              {description}
-            </Text>
-
-            <View tw="mt-6 flex-row items-center justify-between">
-              <Creator nft={nft} />
-              <Owner nft={nft} price={false} />
-            </View>
-
-            <View tw="mt mb-4 h-5">
-              <ClaimedBy
-                claimersList={detailData?.data.item?.multiple_owners_list}
-                nft={nft}
-              />
-            </View>
-            <View tw="h-8 flex-row">
-              {isCreatorDrop && edition ? (
-                <>
-                  <ClaimButton tw="flex-1" edition={edition} />
-                  <ClaimedShareButton
-                    tw="ml-3 w-1/4"
-                    edition={edition}
-                    nft={nft}
-                  />
-                </>
-              ) : null}
-            </View>
-          </View>
-          <TabBarSingle
-            onPress={(i) => {
-              setIndex(i);
-            }}
-            routes={routes}
-            index={index}
-          />
           <ErrorBoundary>
             <Suspense
               fallback={
@@ -384,7 +410,13 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 </View>
               }
             >
-              {TabScene && nft && <TabScene nft={nft} />}
+              {TabScene && nft && (
+                <TabScene
+                  nft={detailData?.data.item ?? nft}
+                  key={index}
+                  ListHeaderComponent={ListHeaderComponent}
+                />
+              )}
             </Suspense>
           </ErrorBoundary>
           <View tw="h-2" />
