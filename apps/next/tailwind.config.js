@@ -69,6 +69,10 @@ module.exports = {
           "50%": { transform: "scale(1.1)", opacity: 1 },
           "100%": { transform: "scale(1)", opacity: 1 },
         },
+        "zoom-in": {
+          from: { opacity: 0, transform: "scale(0.95)" },
+          to: { opacity: 1, transform: "scale(1)" },
+        },
         "fade-in": {
           from: { opacity: 0 },
           to: { opacity: 1 },
@@ -79,6 +83,7 @@ module.exports = {
         "fade-in": "fade-in 150ms",
         "fade-in-250": "fade-in 250ms",
         "fade-in-500": "fade-in 500ms",
+        "zoom-in": "zoom-in 250ms",
       },
     },
   },

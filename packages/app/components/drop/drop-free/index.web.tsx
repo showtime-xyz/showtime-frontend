@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 
-import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
