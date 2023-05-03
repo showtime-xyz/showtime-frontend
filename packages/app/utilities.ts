@@ -850,3 +850,19 @@ export const formatAPIErrorMessage = (error: AxiosError | Error) => {
 
   return messages.join("\n");
 };
+
+export const generateFakeData = (
+  length: number
+): {
+  id: number;
+  username: string;
+  date: string;
+  // Add more keys here if needed
+}[] => {
+  return Array.from({ length }, (_, i) => ({
+    id: i + 1,
+    username: `user${i + 1}`,
+    date: new Date().toISOString(),
+    // Add more keys here if needed
+  }));
+};
