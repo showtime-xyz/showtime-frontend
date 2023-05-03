@@ -8,6 +8,7 @@ import Animated, {
   useAnimatedRef,
   useAnimatedStyle,
   useSharedValue,
+  runOnUI,
 } from "react-native-reanimated";
 
 import { AnimationParams, useLightBox } from "./provider";
@@ -95,12 +96,15 @@ export const LightBox: React.FC<LightBoxProps> = ({
   const tapGesture = Gesture.Tap()
     .onEnd((_, success) => {
       if (!success) return;
-      const measurements = measure(animatedRef);
-      width.value = measurements!.width;
-      height.value = measurements!.height;
-      x.value = measurements!.pageX;
-      y.value = measurements!.pageY - nativeHeaderHeight;
-      runOnJS(handlePress)();
+      runOnUI(() => {
+        "worklet";
+        const measurements = measure(animatedRef);
+        width.value = measurements!.width;
+        height.value = measurements!.height;
+        x.value = measurements!.pageX;
+        y.value = measurements!.pageY - nativeHeaderHeight;
+        runOnJS(handlePress)();
+      })();
     })
     .runOnJS(true);
   const longPressGesture = Gesture.LongPress()
