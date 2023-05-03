@@ -171,12 +171,11 @@ export function Comments({
   const listEmptyComponent = useCallback(
     () =>
       !isLoading && !error && !dataReversed.length ? (
-        <View tw="h-full w-full flex-1 items-center justify-center">
-          <EmptyPlaceholder
-            text="Be the first to add a comment!"
-            title="💬 No comments yet..."
-          />
-        </View>
+        <EmptyPlaceholder
+          text="Be the first to add a comment!"
+          title="💬 No comments yet..."
+          tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] -mt-5 h-full flex-1"
+        />
       ) : null,
     [isLoading, dataReversed.length, error]
   );

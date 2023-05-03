@@ -1,19 +1,21 @@
-import { ComponentProps } from "react";
-
 import { Skeleton as MotiSkeleton } from "moti/skeleton";
 
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { styled } from "@showtime-xyz/universal.tailwind";
-import type { TW } from "@showtime-xyz/universal.tailwind";
 
-type Props = ComponentProps<typeof MotiSkeleton> & {
-  tw?: TW;
-};
+import { SkeletonProps } from "./type";
 
 const StyledSkeleton = styled(MotiSkeleton);
 
-function Skeleton({ tw, ...props }: Props) {
+function Skeleton({ tw, colorMode: colorModeProps, ...props }: SkeletonProps) {
+  const { colorScheme } = useColorScheme();
+
   return (
-    <StyledSkeleton {...props} tw={Array.isArray(tw) ? tw.join(" ") : tw} />
+    <StyledSkeleton
+      colorMode={colorModeProps ?? colorScheme ?? "light"}
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    />
   );
 }
 

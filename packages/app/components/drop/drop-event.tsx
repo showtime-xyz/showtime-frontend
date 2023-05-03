@@ -24,7 +24,6 @@ import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlipIcon, Image as ImageIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
@@ -256,7 +255,7 @@ export const DropEvent = () => {
     }
     if (size && size > MAX_FILE_SIZE) {
       Alert.alert(
-        "Oops, this file is too large (>50MB). Please upload a smaller file."
+        "Oops, this file is too large (>30MB). Please upload a smaller file."
       );
       setError("file", {
         type: "custom",
@@ -348,7 +347,7 @@ export const DropEvent = () => {
 
                             <View tw="mt-2 hidden md:flex">
                               <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                Tap to upload a JPG, PNG, GIF, WebM or MP4 file.
+                                {`Tap to upload a JPG, PNG, GIF, WebM or MP4 file.\nMax file size: 30MB`}
                               </Text>
                             </View>
                           </View>
@@ -651,7 +650,7 @@ export const DropEvent = () => {
                       <Checkbox
                         onChange={(v) => onChange(v)}
                         checked={value}
-                        accesibilityLabel="I agree to the terms and conditions"
+                        aria-label="I agree to the terms and conditions"
                       />
 
                       <Text tw="px-4 text-gray-600 dark:text-gray-400">

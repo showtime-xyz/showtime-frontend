@@ -55,6 +55,7 @@ export const Default = () => {
         <IconItem icon={Icon.ChevronUp} title="ChevronUp" />
         <IconItem icon={Icon.Clock} title="Clock" />
         <IconItem icon={Icon.Close} title="Close" />
+        <IconItem icon={Icon.CloseLarge} title="CloseLarge" />
         <IconItem icon={Icon.Commented} title="Commented" />
         <IconItem icon={Icon.Compass} title="Compass" />
         <IconItem icon={Icon.CompassFilled} title="CompassFilled" />

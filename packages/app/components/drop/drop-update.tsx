@@ -167,7 +167,7 @@ export const DropUpdate = ({
                         }}
                       >
                         <Text tw="font-bold text-gray-900 dark:text-white">
-                          Spotify Release Date
+                          Streaming Services Release Date
                         </Text>
                         <Text tw="pt-4 text-base text-gray-900 dark:text-white">
                           {(dateValue as Date).toLocaleString("en-US", {
@@ -181,7 +181,7 @@ export const DropUpdate = ({
                       </Pressable>
                     ) : (
                       <Text tw="font-bold text-gray-900 dark:text-white">
-                        Enter a Release Date
+                        Streaming Services Release Date
                       </Text>
                     )}
 
@@ -211,7 +211,7 @@ export const DropUpdate = ({
                 onChange={() => {
                   setIsLive(!isLive);
                 }}
-                accesibilityLabel="Live Now"
+                aria-label="Live Now"
               />
               <Text
                 tw="ml-2 font-bold text-black dark:text-white"

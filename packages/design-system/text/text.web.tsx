@@ -36,19 +36,14 @@ const StyledLabel = styled(Label);
 type TextProps = ComponentProps<typeof ReactNativeText>;
 
 export const Text = forwardRef<ReactNativeText, TextProps>(
-  ({ onLayout, accessibilityRole, ...props }, ref) => {
+  ({ onLayout, role, ...props }, ref) => {
     // @ts-ignore web only role - see label/index.web.tsx
     // onLayout won't work on Label component (removing or else RNW throws warning on console even if onLayout is undefined). Not sure if that's needed though. Will find a way to do that later.
-    if (accessibilityRole === "label") {
+    if (role === "label") {
       return <StyledLabel {...props} ref={ref} />;
     } else {
       return (
-        <StyledText
-          onLayout={onLayout}
-          accessibilityRole={accessibilityRole}
-          {...props}
-          ref={ref}
-        />
+        <StyledText onLayout={onLayout} role={role} {...props} ref={ref} />
       );
     }
   }

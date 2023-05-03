@@ -34,7 +34,7 @@ export const Spinner = ({ size, duration = 750, ...rest }: SpinnerProps) => {
         { height: getSpinnerSize(size), width: getSpinnerSize(size) },
         animatedStyle,
       ]}
-      accessibilityRole="progressbar"
+      role="progressbar"
     >
       <SpinnerView size={size} {...rest} />
     </Animated.View>

@@ -19,6 +19,8 @@ export { default as ChevronLeft } from "./ChevronLeft";
 export { default as ChevronRight } from "./ChevronRight";
 export { default as ChevronUp } from "./ChevronUp";
 export { default as Close } from "./Close";
+export { default as CloseLarge } from "./CloseLarge";
+
 export { default as Clock } from "./Clock";
 export { default as Commented } from "./Commented";
 export { default as Compass } from "./Compass";

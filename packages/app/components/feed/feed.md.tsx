@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -140,7 +139,6 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
 // TODO: move to separate file
 const SuggestedUsers = () => {
   const { data, loading } = useFollowSuggestions();
-  const { colorScheme } = useColorScheme();
   const router = useRouter();
   const isDark = useIsDarkMode();
   return (
@@ -154,25 +152,13 @@ const SuggestedUsers = () => {
         {loading ? (
           <View tw="m-4 p-2">
             <View tw="h-16">
-              <Skeleton
-                colorMode={colorScheme as any}
-                width={100}
-                height={20}
-              />
+              <Skeleton width={100} height={20} />
             </View>
             <View tw="h-16">
-              <Skeleton
-                colorMode={colorScheme as any}
-                width={100}
-                height={20}
-              />
+              <Skeleton width={100} height={20} />
             </View>
             <View tw="h-16">
-              <Skeleton
-                colorMode={colorScheme as any}
-                width={100}
-                height={20}
-              />
+              <Skeleton width={100} height={20} />
             </View>
           </View>
         ) : null}

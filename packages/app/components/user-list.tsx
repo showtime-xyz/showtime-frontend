@@ -1,7 +1,6 @@
 import { memo, useCallback } from "react";
 
 import { Chip } from "@showtime-xyz/universal.chip";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import {
   InfiniteScrollList,
@@ -173,35 +172,18 @@ const FollowingListUser = memo(
 FollowingListUser.displayName = "FollowingListUser";
 
 const FollowingUserItemLoadingIndicator = () => {
-  const colorMode = useColorScheme();
-
   return (
     <View tw="px-4">
       {new Array(8).fill(0).map((_, i) => {
         return (
           <View tw="flex-row pt-4" key={`${i}`}>
             <View tw="mr-2 overflow-hidden rounded-full">
-              <Skeleton
-                width={32}
-                height={32}
-                show
-                colorMode={colorMode as any}
-              />
+              <Skeleton width={32} height={32} show />
             </View>
             <View>
-              <Skeleton
-                width={140}
-                height={14}
-                show
-                colorMode={colorMode as any}
-              />
+              <Skeleton width={140} height={14} show />
               <View tw="h-1" />
-              <Skeleton
-                width={90}
-                height={14}
-                show
-                colorMode={colorMode as any}
-              />
+              <Skeleton width={90} height={14} show />
             </View>
           </View>
         );

@@ -24,9 +24,5 @@ export function PressableHover({ tw, ...props }: Props) {
     [tw]
   );
 
-  return (
-    <ClientSideOnly>
-      <StyledPressable {...props} tw={twWithHover} />
-    </ClientSideOnly>
-  );
+  return <StyledPressable {...props} tw={twWithHover} />;
 }

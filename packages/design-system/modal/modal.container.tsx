@@ -89,12 +89,12 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       (props: BottomSheetHandleProps) => {
         return headerShown ? (
           <>
-            <ModalHeaderBar />
+            {enableHandlePanningGesture && <ModalHeaderBar />}
             <ModalHeader title={title} onClose={close} {...props} />
           </>
         ) : null;
       },
-      [title, close, headerShown]
+      [title, close, headerShown, enableHandlePanningGesture]
     );
 
     return (

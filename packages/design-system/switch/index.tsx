@@ -15,13 +15,12 @@ const thumbWidth = 24;
 const thumbOffset = 2;
 
 export type SwitchProps = {
-  accessibilityLabel?: string;
   checked?: boolean;
   onChange?: (nextValue: boolean) => void;
 };
 
 export const Switch = (props: SwitchProps) => {
-  const { checked, onChange, accessibilityLabel } = props;
+  const { checked, onChange, ...rest } = props;
 
   const isDark = useIsDarkMode();
 
@@ -33,9 +32,9 @@ export const Switch = (props: SwitchProps) => {
           onChange(!checked);
         }
       }, [onChange, checked])}
-      accessibilityRole="switch"
+      role="switch"
       accessibilityState={{ checked }}
-      accessibilityLabel={accessibilityLabel}
+      {...rest}
     >
       <View style={styles.gradientWrapper}>
         <LinearGradient

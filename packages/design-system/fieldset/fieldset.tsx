@@ -42,7 +42,6 @@ export type FieldsetProps = {
 function FieldsetImpl(props: FieldsetProps, ref: any) {
   const {
     errorText,
-    accessibilityLabel,
     helperText,
     helperTextTw = "",
     label,
@@ -102,9 +101,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
               tw="flex-1 text-black outline-none focus-visible:ring-1 dark:text-white"
               style={[{ fontSize: 16 }]}
               ref={ref}
-              editable={!disabled}
-              nativeID={inputId}
-              accessibilityLabel={accessibilityLabel}
+              id={inputId}
               multiline={textInputProps.multiline}
               numberOfLines={textInputProps.numberOfLines ?? 1}
               blurOnSubmit={textInputProps.blurOnSubmit}
@@ -113,20 +110,21 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
                 isDark ? colors.gray[400] : colors.gray[600]
               }
               selectionColor={isDark ? colors.gray[300] : colors.gray[700]}
-              //@ts-ignore - web only
-              accessibilityDescribedBy={Platform.select({
+              aria-describedby={Platform.select({
                 web: helperText ? helperTextId : undefined,
                 default: undefined,
               })}
-              accessibilityErrorMessage={Platform.select({
+              aria-errormessage={Platform.select({
                 web: errorText ? errorTextId : undefined,
                 default: undefined,
               })}
-              accessibilityRequired={required}
-              accessibilityInvalid={Platform.select({
+              aria-required={true}
+              aria-invalid={Platform.select({
                 web: errorText ? true : false,
                 default: undefined,
               })}
+              // @ts-ignore
+              readOnly={disabled}
               {...textInputProps}
             />
           ) : null}
@@ -139,9 +137,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
       ) : null}
 
       <AnimateHeight>
-        {errorText ? (
-          <ErrorText nativeID={errorTextId}>{errorText}</ErrorText>
-        ) : null}
+        {errorText ? <ErrorText id={errorTextId}>{errorText}</ErrorText> : null}
       </AnimateHeight>
       <AnimateHeight
         extraHeight={Platform.select({
@@ -154,7 +150,7 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
             <View tw="mt-4 h-[1px] w-full bg-gray-200 dark:bg-gray-800" />
             <View tw="h-4" />
             <Text
-              nativeID={helperTextId}
+              id={helperTextId}
               tw={[
                 "text-sm leading-6 text-gray-700 dark:text-gray-300",
                 helperTextTw,
@@ -169,20 +165,11 @@ function FieldsetImpl(props: FieldsetProps, ref: any) {
   );
 }
 
-export const ErrorText = ({
-  children,
-  nativeID,
-}: {
-  children: any;
-  nativeID?: string;
-}) => {
+export const ErrorText = ({ children, id }: { children: any; id?: string }) => {
   return (
     <>
       <View tw="h-4" />
-      <Text
-        nativeID={nativeID}
-        tw="text-sm font-semibold leading-6 text-red-500"
-      >
+      <Text id={id} tw="text-sm font-semibold leading-6 text-red-500">
         {children}
       </Text>
     </>

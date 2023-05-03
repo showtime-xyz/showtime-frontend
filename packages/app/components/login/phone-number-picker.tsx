@@ -157,7 +157,7 @@ export const PhoneNumberPicker = (props: PhoneNumberPickerProp) => {
         validationSchema={phoneNumberValidationSchema}
         label="Phone number"
         placeholder="Enter your phone number"
-        keyboardType="phone-pad"
+        inputMode="tel"
         textInputRef={textInputRef}
         signInButtonLabel="Send Code"
         leftElement={leftElement}

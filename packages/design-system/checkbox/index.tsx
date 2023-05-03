@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Platform, Pressable } from "react-native";
+import { Platform, Pressable, PressableProps } from "react-native";
 
 import { MotiView } from "moti";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
@@ -12,11 +12,10 @@ import {
 } from "@showtime-xyz/universal.hooks";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-export type CheckboxProps = {
+export type CheckboxProps = Omit<PressableProps, "onChange"> & {
   onChange: (checked: boolean) => void;
   checked: boolean;
   hitSlop?: number;
-  accesibilityLabel: string;
   id?: string;
   disabled?: boolean;
 };
@@ -26,8 +25,8 @@ export const Checkbox = ({
   onChange,
   id,
   hitSlop = 14,
-  accesibilityLabel,
   disabled,
+  ...rest
 }: CheckboxProps) => {
   const handleChange = useCallback(() => {
     onChange(!checked);
@@ -51,14 +50,12 @@ export const Checkbox = ({
   return (
     <Pressable
       onPress={handleChange}
-      //@ts-ignore - web only prop
       onHoverIn={onHoverIn}
       onHoverOut={onHoverOut}
       onFocus={onFocus}
       onBlur={onBlur}
-      accessibilityRole="checkbox"
+      role="checkbox"
       accessibilityState={{ checked }}
-      accessibilityLabel={accesibilityLabel}
       disabled={disabled}
       hitSlop={hitSlop}
       //@ts-ignore - web only - checkbox toggle on spacebar press
@@ -68,6 +65,7 @@ export const Checkbox = ({
         },
         default: undefined,
       })}
+      {...rest}
     >
       <Animated.View
         style={useMemo(
