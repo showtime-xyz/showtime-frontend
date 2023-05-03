@@ -14,7 +14,9 @@ import {
   TrendingTabBarIcon,
 } from "./tab-bar-icons";
 
-const HomeNavigator = dynamic(() => import("../pages/home"));
+const CreatorChannelsNavigator = dynamic(
+  () => import("../pages/creator-channels")
+);
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
 const CreateNavigator = dynamic(() => import("../pages/create"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
@@ -44,8 +46,8 @@ export function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="trendingTab"
-        component={HomeNavigator}
+        name="creatorChannelsTab"
+        component={CreatorChannelsNavigator}
         options={{
           tabBarIcon: TrendingTabBarIcon,
         }}

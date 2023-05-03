@@ -12,6 +12,15 @@ type HomeStackParams = {
   settings: undefined;
 };
 
+// TODO: Add correct types, just quick copy-paste from Trending
+type CreatorChannelsStackParams = {
+  trending: undefined;
+  login: undefined;
+  nft: { id: number };
+  profile: { walletAddress: number };
+  settings: undefined;
+};
+
 type TrendingStackParams = {
   trending: undefined;
   login: undefined;
@@ -115,6 +124,7 @@ type RootStackNavigatorParams = {
 export type {
   NextNavigationProps,
   HomeStackParams,
+  CreatorChannelsStackParams,
   TrendingStackParams,
   CameraStackParams,
   CreateStackParams,
