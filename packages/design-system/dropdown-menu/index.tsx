@@ -31,8 +31,12 @@ const DropdownMenuContent = DropdownMenu.menuify(
     ...props
   }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Content>) => (
     <StyledDropdownMenuContent
+      align="end"
       {...props}
-      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+      tw={[
+        "animate-zoom-in dark:shadow-black45 rounded-2xl bg-white bg-opacity-80 p-2 shadow backdrop-blur-md backdrop-saturate-150 backdrop-filter dark:bg-black dark:bg-opacity-100",
+        tw,
+      ].join(" ")}
     />
   ),
   "Content"

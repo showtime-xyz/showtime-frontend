@@ -1,6 +1,5 @@
 import { useState, memo, useMemo } from "react";
 
-import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";

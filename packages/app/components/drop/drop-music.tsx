@@ -20,7 +20,6 @@ import { Alert } from "@showtime-xyz/universal.alert";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import {
   ErrorText,
