@@ -1,12 +1,9 @@
 import { memo } from "react";
-import { useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { CloseLarge } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
-
-import { breakpoints } from "design-system/theme";
 
 import type { ModalHeaderProps } from "./types";
 
@@ -20,8 +17,6 @@ function ModalHeaderComponent({
   tw = "",
   onClose,
 }: ModalHeaderProps) {
-  const { width } = useWindowDimensions();
-  const isLgWidth = width >= breakpoints["lg"];
   return (
     <View
       tw={[MODAL_HEADER_CONTAINER_TW, Array.isArray(tw) ? tw.join(" ") : tw]}
@@ -31,7 +26,7 @@ function ModalHeaderComponent({
       ) : (
         <Button
           variant="tertiary"
-          size={isLgWidth ? "regular" : "small"}
+          size="small"
           onPress={onClose}
           iconOnly
           hitSlop={10}
@@ -41,9 +36,7 @@ function ModalHeaderComponent({
         </Button>
       )}
 
-      <Text
-        tw={[MODAL_HEADER_TITLE_TW, "flex-1 text-base font-bold sm:text-lg"]}
-      >
+      <Text tw={[MODAL_HEADER_TITLE_TW, "flex-1 text-base font-bold"]}>
         {title}
       </Text>
 
