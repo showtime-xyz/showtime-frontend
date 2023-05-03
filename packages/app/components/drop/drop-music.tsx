@@ -613,7 +613,7 @@ export const DropMusic = () => {
                           }}
                         >
                           <Text tw="font-bold text-gray-900 dark:text-white">
-                            Release Date
+                            Streaming Services Release Date
                           </Text>
                           <Text tw="pt-4 text-base text-gray-900 dark:text-white">
                             {(dateValue as Date).toDateString()}
@@ -621,7 +621,7 @@ export const DropMusic = () => {
                         </Pressable>
                       ) : (
                         <Text tw="font-bold text-gray-900 dark:text-white">
-                          Release Date
+                          Streaming Services Release Date
                         </Text>
                       )}
 
