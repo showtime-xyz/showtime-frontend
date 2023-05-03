@@ -99,11 +99,13 @@ export const LightBox: React.FC<LightBoxProps> = ({
       runOnUI(() => {
         "worklet";
         const measurements = measure(animatedRef);
-        width.value = measurements!.width;
-        height.value = measurements!.height;
-        x.value = measurements!.pageX;
-        y.value = measurements!.pageY - nativeHeaderHeight;
-        runOnJS(handlePress)();
+        if (measurements) {
+          width.value = measurements.width;
+          height.value = measurements.height;
+          x.value = measurements.pageX;
+          y.value = measurements.pageY - nativeHeaderHeight;
+          runOnJS(handlePress)();
+        }
       })();
     })
     .runOnJS(true);
