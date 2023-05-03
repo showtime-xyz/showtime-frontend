@@ -34,11 +34,13 @@ type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
   users?: UserItemType[];
   loading: boolean;
   emptyTitle?: string;
+  ListHeaderComponent?: React.ComponentType<any>;
 };
 export const UserList = ({
   users,
   loading,
   emptyTitle = "No users, yet.",
+  ListHeaderComponent,
   ...rest
 }: UserListProps) => {
   const { follow, unfollow } = useMyInfo();
@@ -85,6 +87,7 @@ export const UserList = ({
       estimatedItemSize={64}
       overscan={8}
       ListEmptyComponent={listEmptyComponent}
+      ListHeaderComponent={ListHeaderComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
       {...modalListProps}
       {...rest}

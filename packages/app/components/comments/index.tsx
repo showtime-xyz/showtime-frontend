@@ -39,9 +39,14 @@ const PlatformInputAccessoryView =
 type CommentsProps = {
   nft: NFT;
   webListHeight?: number | string;
+  ListHeaderComponent?: React.ComponentType<any>;
 };
 
-export function Comments({ nft, webListHeight }: CommentsProps) {
+export function Comments({
+  nft,
+  webListHeight,
+  ListHeaderComponent,
+}: CommentsProps) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
@@ -166,11 +171,10 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
   const listEmptyComponent = useCallback(
     () =>
       !isLoading && !error && !dataReversed.length ? (
-        <View tw="absolute h-full w-full flex-1 items-center justify-center">
+        <View tw="h-full w-full flex-1 items-center justify-center">
           <EmptyPlaceholder
             text="Be the first to add a comment!"
             title="💬 No comments yet..."
-            tw="-mt-20"
           />
         </View>
       ) : null,
@@ -193,7 +197,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
-        <View tw="web:pt-4 flex-grow">
+        <View tw="flex-grow">
           <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
@@ -205,11 +209,12 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             automaticallyAdjustKeyboardInsets={handleInset}
             automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
+            ListHeaderComponent={ListHeaderComponent}
             contentContainerStyle={styles.contentContainer}
             getItemType={getItemType}
+            ListEmptyComponent={listEmptyComponent}
             {...modalListProps}
           />
-          {listEmptyComponent()}
           {isAuthenticated && mounted && (
             <PlatformInputAccessoryView
               {...Platform.select({
