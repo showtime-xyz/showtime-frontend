@@ -411,7 +411,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               }
             >
               {TabScene && nft && (
-                <TabScene nft={nft} ListHeaderComponent={ListHeaderComponent} />
+                <TabScene
+                  nft={detailData?.data.item ?? nft}
+                  key={index}
+                  ListHeaderComponent={ListHeaderComponent}
+                />
               )}
             </Suspense>
           </ErrorBoundary>
