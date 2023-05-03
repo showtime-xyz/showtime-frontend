@@ -82,7 +82,8 @@ export const PanToClose: FC<PanToCloseProps> = ({
       } else {
         snapToPoint(isSwipeDown || !isPanEnough ? 0 : endOffsetY);
       }
-    });
+    })
+    .runOnJS(true);
   if (!panCloseDirection) return null;
   if (disable) return children;
   return (

@@ -3146,9 +3146,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@coinbase/wallet-mobile-sdk@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "@coinbase/wallet-mobile-sdk@npm:1.0.5"
+"@coinbase/wallet-mobile-sdk@npm:1.0.6":
+  version: 1.0.6
+  resolution: "@coinbase/wallet-mobile-sdk@npm:1.0.6"
   dependencies:
     "@coinbase/wallet-sdk": ^3.5.1
     "@metamask/safe-event-emitter": 2.0.0
@@ -3160,7 +3160,7 @@ __metadata:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 7cb719eca3f90a2adb1400ae2d5376f83afb9f300f1887e90c778a9c53d615bbe4b879c42ce04dab394537f9c7c7205882ae282fa8df45f370bac2aa5874774e
+  checksum: 15110c2e9e6e07ec8fb915cd55758c2aa7d02eefdff253d634abc174524b2e8a87a8c97566f533b59b97f89acbf8ff5062305f2f1520773e933b9075cae99bfd
   languageName: node
   linkType: hard
 
@@ -7966,7 +7966,7 @@ __metadata:
     "@babel/runtime": ^7.18.9
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.1.0
-    "@coinbase/wallet-mobile-sdk": ^1.0.5
+    "@coinbase/wallet-mobile-sdk": 1.0.6
     "@ethersproject/shims": ^5.7.0
     "@expo/xcpretty": ^4.2.2
     "@gorhom/bottom-sheet": 4.4.5
