@@ -191,7 +191,9 @@ export const SelectUsername = () => {
               : "opacity-100",
           ]}
           size="regular"
-          disabled={!isFormValid || !isValidUsername || isLoading}
+          disabled={
+            !isFormValid || !isValidUsername || isLoading || isSubmitting
+          }
           onPress={handleSubmit(handleSubmitForm)}
         >
           Next
