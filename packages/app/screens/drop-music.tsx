@@ -9,4 +9,6 @@ export const DropMusicScreen = withModalScreen(DropMusic, {
   tw: "w-full lg:w-[800px]",
   disableBackdropPress: true,
   snapPoints: ["100%"],
+  enableContentPanningGesture: false,
+  enableHandlePanningGesture: false,
 });
