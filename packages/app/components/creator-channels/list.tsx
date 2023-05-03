@@ -12,6 +12,7 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
+import { generateFakeData } from "app/utilities";
 
 import { useChannelsList } from "./hooks/use-channels-list";
 
@@ -22,6 +23,8 @@ type CreatorChannelsListProps = {
 
 type CreatorChannelsListItemProps = {
   id: string;
+  username: string;
+  date: string;
   // TODO: Add more props
 };
 
@@ -47,7 +50,7 @@ const CreatorChannelsListItem = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
     return (
       <View>
-        <Text>AAA</Text>
+        <Text>{item.username}</Text>
       </View>
     );
   }
@@ -66,7 +69,9 @@ export const CreatorChannelsList = memo(
     //const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } = useChannelsList();
 
     // Start FAKE:
-    const data = [...Array(100).keys()] as [];
+    const data = generateFakeData(
+      300
+    ) as unknown as CreatorChannelsListItemProps[];
     const fetchMore = () => {};
     const refresh = () => {};
     const isRefreshing = false;
