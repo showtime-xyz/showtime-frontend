@@ -54,7 +54,7 @@
     "next": "13.2.2",
     "next-images": "^1.8.4",
     "next-pwa": "^5.6.0",
-    "patch-package": "^6.4.7",
+    "patch-package": "^7.0.0",
     "postinstall-postinstall": "^2.1.0",
     "raf": "^3.4.1",
     "react-datepicker": "^4.11.0",
