@@ -98,7 +98,6 @@ function ProfileDropdown({ user, tw = "" }: Props) {
           <MenuItemIcon
             Icon={Slash}
             ios={{
-              // @ts-expect-error TODO: fix this @Alan
               name: isBlocked ? "circle" : "circle.slash",
             }}
           />

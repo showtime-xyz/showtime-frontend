@@ -39,9 +39,14 @@ const PlatformInputAccessoryView =
 type CommentsProps = {
   nft: NFT;
   webListHeight?: number | string;
+  ListHeaderComponent?: React.ComponentType<any>;
 };
 
-export function Comments({ nft, webListHeight }: CommentsProps) {
+export function Comments({
+  nft,
+  webListHeight,
+  ListHeaderComponent,
+}: CommentsProps) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
@@ -191,7 +196,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
-        <View tw="web:pt-4 flex-grow">
+        <View tw="flex-grow">
           <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
@@ -203,6 +208,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             automaticallyAdjustKeyboardInsets={handleInset}
             automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
+            ListHeaderComponent={ListHeaderComponent}
             contentContainerStyle={styles.contentContainer}
             getItemType={getItemType}
             ListEmptyComponent={listEmptyComponent}
