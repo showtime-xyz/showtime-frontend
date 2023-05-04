@@ -17,7 +17,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
-import { getFormatDistanceStrictToWeek } from "app/utilities";
+import { formatDateRelativeWithIntl } from "app/utilities";
 
 import {
   NFTSDisplayName,
@@ -151,7 +151,7 @@ type NotificationDescriptionProps = {
 
 const NotificationDescription = memo(
   ({ notification, setUsers }: NotificationDescriptionProps) => {
-    const formatDistance = getFormatDistanceStrictToWeek(
+    const formatDistance = formatDateRelativeWithIntl(
       notification.to_timestamp
     );
 
@@ -166,7 +166,7 @@ const NotificationDescription = memo(
             {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
           </Text>
           {Boolean(formatDistance) && (
-            <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+            <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
           )}
         </View>
       );
@@ -183,7 +183,7 @@ const NotificationDescription = memo(
             {NOTIFICATION_TYPE_COPY.get("RELEASE_SAVED_TO_SPOTIFY")}
           </Text>
           {Boolean(formatDistance) && (
-            <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+            <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
           )}
         </View>
       );
@@ -200,7 +200,7 @@ const NotificationDescription = memo(
           <NFTSDisplayName nfts={notification.nfts} />
         </Text>
         {Boolean(formatDistance) && (
-          <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+          <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
         )}
       </View>
     );
