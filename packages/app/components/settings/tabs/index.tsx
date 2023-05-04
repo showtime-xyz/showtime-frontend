@@ -7,9 +7,8 @@ import { WalletAddressesV2 } from "app/types";
 import { AccountTab } from "./account";
 import { AdvancedTab } from "./advanced";
 import { BillingTab } from "./billing";
-import { EmailTab } from "./email";
-import { PhoneTab } from "./phone";
 import { PushNotificationTab } from "./push-notifications";
+import { SignInTab } from "./sign-in";
 import { WalletsTab } from "./wallets";
 
 export type SettingTabsSceneProps = {
@@ -23,25 +22,21 @@ export const SETTINGS_ROUTES = [
     key: "Wallets",
   },
   {
-    title: "Email",
-    key: "Email",
+    title: "Sign In",
+    key: "Sign In",
   },
   {
-    title: "Phone Number",
-    key: "Phone",
-  },
-  {
-    title: "Connected Accounts",
+    title: "Connected Apps",
     key: "Account",
+  },
+  {
+    title: "Notifications",
+    key: "Push Notifications",
   },
   {
     title: "Billing",
     key: "Billing",
     hidden: Platform.OS !== "web",
-  },
-  {
-    title: "Push Notifications",
-    key: "Push Notifications",
   },
   {
     title: "Advanced",
@@ -58,10 +53,9 @@ export const SettingTabsScene = ({
   switch (key) {
     case "Wallets":
       return <WalletsTab index={index} setEditingWallet={setEditingWallet} />;
-    case "Email":
-      return <EmailTab index={index} />;
-    case "Phone":
-      return <PhoneTab index={index} />;
+
+    case "Sign In":
+      return <SignInTab index={index} />;
     case "Account":
       return <AccountTab index={index} />;
     case "Billing":
