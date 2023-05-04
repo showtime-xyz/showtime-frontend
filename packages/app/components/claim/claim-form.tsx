@@ -320,7 +320,7 @@ export const ClaimForm = ({
                     {user.data.profile.has_apple_music_token ? (
                       <CheckIcon />
                     ) : (
-                      <View tw="rounded-full border-[1px] border-gray-800 p-3 dark:border-gray-100" />
+                      <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
                     )}
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       Connect your Apple Music account
@@ -344,7 +344,7 @@ export const ClaimForm = ({
                     {user.data.profile.has_spotify_token ? (
                       <CheckIcon />
                     ) : (
-                      <View tw="rounded-full border-[1px] border-gray-800 p-3 dark:border-gray-100" />
+                      <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
                     )}
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       Connect your Spotify account
