@@ -1,7 +1,10 @@
+import { useState, useRef } from "react";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { ArrowLeft } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -25,8 +28,34 @@ const Header = (props: HeaderProps) => {
   );
 };
 
+const total = new Array(1000).fill(0).map((_, i) => ({
+  username: "nishan",
+  id: i,
+  text: i + 1 + ". " + randomSentenceGenerator(10, 50),
+}));
+
 export const Messages = () => {
   const insets = useSafeAreaInsets();
+  const [v, setV] = useState<any>(total.slice(0, 20));
+  const loading = useRef(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onLoadMore = () => {
+    if (loading.current) return;
+    setIsLoading(true);
+    loading.current = true;
+
+    setTimeout(() => {
+      const newV = total.slice(v.length, v.length + 20);
+
+      setV((prevV: any) => {
+        return [...prevV, ...newV];
+      });
+      setIsLoading(false);
+      loading.current = false;
+    }, 2000);
+  };
+
   return (
     <View
       tw="flex-1"
@@ -36,18 +65,22 @@ export const Messages = () => {
     >
       <Header username="nishan" members={29} />
       <InfiniteScrollList
-        data={new Array(25).fill(0).map((_, i) => ({
-          username: "nishan",
-          text: i + ". " + randomSentenceGenerator(10, 50),
-        }))}
-        onEndReached={() => {
-          console.log("Prepend data");
-        }}
+        data={v}
+        onEndReached={onLoadMore}
         inverted
         useWindowScroll={false}
         estimatedItemSize={20}
         renderItem={MessageItem}
         contentContainerStyle={{ paddingTop: insets.bottom }}
+        ListFooterComponent={
+          isLoading
+            ? () => (
+                <View tw="w-full items-center py-4">
+                  <Spinner size="small" />
+                </View>
+              )
+            : () => null
+        }
       />
     </View>
   );

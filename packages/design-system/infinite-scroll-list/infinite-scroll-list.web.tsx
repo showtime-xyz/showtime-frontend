@@ -213,7 +213,7 @@ function InfiniteScrollListImpl<Item>(
               : {}
           }
         >
-          {HeaderComponent}
+          <div style={transformStyle}>{HeaderComponent}</div>
           <div
             ref={scrollMarginOffseRef}
             style={{
@@ -235,7 +235,9 @@ function InfiniteScrollListImpl<Item>(
                 }px)`,
               }}
             >
-              {data?.length === 0 && EmptyComponent}
+              <div style={transformStyle}>
+                {data?.length === 0 && EmptyComponent}
+              </div>
               {renderedItems.map((virtualItem) => {
                 const index = virtualItem.index;
                 return (
@@ -288,7 +290,9 @@ function InfiniteScrollListImpl<Item>(
                   </div>
                 );
               })}
-              {!useWindowScroll && FooterComponent}
+              <div style={transformStyle}>
+                {!useWindowScroll && FooterComponent}
+              </div>
             </div>
           </div>
 
