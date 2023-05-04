@@ -173,13 +173,18 @@ function InfiniteScrollListImpl<Item>(
         currentTarget.scrollTop -= e.deltaY;
       }
     };
-    parentRef.current?.addEventListener("wheel", handleScroll, {
-      passive: false,
-    });
+    if (inverted) {
+      parentRef.current?.addEventListener("wheel", handleScroll, {
+        passive: false,
+      });
+    }
+
     return () => {
-      parentRef.current?.removeEventListener("wheel", handleScroll);
+      if (inverted) {
+        parentRef.current?.removeEventListener("wheel", handleScroll);
+      }
     };
-  }, []);
+  }, [inverted]);
 
   return (
     <>
