@@ -7,7 +7,10 @@ export const Messages = () => {
   return (
     <View tw="flex-1">
       <InfiniteScrollList
-        data={new Array(100).fill(100)}
+        data={new Array(100).fill(0).map(() => ({
+          username: "username",
+          text: "this is a text broadcasted by username. This can really long long long",
+        }))}
         estimatedItemSize={20}
         renderItem={MessageItem}
       />
@@ -15,14 +18,22 @@ export const Messages = () => {
   );
 };
 
-const MessageItem = () => {
+type MessageItemProps = {
+  item: {
+    username: string;
+    text: string;
+  };
+};
+
+const MessageItem = (props: MessageItemProps) => {
+  const { username, text } = props.item;
   return (
     <View tw="mb-5 px-4">
       <View tw="flex-row" style={{ columnGap: 8 }}>
         <Avatar size={24} />
-        <View style={{ rowGap: 8 }}>
-          <Text tw="text-sm font-bold">Username</Text>
-          <Text tw="text-sm">This is the text message. It can be long too</Text>
+        <View tw="flex-1" style={{ rowGap: 8 }}>
+          <Text tw="text-sm font-bold">{username}</Text>
+          <Text tw="text-sm">{text}</Text>
         </View>
       </View>
     </View>
