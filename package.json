@@ -75,7 +75,7 @@
     "@ethersproject/bignumber": "5.7.0",
     "@ethersproject/signing-key": "5.7.0",
     "eth-block-tracker": "4.4.3",
-    "next": "13.2.2",
+    "next": "13.4.0",
     "react-native-mmkv": "2.8.0",
     "@shopify/flash-list": "1.4.2",
     "react-native-svg": "13.9.0",

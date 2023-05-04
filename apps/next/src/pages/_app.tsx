@@ -217,10 +217,11 @@ function App({ Component, pageProps, router }: AppProps) {
 const inter = Inter({
   variable: "--font-inter",
   display: "swap",
+  subsets: ["latin"],
 });
 
 const Container = withColorScheme(
-  ({ children }: { children: React.ReactChild }) => {
+  ({ children }: { children: React.ReactNode }) => {
     const fonts = [inter.variable].join(" ");
 
     const onResize = useCallback(() => {
