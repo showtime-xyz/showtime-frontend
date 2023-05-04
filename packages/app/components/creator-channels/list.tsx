@@ -165,7 +165,7 @@ export const CreatorChannelsList = memo(
 
     // Start FAKE:
     const data = generateFakeData(
-      1,
+      6,
       "data"
     ) as unknown as CreatorChannelsListItemProps[];
     const topCreators = generateFakeData(
@@ -302,7 +302,7 @@ export const CreatorChannelsList = memo(
         onRefresh={refresh}
         ListFooterComponent={ListFooterComponent}
         ref={listRef}
-        estimatedItemSize={17}
+        estimatedItemSize={110}
       />
     );
   }
