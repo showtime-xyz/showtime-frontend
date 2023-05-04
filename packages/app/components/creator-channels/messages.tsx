@@ -1,16 +1,52 @@
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { ArrowLeft } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-export const Messages = () => {
+type HeaderProps = {
+  username: string;
+  members: number;
+};
+
+const Header = (props: HeaderProps) => {
   return (
-    <View tw="flex-1">
+    <View tw="flex-row px-4" style={{ columnGap: 8 }}>
+      <View tw="flex-row items-center" style={{ columnGap: 8 }}>
+        <ArrowLeft height={24} width={24} color={"black"} />
+        <Avatar size={34} />
+      </View>
+      <View tw="flex-1" style={{ rowGap: 8 }}>
+        <Text tw="text-sm font-bold">{props.username}</Text>
+        <Text tw="text-sm">{props.members} members</Text>
+      </View>
+    </View>
+  );
+};
+
+export const Messages = () => {
+  const insets = useSafeAreaInsets();
+  return (
+    <View
+      tw="flex-1"
+      style={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        rowGap: 12,
+      }}
+    >
+      <Header username="nishan" members={29} />
       <InfiniteScrollList
-        data={new Array(100).fill(0).map(() => ({
+        data={new Array(15).fill(0).map(() => ({
           username: "username",
-          text: "this is a text broadcasted by username. This can really long long long",
+          text: randomSentenceGenerator(10, 50),
         }))}
+        onEndReached={() => {
+          console.log("Prepend data");
+        }}
+        inverted
         estimatedItemSize={20}
         renderItem={MessageItem}
       />
@@ -39,3 +75,26 @@ const MessageItem = (props: MessageItemProps) => {
     </View>
   );
 };
+
+function getRandomWord() {
+  const words =
+    "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua".split(
+      " "
+    );
+  return words[Math.floor(Math.random() * words.length)];
+}
+
+function randomSentenceGenerator(minWords: number, maxWords: number) {
+  const sentenceLength =
+    Math.floor(Math.random() * (maxWords - minWords + 1)) + minWords;
+  let sentence = "";
+
+  for (let i = 0; i < sentenceLength; i++) {
+    sentence += getRandomWord() + " ";
+  }
+
+  // Capitalize the first letter and add a period at the end
+  sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1).trim() + ".";
+
+  return sentence;
+}
