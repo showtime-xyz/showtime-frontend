@@ -8,6 +8,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -32,24 +33,36 @@ const keyExtractor = (item: CreatorChannelsListItemProps) => {
   return item.id.toString();
 };
 
-const Header = () => {
+const CreatorChannelsHeader = memo(() => {
   const headerHeight = useHeaderHeight();
 
-  return Platform.OS === "web" ? (
-    <View tw="w-full flex-row justify-center px-4 py-4">
-      <Text tw="text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
-        Creator Channels
+  return (
+    <View tw="px-4 py-4">
+      <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
+        Channels
       </Text>
+      <View tw="mt-3">
+        <Text tw="text-sm leading-5 text-gray-500">
+          Get exclusive updates, presale access and unreleased content from your
+          favorite creators.
+        </Text>
+      </View>
     </View>
-  ) : (
-    <View style={{ height: headerHeight }} />
   );
-};
+});
+
+CreatorChannelsHeader.displayName = "CreatorChannelsHeader";
 
 const CreatorChannelsListItem = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
     return (
-      <View>
+      <View tw="px-4 py-2">
+        <AvatarHoverCard
+          username={item.username}
+          url={"https://picsum.photos/200?" + item.id}
+          size={52}
+          alt="CreatorPreview Avatar"
+        />
         <Text>{item.username}</Text>
       </View>
     );
@@ -59,13 +72,7 @@ const CreatorChannelsListItem = memo(
 CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
 export const CreatorChannelsList = memo(
-  ({
-    hideHeader = false,
-    web_height = undefined,
-  }: {
-    hideHeader?: boolean;
-    web_height?: number;
-  }) => {
+  ({ web_height = undefined }: { web_height?: number }) => {
     //const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } = useChannelsList();
 
     // Start FAKE:
@@ -104,10 +111,7 @@ export const CreatorChannelsList = memo(
       <InfiniteScrollList
         useWindowScroll={false}
         data={data}
-        ListHeaderComponent={Platform.select({
-          web: hideHeader ? undefined : Header,
-          default: undefined,
-        })}
+        ListHeaderComponent={CreatorChannelsHeader}
         // for blur header effect on iOS
         style={{
           height: Platform.select({
@@ -147,7 +151,7 @@ export const CreatorChannelsList = memo(
         onRefresh={refresh}
         ListFooterComponent={ListFooterComponent}
         ref={listRef}
-        estimatedItemSize={56}
+        estimatedItemSize={17}
       />
     );
   }
