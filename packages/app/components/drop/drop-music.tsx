@@ -998,6 +998,7 @@ export const DropMusic = () => {
             ctaCopy="Edit Drop"
             file={getValues("file")}
             spotifyUrl={getValues("spotifyUrl")}
+            appleMusicTrackUrl={getValues("appleMusicTrackUrl")}
             releaseDate={isSaveDrop ? null : getValues("releaseDate")}
           />
         )}
