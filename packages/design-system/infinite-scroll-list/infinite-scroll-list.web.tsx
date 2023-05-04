@@ -52,6 +52,7 @@ function InfiniteScrollListImpl<Item>(
     overscan,
     style,
     useWindowScroll = true,
+    inverted,
     preserveScrollPosition = false,
   } = props;
   let count = data?.length ?? 0;
@@ -131,7 +132,7 @@ function InfiniteScrollListImpl<Item>(
       return;
     }
 
-    if (data && lastItem.index >= data.length - 1) {
+    if (data && data?.length > 0 && lastItem.index >= data.length - 1) {
       onEndReached?.();
     }
   }, [data, onEndReached, renderedItems]);
@@ -161,6 +162,25 @@ function InfiniteScrollListImpl<Item>(
     preserveScrollPosition,
   ]);
 
+  const transformStyle = inverted ? { transform: "scaleY(-1)" } : {};
+
+  useEffect(() => {
+    const handleScroll = (e: WheelEvent) => {
+      e.preventDefault();
+      const currentTarget = e.currentTarget as HTMLElement;
+
+      if (currentTarget) {
+        currentTarget.scrollTop -= e.deltaY;
+      }
+    };
+    parentRef.current?.addEventListener("wheel", handleScroll, {
+      passive: false,
+    });
+    return () => {
+      parentRef.current?.removeEventListener("wheel", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <div
@@ -168,6 +188,7 @@ function InfiniteScrollListImpl<Item>(
           flex: 1,
           display: "flex",
           flexDirection: "column",
+          ...transformStyle,
         }}
       >
         <div
@@ -192,7 +213,7 @@ function InfiniteScrollListImpl<Item>(
               : {}
           }
         >
-          {HeaderComponent}
+          <div style={transformStyle}>{HeaderComponent}</div>
           <div
             ref={scrollMarginOffseRef}
             style={{
@@ -214,7 +235,9 @@ function InfiniteScrollListImpl<Item>(
                 }px)`,
               }}
             >
-              {data?.length === 0 && EmptyComponent}
+              <div style={transformStyle}>
+                {data?.length === 0 && EmptyComponent}
+              </div>
               {renderedItems.map((virtualItem) => {
                 const index = virtualItem.index;
                 return (
@@ -222,7 +245,7 @@ function InfiniteScrollListImpl<Item>(
                     key={virtualItem.key}
                     data-index={index}
                     ref={rowVirtualizer.measureElement}
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", ...transformStyle }}
                   >
                     {typeof data?.[index] !== "undefined" ? (
                       <div
@@ -267,7 +290,9 @@ function InfiniteScrollListImpl<Item>(
                   </div>
                 );
               })}
-              {!useWindowScroll && FooterComponent}
+              <div style={transformStyle}>
+                {!useWindowScroll && FooterComponent}
+              </div>
             </div>
           </div>
 
