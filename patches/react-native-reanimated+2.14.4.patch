@@ -1,3 +1,46 @@
+diff --git a/node_modules/react-native-reanimated/android/src/main/cpp/NativeProxy.cpp b/node_modules/react-native-reanimated/android/src/main/cpp/NativeProxy.cpp
+index fff5022..86018ae 100644
+--- a/node_modules/react-native-reanimated/android/src/main/cpp/NativeProxy.cpp
++++ b/node_modules/react-native-reanimated/android/src/main/cpp/NativeProxy.cpp
+@@ -47,6 +47,8 @@ NativeProxy::NativeProxy(
+ NativeProxy::~NativeProxy() {
+   // removed temporary, new event listener mechanism need fix on the RN side
+   // reactScheduler_->removeEventListener(eventListener_);
++   auto method = javaPart_->getClass()->getMethod<void()>("unregisterEventHandler");
++   method(javaPart_.get());
+ }
+ 
+ jni::local_ref<NativeProxy::jhybriddata> NativeProxy::initHybrid(
+diff --git a/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NativeProxy.java b/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NativeProxy.java
+index f1af5ba..189acf6 100644
+--- a/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NativeProxy.java
++++ b/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NativeProxy.java
+@@ -240,6 +240,10 @@ public class NativeProxy {
+     mNodesManager.registerEventHandler(handler);
+   }
+ 
++  private void unregisterEventHandler() {
++      mNodesManager.unregisterEventHandler();
++  }
++
+   @DoNotStrip
+   private int registerSensor(int sensorType, int interval, SensorSetter setter) {
+     return reanimatedSensorContainer.registerSensor(
+diff --git a/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NodesManager.java b/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NodesManager.java
+index 2f32309..8cbda88 100644
+--- a/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NodesManager.java
++++ b/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NodesManager.java
+@@ -550,6 +550,10 @@ public class NodesManager implements EventDispatcherListener {
+     mCustomEventHandler = handler;
+   }
+ 
++   public void unregisterEventHandler() {
++        mCustomEventHandler = null;
++  }
++
+   public void sendEvent(String name, WritableMap body) {
+     mEventEmitter.emit(name, body);
+   }
 diff --git a/node_modules/react-native-reanimated/lib/reanimated2/hook/useAnimatedReaction.js b/node_modules/react-native-reanimated/lib/reanimated2/hook/useAnimatedReaction.js
 index 15a2f77..5889f00 100644
 --- a/node_modules/react-native-reanimated/lib/reanimated2/hook/useAnimatedReaction.js
