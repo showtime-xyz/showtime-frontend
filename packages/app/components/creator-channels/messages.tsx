@@ -1,8 +1,7 @@
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { ArrowLeft } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -13,14 +12,14 @@ type HeaderProps = {
 
 const Header = (props: HeaderProps) => {
   return (
-    <View tw="flex-row px-4" style={{ columnGap: 8 }}>
+    <View tw="flex-row p-4" style={{ columnGap: 8 }}>
       <View tw="flex-row items-center" style={{ columnGap: 8 }}>
         <ArrowLeft height={24} width={24} color={"black"} />
         <Avatar size={34} />
       </View>
       <View tw="flex-1" style={{ rowGap: 8 }}>
         <Text tw="text-sm font-bold">{props.username}</Text>
-        <Text tw="text-sm">{props.members} members</Text>
+        <Text tw="text-xs">{props.members} members</Text>
       </View>
     </View>
   );
@@ -33,14 +32,12 @@ export const Messages = () => {
       tw="flex-1"
       style={{
         paddingTop: insets.top,
-        paddingBottom: insets.bottom,
-        rowGap: 12,
       }}
     >
       <Header username="nishan" members={29} />
       <InfiniteScrollList
         data={new Array(15).fill(0).map(() => ({
-          username: "username",
+          username: "nishan",
           text: randomSentenceGenerator(10, 50),
         }))}
         onEndReached={() => {
@@ -49,6 +46,7 @@ export const Messages = () => {
         inverted
         estimatedItemSize={20}
         renderItem={MessageItem}
+        contentContainerStyle={{ paddingTop: insets.bottom }}
       />
     </View>
   );
@@ -68,7 +66,11 @@ const MessageItem = (props: MessageItemProps) => {
       <View tw="flex-row" style={{ columnGap: 8 }}>
         <Avatar size={24} />
         <View tw="flex-1" style={{ rowGap: 8 }}>
-          <Text tw="text-sm font-bold">{username}</Text>
+          <View tw="flex-row items-baseline" style={{ columnGap: 8 }}>
+            <Text tw="text-sm font-bold">{username}</Text>
+            <Text tw="text-xs text-gray-700">12:00 PM</Text>
+          </View>
+
           <Text tw="text-sm">{text}</Text>
         </View>
       </View>
