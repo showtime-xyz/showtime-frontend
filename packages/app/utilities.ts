@@ -851,18 +851,71 @@ export const formatAPIErrorMessage = (error: AxiosError | Error) => {
   return messages.join("\n");
 };
 
+function getRandomDateWithinThreeMonths(): string {
+  const now = new Date();
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+  const randomTimestamp = Math.floor(
+    threeMonthsAgo.getTime() +
+      Math.random() * (now.getTime() - threeMonthsAgo.getTime())
+  );
+
+  return new Date(randomTimestamp).toISOString();
+}
+
 export const generateFakeData = (
-  length: number
+  length: number,
+  suffix: string = ""
 ): {
-  id: number;
+  id: string;
   username: string;
   date: string;
   // Add more keys here if needed
 }[] => {
   return Array.from({ length }, (_, i) => ({
-    id: i + 1,
-    username: `user${i + 1}`,
-    date: new Date().toISOString(),
+    id: i + 1 + suffix,
+    username: `user${i + 1}_${suffix}`,
+    date: getRandomDateWithinThreeMonths(),
+    text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices, nunc nisl ultricies nunc, quis ultricies nisl nisl eget ultricies ultrices, nunc nisl ultricies nunc, quis ultricies nisl`,
     // Add more keys here if needed
   }));
 };
+
+export function formatDateRelativeWithIntl(isoDateString: string): string {
+  const date = new Date(isoDateString);
+  const now = new Date();
+  const diffInSeconds = (now.getTime() - date.getTime()) / 1000;
+  const diffInMinutes = diffInSeconds / 60;
+  const diffInHours = diffInMinutes / 60;
+  const diffInDays = Math.floor(diffInHours / 24);
+
+  if (diffInDays < 1) {
+    const timeFormatter = new Intl.DateTimeFormat("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+    return timeFormatter.format(date);
+  } else if (diffInDays >= 1 && diffInDays < 7) {
+    return `${diffInDays}d`;
+  } else {
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    const diffInMonths = Math.floor(diffInDays / 30.44);
+    const diffInYears = Math.floor(diffInDays / 365.25);
+
+    if (diffInWeeks < 4) {
+      return `${diffInWeeks}w`;
+    } else if (diffInMonths < 1) {
+      return `${diffInWeeks}w`;
+    } else if (diffInMonths < 12) {
+      return `${diffInMonths}m`;
+    } else {
+      return `${diffInYears}y`;
+    }
+  }
+}
+
+export function getRandomNumber(min = 50, max = 26000) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
