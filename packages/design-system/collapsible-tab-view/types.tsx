@@ -7,7 +7,7 @@ import type Animated from "react-native-reanimated";
 import type {
   TabViewProps,
   Route as TabViewRoute,
-} from "react-native-tab-view-next";
+} from "react-native-tab-view";
 
 export type Route = TabViewRoute & {
   index: number;

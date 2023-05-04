@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "111.0.2",
+  "version": "112.0.1",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -19,7 +19,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "nativewind": "^2.0.11",
-    "patch-package": "^6.4.7",
+    "patch-package": "^7.0.0",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "0.2.5",
     "react-native-os": "^1.2.6",

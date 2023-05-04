@@ -11,7 +11,7 @@ import {
   TabBar,
   TabView,
   TabViewProps,
-} from "react-native-tab-view-next";
+} from "react-native-tab-view";
 
 import { GestureContainer, GestureContainerRef } from "./gesture-container";
 import type {

@@ -1,4 +1,4 @@
-import { TabView } from "react-native-tab-view-next";
+import { TabView } from "react-native-tab-view";
 
 import { createCollapsibleTabsComponent } from "./create-collapsible-tabs";
 

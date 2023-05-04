@@ -13,7 +13,7 @@ import {
   TabBar,
   TabView,
   TabViewProps,
-} from "react-native-tab-view-next";
+} from "react-native-tab-view";
 import Sticky from "react-stickynode";
 
 import { HeaderTabContext } from "./context";
