@@ -8089,7 +8089,7 @@ __metadata:
     react-native-share: ^8.2.1
     react-native-spotify-remote: "file:../../react-native-spotify-remote.tgz"
     react-native-svg: 13.9.0
-    react-native-tab-view-next: ^3.1.3
+    react-native-tab-view: ^3.5.1
     react-native-view-shot: 3.6.0
     react-native-web: ~0.19.4
     react-native-webview: 12.0.2
@@ -29069,14 +29069,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-tab-view-next@npm:^3.1.3":
-  version: 3.1.3
-  resolution: "react-native-tab-view-next@npm:3.1.3"
+"react-native-tab-view@npm:^3.5.1":
+  version: 3.5.1
+  resolution: "react-native-tab-view@npm:3.5.1"
+  dependencies:
+    use-latest-callback: ^0.1.5
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-pager-view: "*"
-  checksum: b2f7882cf37fbc82d085c717abd8aff58c4971621a1ab5dba3536456c08664f3ccd1f655977b6309d1760e9630ee1bfb212a9803ee10f4bb59ab0dfc7e1b1751
+  checksum: 22213e8bde3b0e16631d290a3da146789dcad461dbdc424cf6448c683a2d75c12abbae5aa329c83788123f6dd0865b451ba57848856483607327fb5fdad2fe12
   languageName: node
   linkType: hard
 

@@ -72,7 +72,7 @@ const nextConfig = {
     "react-native-avoid-softinput",
     "react-native-safe-area-context",
     "react-native-mmkv",
-    "react-native-tab-view-next",
+    "react-native-tab-view",
     "universal-tooltip",
     "react-native-image-colors",
   ],

@@ -25,7 +25,7 @@ import Animated, {
   withDecay,
   withTiming,
 } from "react-native-reanimated";
-import type { SceneRendererProps } from "react-native-tab-view-next";
+import type { SceneRendererProps } from "react-native-tab-view";
 
 import { HeaderTabContext } from "./context";
 import { useRefreshDerivedValue } from "./hooks/use-refresh-value";
