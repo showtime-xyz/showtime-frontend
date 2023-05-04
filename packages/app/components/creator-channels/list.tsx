@@ -1,6 +1,7 @@
-import { useCallback, memo, useRef } from "react";
+import { useCallback, memo, useRef, useMemo } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -13,7 +14,11 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { generateFakeData } from "app/utilities";
+import {
+  formatDateRelativeWithIntl,
+  generateFakeData,
+  getRandomNumber,
+} from "app/utilities";
 
 import { useChannelsList } from "./hooks/use-channels-list";
 
@@ -26,44 +31,70 @@ type CreatorChannelsListItemProps = {
   id: string;
   username: string;
   date: string;
+  text?: string;
+  members: number;
+  itemType?: "creator";
   // TODO: Add more props
-};
+} & { type: "section"; title: string; subtext?: string; tw?: string };
 
 const keyExtractor = (item: CreatorChannelsListItemProps) => {
-  return item.id.toString();
+  return item.type === "section" ? item.title : item.id.toString();
 };
 
-const CreatorChannelsHeader = memo(() => {
-  const headerHeight = useHeaderHeight();
-
-  return (
-    <View tw="px-4 py-4">
-      <Text tw="text-2xl font-extrabold text-gray-900 dark:text-white">
-        Channels
-      </Text>
-      <View tw="mt-3">
-        <Text tw="text-sm leading-5 text-gray-500">
-          Get exclusive updates, presale access and unreleased content from your
-          favorite creators.
+const CreatorChannelsHeader = memo(
+  ({
+    title,
+    subtext,
+    tw = "",
+  }: {
+    title: string;
+    subtext?: string;
+    tw?: string;
+  }) => {
+    return (
+      <View tw="px-4 py-4">
+        <Text
+          tw={["text-2xl font-extrabold text-gray-900 dark:text-white", tw]}
+        >
+          {title}
         </Text>
+        {subtext ? (
+          <View tw="mt-3">
+            <Text tw="text-sm leading-5 text-gray-500">{subtext}</Text>
+          </View>
+        ) : null}
       </View>
-    </View>
-  );
-});
+    );
+  }
+);
 
 CreatorChannelsHeader.displayName = "CreatorChannelsHeader";
 
 const CreatorChannelsListItem = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
+    const time = formatDateRelativeWithIntl(item.date);
     return (
-      <View tw="px-4 py-2">
-        <AvatarHoverCard
-          username={item.username}
-          url={"https://picsum.photos/200?" + item.id}
-          size={52}
-          alt="CreatorPreview Avatar"
-        />
-        <Text>{item.username}</Text>
+      <View tw="flex-1 px-4 py-3">
+        <View tw="flex-row">
+          <AvatarHoverCard
+            username={item.username}
+            url={"https://picsum.photos/200?" + item.id}
+            size={52}
+            alt="CreatorPreview Avatar"
+            tw={"mr-3"}
+          />
+          <View tw="flex-1">
+            <View tw="flex-row items-center">
+              <Text tw="text-lg font-semibold">{item.username}</Text>
+              <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
+            </View>
+            <View tw="mt-2">
+              <Text tw="leading-5 text-gray-500" numberOfLines={2}>
+                {item?.text}
+              </Text>
+            </View>
+          </View>
+        </View>
       </View>
     );
   }
@@ -71,13 +102,75 @@ const CreatorChannelsListItem = memo(
 
 CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
+const CreatorChannelsListCreator = memo(
+  ({ item }: { item: CreatorChannelsListItemProps }) => {
+    const time = formatDateRelativeWithIntl(item.date);
+    const memberCount = new Intl.NumberFormat().format(
+      item.members ?? getRandomNumber() // todo: remove this
+    );
+    return (
+      <View tw="flex-1 px-4 py-3">
+        <View tw="flex-row items-center">
+          <AvatarHoverCard
+            username={item.username}
+            url={"https://picsum.photos/200?" + item.id}
+            size={52}
+            alt="CreatorPreview Avatar"
+            tw={"mr-3"}
+          />
+          <View tw="flex-1 justify-center">
+            <View tw="flex-1 flex-row items-center justify-center">
+              <View tw="flex-1 items-start justify-start">
+                <View tw="flex-1 flex-row items-center justify-start">
+                  <Text tw="text-lg font-semibold">{item.username}</Text>
+                  <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
+                </View>
+                <View tw="flex-1">
+                  <Text tw="font-semibold text-gray-500">
+                    {memberCount} Members
+                  </Text>
+                </View>
+              </View>
+              <View tw="items-end justify-end">
+                <View tw="rounded-full bg-black p-1">
+                  <Text tw="px-6 font-bold text-white">Join</Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View tw="ml-[52px] pl-3">
+          <Text tw="leading-5 text-gray-500" numberOfLines={2}>
+            {item?.text}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+);
+
+CreatorChannelsListCreator.displayName = "CreatorChannelsListCreator";
+
 export const CreatorChannelsList = memo(
   ({ web_height = undefined }: { web_height?: number }) => {
     //const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } = useChannelsList();
 
+    const isDark = useIsDarkMode();
+    const bottomBarHeight = usePlatformBottomHeight();
+    const headerHeight = useHeaderHeight();
+    const { height: windowHeight } = useWindowDimensions();
+
+    const listRef = useRef<any>();
+    useScrollToTop(listRef);
+
     // Start FAKE:
     const data = generateFakeData(
-      300
+      1,
+      "data"
+    ) as unknown as CreatorChannelsListItemProps[];
+    const topCreators = generateFakeData(
+      15,
+      "creator"
     ) as unknown as CreatorChannelsListItemProps[];
     const fetchMore = () => {};
     const refresh = () => {};
@@ -86,16 +179,70 @@ export const CreatorChannelsList = memo(
     const isLoading = false;
     // End FAKE
 
+    // since we're quering two different endpoints, and based on the amount of data from the first endpoint
+    // we have to transform our data a bit and decide if we build a section list or a single FlashList
+    // we're going to useMemo for that and return the data in the format we need
+    const transformedData = useMemo(() => {
+      // if we have more then 15 items from the first endpoint, we're not going to build a section list
+      // we're going to build a single FlashList, but we create a section if `data` is smaller than 15 items
+      if (data.length < 11) {
+        return [
+          {
+            type: "section",
+            title: "Channels",
+            subtext:
+              "Get exclusive updates, presale access and unreleased content from your favorite creators.",
+          },
+          ...data.sort((a, b) => {
+            return b.date.localeCompare(a.date); // will remove sort, only fake data
+          }),
+          {
+            type: "section",
+            title: "Popular creators",
+            tw: "text-xl",
+          },
+          // since the backend returns the same schema for both endpoints, we need to differentiate them with a `itemType` prop
+          ...topCreators
+            .map((creator) => ({
+              ...creator,
+              itemType: "creator",
+            }))
+            .sort((a, b) => {
+              return b.date.localeCompare(a.date); // will remove sort, only fake data
+            }),
+        ];
+      } else {
+        return [
+          {
+            type: "section",
+            title: "Channels",
+            subtext:
+              "Get exclusive updates, presale access and unreleased content from your favorite creators.",
+          },
+          ...data.sort((a, b) => {
+            return b.date.localeCompare(a.date); // will remove sort, only fake data
+          }),
+        ];
+      }
+    }, [data, topCreators]) as CreatorChannelsListItemProps[];
+
     const renderItem = useCallback(({ item }: CreatorChannelsListProps) => {
+      if (item.type === "section") {
+        return (
+          <CreatorChannelsHeader
+            title={item.title}
+            subtext={item?.subtext}
+            tw={item.tw}
+          />
+        );
+      }
+
+      if (item.itemType === "creator") {
+        return <CreatorChannelsListCreator item={item} />;
+      }
+
       return <CreatorChannelsListItem item={item} />;
     }, []);
-    const isDark = useIsDarkMode();
-    const bottomBarHeight = usePlatformBottomHeight();
-    const headerHeight = useHeaderHeight();
-    const { height: windowHeight } = useWindowDimensions();
-
-    const listRef = useRef<any>();
-    useScrollToTop(listRef);
 
     const ListFooterComponent = useCallback(() => {
       if (isLoadingMore)
@@ -110,9 +257,13 @@ export const CreatorChannelsList = memo(
     return (
       <InfiniteScrollList
         useWindowScroll={false}
-        data={data}
-        ListHeaderComponent={CreatorChannelsHeader}
-        // for blur header effect on iOS
+        data={transformedData}
+        getItemType={(item) => {
+          // To achieve better performance, specify the type based on the item
+          return item.type === "section"
+            ? "sectionHeader"
+            : item.itemType ?? "row";
+        }}
         style={{
           height: Platform.select({
             default: windowHeight - bottomBarHeight,
