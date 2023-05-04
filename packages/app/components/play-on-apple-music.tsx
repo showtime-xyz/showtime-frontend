@@ -15,7 +15,7 @@ export const PlayOnAppleMusic = ({
 }) => {
   return (
     <Pressable
-      tw="px-1 py-0.5"
+      tw="px-1 pb-px pt-[3px]"
       onPress={(e) => {
         if (Platform.OS === "web") {
           e.preventDefault();
@@ -33,12 +33,8 @@ export const PlayOnAppleMusic = ({
         tw="items-center justify-center rounded bg-black/60"
         style={StyleSheet.absoluteFillObject}
       />
-      <View tw="mt-[1px] h-full flex-row items-center justify-center">
-        <ListenOnAppleMusic
-          height={20}
-          width={20 * (125.1 / 27.78)}
-          color="white"
-        />
+      <View tw="h-full flex-row items-center justify-center">
+        <ListenOnAppleMusic height={20} width={20 * (125 / 27)} color="white" />
       </View>
     </Pressable>
   );

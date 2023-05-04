@@ -9,7 +9,7 @@ import {
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
-import { Spotify } from "@showtime-xyz/universal.icon";
+import { ListenOnAppleMusic, SpotifyPure } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -30,7 +30,8 @@ export type DropPreviewProps = {
   title: string;
   description: string;
   onPressCTA: () => void;
-  spotifyUrl?: string;
+  spotifyUrl?: string | null;
+  appleMusicTrackUrl?: string | null;
   releaseDate?: string;
   ctaCopy?: string;
   tw?: string;
@@ -48,6 +49,7 @@ export const DropPreview = memo(function DropPreview({
   description,
   onPressCTA,
   spotifyUrl,
+  appleMusicTrackUrl,
   releaseDate,
   ctaCopy,
   tw = "",
@@ -112,32 +114,56 @@ export const DropPreview = memo(function DropPreview({
               }}
             />
           )}
-          {(Boolean(spotifyUrl) || Boolean(releaseDate)) && (
-            <Pressable
-              onPress={onPressSpotify}
-              tw="z-9 absolute bottom-2.5 left-2.5"
-            >
-              <View
-                tw="rounded bg-black/60"
-                style={StyleSheet.absoluteFillObject}
-              />
-              <View tw="flex-row items-center">
-                <Spotify color="white" width={20} height={20} />
-                <Text tw="px-1 text-xs font-semibold text-white">
-                  {releaseDate
-                    ? `Available on ${new Date(releaseDate).toLocaleString(
-                        "default",
-                        {
-                          month: "long",
-                        }
-                      )} ${new Date(releaseDate).getDate()}`
-                    : spotifyUrl
-                    ? "Play on Spotify"
-                    : ""}
-                </Text>
-              </View>
-            </Pressable>
-          )}
+          <View tw="z-9 absolute bottom-2.5 left-2.5 flex-row">
+            {(Boolean(spotifyUrl) || Boolean(releaseDate)) && (
+              <Pressable onPress={onPressSpotify} tw="py-0.5 pl-0.5">
+                <View
+                  tw="rounded bg-black/60"
+                  style={StyleSheet.absoluteFillObject}
+                />
+                <View tw="flex-row items-center">
+                  <SpotifyPure color="white" width={18} height={18} />
+                  <Text tw="px-1 text-xs font-medium text-white">
+                    {releaseDate
+                      ? `Available on ${new Date(releaseDate).toLocaleString(
+                          "default",
+                          {
+                            month: "long",
+                          }
+                        )} ${new Date(releaseDate).getDate()}`
+                      : spotifyUrl
+                      ? "Play on Spotify"
+                      : ""}
+                  </Text>
+                </View>
+              </Pressable>
+            )}
+            {Boolean(appleMusicTrackUrl) && (
+              <Pressable
+                onPress={(e) => {
+                  if (Platform.OS === "web") {
+                    e.preventDefault();
+                  }
+                  if (appleMusicTrackUrl) {
+                    Linking.openURL(appleMusicTrackUrl);
+                  }
+                }}
+                tw="ml-1 px-1 pt-0.5"
+              >
+                <View
+                  tw="rounded bg-black/60"
+                  style={StyleSheet.absoluteFillObject}
+                />
+                <View tw="h-full flex-row items-center justify-center">
+                  <ListenOnAppleMusic
+                    height={20}
+                    width={20 * (125 / 27)}
+                    color="white"
+                  />
+                </View>
+              </Pressable>
+            )}
+          </View>
         </View>
         <View tw="px-4">
           <View tw="flex-row py-4">

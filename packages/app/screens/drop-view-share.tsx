@@ -41,6 +41,8 @@ export const DropViewShareComponent = () => {
       description={edition?.creator_airdrop_edition.description}
       file={edition?.creator_airdrop_edition?.image_url}
       contractAddress={contractAddress}
+      appleMusicTrackUrl={edition?.apple_music_track_url}
+      spotifyUrl={edition?.spotify_track_url}
       preivewComponent={({ size }) => (
         <Media
           item={nft.data.item}

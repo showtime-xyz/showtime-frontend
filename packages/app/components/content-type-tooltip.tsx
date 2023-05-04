@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { Globe, Spotify, Lock } from "@showtime-xyz/universal.icon";
+import { Globe, Lock, SpotifyPure } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -27,7 +27,7 @@ export const contentGatingType = {
     typeName: "Password",
   },
   spotify_save: {
-    icon: Spotify,
+    icon: SpotifyPure,
     text: "Save on Spotify to collect",
     typeName: "Music",
   },
@@ -37,17 +37,17 @@ export const contentGatingType = {
     typeName: "Password & Location",
   },
   spotify_presave: {
-    icon: Spotify,
+    icon: SpotifyPure,
     text: "Pre-Save to collect",
     typeName: "Pre-Save",
   },
   multi_provider_music_save: {
-    icon: Spotify,
+    icon: SpotifyPure,
     text: "Save on Spotify or Apple Music to collect",
     typeName: "Music",
   },
   music_presave: {
-    icon: Spotify,
+    icon: SpotifyPure,
     text: "Pre-Save to collect",
     typeName: "Pre-Save",
   },
@@ -97,14 +97,13 @@ export const ContentTypeTooltip = ({
         triggerElement={
           <>
             <View
-              tw="rounded-sm bg-black/60"
+              tw="rounded bg-black/60"
               style={StyleSheet.absoluteFillObject}
             />
             <View tw="flex-row items-center py-0.5 pl-0.5">
-              {/* @ts-expect-error className not supported */}
-              <Icon color="white" width={20} height={20} className="z-10" />
+              <Icon color="white" width={18} height={18} />
               {edition.presave_release_date ? (
-                <Text tw="px-1 text-xs font-medium text-white">
+                <Text tw="mx-1 text-xs font-medium text-white">
                   Available on{" "}
                   {new Date(edition.presave_release_date).toLocaleString(
                     "default",
@@ -113,7 +112,9 @@ export const ContentTypeTooltip = ({
                     " " +
                     new Date(edition.presave_release_date).getDate()}
                 </Text>
-              ) : null}
+              ) : (
+                <View tw="w-0.5" />
+              )}
             </View>
           </>
         }
