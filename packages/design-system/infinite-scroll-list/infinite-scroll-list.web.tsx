@@ -164,6 +164,23 @@ function InfiniteScrollListImpl<Item>(
 
   const transformStyle = inverted ? { transform: "scaleY(-1)" } : {};
 
+  useEffect(() => {
+    const handleScroll = (e: WheelEvent) => {
+      e.preventDefault();
+      const currentTarget = e.currentTarget as HTMLElement;
+
+      if (currentTarget) {
+        currentTarget.scrollTop -= e.deltaY;
+      }
+    };
+    parentRef.current?.addEventListener("wheel", handleScroll, {
+      passive: false,
+    });
+    return () => {
+      parentRef.current?.removeEventListener("wheel", handleScroll);
+    };
+  }, []);
+
   return (
     <>
       <div
