@@ -52,6 +52,7 @@ function InfiniteScrollListImpl<Item>(
     overscan,
     style,
     useWindowScroll = true,
+    inverted,
     preserveScrollPosition = false,
   } = props;
   let count = data?.length ?? 0;
@@ -131,7 +132,7 @@ function InfiniteScrollListImpl<Item>(
       return;
     }
 
-    if (data && lastItem.index >= data.length - 1) {
+    if (data && data?.length > 0 && lastItem.index >= data.length - 1) {
       onEndReached?.();
     }
   }, [data, onEndReached, renderedItems]);
@@ -161,6 +162,8 @@ function InfiniteScrollListImpl<Item>(
     preserveScrollPosition,
   ]);
 
+  const transformStyle = inverted ? { transform: "scaleY(-1)" } : {};
+
   return (
     <>
       <div
@@ -168,6 +171,7 @@ function InfiniteScrollListImpl<Item>(
           flex: 1,
           display: "flex",
           flexDirection: "column",
+          ...transformStyle,
         }}
       >
         <div
@@ -222,7 +226,7 @@ function InfiniteScrollListImpl<Item>(
                     key={virtualItem.key}
                     data-index={index}
                     ref={rowVirtualizer.measureElement}
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", ...transformStyle }}
                   >
                     {typeof data?.[index] !== "undefined" ? (
                       <div

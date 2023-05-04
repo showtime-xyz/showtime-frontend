@@ -36,14 +36,15 @@ export const Messages = () => {
     >
       <Header username="nishan" members={29} />
       <InfiniteScrollList
-        data={new Array(15).fill(0).map(() => ({
+        data={new Array(15).fill(0).map((_, i) => ({
           username: "nishan",
-          text: randomSentenceGenerator(10, 50),
+          text: i + ". " + randomSentenceGenerator(10, 50),
         }))}
         onEndReached={() => {
           console.log("Prepend data");
         }}
         inverted
+        useWindowScroll={false}
         estimatedItemSize={20}
         renderItem={MessageItem}
         contentContainerStyle={{ paddingTop: insets.bottom }}
