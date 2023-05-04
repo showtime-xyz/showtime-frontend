@@ -36,7 +36,7 @@ export const Messages = () => {
     >
       <Header username="nishan" members={29} />
       <InfiniteScrollList
-        data={new Array(15).fill(0).map((_, i) => ({
+        data={new Array(25).fill(0).map((_, i) => ({
           username: "nishan",
           text: i + ". " + randomSentenceGenerator(10, 50),
         }))}
