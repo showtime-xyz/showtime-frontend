@@ -1,5 +1,3 @@
-import { useState, useRef } from "react";
-
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { ArrowLeft } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -7,6 +5,8 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { useChannelMessages } from "./hooks/use-channel-messages";
 
 type HeaderProps = {
   username: string;
@@ -28,33 +28,21 @@ const Header = (props: HeaderProps) => {
   );
 };
 
-const total = new Array(1000).fill(0).map((_, i) => ({
-  username: "nishan",
-  id: i,
-  text: i + 1 + ". " + randomSentenceGenerator(10, 50),
-}));
-
 export const Messages = () => {
   const insets = useSafeAreaInsets();
-  const [v, setV] = useState<any>(total.slice(0, 20));
-  const loading = useRef(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { data, isLoading, fetchMore, isLoadingMore } = useChannelMessages();
 
   const onLoadMore = () => {
-    if (loading.current) return;
-    setIsLoading(true);
-    loading.current = true;
-
-    setTimeout(() => {
-      const newV = total.slice(v.length, v.length + 20);
-
-      setV((prevV: any) => {
-        return [...prevV, ...newV];
-      });
-      setIsLoading(false);
-      loading.current = false;
-    }, 2000);
+    fetchMore();
   };
+
+  if (isLoading) {
+    return (
+      <View tw="flex-1 items-center justify-center">
+        <Spinner />
+      </View>
+    );
+  }
 
   return (
     <View
@@ -65,7 +53,7 @@ export const Messages = () => {
     >
       <Header username="nishan" members={29} />
       <InfiniteScrollList
-        data={v}
+        data={data}
         onEndReached={onLoadMore}
         inverted
         useWindowScroll={false}
@@ -73,7 +61,7 @@ export const Messages = () => {
         renderItem={MessageItem}
         contentContainerStyle={{ paddingTop: insets.bottom }}
         ListFooterComponent={
-          isLoading
+          isLoadingMore
             ? () => (
                 <View tw="w-full items-center py-4">
                   <Spinner size="small" />
