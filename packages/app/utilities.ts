@@ -890,7 +890,9 @@ export function formatDateRelativeWithIntl(isoDateString: string): string {
   const diffInHours = diffInMinutes / 60;
   const diffInDays = Math.floor(diffInHours / 24);
 
-  if (diffInDays < 1) {
+  if (diffInMinutes < 1) {
+    return "now";
+  } else if (diffInDays < 1) {
     const timeFormatter = new Intl.DateTimeFormat("en-US", {
       hour: "2-digit",
       minute: "2-digit",
