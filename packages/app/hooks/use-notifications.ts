@@ -39,7 +39,7 @@ export const useNotifications = () => {
     (index: number, previousPageData: []) => {
       if (previousPageData && !previousPageData.length) return null;
       const url = isAuthenticated
-        ? `/v1/notifications?page=${index + 1}&limit=${PAGE_SIZE}`
+        ? `/v1/notifications?page=${index + 1}&limit=${PAGE_SIZE}&cache_key=2`
         : null;
       return url;
     },
