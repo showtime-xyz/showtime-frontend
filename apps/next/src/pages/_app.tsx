@@ -215,11 +215,10 @@ function App({ Component, pageProps, router }: AppProps) {
 }
 
 const inter = Inter({
-  variable: "--font-inter",
-  display: "swap",
   subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
 });
-
 const Container = withColorScheme(
   ({ children }: { children: React.ReactNode }) => {
     const fonts = [inter.variable].join(" ");
