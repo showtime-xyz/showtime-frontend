@@ -12,7 +12,6 @@ import {
   HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
-  TrendingTabBarIcon,
 } from "./tab-bar-icons";
 
 const CreatorChannelsNavigator = dynamic(

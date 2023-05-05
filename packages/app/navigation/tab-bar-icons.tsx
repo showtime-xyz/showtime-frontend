@@ -1,5 +1,8 @@
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
+
+import { MMKV } from "react-native-mmkv";
+import * as Tooltip from "universal-tooltip";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -29,6 +32,9 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
+
+const store = new MMKV();
+const STORE_KEY = "showCreatorChannelTip";
 
 type TabBarIconProps = {
   color?: string;
@@ -137,24 +143,62 @@ export const CreatorChannelsTabBarIcon = ({
   color,
   focused,
 }: TabBarIconProps) => {
+  const [showTip, setShowTip] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setShowTip(store.getBoolean(STORE_KEY) ?? true);
+    }, 2000);
+  }, []);
   return (
-    <TabBarIcon tab="/foryou">
-      {focused ? (
-        <CreatorChannelFilled
-          style={{ zIndex: 1 }}
-          width={24}
-          height={24}
-          color={color}
+    <Tooltip.Root
+      onDismiss={() => {
+        setShowTip(false);
+        store.set(STORE_KEY, false);
+      }}
+      open={showTip}
+      delayDuration={100}
+      disableDismissWhenTouchOutside
+    >
+      <Tooltip.Trigger>
+        <TabBarIcon tab="/foryou">
+          {focused ? (
+            <CreatorChannelFilled
+              style={{ zIndex: 1 }}
+              width={24}
+              height={24}
+              color={color}
+            />
+          ) : (
+            <CreatorChannel
+              style={{ zIndex: 1 }}
+              width={24}
+              height={24}
+              color={color}
+            />
+          )}
+        </TabBarIcon>
+      </Tooltip.Trigger>
+      <Tooltip.Content
+        sideOffset={0}
+        containerStyle={{
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 6,
+          paddingBottom: 6,
+        }}
+        className="web:outline-none"
+        side="top"
+        presetAnimation="fadeIn"
+        backgroundColor="#563BFA"
+        borderRadius={12}
+      >
+        <Tooltip.Text
+          textSize={14}
+          textColor="#fff"
+          text={"Check out new broadcasts from your creators"}
         />
-      ) : (
-        <CreatorChannel
-          style={{ zIndex: 1 }}
-          width={24}
-          height={24}
-          color={color}
-        />
-      )}
-    </TabBarIcon>
+      </Tooltip.Content>
+    </Tooltip.Root>
   );
 };
 
