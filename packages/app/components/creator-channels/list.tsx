@@ -82,7 +82,7 @@ const CreatorChannelsListItem = memo(
     return (
       <RectButton
         onPress={() => {
-          router.push(`/channels/${item.id}`);
+          router.push(`/channel/${item.id}`);
         }}
       >
         <View tw="flex-1 px-4 py-3">
