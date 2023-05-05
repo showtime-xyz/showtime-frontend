@@ -26,7 +26,6 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
   const state = useSWR<{ developer_token: string }>(
     "/v1/apple_music/get-dev-token",
     (url) => {
-      console.log("running request");
       return axios({ url, method: "GET" });
     },
     {
@@ -35,6 +34,7 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
       },
       revalidateOnMount: true,
       revalidateOnFocus: false,
+      refreshInterval: 60 * 1000,
     }
   );
 
