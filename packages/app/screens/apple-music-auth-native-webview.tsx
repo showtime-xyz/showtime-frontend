@@ -54,7 +54,6 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
     );
   }
 
-  console.log("statatwe ", state.isValidating, state.isLoading);
   if (state.data?.developer_token) {
     return (
       <View
