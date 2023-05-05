@@ -166,7 +166,10 @@ export const ClaimForm = ({
 
     let success: boolean | undefined | void = false;
 
-    if (edition.gating_type === "multi_provider_music_save") {
+    if (
+      edition.gating_type === "multi_provider_music_save" ||
+      edition.gating_type === "multi_provider_music_presave"
+    ) {
       if (claimType === "spotify") {
         success = await claimSpotifyGatedDrop({ closeModal });
       } else if (claimType === "appleMusic") {
@@ -312,7 +315,8 @@ export const ClaimForm = ({
             </>
           ) : null}
 
-          {edition.gating_type === "multi_provider_music_save" ? (
+          {edition.gating_type === "multi_provider_music_save" ||
+          edition.gating_type === "multi_provider_music_presave" ? (
             <>
               {claimType === "appleMusic" ? (
                 <>

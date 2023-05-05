@@ -137,7 +137,8 @@ export const ClaimButton = ({
       (edition.gating_type === "spotify_presave" ||
         edition.gating_type === "spotify_save" ||
         edition?.gating_type === "music_presave" ||
-        edition.gating_type === "multi_provider_music_save") &&
+        edition.gating_type === "multi_provider_music_save" ||
+        edition.gating_type === "multi_provider_music_presave") &&
       !isAuthenticated
     ) {
       if (type === "spotify") {
@@ -182,6 +183,7 @@ export const ClaimButton = ({
     ...rest,
   };
 
+  const preAddIconheight = buttonProps.size === "small" ? 24 : 26;
   if (isCanViewRaffleResult) {
     return (
       <Button {...buttonProps} onPress={handleRaffleResultPress}>
@@ -256,8 +258,55 @@ export const ClaimButton = ({
         </>
       </Button>
     );
+  } else if (edition?.gating_type === "multi_provider_music_presave") {
+    return (
+      <View tw="w-full flex-row">
+        {edition.creator_apple_music_id ? (
+          <Button
+            {...buttonProps}
+            onPress={() => handleCollectPress("appleMusic")}
+            tw="grow flex-row items-center justify-center bg-black dark:bg-white"
+            disabled={isAppleMusicCollectLoading}
+          >
+            <View tw="mt-[2px]">
+              <PreAddAppleMusic
+                height={preAddIconheight}
+                width={(preAddIconheight * 125) / 27}
+                color={isDark ? "black" : "white"}
+              />
+            </View>
+          </Button>
+        ) : null}
+
+        {edition.creator_spotify_id ? (
+          <>
+            <View tw="w-2" />
+            <Button
+              {...buttonProps}
+              onPress={() => handleCollectPress("spotify")}
+              tw="grow flex-row justify-center"
+              disabled={isSpotifyCollectLoading}
+            >
+              <Spotify
+                color={isDark ? colors.black : colors.white}
+                width={preAddIconheight}
+                height={preAddIconheight}
+              />
+              <Text
+                tw="ml-1 text-sm font-semibold"
+                style={{
+                  fontSize: 12,
+                  color: isDark ? colors.black : colors.white,
+                }}
+              >
+                {isSpotifyCollectLoading ? "Loading..." : "Pre-Save on Spotify"}
+              </Text>
+            </Button>
+          </>
+        ) : null}
+      </View>
+    );
   } else if (edition?.gating_type === "multi_provider_music_save") {
-    const preAddIconheight = buttonProps.size === "small" ? 24 : 26;
     return (
       <View tw="w-full flex-row">
         {edition?.apple_music_track_url ? (

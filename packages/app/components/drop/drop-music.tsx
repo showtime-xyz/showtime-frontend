@@ -306,7 +306,7 @@ export const DropMusic = () => {
           ...values,
           gatingType: isSaveDrop
             ? "multi_provider_music_save"
-            : "spotify_presave",
+            : "multi_provider_music_presave",
           editionSize: isUnlimited ? 0 : values.editionSize,
           releaseDate: isSaveDrop
             ? undefined
@@ -695,14 +695,6 @@ export const DropMusic = () => {
                           />
                           <Label tw="font-bold text-gray-900 dark:text-white">
                             {isSaveDrop ? "Spotify Song Link" : "Spotify URI "}
-                            {isSaveDrop ? (
-                              <Text tw="text-red-600">*</Text>
-                            ) : (
-                              <Text tw="text-xs font-normal">
-                                {"\n"}(Optional, you can drop without and fill
-                                it later)
-                              </Text>
-                            )}
                           </Label>
                           {isSaveDrop ? (
                             <PressableHover
@@ -737,7 +729,7 @@ export const DropMusic = () => {
                 }}
               />
             </View>
-            {isSaveDrop && user.user?.data.profile.apple_music_artist_id ? (
+            {user.user?.data.profile.apple_music_artist_id ? (
               <View tw="mt-4">
                 <Controller
                   control={control}
@@ -755,7 +747,6 @@ export const DropMusic = () => {
                             />
                             <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
                               Apple Music Song Link
-                              <Text tw="text-red-600">*</Text>
                             </Label>
                           </View>
                         }
