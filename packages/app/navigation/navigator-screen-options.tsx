@@ -27,7 +27,7 @@ export const screenOptions = ({
     headerBackVisible: false,
     headerBackTitleVisible: false,
     headerShadowVisible: false,
-    fullscreenGestureEnabled: true,
+    fullScreenGestureEnabled: true,
     animationDuration: 400,
     // @ts-ignore
     headerStyle: {
