@@ -83,6 +83,7 @@ type RootStackNavigatorParams = {
   dropFree: undefined;
   dropSlug: undefined;
   dropEvent: undefined;
+  channel: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;
   search: undefined;

@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
+import { Messages } from "app/components/creator-channels/messages";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
@@ -73,6 +74,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="nft" component={NftScreen} />
         <Stack.Screen name="dropSlug" component={NftScreen} />
+        <Stack.Screen name="channel" component={Messages} />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
