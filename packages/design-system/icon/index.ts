@@ -130,6 +130,15 @@ export { default as AddPhoto } from "./AddPhoto";
 export { default as Raffle } from "./Raffle";
 export { default as PauseOutline } from "./PauseOutline";
 export { default as RaffleHorizontal } from "./RaffleHorizontal";
+export { default as CreatorChannel } from "./CreatorChannel";
+export { default as CreatorChannelFilled } from "./CreatorChannelFilled";
+export { default as CreatorChannelType } from "./CreatorChannelType";
+export { default as GiftV2 } from "./GiftV2";
+export { default as LockRounded } from "./LockRounded";
+export { default as MusicDropType } from "./MusicDropType";
+export { default as Music } from "./Music";
+export { default as Shopping } from "./Shopping";
+
 //#region social icons
 export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";
