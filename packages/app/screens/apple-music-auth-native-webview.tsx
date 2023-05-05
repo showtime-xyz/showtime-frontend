@@ -32,8 +32,9 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
       onError: (error) => {
         captureException(error);
       },
-      refreshInterval: 60 * 1000,
       revalidateOnMount: true,
+      revalidateOnFocus: false,
+      refreshInterval: 60 * 1000,
     }
   );
 
@@ -45,7 +46,7 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
     };
   }, []);
 
-  if (state.isLoading) {
+  if (state.isLoading || state.isValidating) {
     return (
       <View tw="flex-1 items-center justify-center">
         <Spinner />
