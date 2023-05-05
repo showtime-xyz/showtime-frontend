@@ -41,7 +41,7 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
 
   if (state.isLoading) {
     return (
-      <View tw="flex-1 items-center justify-center bg-red-500">
+      <View tw="flex-1 items-center justify-center">
         <Spinner />
       </View>
     );
