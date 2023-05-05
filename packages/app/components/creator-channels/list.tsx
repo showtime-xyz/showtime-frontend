@@ -79,11 +79,13 @@ const CreatorChannelsListItem = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
     const time = formatDateRelativeWithIntl(item.date);
     const router = useRouter();
+    const isDark = useIsDarkMode();
     return (
       <RectButton
         onPress={() => {
           router.push(`/channel/${item.id}`);
         }}
+        underlayColor={isDark ? "white" : "black"}
       >
         <View tw="flex-1 px-4 py-3">
           <View tw="flex-row">
