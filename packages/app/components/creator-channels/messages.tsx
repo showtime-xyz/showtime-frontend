@@ -1,10 +1,15 @@
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { formatDateRelativeWithIntl } from "app/utilities";
 
 import { useChannelMessages } from "./hooks/use-channel-messages";
 
@@ -14,15 +19,31 @@ type HeaderProps = {
 };
 
 const Header = (props: HeaderProps) => {
+  const router = useRouter();
+  const isDark = useIsDarkMode();
   return (
     <View tw="flex-row p-4" style={{ columnGap: 8 }}>
       <View tw="flex-row items-center" style={{ columnGap: 8 }}>
-        <ArrowLeft height={24} width={24} color={"black"} />
+        <Pressable
+          onPress={() => {
+            router.back();
+          }}
+        >
+          <ArrowLeft
+            height={24}
+            width={24}
+            color={isDark ? "white" : "black"}
+          />
+        </Pressable>
         <Avatar size={34} />
       </View>
       <View tw="flex-1" style={{ rowGap: 8 }}>
-        <Text tw="text-sm font-bold">{props.username}</Text>
-        <Text tw="text-xs">{props.members} members</Text>
+        <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
+          {props.username}
+        </Text>
+        <Text tw="text-xs text-gray-900 dark:text-gray-100">
+          {props.members} members
+        </Text>
       </View>
     </View>
   );
@@ -89,36 +110,17 @@ const MessageItem = (props: MessageItemProps) => {
         <Avatar size={24} />
         <View tw="flex-1" style={{ rowGap: 8 }}>
           <View tw="flex-row items-baseline" style={{ columnGap: 8 }}>
-            <Text tw="text-sm font-bold">{username}</Text>
-            <Text tw="text-xs text-gray-700">12:00 PM</Text>
+            <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
+              {username}
+            </Text>
+            <Text tw="text-xs text-gray-700 dark:text-gray-200">
+              {formatDateRelativeWithIntl(new Date().toISOString())}
+            </Text>
           </View>
 
-          <Text tw="text-sm">{text}</Text>
+          <Text tw="text-sm text-gray-900 dark:text-gray-100">{text}</Text>
         </View>
       </View>
     </View>
   );
 };
-
-function getRandomWord() {
-  const words =
-    "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua".split(
-      " "
-    );
-  return words[Math.floor(Math.random() * words.length)];
-}
-
-function randomSentenceGenerator(minWords: number, maxWords: number) {
-  const sentenceLength =
-    Math.floor(Math.random() * (maxWords - minWords + 1)) + minWords;
-  let sentence = "";
-
-  for (let i = 0; i < sentenceLength; i++) {
-    sentence += getRandomWord() + " ";
-  }
-
-  // Capitalize the first letter and add a period at the end
-  sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1).trim() + ".";
-
-  return sentence;
-}
