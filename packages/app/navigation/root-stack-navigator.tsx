@@ -59,7 +59,13 @@ export function RootStackNavigator() {
         options={{ headerShown: false }}
       />
       {/* Screens without default header */}
-      <Stack.Group screenOptions={{ headerShown: false }}>
+      <Stack.Group
+        screenOptions={{
+          headerShown: false,
+          fullScreenGestureEnabled: true,
+          animationDuration: 400,
+        }}
+      >
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
