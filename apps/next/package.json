@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "STAGE=development NODE_OPTIONS='--inspect' next dev",
     "build": "STAGE=production next build",
-    "build:turbo": "cd ../.. && yarn build",
+    "build:turbo": "cd ../.. && yarn build:next",
     "build:analyze": "ANALYZE=true yarn build",
     "start": "next start",
     "postinstall": "cd ../.. && yarn patch-package"
