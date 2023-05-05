@@ -8,6 +8,7 @@ import { useUser } from "app/hooks/use-user";
 
 import { BottomTabbar } from "./bottom-tab-bar";
 import {
+  CreatorChannelsTabBarIcon,
   HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
@@ -49,7 +50,7 @@ export function BottomTabNavigator() {
         name="creatorChannelsTab"
         component={CreatorChannelsNavigator}
         options={{
-          tabBarIcon: TrendingTabBarIcon,
+          tabBarIcon: CreatorChannelsTabBarIcon,
         }}
       />
       {width < 768 && (
