@@ -136,7 +136,8 @@ export const ClaimButton = ({
     if (
       (edition.gating_type === "spotify_presave" ||
         edition.gating_type === "spotify_save" ||
-        edition?.gating_type === "music_presave") &&
+        edition?.gating_type === "music_presave" ||
+        edition.gating_type === "multi_provider_music_save") &&
       !isAuthenticated
     ) {
       if (type === "spotify") {
