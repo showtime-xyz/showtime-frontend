@@ -59,6 +59,7 @@ function ListMediaImpl({
           alt={item?.token_name}
           style={{ height: "100%", width: "100%" }}
           loading={loading}
+          transition={200}
         />
       ) : null}
 
@@ -75,6 +76,7 @@ function ListMediaImpl({
           alt={item?.token_name}
           style={{ height: "100%", width: "100%" }}
           loading={loading}
+          transition={200}
         />
       ) : null}
 
