@@ -108,7 +108,7 @@ const CheckoutFormStripe = () => {
   };
   return (
     <>
-      <View tw="min-h-[380px] justify-end" nativeID="payment-form">
+      <View tw="min-h-[380px] justify-end" id="payment-form">
         <View tw="justify-end p-4">
           <LinkAuthenticationElement
             className="PaymentElement"
@@ -127,7 +127,7 @@ const CheckoutFormStripe = () => {
               onChange={() =>
                 setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
               }
-              accesibilityLabel="Set as default payment method"
+              aria-label="Set as default payment method"
             />
             <Text
               tw="ml-2 text-gray-900 dark:text-gray-50"

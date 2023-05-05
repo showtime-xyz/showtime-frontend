@@ -1,22 +1,31 @@
 import { ComponentProps, useMemo } from "react";
 
-import { MotiPressable, mergeAnimateProp } from "moti/interactions";
+import { MotiPressable } from "moti/interactions";
 
-export type Props = ComponentProps<typeof MotiPressable> & {
+export type PressableScaleProps = ComponentProps<typeof MotiPressable> & {
   scaleTo?: number;
+  role?: string;
 };
 
-export function PressableScale({ animate, scaleTo = 0.95, ...props }: Props) {
-  const animateValues = useMemo(
-    () => (interaction: any) => {
-      "worklet";
+export function PressableScale({
+  scaleTo = 0.95,
+  role,
+  ...props
+}: PressableScaleProps) {
+  return (
+    <MotiPressable
+      {...props}
+      animate={useMemo(
+        () =>
+          ({ pressed }) => {
+            "worklet";
 
-      return mergeAnimateProp(interaction, animate, {
-        scale: interaction.pressed ? scaleTo : 1,
-      });
-    },
-    [animate, scaleTo]
+            return {
+              scale: pressed ? scaleTo : 1,
+            };
+          },
+        [scaleTo]
+      )}
+    />
   );
-
-  return <MotiPressable animate={animateValues} {...props} />;
 }

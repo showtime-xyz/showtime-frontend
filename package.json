@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "109.0.3",
+  "version": "112.0.2",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -19,7 +19,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "nativewind": "^2.0.11",
-    "patch-package": "^6.4.7",
+    "patch-package": "^7.0.0",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "0.2.5",
     "react-native-os": "^1.2.6",
@@ -68,7 +68,7 @@
     "react-dom": "18.2.0",
     "@jest/create-cache-key-function": "29.2.1",
     "jest-runtime": "29.5.0",
-    "react-native-reanimated": "~2.14.4",
+    "react-native-reanimated": "2.14.4",
     "@types/react": "18.0.35",
     "@react-navigation/native": "6.1.3",
     "metro-react-native-babel-preset": "0.73.9",

@@ -25,7 +25,7 @@ import Animated, {
   withDecay,
   withTiming,
 } from "react-native-reanimated";
-import type { SceneRendererProps } from "react-native-tab-view-next";
+import type { SceneRendererProps } from "react-native-tab-view";
 
 import { HeaderTabContext } from "./context";
 import { useRefreshDerivedValue } from "./hooks/use-refresh-value";
@@ -293,7 +293,8 @@ export const GestureContainer = React.forwardRef<
           isSlidingHeader.value = false;
         }
       );
-    });
+    })
+    .runOnJS(true);
 
   const gestureHandler = Gesture.Pan()
     .simultaneousWithExternalGesture(gestureHandlerHeader, ...childGestures)
@@ -377,7 +378,8 @@ export const GestureContainer = React.forwardRef<
       } else {
         tabsRefreshTrans.value < 0 ? onTabsStartRefresh() : onTabsEndRefresh();
       }
-    });
+    })
+    .runOnJS(true);
   //#endregion
 
   useEffect(() => {

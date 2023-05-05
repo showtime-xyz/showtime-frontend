@@ -13,7 +13,7 @@ const INCLUDES = [
   getModule("zeego"),
   getModule("nativewind"),
   getModule("@showtime-xyz"),
-  getModule("react-native-tab-view-next"),
+  getModule("react-native-tab-view"),
 ];
 const EXCLUDES = [
   "/node_modules",

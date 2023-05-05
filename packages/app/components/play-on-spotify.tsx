@@ -32,7 +32,7 @@ export const PlayOnSpotify = ({
     >
       <View tw="rounded bg-black/60" style={StyleSheet.absoluteFillObject} />
       <View tw="flex-row items-center">
-        <SpotifyPure color="white" width={18.11} height={18.11} />
+        <SpotifyPure color="white" width={18} height={18} />
         <Text
           style={{ marginTop: 0, marginBottom: 0 }}
           tw="ml-1 text-xs font-medium text-white"

@@ -123,7 +123,6 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
             tw="text-xs font-medium"
             numberOfLines={1}
             style={{ color: textColor }}
-            accessibilityRole="text"
           >
             {snackbar.text}
           </Text>
@@ -136,8 +135,8 @@ export const Snackbar: React.FC<SnackbarProps> = ({ snackbar, show, hide }) => {
               style={{ marginLeft: "auto" }}
             >
               <PressableScale
-                accessibilityLabel="View"
-                accessibilityRole="button"
+                aria-label="View"
+                role="button"
                 onPress={snackbar.action?.onPress}
               >
                 {snackbar.action?.element ? (

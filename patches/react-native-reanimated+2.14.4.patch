@@ -1,3 +1,46 @@
+diff --git a/node_modules/react-native-reanimated/android/src/main/cpp/NativeProxy.cpp b/node_modules/react-native-reanimated/android/src/main/cpp/NativeProxy.cpp
+index fff5022..86018ae 100644
+--- a/node_modules/react-native-reanimated/android/src/main/cpp/NativeProxy.cpp
++++ b/node_modules/react-native-reanimated/android/src/main/cpp/NativeProxy.cpp
+@@ -47,6 +47,8 @@ NativeProxy::NativeProxy(
+ NativeProxy::~NativeProxy() {
+   // removed temporary, new event listener mechanism need fix on the RN side
+   // reactScheduler_->removeEventListener(eventListener_);
++   auto method = javaPart_->getClass()->getMethod<void()>("unregisterEventHandler");
++   method(javaPart_.get());
+ }
+ 
+ jni::local_ref<NativeProxy::jhybriddata> NativeProxy::initHybrid(
+diff --git a/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NativeProxy.java b/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NativeProxy.java
+index f1af5ba..189acf6 100644
+--- a/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NativeProxy.java
++++ b/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NativeProxy.java
+@@ -240,6 +240,10 @@ public class NativeProxy {
+     mNodesManager.registerEventHandler(handler);
+   }
+ 
++  private void unregisterEventHandler() {
++      mNodesManager.unregisterEventHandler();
++  }
++
+   @DoNotStrip
+   private int registerSensor(int sensorType, int interval, SensorSetter setter) {
+     return reanimatedSensorContainer.registerSensor(
+diff --git a/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NodesManager.java b/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NodesManager.java
+index 2f32309..8cbda88 100644
+--- a/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NodesManager.java
++++ b/node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/NodesManager.java
+@@ -550,6 +550,10 @@ public class NodesManager implements EventDispatcherListener {
+     mCustomEventHandler = handler;
+   }
+ 
++   public void unregisterEventHandler() {
++        mCustomEventHandler = null;
++  }
++
+   public void sendEvent(String name, WritableMap body) {
+     mEventEmitter.emit(name, body);
+   }
 diff --git a/node_modules/react-native-reanimated/lib/reanimated2/hook/useAnimatedReaction.js b/node_modules/react-native-reanimated/lib/reanimated2/hook/useAnimatedReaction.js
 index 15a2f77..5889f00 100644
 --- a/node_modules/react-native-reanimated/lib/reanimated2/hook/useAnimatedReaction.js
@@ -144,3 +187,47 @@ index 46e3e88..b2af463 100644
 +    return isWebNode(value) || isWebElement(value);
 +  }
 \ No newline at end of file
+diff --git a/node_modules/react-native-reanimated/lib/reanimated2/js-reanimated/index.js b/node_modules/react-native-reanimated/lib/reanimated2/js-reanimated/index.js
+index 8ee42b1..5d54951 100644
+--- a/node_modules/react-native-reanimated/lib/reanimated2/js-reanimated/index.js
++++ b/node_modules/react-native-reanimated/lib/reanimated2/js-reanimated/index.js
+@@ -1,4 +1,7 @@
+ import JSReanimated from './JSReanimated';
++import createReactDOMStyle from 'react-native-web/dist/exports/StyleSheet/compiler/createReactDOMStyle';
++import { createTransformValue } from 'react-native-web/dist/exports/StyleSheet/preprocess';
++
+ const reanimatedJS = new JSReanimated();
+ export const _updatePropsJS = (updates, viewRef) => {
+     if (viewRef._component) {
+@@ -9,8 +12,8 @@ export const _updatePropsJS = (updates, viewRef) => {
+             acc[index][key] = value;
+             return acc;
+         }, [{}, {}]);
+-        if (typeof component.setNativeProps === 'function') {
+-            setNativeProps(component, rawStyles);
++        if (component.style !== undefined) {
++            updatePropsDOM(component, rawStyles);
+         }
+         else if (Object.keys(component.props).length > 0) {
+             Object.keys(component.props).forEach((key) => {
+@@ -26,10 +29,18 @@ export const _updatePropsJS = (updates, viewRef) => {
+         }
+     }
+ };
+-const setNativeProps = (component, style) => {
++const updatePropsDOM = (component, style) => {
+     const previousStyle = component.previousStyle ? component.previousStyle : {};
+     const currentStyle = Object.assign(Object.assign({}, previousStyle), style);
+     component.previousStyle = currentStyle;
+-    component.setNativeProps({ style: currentStyle });
++    const domStyle = createReactDOMStyle(currentStyle);
++    for (const key in domStyle) {
++      if(key === 'transform') {
++          (component.style).transform = createTransformValue(domStyle[key]);
++      }else{
++          (component.style)[key] = domStyle[key];
++      }
++    }
++   
+ };
+ export default reanimatedJS;

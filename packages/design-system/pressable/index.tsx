@@ -1,18 +1,18 @@
 import {
-  Pressable as ReactNativePressable,
-  PressableProps,
+  Pressable as RNPressable,
+  PressableProps as RNPressableProps,
 } from "react-native";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
-export type Props = Omit<PressableProps, "tw"> & {
+export type PressableProps = Omit<RNPressableProps, "tw"> & {
   tw?: TW;
 };
 
-const StyledPressable = styled(ReactNativePressable);
+const StyledPressable = styled(RNPressable);
 
-export function Pressable({ tw, ...props }: Props) {
+export function Pressable({ tw, ...props }: PressableProps) {
   return (
     <StyledPressable {...props} tw={Array.isArray(tw) ? tw.join(" ") : tw} />
   );

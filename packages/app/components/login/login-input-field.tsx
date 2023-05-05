@@ -14,7 +14,7 @@ type FormData = {
 };
 
 interface LoginInputFieldProps
-  extends Pick<TextInputProps, "keyboardType" | "textContentType"> {
+  extends Pick<TextInputProps, "inputMode" | "textContentType"> {
   label?: string;
   placeholder?: string;
   signInButtonLabel?: string;
@@ -31,7 +31,7 @@ export function LoginInputField({
   label = "Input Field",
   placeholder = "Enter here",
   signInButtonLabel = "Sign in",
-  keyboardType = "default",
+  inputMode = "none",
   textContentType = "none",
   validationSchema,
   leftElement,
@@ -79,7 +79,7 @@ export function LoginInputField({
             errorText={errors.data?.message}
             autoCapitalize="none"
             autoCorrect={false}
-            keyboardType={keyboardType}
+            inputMode={inputMode}
             textContentType={textContentType}
             leftElement={leftElement}
             returnKeyType="go"

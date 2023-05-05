@@ -43,14 +43,15 @@ function withModalScreen<P extends object>(
       Boolean(router.query[matchingQueryParam as any]);
 
     const contextValues = useMemo(() => ({ setTitle }), []);
-
-    if (!shouldShowModal) {
-      return null;
-    }
-
     return (
       <ModalScreenContext.Provider value={contextValues}>
-        <Modal ref={modalRef} title={title} onClose={onClose} {...rest}>
+        <Modal
+          ref={modalRef}
+          title={title}
+          visible={shouldShowModal}
+          onClose={onClose}
+          {...rest}
+        >
           <Screen {...props} />
         </Modal>
       </ModalScreenContext.Provider>

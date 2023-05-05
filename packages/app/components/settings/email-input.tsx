@@ -17,7 +17,7 @@ type FormData = {
 };
 
 interface EmailInputProps
-  extends Pick<TextInputProps, "keyboardType" | "textContentType"> {
+  extends Pick<TextInputProps, "inputMode" | "textContentType"> {
   label: string;
   placeholder: string;
   submitButtonLabel: string;
@@ -28,7 +28,7 @@ export const EmailInput = (props: EmailInputProps) => {
   const label = props.label;
   const onSubmit = props.onSubmit;
   const placeholder = props.placeholder;
-  const keyboardType = props.keyboardType;
+  const inputMode = props.inputMode;
   const submitButtonLabel = props.submitButtonLabel;
   const textContentType = props.textContentType;
 
@@ -83,7 +83,7 @@ export const EmailInput = (props: EmailInputProps) => {
             errorText={errors.data?.message}
             autoCapitalize="none"
             autoCorrect={false}
-            keyboardType={keyboardType}
+            inputMode={inputMode}
             textContentType={textContentType}
             returnKeyType="go"
             componentRef={ref}

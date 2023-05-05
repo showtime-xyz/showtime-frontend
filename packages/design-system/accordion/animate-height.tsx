@@ -16,6 +16,7 @@ export type AnimateHeightProps = {
   onHeightDidAnimate?: (height: number) => void;
   initialHeight?: number;
   style?: StyleProp<ViewStyle>;
+  extraHeight?: number;
 };
 const transition = { duration: 200 } as const;
 
@@ -25,6 +26,7 @@ export function AnimateHeight({
   style,
   onHeightDidAnimate,
   initialHeight = 0,
+  extraHeight = 0,
 }: AnimateHeightProps) {
   const measuredHeight = useSharedValue(initialHeight);
   const childStyle = useAnimatedStyle(
@@ -36,13 +38,17 @@ export function AnimateHeight({
 
   const containerStyle = useAnimatedStyle(() => {
     return {
-      height: withTiming(hide ? 0 : measuredHeight.value, transition, () => {
-        if (onHeightDidAnimate) {
-          runOnJS(onHeightDidAnimate)(measuredHeight.value);
+      height: withTiming(
+        hide ? 0 : measuredHeight.value + extraHeight,
+        transition,
+        () => {
+          if (onHeightDidAnimate) {
+            runOnJS(onHeightDidAnimate)(measuredHeight.value + extraHeight);
+          }
         }
-      }),
+      ),
     };
-  }, [hide, measuredHeight]);
+  }, [hide, measuredHeight, extraHeight]);
 
   return (
     <Animated.View style={[styles.hidden, style, containerStyle]}>

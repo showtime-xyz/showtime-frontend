@@ -1,4 +1,6 @@
-import { forwardRef, memo, useCallback, useRef } from "react";
+import { forwardRef, memo, useCallback } from "react";
+
+import debounce from "lodash/debounce";
 
 import { MOBILE_SNAP_POINTS, WEB_HEIGHT } from "./constants";
 import { ModalContainer as BaseModalContainer } from "./modal.container";
@@ -19,27 +21,22 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
     },
     ref
   ) {
-    const didFireClose = useRef(false);
-
     //#region methods
     const handleOnClose = useCallback(() => {
-      if (didFireClose.current) {
-        return;
-      }
-      didFireClose.current = true;
       onClose?.();
     }, [onClose]);
+    const debounceHandleOnClose = debounce(handleOnClose, 300);
 
     const handleClose = useCallback(() => {
       if (!isScreen) {
-        handleOnClose();
+        debounceHandleOnClose();
         //@ts-ignore
       } else if (isScreen && ref && ref.current) {
         //@ts-ignore
         ref.current.close();
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isScreen, handleOnClose]);
+    }, [isScreen, debounceHandleOnClose]);
     //#endregion
 
     //#region render

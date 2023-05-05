@@ -60,7 +60,7 @@ Sentry.init({
   environment: process.env.STAGE,
 });
 
-enableExperimentalWebImplementation();
+enableExperimentalWebImplementation(true);
 
 function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;

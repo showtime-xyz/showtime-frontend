@@ -3146,9 +3146,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@coinbase/wallet-mobile-sdk@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "@coinbase/wallet-mobile-sdk@npm:1.0.5"
+"@coinbase/wallet-mobile-sdk@npm:1.0.6":
+  version: 1.0.6
+  resolution: "@coinbase/wallet-mobile-sdk@npm:1.0.6"
   dependencies:
     "@coinbase/wallet-sdk": ^3.5.1
     "@metamask/safe-event-emitter": 2.0.0
@@ -3160,7 +3160,7 @@ __metadata:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 7cb719eca3f90a2adb1400ae2d5376f83afb9f300f1887e90c778a9c53d615bbe4b879c42ce04dab394537f9c7c7205882ae282fa8df45f370bac2aa5874774e
+  checksum: 15110c2e9e6e07ec8fb915cd55758c2aa7d02eefdff253d634abc174524b2e8a87a8c97566f533b59b97f89acbf8ff5062305f2f1520773e933b9075cae99bfd
   languageName: node
   linkType: hard
 
@@ -7966,7 +7966,7 @@ __metadata:
     "@babel/runtime": ^7.18.9
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.1.0
-    "@coinbase/wallet-mobile-sdk": ^1.0.5
+    "@coinbase/wallet-mobile-sdk": 1.0.6
     "@ethersproject/shims": ^5.7.0
     "@expo/xcpretty": ^4.2.2
     "@gorhom/bottom-sheet": 4.4.5
@@ -8040,7 +8040,6 @@ __metadata:
     expo-media-library: ~15.2.3
     expo-modules-core: ~1.2.6
     expo-navigation-bar: ~2.1.1
-    expo-next-react-navigation: ^2.0.2
     expo-notifications: ~0.18.1
     expo-splash-screen: ~0.18.2
     expo-status-bar: ~1.4.4
@@ -8054,7 +8053,7 @@ __metadata:
     jest-expo: ^48.0.2
     jest-next-dynamic: ^1.0.1
     metro-minify-esbuild: ^0.2.0
-    moti: 0.24.2
+    moti: 0.25.1
     nativewind: ^2.0.11
     node-libs-react-native: ^1.2.1
     path-browserify: ^1.0.1
@@ -8070,7 +8069,6 @@ __metadata:
     react-native-bignumber: ^0.2.1
     react-native-blob-jsi-helper: ^0.3.0
     react-native-blurhash: ^1.1.10
-    react-native-cronet: ^0.5.0
     react-native-gesture-handler: ~2.9.0
     react-native-get-random-values: ^1.8.0
     react-native-image-colors: ^1.5.2
@@ -8084,23 +8082,23 @@ __metadata:
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.5
     react-native-quick-crypto: ^0.6.1
-    react-native-reanimated: ~2.14.4
+    react-native-reanimated: 2.14.4
     react-native-reanimated-carousel: ^3.3.0
     react-native-safe-area-context: 4.5.1
     react-native-screens: ^3.20.0
     react-native-share: ^8.2.1
     react-native-spotify-remote: "file:../../react-native-spotify-remote.tgz"
     react-native-svg: 13.9.0
-    react-native-tab-view-next: ^3.1.3
+    react-native-tab-view: ^3.5.1
     react-native-view-shot: 3.6.0
-    react-native-web: ~0.18.12
+    react-native-web: ~0.19.4
     react-native-webview: 12.0.2
     react-string-replace: 1.1.0
     react-test-renderer: 18.2.0
     readable-stream: 4.3.0
     semver: ^7.4.0
     sentry-expo: ~6.1.1
-    solito: 3.2.0
+    solito: ~3.2.4
     stream-browserify: ^3.0.0
     string_decoder: ~1.3.0
     timers-browserify: ^2.0.12
@@ -8144,7 +8142,6 @@ __metadata:
     "@radix-ui/react-tooltip": ^1.0.5
     "@radix-ui/react-use-escape-keydown": ^1.0.2
     "@rainbow-me/rainbowkit": ^0.12.7
-    "@react-native-community/slider": ^4.4.2
     "@react-native-menu/menu": ^0.7.3
     "@sentry/integrations": 7.7.0
     "@sentry/nextjs": 7.7.0
@@ -8177,7 +8174,7 @@ __metadata:
     next-compose-plugins: ^2.2.1
     next-images: ^1.8.4
     next-pwa: ^5.6.0
-    patch-package: ^6.4.7
+    patch-package: ^7.0.0
     postcss: ^8.4.21
     postinstall-postinstall: ^2.1.0
     raf: ^3.4.1
@@ -8186,7 +8183,7 @@ __metadata:
     react-easy-crop: ^4.7.4
     react-hot-toast: ^2.4.0
     react-native-reanimated-swc-plugin: ^0.3.0
-    react-native-web: ~0.18.12
+    react-native-web: ~0.19.4
     react-remove-scroll: ^2.5.5
     react-remove-scroll-bar: ^2.3.4
     react-stickynode: ^4.1.0
@@ -8252,11 +8249,11 @@ __metadata:
     react-native-mmkv: 2.8.0
     react-native-pager-view: 6.2.0
     react-native-quick-base64: ^2.0.5
-    react-native-reanimated: ~2.14.4
+    react-native-reanimated: 2.14.4
     react-native-safe-area-context: 4.5.1
     react-native-screens: ^3.20.0
     react-native-svg: 13.9.0
-    react-native-web: ~0.18.12
+    react-native-web: ~0.19.4
     typescript: ^5.0.4
     universal-tooltip: ^0.2.0
   languageName: unknown
@@ -8284,7 +8281,7 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hot-toast: ^2.4.0
-    react-native-web: ~0.18.12
+    react-native-web: ~0.19.4
     storybook: ^7.0.7
     tailwindcss: ^3.3.1
     typescript: ^5.0.4
@@ -15398,6 +15395,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ci-info@npm:^3.7.0":
+  version: 3.8.0
+  resolution: "ci-info@npm:3.8.0"
+  checksum: d0a4d3160497cae54294974a7246202244fff031b0a6ea20dd57b10ec510aa17399c41a1b0982142c105f3255aff2173e5c0dd7302ee1b2f28ba3debda375098
+  languageName: node
+  linkType: hard
+
 "cipher-base@npm:^1.0.0, cipher-base@npm:^1.0.1, cipher-base@npm:^1.0.3":
   version: 1.0.4
   resolution: "cipher-base@npm:1.0.4"
@@ -16236,16 +16240,6 @@ __metadata:
     safe-buffer: ^5.0.1
     sha.js: ^2.4.8
   checksum: ba12bb2257b585a0396108c72830e85f882ab659c3320c83584b1037f8ab72415095167ced80dc4ce8e446a8ecc4b2acf36d87befe0707d73b26cf9dc77440ed
-  languageName: node
-  linkType: hard
-
-"create-react-class@npm:^15.7.0":
-  version: 15.7.0
-  resolution: "create-react-class@npm:15.7.0"
-  dependencies:
-    loose-envify: ^1.3.1
-    object-assign: ^4.1.1
-  checksum: 0c5f43da705fa9f67ec289051dd5780792652d440dfa17cd2c7d8423c1f604609596f895dabf46fda1960ddd93ee96fe1b61ef4d55a94fc4271b07d515486714
   languageName: node
   linkType: hard
 
@@ -19424,25 +19418,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-navigation-core@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "expo-navigation-core@npm:2.0.0"
-  dependencies:
-    lodash.get: ^4.4.2
-  checksum: 4d979266fb5b90a78dc1317b8004d6f43088393decb311c91e3426e8e408a9fc474e51969469e0d8dc875042829141eeb342e297c405bab8f0d11c55d80a89c2
-  languageName: node
-  linkType: hard
-
-"expo-next-react-navigation@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "expo-next-react-navigation@npm:2.0.2"
-  dependencies:
-    expo-navigation-core: ^2.0.0
-    lodash.get: ^4.4.2
-  checksum: ef0a173a5b09192b9b8c65698f201001d7c926958106b0f8640c8af116b680e7a94711bfb8177f95186a60bff86077b23bbec12e19f67cb38f80636c146a5323
-  languageName: node
-  linkType: hard
-
 "expo-notifications@npm:~0.18.1":
   version: 0.18.1
   resolution: "expo-notifications@npm:0.18.1"
@@ -20445,17 +20420,6 @@ __metadata:
     jsonfile: ^6.0.1
     universalify: ^2.0.0
   checksum: fb883c68245b2d777fbc1f2082c9efb084eaa2bbf9fddaa366130d196c03608eebef7fb490541276429ee1ca99f317e2d73e96f5ca0999eefedf5a624ae1edfd
-  languageName: node
-  linkType: hard
-
-"fs-extra@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "fs-extra@npm:7.0.1"
-  dependencies:
-    graceful-fs: ^4.1.2
-    jsonfile: ^4.0.0
-    universalify: ^0.1.0
-  checksum: 141b9dccb23b66a66cefdd81f4cda959ff89282b1d721b98cea19ba08db3dcbe6f862f28841f3cf24bb299e0b7e6c42303908f65093cb7e201708e86ea5a8dcf
   languageName: node
   linkType: hard
 
@@ -21949,17 +21913,6 @@ __metadata:
   version: 1.2.7
   resolution: "is-callable@npm:1.2.7"
   checksum: 61fd57d03b0d984e2ed3720fb1c7a897827ea174bd44402878e059542ea8c4aeedee0ea0985998aa5cc2736b2fa6e271c08587addb5b3959ac52cf665173d1ac
-  languageName: node
-  linkType: hard
-
-"is-ci@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "is-ci@npm:2.0.0"
-  dependencies:
-    ci-info: ^2.0.0
-  bin:
-    is-ci: bin.js
-  checksum: 77b869057510f3efa439bbb36e9be429d53b3f51abd4776eeea79ab3b221337fe1753d1e50058a9e2c650d38246108beffb15ccfd443929d77748d8c0cc90144
   languageName: node
   linkType: hard
 
@@ -24430,13 +24383,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.get@npm:^4.4.2":
-  version: 4.4.2
-  resolution: "lodash.get@npm:4.4.2"
-  checksum: e403047ddb03181c9d0e92df9556570e2b67e0f0a930fcbbbd779370972368f5568e914f913e93f3b08f6d492abc71e14d4e9b7a18916c31fa04bd2306efe545
-  languageName: node
-  linkType: hard
-
 "lodash.has@npm:^4.5.2":
   version: 4.5.2
   resolution: "lodash.has@npm:4.5.2"
@@ -24607,7 +24553,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.3.1, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -24893,6 +24839,13 @@ __metadata:
   version: 5.2.1
   resolution: "memoize-one@npm:5.2.1"
   checksum: a3cba7b824ebcf24cdfcd234aa7f86f3ad6394b8d9be4c96ff756dafb8b51c7f71320785fbc2304f1af48a0467cbbd2a409efc9333025700ed523f254cb52e3d
+  languageName: node
+  linkType: hard
+
+"memoize-one@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "memoize-one@npm:6.0.0"
+  checksum: f185ea69f7cceae5d1cb596266dcffccf545e8e7b4106ec6aa93b71ab9d16460dd118ac8b12982c55f6d6322fcc1485de139df07eacffaae94888b9b3ad7675f
   languageName: node
   linkType: hard
 
@@ -25630,14 +25583,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moti@npm:0.24.2":
-  version: 0.24.2
-  resolution: "moti@npm:0.24.2"
+"moti@npm:0.25.1":
+  version: 0.25.1
+  resolution: "moti@npm:0.25.1"
   dependencies:
     framer-motion: ^6.5.1
   peerDependencies:
     react-native-reanimated: "*"
-  checksum: c93a403a11d5023782a95b2a0eb4c56842dbcd2c8e38e758c6439f0496d04e3f03a199939370b9855333af8251e7958a0f1e2c465cb1a1c6564d122adb3afe58
+  checksum: 804b111f17a1a1d80324566016853bdfca6d81bad76735446fbb4dbd49b4480640681c5209e8785683a1a285fadbd0ea68f005adc8a77de058f09dc372aaf1c2
   languageName: node
   linkType: hard
 
@@ -27074,26 +27027,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"patch-package@npm:^6.4.7":
-  version: 6.4.7
-  resolution: "patch-package@npm:6.4.7"
+"patch-package@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "patch-package@npm:7.0.0"
   dependencies:
     "@yarnpkg/lockfile": ^1.1.0
-    chalk: ^2.4.2
-    cross-spawn: ^6.0.5
+    chalk: ^4.1.2
+    ci-info: ^3.7.0
+    cross-spawn: ^7.0.3
     find-yarn-workspace-root: ^2.0.0
-    fs-extra: ^7.0.1
-    is-ci: ^2.0.0
+    fs-extra: ^9.0.0
     klaw-sync: ^6.0.0
-    minimist: ^1.2.0
+    minimist: ^1.2.6
     open: ^7.4.2
     rimraf: ^2.6.3
     semver: ^5.6.0
     slash: ^2.0.0
     tmp: ^0.0.33
+    yaml: ^2.2.2
   bin:
     patch-package: index.js
-  checksum: f36d5324da3b69ee635e7cd2c68f4d3dd89dc91d60ffdaad3b602fd953277f4da901c91033683bf6ff31c14799bc049849af3a389455c25d0435fe9cfb0d4088
+  checksum: 63f6589320f8953ac06b5c0c1549c82ef051aea81db91173157ab270a8f4910deb895e0b4d49ee1626a4a0a02d74f134bdbeb76052b639a2239e2df83c4a7ce6
   languageName: node
   linkType: hard
 
@@ -28789,16 +28743,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-cronet@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "react-native-cronet@npm:0.5.0"
-  peerDependencies:
-    react: ">=16.11.0"
-    react-native: ">=0.62.0 <1.0.x"
-  checksum: 0967065301a622d6439d53bd2a45db4d7ddbef174811bab23be86b956d96cbbd4ec1da05b11d0bf31548701e17d466b0c3a5913dce8e908a1a80d27d0efd6edc
-  languageName: node
-  linkType: hard
-
 "react-native-crypto@npm:^2.0.1":
   version: 2.2.0
   resolution: "react-native-crypto@npm:2.2.0"
@@ -29047,7 +28991,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:~2.14.4":
+"react-native-reanimated@npm:2.14.4":
   version: 2.14.4
   resolution: "react-native-reanimated@npm:2.14.4"
   dependencies:
@@ -29125,14 +29069,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-tab-view-next@npm:^3.1.3":
-  version: 3.1.3
-  resolution: "react-native-tab-view-next@npm:3.1.3"
+"react-native-tab-view@npm:^3.5.1":
+  version: 3.5.1
+  resolution: "react-native-tab-view@npm:3.5.1"
+  dependencies:
+    use-latest-callback: ^0.1.5
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-pager-view: "*"
-  checksum: b2f7882cf37fbc82d085c717abd8aff58c4971621a1ab5dba3536456c08664f3ccd1f655977b6309d1760e9630ee1bfb212a9803ee10f4bb59ab0dfc7e1b1751
+  checksum: 22213e8bde3b0e16631d290a3da146789dcad461dbdc424cf6448c683a2d75c12abbae5aa329c83788123f6dd0865b451ba57848856483607327fb5fdad2fe12
   languageName: node
   linkType: hard
 
@@ -29157,21 +29103,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-web@npm:~0.18.12":
-  version: 0.18.12
-  resolution: "react-native-web@npm:0.18.12"
+"react-native-web@npm:~0.19.4":
+  version: 0.19.4
+  resolution: "react-native-web@npm:0.19.4"
   dependencies:
     "@babel/runtime": ^7.18.6
-    create-react-class: ^15.7.0
     fbjs: ^3.0.4
     inline-style-prefixer: ^6.0.1
+    memoize-one: ^6.0.0
     normalize-css-color: ^1.0.2
+    nullthrows: ^1.1.1
     postcss-value-parser: ^4.2.0
     styleq: ^0.1.2
   peerDependencies:
-    react: ^17.0.2 || ^18.0.0
-    react-dom: ^17.0.2 || ^18.0.0
-  checksum: 69f0ebafafc4b04b845105646d0efc0cee10ed378377c621ac67a487d5508bb0dbd1c0ff3ea8d17f5cff0c0fb8d6355916f52f19ad3dad842b99b75c65ff4973
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: e8cf1f3d01a7d160bd02a28c90d239b1dcb7ee0661344c74b908cf205f9f1acf8dd87307cf1a1a30dfd4fe1604f49820f68e5cf721cd5e8693bd16e3d5a7e87b
   languageName: node
   linkType: hard
 
@@ -30853,7 +30800,7 @@ __metadata:
     husky: ^8.0.1
     lint-staged: ^13.0.3
     nativewind: ^2.0.11
-    patch-package: ^6.4.7
+    patch-package: ^7.0.0
     prettier: ^2.8.7
     prettier-plugin-tailwindcss: 0.2.5
     react-native-os: ^1.2.6
@@ -31151,10 +31098,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"solito@npm:3.2.0":
-  version: 3.2.0
-  resolution: "solito@npm:3.2.0"
-  checksum: 5bcb3c93a3f8bfc9ef5a35b893c61ab067dfeec68e04ecdd232139d237615906e46c941087dcfc2569262bc87a689e501e9547b5f724ee4a16bd6ab9964e76fa
+"solito@npm:~3.2.4":
+  version: 3.2.6
+  resolution: "solito@npm:3.2.6"
+  checksum: c8ff1732b969748b7be71037a284927d7e57965fca1b405d168a6bf288ea9810baa8e19413752d06d71edc51799879db657ec894ebb9a354d3cf57fa4d7c629a
   languageName: node
   linkType: hard
 
@@ -35192,6 +35139,13 @@ __metadata:
   version: 2.2.1
   resolution: "yaml@npm:2.2.1"
   checksum: 84f68cbe462d5da4e7ded4a8bded949ffa912bc264472e5a684c3d45b22d8f73a3019963a32164023bdf3d83cfb6f5b58ff7b2b10ef5b717c630f40bd6369a23
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "yaml@npm:2.2.2"
+  checksum: d90c235e099e30094dcff61ba3350437aef53325db4a6bcd04ca96e1bfe7e348b191f6a7a52b5211e2dbc4eeedb22a00b291527da030de7c189728ef3f2b4eb3
   languageName: node
   linkType: hard
 

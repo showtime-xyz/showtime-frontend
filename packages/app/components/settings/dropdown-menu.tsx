@@ -33,7 +33,6 @@ export const DropdownMenu = (props: AddressMenuProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent loop sideOffset={8}>
         <DropdownMenuItem
-          // @ts-ignore
           onSelect={props.onRemove}
           className="danger"
           disabled={disable}

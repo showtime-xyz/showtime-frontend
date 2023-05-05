@@ -158,10 +158,10 @@ const expoConfig: ExpoConfig = {
     "./plugins/with-android-manifest.js",
     "./plugins/with-hermes-ios-m1-workaround.js",
     "sentry-expo",
-    "./plugins/react-native-cronet.js",
     "./plugins/with-spotify-sdk.js",
     "./plugins/with-android-splash-screen.js",
     "./plugins/with-disabled-force-dark-mode.js",
+    "./plugins/with-react-native-reanimated-crash-android-fix.js",
     [
       withInfoPlist,
       (config) => {
