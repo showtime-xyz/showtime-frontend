@@ -1,9 +1,12 @@
 import { useCallback, memo, useRef, useMemo } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
+import { RectButton } from "react-native-gesture-handler";
+
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -60,7 +63,9 @@ const CreatorChannelsHeader = memo(
         </Text>
         {subtext ? (
           <View tw="mt-3">
-            <Text tw="text-sm leading-5 text-gray-500">{subtext}</Text>
+            <Text tw="text-sm leading-5 text-gray-500 dark:text-gray-400">
+              {subtext}
+            </Text>
           </View>
         ) : null}
       </View>
@@ -73,29 +78,41 @@ CreatorChannelsHeader.displayName = "CreatorChannelsHeader";
 const CreatorChannelsListItem = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
     const time = formatDateRelativeWithIntl(item.date);
+    const router = useRouter();
     return (
-      <View tw="flex-1 px-4 py-3">
-        <View tw="flex-row">
-          <AvatarHoverCard
-            username={item.username}
-            url={"https://picsum.photos/200?" + item.id}
-            size={52}
-            alt="CreatorPreview Avatar"
-            tw={"mr-3"}
-          />
-          <View tw="flex-1">
-            <View tw="flex-row items-center">
-              <Text tw="text-lg font-semibold">{item.username}</Text>
-              <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
-            </View>
-            <View tw="mt-2">
-              <Text tw="leading-5 text-gray-500" numberOfLines={2}>
-                {item?.text}
-              </Text>
+      <RectButton
+        onPress={() => {
+          router.push("/creator-channels/" + item.id);
+        }}
+      >
+        <View tw="flex-1 px-4 py-3">
+          <View tw="flex-row">
+            <AvatarHoverCard
+              username={item.username}
+              url={"https://picsum.photos/200?" + item.id}
+              size={52}
+              alt="CreatorPreview Avatar"
+              tw={"mr-3"}
+            />
+            <View tw="flex-1">
+              <View tw="flex-row items-center">
+                <Text tw="text-lg font-semibold text-black dark:text-white">
+                  {item.username}
+                </Text>
+                <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
+              </View>
+              <View tw="mt-2">
+                <Text
+                  tw="leading-5 text-gray-500 dark:text-gray-300"
+                  numberOfLines={2}
+                >
+                  {item?.text}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </RectButton>
     );
   }
 );
@@ -122,25 +139,32 @@ const CreatorChannelsListCreator = memo(
             <View tw="flex-1 flex-row items-center justify-center">
               <View tw="flex-1 items-start justify-start">
                 <View tw="flex-1 flex-row items-center justify-start">
-                  <Text tw="text-lg font-semibold">{item.username}</Text>
+                  <Text tw="text-lg font-semibold text-black dark:text-white">
+                    {item.username}
+                  </Text>
                   <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
                 </View>
                 <View tw="flex-1">
-                  <Text tw="font-semibold text-gray-500">
+                  <Text tw="font-semibold text-gray-500 dark:text-gray-500">
                     {memberCount} Members
                   </Text>
                 </View>
               </View>
               <View tw="items-end justify-end">
-                <View tw="rounded-full bg-black p-1">
-                  <Text tw="px-6 font-bold text-white">Join</Text>
+                <View tw="rounded-full bg-black p-1 dark:bg-white">
+                  <Text tw="px-6 font-bold text-white dark:text-black">
+                    Join
+                  </Text>
                 </View>
               </View>
             </View>
           </View>
         </View>
         <View tw="ml-[52px] pl-3">
-          <Text tw="leading-5 text-gray-500" numberOfLines={2}>
+          <Text
+            tw="leading-5 text-gray-500 dark:text-gray-300"
+            numberOfLines={2}
+          >
             {item?.text}
           </Text>
         </View>
