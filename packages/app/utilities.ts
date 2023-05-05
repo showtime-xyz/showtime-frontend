@@ -877,7 +877,7 @@ export const generateFakeData = (
     id: i + 1 + suffix,
     username: `user${i + 1}_${suffix}`,
     date: getRandomDateWithinThreeMonths(),
-    text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget ultricies ultrices, nunc nisl ultricies nunc, quis ultricies nisl nisl eget ultricies ultrices, nunc nisl ultricies nunc, quis ultricies nisl`,
+    text: generateRandomLoremIpsum(),
     // Add more keys here if needed
   }));
 };
@@ -920,4 +920,71 @@ export function formatDateRelativeWithIntl(isoDateString: string): string {
 
 export function getRandomNumber(min = 50, max = 26000) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function generateRandomLoremIpsum() {
+  const words = [
+    "lorem",
+    "ipsum",
+    "dolor",
+    "sit",
+    "amet",
+    "consectetur",
+    "adipiscing",
+    "elit",
+    "curabitur",
+    "vel",
+    "hendrerit",
+    "libero",
+    "eleifend",
+    "blandit",
+    "nunc",
+    "ornare",
+    "odio",
+    "ut",
+    "orci",
+    "gravida",
+    "imperdiet",
+    "nullam",
+    "purus",
+    "lacinia",
+    "a",
+    "pretium",
+    "quis",
+    "congue",
+    "praesent",
+    "sagittis",
+    "laoreet",
+    "auctor",
+    "mauris",
+    "non",
+    "velit",
+    "eros",
+    "dictum",
+    "proin",
+    "accumsan",
+    "sapien",
+    "nec",
+    "massa",
+    "volutpat",
+    "venenatis",
+    "sed",
+    "eu",
+    "molestie",
+  ];
+
+  const minWordsCount = 3;
+  const maxWordsCount = 15;
+  const wordsCount =
+    Math.floor(Math.random() * (maxWordsCount - minWordsCount + 1)) +
+    minWordsCount;
+
+  const result = [];
+
+  for (let i = 0; i < wordsCount; i++) {
+    const randomIndex = Math.floor(Math.random() * words.length);
+    result.push(words[randomIndex]);
+  }
+
+  return result.join(" ");
 }
