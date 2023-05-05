@@ -8,6 +8,8 @@ import {
   BellFilled,
   Compass,
   CompassFilled,
+  CreatorChannel,
+  CreatorChannelFilled,
   Home,
   HomeFilled,
   Hot,
@@ -127,6 +129,31 @@ export const CreateTabBarIcon = ({
       >
         <Plus width={24} height={24} color={color} />
       </View>
+    </TabBarIcon>
+  );
+};
+
+export const CreatorChannelsTabBarIcon = ({
+  color,
+  focused,
+}: TabBarIconProps) => {
+  return (
+    <TabBarIcon tab="/foryou">
+      {focused ? (
+        <CreatorChannelFilled
+          style={{ zIndex: 1 }}
+          width={24}
+          height={24}
+          color={color}
+        />
+      ) : (
+        <CreatorChannel
+          style={{ zIndex: 1 }}
+          width={24}
+          height={24}
+          color={color}
+        />
+      )}
     </TabBarIcon>
   );
 };

@@ -79,7 +79,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
         screens: {
           // Bottom Tab Navigator
           homeTab: "",
-          trendingTab: "trending",
+          creatorChannelsTab: "creator-channels",
           notificationsTab: "notifications",
           profileTab: "profile",
         },
