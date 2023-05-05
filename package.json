@@ -23,7 +23,7 @@
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "0.2.5",
     "react-native-os": "^1.2.6",
-    "turbo": "^1.8.8"
+    "turbo": "^1.9.3"
   },
   "workspaces": [
     "apps/expo",
@@ -41,7 +41,7 @@
     "dev:next-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react",
     "dev:web": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next --scope=@showtime/storybook-react",
     "dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo --scope=@showtime/storybook-react-native",
-    "build": "yarn turbo run build",
+    "build": "yarn turbo run build --scope=@showtime/next",
     "build:expo": "yarn turbo run build --scope=@showtime/expo",
     "build:next": "yarn turbo run build --scope=@showtime/next",
     "build:expo-storybook": "yarn turbo run build --scope=@showtime/storybook-react-native",
