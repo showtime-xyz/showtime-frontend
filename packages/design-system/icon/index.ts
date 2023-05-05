@@ -138,6 +138,7 @@ export { default as LockRounded } from "./LockRounded";
 export { default as MusicDropType } from "./MusicDropType";
 export { default as Music } from "./Music";
 export { default as Shopping } from "./Shopping";
+export { default as FreeDropType } from "./FreeDropType";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

@@ -182,6 +182,7 @@ export const Default = () => {
             title="CreatorChannelFilled"
           />
           <IconItem icon={Icon.CreatorChannelType} title="CreatorChannelType" />
+          <IconItem icon={Icon.FreeDropType} title="FreeDropType" />
           <IconItem icon={Icon.GiftV2} title="GiftV2" />
           <IconItem icon={Icon.LockRounded} title="LockRounded" />
           <IconItem icon={Icon.MusicDropType} title="MusicDropType" />
