@@ -32,7 +32,7 @@
           if (!developerToken) {
             const res = await fetch("/api/apple-music-developer-token");
             const v = await res.json();
-            let developerToken = v.developer_token;
+            developerToken = v.developer_token;
           }
           
           const music = await window.MusicKit.configure({
