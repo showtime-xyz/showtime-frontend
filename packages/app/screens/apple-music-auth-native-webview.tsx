@@ -26,14 +26,15 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
   const state = useSWR<{ developer_token: string }>(
     "/v1/apple_music/get-dev-token",
     (url) => {
+      console.log("running request");
       return axios({ url, method: "GET" });
     },
     {
       onError: (error) => {
         captureException(error);
       },
-      refreshInterval: 60 * 1000,
       revalidateOnMount: true,
+      revalidateOnFocus: false,
     }
   );
 
@@ -45,7 +46,7 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
     };
   }, []);
 
-  if (state.isLoading) {
+  if (state.isLoading || state.isValidating) {
     return (
       <View tw="flex-1 items-center justify-center">
         <Spinner />
@@ -53,6 +54,7 @@ export const AppleMusicAuthNativeWebViewScreen = () => {
     );
   }
 
+  console.log("statatwe ", state.isValidating, state.isLoading);
   if (state.data?.developer_token) {
     return (
       <View
