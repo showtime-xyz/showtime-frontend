@@ -31,6 +31,9 @@ const nextConfig = {
       // ["react-native-reanimated-swc-plugin"],
       // ["@nissy-dev/swc-plugin-react-native-web", { commonjs: true }],
     ],
+    fontLoaders: [
+      { loader: "@next/font/google", options: { subsets: ["latin"] } },
+    ],
   },
   transpilePackages: [
     "react-native",
