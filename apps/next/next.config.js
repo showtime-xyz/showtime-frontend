@@ -20,6 +20,7 @@ const nextConfig = {
   swcMinify: false,
   reactStrictMode: false,
   experimental: {
+    appDir: false,
     optimizeCss: true,
     browsersListForSwc: true,
     legacyBrowsers: false,
