@@ -33,7 +33,6 @@ const nextConfig = {
     ],
   },
   transpilePackages: [
-    "react-native",
     "react-native-web",
     "app",
     "desing-system",
