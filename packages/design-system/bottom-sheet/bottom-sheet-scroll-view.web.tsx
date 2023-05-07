@@ -1,3 +1,3 @@
 import { ScrollView } from "react-native";
 
-export { ScrollView as BottomSheetModalProvider };
+export const BottomSheetScrollView = ScrollView;

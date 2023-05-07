@@ -1,3 +1,3 @@
 import { Fragment } from "react";
 
-export { Fragment as BottomSheetModalProvider };
+export const BottomSheetModalProvider = Fragment;
