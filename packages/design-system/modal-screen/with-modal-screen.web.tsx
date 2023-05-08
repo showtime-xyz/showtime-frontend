@@ -1,6 +1,7 @@
 import { FC, useCallback, useRef, useMemo, useState, useEffect } from "react";
 
-import { ModalMethods, Modal } from "@showtime-xyz/universal.modal";
+import { Modal } from "@showtime-xyz/universal.modal";
+import type { ModalMethods } from "@showtime-xyz/universal.modal";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { ModalScreenContext } from "./modal-screen-context";
