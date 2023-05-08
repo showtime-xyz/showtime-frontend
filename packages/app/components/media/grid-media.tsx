@@ -84,6 +84,7 @@ function GridMediaImpl({
           style={sizeStyle}
           resizeMode={resizeMode}
           alt={item?.token_name}
+          transition={200}
         />
       ) : null}
 
@@ -106,6 +107,7 @@ function GridMediaImpl({
             style={sizeStyle}
             resizeMode={resizeMode}
             alt={item?.token_name}
+            transition={200}
           />
         </>
       ) : null}
@@ -125,6 +127,7 @@ function GridMediaImpl({
           style={sizeStyle}
           resizeMode={resizeMode}
           alt={item?.token_name}
+          transition={200}
         />
       ) : null}
     </View>

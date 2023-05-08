@@ -6,6 +6,7 @@ import {
   FlashListProps,
   ListRenderItemInfo,
 } from "@shopify/flash-list";
+import { ScrollView } from "react-native-gesture-handler";
 
 export type InfiniteScrollListProps<T> = FlashListProps<T> & {
   index?: number;
@@ -50,6 +51,7 @@ function FlashListComponent<T>(
     return (
       <View style={[{ height: "100%" }, style]}>
         <FlashList
+          renderScrollComponent={ScrollView}
           {...rest}
           numColumns={numColumns}
           ref={ref}
@@ -60,6 +62,7 @@ function FlashListComponent<T>(
   } else {
     return (
       <FlashList
+        renderScrollComponent={ScrollView}
         {...rest}
         numColumns={numColumns}
         renderItem={renderItem}

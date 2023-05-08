@@ -24,9 +24,6 @@ export const ScollableTabBar = ({
   ...rest
 }: Props & { navigationState: State }) => {
   const isDark = useIsDarkMode();
-  const onTabPress = useCallback(() => {
-    Haptics.impactAsync();
-  }, []);
 
   return (
     <View tw="web:border-b-0 border-b border-gray-200 bg-white px-4 dark:border-gray-800 dark:bg-black">
@@ -52,7 +49,6 @@ export const ScollableTabBar = ({
         }}
         indicatorStyle={{ backgroundColor: isDark ? "#FFF" : colors.gray[900] }}
         tabStyle={{ paddingVertical: 8 }}
-        onTabPress={onTabPress}
       />
     </View>
   );

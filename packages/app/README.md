@@ -4,8 +4,8 @@ The Showtime app powered by Expo, Next.js, Storybook and Universal UI.
 
 You'll find included:
 
-- [Expo SDK 46](https://docs.expo.dev) (with Hermes on iOS and Android)
-- [Next.js 12](https://nextjs.org/docs/getting-started)
+- [Expo SDK 48](https://docs.expo.dev) (with Hermes on iOS and Android)
+- [Next.js 13](https://nextjs.org/docs/getting-started)
 - [React Native for Web](https://necolas.github.io/react-native-web)
 - [TypeScript](https://www.typescriptlang.org)
 - [Reanimated](https://github.com/software-mansion/react-native-reanimated) (with SWC plugin for Next.js)
