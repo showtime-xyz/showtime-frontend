@@ -51,6 +51,11 @@ export const contentGatingType = {
     text: "Pre-Save to collect",
     typeName: "Pre-Save",
   },
+  multi_provider_music_presave: {
+    icon: SpotifyPure,
+    text: "Pre-Save to collect",
+    typeName: "Pre-Save",
+  },
 };
 
 export const ContentTypeTooltip = ({
