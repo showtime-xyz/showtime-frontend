@@ -24,14 +24,7 @@ import type {
   TabViewCustomRenders,
 } from "./types";
 
-export {
-  TabFlatList,
-  TabScrollView,
-  TabSectionList,
-  TabScrollViewProps,
-  TabFlatListProps,
-  TabSectionListProps,
-} from "./scrollable-view";
+export { TabFlatList, TabScrollView, TabSectionList } from "./scrollable-view";
 
 export type HeaderTabViewRef = {};
 export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &

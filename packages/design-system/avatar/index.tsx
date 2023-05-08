@@ -68,6 +68,7 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
           ref={ref}
         >
           <Image
+            recyclingKey={url || DEFAULT_AVATAR_PIC}
             source={imageSource}
             width={size}
             height={size}
@@ -88,6 +89,7 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
       );
     }, [
       tw,
+      url,
       size,
       borderRadius,
       borderColor,

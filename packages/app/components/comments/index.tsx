@@ -6,12 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  Platform,
-  StyleSheet,
-  TextInput,
-  InputAccessoryView,
-} from "react-native";
+import { Platform, StyleSheet, TextInput } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
@@ -29,6 +24,7 @@ import { useUser } from "app/hooks/use-user";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
+import { InputAccessoryView } from "../input-accessory-view";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 

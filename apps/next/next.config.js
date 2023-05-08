@@ -20,6 +20,7 @@ const nextConfig = {
   swcMinify: false,
   reactStrictMode: false,
   experimental: {
+    appDir: false,
     optimizeCss: true,
     browsersListForSwc: true,
     legacyBrowsers: false,
@@ -29,13 +30,11 @@ const nextConfig = {
     scrollRestoration: true,
     swcPlugins: [
       // ["react-native-reanimated-swc-plugin"],
-      ["@nissy-dev/swc-plugin-react-native-web", { commonjs: true }],
-    ],
-    fontLoaders: [
-      { loader: "@next/font/google", options: { subsets: ["latin"] } },
+      // ["@nissy-dev/swc-plugin-react-native-web", { commonjs: true }],
     ],
   },
   transpilePackages: [
+    "react-native",
     "react-native-web",
     "app",
     "desing-system",

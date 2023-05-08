@@ -21,7 +21,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
-import { ModalContainerProps, ModalMethods } from "./types";
+import type { ModalContainerProps, ModalMethods } from "./types";
 
 // @ts-ignore
 

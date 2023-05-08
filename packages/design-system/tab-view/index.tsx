@@ -4,10 +4,10 @@ import { Platform, StatusBar, StyleProp, ViewStyle } from "react-native";
 import { SceneRendererProps, NavigationState } from "react-native-tab-view";
 
 import {
-  Route,
   CollapsibleTabView,
   CollapsibleTabViewProps,
 } from "@showtime-xyz/universal.collapsible-tab-view";
+import type { Route } from "@showtime-xyz/universal.collapsible-tab-view";
 import { TabScrollView } from "@showtime-xyz/universal.collapsible-tab-view";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
