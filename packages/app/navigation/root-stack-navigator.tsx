@@ -74,11 +74,20 @@ export function RootStackNavigator() {
           name="search"
           component={SearchScreen}
           options={{
-            animation: "none",
+            animation: "fade",
+            animationDuration: 200,
           }}
         />
-        <Stack.Screen name="nft" component={NftScreen} />
-        <Stack.Screen name="dropSlug" component={NftScreen} />
+        <Stack.Screen
+          name="nft"
+          component={NftScreen}
+          getId={({ params }) => Object.values(params).join("-")}
+        />
+        <Stack.Screen
+          name="dropSlug"
+          component={NftScreen}
+          getId={({ params }) => Object.values(params).join("-")}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
