@@ -8,7 +8,6 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 
-import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -55,7 +54,6 @@ export const ThemeBottomTabbar = ({
             target: route.key,
             canPreventDefault: true,
           });
-          Haptics.impactAsync();
 
           if (route.name === "createTab") {
             redirectToCreateDrop();
