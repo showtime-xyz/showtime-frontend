@@ -30,6 +30,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
   return (
     <View tw="relative flex-1 px-8">
       <ScrollView tw="flex-1 px-8">
+        <View tw="h-2" />
         <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-gray-50 lg:text-4xl">
           Your jaw will drop, too.
         </Text>

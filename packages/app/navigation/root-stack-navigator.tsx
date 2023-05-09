@@ -14,6 +14,7 @@ import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropUpdateScreen } from "app/screens/drop-update";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
@@ -152,7 +153,11 @@ export function RootStackNavigator() {
           name="verifyPhoneNumber"
           component={VerifyPhoneNumberScreen}
         />
-        <Stack.Screen name="drop" component={DropScreen} />
+        <Stack.Screen
+          name="dropExplanation"
+          component={DropExplanationScreen}
+        />
+
         <Stack.Screen
           name="dropMusic"
           component={DropMusicScreen}
@@ -194,6 +199,7 @@ export function RootStackNavigator() {
           component={ClaimLimitExplanationScreen}
         />
         <Stack.Screen name="report" component={ReportScreen} />
+        <Stack.Screen name="drop" component={DropScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

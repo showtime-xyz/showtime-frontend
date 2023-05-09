@@ -69,6 +69,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       spotifyAuth: "spotifyAuth",
       addEmail: "settings/add-email",
       verifyPhoneNumber: "settings/verify-phone-number",
+      dropExplanation: "dropExplanation",
       privacySecuritySettings: "settings/privacy-and-security",
       notificationSettings: "settings/notifications",
       blockedList: "settings/blocked-list",

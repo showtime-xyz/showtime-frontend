@@ -106,6 +106,7 @@ type RootStackNavigatorParams = {
   following: undefined;
   addEmail: undefined;
   verifyPhoneNumber: undefined;
+  dropExplanation: undefined;
   drop: undefined;
   qrCodeShare: undefined;
   dropViewShareModal: undefined;
