@@ -22,7 +22,8 @@ import {
   User,
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import type { TW } from "@showtime-xyz/universal.tailwind";
+import { TW, colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -144,11 +145,20 @@ export const CreatorChannelsTabBarIcon = ({
   focused,
 }: TabBarIconProps) => {
   const [showTip, setShowTip] = useState(false);
+  const [badgeNumber, setBadgeNumber] = useState(12);
+
   useEffect(() => {
-    setTimeout(() => {
-      setShowTip(store.getBoolean(STORE_KEY) ?? true);
-    }, 2000);
-  }, []);
+    if (store.getBoolean(STORE_KEY)) {
+      setTimeout(() => {
+        setShowTip(true);
+      }, 2000);
+    }
+
+    if (focused) {
+      setShowTip(false);
+    }
+  }, [focused]);
+
   return (
     <Tooltip.Root
       onDismiss={() => {
@@ -156,7 +166,7 @@ export const CreatorChannelsTabBarIcon = ({
         store.set(STORE_KEY, false);
       }}
       open={showTip}
-      delayDuration={100}
+      delayDuration={250}
       disableDismissWhenTouchOutside
     >
       <Tooltip.Trigger>
@@ -168,6 +178,20 @@ export const CreatorChannelsTabBarIcon = ({
               height={24}
               color={color}
             />
+          ) : showTip ? (
+            <View tw="w-16 flex-row items-center justify-center rounded-full bg-indigo-700 py-1.5">
+              <CreatorChannel
+                style={{ zIndex: 1 }}
+                width={24}
+                height={24}
+                color="#fff"
+              />
+              {badgeNumber > 0 && (
+                <Text tw="ml-2 text-sm font-medium text-white">
+                  {badgeNumber > 99 ? "99+" : badgeNumber}
+                </Text>
+              )}
+            </View>
           ) : (
             <CreatorChannel
               style={{ zIndex: 1 }}
@@ -175,6 +199,13 @@ export const CreatorChannelsTabBarIcon = ({
               height={24}
               color={color}
             />
+          )}
+          {badgeNumber > 0 && !showTip && (
+            <View tw="absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
+              <Text tw="text-xs font-medium text-white">
+                {badgeNumber > 99 ? "99" : badgeNumber}
+              </Text>
+            </View>
           )}
         </TabBarIcon>
       </Tooltip.Trigger>
@@ -189,7 +220,7 @@ export const CreatorChannelsTabBarIcon = ({
         className="web:outline-none"
         side="top"
         presetAnimation="fadeIn"
-        backgroundColor="#563BFA"
+        backgroundColor={colors.indigo[700]}
         borderRadius={12}
       >
         <Tooltip.Text
