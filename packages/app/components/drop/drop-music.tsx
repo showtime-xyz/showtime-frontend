@@ -259,7 +259,7 @@ export const DropMusic = () => {
   // We change the title when user returns from checkout flow and they have credits
   useEffect(() => {
     return () => {
-      modalScreenContext?.setTitle("Music Drop: Pre-Save on Spotify");
+      modalScreenContext?.setTitle("Pre-Save on Spotify or Apple Music");
     };
   }, [modalScreenContext]);
 
