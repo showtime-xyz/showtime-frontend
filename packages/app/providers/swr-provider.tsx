@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { AppState, AppStateStatus } from "react-native";
 
 import NetInfo from "@react-native-community/netinfo";
@@ -42,15 +43,18 @@ export const SWRProvider = ({
 }): JSX.Element => {
   const { refreshTokens } = useAccessTokenManager();
   const { isOnline } = useIsOnline();
+  const lastError = useRef<AxiosError | null>(null);
 
   return (
     <SWRConfig
       value={{
         provider: mmkvProvider,
         onError: (err) => {
-          if (err?.message && __DEV__) {
+          if (err?.message && __DEV__ && lastError.current !== err?.message) {
             console.error(err);
             toast.error(err.message);
+            // sometimes we receive massive toast error spams, I added a little check to prevent that
+            lastError.current = err.message;
           }
         },
         onErrorRetry: async (

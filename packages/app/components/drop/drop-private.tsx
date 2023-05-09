@@ -57,7 +57,7 @@ const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 const defaultValues = {
   royalty: 10,
   editionSize: 15,
-  duration: SECONDS_IN_A_WEEK,
+  duration: SECONDS_IN_A_MONTH,
   password: "",
   googleMapsUrl: "",
   radius: 1, // In kilometers

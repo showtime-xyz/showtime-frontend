@@ -71,7 +71,7 @@ const durationOptions = [
 const defaultValues = {
   royalty: 10,
   editionSize: 15,
-  duration: SECONDS_IN_A_WEEK,
+  duration: SECONDS_IN_A_MONTH,
   radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
