@@ -34,7 +34,7 @@ export const EngagementIcons = memo<EngagementIconsProps>(
     return (
       <View
         pointerEvents="box-none"
-        tw={["absolute bottom-0 right-0 flex-col pr-3", tw]}
+        tw={["absolute bottom-12 right-0 flex-col pr-3", tw]}
         style={{ paddingBottom: bottomPadding }}
       >
         <View style={{ height: bottomPadding }} pointerEvents="none" />
