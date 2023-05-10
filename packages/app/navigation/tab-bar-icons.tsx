@@ -1,4 +1,4 @@
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import { MMKV } from "react-native-mmkv";
@@ -9,8 +9,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Bell,
   BellFilled,
-  Compass,
-  CompassFilled,
   CreatorChannel,
   CreatorChannelFilled,
   Home,
@@ -59,7 +57,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
         <PressableHover
           onPress={onPress}
           tw={[
-            "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
+            "h-12 w-12 items-center justify-center md:bg-gray-100 md:dark:bg-gray-900",
             tw ?? "",
           ]}
         >
@@ -72,7 +70,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
       <Link href={tab}>
         <View
           tw={[
-            "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
+            "h-12 w-12 items-center justify-center md:bg-gray-100 md:dark:bg-gray-900",
             tw ?? "",
           ]}
         >
@@ -82,7 +80,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
     );
   }
 
-  return <View tw="h-12 w-12 items-center justify-center">{children}</View>;
+  return <View tw="h-12 w-14 items-center justify-center">{children}</View>;
 }
 
 export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
@@ -104,6 +102,7 @@ export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
 
 export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
   const isDark = useIsDarkMode();
+  store.delete(STORE_KEY);
 
   return (
     <TabBarIcon tab="/" tw={tw}>
@@ -146,11 +145,13 @@ export const CreatorChannelsTabBarIcon = ({
 }: TabBarIconProps) => {
   const [showTip, setShowTip] = useState(false);
   const [badgeNumber, setBadgeNumber] = useState(12);
+  const isSet = useRef(false);
 
   useEffect(() => {
-    if (store.getBoolean(STORE_KEY)) {
+    if (!store.getBoolean(STORE_KEY) && !isSet.current) {
       setTimeout(() => {
         setShowTip(true);
+        isSet.current = true;
       }, 2000);
     }
 
@@ -160,76 +161,62 @@ export const CreatorChannelsTabBarIcon = ({
   }, [focused]);
 
   return (
-    <Tooltip.Root
-      onDismiss={() => {
-        setShowTip(false);
-        store.set(STORE_KEY, false);
-      }}
-      open={showTip}
-      delayDuration={250}
-      disableDismissWhenTouchOutside
-    >
-      <Tooltip.Trigger>
-        <TabBarIcon tab="/foryou">
-          {focused ? (
-            <CreatorChannelFilled
-              style={{ zIndex: 1 }}
-              width={24}
-              height={24}
-              color={color}
-            />
-          ) : showTip ? (
-            <View tw="w-16 flex-row items-center justify-center rounded-full bg-indigo-700 py-1.5">
-              <CreatorChannel
-                style={{ zIndex: 1 }}
-                width={24}
-                height={24}
-                color="#fff"
-              />
-              {badgeNumber > 0 && (
-                <Text tw="ml-2 text-sm font-medium text-white">
-                  {badgeNumber > 99 ? "99+" : badgeNumber}
-                </Text>
-              )}
-            </View>
-          ) : (
-            <CreatorChannel
-              style={{ zIndex: 1 }}
-              width={24}
-              height={24}
-              color={color}
-            />
-          )}
-          {badgeNumber > 0 && !showTip && (
-            <View tw="absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
-              <Text tw="text-xs font-medium text-white">
-                {badgeNumber > 99 ? "99" : badgeNumber}
-              </Text>
-            </View>
-          )}
-        </TabBarIcon>
-      </Tooltip.Trigger>
-      <Tooltip.Content
-        sideOffset={0}
-        containerStyle={{
-          paddingLeft: 10,
-          paddingRight: 10,
-          paddingTop: 6,
-          paddingBottom: 6,
+    <TabBarIcon tab="/foryou">
+      <Tooltip.Root
+        onDismiss={() => {
+          store.set(STORE_KEY, true);
         }}
-        className="web:outline-none"
-        side="top"
-        presetAnimation="fadeIn"
-        backgroundColor={colors.indigo[700]}
-        borderRadius={12}
+        open={showTip}
+        delayDuration={250}
+        disableDismissWhenTouchOutside={Platform.OS !== "android"}
       >
-        <Tooltip.Text
-          textSize={14}
-          textColor="#fff"
-          text={"Check out new broadcasts from your creators"}
-        />
-      </Tooltip.Content>
-    </Tooltip.Root>
+        <Tooltip.Trigger>
+          <View tw="items-center justify-center">
+            {focused ? (
+              <CreatorChannelFilled width={24} height={24} color={color} />
+            ) : showTip ? (
+              <View tw="w-14 flex-row items-center justify-center rounded-full bg-indigo-700 py-1">
+                <CreatorChannel width={24} height={24} color="#fff" />
+                {badgeNumber > 0 && (
+                  <Text tw="ml-1 text-sm font-medium text-white">
+                    {badgeNumber > 99 ? "99+" : badgeNumber}
+                  </Text>
+                )}
+              </View>
+            ) : (
+              <CreatorChannel width={24} height={24} color={color} />
+            )}
+          </View>
+        </Tooltip.Trigger>
+        <Tooltip.Content
+          sideOffset={0}
+          containerStyle={{
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingTop: 6,
+            paddingBottom: 6,
+          }}
+          className="web:outline-none"
+          side="top"
+          presetAnimation="fadeIn"
+          backgroundColor={colors.indigo[700]}
+          borderRadius={12}
+        >
+          <Tooltip.Text
+            textSize={14}
+            textColor="#fff"
+            text={"Check out new broadcasts from your creators"}
+          />
+        </Tooltip.Content>
+      </Tooltip.Root>
+      {badgeNumber > 0 && !showTip && (
+        <View tw="absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
+          <Text tw="text-xs font-medium text-white">
+            {badgeNumber > 99 ? "99" : badgeNumber}
+          </Text>
+        </View>
+      )}
+    </TabBarIcon>
   );
 };
 
