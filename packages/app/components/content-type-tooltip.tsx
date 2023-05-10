@@ -1,6 +1,11 @@
 import { StyleSheet } from "react-native";
 
-import { Globe, Lock, SpotifyPure } from "@showtime-xyz/universal.icon";
+import {
+  AppleMusic,
+  Globe,
+  Lock,
+  SpotifyPure,
+} from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -67,23 +72,66 @@ export const ContentTypeTooltip = ({
     return <PlayOnSpinamp url={edition?.spinamp_track_url} />;
   }
 
-  // Show play button if it's released and has track urls
-  if (
-    edition?.gating_type === "multi_provider_music_presave" &&
-    edition?.presave_release_date &&
-    new Date() >= new Date(edition?.presave_release_date)
-  ) {
-    if (edition?.apple_music_track_url && edition?.spotify_track_url) {
+  if (edition?.gating_type === "multi_provider_music_presave") {
+    // Show play button if it's released and has track urls
+    if (
+      edition?.presave_release_date &&
+      new Date() >= new Date(edition?.presave_release_date)
+    ) {
+      if (edition?.apple_music_track_url && edition?.spotify_track_url) {
+        return (
+          <View tw="flex-row" style={{ columnGap: 4 }}>
+            <PlayOnSpotify edition={edition} />
+            <PlayOnAppleMusic edition={edition} />
+          </View>
+        );
+      } else if (edition?.apple_music_track_url) {
+        return <PlayOnAppleMusic edition={edition} />;
+      } else if (edition?.spotify_track_url) {
+        return <PlayOnSpotify edition={edition} />;
+      }
+    }
+    // Show available on tooltip if not released yet
+    else {
       return (
-        <View tw="flex-row" style={{ columnGap: 4 }}>
-          <PlayOnSpotify edition={edition} />
-          <PlayOnAppleMusic edition={edition} />
-        </View>
+        <TextTooltip
+          side="bottom"
+          triggerElement={
+            <>
+              <View
+                tw="rounded bg-black/60"
+                style={StyleSheet.absoluteFillObject}
+              />
+              <View tw="flex-row items-center py-0.5 pl-0.5">
+                {edition.creator_apple_music_id ? (
+                  <>
+                    <AppleMusic height={18} width={18} color={"white"} />
+                    <View tw="w-1" />
+                  </>
+                ) : null}
+                {edition.creator_spotify_id ? (
+                  <SpotifyPure height={18} width={18} color={"white"} />
+                ) : null}
+                {edition.presave_release_date ? (
+                  <Text tw="mx-1 text-xs font-medium text-white">
+                    Available on{" "}
+                    {new Date(edition.presave_release_date).toLocaleString(
+                      "default",
+                      { month: "long" }
+                    ) +
+                      " " +
+                      new Date(edition.presave_release_date).getDate()}
+                  </Text>
+                ) : (
+                  <View tw="w-0.5" />
+                )}
+              </View>
+            </>
+          }
+          text={contentGatingType[edition?.gating_type].text}
+          {...rest}
+        />
       );
-    } else if (edition?.apple_music_track_url) {
-      return <PlayOnAppleMusic edition={edition} />;
-    } else if (edition?.spotify_track_url) {
-      return <PlayOnSpotify edition={edition} />;
     }
   }
 
