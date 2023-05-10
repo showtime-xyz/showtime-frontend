@@ -1,31 +1,32 @@
 import * as React from "react";
 
-import Svg, { SvgProps, G, Path, Defs, ClipPath } from "react-native-svg";
+import Svg, { SvgProps, Path } from "react-native-svg";
 
 const SvgMusicDropType = (props: SvgProps) => (
   <Svg width={24} height={24} fill="none" viewBox="0 0 24 24" {...props}>
-    <G
+    <Path
+      fill={props.color}
       stroke={props.color}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}
-      clipPath="url(#MusicDropType_svg__a)"
-    >
-      <Path
-        fill={props.color}
-        d="M4.952 22.05c2.074 0 3.756-1.608 3.756-3.592s-1.682-3.592-3.756-3.592-3.755 1.608-3.755 3.592 1.681 3.592 3.755 3.592Z"
-      />
-      <Path d="M22.477 18.666V4.621c0-2.993-1.962-3.408-3.948-2.89l-7.51 1.957c-1.373.357-2.311 1.393-2.311 2.89v11.335" />
-      <Path
-        fill={props.color}
-        d="M18.721 22.259c2.074 0 3.756-1.609 3.756-3.592 0-1.984-1.682-3.592-3.756-3.592s-3.755 1.608-3.755 3.592c0 1.983 1.681 3.591 3.755 3.591ZM22.477 6.693l-13.77 3.592.6-.678v-3.68l.807-1.402 8.903-2.488h1.32l1.355.771.55 1.717.235 2.168Z"
-      />
-    </G>
-    <Defs>
-      <ClipPath id="MusicDropType_svg__a">
-        <Path fill={props.color} d="M0 0h24v24H0z" />
-      </ClipPath>
-    </Defs>
+      d="M5.4 21.66c1.988 0 3.6-1.541 3.6-3.443 0-1.901-1.612-3.443-3.6-3.443s-3.6 1.542-3.6 3.443c0 1.902 1.612 3.444 3.6 3.444Z"
+    />
+    <Path
+      stroke={props.color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M22.2 18.417V4.952c0-2.87-1.88-3.267-3.785-2.77l-7.2 1.876C9.9 4.4 9 5.393 9 6.828v10.866"
+    />
+    <Path
+      fill={props.color}
+      stroke={props.color}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M18.6 21.86c1.988 0 3.6-1.541 3.6-3.443 0-1.902-1.612-3.444-3.6-3.444S15 16.515 15 18.418s1.612 3.443 3.6 3.443ZM21.242 6.614 9 9.808l.534-.603V5.934l.716-1.247 7.916-2.212h1.173l1.205.685.489 1.527.21 1.927Z"
+    />
   </Svg>
 );
 export default SvgMusicDropType;

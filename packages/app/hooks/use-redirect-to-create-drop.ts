@@ -32,7 +32,7 @@ export const useRedirectToCreateDrop = () => {
       // check if user has completed onboarding
       await onboardingPromise();
 
-      if (store.getString(STORE_KEY)) {
+      if (store.getBoolean(STORE_KEY)) {
         router.push(
           Platform.select({
             native: "/dropExplanation",

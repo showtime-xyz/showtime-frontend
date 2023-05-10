@@ -10,7 +10,7 @@ export const DropScreen = withModalScreen(DropModal, {
   title: "Choose your drop type",
   matchingPathname: "/drop",
   matchingQueryParam: "dropModal",
-  tw: "w-full lg:w-[800px] web:lg:pb-8",
-  snapPoints: [450],
+  tw: "w-full web:lg:pb-8",
+  snapPoints: [400],
   useNativeModal: false,
 });

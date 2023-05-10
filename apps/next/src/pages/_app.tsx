@@ -28,6 +28,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEventScreen } from "app/screens/drop-event";
+import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropFreeScreen } from "app/screens/drop-free";
 import { DropMusicScreen } from "app/screens/drop-music";
 import { DropPrivateScreen } from "app/screens/drop-private";
@@ -185,6 +186,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <FollowersScreen />
         <FollowingScreen />
         <DropScreen />
+        <DropExplanationScreen />
         <ClaimScreen />
         <RaffleScreen />
         <CollectorsScreen />
