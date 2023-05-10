@@ -67,17 +67,40 @@ export const ContentTypeTooltip = ({
     return <PlayOnSpinamp url={edition?.spinamp_track_url} />;
   }
 
-  if (edition?.apple_music_track_url && edition?.spotify_track_url) {
-    return (
-      <View tw="flex-row" style={{ columnGap: 4 }}>
-        <PlayOnSpotify edition={edition} />
-        <PlayOnAppleMusic edition={edition} />
-      </View>
-    );
+  // Show play button if it's released and has track urls
+  if (
+    edition?.gating_type === "multi_provider_music_presave" &&
+    edition?.presave_release_date &&
+    new Date() >= new Date(edition?.presave_release_date)
+  ) {
+    if (edition?.apple_music_track_url && edition?.spotify_track_url) {
+      return (
+        <View tw="flex-row" style={{ columnGap: 4 }}>
+          <PlayOnSpotify edition={edition} />
+          <PlayOnAppleMusic edition={edition} />
+        </View>
+      );
+    } else if (edition?.apple_music_track_url) {
+      return <PlayOnAppleMusic edition={edition} />;
+    } else if (edition?.spotify_track_url) {
+      return <PlayOnSpotify edition={edition} />;
+    }
   }
 
-  if (edition?.apple_music_track_url) {
-    return <PlayOnAppleMusic edition={edition} />;
+  // Show play button if it's save drop and has track urls
+  if (edition?.gating_type === "multi_provider_music_save") {
+    if (edition?.apple_music_track_url && edition?.spotify_track_url) {
+      return (
+        <View tw="flex-row" style={{ columnGap: 4 }}>
+          <PlayOnSpotify edition={edition} />
+          <PlayOnAppleMusic edition={edition} />
+        </View>
+      );
+    } else if (edition?.apple_music_track_url) {
+      return <PlayOnAppleMusic edition={edition} />;
+    } else if (edition?.spotify_track_url) {
+      return <PlayOnSpotify edition={edition} />;
+    }
   }
 
   if (
