@@ -106,8 +106,8 @@ export const DropUpdate = ({
               Update Song Link
             </Text>
           ) : null}
-          {isSpotifyDrop ? (
-            <View style={{ rowGap: 16 }}>
+          <View style={{ rowGap: 16 }}>
+            {isSpotifyDrop ? (
               <Controller
                 control={control}
                 name="spotifyUrl"
@@ -144,35 +144,34 @@ export const DropUpdate = ({
                   );
                 }}
               />
+            ) : null}
 
-              {isAppleMusicDrop ? (
-                <Controller
-                  control={control}
-                  name="appleMusicUrl"
-                  render={({ field: { onChange, onBlur, value, ref } }) => {
-                    return (
-                      <Fieldset
-                        ref={ref}
-                        label={
-                          <View tw="flex-row">
-                            <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
-                              Apple Music Song Link{" "}
-                            </Label>
-                          </View>
-                        }
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        placeholder="Enter the Apple Music song link"
-                        errorText={errors.appleMusicUrl?.message}
-                      />
-                    );
-                  }}
-                />
-              ) : null}
-            </View>
-          ) : null}
-
+            {isAppleMusicDrop ? (
+              <Controller
+                control={control}
+                name="appleMusicUrl"
+                render={({ field: { onChange, onBlur, value, ref } }) => {
+                  return (
+                    <Fieldset
+                      ref={ref}
+                      label={
+                        <View tw="flex-row">
+                          <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                            Apple Music Song Link{" "}
+                          </Label>
+                        </View>
+                      }
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Enter the Apple Music song link"
+                      errorText={errors.appleMusicUrl?.message}
+                    />
+                  );
+                }}
+              />
+            ) : null}
+          </View>
           <View tw="h-4" />
           <View>
             <Controller
