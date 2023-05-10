@@ -311,9 +311,7 @@ export const DropMusic = () => {
           releaseDate: isSaveDrop
             ? undefined
             : values.releaseDate ?? getDefaultDate().toISOString(),
-          appleMusicTrackUrl: isSaveDrop
-            ? values.appleMusicTrackUrl
-            : undefined,
+          appleMusicTrackUrl: values.appleMusicTrackUrl,
         },
         clearStorage
       );
