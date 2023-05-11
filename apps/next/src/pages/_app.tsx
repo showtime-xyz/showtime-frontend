@@ -2,6 +2,7 @@ import "raf/polyfill";
 
 import "setimmediate";
 
+import { useEffect } from "react";
 import { useCallback } from "react";
 
 import "@rainbow-me/rainbowkit/styles.css";
@@ -17,6 +18,8 @@ import { View } from "@showtime-xyz/universal.view";
 import Footer from "app/components/footer";
 import Header from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
+import { useScript } from "app/hooks/use-script";
+import { initialiseAppleMusic } from "app/lib/apple-music-auth/apple-music-auth";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { CheckoutScreen } from "app/screens/checkout";
@@ -64,6 +67,17 @@ enableExperimentalWebImplementation(true);
 
 function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;
+
+  const scriptLoadedRes = useScript(
+    "https://js-cdn.music.apple.com/musickit/v3/musickit.js"
+  );
+
+  useEffect(() => {
+    if (scriptLoadedRes === "ready") {
+      initialiseAppleMusic();
+    }
+  }, [scriptLoadedRes]);
+
   const metaTags = meta ? (
     <>
       <title>{meta.title}</title>
