@@ -103,7 +103,6 @@ export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
 
 export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
   const isDark = useIsDarkMode();
-
   return (
     <TabBarIcon tab="/" tw={tw}>
       <Showtime
@@ -154,7 +153,6 @@ export const CreatorChannelsTabBarIcon = ({
       setTimeout(() => {
         setShowTip(true);
         isSet.current = true;
-        setOpen(true);
       }, 2000);
     }
     if (focused) {

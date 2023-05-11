@@ -23,6 +23,7 @@ import { VideoConfigContext } from "app/context/video-config-context";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetailBySlug } from "app/hooks/use-nft-details-by-slug";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+import { useRedirectToCreatorChannelIntro } from "app/hooks/use-redirect-to-intro-creator-channel";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
@@ -41,6 +42,7 @@ type Query = {
   username?: string;
   dropSlug?: string;
   initialScrollIndex?: string;
+  showCreatorChannelIntro?: boolean;
 };
 
 const { useParam } = createParam<Query>();
@@ -124,8 +126,14 @@ const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
     initial: false,
     parse: (v) => Boolean(v),
   });
+  const [showCreatorChannelIntro] = useParam("showCreatorChannelIntro", {
+    initial: false,
+    parse: (v) => Boolean(v),
+  });
   const [contractAddress] = useParam("contractAddress");
   const initialRef = useRef(false);
+  const initialRedirectToIntro = useRef(false);
+
   const videoConfig = useMemo(
     () => ({
       isMuted: true,
@@ -139,6 +147,7 @@ const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
 
   const dummyId = 1;
   const visibileItems = useSharedValue([undefined, dummyId, undefined]);
+  const redirectToCreatorChannelIntro = useRedirectToCreatorChannelIntro();
 
   useEffect(() => {
     if (showClaim && contractAddress && !initialRef.current) {
@@ -146,6 +155,15 @@ const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
       redirectToClaimDrop(contractAddress);
     }
   }, [showClaim, redirectToClaimDrop, contractAddress]);
+
+  useEffect(() => {
+    if (!initialRedirectToIntro.current && showCreatorChannelIntro) {
+      setTimeout(() => {
+        initialRedirectToIntro.current = true;
+        redirectToCreatorChannelIntro();
+      }, 1000);
+    }
+  }, [redirectToCreatorChannelIntro, showCreatorChannelIntro]);
 
   return (
     <ErrorBoundary>

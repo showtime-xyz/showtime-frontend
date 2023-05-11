@@ -4,6 +4,7 @@ import { useWindowDimensions, Platform } from "react-native";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
+import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CreatorChannelType } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
@@ -82,6 +83,7 @@ export const CreatorChannelsIntro = () => {
         <Button
           size="regular"
           onPress={() => {
+            Haptics.impactAsync();
             const pathname = `/channel/${userProfile?.data.profile.profile_id}`;
             if (Platform.OS === "web") {
               router.push(pathname);
@@ -94,7 +96,7 @@ export const CreatorChannelsIntro = () => {
           Enter channel
         </Button>
         <View tw="h-4" />
-        <Text tw="text-center text-xs text-indigo-700">{`2,300 members awaiting`}</Text>
+        <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`2,300 members awaiting`}</Text>
       </View>
     </BottomSheetModalProvider>
   );
