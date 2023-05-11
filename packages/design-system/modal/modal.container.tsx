@@ -37,6 +37,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       enableContentPanningGesture = true,
       enableHandlePanningGesture = true,
       headerShown = true,
+      closeButtonProps,
     },
     ref
   ) {
@@ -90,11 +91,16 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
         return headerShown ? (
           <>
             {enableHandlePanningGesture && <ModalHeaderBar />}
-            <ModalHeader title={title} onClose={close} {...props} />
+            <ModalHeader
+              title={title}
+              onClose={close}
+              closeButtonProps={closeButtonProps}
+              {...props}
+            />
           </>
         ) : null;
       },
-      [title, close, headerShown, enableHandlePanningGesture]
+      [title, close, headerShown, enableHandlePanningGesture, closeButtonProps]
     );
 
     return (

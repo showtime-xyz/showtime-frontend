@@ -13,4 +13,7 @@ export const DropScreen = withModalScreen(DropModal, {
   tw: "w-full web:lg:pb-8",
   snapPoints: [400],
   useNativeModal: false,
+  closeButtonProps: {
+    variant: "text",
+  },
 });

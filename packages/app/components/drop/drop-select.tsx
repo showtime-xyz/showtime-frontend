@@ -47,12 +47,13 @@ export const DropSelect = () => {
             isNew
             description="Send an exclusive update to your fans on your channel"
             onPress={() => {
+              const pathname = `/channel/${user.user?.data.profile.profile_id}`;
               if (Platform.OS === "web") {
-                router.replace("/drop/music");
+                router.push(pathname);
               } else {
                 modalScreenContext?.pop?.({
                   callback: () => {
-                    router.push("/drop/free");
+                    router.push(pathname);
                   },
                 });
               }

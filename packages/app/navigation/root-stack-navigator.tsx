@@ -12,6 +12,7 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
+import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
@@ -186,6 +187,10 @@ export function RootStackNavigator() {
           component={DropViewShareScreen}
         />
         <Stack.Screen name="raffle" component={RaffleScreen} />
+        <Stack.Screen
+          name="creatorChannelsIntro"
+          component={CreatorChannelsIntroScreen}
+        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
