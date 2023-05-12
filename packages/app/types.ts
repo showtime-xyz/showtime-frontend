@@ -275,6 +275,7 @@ export type MyInfo = {
 export type GatingType =
   | "spotify_save"
   | "multi_provider_music_save"
+  | "multi_provider_music_presave"
   | "password"
   | "location"
   | "multi"

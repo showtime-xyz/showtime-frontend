@@ -152,7 +152,8 @@ function NFTDropdown({
           ) : null}
 
           {(edition?.gating_type === "spotify_presave" ||
-            edition?.gating_type === "music_presave") &&
+            edition?.gating_type === "music_presave" ||
+            edition?.gating_type === "multi_provider_music_presave") &&
           nft.creator_username === user?.data.profile.username ? (
             <DropdownMenuItem
               onSelect={() => {
@@ -171,7 +172,7 @@ function NFTDropdown({
                 }}
               />
               <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                Update Spotify Link
+                Update Song Link
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           ) : null}

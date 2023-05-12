@@ -26,6 +26,8 @@ export type CreatorEditionResponse = {
   password: string | null;
   time_limit: string;
   total_claimed_count: number;
+  creator_spotify_id?: string;
+  creator_apple_music_id?: string;
   gating_type: GatingType;
   spotify_track_name: string | null;
   spotify_track_url: string | null;
