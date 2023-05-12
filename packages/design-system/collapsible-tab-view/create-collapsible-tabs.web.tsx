@@ -58,7 +58,6 @@ function CollapsibleHeaderTabView<T extends Route>(
   ref?: any
 ) {
   const shareAnimatedValue = useSharedValue(0);
-  const headerTrans = useSharedValue(0);
   const curIndexValue = useSharedValue(navigationState.index);
   const isSlidingHeader = useSharedValue(false);
   const isStartRefreshing = useSharedValue(false);
@@ -140,7 +139,6 @@ function CollapsibleHeaderTabView<T extends Route>(
     <HeaderTabContext.Provider
       value={{
         shareAnimatedValue,
-        headerTrans,
         tabbarHeight,
         expectHeight: 0,
         headerHeight: 0,

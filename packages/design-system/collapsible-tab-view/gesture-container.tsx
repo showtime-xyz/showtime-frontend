@@ -655,7 +655,6 @@ export const GestureContainer = React.forwardRef<
     <HeaderTabContext.Provider
       value={{
         shareAnimatedValue,
-        headerTrans,
         tabbarHeight,
         expectHeight: Math.floor(
           headerHeight + tabviewHeight - minHeaderHeight

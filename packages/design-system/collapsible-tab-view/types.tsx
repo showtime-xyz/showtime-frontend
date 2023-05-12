@@ -106,7 +106,6 @@ export type TabHeaderContext = {
   refreshHeight: number;
   overflowPull: number;
   pullExtendedCoefficient: number;
-  headerTrans: Animated.SharedValue<number>;
   expectHeight: number;
   refHasChanged: (ref: NativeGesture) => void;
   curIndexValue: Animated.SharedValue<number>;
