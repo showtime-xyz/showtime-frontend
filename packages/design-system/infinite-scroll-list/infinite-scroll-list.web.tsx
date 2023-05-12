@@ -196,7 +196,9 @@ function InfiniteScrollListImpl<Item>(
           <div
             ref={scrollMarginOffseRef}
             style={{
-              height: rowVirtualizer.getTotalSize(),
+              height:
+                rowVirtualizer.getTotalSize() -
+                (useWindowScroll ? 0 : parentOffsetRef.current),
               width: "100%",
               position: "relative",
             }}

@@ -38,26 +38,6 @@ export function Ownership({ nft }: Props) {
 
   if (!nft) return null;
 
-  // if (loading) {
-  //   return (
-  //     <OwnershipContainer count={nft.owner_count}>
-  //       {Array(nft.owner_count)
-  //         .fill(0)
-  //         .slice(0, 4)
-  //         .map((_, index) => (
-  //           <Skeleton
-  //             key={`nft-${nft.nft_id}-owner-${index}-skeleton`}
-  //             width={14}
-  //             height={14}
-  //             colorMode={isDarkMode ? "dark" : "light"}
-  //             radius="round"
-  //             show={true}
-  //           />
-  //         ))}
-  //     </OwnershipContainer>
-  //   );
-  // }
-
   if (
     data?.owner_count &&
     data.owner_count > 1 &&

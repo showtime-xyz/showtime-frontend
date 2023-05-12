@@ -70,8 +70,8 @@ function TextLink({
           ...textProps,
           variant,
           tw,
-          accessibilityRole: "link",
-          selectable: false,
+          role: "link",
+          userSelect: false,
           onPress,
         }),
         [variant, tw, textProps, onPress]

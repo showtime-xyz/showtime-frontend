@@ -1,6 +1,7 @@
 import { ComponentType } from "react";
 import { Platform } from "react-native";
 
+import type { ImageSystemSymbolConfiguration } from "react-native-ios-context-menu/lib/typescript/types/ImageItemConfig";
 import { SvgProps } from "react-native-svg";
 import * as DropdownMenu from "zeego/src/dropdown-menu";
 import type { MenuItemIconProps as ZeegoMenuItemIconProps } from "zeego/src/menu/types";
@@ -9,8 +10,11 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { DropdownMenuItemIcon } from "design-system/dropdown-menu";
 
-type MenuItemIconProps = ZeegoMenuItemIconProps & {
+type MenuItemIconProps = Omit<ZeegoMenuItemIconProps, "ios"> & {
   Icon: ComponentType<SvgProps>;
+  ios?: ImageSystemSymbolConfiguration & {
+    name: any;
+  };
 };
 
 export const MenuItemIcon = DropdownMenu.menuify(

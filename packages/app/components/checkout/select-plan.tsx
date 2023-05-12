@@ -6,7 +6,6 @@ import useSWRMutation from "swr/mutation";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CreditCard } from "@showtime-xyz/universal.icon";
@@ -36,7 +35,6 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
   }>(MY_INFO_ENDPOINT, fetchPaymentIntent);
   const [selectDefault, setSelectDefault] = useState(true);
   const paymentMethods = usePaymentsManage();
-  const colorMode = useColorScheme();
   const defaultPaymentMethod = useMemo(
     () => paymentMethods.data?.find((method) => method.is_default),
     [paymentMethods.data]
@@ -95,23 +93,11 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
     <View tw="p-4">
       {paidDropPlansQuery.isLoading ? (
         <View>
-          <Skeleton
-            colorMode={isDark ? "dark" : "light"}
-            width="100%"
-            height={46}
-          />
+          <Skeleton width="100%" height={46} />
           <View tw="h-4" />
-          <Skeleton
-            colorMode={isDark ? "dark" : "light"}
-            width="100%"
-            height={46}
-          />
+          <Skeleton width="100%" height={46} />
           <View tw="h-4" />
-          <Skeleton
-            colorMode={isDark ? "dark" : "light"}
-            width="100%"
-            height={46}
-          />
+          <Skeleton width="100%" height={46} />
         </View>
       ) : paidDropPlansQuery.error ? (
         <ErrorText>Something went wrong. Please try again</ErrorText>
@@ -154,13 +140,13 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
       })}
       <View tw="mt-4">
         {paymentMethods.isLoading ? (
-          <Skeleton height={16} width={200} colorMode={colorMode as any} />
+          <Skeleton height={16} width={200} />
         ) : defaultPaymentMethod ? (
           <View tw="flex-row items-center">
             <Checkbox
               checked={selectDefault}
               onChange={() => setSelectDefault(!selectDefault)}
-              accesibilityLabel="Select default payment method"
+              aria-label="Select default payment method"
             />
             <Text
               tw="ml-2 text-gray-900 dark:text-gray-50"

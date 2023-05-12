@@ -6,12 +6,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  Platform,
-  StyleSheet,
-  TextInput,
-  InputAccessoryView,
-} from "react-native";
+import { Platform, StyleSheet, TextInput } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
@@ -29,6 +24,7 @@ import { useUser } from "app/hooks/use-user";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
+import { InputAccessoryView } from "../input-accessory-view";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
@@ -39,9 +35,14 @@ const PlatformInputAccessoryView =
 type CommentsProps = {
   nft: NFT;
   webListHeight?: number | string;
+  ListHeaderComponent?: React.ComponentType<any>;
 };
 
-export function Comments({ nft, webListHeight }: CommentsProps) {
+export function Comments({
+  nft,
+  webListHeight,
+  ListHeaderComponent,
+}: CommentsProps) {
   //#region refs
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
@@ -166,13 +167,11 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
   const listEmptyComponent = useCallback(
     () =>
       !isLoading && !error && !dataReversed.length ? (
-        <View tw="absolute h-full w-full flex-1 items-center justify-center">
-          <EmptyPlaceholder
-            text="Be the first to add a comment!"
-            title="💬 No comments yet..."
-            tw="-mt-20"
-          />
-        </View>
+        <EmptyPlaceholder
+          text="Be the first to add a comment!"
+          title="💬 No comments yet..."
+          tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] -mt-5 h-full flex-1"
+        />
       ) : null,
     [isLoading, dataReversed.length, error]
   );
@@ -193,7 +192,7 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
       {isLoading || (dataReversed.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
-        <View tw="web:pt-4 flex-grow">
+        <View tw="flex-grow">
           <InfiniteScrollList
             data={dataReversed}
             refreshing={isLoading}
@@ -205,11 +204,12 @@ export function Comments({ nft, webListHeight }: CommentsProps) {
             automaticallyAdjustKeyboardInsets={handleInset}
             automaticallyAdjustContentInsets={false}
             contentInsetAdjustmentBehavior="never"
+            ListHeaderComponent={ListHeaderComponent}
             contentContainerStyle={styles.contentContainer}
             getItemType={getItemType}
+            ListEmptyComponent={listEmptyComponent}
             {...modalListProps}
           />
-          {listEmptyComponent()}
           {isAuthenticated && mounted && (
             <PlatformInputAccessoryView
               {...Platform.select({

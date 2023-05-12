@@ -4,7 +4,6 @@ import {
   PressableProps,
 } from "react-native";
 
-import { ClientSideOnly } from "@showtime-xyz/universal.client-side-only";
 import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
@@ -24,9 +23,5 @@ export function PressableHover({ tw, ...props }: Props) {
     [tw]
   );
 
-  return (
-    <ClientSideOnly>
-      <StyledPressable {...props} tw={twWithHover} />
-    </ClientSideOnly>
-  );
+  return <StyledPressable {...props} tw={twWithHover} />;
 }

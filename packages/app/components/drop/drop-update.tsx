@@ -29,13 +29,8 @@ import { DateTimePicker } from "design-system/date-time-picker";
 import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 
 const dropValidationSchema = yup.object({
-  spotifyUrl: yup
-    .string()
-    .url(
-      "Please enter a valid URI. e.g. https://open.spotify.com/track/0DiWol3AO6WpXZgp0goxAV"
-    )
-    .required()
-    .typeError("Please enter a Spotify URL"),
+  spotifyUrl: yup.string().optional().nullable(),
+  appleMusicUrl: yup.string().optional().nullable(),
 });
 export const DropUpdate = ({
   edition,
@@ -51,13 +46,21 @@ export const DropUpdate = ({
           ? new Date(edition.presave_release_date)
           : undefined,
         spotifyUrl: edition.spotify_track_url,
+        appleMusicUrl: edition.apple_music_track_url,
       };
     }
     return {};
-  }, [edition?.presave_release_date, edition?.spotify_track_url]);
+  }, [
+    edition?.presave_release_date,
+    edition?.spotify_track_url,
+    edition?.apple_music_track_url,
+  ]);
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
   const [isLive, setIsLive] = useState(true);
+
+  const isSpotifyDrop = edition?.creator_spotify_id;
+  const isAppleMusicDrop = edition?.creator_apple_music_id;
 
   const {
     control,
@@ -83,14 +86,11 @@ export const DropUpdate = ({
   }, [resetForm, defaultValues]);
 
   const onSubmit = async (values: typeof defaultValues) => {
-    if (
-      edition?.creator_airdrop_edition.contract_address &&
-      values.releaseDate &&
-      values.spotifyUrl
-    ) {
+    if (edition?.creator_airdrop_edition.contract_address) {
       await mutatePresaveReleaseDate.trigger({
         releaseDate: isLive ? new Date() : values.releaseDate,
         spotifyUrl: values.spotifyUrl,
+        appleMusicUrl: values.appleMusicUrl,
       });
 
       router.pop();
@@ -103,44 +103,75 @@ export const DropUpdate = ({
         <View tw="w-full">
           {Platform.OS === "web" ? (
             <Text tw="py-8 text-3xl font-bold text-gray-900 dark:text-white">
-              Update Spotify Link
+              Update Song Link
             </Text>
           ) : null}
-          <Controller
-            control={control}
-            name="spotifyUrl"
-            render={({ field: { onChange, onBlur, value, ref } }) => {
-              return (
-                <Fieldset
-                  ref={ref}
-                  label={
-                    <View tw="flex-row">
-                      <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
-                        Spotify Song Link{" "}
-                      </Label>
-                      <PressableHover
-                        onPress={() => {
-                          setShowCopySpotifyLinkTutorial(true);
-                        }}
-                      >
-                        <InformationCircle
-                          height={18}
-                          width={18}
-                          color={isDark ? colors.gray[400] : colors.gray[600]}
-                        />
-                      </PressableHover>
-                    </View>
-                  }
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="Enter the Spotify song link"
-                  errorText={errors.spotifyUrl?.message}
-                />
-              );
-            }}
-          />
+          <View style={{ rowGap: 16 }}>
+            {isSpotifyDrop ? (
+              <Controller
+                control={control}
+                name="spotifyUrl"
+                render={({ field: { onChange, onBlur, value, ref } }) => {
+                  return (
+                    <Fieldset
+                      ref={ref}
+                      label={
+                        <View tw="flex-row">
+                          <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                            Spotify Song Link{" "}
+                          </Label>
+                          <PressableHover
+                            onPress={() => {
+                              setShowCopySpotifyLinkTutorial(true);
+                            }}
+                          >
+                            <InformationCircle
+                              height={18}
+                              width={18}
+                              color={
+                                isDark ? colors.gray[400] : colors.gray[600]
+                              }
+                            />
+                          </PressableHover>
+                        </View>
+                      }
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Enter the Spotify song link"
+                      errorText={errors.spotifyUrl?.message}
+                    />
+                  );
+                }}
+              />
+            ) : null}
 
+            {isAppleMusicDrop ? (
+              <Controller
+                control={control}
+                name="appleMusicUrl"
+                render={({ field: { onChange, onBlur, value, ref } }) => {
+                  return (
+                    <Fieldset
+                      ref={ref}
+                      label={
+                        <View tw="flex-row">
+                          <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                            Apple Music Song Link{" "}
+                          </Label>
+                        </View>
+                      }
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Enter the Apple Music song link"
+                      errorText={errors.appleMusicUrl?.message}
+                    />
+                  );
+                }}
+              />
+            ) : null}
+          </View>
           <View tw="h-4" />
           <View>
             <Controller
@@ -167,7 +198,7 @@ export const DropUpdate = ({
                         }}
                       >
                         <Text tw="font-bold text-gray-900 dark:text-white">
-                          Spotify Release Date
+                          Streaming Services Release Date
                         </Text>
                         <Text tw="pt-4 text-base text-gray-900 dark:text-white">
                           {(dateValue as Date).toLocaleString("en-US", {
@@ -181,7 +212,7 @@ export const DropUpdate = ({
                       </Pressable>
                     ) : (
                       <Text tw="font-bold text-gray-900 dark:text-white">
-                        Enter a Release Date
+                        Streaming Services Release Date
                       </Text>
                     )}
 
@@ -211,7 +242,7 @@ export const DropUpdate = ({
                 onChange={() => {
                   setIsLive(!isLive);
                 }}
-                accesibilityLabel="Live Now"
+                aria-label="Live Now"
               />
               <Text
                 tw="ml-2 font-bold text-black dark:text-white"

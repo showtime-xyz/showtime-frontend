@@ -16,7 +16,6 @@ import * as MediaLibrary from "expo-media-library";
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -84,58 +83,24 @@ type QRCodeModalProps = QRCodeModalParams & {
 };
 
 const QRCodeSkeleton = ({ size = 375 }) => {
-  const { colorScheme } = useColorScheme();
   return (
     <View tw="items-center p-4">
       <View tw="w-full max-w-[420px] items-center justify-center rounded-3xl py-4">
-        <Skeleton
-          width={size}
-          height={size}
-          show
-          radius={24}
-          colorMode={colorScheme as any}
-        />
+        <Skeleton width={size} height={size} show radius={24} />
 
         <View tw="w-full flex-row justify-between p-4">
           <View tw="py-4">
             <View tw="flex-row pb-4">
-              <Skeleton
-                width={38}
-                height={38}
-                show
-                radius={999}
-                colorMode={colorScheme as any}
-              />
+              <Skeleton width={38} height={38} show radius={999} />
               <View tw="ml-2">
-                <Skeleton
-                  width={120}
-                  height={16}
-                  show
-                  colorMode={colorScheme as any}
-                />
+                <Skeleton width={120} height={16} show />
                 <View tw="h-1" />
-                <Skeleton
-                  width={60}
-                  height={16}
-                  show
-                  colorMode={colorScheme as any}
-                />
+                <Skeleton width={60} height={16} show />
               </View>
             </View>
-            <Skeleton
-              width={200}
-              height={38}
-              show
-              colorMode={colorScheme as any}
-            />
+            <Skeleton width={200} height={38} show />
           </View>
-          <Skeleton
-            width={114}
-            height={114}
-            show
-            radius={24}
-            colorMode={colorScheme as any}
-          />
+          <Skeleton width={114} height={114} show radius={24} />
         </View>
       </View>
     </View>

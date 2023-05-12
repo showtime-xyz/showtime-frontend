@@ -57,7 +57,7 @@ const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 const defaultValues = {
   royalty: 10,
   editionSize: 15,
-  duration: SECONDS_IN_A_WEEK,
+  duration: SECONDS_IN_A_MONTH,
   password: "",
   googleMapsUrl: "",
   radius: 1, // In kilometers
@@ -254,7 +254,7 @@ export const DropPrivate = () => {
     }
     if (size && size > MAX_FILE_SIZE) {
       Alert.alert(
-        "Oops, this file is too large (>50MB). Please upload a smaller file."
+        "Oops, this file is too large (>30MB). Please upload a smaller file."
       );
       setError("file", {
         type: "custom",
@@ -346,7 +346,7 @@ export const DropPrivate = () => {
 
                             <View tw="mt-2 hidden md:flex">
                               <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                Tap to upload a JPG, PNG, GIF, WebM or MP4 file.
+                                {`Tap to upload a JPG, PNG, GIF, WebM or MP4 file.\nMax file size: 30MB`}
                               </Text>
                             </View>
                           </View>
@@ -628,7 +628,7 @@ export const DropPrivate = () => {
                       <Checkbox
                         onChange={(v) => onChange(v)}
                         checked={value}
-                        accesibilityLabel="I agree to the terms and conditions"
+                        aria-label="I agree to the terms and conditions"
                       />
 
                       <Text tw="px-4 text-gray-600 dark:text-gray-400">

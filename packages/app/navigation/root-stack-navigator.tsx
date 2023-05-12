@@ -58,7 +58,13 @@ export function RootStackNavigator() {
         options={{ headerShown: false }}
       />
       {/* Screens without default header */}
-      <Stack.Group screenOptions={{ headerShown: false }}>
+      <Stack.Group
+        screenOptions={{
+          headerShown: false,
+          fullScreenGestureEnabled: true,
+          animationDuration: 400,
+        }}
+      >
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
@@ -68,11 +74,20 @@ export function RootStackNavigator() {
           name="search"
           component={SearchScreen}
           options={{
-            animation: "none",
+            animation: "fade",
+            animationDuration: 200,
           }}
         />
-        <Stack.Screen name="nft" component={NftScreen} />
-        <Stack.Screen name="dropSlug" component={NftScreen} />
+        <Stack.Screen
+          name="nft"
+          component={NftScreen}
+          getId={({ params }) => Object.values(params).join("-")}
+        />
+        <Stack.Screen
+          name="dropSlug"
+          component={NftScreen}
+          getId={({ params }) => Object.values(params).join("-")}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -145,10 +160,27 @@ export function RootStackNavigator() {
           component={VerifyPhoneNumberScreen}
         />
         <Stack.Screen name="drop" component={DropScreen} />
-        <Stack.Screen name="dropMusic" component={DropMusicScreen} />
-        <Stack.Screen name="dropFree" component={DropFreeScreen} />
-        <Stack.Screen name="dropEvent" component={DropEventScreen} />
-        <Stack.Screen name="dropPrivate" component={DropPrivateScreen} />
+        <Stack.Screen
+          name="dropMusic"
+          component={DropMusicScreen}
+          options={{ gestureEnabled: false }}
+        />
+
+        <Stack.Screen
+          name="dropFree"
+          component={DropFreeScreen}
+          options={{ gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="dropEvent"
+          component={DropEventScreen}
+          options={{ gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="dropPrivate"
+          component={DropPrivateScreen}
+          options={{ gestureEnabled: false }}
+        />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
         <Stack.Screen

@@ -8,7 +8,6 @@ import {
 } from "react";
 import { ViewStyle } from "react-native";
 
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Image } from "@showtime-xyz/universal.image";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -50,7 +49,6 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
     },
     ref
   ) {
-    const { colorScheme } = useColorScheme();
     const [isLoading, setIsLoading] = useState(enableSkeleton);
     const imageSource = useMemo(
       () => ({ uri: getAvatarImageUrl(url || DEFAULT_AVATAR_PIC, size) }),
@@ -70,6 +68,7 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
           ref={ref}
         >
           <Image
+            recyclingKey={url || DEFAULT_AVATAR_PIC}
             source={imageSource}
             width={size}
             height={size}
@@ -90,6 +89,7 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
       );
     }, [
       tw,
+      url,
       size,
       borderRadius,
       borderColor,
@@ -107,7 +107,6 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
           height={size}
           radius={borderRadius}
           show={isLoading}
-          colorMode={colorScheme as any}
         >
           {renderAvatar()}
         </Skeleton>

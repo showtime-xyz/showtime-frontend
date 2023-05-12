@@ -10,10 +10,7 @@ import {
 import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
-import {
-  Pressable,
-  Props as PressableProps,
-} from "@showtime-xyz/universal.pressable";
+import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -162,9 +159,8 @@ const CardLargeScreen = ({
   return (
     <LikeContextProvider nft={nft}>
       <View
+        role="article"
         // @ts-ignore
-        // TODO: add accessibility types for RNW
-        accessibilityRole="article"
         dataset={Platform.select({ web: { testId: "nft-card" } })}
         style={[sizeStyle]}
         tw={[

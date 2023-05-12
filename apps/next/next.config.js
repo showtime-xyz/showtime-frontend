@@ -20,6 +20,7 @@ const nextConfig = {
   swcMinify: false,
   reactStrictMode: false,
   experimental: {
+    appDir: false,
     optimizeCss: true,
     browsersListForSwc: true,
     legacyBrowsers: false,
@@ -29,10 +30,7 @@ const nextConfig = {
     scrollRestoration: true,
     swcPlugins: [
       // ["react-native-reanimated-swc-plugin"],
-      ["@nissy-dev/swc-plugin-react-native-web", { commonjs: true }],
-    ],
-    fontLoaders: [
-      { loader: "@next/font/google", options: { subsets: ["latin"] } },
+      // ["@nissy-dev/swc-plugin-react-native-web", { commonjs: true }],
     ],
   },
   transpilePackages: [
@@ -52,8 +50,6 @@ const nextConfig = {
     "expo-av",
     "expo-asset",
     "expo-blur",
-    "expo-build-properties",
-    "expo-camera",
     "expo-clipboard",
     "expo-constants",
     "expo-dev-client",
@@ -61,27 +57,22 @@ const nextConfig = {
     "expo-modules-core",
     "expo-image-picker",
     "expo-linear-gradient",
-    "expo-linking",
     "expo-localization",
     "expo-location",
     "expo-mail-composer",
     "expo-media-library",
-    "expo-splash-screen",
     "expo-status-bar",
     "expo-system-ui",
     "expo-web-browser",
     "expo-file-system",
-    "@react-native-menu/menu",
     "react-native-reanimated",
     "react-native-gesture-handler",
     "react-native-svg",
     "react-native-avoid-softinput",
     "react-native-safe-area-context",
     "react-native-mmkv",
-    "@react-native-community/slider",
     "react-native-tab-view",
     "universal-tooltip",
-    "showtime-tab-view",
     "react-native-image-colors",
   ],
   webpack: (config, options) => {
@@ -94,13 +85,8 @@ const nextConfig = {
       ...(config.resolve.alias || {}),
       // Alias direct react-native imports to react-native-web
       "react-native$": "react-native-web",
-      // Alias internal react-native modules to react-native-web
-      "react-native/Libraries/EventEmitter/RCTDeviceEventEmitter$":
-        "react-native-web/dist/vendor/react-native/NativeEventEmitter/RCTDeviceEventEmitter",
-      "react-native/Libraries/vendor/emitter/EventEmitter$":
-        "react-native-web/dist/vendor/react-native/emitter/EventEmitter",
-      "react-native/Libraries/EventEmitter/NativeEventEmitter$":
-        "react-native-web/dist/vendor/react-native/NativeEventEmitter",
+      "react-native-web/dist/cjs/exports/DrawerLayoutAndroid":
+        "react-native-web/dist/cjs/modules/UnimplementedView",
     };
 
     config.resolve.extensions = [

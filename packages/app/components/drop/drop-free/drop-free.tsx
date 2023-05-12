@@ -71,7 +71,7 @@ const durationOptions = [
 const defaultValues = {
   royalty: 10,
   editionSize: 15,
-  duration: SECONDS_IN_A_WEEK,
+  duration: SECONDS_IN_A_MONTH,
   radius: 1, // In kilometers
   hasAcceptedTerms: false,
   notSafeForWork: false,
@@ -286,7 +286,7 @@ export const DropFree = () => {
     }
     if (size && size > MAX_FILE_SIZE) {
       Alert.alert(
-        "Oops, this file is too large (>50MB). Please upload a smaller file."
+        "Oops, this file is too large (>30MB). Please upload a smaller file."
       );
       setError("file", {
         type: "custom",
@@ -412,8 +412,7 @@ export const DropFree = () => {
 
                               <View tw="mt-2 hidden md:flex">
                                 <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                  Tap to upload a JPG, PNG, GIF, WebM or MP4
-                                  file.
+                                  {`Tap to upload a JPG, PNG, GIF, WebM or MP4 file.\nMax file size: 30MB`}
                                 </Text>
                               </View>
                             </View>
@@ -706,7 +705,7 @@ export const DropFree = () => {
                         <Checkbox
                           onChange={(v) => onChange(v)}
                           checked={value}
-                          accesibilityLabel="I agree to the terms and conditions"
+                          aria-label="I agree to the terms and conditions"
                         />
 
                         <Text tw="px-4 text-gray-600 dark:text-gray-400">

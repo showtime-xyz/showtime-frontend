@@ -57,7 +57,7 @@ export const DropSelect = () => {
 
         <View tw="mt-6 w-full px-4 lg:w-[360px]">
           <CreateCard
-            title="Music Drop: Pre-Save on Spotify"
+            title="Pre-Save on Spotify or Apple Music"
             icon={
               <Spotify
                 color={isDark ? "black" : "white"}

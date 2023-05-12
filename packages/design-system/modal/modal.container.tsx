@@ -21,7 +21,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 
 import { ModalHeader } from "./modal.header";
 import { ModalHeaderBar } from "./modal.header-bar";
-import { ModalContainerProps, ModalMethods } from "./types";
+import type { ModalContainerProps, ModalMethods } from "./types";
 
 // @ts-ignore
 
@@ -89,12 +89,12 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       (props: BottomSheetHandleProps) => {
         return headerShown ? (
           <>
-            <ModalHeaderBar />
+            {enableHandlePanningGesture && <ModalHeaderBar />}
             <ModalHeader title={title} onClose={close} {...props} />
           </>
         ) : null;
       },
-      [title, close, headerShown]
+      [title, close, headerShown, enableHandlePanningGesture]
     );
 
     return (

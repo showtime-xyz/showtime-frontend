@@ -62,7 +62,14 @@ type BottomTabNavigatorParams = {
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
   profileTab: NavigatorScreenParams<ProfileStackParams>;
 };
-
+type SwipeListParams = {
+  profileId?: string;
+  initialScrollIndex?: number;
+  collectionId?: number;
+  sortType?: string;
+  tabType?: string;
+  type: string;
+};
 type RootStackNavigatorParams = {
   bottomTabs: BottomTabNavigatorParams;
   profile: ProfileStackParams["profile"];
@@ -72,20 +79,15 @@ type RootStackNavigatorParams = {
   blockedList: undefined;
   dropMusic: undefined;
   dropFree: undefined;
-  dropSlug: undefined;
+  dropSlug: SwipeListParams & {
+    dropSlug?: string;
+  };
   dropEvent: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;
   search: undefined;
-  swipeList: {
-    profileId?: string;
-    initialScrollIndex?: number;
-    collectionId?: number;
-    sortType?: string;
-    tabType?: string;
-    type: string;
-  };
-  nft: undefined;
+  swipeList: SwipeListParams;
+  nft: SwipeListParams;
   login: undefined;
   comments: undefined;
   details: undefined;

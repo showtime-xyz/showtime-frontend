@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "109.0.4",
+  "version": "112.0.7",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -19,11 +19,11 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "nativewind": "^2.0.11",
-    "patch-package": "^6.4.7",
+    "patch-package": "^7.0.0",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "0.2.5",
     "react-native-os": "^1.2.6",
-    "turbo": "^1.2.8"
+    "turbo": "^1.9.3"
   },
   "workspaces": [
     "apps/expo",
@@ -78,7 +78,7 @@
     "@ethersproject/bignumber": "5.7.0",
     "@ethersproject/signing-key": "5.7.0",
     "eth-block-tracker": "4.4.3",
-    "next": "13.2.2",
+    "next": "^13.4.1",
     "react-native-mmkv": "2.8.0",
     "@shopify/flash-list": "1.4.2",
     "react-native-svg": "13.9.0",

@@ -113,7 +113,7 @@ export const EditProfile = () => {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { isValid, validate } = useValidateUsername();
+  const { isValid, validate, isLoading } = useValidateUsername();
   const isDark = useIsDarkMode();
   const pickFile = useFilePicker();
   const [cropViewHeight, setCropViewHeight] = useState(400);
@@ -167,7 +167,7 @@ export const EditProfile = () => {
   }, [reset, defaultValues]);
 
   const handleSubmitForm = async (values: typeof defaultValues) => {
-    if (!isValid || !formIsValid) return;
+    if (!isValid || !formIsValid || isLoading) return;
 
     const newValues = {
       name: values.name?.trim() || null,
@@ -275,7 +275,7 @@ export const EditProfile = () => {
               render={({ field: { onChange, value } }) => (
                 <DropFileZone onChange={({ file }) => onChange(file)}>
                   <Pressable
-                    accessibilityLabel="Pick profile photo"
+                    aria-label="Pick profile photo"
                     testID="profile_photo_picker"
                     onPress={async () => {
                       const file = await pickFile({
@@ -325,7 +325,7 @@ export const EditProfile = () => {
                   <DropFileZone onChange={({ file }) => onChange(file)}>
                     <>
                       <Pressable
-                        accessibilityLabel="Pick profile photo"
+                        aria-label="Pick profile photo"
                         testID="profile_photo_picker"
                         onPress={async () => {
                           const file = await pickFile({
@@ -497,7 +497,7 @@ export const EditProfile = () => {
                     ref={ref}
                     tw="mt-4"
                     label="Website"
-                    keyboardType="url"
+                    inputMode="url"
                     textContentType="URL"
                     placeholder="Your URL"
                     testID="website_url"
@@ -554,8 +554,12 @@ export const EditProfile = () => {
           </BottomSheetScrollView>
           <View tw="my-2.5 mb-4 px-4">
             <Button
-              disabled={isSubmitting}
-              tw={isSubmitting || !formIsValid || !isValid ? "opacity-50" : ""}
+              disabled={isSubmitting || !formIsValid || !isValid || isLoading}
+              tw={
+                isSubmitting || !formIsValid || !isValid || isLoading
+                  ? "opacity-50"
+                  : ""
+              }
               onPress={handleSubmit(handleSubmitForm)}
               size="regular"
             >

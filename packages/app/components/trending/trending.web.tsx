@@ -31,7 +31,7 @@ type Query = {
   tab: "creator" | "drop";
   filter: string;
 };
-
+const MOBILE_HEADER_HEIGHT = 88;
 const TrendingHeaderContext = createContext<{
   filter: string | undefined;
   setFilter: (type: string) => void;
@@ -55,7 +55,7 @@ const Header = () => {
     return index;
   }, [filter]);
   return (
-    <View tw="mx-auto mb-4 w-full max-w-screen-xl">
+    <View tw="z-10 mx-auto mb-0 w-full max-w-screen-xl md:mb-4">
       <View tw="w-full flex-row justify-center px-4 py-4 md:hidden">
         <Text tw="text-lg font-extrabold text-gray-900 dark:text-white">
           Trending
@@ -101,7 +101,6 @@ const Header = () => {
           </Link>
         </View>
       </View>
-
       <View tw="web:min-h-[43px]">
         <TabBarSingle
           onPress={(index: number) => {
@@ -175,15 +174,15 @@ export const Trending = () => {
     <TrendingHeaderContext.Provider value={contextValues}>
       <View tw="w-full pb-8 md:pt-20">
         <ErrorBoundary>
+          <Header />
           <InfiniteScrollList
             useWindowScroll={isMdWidth}
-            ListHeaderComponent={Header}
             data={list}
             preserveScrollPosition
             keyExtractor={keyExtractor}
             renderItem={renderItem}
             style={{
-              height: screenHeight - bottomBarHeight,
+              height: screenHeight - bottomBarHeight - MOBILE_HEADER_HEIGHT,
             }}
             ListEmptyComponent={ListEmptyComponent}
           />

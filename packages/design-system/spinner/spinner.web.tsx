@@ -10,7 +10,7 @@ export const Spinner = ({ size, ...rest }: SpinnerProps) => {
         width: getSpinnerSize(size),
       }}
       tw="animate-spin"
-      accessibilityRole="progressbar"
+      role="progressbar"
     >
       <SpinnerView size={size} {...rest} />
     </View>

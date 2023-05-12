@@ -10,8 +10,9 @@ export const useGetAppleMusicToken = () => {
   const router = useRouter();
   const state = useSWRMutation(MY_INFO_ENDPOINT, async () => {
     router.push("/appleMusicAuthNativeWebView");
-    const promise = new Promise<string>((resolve) => {
+    const promise = new Promise<string>((resolve, reject) => {
       tokenPromiseCallbacks.resolve = resolve;
+      tokenPromiseCallbacks.reject = reject;
     });
 
     const token = await promise;

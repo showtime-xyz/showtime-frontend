@@ -284,9 +284,7 @@ const ListCardLargeScreen = ({
 
   return (
     <View
-      // @ts-expect-error TODO: add accessibility types for RNW
-      accessibilityRole="article"
-      dataset={Platform.select({ web: { testId: "nft-card" } })}
+      role="article"
       style={[sizeStyle]}
       tw={[
         "mx-4 my-2 md:mx-0",

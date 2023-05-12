@@ -1,4 +1,5 @@
-import { View, Text } from "@showtime-xyz/universal";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { Skeleton } from "./index";
 

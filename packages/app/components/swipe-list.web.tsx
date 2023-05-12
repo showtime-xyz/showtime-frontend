@@ -112,7 +112,7 @@ export const SwipeList = ({
   return (
     <View
       testID="swipeList"
-      nativeID="slidelist"
+      id="slidelist"
       tw="fixed inset-0 h-screen overflow-hidden bg-gray-100 dark:bg-black"
     >
       <VideoConfigContext.Provider value={videoConfig}>

@@ -27,6 +27,8 @@ export const screenOptions = ({
     headerBackVisible: false,
     headerBackTitleVisible: false,
     headerShadowVisible: false,
+    fullScreenGestureEnabled: true,
+    animationDuration: 400,
     // @ts-ignore
     headerStyle: {
       height: 64 + safeAreaTop,

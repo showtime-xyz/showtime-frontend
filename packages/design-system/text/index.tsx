@@ -18,8 +18,8 @@ export type Props = {
   | "onTextLayout"
   | "children"
   | "selectable"
-  | "nativeID"
-  | "accessibilityRole"
+  | "id"
+  | "role"
   | "numberOfLines"
   | "ellipsizeMode"
   | "onPress"
@@ -38,9 +38,9 @@ export const Text = forwardRef<TextType, Props>(
       children,
       selectable,
       tw = "",
-      nativeID,
+      id,
       htmlFor,
-      accessibilityRole,
+      role,
       numberOfLines,
       ellipsizeMode,
       pointerEvents,
@@ -52,12 +52,12 @@ export const Text = forwardRef<TextType, Props>(
     return (
       <StyledText
         tw={Array.isArray(tw) ? tw.join(" ") : tw}
-        nativeID={nativeID}
+        id={id}
         ref={ref}
         selectable={selectable}
         onLayout={onLayout}
         onTextLayout={onTextLayout}
-        accessibilityRole={accessibilityRole}
+        role={role}
         numberOfLines={numberOfLines}
         ellipsizeMode={ellipsizeMode}
         onPress={onPress}

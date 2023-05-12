@@ -10,8 +10,8 @@ const CONTAINER_PADDING_TW = {
 };
 
 const CONTAINER_ICON_PADDING_TW = {
-  small: "px-2",
-  regular: "p-3",
+  small: "px-2 w-8",
+  regular: "p-3 w-12",
 };
 
 const CONTAINER_HEIGHT_TW = {

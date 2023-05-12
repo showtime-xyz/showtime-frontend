@@ -1,10 +1,10 @@
-import { forwardRef, memo, useCallback, useRef } from "react";
+import { forwardRef, memo, useCallback } from "react";
 
 import debounce from "lodash/debounce";
 
 import { MOBILE_SNAP_POINTS, WEB_HEIGHT } from "./constants";
 import { ModalContainer as BaseModalContainer } from "./modal.container";
-import { ModalMethods, ModalProps } from "./types";
+import type { ModalMethods, ModalProps } from "./types";
 
 const ModalComponent = forwardRef<ModalMethods, ModalProps>(
   function ModalComponent(

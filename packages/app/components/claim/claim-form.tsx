@@ -73,13 +73,12 @@ export const ClaimForm = ({
   const [claimType] = useParam("type");
   const isDark = useIsDarkMode();
   const { claimNFT } = useClaimNFT(edition.creator_airdrop_edition);
-  const { claimSpotifyGatedDrop } = useSpotifyGatedClaim(
-    edition.creator_airdrop_edition
-  );
-  const { claimAppleMusicGatedDrop } = useAppleMusicGatedClaim(
-    edition.creator_airdrop_edition
-  );
+  const { claimSpotifyGatedDrop, isMutating: isSpotifyDropMutating } =
+    useSpotifyGatedClaim(edition.creator_airdrop_edition);
+  const { claimAppleMusicGatedDrop, isMutating: isAppleMusicDropMutating } =
+    useAppleMusicGatedClaim(edition.creator_airdrop_edition);
 
+  const isLoading = isAppleMusicDropMutating || isSpotifyDropMutating;
   const router = useRouter();
   const { user, isIncompletedProfile } = useUser({
     redirectTo: "/login",
@@ -166,7 +165,10 @@ export const ClaimForm = ({
 
     let success: boolean | undefined | void = false;
 
-    if (edition.gating_type === "multi_provider_music_save") {
+    if (
+      edition.gating_type === "multi_provider_music_save" ||
+      edition.gating_type === "multi_provider_music_presave"
+    ) {
       if (claimType === "spotify") {
         success = await claimSpotifyGatedDrop({ closeModal });
       } else if (claimType === "appleMusic") {
@@ -214,6 +216,7 @@ export const ClaimForm = ({
     [edition?.creator_airdrop_edition?.description]
   );
   const isDisableButton =
+    isLoading ||
     state.status === "loading" ||
     (edition.gating_type === "multi" && !location && !password) ||
     (edition.gating_type === "password" && !password) ||
@@ -312,7 +315,8 @@ export const ClaimForm = ({
             </>
           ) : null}
 
-          {edition.gating_type === "multi_provider_music_save" ? (
+          {edition.gating_type === "multi_provider_music_save" ||
+          edition.gating_type === "multi_provider_music_presave" ? (
             <>
               {claimType === "appleMusic" ? (
                 <>
@@ -320,7 +324,7 @@ export const ClaimForm = ({
                     {user.data.profile.has_apple_music_token ? (
                       <CheckIcon />
                     ) : (
-                      <View tw="rounded-full border-[1px] border-gray-800 p-3 dark:border-gray-100" />
+                      <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
                     )}
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       Connect your Apple Music account
@@ -344,7 +348,7 @@ export const ClaimForm = ({
                     {user.data.profile.has_spotify_token ? (
                       <CheckIcon />
                     ) : (
-                      <View tw="rounded-full border-[1px] border-gray-800 p-3 dark:border-gray-100" />
+                      <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
                     )}
                     <Text tw="ml-1 text-gray-900 dark:text-gray-100">
                       Connect your Spotify account
@@ -442,7 +446,9 @@ export const ClaimForm = ({
               tw={isDisableButton ? "opacity-[0.45]" : ""}
               onPress={handleClaimNFT}
             >
-              {state.status === "loading" ? (
+              {isLoading ? (
+                "Loading..."
+              ) : state.status === "loading" ? (
                 "Collecting... it should take about 10 seconds"
               ) : state.status === "error" ? (
                 "Failed. Retry!"
