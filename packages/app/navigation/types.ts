@@ -111,6 +111,7 @@ type RootStackNavigatorParams = {
   qrCodeShare: undefined;
   dropViewShareModal: undefined;
   creatorChannelsIntro: undefined;
+  creatorChannelsCongrats: undefined;
   raffle: undefined;
   claim: undefined;
   collectors: undefined;

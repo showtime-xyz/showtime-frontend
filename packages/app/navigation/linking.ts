@@ -51,6 +51,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       claim: "claim/:contractAddress",
       channel: "channel/:channelId",
       creatorChannelsIntro: "creator-channels/intro",
+      creatorChannelsCongrats: "creator-channels/congrats",
       collectors: "collectors/:chainName/:contractAddress/:tokenId",
       claimLimitExplanation: "claim/claim-limit-explanation",
       likers: "likers/:nftId",

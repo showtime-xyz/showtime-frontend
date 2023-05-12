@@ -139,6 +139,7 @@ export { default as MusicDropType } from "./MusicDropType";
 export { default as Music } from "./Music";
 export { default as Shopping } from "./Shopping";
 export { default as FreeDropType } from "./FreeDropType";
+export { default as Congrats } from "./Congrats";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

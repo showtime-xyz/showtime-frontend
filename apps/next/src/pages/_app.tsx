@@ -25,6 +25,8 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
+import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
+import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEventScreen } from "app/screens/drop-event";
@@ -201,7 +203,8 @@ function App({ Component, pageProps, router }: AppProps) {
         <CheckoutReturnScreen />
         <QRCodeShareScreen />
         <DropViewShareScreen />
-
+        <CreatorChannelsCongratsScreen />
+        <CreatorChannelsIntroScreen />
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
         <OnboardingScreen />
