@@ -8088,7 +8088,7 @@ __metadata:
     react-native-bignumber: ^0.2.1
     react-native-blob-jsi-helper: ^0.3.0
     react-native-blurhash: ^1.1.10
-    react-native-gesture-handler: ~2.9.0
+    react-native-gesture-handler: ~2.10.0
     react-native-get-random-values: ^1.8.0
     react-native-image-colors: ^1.5.2
     react-native-ios-context-menu: ^1.15.3
@@ -8262,7 +8262,7 @@ __metadata:
     react-dom: 18.2.0
     react-native: 0.71.7
     react-native-blob-jsi-helper: ^0.3.0
-    react-native-gesture-handler: ~2.9.0
+    react-native-gesture-handler: ~2.10.0
     react-native-get-random-values: ^1.8.0
     react-native-ios-context-menu: ^1.15.3
     react-native-mmkv: 2.8.0
@@ -28801,9 +28801,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:~2.9.0":
-  version: 2.9.0
-  resolution: "react-native-gesture-handler@npm:2.9.0"
+"react-native-gesture-handler@npm:~2.10.0":
+  version: 2.10.0
+  resolution: "react-native-gesture-handler@npm:2.10.0"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -28813,7 +28813,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 6bfdd9d23486193424dcfb0073dd821a216c2783dde746d73a3441e920602343f09efa10261c6f09fcbcb645d029a95305c86f61997053c01ad89751c8c6d236
+  checksum: 7bfde740a67e551458228ad9076af511ad3538c5e65598fc0aef0fdb7329c1743501e31d46ad64fc42697132e3f39721da45d044ad38c6049415b2ede79b13e8
   languageName: node
   linkType: hard
 
