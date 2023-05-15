@@ -8140,7 +8140,7 @@ __metadata:
     ts-jest: ^29.1.0
     tty-browserify: 0.0.1
     typescript: ^5.0.4
-    universal-tooltip: ^0.4.2
+    universal-tooltip: ^0.5.0
     url: ~0.11.0
     use-timer: ^2.0.1
     use-unmount-signal: ^1.0.0
@@ -8289,7 +8289,7 @@ __metadata:
     react-native-svg: 13.9.0
     react-native-web: ~0.19.4
     typescript: ^5.0.4
-    universal-tooltip: ^0.4.2
+    universal-tooltip: ^0.5.0
   languageName: unknown
   linkType: soft
 
@@ -33404,16 +33404,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"universal-tooltip@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "universal-tooltip@npm:0.4.2"
+"universal-tooltip@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "universal-tooltip@npm:0.5.0"
   peerDependencies:
     "@radix-ui/react-popover": "*"
     "@radix-ui/react-tooltip": "*"
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 33000039ce6da055fc2def44b07e34dde48810915025641cb48e59a12672dca5cbd06094de6d52423ae87a2c7342a859ea0e7c42372c4e8f71e17b9505642251
+  checksum: 6f289f207c5b3176e1e3349d68d3aeb333518e4b77fcefeaa0695683cb18341fdfab00af74ab572eaf5bf1c99b1ca0d557bd80c37a863a9a79abf71ec5934dfc
   languageName: node
   linkType: hard
 

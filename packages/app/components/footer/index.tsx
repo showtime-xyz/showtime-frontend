@@ -8,10 +8,10 @@ import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
 import { SWIPE_LIST_SCREENS } from "app/lib/constants";
 import {
   CreateTabBarIcon,
+  CreatorChannelsTabBarIcon,
   HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
-  TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
@@ -45,15 +45,15 @@ const Footer = () => {
       style={{
         height: MOBILE_WEB_TABS_HEIGHT,
       }}
-      tw="safe-bottom fixed bottom-0 left-0 right-0 z-50 h-12 flex-row items-center justify-between px-4 backdrop-blur-md"
+      tw="safe-bottom fixed bottom-0 left-0 right-0 z-50 h-12 flex-row items-center justify-between px-4 pt-1 backdrop-blur-md"
     >
       <HomeTabBarIcon
         color={color}
         focused={router.pathname === "/" || router.pathname === "/trending"}
       />
-      <TrendingTabBarIcon
+      <CreatorChannelsTabBarIcon
         color={color}
-        focused={router.pathname === "/home" || router.pathname === "/foryou"}
+        focused={router.pathname === "/creator-channels"}
       />
       <CreateTabBarIcon
         color={buttonColor}

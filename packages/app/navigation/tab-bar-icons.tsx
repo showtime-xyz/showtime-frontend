@@ -3,6 +3,7 @@ import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import { MMKV } from "react-native-mmkv";
 import * as Tooltip from "universal-tooltip";
+import type { ContentProps } from "universal-tooltip";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -58,7 +59,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
         <PressableHover
           onPress={onPress}
           tw={[
-            "h-12 w-12 items-center justify-center md:bg-gray-100 md:dark:bg-gray-900",
+            "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
             tw ?? "",
           ]}
         >
@@ -71,7 +72,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
       <Link href={tab}>
         <View
           tw={[
-            "h-12 w-12 items-center justify-center md:bg-gray-100 md:dark:bg-gray-900",
+            "h-12 w-12 items-center justify-center rounded-full md:bg-gray-100 md:dark:bg-gray-900",
             tw ?? "",
           ]}
         >
@@ -141,13 +142,21 @@ export const CreateTabBarIcon = ({
 export const CreatorChannelsTabBarIcon = ({
   color,
   focused,
-}: TabBarIconProps) => {
+  tooltipSide = "top",
+}: TabBarIconProps & {
+  tooltipSide?: ContentProps["side"];
+}) => {
   const router = useRouter();
   const [showTip, setShowTip] = useState(false);
   const [open, setOpen] = useState(true);
   const [badgeNumber, setBadgeNumber] = useState(12);
   const isSet = useRef(false);
 
+  const onDismiss = () => {
+    store.set(STORE_KEY, true);
+    isSet.current = true;
+    setShowTip(false);
+  };
   useEffect(() => {
     if (!store.getBoolean(STORE_KEY) && !isSet.current) {
       setTimeout(() => {
@@ -162,14 +171,14 @@ export const CreatorChannelsTabBarIcon = ({
 
   if (!showTip) {
     return (
-      <TabBarIcon tab="/foryou">
+      <TabBarIcon tab="/creator-channels">
         {focused ? (
           <CreatorChannelFilled width={24} height={24} color={color} />
         ) : (
           <CreatorChannel width={24} height={24} color={color} />
         )}
         {badgeNumber > 0 && (
-          <View tw="absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
+          <View tw="web:-top-0.5 absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
             <Text tw="text-xs font-medium text-white">
               {badgeNumber > 99 ? "99" : badgeNumber}
             </Text>
@@ -179,22 +188,19 @@ export const CreatorChannelsTabBarIcon = ({
     );
   }
   return (
-    <TabBarIcon tab="/foryou">
+    <TabBarIcon tab="/creator-channels">
       <Tooltip.Root
-        onDismiss={() => {
-          store.set(STORE_KEY, true);
-          setShowTip(false);
-          isSet.current = true;
-        }}
+        onDismiss={onDismiss}
         open={open}
         disableDismissWhenTouchOutside
+        usePopover
       >
         <Tooltip.Trigger>
           <View tw="items-center justify-center">
-            <View tw="w-14 flex-row items-center justify-center rounded-full bg-indigo-700 py-1">
+            <View tw="w-14 flex-row items-center justify-center rounded-full bg-indigo-700 md:h-12 md:w-12">
               <CreatorChannel width={24} height={24} color="#fff" />
               {badgeNumber > 0 && (
-                <Text tw="ml-1 text-sm font-medium text-white">
+                <Text tw="ml-1 text-sm font-medium text-white md:hidden">
                   {badgeNumber > 99 ? "99+" : badgeNumber}
                 </Text>
               )}
@@ -210,12 +216,15 @@ export const CreatorChannelsTabBarIcon = ({
             paddingBottom: 6,
           }}
           className="web:outline-none"
-          side="top"
+          side={tooltipSide}
           presetAnimation="fadeIn"
           backgroundColor={colors.indigo[700]}
           borderRadius={12}
           onTap={() => {
             router.push("/creator-channels");
+            if (Platform.OS === "web") {
+              onDismiss();
+            }
           }}
           dismissDuration={500}
           maxWidth={200}
