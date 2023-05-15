@@ -27836,12 +27836,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-plugin-tailwindcss@npm:0.2.5":
-  version: 0.2.5
-  resolution: "prettier-plugin-tailwindcss@npm:0.2.5"
+"prettier-plugin-tailwindcss@npm:insiders":
+  version: 0.0.0-insiders.d3f787d
+  resolution: "prettier-plugin-tailwindcss@npm:0.0.0-insiders.d3f787d"
   peerDependencies:
     "@ianvs/prettier-plugin-sort-imports": "*"
-    "@prettier/plugin-php": "*"
     "@prettier/plugin-pug": "*"
     "@shopify/prettier-plugin-liquid": "*"
     "@shufo/prettier-plugin-blade": "*"
@@ -27851,6 +27850,7 @@ __metadata:
     prettier-plugin-css-order: "*"
     prettier-plugin-import-sort: "*"
     prettier-plugin-jsdoc: "*"
+    prettier-plugin-marko: "*"
     prettier-plugin-organize-attributes: "*"
     prettier-plugin-organize-imports: "*"
     prettier-plugin-style-order: "*"
@@ -27858,8 +27858,6 @@ __metadata:
     prettier-plugin-twig-melody: "*"
   peerDependenciesMeta:
     "@ianvs/prettier-plugin-sort-imports":
-      optional: true
-    "@prettier/plugin-php":
       optional: true
     "@prettier/plugin-pug":
       optional: true
@@ -27877,6 +27875,8 @@ __metadata:
       optional: true
     prettier-plugin-jsdoc:
       optional: true
+    prettier-plugin-marko:
+      optional: true
     prettier-plugin-organize-attributes:
       optional: true
     prettier-plugin-organize-imports:
@@ -27887,7 +27887,7 @@ __metadata:
       optional: true
     prettier-plugin-twig-melody:
       optional: true
-  checksum: 44ae325d40ad747dd8fb36e1d7986de1919b9bd912993628c18f4743c9287b1add6dd2d951ed336b1031a2ad49c7ba5eb50e4be6d3b9b37e0da7fd137d13ec53
+  checksum: ec929e3ee143ade60a24503f71c38b798105f730218dfe6c9bf1ac3532bf5146084e2c2227b0f9fd951644184175bd48ff2de2ebef813a1cc43f3289a05eb239
   languageName: node
   linkType: hard
 
@@ -30874,7 +30874,7 @@ __metadata:
     nativewind: ^2.0.11
     patch-package: ^7.0.0
     prettier: ^2.8.7
-    prettier-plugin-tailwindcss: 0.2.5
+    prettier-plugin-tailwindcss: insiders
     react-native-os: ^1.2.6
     turbo: ^1.9.3
   languageName: unknown
