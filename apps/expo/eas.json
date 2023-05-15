@@ -4,11 +4,13 @@
       "channel": "production",
       "distribution": "store",
       "ios": {
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "large"
       },
       "android": {
         "buildType": "app-bundle",
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "large"
       },
       "env": {
         "STAGE": "production",
@@ -23,11 +25,13 @@
       "channel": "staging",
       "distribution": "internal",
       "ios": {
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "large"
       },
       "android": {
         "buildType": "apk",
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "large"
       },
       "env": {
         "STAGE": "staging",
@@ -42,10 +46,12 @@
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "large"
       },
       "android": {
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "large"
       },
       "env": {
         "STAGE": "development"
@@ -58,10 +64,12 @@
     "simulator": {
       "ios": {
         "simulator": true,
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "large"
       },
       "android": {
-        "image": "latest"
+        "image": "latest",
+        "resourceClass": "large"
       },
       "env": {
         "STAGE": "staging"
