@@ -13,4 +13,5 @@ module.exports = {
   ],
   importOrderSeparation: true,
   plugins: [require("./plugins/merged-prettier-plugin.js")],
+  tailwindAttributes: ["tw"],
 };

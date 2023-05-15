@@ -83,7 +83,7 @@ export const DropSelect = () => {
 
         <View tw="mt-2.5 w-full px-4">
           <CreateCard
-            title="Music Drop: Pre-Save on Spotify"
+            title="Pre-Save on Spotify or Apple Music"
             icon={<MusicDropType color={iconColor} height={24} width={24} />}
             description="Promote your latest music: give your fans a free collectible for saving your song to their library."
             onPress={() => {

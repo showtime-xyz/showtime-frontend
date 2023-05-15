@@ -169,7 +169,11 @@ export const ErrorText = ({ children, id }: { children: any; id?: string }) => {
   return (
     <>
       <View tw="h-4" />
-      <Text id={id} tw="text-sm font-semibold leading-6 text-red-500">
+      <Text
+        id={id}
+        style={{ fontSize: 14 }}
+        tw="font-semibold leading-6 text-red-500"
+      >
         {children}
       </Text>
     </>

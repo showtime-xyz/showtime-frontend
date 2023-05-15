@@ -117,10 +117,6 @@ export const ScollableAutoWidthTabBar = ({
     });
   };
 
-  const onTabPress = useCallback(() => {
-    Haptics.impactAsync();
-  }, []);
-
   const onTabBarItemLayout = useCallback(
     ({
       navigationState,
@@ -191,7 +187,6 @@ export const ScollableAutoWidthTabBar = ({
       }}
       scrollEnabled
       tabStyle={styles.tabStyle}
-      onTabPress={onTabPress}
       renderTabBarItem={({
         onPress,
         onLongPress,

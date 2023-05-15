@@ -76,7 +76,7 @@ const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 const defaultValues = {
   royalty: 10,
   editionSize: 100,
-  duration: SECONDS_IN_A_WEEK,
+  duration: SECONDS_IN_A_MONTH,
   password: "",
   googleMapsUrl: "",
   radius: 1, // In kilometers
@@ -259,7 +259,7 @@ export const DropMusic = () => {
   // We change the title when user returns from checkout flow and they have credits
   useEffect(() => {
     return () => {
-      modalScreenContext?.setTitle("Music Drop: Pre-Save on Spotify");
+      modalScreenContext?.setTitle("Pre-Save on Spotify or Apple Music");
     };
   }, [modalScreenContext]);
 
@@ -306,14 +306,12 @@ export const DropMusic = () => {
           ...values,
           gatingType: isSaveDrop
             ? "multi_provider_music_save"
-            : "spotify_presave",
+            : "multi_provider_music_presave",
           editionSize: isUnlimited ? 0 : values.editionSize,
           releaseDate: isSaveDrop
             ? undefined
             : values.releaseDate ?? getDefaultDate().toISOString(),
-          appleMusicTrackUrl: isSaveDrop
-            ? values.appleMusicTrackUrl
-            : undefined,
+          appleMusicTrackUrl: values.appleMusicTrackUrl,
         },
         clearStorage
       );
@@ -695,14 +693,6 @@ export const DropMusic = () => {
                           />
                           <Label tw="font-bold text-gray-900 dark:text-white">
                             {isSaveDrop ? "Spotify Song Link" : "Spotify URI "}
-                            {isSaveDrop ? (
-                              <Text tw="text-red-600">*</Text>
-                            ) : (
-                              <Text tw="text-xs font-normal">
-                                {"\n"}(Optional, you can drop without and fill
-                                it later)
-                              </Text>
-                            )}
                           </Label>
                           {isSaveDrop ? (
                             <PressableHover
@@ -737,7 +727,7 @@ export const DropMusic = () => {
                 }}
               />
             </View>
-            {isSaveDrop && user.user?.data.profile.apple_music_artist_id ? (
+            {user.user?.data.profile.apple_music_artist_id ? (
               <View tw="mt-4">
                 <Controller
                   control={control}
@@ -755,7 +745,6 @@ export const DropMusic = () => {
                             />
                             <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
                               Apple Music Song Link
-                              <Text tw="text-red-600">*</Text>
                             </Label>
                           </View>
                         }

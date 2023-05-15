@@ -260,9 +260,18 @@ export const useDropNFT = () => {
             : undefined,
       };
 
+      // TODO: deprecate spotify_presave at some point
       if (params.releaseDate && params.gatingType === "spotify_presave") {
         requestData.release_date = params.releaseDate;
       }
+
+      if (
+        params.releaseDate &&
+        params.gatingType === "multi_provider_music_presave"
+      ) {
+        requestData.release_date = params.releaseDate;
+      }
+
       const relayerResponse = await axios({
         url: "/v1/creator-airdrops/create-gated-edition",
         method: "POST",

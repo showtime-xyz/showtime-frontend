@@ -3,7 +3,6 @@ import { StyleSheet, useWindowDimensions } from "react-native";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { MotiView } from "moti";
 
-import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -50,7 +49,6 @@ export const ThemeBottomTabbar = ({
             target: route.key,
             canPreventDefault: true,
           });
-          Haptics.impactAsync();
 
           if (route.name === "createTab") {
             redirectToCreateDrop();

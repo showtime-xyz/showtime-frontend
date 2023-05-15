@@ -281,7 +281,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             >
               <Close width={24} height={24} />
             </Button>
-            <View tw="flex-row items-center">
+            <View tw="swiper-no-swiping flex-row items-center">
               {nft?.mime_type?.includes("video") ? (
                 <Button
                   variant="text"
