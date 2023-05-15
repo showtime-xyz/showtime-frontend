@@ -1,15 +1,8 @@
-import {
-  useCallback,
-  useMemo,
-  useRef,
-  createContext,
-  useState,
-  useEffect,
-} from "react";
+import { useCallback, useMemo, useRef, createContext, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { Virtual, Keyboard } from "swiper";
+import { Virtual, Keyboard, Mousewheel } from "swiper";
 import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/virtual";
@@ -119,7 +112,7 @@ export const SwipeList = ({
         <SwiperActiveIndexContext.Provider value={activeIndex}>
           <ViewabilityItemsContext.Provider value={visibleItems}>
             <Swiper
-              modules={[Virtual, Keyboard]}
+              modules={[Virtual, Keyboard, Mousewheel]}
               height={windowHeight}
               width={windowWidth}
               keyboard
@@ -131,6 +124,9 @@ export const SwipeList = ({
               threshold={isMobileWeb() ? 0 : 25}
               noSwiping
               noSwipingClass="swiper-no-swiping"
+              mousewheel={{
+                noMousewheelClass: "swiper-no-swiping",
+              }}
             >
               {data.map((item, index) => (
                 <SwiperSlide key={item.nft_id} virtualIndex={index}>
