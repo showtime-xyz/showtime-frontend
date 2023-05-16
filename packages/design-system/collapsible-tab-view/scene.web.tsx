@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ScrollViewProps, StyleSheet } from "react-native";
 
+import Animated, { useSharedValue } from "react-native-reanimated";
+
+import { useHeaderTabContext } from "./context";
+import { useSharedScrollableRef } from "./hooks";
 import type { SceneProps } from "./types";
 
 export function SceneComponent<P extends ScrollViewProps>({
@@ -12,9 +16,24 @@ export function SceneComponent<P extends ScrollViewProps>({
   style,
   ...restProps
 }: SceneProps<P>) {
+  const { updateSceneInfo } = useHeaderTabContext();
+  const scollViewRef =
+    useSharedScrollableRef<Animated.ScrollView>(forwardedRef);
+  const scrollY = useSharedValue(0);
+
+  useEffect(() => {
+    if (scollViewRef && scollViewRef.current) {
+      updateSceneInfo({
+        scrollRef: scollViewRef,
+        index,
+        scrollY,
+      });
+    }
+  }, [scollViewRef, index, scrollY, updateSceneInfo]);
+
   return (
     <ContainerView
-      ref={forwardedRef}
+      ref={scollViewRef}
       scrollEventThrottle={16}
       directionalLockEnabled
       style={[styles.container, style]}

@@ -53,23 +53,23 @@ const RefreshControlContainer: React.FC<RefreshControlContainerProps> = ({
   useAnimatedReaction(
     () => {
       return {
-        prs: progress.value,
-        isR: isRefreshing.value,
-        isRA: isRefreshingWithAnimation.value,
+        _progress: progress.value,
+        _isRefreshing: isRefreshing.value,
+        _isRefreshingWithAnimation: isRefreshingWithAnimation.value,
       };
     },
-    ({ prs, isR, isRA }) => {
-      if (isR !== isRA) {
-        refreshType.value = isR
+    ({ _progress, _isRefreshing, _isRefreshingWithAnimation }) => {
+      if (_isRefreshing !== _isRefreshingWithAnimation) {
+        refreshType.value = _isRefreshing
           ? RefreshTypeEnum.Pending
           : RefreshTypeEnum.Finish;
         return;
       }
-      if (isR) {
+      if (_isRefreshing) {
         refreshType.value = RefreshTypeEnum.Refreshing;
       } else {
         refreshType.value =
-          prs < 1 ? RefreshTypeEnum.Cancel : RefreshTypeEnum.Success;
+          _progress < 1 ? RefreshTypeEnum.Cancel : RefreshTypeEnum.Success;
       }
     },
     [refreshHeight]

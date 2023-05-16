@@ -19,9 +19,7 @@ export const Basic = () => {
   const [visible, setVisible] = useState(false);
   return (
     <Container>
-      <Button onPress={() => setVisible(!visible)}>
-        <Text tw="text-white dark:text-black">Open ModalSheet</Text>
-      </Button>
+      <Button onPress={() => setVisible(!visible)}>Open ModalSheet</Button>
       <ModalSheet
         title="Modal Sheet"
         visible={visible}
