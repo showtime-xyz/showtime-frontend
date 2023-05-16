@@ -8037,7 +8037,7 @@ __metadata:
     expo-font: ~11.1.1
     expo-gl: ~12.4.0
     expo-haptics: ~12.2.1
-    expo-image: ^1.0.0
+    expo-image: ^1.2.3
     expo-image-picker: ~14.1.1
     expo-linear-gradient: ~12.1.2
     expo-linking: ~4.0.1
@@ -8236,7 +8236,7 @@ __metadata:
     expo-dev-client: ~2.2.1
     expo-font: ~11.1.1
     expo-haptics: ~12.2.1
-    expo-image: ^1.0.0
+    expo-image: ^1.2.3
     expo-image-picker: ~14.1.1
     expo-linear-gradient: ~12.1.2
     expo-linking: ~4.0.1
@@ -19276,12 +19276,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image@npm:^1.0.0":
-  version: 1.2.2
-  resolution: "expo-image@npm:1.2.2"
+"expo-image@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "expo-image@npm:1.2.3"
   peerDependencies:
     expo: "*"
-  checksum: f04d5527c5d6145c67a238e191d415873933be8038d64741ae596769956ee5bbd5b48508de1b17fc368952e8463e83ea7ce76ee8069a35aa48a16005959358dd
+  checksum: 458a2d581da21c6196efe2395e30473e0af50c86f76b72c7d49a55fe8bfc7fde10c1b3012b21dc860ee09ba302ba65aff9eb8e771040f22d4f2063c0425a89d9
   languageName: node
   linkType: hard
 
