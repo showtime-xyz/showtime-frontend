@@ -6,7 +6,6 @@ import React, {
 } from "react";
 import { LayoutChangeEvent, StyleSheet, View } from "react-native";
 
-import { useSharedValue } from "react-native-reanimated";
 import {
   NavigationState,
   SceneRendererProps,
@@ -14,7 +13,6 @@ import {
   TabView,
   TabViewProps,
 } from "react-native-tab-view";
-import Sticky from "react-stickynode";
 
 import { HeaderTabContext } from "./context";
 import { useSceneInfo } from "./hooks";
@@ -24,7 +22,14 @@ import type {
   TabViewCustomRenders,
 } from "./types";
 
-export { TabFlatList, TabScrollView, TabSectionList } from "./scrollable-view";
+export {
+  TabFlatList,
+  TabScrollView,
+  TabSectionList,
+  TabScrollViewProps,
+  TabFlatListProps,
+  TabSectionListProps,
+} from "./scrollable-view";
 
 export type HeaderTabViewRef = {};
 export type HeaderTabViewProps<T extends Route> = Partial<TabViewProps<T>> &
@@ -37,23 +42,23 @@ export function createCollapsibleTabsComponent() {
 
 function CollapsibleHeaderTabView<T extends Route>(
   {
-    renderTabBar,
-    overflowHeight = 0,
+    renderTabBar: renderTabBarProp,
     renderScrollHeader,
     initTabbarHeight = 44,
     minHeaderHeight = 0,
     navigationState,
     emptyBodyComponent,
     renderScene,
-    renderSceneHeader,
+    renderSceneHeader: renderSceneHeaderProp,
     ...restProps
   }: HeaderTabViewProps<T>,
   ref?: any
 ) {
-  const shareAnimatedValue = useSharedValue(0);
-  const curIndexValue = useSharedValue(navigationState.index);
-  const isSlidingHeader = useSharedValue(false);
-  const isStartRefreshing = useSharedValue(false);
+  const shareAnimatedValue = { value: 0 };
+  const headerTrans = { value: 0 };
+  const curIndexValue = { value: 0 };
+  const isSlidingHeader = { value: false };
+  const isStartRefreshing = { value: false };
 
   // layout
   const [tabbarHeight, setTabbarHeight] = useState(initTabbarHeight);
@@ -66,27 +71,24 @@ function CollapsibleHeaderTabView<T extends Route>(
         layout: { height },
       },
     }: LayoutChangeEvent) => {
-      if (overflowHeight > height) {
-        console.warn("overflowHeight must be less than the tabbar height");
-      }
       if (Math.abs(tabbarHeight - height) < 1) return;
       setTabbarHeight(height);
     },
-    [tabbarHeight, overflowHeight]
+    [tabbarHeight]
   );
-  const _renderTabBar = useCallback(
+  const renderTabBar = useCallback(
     (
       tabbarProps: SceneRendererProps & {
         navigationState: NavigationState<T>;
       }
     ) => {
-      return renderTabBar ? (
-        renderTabBar(tabbarProps)
+      return renderTabBarProp ? (
+        renderTabBarProp(tabbarProps)
       ) : (
         <TabBar {...tabbarProps} />
       );
     },
-    [renderTabBar]
+    [renderTabBarProp]
   );
 
   const renderTabView = (e: TabViewCustomRenders) => {
@@ -98,7 +100,7 @@ function CollapsibleHeaderTabView<T extends Route>(
           tabbarProps: SceneRendererProps & {
             navigationState: NavigationState<T>;
           }
-        ) => e.renderTabBarContainer(_renderTabBar(tabbarProps))}
+        ) => e.renderTabBarContainer(renderTabBar(tabbarProps))}
         renderScene={(props: any) =>
           e.renderSceneHeader(renderScene(props), props)
         }
@@ -106,22 +108,20 @@ function CollapsibleHeaderTabView<T extends Route>(
     );
   };
 
-  const _renderTabBarContainer = (children: React.ReactElement) => {
+  const renderTabBarContainer = (children: React.ReactElement) => {
     return (
       <View style={styles.tabbarStyle}>
-        <Sticky enabled={true} top={minHeaderHeight}>
-          <View onLayout={tabbarOnLayout}>{children}</View>
-        </Sticky>
+        <View onLayout={tabbarOnLayout}>{children}</View>
       </View>
     );
   };
-  const _renderSceneHeader = (
+  const renderSceneHeader = (
     children: React.ReactElement,
     props: SceneRendererProps & { route: T }
   ) => {
     return (
       <View style={styles.full}>
-        {renderSceneHeader?.(props.route)}
+        {renderSceneHeaderProp?.(props.route)}
         {children}
       </View>
     );
@@ -132,6 +132,7 @@ function CollapsibleHeaderTabView<T extends Route>(
     <HeaderTabContext.Provider
       value={{
         shareAnimatedValue,
+        headerTrans,
         tabbarHeight,
         expectHeight: 0,
         headerHeight: 0,
@@ -154,8 +155,8 @@ function CollapsibleHeaderTabView<T extends Route>(
           <View style={{ marginTop: tabbarHeight }}>{emptyBodyComponent}</View>
         ) : (
           renderTabView({
-            renderTabBarContainer: _renderTabBarContainer,
-            renderSceneHeader: _renderSceneHeader,
+            renderTabBarContainer: renderTabBarContainer,
+            renderSceneHeader: renderSceneHeader,
           })
         )}
       </View>
