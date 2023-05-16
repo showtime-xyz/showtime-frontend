@@ -93,22 +93,20 @@ export const LightBox: React.FC<LightBoxProps> = ({
     });
   };
 
-  const tapGesture = Gesture.Tap()
-    .onEnd((_, success) => {
-      if (!success) return;
-      runOnUI(() => {
-        "worklet";
-        const measurements = measure(animatedRef);
-        if (measurements) {
-          width.value = measurements.width;
-          height.value = measurements.height;
-          x.value = measurements.pageX;
-          y.value = measurements.pageY - nativeHeaderHeight;
-          runOnJS(handlePress)();
-        }
-      })();
-    })
-    .runOnJS(true);
+  const tapGesture = Gesture.Tap().onEnd((_, success) => {
+    if (!success) return;
+    runOnUI(() => {
+      "worklet";
+      const measurements = measure(animatedRef);
+      if (measurements) {
+        width.value = measurements.width;
+        height.value = measurements.height;
+        x.value = measurements.pageX;
+        y.value = measurements.pageY - nativeHeaderHeight;
+        runOnJS(handlePress)();
+      }
+    })();
+  });
   const longPressGesture = Gesture.LongPress()
     .enabled(!!onLongPress)
     .maxDistance(10)
@@ -117,8 +115,7 @@ export const LightBox: React.FC<LightBoxProps> = ({
       if (onLongPress) {
         runOnJS(onLongPress)();
       }
-    })
-    .runOnJS(true);
+    });
   return (
     //@ts-ignore
     <GestureDetector gesture={Gesture.Race(longPressGesture, tapGesture)}>
