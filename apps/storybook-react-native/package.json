@@ -37,7 +37,7 @@
     "@storybook/react-native": "^6.5.3",
     "burnt": "^0.10.0",
     "design-system": "*",
-    "expo": "~48.0.16",
+    "expo": "~48.0.15",
     "expo-asset": "~8.6.2",
     "expo-av": "~13.3.0",
     "expo-blur": "~12.3.0",

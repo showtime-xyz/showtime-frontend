@@ -8024,7 +8024,7 @@ __metadata:
     dotenv: ^16.0.3
     esbuild: ^0.17.16
     events: ^3.3.0
-    expo: ~48.0.16
+    expo: ~48.0.15
     expo-app-loading: ~2.1.1
     expo-application: ~5.1.1
     expo-av: ~13.3.0
@@ -8228,7 +8228,7 @@ __metadata:
     "@storybook/react-native": ^6.5.3
     burnt: ^0.10.0
     design-system: "*"
-    expo: ~48.0.16
+    expo: ~48.0.15
     expo-asset: ~8.6.2
     expo-av: ~13.3.0
     expo-blur: ~12.3.0
@@ -19533,7 +19533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:~48.0.16":
+"expo@npm:48.0.16":
   version: 48.0.16
   resolution: "expo@npm:48.0.16"
   dependencies:
