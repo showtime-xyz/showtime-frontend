@@ -113,7 +113,7 @@ export function SceneComponent<P extends object>({
             top: headerHeight,
             ...scrollIndicatorInsets,
           }}
-          bounces={false}
+          // bounces={false}
         />
       </GestureDetector>
     </Animated.View>

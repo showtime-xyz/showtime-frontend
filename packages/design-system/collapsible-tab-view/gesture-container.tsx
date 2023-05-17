@@ -345,12 +345,7 @@ export const GestureContainer = React.forwardRef<
           0
         );
       } else {
-        if (
-          childScrollYTrans[curIndexValue.value]!.value !== 0 ||
-          event.translationY <= 0
-        )
-          return;
-
+        if (shareAnimatedValue.value > 0 || event.translationY <= 0) return;
         if (isDragging.value === false) {
           basyY.value = onReadyToActive(true);
           isDragging.value = true;
