@@ -1,5 +1,6 @@
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import dynamic from "next/dynamic";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
@@ -27,42 +28,46 @@ const AlertProvider = dynamic(() => import("@showtime-xyz/universal.alert"), {
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <MagicProvider>
-      <ColorSchemeProvider>
-        <SafeAreaProvider>
-          <LightBoxProvider>
-            <WalletProvider>
-              <AlertProvider>
-                <SnackbarProvider>
-                  <SWRProvider>
-                    <Web3Provider>
-                      <AuthProvider>
-                        <UserProvider>
-                          <BottomSheetModalProvider>
-                            <GrowthBookProvider growthbook={growthbook}>
-                              <FeedProvider>
-                                <NavigationProvider>
-                                  <BiconomyProvider>
-                                    <MuteProvider>
-                                      <ClaimProvider>
-                                        <DropProvider>{children}</DropProvider>
-                                      </ClaimProvider>
-                                    </MuteProvider>
-                                  </BiconomyProvider>
-                                </NavigationProvider>
-                              </FeedProvider>
-                            </GrowthBookProvider>
-                          </BottomSheetModalProvider>
-                        </UserProvider>
-                      </AuthProvider>
-                    </Web3Provider>
-                  </SWRProvider>
-                </SnackbarProvider>
-              </AlertProvider>
-            </WalletProvider>
-          </LightBoxProvider>
-        </SafeAreaProvider>
-      </ColorSchemeProvider>
-    </MagicProvider>
+    <GestureHandlerRootView>
+      <MagicProvider>
+        <ColorSchemeProvider>
+          <SafeAreaProvider>
+            <LightBoxProvider>
+              <WalletProvider>
+                <AlertProvider>
+                  <SnackbarProvider>
+                    <SWRProvider>
+                      <Web3Provider>
+                        <AuthProvider>
+                          <UserProvider>
+                            <BottomSheetModalProvider>
+                              <GrowthBookProvider growthbook={growthbook}>
+                                <FeedProvider>
+                                  <NavigationProvider>
+                                    <BiconomyProvider>
+                                      <MuteProvider>
+                                        <ClaimProvider>
+                                          <DropProvider>
+                                            {children}
+                                          </DropProvider>
+                                        </ClaimProvider>
+                                      </MuteProvider>
+                                    </BiconomyProvider>
+                                  </NavigationProvider>
+                                </FeedProvider>
+                              </GrowthBookProvider>
+                            </BottomSheetModalProvider>
+                          </UserProvider>
+                        </AuthProvider>
+                      </Web3Provider>
+                    </SWRProvider>
+                  </SnackbarProvider>
+                </AlertProvider>
+              </WalletProvider>
+            </LightBoxProvider>
+          </SafeAreaProvider>
+        </ColorSchemeProvider>
+      </MagicProvider>
+    </GestureHandlerRootView>
   );
 };

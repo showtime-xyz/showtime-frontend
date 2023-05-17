@@ -10,7 +10,6 @@ import { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
-import { enableExperimentalWebImplementation } from "react-native-gesture-handler";
 
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
@@ -52,18 +51,10 @@ import { Toaster } from "design-system/toast";
 
 import "../styles/styles.css";
 
-// TODO: remove this once Reanimated ship a fix
-if (typeof window !== "undefined") {
-  // @ts-ignore
-  window._frameTimestamp = null;
-}
-
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
 });
-
-enableExperimentalWebImplementation(true);
 
 function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;
