@@ -79,7 +79,7 @@ function withModalScreen<P extends object>(
         isLayouted.current = false;
         setVisible(false);
       }
-    }, [router, title]);
+    }, [router]);
 
     return (
       <ModalScreenContext.Provider value={contextValues}>
