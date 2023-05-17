@@ -1,8 +1,8 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { QRCodeModal } from "app/components/qr-code/index";
+import { DownloadQRCodeModal } from "app/components/qr-code";
 
-export const QRCodeShareScreen = withModalScreen(QRCodeModal, {
+export const QRCodeShareScreen = withModalScreen(DownloadQRCodeModal, {
   title: "Congrats! Now share it.",
   matchingPathname: "/qr-code-share/[contractAddress]",
   matchingQueryParam: "qrCodeShareModal",
