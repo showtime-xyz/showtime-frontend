@@ -36,6 +36,7 @@ export function SceneComponent<P extends object>({
     shareAnimatedValue,
     headerHeight,
     expectHeight,
+    curIndexValue,
     refHasChanged,
     updateSceneInfo,
     scrollViewPaddingTop,
@@ -112,7 +113,7 @@ export function SceneComponent<P extends object>({
             top: headerHeight,
             ...scrollIndicatorInsets,
           }}
-          // bounces={false}
+          bounces={false}
         />
       </GestureDetector>
     </Animated.View>

@@ -202,9 +202,11 @@ const expoConfig: ExpoConfig = {
           minSdkVersion: 23,
           buildToolsVersion: "33.0.0",
           kotlinVersion: "1.6.20",
+          unstable_networkInspector: true,
         },
         ios: {
           deploymentTarget: "13.0",
+          unstable_networkInspector: true,
         },
       },
     ],

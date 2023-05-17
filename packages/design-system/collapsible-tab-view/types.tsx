@@ -49,6 +49,10 @@ export type CollapsibleHeaderProps<T extends Route> = {
   refreshControlTop?: number;
   emptyBodyComponent?: JSX.Element | null;
   renderSceneHeader?: (props: T) => JSX.Element | null;
+  /**
+   * Enabling this option will prevent Reanimated & GestureHandler from crashing sometimes in debug mode.
+   */
+  enableGestureRunOnJS?: boolean;
 };
 
 export type TabViewCustomRenders = {

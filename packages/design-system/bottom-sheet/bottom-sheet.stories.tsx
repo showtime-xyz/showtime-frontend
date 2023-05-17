@@ -19,9 +19,7 @@ export const Basic = () => {
   const [visible, setVisible] = useState(false);
   return (
     <Container>
-      <Button onPress={() => setVisible(!visible)}>
-        <Text tw="text-white dark:text-black">Open bottom sheet</Text>
-      </Button>
+      <Button onPress={() => setVisible(!visible)}>Open bottom sheet</Button>
       <BottomSheet visible={visible} onDismiss={() => setVisible(false)}>
         <View>
           <Text tw="text-black dark:text-white">Hello world</Text>
