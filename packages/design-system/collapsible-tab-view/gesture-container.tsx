@@ -177,14 +177,18 @@ export const GestureContainer = React.forwardRef<
   }, [animateTabsToRefresh]);
   const stopAllAnimation = () => {
     "worklet";
-    if (!sceneIsReady.value[curIndexValue.value]) return;
+
+    // if (!sceneIsReady.value[curIndexValue.value]) return;
+
     cancelAnimation(headerTrans);
     slideIndex.value = -1;
     dragIndex.value = -1;
 
     const handleSceneSync = (index: number) => {
       if (!childScrollYTrans[index]) return;
+
       const syncPosition = Math.min(shareAnimatedValue.value, calcHeight);
+
       if (
         childScrollYTrans[index]!.value >= calcHeight &&
         shareAnimatedValue.value >= calcHeight
@@ -262,7 +266,7 @@ export const GestureContainer = React.forwardRef<
       stopScrollView();
     })
     .onUpdate((event) => {
-      if (!sceneIsReady.value[curIndexValue.value]) return;
+      // if (!sceneIsReady.value[curIndexValue.value]) return;
 
       if (isSlidingHeader.value === false) {
         slideIndex.value = curIndexValue.value;
@@ -277,7 +281,7 @@ export const GestureContainer = React.forwardRef<
       );
     })
     .onEnd((event) => {
-      if (!sceneIsReady.value[curIndexValue.value]) return;
+      // if (!sceneIsReady.value[curIndexValue.value]) return;
       if (isSlidingHeader.value === false) return;
 
       headerTransStartY.value = 0;
@@ -311,7 +315,7 @@ export const GestureContainer = React.forwardRef<
     })
     .onUpdate((event) => {
       if (
-        !sceneIsReady.value[curIndexValue.value] ||
+        // !sceneIsReady.value[curIndexValue.value] ||
         !onStartRefresh ||
         childScrollYTrans[curIndexValue.value]?.value === undefined
       )
@@ -328,6 +332,7 @@ export const GestureContainer = React.forwardRef<
           );
         }
       };
+
       if (isRefreshing.value !== isRefreshingWithAnimation.value) return;
       if (isRefreshing.value) {
         if (isDragging.value === false) {
@@ -360,7 +365,9 @@ export const GestureContainer = React.forwardRef<
       }
     })
     .onEnd((event) => {
-      if (!sceneIsReady.value[curIndexValue.value] || !onStartRefresh) return;
+      // if (!sceneIsReady.value[curIndexValue.value] || !onStartRefresh) return;
+      if (!onStartRefresh) return;
+
       if (isDragging.value === false) return;
       isDragging.value = false;
       if (isRefreshing.value !== isRefreshingWithAnimation.value) return;
@@ -534,7 +541,6 @@ export const GestureContainer = React.forwardRef<
       [0, -calcHeight],
       Extrapolation.CLAMP
     );
-    // for iOS scrollview bounces prop spring effect.
     if (isIOS) {
       return shareAnimatedValue.value > 0
         ? headerTransY
