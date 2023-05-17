@@ -60,7 +60,7 @@ export function SceneComponent<P extends object>({
     onScroll: (e) => {
       const moveY = e.contentOffset.y;
       scrollY.value = moveY;
-      // if (curIndexValue.value !== index) return;
+      if (curIndexValue.value !== index) return;
       shareAnimatedValue.value = moveY;
       if (propOnScroll) {
         runOnJS(propOnScroll as any)({ nativeEvent: e });
@@ -113,7 +113,7 @@ export function SceneComponent<P extends object>({
             top: headerHeight,
             ...scrollIndicatorInsets,
           }}
-          bounces={false}
+          // bounces={false}
         />
       </GestureDetector>
     </Animated.View>
