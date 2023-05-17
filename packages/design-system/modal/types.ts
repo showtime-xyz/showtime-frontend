@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
-import type { GorhomBottomSheetProps } from "@showtime-xyz/universal.bottom-sheet";
+import type { BottomSheetProps as GorhomBottomSheetProps } from "@showtime-xyz/universal.bottom-sheet";
 import { ButtonProps } from "@showtime-xyz/universal.button";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
@@ -54,7 +54,11 @@ export type ModalProps = Pick<ModalHeaderProps, "closeButtonProps"> & {
    */
   children?: ReactNode;
   //#endregion
-
+  /**
+   * Defines the modal to close method
+   * @default undefined
+   */
+  close?: () => void;
   //#region callbacks
   /**
    * Defines the action to close

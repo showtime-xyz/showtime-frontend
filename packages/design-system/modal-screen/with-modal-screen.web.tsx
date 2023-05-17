@@ -19,29 +19,44 @@ function withModalScreen<P extends object>(
   // eslint-disable-next-line react/display-name
   return function (props: P) {
     const [title, setTitle] = useState(titleProp);
+    const [visible, setVisible] = useState(false);
+    const isLayouted = useRef(false);
     const modalRef = useRef<ModalMethods>(null);
     const router = useRouter();
+
+    const closeModal = useCallback(() => {
+      setVisible(false);
+    }, []);
 
     const onClose = useCallback(() => {
       if (
         router.asPath === "/login" ||
         router.asPath === "/create" ||
         router.asPath === "/drop/free" ||
-        router.asPath === "/drop/music"
+        router.asPath === "/drop/music" ||
+        router.asPath === "/drop" ||
+        router.asPath === "/"
       ) {
         router.push("/");
       } else {
         router.pop();
       }
+      isLayouted.current = false;
     }, [router]);
 
     useEffect(() => {
       setTitle(titleProp);
     }, []);
-
-    const shouldShowModal =
-      router.pathname === matchingPathname ||
-      Boolean(router.query[matchingQueryParam as any]);
+    useEffect(() => {
+      if (
+        !isLayouted.current &&
+        (router.pathname === matchingPathname ||
+          Boolean(router.query[matchingQueryParam as any]))
+      ) {
+        isLayouted.current = true;
+        setVisible(true);
+      }
+    }, [router]);
 
     const contextValues = useMemo(() => ({ setTitle }), []);
     return (
@@ -49,8 +64,9 @@ function withModalScreen<P extends object>(
         <Modal
           ref={modalRef}
           title={title}
-          visible={shouldShowModal}
+          visible={visible}
           onClose={onClose}
+          close={closeModal}
           {...rest}
         >
           <Screen {...props} />

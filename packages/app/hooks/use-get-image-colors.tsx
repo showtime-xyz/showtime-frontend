@@ -17,6 +17,14 @@ export const useGetImageColors = ({ uri }: GetImageColorsParams) => {
 
   useEffect(() => {
     (async () => {
+      if (__DEV__) {
+        setColors({
+          colors: ["#333", "#FFF"],
+          textColor: "#FFF",
+          isDark: true,
+        });
+        return;
+      }
       const result = await ImageColors.getColors(uri, {
         fallback: FALLBACK_COLOR,
         cache: true,
