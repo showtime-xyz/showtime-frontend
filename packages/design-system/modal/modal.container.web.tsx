@@ -39,6 +39,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       title,
       web_height = WEB_HEIGHT,
       onClose,
+      close,
       children,
       bodyStyle,
       style,
@@ -52,24 +53,24 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
     useImperativeHandle(
       ref,
       () => ({
-        close: () => {},
+        close,
       }),
-      []
+      [close]
     );
 
     return (
-      <Transition.Root show={visible} as={Fragment}>
+      <Transition.Root afterLeave={onClose} show={visible} as={Fragment}>
         <View className={CONTAINER_TW.join(" ")}>
           <Transition.Child
-            enter="ease-out duration-150"
+            enter="ease-out duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="ease-in duration-150"
+            leave="ease-in duration-200"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
             <ModalBackdrop
-              onClose={onClose}
+              onClose={close}
               disableBackdropPress={disableBackdropPress}
             />
           </Transition.Child>
@@ -78,7 +79,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
             enter="ease-out duration-300"
             enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             enterTo="opacity-100 translate-y-0 sm:scale-100"
-            leave="ease-in duration-150"
+            leave="ease-in duration-250"
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
@@ -86,7 +87,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
               tw={[...MODAL_CONTAINER_TW, web_height, propTw]}
               style={style}
             >
-              {headerShown && <ModalHeader title={title} onClose={onClose} />}
+              {headerShown && <ModalHeader title={title} onClose={close} />}
               <View
                 tw={MODAL_BODY_TW}
                 style={bodyStyle}
