@@ -108,6 +108,7 @@ export const CommentInputBox = forwardRef<
       <MessageBox
         ref={commentInputRef}
         submitting={submitting}
+        placeholder="Add a comment..."
         onSubmit={handleOnSubmitComment}
         userAvatar={user?.data.profile.img_url}
       />

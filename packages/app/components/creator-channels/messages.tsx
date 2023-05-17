@@ -9,6 +9,8 @@ import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { InputAccessoryView } from "app/components/input-accessory-view";
+import { MessageBox } from "app/components/messages";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import { useChannelMessages } from "./hooks/use-channel-messages";
@@ -67,9 +69,10 @@ export const Messages = () => {
 
   return (
     <View
-      tw="flex-1"
+      tw="w-full flex-1"
       style={{
         paddingTop: insets.top,
+        paddingBottom: insets.bottom + 32,
       }}
     >
       <Header username="nishan" members={29} />
@@ -79,6 +82,7 @@ export const Messages = () => {
         inverted
         useWindowScroll={false}
         estimatedItemSize={20}
+        keyboardDismissMode="interactive"
         renderItem={MessageItem}
         contentContainerStyle={{ paddingTop: insets.bottom }}
         ListFooterComponent={
@@ -91,6 +95,17 @@ export const Messages = () => {
             : () => null
         }
       />
+      <InputAccessoryView>
+        <View tw="bg-white dark:bg-black">
+          <MessageBox
+            placeholder="Send an update..."
+            onSubmit={(text: string) => {
+              return Promise.resolve();
+            }}
+            submitting={false}
+          />
+        </View>
+      </InputAccessoryView>
     </View>
   );
 };

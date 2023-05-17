@@ -26,6 +26,7 @@ interface MessageBoxProps {
   onSubmit?: (text: string) => Promise<void>;
   onFocus?: () => void;
   onBlur?: () => void;
+  placeholder: string;
 }
 
 export interface MessageBoxMethods {
@@ -36,10 +37,16 @@ export interface MessageBoxMethods {
 }
 
 export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
-  function MessageBox(
-    { submitting, userAvatar, style, onSubmit, onFocus, onBlur },
-    ref
-  ) {
+  function MessageBox(props, ref) {
+    const {
+      submitting,
+      userAvatar,
+      style,
+      onSubmit,
+      onFocus,
+      onBlur,
+      placeholder,
+    } = props;
     //#region variables
     const isDark = useIsDarkMode();
     const inputRef = useRef<typeof TextInput | HTMLElement>();
@@ -79,11 +86,13 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     return (
       <View tw="web:pb-0 flex-row items-center px-4 py-2" style={style}>
         <View tw="mr-2 flex-1 flex-row items-center rounded-[32px] bg-gray-100 p-2 pl-3 dark:bg-gray-700">
-          <Avatar alt="Avatar" tw="mr-2" size={24} url={userAvatar} />
+          {userAvatar ? (
+            <Avatar alt="Avatar" tw="mr-2" size={24} url={userAvatar} />
+          ) : null}
           <TextInput
             ref={inputRef as any}
             value={value}
-            placeholder="Add a comment..."
+            placeholder={placeholder}
             enterkeyhint="send"
             placeholderTextColor={isDark ? colors.gray[300] : colors.gray[500]}
             multiline={true}
