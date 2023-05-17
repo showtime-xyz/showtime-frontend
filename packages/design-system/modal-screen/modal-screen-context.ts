@@ -1,15 +1,11 @@
 import { useContext, createContext } from "react";
 
+import { ModalScreenContextValue } from "./types";
+
 export const useModalScreenContext = () => {
   const context = useContext(ModalScreenContext);
 
   return context;
 };
 
-type ModalScreenContextValue = {
-  setTitle: (title: string) => void;
-};
-
-export const ModalScreenContext = createContext<ModalScreenContextValue | null>(
-  null
-);
+export const ModalScreenContext = createContext<ModalScreenContextValue>(null);
