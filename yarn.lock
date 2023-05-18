@@ -8098,6 +8098,7 @@ __metadata:
     react-native-svg: 13.9.0
     react-native-tab-view: ^3.5.1
     react-native-view-shot: 3.6.0
+    react-native-volume-manager: ^1.5.1
     react-native-web: ~0.19.4
     react-native-webview: 12.0.2
     react-string-replace: 1.1.0
@@ -29101,6 +29102,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 702fecd29aef9a139846e9bf535a2ffec4091091ea1833a4135bedd88376e7b5d45bc2e2af4f5f4d0a83b208adaebf43cd646230799d495536e3bdb0ff71c0b0
+  languageName: node
+  linkType: hard
+
+"react-native-volume-manager@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "react-native-volume-manager@npm:1.5.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 1a764edf6c67782ebebaad6d7a30d78974638104b781838fc3db831752b7320eaddb582902228bbcc63ae696af2f9da1d67ea6ae05d6758448dc07bc9976b4ec
   languageName: node
   linkType: hard
 
