@@ -99,16 +99,6 @@ export const Checkbox = ({
           </Svg>
         </MotiView>
       </Animated.View>
-      {Platform.OS === "web" && (
-        <input
-          disabled={disabled}
-          type="checkbox"
-          id={id}
-          hidden
-          onChange={handleChange}
-          checked={checked}
-        />
-      )}
     </Pressable>
   );
 };
