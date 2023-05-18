@@ -359,7 +359,7 @@ export const CreatorChannelsList = memo(
         >
           <ChevronLeft width={24} height={24} />
         </Button>
-        <View tw="h-full w-72 overflow-hidden rounded-2xl bg-white">
+        <View tw="h-full w-72 overflow-hidden rounded-2xl bg-white dark:bg-black">
           <InfiniteScrollList
             useWindowScroll={false}
             data={transformedData}
@@ -406,7 +406,7 @@ export const CreatorChannelsList = memo(
             estimatedItemSize={110}
           />
         </View>
-        <View tw="ml-3 h-full flex-1 overflow-hidden rounded-2xl bg-white">
+        <View tw="ml-3 h-full flex-1 overflow-hidden rounded-2xl bg-white dark:bg-black">
           <Messages />
         </View>
       </View>
