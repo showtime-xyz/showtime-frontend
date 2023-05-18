@@ -1,5 +1,7 @@
-import { useState, createContext, useMemo } from "react";
+import { useState, createContext, useMemo, useEffect } from "react";
 import { Modal } from "react-native";
+
+import { MotiView } from "moti";
 
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { View } from "@showtime-xyz/universal.view";
@@ -32,12 +34,17 @@ export const ReactionProvider = ({ children }: any) => {
         transparent
         onRequestClose={handleClose}
       >
-        <View tw="flex-1">
+        <MotiView
+          style={{ flex: 1 }}
+          from={{ translateX: -8 }}
+          animate={{ translateX: 0 }}
+          transition={{ type: "spring", damping: 9, mass: 0.75 }}
+        >
           <Pressable tw="absolute h-full w-full" onPress={handleClose} />
           <View tw="absolute" style={position}>
             {reactions}
           </View>
-        </View>
+        </MotiView>
       </Modal>
     </ReactionContext.Provider>
   );
