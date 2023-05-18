@@ -14,7 +14,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Send } from "@showtime-xyz/universal.icon";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { TextInput } from "@showtime-xyz/universal.text-input";
+import { TextInput, TextInputProps } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAutoSizeInput } from "app/hooks/use-auto-size-input";
@@ -27,6 +27,7 @@ interface MessageBoxProps {
   onFocus?: () => void;
   onBlur?: () => void;
   placeholder: string;
+  textInputProps?: TextInputProps;
 }
 
 export interface MessageBoxMethods {
@@ -46,6 +47,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       onFocus,
       onBlur,
       placeholder,
+      textInputProps,
     } = props;
     //#region variables
     const isDark = useIsDarkMode();
@@ -93,12 +95,8 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             ref={inputRef as any}
             value={value}
             placeholder={placeholder}
-            enterkeyhint="send"
             placeholderTextColor={isDark ? colors.gray[300] : colors.gray[500]}
             multiline={true}
-            {...(Platform.OS === "ios"
-              ? { keyboardType: "twitter" }
-              : { inputMode: "text" })}
             tw="ios:pb-1 max-h-20 w-full flex-1 text-sm text-black dark:text-white"
             onChangeText={handleTextChange}
             onFocus={onFocus}
@@ -107,6 +105,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             // @ts-ignore RNW >= v19 & RN >= 0.71 supports these props
             readOnly={submitting}
             rows={1}
+            {...textInputProps}
           />
         </View>
         <Button
