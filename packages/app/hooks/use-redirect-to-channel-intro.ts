@@ -4,11 +4,11 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useOnboardingPromise } from "app/components/onboarding";
 
-export const useRedirectToCreatorChannelIntro = () => {
+export const useRedirectToChannelIntro = () => {
   const router = useRouter();
   const { onboardingPromise } = useOnboardingPromise();
 
-  const redirectToCreatorChannelIntro = async () => {
+  const redirectToChannelIntro = async () => {
     await onboardingPromise();
     const as = `/channels/intro`;
     router.push(
@@ -29,5 +29,5 @@ export const useRedirectToCreatorChannelIntro = () => {
     );
   };
 
-  return redirectToCreatorChannelIntro;
+  return redirectToChannelIntro;
 };

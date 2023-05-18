@@ -22,8 +22,8 @@ import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useNFTDetailBySlug } from "app/hooks/use-nft-details-by-slug";
+import { useRedirectToChannelIntro } from "app/hooks/use-redirect-to-channel-intro";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
-import { useRedirectToCreatorChannelIntro } from "app/hooks/use-redirect-to-intro-creator-channel";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
@@ -147,7 +147,7 @@ const NFTDetailScreenImpl = ({ fallback = {} }: { fallback?: object }) => {
 
   const dummyId = 1;
   const visibileItems = useSharedValue([undefined, dummyId, undefined]);
-  const redirectToCreatorChannelIntro = useRedirectToCreatorChannelIntro();
+  const redirectToCreatorChannelIntro = useRedirectToChannelIntro();
 
   useEffect(() => {
     if (showClaim && contractAddress && !initialRef.current) {

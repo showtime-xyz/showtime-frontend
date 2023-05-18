@@ -110,7 +110,9 @@ export const CreatorChannelsCongrats = () => {
             }}
           >
             <>
-              <Text tw="ml-1 text-base font-bold text-white">Share Link</Text>
+              <Text tw="ml-1 text-base font-bold text-white dark:text-gray-900">
+                Share Link
+              </Text>
             </>
           </Button>
           <Button

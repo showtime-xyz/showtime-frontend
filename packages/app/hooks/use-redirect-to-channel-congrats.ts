@@ -2,10 +2,10 @@ import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
-export const useRedirectToCreatorChannelCongrats = () => {
+export const useRedirectToChannelCongrats = () => {
   const router = useRouter();
 
-  const redirectToCreatorChannelCongrats = async () => {
+  const redirectToChannelCongrats = async () => {
     const as = `/channels/congrats`;
     router.push(
       Platform.select({
@@ -25,5 +25,5 @@ export const useRedirectToCreatorChannelCongrats = () => {
     );
   };
 
-  return redirectToCreatorChannelCongrats;
+  return redirectToChannelCongrats;
 };
