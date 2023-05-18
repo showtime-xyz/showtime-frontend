@@ -122,6 +122,7 @@ type RootStackNavigatorParams = {
   channelsMessage: undefined;
   channelsIntro: undefined;
   channelsCongrats: undefined;
+  channelsMembers: undefined;
 };
 
 export type {

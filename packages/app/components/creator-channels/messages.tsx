@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -23,18 +24,49 @@ import { useChannelMessages } from "./hooks/use-channel-messages";
 type HeaderProps = {
   username: string;
   members: number;
+  channelId: string;
 };
 
 const Header = (props: HeaderProps) => {
   const router = useRouter();
   const isDark = useIsDarkMode();
+
+  const viewMembersList = useCallback(() => {
+    const as = `/channels/${props.channelId}/members`;
+
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            channelsMembersModal: true,
+          },
+        } as any,
+      }),
+      Platform.select({
+        native: as,
+        web: router.asPath,
+      }),
+      { shallow: true }
+    );
+  }, [props.channelId, router]);
+
   return (
-    <View tw="flex-row p-4" style={{ columnGap: 8 }}>
-      <View tw="flex-row items-center" style={{ columnGap: 8 }}>
+    <View
+      tw="web:pt-2 android:pt-4 flex-row px-4 pb-2"
+      style={{ columnGap: 8 }}
+    >
+      <View
+        tw="web:pl-10 web:md:pl-0 flex-row items-center"
+        style={{ columnGap: 8 }}
+      >
         <Pressable
           onPress={() => {
             router.back();
           }}
+          tw="web:hidden"
         >
           <ArrowLeft
             height={24}
@@ -48,7 +80,10 @@ const Header = (props: HeaderProps) => {
         <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
           {props.username}
         </Text>
-        <Text tw="text-xs text-gray-900 dark:text-gray-100">
+        <Text
+          onPress={viewMembersList}
+          tw="text-xs text-gray-900 dark:text-gray-100"
+        >
           {props.members} members
         </Text>
       </View>
@@ -100,7 +135,7 @@ export const Messages = () => {
           }),
       }}
     >
-      <Header username="nishan" members={29} />
+      <Header username="nishan" members={29} channelId={channelId} />
       <InfiniteScrollList
         data={data}
         onEndReached={onLoadMore}

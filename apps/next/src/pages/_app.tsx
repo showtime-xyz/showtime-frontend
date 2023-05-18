@@ -14,6 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
+import { CreatorChannelsMembersModal } from "app/components/creator-channels";
 import Footer from "app/components/footer";
 import Header from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
@@ -29,6 +30,7 @@ import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
 import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
+import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEventScreen } from "app/screens/drop-event";
@@ -210,6 +212,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropViewShareScreen />
         <CreatorChannelsCongratsScreen />
         <CreatorChannelsIntroScreen />
+        <CreatorChannelsMembersScreen />
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
         <OnboardingScreen />
