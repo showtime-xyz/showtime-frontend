@@ -285,7 +285,7 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
 export const useComments = ({ nftId }: { nftId: number }) => {
   const PAGE_SIZE = 10;
   const commentsUrlFn = useCallback(() => {
-    const url = `/v2/comments/${nftId}?limit=${PAGE_SIZE}`;
+    const url = `/v3/comments/${nftId}?limit=${PAGE_SIZE}`;
     return url;
   }, [nftId]);
 
