@@ -71,15 +71,15 @@ function withModalScreen<P extends object>(
       if (
         !isLayouted.current &&
         (router.pathname === matchingPathname ||
-          Boolean(router.query[matchingQueryParam as any]))
+          Boolean(router.query[matchingQueryParam]))
       ) {
         isLayouted.current = true;
         setVisible(true);
-      } else if (isLayouted.current) {
+      } else if (isLayouted.current && router.pathname !== matchingPathname) {
         isLayouted.current = false;
         setVisible(false);
       }
-    }, [router]);
+    }, [router.pathname, router.query]);
 
     return (
       <ModalScreenContext.Provider value={contextValues}>
