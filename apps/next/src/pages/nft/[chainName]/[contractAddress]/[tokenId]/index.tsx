@@ -23,6 +23,7 @@ export async function getServerSideProps(context) {
     const imageUrl = getMediaUrl({
       nft,
       stillPreview: nft?.mime_type?.startsWith("video"),
+      optimized: true,
     });
 
     if (nft) {
