@@ -183,6 +183,8 @@ export const HIDE_LINK_FOOTER_ROUTER_LIST = [
   "/nft/[chainName]/[contractAddress]/[tokenId]",
   "/list",
   "/profile/[username]/[dropSlug]",
+  "/channels",
+  "/channels/[channelId]",
 ];
 export const SWIPE_LIST_SCREENS = [
   "/home",

@@ -6,8 +6,8 @@ export const CreatorChannelsIntroScreen = withModalScreen(
   CreatorChannelsIntro,
   {
     title: "",
-    matchingPathname: "/creator-channels/intro",
-    matchingQueryParam: "creatorChannelsIntroModal",
+    matchingPathname: "/channels/intro",
+    matchingQueryParam: "channelsIntroModal",
     tw: "w-full",
     disableBackdropPress: true,
     snapPoints: ["100%"],

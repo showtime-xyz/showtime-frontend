@@ -47,7 +47,7 @@ export const DropSelect = () => {
             isNew
             description="Send an exclusive update to your fans on your channel"
             onPress={() => {
-              const pathname = `/channel/${user.user?.data.profile.profile_id}`;
+              const pathname = `/channels/${user.user?.data.profile.profile_id}`;
               if (Platform.OS === "web") {
                 router.push(pathname);
               } else {

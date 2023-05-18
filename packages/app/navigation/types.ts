@@ -14,11 +14,8 @@ type HomeStackParams = {
 
 // TODO: Add correct types, just quick copy-paste from Trending
 type CreatorChannelsStackParams = {
-  trending: undefined;
-  login: undefined;
-  nft: { id: number };
-  profile: { walletAddress: number };
-  settings: undefined;
+  channels: undefined;
+  channelId: undefined;
 };
 
 type TrendingStackParams = {
@@ -66,7 +63,7 @@ type NextNavigationProps = {
 
 type BottomTabNavigatorParams = {
   homeTab: NavigatorScreenParams<HomeStackParams>;
-  trendingTab: NavigatorScreenParams<TrendingStackParams>;
+  creatorChannelsTab: NavigatorScreenParams<TrendingStackParams>;
   cameraTab: NavigatorScreenParams<CameraStackParams>;
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
   profileTab: NavigatorScreenParams<ProfileStackParams>;
@@ -92,7 +89,6 @@ type RootStackNavigatorParams = {
     dropSlug?: string;
   };
   dropEvent: undefined;
-  channel: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;
   search: undefined;
@@ -112,8 +108,6 @@ type RootStackNavigatorParams = {
   drop: undefined;
   qrCodeShare: undefined;
   dropViewShareModal: undefined;
-  creatorChannelsIntro: undefined;
-  creatorChannelsCongrats: undefined;
   raffle: undefined;
   claim: undefined;
   collectors: undefined;
@@ -125,6 +119,9 @@ type RootStackNavigatorParams = {
     nftId?: string;
     userId?: string;
   };
+  channelsMessage: undefined;
+  channelsIntro: undefined;
+  channelsCongrats: undefined;
 };
 
 export type {

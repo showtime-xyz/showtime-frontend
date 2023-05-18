@@ -92,7 +92,7 @@ export function RootStackNavigator() {
           component={NftScreen}
           getId={({ params }) => Object.values(params).join("-")}
         />
-        <Stack.Screen name="channel" component={Messages} />
+        <Stack.Screen name="channelsMessage" component={Messages} />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -198,11 +198,11 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="raffle" component={RaffleScreen} />
         <Stack.Screen
-          name="creatorChannelsIntro"
+          name="channelsIntro"
           component={CreatorChannelsIntroScreen}
         />
         <Stack.Screen
-          name="creatorChannelsCongrats"
+          name="channelsCongrats"
           component={CreatorChannelsCongratsScreen}
         />
       </Stack.Group>

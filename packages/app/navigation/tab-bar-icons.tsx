@@ -171,7 +171,7 @@ export const CreatorChannelsTabBarIcon = ({
 
   if (!showTip) {
     return (
-      <TabBarIcon tab="/creator-channels">
+      <TabBarIcon tab="/channels">
         {focused ? (
           <CreatorChannelFilled width={24} height={24} color={color} />
         ) : (
@@ -188,7 +188,7 @@ export const CreatorChannelsTabBarIcon = ({
     );
   }
   return (
-    <TabBarIcon tab="/creator-channels">
+    <TabBarIcon tab="/channels">
       <Tooltip.Root
         onDismiss={onDismiss}
         open={open}
@@ -221,7 +221,7 @@ export const CreatorChannelsTabBarIcon = ({
           backgroundColor={colors.indigo[700]}
           borderRadius={12}
           onTap={() => {
-            router.push("/creator-channels");
+            router.push("/channels");
             if (Platform.OS === "web") {
               onDismiss();
             }

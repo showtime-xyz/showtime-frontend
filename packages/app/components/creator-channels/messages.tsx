@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft } from "@showtime-xyz/universal.icon";
@@ -11,8 +13,11 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { InputAccessoryView } from "app/components/input-accessory-view";
 import { MessageBox } from "app/components/messages";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { createParam } from "app/navigation/use-param";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
+import { EmptyPlaceholder } from "../empty-placeholder";
 import { useChannelMessages } from "./hooks/use-channel-messages";
 
 type HeaderProps = {
@@ -50,15 +55,30 @@ const Header = (props: HeaderProps) => {
     </View>
   );
 };
+type Query = {
+  channelId: string;
+};
+const { useParam } = createParam<Query>();
 
 export const Messages = () => {
+  const [channelId] = useParam("channelId");
+
   const insets = useSafeAreaInsets();
+  const bototm = usePlatformBottomHeight();
+
   const { data, isLoading, fetchMore, isLoadingMore } = useChannelMessages();
 
   const onLoadMore = () => {
     fetchMore();
   };
-
+  if (!channelId) {
+    return (
+      <EmptyPlaceholder
+        tw="animate-fade-in-250 flex-1"
+        title="Select a channel."
+      />
+    );
+  }
   if (isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -69,10 +89,15 @@ export const Messages = () => {
 
   return (
     <View
-      tw="w-full flex-1"
+      tw="animate-fade-in-250 w-full flex-1"
       style={{
         paddingTop: insets.top,
-        paddingBottom: insets.bottom + 32,
+        paddingBottom:
+          bototm +
+          Platform.select({
+            web: 4,
+            default: 10,
+          }),
       }}
     >
       <Header username="nishan" members={29} />

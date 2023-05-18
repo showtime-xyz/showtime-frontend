@@ -49,9 +49,6 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       qrCodeShare: "/qr-code-share/:contractAddress",
       raffle: "/raffle/:contractAddress",
       claim: "claim/:contractAddress",
-      channel: "channel/:channelId",
-      creatorChannelsIntro: "creator-channels/intro",
-      creatorChannelsCongrats: "creator-channels/congrats",
       collectors: "collectors/:chainName/:contractAddress/:tokenId",
       claimLimitExplanation: "claim/claim-limit-explanation",
       likers: "likers/:nftId",
@@ -77,12 +74,15 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       blockedList: "settings/blocked-list",
       swipeList: "list",
       appleMusicAuthNativeWebView: "appleMusicAuthNativeWebView",
+      channelsMessage: "channels/:channelId",
+      channelsIntro: "channels/intro",
+      channelsCongrats: "channels/congrats",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {
           // Bottom Tab Navigator
           homeTab: "",
-          creatorChannelsTab: "creator-channels",
+          channelsTab: "channels",
           notificationsTab: "notifications",
           profileTab: "profile",
         },

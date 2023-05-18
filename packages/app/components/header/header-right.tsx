@@ -32,7 +32,7 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
               <View tw="mx-2">
                 <CreatorChannelsTabBarIcon
                   color={isDark ? "white" : "black"}
-                  focused={router.pathname === "/creator-channels"}
+                  focused={router.pathname.includes("channels")}
                   tooltipSide="bottom"
                 />
               </View>

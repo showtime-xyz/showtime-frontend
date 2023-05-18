@@ -43,7 +43,7 @@ function CreatorChannelsNavigator() {
       })}
     >
       <CreatorChannelsStack.Screen
-        name="trending"
+        name="channels"
         component={CreatorChannelsScreen}
       />
     </CreatorChannelsStack.Navigator>

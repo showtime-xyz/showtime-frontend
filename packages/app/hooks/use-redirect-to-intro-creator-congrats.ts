@@ -6,7 +6,7 @@ export const useRedirectToCreatorChannelCongrats = () => {
   const router = useRouter();
 
   const redirectToCreatorChannelCongrats = async () => {
-    const as = `/creator-channels/congrats`;
+    const as = `/channels/congrats`;
     router.push(
       Platform.select({
         native: as,
@@ -14,7 +14,7 @@ export const useRedirectToCreatorChannelCongrats = () => {
           pathname: router.pathname,
           query: {
             ...router.query,
-            creatorChannelsCongratsModal: true,
+            channelsCongratsModal: true,
           },
         } as any,
       }),

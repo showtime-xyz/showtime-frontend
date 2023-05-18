@@ -4,7 +4,6 @@ import { useTrackPageViewed } from "app/lib/analytics";
 
 const CreatorChannelsScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Creator Channels" });
-
   return <CreatorChannelsList />;
 });
 

@@ -10,7 +10,7 @@ export const useRedirectToCreatorChannelIntro = () => {
 
   const redirectToCreatorChannelIntro = async () => {
     await onboardingPromise();
-    const as = `/creator-channels/intro`;
+    const as = `/channels/intro`;
     router.push(
       Platform.select({
         native: as,
@@ -18,7 +18,7 @@ export const useRedirectToCreatorChannelIntro = () => {
           pathname: router.pathname,
           query: {
             ...router.query,
-            creatorChannelsIntroModal: true,
+            channelsIntroModal: true,
           },
         } as any,
       }),

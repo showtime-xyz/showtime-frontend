@@ -84,7 +84,7 @@ export const CreatorChannelsIntro = () => {
           size="regular"
           onPress={() => {
             Haptics.impactAsync();
-            const pathname = `/channel/${userProfile?.data.profile.profile_id}`;
+            const pathname = `/channels/${userProfile?.data.profile.profile_id}`;
             if (Platform.OS === "web") {
               router.push(pathname);
             } else {

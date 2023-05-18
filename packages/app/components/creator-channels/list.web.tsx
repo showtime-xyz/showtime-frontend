@@ -5,6 +5,7 @@ import { RectButton } from "react-native-gesture-handler";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { ChevronLeft } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -23,7 +24,10 @@ import {
   getRandomNumber,
 } from "app/utilities";
 
+import { breakpoints } from "design-system/theme";
+
 import { useChannelsList } from "./hooks/use-channels-list";
+import { Messages } from "./messages";
 
 type CreatorChannelsListProps = {
   item: CreatorChannelsListItemProps;
@@ -184,8 +188,9 @@ export const CreatorChannelsList = memo(
     const isDark = useIsDarkMode();
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
-    const { height: windowHeight } = useWindowDimensions();
-
+    const { height: windowHeight, width } = useWindowDimensions();
+    const isMdWidth = width >= breakpoints["md"];
+    const router = useRouter();
     const listRef = useRef<any>();
     useScrollToTop(listRef);
 
@@ -279,57 +284,132 @@ export const CreatorChannelsList = memo(
         );
       return null;
     }, [isLoadingMore]);
+    const mdHeight = windowHeight - 140;
+    console.log(router);
 
-    return (
-      <InfiniteScrollList
-        useWindowScroll={false}
-        data={transformedData}
-        getItemType={(item) => {
-          // To achieve better performance, specify the type based on the item
-          return item.type === "section"
-            ? "sectionHeader"
-            : item.itemType ?? "row";
-        }}
-        style={{
-          height: Platform.select({
-            default: windowHeight - bottomBarHeight,
-            web: web_height ? web_height : windowHeight - bottomBarHeight,
-            ios: windowHeight,
-          }),
-        }}
-        // for blur effect on Native
-        contentContainerStyle={Platform.select({
-          ios: {
-            paddingTop: headerHeight,
-            paddingBottom: bottomBarHeight,
-          },
-          android: {
-            paddingBottom: bottomBarHeight,
-          },
-          default: {},
-        })}
-        // Todo: unity refresh control same as tab view
-        refreshControl={
-          <RefreshControl
+    if (!isMdWidth) {
+      if (router.query["channelId"]) {
+        return <Messages />;
+      }
+      return (
+        <View tw="w-full">
+          <InfiniteScrollList
+            useWindowScroll={false}
+            data={transformedData}
+            getItemType={(item) => {
+              // To achieve better performance, specify the type based on the item
+              return item.type === "section"
+                ? "sectionHeader"
+                : item.itemType ?? "row";
+            }}
+            style={{
+              height: Platform.select({
+                default: windowHeight - bottomBarHeight,
+                web: web_height ? web_height : windowHeight - bottomBarHeight,
+                ios: windowHeight,
+              }),
+            }}
+            // for blur effect on Native
+            contentContainerStyle={Platform.select({
+              ios: {
+                paddingTop: headerHeight,
+                paddingBottom: bottomBarHeight,
+              },
+              android: {
+                paddingBottom: bottomBarHeight,
+              },
+              default: {},
+            })}
+            // Todo: unity refresh control same as tab view
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={refresh}
+                progressViewOffset={headerHeight}
+                tintColor={isDark ? colors.gray[200] : colors.gray[700]}
+                colors={[colors.violet[500]]}
+                progressBackgroundColor={
+                  isDark ? colors.gray[200] : colors.gray[100]
+                }
+              />
+            }
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onEndReached={fetchMore}
             refreshing={isRefreshing}
             onRefresh={refresh}
-            progressViewOffset={headerHeight}
-            tintColor={isDark ? colors.gray[200] : colors.gray[700]}
-            colors={[colors.violet[500]]}
-            progressBackgroundColor={
-              isDark ? colors.gray[200] : colors.gray[100]
-            }
+            ListFooterComponent={ListFooterComponent}
+            ref={listRef}
+            estimatedItemSize={110}
           />
-        }
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        onEndReached={fetchMore}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        ListFooterComponent={ListFooterComponent}
-        ref={listRef}
-        estimatedItemSize={110}
-      />
+        </View>
+      );
+    }
+    return (
+      <View
+        tw="mt-24 w-full max-w-screen-lg flex-row px-4"
+        style={{ height: mdHeight }}
+      >
+        <Button
+          iconOnly
+          size="regular"
+          variant="secondary"
+          tw="absolute -left-12"
+          onPress={() => router.push("/")}
+        >
+          <ChevronLeft width={24} height={24} />
+        </Button>
+        <View tw="h-full w-72 overflow-hidden rounded-2xl bg-white">
+          <InfiniteScrollList
+            useWindowScroll={false}
+            data={transformedData}
+            getItemType={(item) => {
+              // To achieve better performance, specify the type based on the item
+              return item.type === "section"
+                ? "sectionHeader"
+                : item.itemType ?? "row";
+            }}
+            style={{
+              height: mdHeight,
+            }}
+            // for blur effect on Native
+            contentContainerStyle={Platform.select({
+              ios: {
+                paddingTop: headerHeight,
+                paddingBottom: bottomBarHeight,
+              },
+              android: {
+                paddingBottom: bottomBarHeight,
+              },
+              default: {},
+            })}
+            // Todo: unity refresh control same as tab view
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={refresh}
+                progressViewOffset={headerHeight}
+                tintColor={isDark ? colors.gray[200] : colors.gray[700]}
+                colors={[colors.violet[500]]}
+                progressBackgroundColor={
+                  isDark ? colors.gray[200] : colors.gray[100]
+                }
+              />
+            }
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onEndReached={fetchMore}
+            refreshing={isRefreshing}
+            onRefresh={refresh}
+            ListFooterComponent={ListFooterComponent}
+            ref={listRef}
+            estimatedItemSize={110}
+          />
+        </View>
+        <View tw="ml-3 h-full flex-1 overflow-hidden rounded-2xl bg-white">
+          <Messages />
+        </View>
+      </View>
     );
   }
 );
