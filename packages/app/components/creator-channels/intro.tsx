@@ -39,7 +39,7 @@ export const CreatorChannelsIntro = () => {
           <View tw="self-center rounded-full border border-gray-300 dark:border-gray-700">
             <Avatar
               url={userProfile?.data.profile.img_url}
-              enableSkeleton
+              enableSkeleton={Platform.OS !== "web"}
               size={140}
             />
           </View>
@@ -50,12 +50,16 @@ export const CreatorChannelsIntro = () => {
               height={32}
             />
           </View>
-          <Image
-            source={require("./channel-graphic.png")}
-            width={imageSize}
-            height={imageSize}
-            tw="absolute -top-20"
-          />
+          <View
+            style={{ width: imageSize, height: imageSize }}
+            tw="absolute -top-24 self-center"
+          >
+            <Image
+              source={require("./channel-graphic.png")}
+              width={imageSize}
+              height={imageSize}
+            />
+          </View>
           <View
             style={{ marginTop: 130 }}
             tw="items-center justify-center px-6"
