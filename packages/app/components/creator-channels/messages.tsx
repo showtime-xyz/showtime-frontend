@@ -14,6 +14,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { InputAccessoryView } from "app/components/input-accessory-view";
 import { MessageBox } from "app/components/messages";
+import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { createParam } from "app/navigation/use-param";
 import { formatDateRelativeWithIntl } from "app/utilities";
@@ -195,6 +196,12 @@ const MessageItem = (props: MessageItemProps) => {
 
           <Text tw="text-sm text-gray-900 dark:text-gray-100">{text}</Text>
         </View>
+        <Reaction
+          selected={"❤️"}
+          onPress={() => {
+            console.log("pressed");
+          }}
+        />
       </View>
     </View>
   );

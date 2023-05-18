@@ -33,7 +33,7 @@ export const useChannelMessages = () => {
               (indexRef.current + 1) * PAGE_SIZE
             )
           );
-        }, 2000);
+        }, 500);
       });
     }
   );
