@@ -29,7 +29,7 @@ function withModalScreen<P extends {}>(
     const [contextValues, setContextValues] = useState<ModalScreenContextValue>(
       {
         setTitle,
-        pop: null,
+        pop: () => {},
       }
     );
     const modalRef = useRef<ModalMethods>(null);
