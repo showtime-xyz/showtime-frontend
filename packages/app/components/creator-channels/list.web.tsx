@@ -207,6 +207,7 @@ export const CreatorChannelsList = memo(
       () => generateFakeData(15, "creator"),
       []
     ) as unknown as CreatorChannelsListItemProps[];
+
     const fetchMore = () => {};
     const refresh = () => {};
     const isRefreshing = false;

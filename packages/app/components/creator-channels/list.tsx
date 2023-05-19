@@ -89,7 +89,7 @@ const CreatorChannelsListItem = memo(
         style={{ width: "100%" }}
       >
         <View tw="flex-1 px-4 py-3">
-          <View tw="flex-row">
+          <View tw="flex-row items-center">
             <AvatarHoverCard
               username={item.username}
               url={"https://picsum.photos/200?" + item.id}
@@ -146,14 +146,15 @@ const CreatorChannelsListCreator = memo(
               <View tw="flex-1 items-start justify-start">
                 <View tw="flex-1 flex-row items-center justify-start">
                   <Text
-                    tw="web:max-w-[70%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
+                    tw="web:max-w-[65%] max-w-[90%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
                     numberOfLines={1}
                   >
-                    {item.username} fwoeifjweoifjweoifjweofijwef
+                    {item.username}
                   </Text>
-                  <Text tw="web:hidden ml-2 text-xs text-gray-500">{time}</Text>
+                  {/* TODO: determine if we keep this */}
+                  <Text tw="ml-2 hidden text-xs text-gray-500">{time}</Text>
                 </View>
-                <View tw="flex-1">
+                <View tw="web:mt-1.5 flex-1">
                   <Text tw="font-semibold text-gray-500 dark:text-gray-500">
                     {memberCount} Members
                   </Text>
@@ -197,14 +198,15 @@ export const CreatorChannelsList = memo(
     useScrollToTop(listRef);
 
     // Start FAKE:
-    const data = generateFakeData(
-      6,
-      "data"
+    const data = useMemo(
+      () => generateFakeData(6, "data"),
+      []
     ) as unknown as CreatorChannelsListItemProps[];
-    const topCreators = generateFakeData(
-      15,
-      "creator"
+    const topCreators = useMemo(
+      () => generateFakeData(15, "creator"),
+      []
     ) as unknown as CreatorChannelsListItemProps[];
+
     const fetchMore = () => {};
     const refresh = () => {};
     const isRefreshing = false;
