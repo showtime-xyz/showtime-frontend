@@ -82,16 +82,21 @@ const CreatorChannelsListItem = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
     const time = formatDateRelativeWithIntl(item.date);
     const router = useRouter();
-    const isDark = useIsDarkMode();
+    const currentChannel = useMemo(() => router.query["channelId"], [router]);
     return (
       <RectButton
         onPress={() => {
           router.push(`/channels/${item.id}`);
         }}
-        underlayColor={isDark ? "white" : "black"}
+        underlayColor={"transparent"}
         style={{ width: "100%" }}
       >
-        <View tw="flex-1 px-4 py-3">
+        <View
+          tw={[
+            "mx-3 my-1 flex-1 cursor-pointer rounded-lg px-2 py-2 hover:bg-gray-100",
+            currentChannel === item.id ? "bg-gray-100" : "",
+          ]}
+        >
           <View tw="flex-row items-start justify-start">
             <AvatarHoverCard
               username={item.username}
