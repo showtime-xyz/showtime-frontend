@@ -86,6 +86,7 @@ const CreatorChannelsListItem = memo(
           router.push(`/channels/${item.id}`);
         }}
         underlayColor={isDark ? "white" : "black"}
+        style={{ width: "100%" }}
       >
         <View tw="flex-1 px-4 py-3">
           <View tw="flex-row">
@@ -98,7 +99,10 @@ const CreatorChannelsListItem = memo(
             />
             <View tw="flex-1">
               <View tw="flex-row items-center">
-                <Text tw="text-lg font-semibold text-black dark:text-white">
+                <Text
+                  tw="web:max-w-[80%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
+                  numberOfLines={1}
+                >
                   {item.username}
                 </Text>
                 <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
@@ -141,10 +145,13 @@ const CreatorChannelsListCreator = memo(
             <View tw="flex-1 flex-row items-center justify-center">
               <View tw="flex-1 items-start justify-start">
                 <View tw="flex-1 flex-row items-center justify-start">
-                  <Text tw="text-lg font-semibold text-black dark:text-white">
-                    {item.username}
+                  <Text
+                    tw="web:max-w-[70%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
+                    numberOfLines={1}
+                  >
+                    {item.username} fwoeifjweoifjweoifjweofijwef
                   </Text>
-                  <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
+                  <Text tw="web:hidden ml-2 text-xs text-gray-500">{time}</Text>
                 </View>
                 <View tw="flex-1">
                   <Text tw="font-semibold text-gray-500 dark:text-gray-500">

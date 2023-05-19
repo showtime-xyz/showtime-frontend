@@ -27,6 +27,7 @@ import {
 import { breakpoints } from "design-system/theme";
 
 import { useChannelsList } from "./hooks/use-channels-list";
+import { CreatorChannelsList as CreatorChannelsListMobile } from "./list.tsx";
 import { Messages } from "./messages";
 
 type CreatorChannelsListProps = {
@@ -288,66 +289,19 @@ export const CreatorChannelsList = memo(
       return null;
     }, [isLoadingMore]);
     const mdHeight = windowHeight - 140;
-    console.log(router);
 
     if (!isMdWidth) {
       if (router.query["channelId"]) {
         return <Messages />;
       }
+
       return (
         <View tw="w-full">
-          <InfiniteScrollList
-            useWindowScroll={false}
-            data={transformedData}
-            getItemType={(item) => {
-              // To achieve better performance, specify the type based on the item
-              return item.type === "section"
-                ? "sectionHeader"
-                : item.itemType ?? "row";
-            }}
-            style={{
-              height: Platform.select({
-                default: windowHeight - bottomBarHeight,
-                web: web_height ? web_height : windowHeight - bottomBarHeight,
-                ios: windowHeight,
-              }),
-            }}
-            // for blur effect on Native
-            contentContainerStyle={Platform.select({
-              ios: {
-                paddingTop: headerHeight,
-                paddingBottom: bottomBarHeight,
-              },
-              android: {
-                paddingBottom: bottomBarHeight,
-              },
-              default: {},
-            })}
-            // Todo: unity refresh control same as tab view
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefreshing}
-                onRefresh={refresh}
-                progressViewOffset={headerHeight}
-                tintColor={isDark ? colors.gray[200] : colors.gray[700]}
-                colors={[colors.violet[500]]}
-                progressBackgroundColor={
-                  isDark ? colors.gray[200] : colors.gray[100]
-                }
-              />
-            }
-            renderItem={renderItem}
-            keyExtractor={keyExtractor}
-            onEndReached={fetchMore}
-            refreshing={isRefreshing}
-            onRefresh={refresh}
-            ListFooterComponent={ListFooterComponent}
-            ref={listRef}
-            estimatedItemSize={110}
-          />
+          <CreatorChannelsListMobile />
         </View>
       );
     }
+
     return (
       <View
         tw="mt-24 w-full max-w-screen-lg flex-row px-4"
