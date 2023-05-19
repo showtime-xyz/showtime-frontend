@@ -88,9 +88,10 @@ const CreatorChannelsListItem = memo(
           router.push(`/channels/${item.id}`);
         }}
         underlayColor={isDark ? "white" : "black"}
+        style={{ width: "100%" }}
       >
         <View tw="flex-1 px-4 py-3">
-          <View tw="flex-row items-center">
+          <View tw="flex-row items-start justify-start">
             <AvatarHoverCard
               username={item.username}
               url={"https://picsum.photos/200?" + item.id}
@@ -101,16 +102,16 @@ const CreatorChannelsListItem = memo(
             <View tw="flex-1">
               <View tw="flex-row items-center">
                 <Text
-                  tw="text-md text-[15px] font-semibold text-black dark:text-white"
+                  tw="text-md max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-black dark:text-white"
                   numberOfLines={1}
                 >
                   {item.username}
                 </Text>
                 <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
               </View>
-              <View tw="mt-2">
+              <View tw="mt-1">
                 <Text
-                  tw="text-13 text-gray-500 dark:text-gray-300"
+                  tw="text-[12px] text-gray-500 dark:text-gray-300"
                   numberOfLines={2}
                 >
                   {item?.text}
@@ -146,7 +147,7 @@ const CreatorChannelsListCreator = memo(
               <View tw="flex-1 items-start justify-start">
                 <View tw="flex-1 flex-row items-start justify-start">
                   <Text
-                    tw="text-[15px] font-semibold text-black dark:text-white"
+                    tw="text-md max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-black dark:text-white"
                     numberOfLines={1}
                   >
                     {item.username}
@@ -169,7 +170,10 @@ const CreatorChannelsListCreator = memo(
           </View>
         </View>
         <View tw="ml-[40px] mt-1 pl-3">
-          <Text tw="text-13 text-gray-500 dark:text-gray-300" numberOfLines={2}>
+          <Text
+            tw="text-[12px] text-gray-500 dark:text-gray-300"
+            numberOfLines={2}
+          >
             {item?.text}
           </Text>
         </View>
