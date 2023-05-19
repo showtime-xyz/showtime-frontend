@@ -1,3 +1,3 @@
 export const emojiButtonSize = 54;
-export const reactionButtonSize = 20;
+export const reactionButtonSize = 18;
 export const reactionEmojis = ["❤️", "🔥", "😍", "❇️"];

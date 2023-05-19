@@ -203,7 +203,7 @@ const MessageItem = (props: MessageItemProps) => {
               {reactionEmojis.map((emoji) => {
                 return (
                   <Pressable key={emoji}>
-                    <Text tw="text-sm text-gray-700 dark:text-gray-200">
+                    <Text tw="text-xs text-gray-700 dark:text-gray-200">
                       {emoji} 1.2k
                     </Text>
                   </Pressable>
