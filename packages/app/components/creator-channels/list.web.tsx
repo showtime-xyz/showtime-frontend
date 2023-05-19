@@ -112,7 +112,7 @@ const CreatorChannelsListItem = memo(
               </View>
               <View tw="mt-1">
                 <Text
-                  tw="text-[12px] text-gray-500 dark:text-gray-300"
+                  tw="text-[13px] text-gray-500 dark:text-gray-300"
                   numberOfLines={2}
                 >
                   {item?.text}
@@ -172,7 +172,7 @@ const CreatorChannelsListCreator = memo(
         </View>
         <View tw="ml-[40px] mt-1 pl-3">
           <Text
-            tw="text-[12px] text-gray-500 dark:text-gray-300"
+            tw="text-[13px] text-gray-500 dark:text-gray-300"
             numberOfLines={2}
           >
             {item?.text}
@@ -316,7 +316,7 @@ export const CreatorChannelsList = memo(
         >
           <ChevronLeft width={24} height={24} />
         </Button>
-        <View tw="h-full w-72 overflow-hidden rounded-2xl bg-white dark:bg-black">
+        <View tw="h-full w-80 overflow-hidden rounded-2xl bg-white dark:bg-black">
           <InfiniteScrollList
             useWindowScroll={false}
             data={transformedData}
