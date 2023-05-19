@@ -60,14 +60,12 @@ const CreatorChannelsHeader = memo(
   }) => {
     return (
       <View tw="px-4 py-4">
-        <Text
-          tw={["text-2xl font-extrabold text-gray-900 dark:text-white", tw]}
-        >
+        <Text tw={["text-xl font-bold text-gray-900 dark:text-white", tw]}>
           {title}
         </Text>
         {subtext ? (
           <View tw="mt-3">
-            <Text tw="text-sm leading-5 text-gray-500 dark:text-gray-400">
+            <Text tw="text-xs leading-5 text-gray-500 dark:text-gray-400">
               {subtext}
             </Text>
           </View>
@@ -92,24 +90,27 @@ const CreatorChannelsListItem = memo(
         underlayColor={isDark ? "white" : "black"}
       >
         <View tw="flex-1 px-4 py-3">
-          <View tw="flex-row">
+          <View tw="flex-row items-center">
             <AvatarHoverCard
               username={item.username}
               url={"https://picsum.photos/200?" + item.id}
-              size={52}
+              size={40}
               alt="CreatorPreview Avatar"
               tw={"mr-3"}
             />
             <View tw="flex-1">
               <View tw="flex-row items-center">
-                <Text tw="text-lg font-semibold text-black dark:text-white">
+                <Text
+                  tw="text-md text-[15px] font-semibold text-black dark:text-white"
+                  numberOfLines={1}
+                >
                   {item.username}
                 </Text>
                 <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
               </View>
               <View tw="mt-2">
                 <Text
-                  tw="leading-5 text-gray-500 dark:text-gray-300"
+                  tw="text-13 text-gray-500 dark:text-gray-300"
                   numberOfLines={2}
                 >
                   {item?.text}
@@ -127,38 +128,39 @@ CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
 const CreatorChannelsListCreator = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
-    const time = formatDateRelativeWithIntl(item.date);
     const memberCount = new Intl.NumberFormat().format(
       item.members ?? getRandomNumber() // todo: remove this
     );
     return (
       <View tw="flex-1 px-4 py-3">
-        <View tw="flex-row items-center">
+        <View tw="flex-row items-start">
           <AvatarHoverCard
             username={item.username}
             url={"https://picsum.photos/200?" + item.id}
-            size={52}
+            size={40}
             alt="CreatorPreview Avatar"
             tw={"mr-3"}
           />
           <View tw="flex-1 justify-center">
             <View tw="flex-1 flex-row items-center justify-center">
               <View tw="flex-1 items-start justify-start">
-                <View tw="flex-1 flex-row items-center justify-start">
-                  <Text tw="text-lg font-semibold text-black dark:text-white">
+                <View tw="flex-1 flex-row items-start justify-start">
+                  <Text
+                    tw="text-[15px] font-semibold text-black dark:text-white"
+                    numberOfLines={1}
+                  >
                     {item.username}
                   </Text>
-                  <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
                 </View>
-                <View tw="flex-1">
-                  <Text tw="font-semibold text-gray-500 dark:text-gray-500">
-                    {memberCount} Members
+                <View tw="mt-1 flex-1">
+                  <Text tw="text-[11px] font-bold text-gray-500 dark:text-gray-500">
+                    {memberCount} Followers
                   </Text>
                 </View>
               </View>
               <View tw="items-end justify-end">
                 <View tw="rounded-full bg-black p-1 dark:bg-white">
-                  <Text tw="px-6 font-bold text-white dark:text-black">
+                  <Text tw="px-2.5 py-0.5 text-xs font-bold text-white dark:text-black">
                     Join
                   </Text>
                 </View>
@@ -166,11 +168,8 @@ const CreatorChannelsListCreator = memo(
             </View>
           </View>
         </View>
-        <View tw="ml-[52px] pl-3">
-          <Text
-            tw="leading-5 text-gray-500 dark:text-gray-300"
-            numberOfLines={2}
-          >
+        <View tw="ml-[40px] mt-1 pl-3">
+          <Text tw="text-13 text-gray-500 dark:text-gray-300" numberOfLines={2}>
             {item?.text}
           </Text>
         </View>
@@ -195,13 +194,13 @@ export const CreatorChannelsList = memo(
     useScrollToTop(listRef);
 
     // Start FAKE:
-    const data = generateFakeData(
-      6,
-      "data"
+    const data = useMemo(
+      () => generateFakeData(6, "data"),
+      []
     ) as unknown as CreatorChannelsListItemProps[];
-    const topCreators = generateFakeData(
-      15,
-      "creator"
+    const topCreators = useMemo(
+      () => generateFakeData(15, "creator"),
+      []
     ) as unknown as CreatorChannelsListItemProps[];
     const fetchMore = () => {};
     const refresh = () => {};
@@ -220,7 +219,7 @@ export const CreatorChannelsList = memo(
         return [
           {
             type: "section",
-            title: "Channels",
+            title: "My Channels",
             subtext:
               "Get exclusive updates, presale access and unreleased content from your favorite creators.",
           },
