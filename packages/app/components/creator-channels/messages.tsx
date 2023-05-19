@@ -20,6 +20,7 @@ import { createParam } from "app/navigation/use-param";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
+import { reactionEmojis } from "../reaction/constants";
 import { useChannelMessages } from "./hooks/use-channel-messages";
 
 type HeaderProps = {
@@ -197,13 +198,28 @@ const MessageItem = (props: MessageItemProps) => {
           <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
             {text}
           </Text>
+          <View tw="mt-1 w-full flex-row items-center">
+            <View tw="max-w-[300px] flex-[5] flex-row justify-between">
+              {reactionEmojis.map((emoji) => {
+                return (
+                  <Pressable key={emoji}>
+                    <Text tw="text-sm text-gray-700 dark:text-gray-200">
+                      {emoji} 1.2k
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+            <View tw="mr-2 flex-1 flex-row justify-end">
+              <Reaction
+                selected={"❤️"}
+                onPress={() => {
+                  console.log("pressed");
+                }}
+              />
+            </View>
+          </View>
         </View>
-        <Reaction
-          selected={"❤️"}
-          onPress={() => {
-            console.log("pressed");
-          }}
-        />
       </View>
     </View>
   );
