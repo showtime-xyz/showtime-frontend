@@ -1,3 +1,4 @@
+import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Plus } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
@@ -11,6 +12,7 @@ import {
   CreatorChannelsTabBarIcon,
   TrendingTabBarIcon,
 } from "app/navigation/tab-bar-icons";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import { NotificationsInHeader } from "./header";
 
@@ -22,6 +24,7 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
   const { isLoading, isAuthenticated, user } = useUser();
   const isDark = useIsDarkMode();
   const redirectToDrop = useRedirectToCreateDrop();
+  const navigateToLogin = useNavigateToLogin();
 
   return (
     <View>
@@ -73,8 +76,17 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
                     focused={router.pathname === "/foryou"}
                   />
                 </View>
+                <Button
+                  onPress={navigateToLogin}
+                  variant="primary"
+                  size="regular"
+                  labelTW="font-semibold"
+                >
+                  Sign In
+                </Button>
               </>
             )}
+
             {/* {Platform.OS === "web" ? <NetworkButton /> : null} */}
           </View>
         </View>
