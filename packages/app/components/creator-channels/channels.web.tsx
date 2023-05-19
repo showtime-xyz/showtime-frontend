@@ -27,7 +27,7 @@ import {
 import { breakpoints } from "design-system/theme";
 
 import { useChannelsList } from "./hooks/use-channels-list";
-import { CreatorChannelsList as CreatorChannelsListMobile } from "./list.tsx";
+import { CreatorChannelsList as CreatorChannelsListMobile } from "./list";
 import { Messages } from "./messages";
 
 type CreatorChannelsListProps = {
@@ -185,7 +185,7 @@ const CreatorChannelsListCreator = memo(
 
 CreatorChannelsListCreator.displayName = "CreatorChannelsListCreator";
 
-export const CreatorChannelsList = memo(
+export const CreatorChannels = memo(
   ({ web_height = undefined }: { web_height?: number }) => {
     //const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } = useChannelsList();
 
@@ -372,4 +372,4 @@ export const CreatorChannelsList = memo(
   }
 );
 
-CreatorChannelsList.displayName = "CreatorChannelsList";
+CreatorChannels.displayName = "CreatorChannels";
