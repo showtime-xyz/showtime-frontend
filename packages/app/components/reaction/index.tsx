@@ -15,13 +15,14 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ReactionContext } from "app/components/reaction/reaction-provider";
+import {
+  emojiButtonSize,
+  reactionButtonSize,
+  reactionEmojis,
+} from "./constants";
+import { ReactionContext } from "./reaction-context";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-const reactions = ["❤️", "🔥", "😍", "❇️"];
-
-const emojiButtonSize = 54;
-const reactionButtonSize = 20;
 
 type Props = {
   onPress?: (emoji: string) => void;
@@ -36,7 +37,7 @@ export const Reaction = (props: Props) => {
 
   const isDark = useIsDarkMode();
   const setPositions = (pageX: number, pageY: number) => {
-    const totalRectButtonWidth = emojiButtonSize * reactions.length;
+    const totalRectButtonWidth = emojiButtonSize * reactionEmojis.length;
     pageX -= totalRectButtonWidth;
     pageX += emojiButtonSize / 2;
 
@@ -48,7 +49,7 @@ export const Reaction = (props: Props) => {
     state.setPosition({ top: pageY, left: pageX });
     state.setReactions(
       <View tw="flex-row overflow-hidden rounded-xl bg-gray-50 dark:bg-gray-800">
-        {reactions.map((reaction) => (
+        {reactionEmojis.map((reaction) => (
           <ShowtimePressable
             key={reaction}
             tw={`items-center justify-center ${
@@ -84,6 +85,8 @@ export const Reaction = (props: Props) => {
       onPress={() => {
         runOnUI(handlePress)();
       }}
+      style={{ alignSelf: "flex-start" }}
+      hitSlop={20}
     >
       <SVGReaction
         width={reactionButtonSize}

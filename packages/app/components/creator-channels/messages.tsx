@@ -194,7 +194,9 @@ const MessageItem = (props: MessageItemProps) => {
             </Text>
           </View>
 
-          <Text tw="text-sm text-gray-900 dark:text-gray-100">{text}</Text>
+          <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+            {text}
+          </Text>
         </View>
         <Reaction
           selected={"❤️"}
