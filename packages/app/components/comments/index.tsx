@@ -14,6 +14,7 @@ import { useAlert } from "@showtime-xyz/universal.alert";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -77,16 +78,15 @@ export function Comments({
     unlikeComment,
     deleteComment,
     newComment,
+    fetchMore,
+    isLoadingMore,
   } = useComments(nft.nft_id);
   const modalListProps = useModalListProps(webListHeight);
   const { bottom } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   //#endregion
   //#region variables
-  const dataReversed = useMemo(
-    () => data?.comments.slice().reverse() || [],
-    [data]
-  );
+  const dataReversed = useMemo(() => data.slice().reverse() || [], [data]);
 
   //#endregion
 
@@ -175,10 +175,16 @@ export function Comments({
       ) : null,
     [isLoading, dataReversed.length, error]
   );
-  const listFooterComponent = useCallback(
-    () => <View style={{ height: Math.max(bottom, 20) }} />,
-    [bottom]
-  );
+  const listFooterComponent = useCallback(() => {
+    if (isLoadingMore)
+      return (
+        <View tw="items-center pb-4">
+          <Spinner size="small" />
+        </View>
+      );
+    return <View style={{ height: Math.max(bottom, 20) }} />;
+  }, [bottom, isLoadingMore]);
+
   // run two recycling pools to optimize performance
   const getItemType = useCallback((item: CommentType) => {
     if (item.replies && item.replies?.length > 0) {
@@ -208,6 +214,7 @@ export function Comments({
             contentContainerStyle={styles.contentContainer}
             getItemType={getItemType}
             ListEmptyComponent={listEmptyComponent}
+            onEndReached={fetchMore}
             {...modalListProps}
           />
           {isAuthenticated && mounted && (

@@ -42,22 +42,22 @@ export interface Data {
   count: number;
 }
 
-export interface CommentsPayload {
-  data: Data;
-}
+export type CommentsPayload = Data;
 
 export const useComments = (nftId?: number) => {
+  const PAGE_SIZE = 5;
   //#region state
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [commentsCount, setCommentsCount] = useState(0);
+
   //#endregion
 
   //#region hooks
   const { mutate } = useSWRConfig();
   const fetchCommentsURL = useCallback(
-    function fetchCommentsURL() {
-      // TODO: uncomment when pagination is fixed.
-      // return `/v2/comments/${nftId}?limit=10&page=${index + 1}`;
-      return nftId ? `/v3/comments/${nftId}` : null;
+    (index: number, previousPageData: []) => {
+      if (previousPageData && !previousPageData.length) return null;
+      return `/v3/comments/${nftId}`;
     },
     [nftId]
   );
@@ -72,9 +72,20 @@ export const useComments = (nftId?: number) => {
     refresh,
     mutate: mutateComments,
   } = useInfiniteListQuerySWR<CommentsPayload>(fetchCommentsURL);
-  const commentsCount = useMemo(() => {
-    return data?.[0].data?.count ?? 0;
+
+  const newData = useMemo(() => {
+    let newData: any = [];
+    if (data) {
+      setCommentsCount(data.length > 0 ? data[data.length - 1].count : 0);
+      data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p.comments);
+        }
+      });
+    }
+    return newData;
   }, [data]);
+
   //#endregion
 
   //#region callbacks
@@ -156,10 +167,10 @@ export const useComments = (nftId?: number) => {
       });
 
       mutateComments((data) => {
-        if (data?.[0].data?.comments) {
-          data[0].data.comments = deleteCommentRecursively(
+        if (data?.[0]?.comments) {
+          data[0].comments = deleteCommentRecursively(
             commentId,
-            data[0].data.comments
+            data[0].comments
           );
         }
         return data;
@@ -208,18 +219,14 @@ export const useComments = (nftId?: number) => {
 
   return {
     error,
-    data: data?.[0].data,
-
+    data: newData,
     isSubmitting,
     isLoading,
     isLoadingMore,
     isRefreshing,
-
     commentsCount,
-
     refresh,
     fetchMore,
-
     likeComment,
     unlikeComment,
     deleteComment,

@@ -244,7 +244,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           onPress={(i) => {
             setIndex(i);
           }}
-          routes={routes}
+          routes={routes as any}
           index={index}
         />
         <View tw="h-4" />
