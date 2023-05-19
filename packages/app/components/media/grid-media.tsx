@@ -46,7 +46,12 @@ function GridMediaImpl({
     [item]
   );
   const mediaStillPreviewUri = useMemo(
-    () => getMediaUrl({ nft: item, stillPreview: true }),
+    () =>
+      getMediaUrl({
+        nft: item,
+        stillPreview: true,
+        optimized: true,
+      }),
     [item]
   );
   const contentWidth = useContentWidth();
