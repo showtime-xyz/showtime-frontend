@@ -40,7 +40,13 @@ function ListMediaImpl({
   );
 
   const mediaStillPreviewUri = useMemo(
-    () => getMediaUrl({ nft: item, stillPreview: true, animated: false }),
+    () =>
+      getMediaUrl({
+        nft: item,
+        stillPreview: true,
+        animated: false,
+        optimized: true,
+      }),
     [item]
   );
 

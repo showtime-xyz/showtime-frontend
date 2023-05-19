@@ -187,12 +187,21 @@ const buildCdnUrl = (nft: NFT, stillPreview?: boolean) => {
   }`;
 };
 
-const getVideoOrGifUrl = (nft: NFT, animated?: boolean) => {
+const getVideoOrGifUrl = (
+  nft: NFT,
+  animated?: boolean,
+  optimized?: boolean
+) => {
+  // we have two sets of thumbnails, one from the first frame, and one from the middle (optimize)
+  const bunnyThumbUrl = optimized
+    ? nft?.video_urls?.optimized_thumbnail
+    : nft?.video_urls?.thumbnail;
+
   return animated
     ? nft?.video_urls?.preview_animation ??
-        nft?.video_urls?.thumbnail ??
+        bunnyThumbUrl ??
         nft?.cloudinary_thumbnail_url
-    : nft?.video_urls?.thumbnail ?? nft?.cloudinary_thumbnail_url;
+    : bunnyThumbUrl ?? nft?.cloudinary_thumbnail_url;
 };
 
 const getAvailableVideoUrl = (nft: NFT, stillPreview: boolean) => {
@@ -217,10 +226,12 @@ export const getMediaUrl = ({
   nft,
   stillPreview,
   animated,
+  optimized,
 }: {
   nft?: NFT;
   stillPreview: boolean;
   animated?: boolean;
+  optimized?: boolean;
 }) => {
   if (!nft || (!nft.chain_name && !nft.contract_address && !nft.token_id)) {
     console.warn("NFT is missing fields to get media URL");
@@ -234,7 +245,7 @@ export const getMediaUrl = ({
     stillPreview &&
     (nft?.mime_type?.startsWith("video") || nft?.mime_type === "image/gif")
   ) {
-    const url = getVideoOrGifUrl(nft, animated);
+    const url = getVideoOrGifUrl(nft, animated, optimized);
     cdnUrl = url ?? cdnUrl;
     cdnUrl = cdnUrl.replace(
       "https://storage.googleapis.com/showtime-cdn/cdnv2",
