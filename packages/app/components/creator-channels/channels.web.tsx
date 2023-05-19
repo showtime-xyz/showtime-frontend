@@ -156,7 +156,7 @@ const CreatorChannelsListCreator = memo(
                 </View>
                 <View tw="mt-1 flex-1">
                   <Text tw="text-[11px] font-bold text-gray-500 dark:text-gray-500">
-                    {memberCount} Followers
+                    {memberCount} Members
                   </Text>
                 </View>
               </View>
