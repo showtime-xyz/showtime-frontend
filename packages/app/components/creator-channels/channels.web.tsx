@@ -42,6 +42,7 @@ type CreatorChannelsListItemProps = {
   text?: string;
   members: number;
   itemType?: "creator";
+  unreadMessages?: number;
   // TODO: Add more props
 } & { type: "section"; title: string; subtext?: string; tw?: string };
 
@@ -83,6 +84,7 @@ const CreatorChannelsListItem = memo(
     const time = formatDateRelativeWithIntl(item.date);
     const router = useRouter();
     const currentChannel = useMemo(() => router.query["channelId"], [router]);
+
     return (
       <RectButton
         onPress={() => {
@@ -93,7 +95,7 @@ const CreatorChannelsListItem = memo(
       >
         <View
           tw={[
-            "mx-3 my-1 flex-1 cursor-pointer rounded-lg px-2 py-2 hover:bg-gray-100",
+            "mx-3 my-1 flex-1 cursor-pointer rounded-lg px-2 py-2 transition-colors hover:bg-gray-100",
             currentChannel === item.id ? "bg-gray-100" : "",
           ]}
         >
@@ -117,7 +119,12 @@ const CreatorChannelsListItem = memo(
               </View>
               <View tw="mt-1">
                 <Text
-                  tw="text-[13px] text-gray-500 dark:text-gray-300"
+                  tw={[
+                    "text-[13px] ",
+                    item?.unreadMessages
+                      ? "font-semibold text-black dark:text-white"
+                      : "text-gray-500 dark:text-gray-300",
+                  ]}
                   numberOfLines={2}
                 >
                   {item?.text}
