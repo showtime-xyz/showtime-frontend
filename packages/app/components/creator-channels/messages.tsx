@@ -3,12 +3,13 @@ import { Platform } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft } from "@showtime-xyz/universal.icon";
+import { ArrowLeft, Settings, Share } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -57,7 +58,7 @@ const Header = (props: HeaderProps) => {
 
   return (
     <View
-      tw="web:pt-2 android:pt-4 flex-row px-4 pb-2"
+      tw="web:pt-5 android:pt-4 flex-row items-center px-4 pb-2"
       style={{ columnGap: 8 }}
     >
       <View
@@ -88,6 +89,22 @@ const Header = (props: HeaderProps) => {
         >
           {props.members} members
         </Text>
+      </View>
+      <View tw="flex-row">
+        <Pressable tw="p-2">
+          <Share
+            height={20}
+            width={20}
+            color={isDark ? colors.gray["100"] : colors.gray[800]}
+          />
+        </Pressable>
+        <Pressable tw="p-2">
+          <Settings
+            height={20}
+            width={20}
+            color={isDark ? colors.gray["100"] : colors.gray[800]}
+          />
+        </Pressable>
       </View>
     </View>
   );
