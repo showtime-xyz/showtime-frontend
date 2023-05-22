@@ -38,7 +38,7 @@ export interface CommentType {
 
 export interface Data {
   comments: CommentType[];
-  has_more: boolean;
+  next_page: number | null;
   count: number;
 }
 
@@ -49,15 +49,16 @@ export const useComments = (nftId?: number) => {
   //#region state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
+  const [isReachingEnd, setIsReachingEnd] = useState(false);
 
   //#endregion
 
   //#region hooks
   const { mutate } = useSWRConfig();
   const fetchCommentsURL = useCallback(
-    (index: number, previousPageData: []) => {
-      if (previousPageData && !previousPageData.length) return null;
-      return `/v3/comments/${nftId}`;
+    (index: number, previousPageData: any) => {
+      if (previousPageData && !previousPageData?.comments.length) return null;
+      return `/v3/comments/${nftId}?page=${index + 1}&limit=${PAGE_SIZE}`;
     },
     [nftId]
   );
@@ -68,15 +69,19 @@ export const useComments = (nftId?: number) => {
     isLoadingMore,
     isRefreshing,
     error,
-    fetchMore,
+    fetchMore: fetchMoreComments,
     refresh,
     mutate: mutateComments,
-  } = useInfiniteListQuerySWR<CommentsPayload>(fetchCommentsURL);
+  } = useInfiniteListQuerySWR<CommentsPayload>(fetchCommentsURL, {
+    pageSize: PAGE_SIZE,
+  });
 
   const newData = useMemo(() => {
     let newData: any = [];
     if (data) {
-      setCommentsCount(data.length > 0 ? data[data.length - 1].count : 0);
+      const lastData = data[data.length - 1];
+      setCommentsCount(lastData.count ?? 0);
+      setIsReachingEnd(!lastData?.next_page);
       data.forEach((p) => {
         if (p) {
           newData = newData.concat(p.comments);
@@ -85,7 +90,10 @@ export const useComments = (nftId?: number) => {
     }
     return newData;
   }, [data]);
-
+  const fetchMore = async () => {
+    if (isReachingEnd) return;
+    await fetchMoreComments();
+  };
   //#endregion
 
   //#region callbacks
