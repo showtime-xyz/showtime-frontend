@@ -15,6 +15,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
 import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
+import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
@@ -226,6 +227,10 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="report" component={ReportScreen} />
         <Stack.Screen name="drop" component={DropScreen} />
+        <Stack.Screen
+          name="channelsSettings"
+          component={CreatorChannelsSettingsScreen}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );

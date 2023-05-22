@@ -10,7 +10,10 @@ import Animated, {
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Settings, Share } from "@showtime-xyz/universal.icon";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import {
+  InfiniteScrollList,
+  ListRenderItemInfo,
+} from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -35,6 +38,8 @@ type HeaderProps = {
   username: string;
   members: number;
   channelId: string;
+  onPressSettings: () => void;
+  onPressShare: () => void;
 };
 
 const Header = (props: HeaderProps) => {
@@ -65,18 +70,14 @@ const Header = (props: HeaderProps) => {
 
   return (
     <View
-      tw="web:pt-5 android:pt-4 flex-row items-center px-4 pb-2"
+      tw="web:pt-2 android:pt-4 flex-row items-center px-4 pb-2"
       style={{ columnGap: 8 }}
     >
-      <View
-        tw="web:pl-10 web:md:pl-0 flex-row items-center"
-        style={{ columnGap: 8 }}
-      >
+      <View tw="flex-row items-center" style={{ columnGap: 8 }}>
         <Pressable
           onPress={() => {
             router.back();
           }}
-          tw="web:hidden"
         >
           <ArrowLeft
             height={24}
@@ -98,14 +99,14 @@ const Header = (props: HeaderProps) => {
         </Text>
       </View>
       <View tw="flex-row">
-        <Pressable tw="p-2">
+        <Pressable onPress={props.onPressShare} tw="p-2">
           <Share
             height={20}
             width={20}
             color={isDark ? colors.gray["100"] : colors.gray[800]}
           />
         </Pressable>
-        <Pressable tw="p-2">
+        <Pressable onPress={props.onPressSettings} tw="p-2">
           <Settings
             height={20}
             width={20}
@@ -123,9 +124,9 @@ const { useParam } = createParam<Query>();
 
 export const Messages = () => {
   const [channelId] = useParam("channelId");
-
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
+  const router = useRouter();
 
   const { data, isLoading, fetchMore, isLoadingMore } = useChannelMessages();
   const keyboard = useAnimatedKeyboard();
@@ -173,7 +174,34 @@ export const Messages = () => {
           }),
       }}
     >
-      <Header username="nishan" members={29} channelId={channelId} />
+      <Header
+        username="nishan"
+        onPressSettings={() => {
+          const as = `/channels/${channelId}/settings`;
+          router.push(
+            Platform.select({
+              native: as,
+              web: {
+                pathname: router.pathname,
+                query: {
+                  ...router.query,
+                  channelsSettingsModal: true,
+                },
+              } as any,
+            }),
+            Platform.select({
+              native: as,
+              web: router.asPath,
+            }),
+            { shallow: true }
+          );
+        }}
+        onPressShare={() => {
+          console.log("Share");
+        }}
+        members={29}
+        channelId={channelId}
+      />
       <View tw="overflow-hidden">
         <AnimatedInfiniteScrollList
           data={data}
@@ -182,7 +210,7 @@ export const Messages = () => {
           useWindowScroll={false}
           estimatedItemSize={20}
           keyboardDismissMode="on-drag"
-          renderItem={MessageItem}
+          renderItem={MessageItem as any}
           contentContainerStyle={{ paddingTop: insets.bottom }}
           style={style}
           ListFooterComponent={
@@ -244,7 +272,7 @@ type MessageItemProps = {
   };
 };
 
-const MessageItem = (props: MessageItemProps) => {
+const MessageItem = (props: ListRenderItemInfo<MessageItemProps["item"]>) => {
   const { username, text } = props.item;
   return (
     <View tw="mb-5 px-4">

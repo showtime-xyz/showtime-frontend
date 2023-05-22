@@ -31,6 +31,7 @@ import { CommentsScreen } from "app/screens/comments";
 import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
 import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
+import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEventScreen } from "app/screens/drop-event";
@@ -213,6 +214,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorChannelsCongratsScreen />
         <CreatorChannelsIntroScreen />
         <CreatorChannelsMembersScreen />
+        <CreatorChannelsSettingsScreen />
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
         <OnboardingScreen />

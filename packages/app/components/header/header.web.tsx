@@ -13,7 +13,10 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { WEB_HEADER_HEIGHT } from "app/constants/layout";
 import { useUser } from "app/hooks/use-user";
-import { SWIPE_LIST_SCREENS } from "app/lib/constants";
+import {
+  HIDE_MOBILE_WEB_HEADER_SCREENS,
+  SWIPE_LIST_SCREENS,
+} from "app/lib/constants";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
@@ -121,6 +124,9 @@ export const Header = withColorScheme(
           </View>
         </View>
       );
+    }
+    if (HIDE_MOBILE_WEB_HEADER_SCREENS.includes(router.pathname)) {
+      return null;
     }
     return (
       <>
