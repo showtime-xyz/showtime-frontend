@@ -136,8 +136,7 @@ const CCUserListItem = memo(
                     tw="max-w-[70%] text-sm font-semibold text-gray-500 dark:text-gray-300"
                     numberOfLines={1}
                   >
-                    {item.name} fwoeijfewofijweofijewofijwefoijwefoiwjefo
-                    iwjedoiwej
+                    {item.name}
                   </Text>
                   <View tw="flex-row items-center justify-center px-3">
                     <Text tw="mr-3 font-extrabold text-gray-500 dark:text-gray-300">
