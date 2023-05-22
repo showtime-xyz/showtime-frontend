@@ -217,7 +217,6 @@ const MessageInput = () => {
       position: "absolute",
       bottom: insets.bottom + 16,
       width: "100%",
-      backgroundColor: "white",
       transform: [
         {
           translateY: -keyboard.height.value + 32,
