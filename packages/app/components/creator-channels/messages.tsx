@@ -1,5 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Platform } from "react-native";
+
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+import Animated, {
+  useAnimatedKeyboard,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -13,7 +19,6 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { InputAccessoryView } from "app/components/input-accessory-view";
 import { MessageBox } from "app/components/messages";
 import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
@@ -21,9 +26,11 @@ import { createParam } from "app/navigation/use-param";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { reactionEmojis } from "../reaction/constants";
+import { MessageReactions } from "../reaction/message-reactions";
 import { useChannelMessages } from "./hooks/use-channel-messages";
 
+const AnimatedInfiniteScrollList =
+  Animated.createAnimatedComponent(InfiniteScrollList);
 type HeaderProps = {
   username: string;
   members: number;
@@ -118,13 +125,24 @@ export const Messages = () => {
   const [channelId] = useParam("channelId");
 
   const insets = useSafeAreaInsets();
-  const bototm = usePlatformBottomHeight();
+  const bottomHeight = usePlatformBottomHeight();
 
   const { data, isLoading, fetchMore, isLoadingMore } = useChannelMessages();
+  const keyboard = useAnimatedKeyboard();
 
   const onLoadMore = () => {
     fetchMore();
   };
+
+  const style = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          translateY: -keyboard.height.value,
+        },
+      ],
+    };
+  });
   if (!channelId) {
     return (
       <EmptyPlaceholder
@@ -147,7 +165,8 @@ export const Messages = () => {
       style={{
         paddingTop: insets.top,
         paddingBottom:
-          bototm +
+          bottomHeight +
+          32 +
           Platform.select({
             web: 4,
             default: 10,
@@ -155,40 +174,70 @@ export const Messages = () => {
       }}
     >
       <Header username="nishan" members={29} channelId={channelId} />
-      <InfiniteScrollList
-        data={data}
-        onEndReached={onLoadMore}
-        inverted
-        useWindowScroll={false}
-        estimatedItemSize={20}
-        keyboardDismissMode="interactive"
-        renderItem={MessageItem}
-        contentContainerStyle={{ paddingTop: insets.bottom }}
-        ListFooterComponent={
-          isLoadingMore
-            ? () => (
-                <View tw="w-full items-center py-4">
-                  <Spinner size="small" />
-                </View>
-              )
-            : () => null
-        }
-      />
-      <InputAccessoryView>
-        <View tw="bg-white dark:bg-black">
-          <MessageBox
-            placeholder="Send an update..."
-            onSubmit={(text: string) => {
-              return Promise.resolve();
-            }}
-            submitting={false}
-          />
-        </View>
-      </InputAccessoryView>
+      <View tw="overflow-hidden">
+        <AnimatedInfiniteScrollList
+          data={data}
+          onEndReached={onLoadMore}
+          inverted
+          useWindowScroll={false}
+          estimatedItemSize={20}
+          keyboardDismissMode="on-drag"
+          renderItem={MessageItem}
+          contentContainerStyle={{ paddingTop: insets.bottom }}
+          style={style}
+          ListFooterComponent={
+            isLoadingMore
+              ? () => (
+                  <View tw="w-full items-center py-4">
+                    <Spinner size="small" />
+                  </View>
+                )
+              : () => null
+          }
+        />
+      </View>
+      <MessageInput />
     </View>
   );
 };
 
+const MessageInput = () => {
+  const keyboard = useAnimatedKeyboard();
+  const insets = useSafeAreaInsets();
+  useEffect(() => {
+    AvoidSoftInput.setEnabled(false);
+
+    return () => {
+      AvoidSoftInput.setEnabled(true);
+    };
+  }, []);
+
+  const style = useAnimatedStyle(() => {
+    return {
+      position: "absolute",
+      bottom: insets.bottom + 16,
+      width: "100%",
+      backgroundColor: "white",
+      transform: [
+        {
+          translateY: -keyboard.height.value + 32,
+        },
+      ],
+    };
+  });
+
+  return (
+    <Animated.View style={style}>
+      <MessageBox
+        placeholder="Send an update..."
+        onSubmit={(text: string) => {
+          return Promise.resolve();
+        }}
+        submitting={false}
+      />
+    </Animated.View>
+  );
+};
 type MessageItemProps = {
   item: {
     username: string;
@@ -216,17 +265,7 @@ const MessageItem = (props: MessageItemProps) => {
             {text}
           </Text>
           <View tw="mt-1 w-full flex-row items-center">
-            <View tw="max-w-[300px] flex-[5] flex-row justify-between">
-              {reactionEmojis.map((emoji) => {
-                return (
-                  <Pressable key={emoji}>
-                    <Text tw="text-xs text-gray-700 dark:text-gray-200">
-                      {emoji} 1.2k
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
+            <MessageReactions />
             <View tw="mr-2 flex-1 flex-row justify-end">
               <Reaction
                 selected={"❤️"}
