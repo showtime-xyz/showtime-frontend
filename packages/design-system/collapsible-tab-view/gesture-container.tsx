@@ -178,7 +178,7 @@ export const GestureContainer = React.forwardRef<
   const stopAllAnimation = () => {
     "worklet";
 
-    // if (!sceneIsReady.value[curIndexValue.value]) return;
+    if (!sceneIsReady.value[curIndexValue.value]) return;
 
     cancelAnimation(headerTrans);
     slideIndex.value = -1;
@@ -266,7 +266,7 @@ export const GestureContainer = React.forwardRef<
       stopScrollView();
     })
     .onUpdate((event) => {
-      // if (!sceneIsReady.value[curIndexValue.value]) return;
+      if (!sceneIsReady.value[curIndexValue.value]) return;
 
       if (isSlidingHeader.value === false) {
         slideIndex.value = curIndexValue.value;
@@ -281,7 +281,7 @@ export const GestureContainer = React.forwardRef<
       );
     })
     .onEnd((event) => {
-      // if (!sceneIsReady.value[curIndexValue.value]) return;
+      if (!sceneIsReady.value[curIndexValue.value]) return;
       if (isSlidingHeader.value === false) return;
 
       headerTransStartY.value = 0;
@@ -315,7 +315,7 @@ export const GestureContainer = React.forwardRef<
     })
     .onUpdate((event) => {
       if (
-        // !sceneIsReady.value[curIndexValue.value] ||
+        !sceneIsReady.value[curIndexValue.value] ||
         !onStartRefresh ||
         childScrollYTrans[curIndexValue.value]?.value === undefined
       )
@@ -360,7 +360,7 @@ export const GestureContainer = React.forwardRef<
       }
     })
     .onEnd((event) => {
-      // if (!sceneIsReady.value[curIndexValue.value] || !onStartRefresh) return;
+      if (!sceneIsReady.value[curIndexValue.value] || !onStartRefresh) return;
       if (!onStartRefresh) return;
 
       if (isDragging.value === false) return;
