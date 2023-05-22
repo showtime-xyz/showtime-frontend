@@ -183,7 +183,7 @@ const expoConfig: ExpoConfig = {
           // Enable 120 FPS animations
           CADisableMinimumFrameDurationOnPhone: true,
           // let RNS handle status bar management
-          UIViewControllerBasedStatusBarAppearance: true,
+          UIViewControllerBasedStatusBarAppearance: false,
           LSApplicationQueriesSchemes: [
             "mailto",
             "instagram",
