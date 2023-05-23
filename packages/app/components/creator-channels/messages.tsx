@@ -143,7 +143,7 @@ export const Messages = () => {
         },
       ],
     };
-  });
+  }, [keyboard]);
   if (!channelId) {
     return (
       <EmptyPlaceholder
@@ -162,16 +162,12 @@ export const Messages = () => {
 
   return (
     <View
-      tw="animate-fade-in-250 w-full flex-1"
+      tw="animate-fade-in-250 w-full flex-1 bg-white dark:bg-black"
       style={{
         paddingTop: insets.top,
-        paddingBottom:
-          bottomHeight +
-          32 +
-          Platform.select({
-            web: 4,
-            default: 10,
-          }),
+        paddingBottom: Platform.select({
+          web: bottomHeight,
+        }),
       }}
     >
       <Header
@@ -202,7 +198,7 @@ export const Messages = () => {
         members={29}
         channelId={channelId}
       />
-      <View tw="overflow-hidden">
+      <View tw="web:pb-12 flex-1 overflow-hidden pb-8">
         <AnimatedInfiniteScrollList
           data={data}
           onEndReached={onLoadMore}
@@ -231,7 +227,7 @@ export const Messages = () => {
 
 const MessageInput = () => {
   const keyboard = useAnimatedKeyboard();
-  const insets = useSafeAreaInsets();
+  const bottomHeight = usePlatformBottomHeight();
   useEffect(() => {
     AvoidSoftInput.setEnabled(false);
 
@@ -240,18 +236,20 @@ const MessageInput = () => {
     };
   }, []);
 
+  const bottom = Platform.select({ web: bottomHeight + 8, default: 16 });
+
   const style = useAnimatedStyle(() => {
     return {
       position: "absolute",
-      bottom: insets.bottom + 16,
       width: "100%",
+      bottom,
       transform: [
         {
-          translateY: -keyboard.height.value + 32,
+          translateY: -keyboard.height.value,
         },
       ],
     };
-  });
+  }, [keyboard, bottom]);
 
   return (
     <Animated.View style={style}>
