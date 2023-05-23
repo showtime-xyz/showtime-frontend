@@ -157,7 +157,7 @@ const CCUserListItem = memo(
 
               <View tw="flex-row items-center">
                 <Text
-                  tw="max-w-[55%] text-sm font-semibold text-gray-900 dark:text-white"
+                  tw="web:max-w-[190px] max-w-[50%] text-sm font-semibold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {item.username ? (
