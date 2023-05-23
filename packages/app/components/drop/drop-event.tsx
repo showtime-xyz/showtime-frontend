@@ -395,7 +395,6 @@ export const DropEvent = () => {
                           textAlignVertical="top"
                           placeholder="What is this drop about?"
                           onBlur={onBlur}
-                          helperText="You cannot edit this after the drop is created."
                           errorText={errors.description?.message}
                           value={value}
                           numberOfLines={3}
@@ -426,7 +425,6 @@ export const DropEvent = () => {
                     textAlignVertical="top"
                     placeholder="What is this drop about?"
                     onBlur={onBlur}
-                    helperText="You cannot edit this after the drop is created."
                     errorText={errors.description?.message}
                     value={value}
                     numberOfLines={3}
@@ -563,7 +561,7 @@ export const DropEvent = () => {
                                 label="Your royalties (%)"
                                 placeholder="Enter a number"
                                 onBlur={onBlur}
-                                helperText="How much you'll earn each time an edition of this drop is sold"
+                                helperText="Earn royalties each time an edition is sold."
                                 errorText={errors.royalty?.message}
                                 value={value?.toString()}
                                 onChangeText={onChange}
