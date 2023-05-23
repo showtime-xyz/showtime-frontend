@@ -117,6 +117,7 @@ const CCUserListItem = memo(
           href={`/@${item.username ?? item.wallet_address}`}
           tw="flex-1"
           viewProps={{ style: { flex: 1 } }}
+          className="w-full"
         >
           <View tw="flex-row items-center">
             <View tw="mr-2 h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
