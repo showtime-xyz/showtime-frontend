@@ -129,24 +129,25 @@ const CCUserListItem = memo(
                 />
               )}
             </View>
-            <View tw="mr-1 flex-1 justify-center">
+            <View tw="flex-1 justify-center">
               {item.name ? (
-                <View tw="flex-row items-center">
+                <View tw="flex-row items-center pb-0.5">
                   <Text
-                    tw="max-w-[70%] text-sm font-semibold text-gray-500 dark:text-gray-300"
+                    tw="max-w-[55%] text-sm font-semibold text-gray-500 dark:text-gray-300"
                     numberOfLines={1}
                   >
                     {item.name}
                   </Text>
-                  <View tw="flex-row items-center justify-center px-3">
-                    <Text tw="mr-3 font-extrabold text-gray-500 dark:text-gray-300">
+                  <View tw="flex-row items-center justify-center px-2.5">
+                    <Text tw="mr-2.5 text-xs font-extrabold text-gray-500 dark:text-gray-300">
                       •
                     </Text>
-                    <Text tw="font-normal text-gray-500 dark:text-gray-300">
+                    <Text tw="text-[12px] font-medium text-gray-500 dark:text-gray-300">
                       {item.reaction_count ?? 0}{" "}
                     </Text>
                     <ReactionIcon
-                      fontSize={20}
+                      width={16}
+                      height={16}
                       stroke={isDark ? colors.gray[300] : colors.gray[500]}
                     />
                   </View>
@@ -155,11 +156,11 @@ const CCUserListItem = memo(
 
               <View tw="flex-row items-center">
                 <Text
-                  tw="max-w-[120px] text-sm font-semibold text-gray-900 dark:text-white"
+                  tw="max-w-[55%] text-sm font-semibold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {item.username ? (
-                    <>@{item.username}</>
+                    <>@{item.username}feieieieieieieieieieieiei</>
                   ) : (
                     <>{formatAddressShort(item.wallet_address)}</>
                   )}
