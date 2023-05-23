@@ -79,6 +79,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       channelsCongrats: "channels/congrats",
       channelsMembers: "channels/:channelId/members",
       channelsSettings: "channels/:channelId/settings",
+      channelsMessageReactions: "channels/:channelId/reactions",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {

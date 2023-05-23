@@ -91,6 +91,7 @@ type RootStackNavigatorParams = {
   dropEvent: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;
+  channelsMessageReactions: undefined;
   search: undefined;
   swipeList: SwipeListParams;
   nft: SwipeListParams;
