@@ -290,7 +290,7 @@ export const Messages = () => {
             </Text>
           </View>
         </View>
-        <View tw="absolute bottom-0 w-full items-center justify-center">
+        <View tw="absolute bottom-0.5 w-full items-center justify-center">
           <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`2,300 members will be notified`}</Text>
         </View>
       </>

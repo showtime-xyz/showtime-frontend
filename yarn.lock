@@ -4266,9 +4266,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-plugins@npm:6.0.1, @expo/config-plugins@npm:~6.0.0":
-  version: 6.0.1
-  resolution: "@expo/config-plugins@npm:6.0.1"
+"@expo/config-plugins@npm:6.0.2":
+  version: 6.0.2
+  resolution: "@expo/config-plugins@npm:6.0.2"
   dependencies:
     "@expo/config-types": ^48.0.0
     "@expo/json-file": ~8.2.37
@@ -4285,7 +4285,7 @@ __metadata:
     slash: ^3.0.0
     xcode: ^3.0.1
     xml2js: 0.4.23
-  checksum: ad324c21c546157a5187442a4b9f623a62b5894dd35fa852e3f46ab6cb799706fb814c361f523df391f095aa89d7a7ca04c214de2cd8a5be3b3c85f52f49375f
+  checksum: 2c689f767d3fd6578535b90bae42f6559e7e53321d71e621d38975fdf49853f9c16b5bd7a5f8574a72133cb2b93490c28a46a8c5dcc1f999940b7fa742acfca9
   languageName: node
   linkType: hard
 
@@ -4309,6 +4309,29 @@ __metadata:
     xcode: ^3.0.1
     xml2js: 0.4.23
   checksum: 9fc5e19a92e105d200aeb7ed28607c2e4e8dcf2b7256c8bae32b2f30ccb5139fbe4854df8c6d6db0bb80e254ddb48a82665043582e7044b4ba1888448909c818
+  languageName: node
+  linkType: hard
+
+"@expo/config-plugins@npm:~6.0.0":
+  version: 6.0.1
+  resolution: "@expo/config-plugins@npm:6.0.1"
+  dependencies:
+    "@expo/config-types": ^48.0.0
+    "@expo/json-file": ~8.2.37
+    "@expo/plist": ^0.0.20
+    "@expo/sdk-runtime-versions": ^1.0.0
+    "@react-native/normalize-color": ^2.0.0
+    chalk: ^4.1.2
+    debug: ^4.3.1
+    find-up: ~5.0.0
+    getenv: ^1.0.0
+    glob: 7.1.6
+    resolve-from: ^5.0.0
+    semver: ^7.3.5
+    slash: ^3.0.0
+    xcode: ^3.0.1
+    xml2js: 0.4.23
+  checksum: ad324c21c546157a5187442a4b9f623a62b5894dd35fa852e3f46ab6cb799706fb814c361f523df391f095aa89d7a7ca04c214de2cd8a5be3b3c85f52f49375f
   languageName: node
   linkType: hard
 
@@ -8071,12 +8094,12 @@ __metadata:
     react: 18.2.0
     react-dom: 18.2.0
     react-hook-form: ^7.43.9
-    react-native: 0.71.7
+    react-native: 0.71.8
     react-native-avoid-softinput: ^3.1.5
     react-native-bignumber: ^0.2.1
     react-native-blob-jsi-helper: ^0.3.0
     react-native-blurhash: ^1.1.10
-    react-native-gesture-handler: ~2.10.0
+    react-native-gesture-handler: 2.10.1
     react-native-get-random-values: ^1.8.0
     react-native-image-colors: ^1.5.2
     react-native-ios-context-menu: ^1.15.3
@@ -8228,7 +8251,7 @@ __metadata:
     "@storybook/react-native": ^6.5.3
     burnt: ^0.10.0
     design-system: "*"
-    expo: ~48.0.15
+    expo: ~48.0.17
     expo-asset: ~8.6.2
     expo-av: ~13.3.0
     expo-blur: ~12.3.0
@@ -8249,9 +8272,9 @@ __metadata:
     nativewind: ^2.0.11
     react: 18.2.0
     react-dom: 18.2.0
-    react-native: 0.71.7
+    react-native: 0.71.8
     react-native-blob-jsi-helper: ^0.3.0
-    react-native-gesture-handler: ~2.10.0
+    react-native-gesture-handler: 2.10.1
     react-native-get-random-values: ^1.8.0
     react-native-ios-context-menu: ^1.15.3
     react-native-mmkv: 2.8.0
@@ -19511,14 +19534,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:48.0.16":
-  version: 48.0.16
-  resolution: "expo@npm:48.0.16"
+"expo@npm:~48.0.15, expo@npm:~48.0.17":
+  version: 48.0.17
+  resolution: "expo@npm:48.0.17"
   dependencies:
     "@babel/runtime": ^7.20.0
     "@expo/cli": 0.7.1
     "@expo/config": 8.0.2
-    "@expo/config-plugins": 6.0.1
+    "@expo/config-plugins": 6.0.2
     "@expo/vector-icons": ^13.0.0
     babel-preset-expo: ~9.3.2
     cross-spawn: ^6.0.5
@@ -19539,7 +19562,7 @@ __metadata:
     uuid: ^3.4.0
   bin:
     expo: bin/cli.js
-  checksum: e1d2f68501c8870449fd9c993859d32f37ed1695f6c18a4ad43785805e25fd600d5d1e267a851c961a7f83dea7c140bf62333b34832eed433131e50aaa00149b
+  checksum: 560aaa0da139560d84fea92bce9bc3aa0c32e157b7676f1c80ee3bece43226fe1f44fe41837b91d00a4107a0cf5291f0e042d5f9ca1591d723dbf5a96a168df3
   languageName: node
   linkType: hard
 
@@ -28741,9 +28764,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:~2.10.0":
-  version: 2.10.0
-  resolution: "react-native-gesture-handler@npm:2.10.0"
+"react-native-gesture-handler@npm:2.10.1":
+  version: 2.10.1
+  resolution: "react-native-gesture-handler@npm:2.10.1"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -28753,7 +28776,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 7bfde740a67e551458228ad9076af511ad3538c5e65598fc0aef0fdb7329c1743501e31d46ad64fc42697132e3f39721da45d044ad38c6049415b2ede79b13e8
+  checksum: 8770c6590aca1947957aefc1979bae7263cac1814fd087f5d7c6f3ed0f8a0acda85136421fee814e4d8ec86a973190b206136a8e0e90659488f569373d3af117
   languageName: node
   linkType: hard
 
@@ -28768,10 +28791,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gradle-plugin@npm:^0.71.17":
-  version: 0.71.17
-  resolution: "react-native-gradle-plugin@npm:0.71.17"
-  checksum: 5ff996bafc3959a36551dc34d481cefb070ede4025b5eb2ce659f51adf74ba0e6845cc019ea1d547e0b4007f1c3c68146fa719688f09bde308f25320c6c6f834
+"react-native-gradle-plugin@npm:^0.71.18":
+  version: 0.71.18
+  resolution: "react-native-gradle-plugin@npm:0.71.18"
+  checksum: 19f0a41e29c9210ff495010aaa612f2c2f4f5f937b6c20266c8dc62f4ccedc65bb7576de59b2f3fd2bb8044ce9785e56673879f2eb452f948e6659a5e1fa5894
   languageName: node
   linkType: hard
 
@@ -29125,9 +29148,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native@npm:0.71.7":
-  version: 0.71.7
-  resolution: "react-native@npm:0.71.7"
+"react-native@npm:0.71.8":
+  version: 0.71.8
+  resolution: "react-native@npm:0.71.8"
   dependencies:
     "@jest/create-cache-key-function": ^29.2.1
     "@react-native-community/cli": 10.2.2
@@ -29154,7 +29177,7 @@ __metadata:
     promise: ^8.3.0
     react-devtools-core: ^4.26.1
     react-native-codegen: ^0.71.5
-    react-native-gradle-plugin: ^0.71.17
+    react-native-gradle-plugin: ^0.71.18
     react-refresh: ^0.4.0
     react-shallow-renderer: ^16.15.0
     regenerator-runtime: ^0.13.2
@@ -29167,7 +29190,7 @@ __metadata:
     react: 18.2.0
   bin:
     react-native: cli.js
-  checksum: efd91d5560290b883e0d3d3482cc4657268c2e480171b63a0c6b7dc8f6b1331298feac7d9966e1831d95d9fee893dfa831252052561232843e4982880238f09e
+  checksum: fe887c1b8bded23f9efea9dc10a8a8b2f32147e06418fc9a78294944874797abb0185ebcb0fdc5ce88046280bca72264ae8d119f4ca681a3e0bc502d0f75bfbe
   languageName: node
   linkType: hard
 

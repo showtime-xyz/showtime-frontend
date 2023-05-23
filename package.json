@@ -84,8 +84,7 @@
     "react-native-svg": "13.9.0",
     "expo-linear-gradient": "12.1.2",
     "react-native-screens": "3.20.0",
-    "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz",
-    "expo": "48.0.16"
+    "react-native-spotify-remote": "file:./react-native-spotify-remote.tgz"
   },
   "react-native": {
     "zlib": "browserify-zlib",
