@@ -160,7 +160,7 @@ const CCUserListItem = memo(
                   numberOfLines={1}
                 >
                   {item.username ? (
-                    <>@{item.username}feieieieieieieieieieieiei</>
+                    <>@{item.username}</>
                   ) : (
                     <>{formatAddressShort(item.wallet_address)}</>
                   )}
