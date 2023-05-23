@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, memo } from "react";
 import { Platform } from "react-native";
 
 import { AvoidSoftInput } from "react-native-avoid-softinput";
@@ -12,7 +12,8 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Settings, Share } from "@showtime-xyz/universal.icon";
 import {
   InfiniteScrollList,
-  ListRenderItemInfo,
+  InfiniteScrollListProps,
+  ListRenderItem,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -35,8 +36,15 @@ import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
 import { useChannelMessages } from "./hooks/use-channel-messages";
 
-const AnimatedInfiniteScrollList =
-  Animated.createAnimatedComponent(InfiniteScrollList);
+type TMessageItem = {
+  username: string;
+  text: string;
+};
+
+type MessageItemProps = {
+  item: TMessageItem;
+};
+
 type HeaderProps = {
   username: string;
   members: number;
@@ -44,6 +52,11 @@ type HeaderProps = {
   onPressSettings: () => void;
   onPressShare: () => void;
 };
+
+const AnimatedInfiniteScrollList =
+  Animated.createAnimatedComponent<InfiniteScrollListProps<TMessageItem>>(
+    InfiniteScrollList
+  );
 
 const Header = (props: HeaderProps) => {
   const router = useRouter();
@@ -156,6 +169,10 @@ export const Messages = () => {
     fetchMore();
   };
 
+  const renderItem: ListRenderItem<TMessageItem> = useCallback(({ item }) => {
+    return <MessageItem item={item} />;
+  }, []);
+
   const style = useAnimatedStyle(() => {
     return {
       transform: [
@@ -227,9 +244,9 @@ export const Messages = () => {
           onEndReached={onLoadMore}
           inverted
           useWindowScroll={false}
-          estimatedItemSize={20}
+          estimatedItemSize={100}
           keyboardDismissMode="on-drag"
-          renderItem={MessageItem as any}
+          renderItem={renderItem}
           contentContainerStyle={{ paddingTop: insets.bottom }}
           style={style}
           ListFooterComponent={
@@ -286,15 +303,9 @@ const MessageInput = () => {
     </Animated.View>
   );
 };
-type MessageItemProps = {
-  item: {
-    username: string;
-    text: string;
-  };
-};
 
-const MessageItem = (props: ListRenderItemInfo<MessageItemProps["item"]>) => {
-  const { username, text } = props.item;
+const MessageItem = memo(({ item }: MessageItemProps) => {
+  const { username, text } = item;
   return (
     <View tw="mb-5 px-4">
       <View tw="flex-row" style={{ columnGap: 8 }}>
@@ -327,4 +338,6 @@ const MessageItem = (props: ListRenderItemInfo<MessageItemProps["item"]>) => {
       </View>
     </View>
   );
-};
+});
+
+MessageItem.displayName = "MessageItem";
