@@ -24,6 +24,7 @@ export type InfiniteScrollListProps<T> = FlashListProps<T> & {
   }>;
 
   preserveScrollPosition?: boolean;
+  useWindowScroll?: boolean;
 };
 
 function FlashListComponent<T>(
