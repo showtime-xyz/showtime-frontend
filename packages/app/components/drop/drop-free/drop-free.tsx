@@ -665,7 +665,17 @@ export const DropFree = () => {
                             <Fieldset
                               ref={ref}
                               tw="flex-1"
-                              label="Explicit content (18+)"
+                              label={
+                                <View tw="mr-5 flex">
+                                  <Text tw="font-semibold">
+                                    Explicit visual (18+)
+                                  </Text>
+                                  <Text tw="max-w-[100%] pt-1 text-xs">
+                                    Do not check if your song lyrics are
+                                    explicit.
+                                  </Text>
+                                </View>
+                              }
                               switchOnly
                               switchProps={{
                                 checked: value,
