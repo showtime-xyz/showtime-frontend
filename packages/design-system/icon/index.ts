@@ -140,6 +140,7 @@ export { default as Music } from "./Music";
 export { default as Shopping } from "./Shopping";
 export { default as FreeDropType } from "./FreeDropType";
 export { default as Congrats } from "./Congrats";
+export { default as EyeOffV2 } from "./EyeOffV2";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

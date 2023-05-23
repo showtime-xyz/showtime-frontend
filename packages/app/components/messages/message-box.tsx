@@ -126,13 +126,13 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
           }}
         >
           {submitting ? (
-            <Spinner size="small" color={colors.gray[500]} />
-          ) : (
-            <Send
-              width={20}
-              height={20}
-              color={disable ? colors.gray[400] : colors.gray[800]}
+            <Spinner
+              size="small"
+              color={colors.gray[500]}
+              secondaryColor="transparent"
             />
+          ) : (
+            <Send width={20} height={20} />
           )}
         </Button>
       </View>

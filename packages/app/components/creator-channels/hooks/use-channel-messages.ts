@@ -4,11 +4,13 @@ import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 
 const PAGE_SIZE = 10;
 
-const totalData = new Array(1000).fill(0).map((_, i) => ({
-  username: "nishan",
-  id: i,
-  text: i + 1 + ". " + randomSentenceGenerator(10, 50),
-}));
+const totalData = new Array(Number(Math.random().toFixed(2)) * 1000)
+  .fill(0)
+  .map((_, i) => ({
+    username: "nishan",
+    id: i,
+    text: i + 1 + ". " + randomSentenceGenerator(10, 50),
+  }));
 
 export const useChannelMessages = () => {
   let indexRef = useRef(0);
@@ -51,7 +53,7 @@ export const useChannelMessages = () => {
 
   return {
     ...queryState,
-    data: newData,
+    data: [],
   };
 };
 

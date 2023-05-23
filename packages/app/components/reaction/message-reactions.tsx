@@ -8,7 +8,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { reactionEmojis } from "./constants";
 
-export const MessageReactions = ({ channelId }: { channelId: number }) => {
+export const MessageReactions = ({ channelId }: { channelId?: string }) => {
   const router = useRouter();
 
   const handleReactionPress = useCallback(() => {

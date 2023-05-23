@@ -57,7 +57,10 @@ const CreatorChannelsHeader = memo(
     return (
       <View tw="px-4 py-4">
         <Text
-          tw={["text-2xl font-extrabold text-gray-900 dark:text-white", tw]}
+          tw={[
+            "web:text-center text-2xl font-extrabold text-gray-900 dark:text-white",
+            tw,
+          ]}
         >
           {title}
         </Text>

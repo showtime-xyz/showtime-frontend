@@ -1,6 +1,7 @@
-import { useCallback, useEffect, memo } from "react";
+import { useCallback, useEffect, memo, useState } from "react";
 import { Platform } from "react-native";
 
+import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedKeyboard,
@@ -8,8 +9,19 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Settings, Share } from "@showtime-xyz/universal.icon";
+import {
+  ArrowLeft,
+  CloseLarge,
+  EyeOffV2,
+  GiftV2,
+  LockRounded,
+  Music,
+  Settings,
+  Share,
+  Shopping,
+} from "@showtime-xyz/universal.icon";
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
@@ -43,6 +55,7 @@ type TMessageItem = {
 
 type MessageItemProps = {
   item: TMessageItem;
+  channelId?: string;
 };
 
 type HeaderProps = {
@@ -144,13 +157,32 @@ type Query = {
   channelId: string;
 };
 const { useParam } = createParam<Query>();
-
+const benefits = [
+  {
+    icon: Music,
+    text: "Music releases and shows",
+  },
+  {
+    icon: GiftV2,
+    text: "NFT drops & allowlists",
+  },
+  {
+    icon: Shopping,
+    text: "Merchandise links & discounts",
+  },
+  {
+    icon: LockRounded,
+    text: "Unreleased content or news",
+  },
+];
 export const Messages = () => {
   const [channelId] = useParam("channelId");
+  const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   const router = useRouter();
   const share = useShare();
+  const isDark = useIsDarkMode();
   const shareLink = async () => {
     const result = await share({
       url: `${getWebBaseURL()}/channels/${channelId}`,
@@ -169,9 +201,12 @@ export const Messages = () => {
     fetchMore();
   };
 
-  const renderItem: ListRenderItem<TMessageItem> = useCallback(({ item }) => {
-    return <MessageItem item={item} />;
-  }, []);
+  const renderItem: ListRenderItem<TMessageItem> = useCallback(
+    ({ item }) => {
+      return <MessageItem item={item} channelId={channelId} />;
+    },
+    [channelId]
+  );
 
   const style = useAnimatedStyle(() => {
     return {
@@ -182,9 +217,85 @@ export const Messages = () => {
       ],
     };
   }, [keyboard]);
-  const listEmptyComponent = () => {
-    return <View></View>;
-  };
+
+  const listEmptyComponent = useCallback(() => {
+    const iconColor = isDark ? colors.white : colors.gray[900];
+    return (
+      <>
+        <View tw="mt-6 w-full items-center justify-center">
+          <AnimatePresence exitBeforeEnter>
+            <MotiView
+              from={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              exitTransition={{
+                type: "timing",
+                duration: 600,
+              }}
+            >
+              {showIntro && (
+                <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 px-4 pb-6 pt-4 dark:bg-gray-900">
+                  <Button
+                    onPress={() => setShowIntro(false)}
+                    iconOnly
+                    variant="text"
+                  >
+                    <CloseLarge width={14} height={14} />
+                  </Button>
+                  <View tw="px-6 pt-1">
+                    <Text tw="text-sm font-bold text-black dark:text-white">
+                      Welcome! Now send your first update.
+                    </Text>
+                    <View tw="h-2" />
+                    <Text tw="text-sm text-gray-900 dark:text-white">
+                      All your collectors will join automatically after your
+                      first update. We recommend at least 2 updates a week on:
+                    </Text>
+                    {benefits.map((item, i) => (
+                      <View tw="mt-2 flex-row items-center" key={i.toString()}>
+                        {item.icon({ width: 20, height: 20, color: iconColor })}
+                        <Text tw="ml-3 text-sm font-semibold text-black dark:text-white">
+                          {item.text}
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              )}
+            </MotiView>
+          </AnimatePresence>
+          <View tw="mt-3 max-w-[300px] flex-row items-start justify-start">
+            <View tw="absolute -top-1.5">
+              <EyeOffV2
+                width={18}
+                height={18}
+                color={isDark ? colors.gray[200] : colors.gray[600]}
+              />
+            </View>
+            <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-500">
+              This channel is not visible to your followers until you post an
+              update.
+              <Text
+                tw="ml-1 text-center text-xs text-blue-600"
+                onPress={() => setShowIntro(true)}
+              >
+                Learn more.
+              </Text>
+            </Text>
+          </View>
+        </View>
+        <View tw="absolute bottom-0 w-full items-center justify-center">
+          <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`2,300 members will be notified`}</Text>
+        </View>
+      </>
+    );
+  }, [isDark, showIntro]);
 
   if (!channelId) {
     return (
@@ -304,7 +415,7 @@ const MessageInput = () => {
   );
 };
 
-const MessageItem = memo(({ item }: MessageItemProps) => {
+const MessageItem = memo(({ item, channelId }: MessageItemProps) => {
   const { username, text } = item;
   return (
     <View tw="mb-5 px-4">
@@ -324,7 +435,7 @@ const MessageItem = memo(({ item }: MessageItemProps) => {
             {text}
           </Text>
           <View tw="mt-1 w-full flex-row items-center">
-            <MessageReactions />
+            <MessageReactions channelId={channelId} />
             <View tw="mr-2 flex-1 flex-row justify-end">
               <Reaction
                 selected={"❤️"}

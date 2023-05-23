@@ -14,7 +14,7 @@ type IconItemProps = {
   icon: any;
   title: string;
 };
-export const IconContext = createContext<{
+const IconContext = createContext<{
   color: string;
 }>({
   color: "#000",
@@ -159,6 +159,7 @@ export const Default = () => {
           <IconItem icon={Icon.Refresh} title="Refresh" />
           <IconItem icon={Icon.Eye} title="Eye" />
           <IconItem icon={Icon.EyeOff} title="EyeOff" />
+          <IconItem icon={Icon.EyeOffV2} title="EyeOffV2" />
           <IconItem icon={Icon.Location} title="Location" />
           <IconItem icon={Icon.Lock} title="Lock" />
           <IconItem icon={Icon.Download} title="Download" />

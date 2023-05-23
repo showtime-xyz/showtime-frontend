@@ -223,10 +223,13 @@ function InfiniteScrollListImpl<Item>(
             ref={scrollMarginOffseRef}
             style={{
               height:
-                rowVirtualizer.getTotalSize() -
-                (useWindowScroll ? 0 : parentOffsetRef.current),
+                rowVirtualizer.getTotalSize() === 0
+                  ? "100%"
+                  : rowVirtualizer.getTotalSize() -
+                    (useWindowScroll ? 0 : parentOffsetRef.current),
               width: "100%",
               position: "relative",
+              flex: 1,
             }}
           >
             <div
@@ -235,12 +238,20 @@ function InfiniteScrollListImpl<Item>(
                 top: 0,
                 left: 0,
                 width: "100%",
+                minHeight: "100%",
                 transform: `translateY(${
                   renderedItems[0]?.start - rowVirtualizer.options.scrollMargin
                 }px)`,
               }}
             >
-              <div style={transformStyle}>
+              <div
+                style={{
+                  height: "100%",
+                  position: "absolute",
+                  inset: 0,
+                  ...transformStyle,
+                }}
+              >
                 {data?.length === 0 && EmptyComponent}
               </div>
               {renderedItems.map((virtualItem) => {
