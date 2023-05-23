@@ -30,8 +30,9 @@ export const ReactionProvider = ({ children }: any) => {
   const animatedStyle = useAnimatedStyle(() => {
     const totalRectButtonWidth = emojiButtonSize * reactionEmojis.length;
 
-    const newV = withSpring(animatedV.value);
+    const newV = withSpring(animatedV.value, { mass: 0.8, stiffness: 150 });
     return {
+      willChange: "transform", // make it hardware accelerated on web
       transform: [
         {
           translateX: totalRectButtonWidth / 2,
