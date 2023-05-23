@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, memo } from "react";
+import { useCallback, useEffect, memo } from "react";
 import { Platform } from "react-native";
 
 import { AvoidSoftInput } from "react-native-avoid-softinput";
