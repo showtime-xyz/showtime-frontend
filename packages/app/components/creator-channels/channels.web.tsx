@@ -324,7 +324,7 @@ export const CreatorChannels = memo(
           iconOnly
           size="regular"
           variant="secondary"
-          tw="absolute -left-12"
+          tw="absolute md:hidden lg:-left-12 lg:flex"
           onPress={() => router.push("/")}
         >
           <ChevronLeft width={24} height={24} />

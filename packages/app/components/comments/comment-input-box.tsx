@@ -116,6 +116,7 @@ export const CommentInputBox = forwardRef<
             ? { keyboardType: "twitter" }
             : { inputMode: "text" }),
         }}
+        tw="web:pb-0"
       />
     </>
   );

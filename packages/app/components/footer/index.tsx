@@ -5,7 +5,10 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
-import { SWIPE_LIST_SCREENS } from "app/lib/constants";
+import {
+  HIDE_MOBILE_WEB_FOOTER_SCREENS,
+  SWIPE_LIST_SCREENS,
+} from "app/lib/constants";
 import {
   CreateTabBarIcon,
   CreatorChannelsTabBarIcon,
@@ -39,7 +42,9 @@ const Footer = () => {
   if (isTabBarHidden) {
     return null;
   }
-
+  if (HIDE_MOBILE_WEB_FOOTER_SCREENS.includes(router.pathname)) {
+    return null;
+  }
   return (
     <View
       style={{

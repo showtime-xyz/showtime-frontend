@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Platform } from "react-native";
 
-import { useCustomAlert } from "@showtime-xyz/universal.alert";
+import { Alert } from "@showtime-xyz/universal.alert";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Divider } from "@showtime-xyz/universal.divider";
@@ -22,7 +22,6 @@ export const ChannelsSettings = () => {
   const [channelId] = useParam("channelId");
   const [showSettings, setShowSettings] = useState(false);
   const [checked, setChecked] = useState(false);
-  const CustomAlert = useCustomAlert();
   const insets = useSafeAreaInsets();
   const bototm = usePlatformBottomHeight();
   return (
@@ -46,7 +45,7 @@ export const ChannelsSettings = () => {
             <Button
               variant="danger"
               onPress={() => {
-                CustomAlert.alert(
+                Alert.alert(
                   `Leave Channel`,
                   "Are you sure you want to leave this Channel?",
                   [

@@ -999,3 +999,7 @@ export function generateRandomLoremIpsum() {
 
   return result.join(" ");
 }
+
+export const getWebBaseURL = () => {
+  return `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN ?? "showtime.xyz"}`;
+};

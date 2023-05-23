@@ -22,11 +22,14 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { MessageBox } from "app/components/messages";
 import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useShare } from "app/hooks/use-share";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
-import { formatDateRelativeWithIntl } from "app/utilities";
+import { formatDateRelativeWithIntl, getWebBaseURL } from "app/utilities";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
@@ -45,7 +48,6 @@ type HeaderProps = {
 const Header = (props: HeaderProps) => {
   const router = useRouter();
   const isDark = useIsDarkMode();
-
   const viewMembersList = useCallback(() => {
     const as = `/channels/${props.channelId}/members`;
 
@@ -85,10 +87,18 @@ const Header = (props: HeaderProps) => {
             color={isDark ? "white" : "black"}
           />
         </Pressable>
-        <Avatar size={34} />
+        <AvatarHoverCard
+          username={props.username}
+          url={"https://picsum.photos/200"}
+          size={34}
+          alt="Channels Avatar"
+        />
       </View>
       <View tw="flex-1" style={{ rowGap: 8 }}>
-        <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
+        <Text
+          onPress={() => router.push(`/@${props.username}`)}
+          tw="text-sm font-bold text-gray-900 dark:text-gray-100"
+        >
           {props.username}
         </Text>
         <Text
@@ -127,7 +137,18 @@ export const Messages = () => {
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   const router = useRouter();
-
+  const share = useShare();
+  const shareLink = async () => {
+    const result = await share({
+      url: `${getWebBaseURL()}/channels/${channelId}`,
+    });
+    if (result.action === "sharedAction") {
+      Analytics.track(
+        EVENTS.USER_SHARED_PROFILE,
+        result.activityType ? { type: result.activityType } : undefined
+      );
+    }
+  };
   const { data, isLoading, fetchMore, isLoadingMore } = useChannelMessages();
   const keyboard = useAnimatedKeyboard();
 
@@ -144,6 +165,10 @@ export const Messages = () => {
       ],
     };
   }, [keyboard]);
+  const listEmptyComponent = () => {
+    return <View></View>;
+  };
+
   if (!channelId) {
     return (
       <EmptyPlaceholder
@@ -171,7 +196,7 @@ export const Messages = () => {
       }}
     >
       <Header
-        username="nishan"
+        username="nishanbende"
         onPressSettings={() => {
           const as = `/channels/${channelId}/settings`;
           router.push(
@@ -192,13 +217,11 @@ export const Messages = () => {
             { shallow: true }
           );
         }}
-        onPressShare={() => {
-          console.log("Share");
-        }}
+        onPressShare={shareLink}
         members={29}
         channelId={channelId}
       />
-      <View tw="web:pb-12 flex-1 overflow-hidden pb-8">
+      <View tw="web:pb-16 flex-1 overflow-hidden pb-8">
         <AnimatedInfiniteScrollList
           data={data}
           onEndReached={onLoadMore}
@@ -218,6 +241,7 @@ export const Messages = () => {
                 )
               : () => null
           }
+          ListEmptyComponent={listEmptyComponent}
         />
       </View>
       <MessageInput />
@@ -236,12 +260,10 @@ const MessageInput = () => {
     };
   }, []);
 
-  const bottom = Platform.select({ web: bottomHeight + 8, default: 16 });
+  const bottom = Platform.select({ web: bottomHeight, default: 16 });
 
   const style = useAnimatedStyle(() => {
     return {
-      position: "absolute",
-      width: "100%",
       bottom,
       transform: [
         {
@@ -252,13 +274,14 @@ const MessageInput = () => {
   }, [keyboard, bottom]);
 
   return (
-    <Animated.View style={style}>
+    <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
       <MessageBox
         placeholder="Send an update..."
         onSubmit={(text: string) => {
           return Promise.resolve();
         }}
         submitting={false}
+        tw="bg-white dark:bg-black"
       />
     </Animated.View>
   );

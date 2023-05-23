@@ -28,6 +28,7 @@ interface MessageBoxProps {
   onBlur?: () => void;
   placeholder: string;
   textInputProps?: TextInputProps;
+  tw?: string;
 }
 
 export interface MessageBoxMethods {
@@ -48,6 +49,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       onBlur,
       placeholder,
       textInputProps,
+      tw = "",
     } = props;
     //#region variables
     const isDark = useIsDarkMode();
@@ -86,8 +88,11 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       [handleReset, handleFocus]
     );
     return (
-      <View tw="web:pb-0 flex-row items-center px-4 py-2" style={style}>
-        <View tw="mr-2 flex-1 flex-row items-center rounded-[32px] bg-gray-100 p-2 pl-3 dark:bg-gray-700">
+      <View
+        tw={["flex-row items-center px-4 py-2", tw].join(" ")}
+        style={style}
+      >
+        <View tw="mr-2 min-h-[40px] flex-1 flex-row items-center rounded-[32px] bg-gray-100 p-2 pl-3 dark:bg-gray-700">
           {userAvatar ? (
             <Avatar alt="Avatar" tw="mr-2" size={24} url={userAvatar} />
           ) : null}

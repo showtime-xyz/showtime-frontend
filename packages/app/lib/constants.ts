@@ -194,5 +194,5 @@ export const SWIPE_LIST_SCREENS = [
   "/list",
 ];
 export const HIDE_MOBILE_WEB_HEADER_SCREENS = ["/channels/[channelId]"];
-
+export const HIDE_MOBILE_WEB_FOOTER_SCREENS = ["/channels/[channelId]"];
 export const DARK_THEME_PATHNAMES = ["/", "/foryou"];
