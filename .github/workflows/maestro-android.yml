@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Expo prebuild
+        run: yarn E2E:build
+
       - name: set up JDK 11
         uses: actions/setup-java@v3
         with:
