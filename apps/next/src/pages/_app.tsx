@@ -29,6 +29,7 @@ import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropEventScreen } from "app/screens/drop-event";
 import { DropFreeScreen } from "app/screens/drop-free";
 import { DropMusicScreen } from "app/screens/drop-music";
@@ -204,7 +205,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <CheckoutReturnScreen />
         <QRCodeShareScreen />
         <DropViewShareScreen />
-
+        <DropEditDetailsScreen />
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
         <OnboardingScreen />

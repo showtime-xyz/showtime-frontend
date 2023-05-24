@@ -176,6 +176,42 @@ function NFTDropdown({
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           ) : null}
+          <DropdownMenuItem
+            onSelect={() => {
+              const contractAddress =
+                edition?.creator_airdrop_edition.contract_address;
+              const as = `drop/edit-details/${contractAddress}`;
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      contractAddress,
+                      dropEditDetailsModal: true,
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: as,
+                  web: router.asPath,
+                }),
+                { shallow: true }
+              );
+            }}
+            key="edit details"
+          >
+            <MenuItemIcon
+              Icon={Edit}
+              ios={{
+                name: "square.and.pencil",
+              }}
+            />
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              Edit Drop Details
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
 
           {isMobileWeb() ? (
             <DropdownMenuItem
