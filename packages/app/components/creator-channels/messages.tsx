@@ -40,6 +40,7 @@ import { MessageBox } from "app/components/messages";
 import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useShare } from "app/hooks/use-share";
+import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
 import { formatDateRelativeWithIntl, getWebBaseURL } from "app/utilities";
@@ -181,6 +182,11 @@ export const Messages = () => {
   const router = useRouter();
   const share = useShare();
   const isDark = useIsDarkMode();
+  const user = useUser();
+  const isUserAdmin =
+    user.user?.data.channels &&
+    user.user?.data.channels[0] === Number(channelId);
+
   const shareLink = async () => {
     const result = await share({
       url: `${getWebBaseURL()}/channels/${channelId}`,
@@ -371,7 +377,7 @@ export const Messages = () => {
           ListEmptyComponent={listEmptyComponent}
         />
       </View>
-      <MessageInput channelId={channelId} />
+      {isUserAdmin ? <MessageInput channelId={channelId} /> : null}
     </View>
   );
 };
