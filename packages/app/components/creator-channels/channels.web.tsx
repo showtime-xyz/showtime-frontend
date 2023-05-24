@@ -15,14 +15,9 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import {
-  formatDateRelativeWithIntl,
-  generateFakeData,
-  getRandomNumber,
-} from "app/utilities";
+import { formatDateRelativeWithIntl } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
