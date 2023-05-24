@@ -238,7 +238,8 @@ function InfiniteScrollListImpl<Item>(
                 top: 0,
                 left: 0,
                 width: "100%",
-                minHeight: "100%",
+                minHeight:
+                  rowVirtualizer.getTotalSize() === 0 ? "100%" : undefined,
                 transform: `translateY(${
                   renderedItems[0]?.start - rowVirtualizer.options.scrollMargin
                 }px)`,
