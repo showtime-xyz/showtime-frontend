@@ -38,7 +38,7 @@ jobs:
 
           echo "APK_PATH=$(pwd)/app/build/outputs/apk/release/app-release.apk" >>$GITHUB_ENV
 
-      - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
+      - uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
           app-file: ${{ env.APK_PATH }}
