@@ -23,9 +23,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Expo prebuild
-        run: yarn waldo:build
-
       - name: Build with Xcode
         run: |
           DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
