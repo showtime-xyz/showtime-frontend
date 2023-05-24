@@ -19,6 +19,7 @@ interface CommentRowProps {
   deleteComment: (id: number) => Promise<void>;
   reply?: (comment: CommentType) => void;
   creatorId?: number;
+  isReply?: boolean;
 }
 
 const REPLIES_PER_BATCH = 2;
@@ -31,6 +32,7 @@ function CommentRowComponent({
   deleteComment,
   reply,
   creatorId,
+  isReply,
 }: CommentRowProps) {
   /**
    * we used memo, so needs to add this hooks to here,
@@ -90,7 +92,6 @@ function CommentRowComponent({
     [user, comment.comment_id]
   );
 
-  const isReply = comment.parent_id !== null && comment.parent_id !== undefined;
   //#endregion
 
   //#region callbacks
@@ -191,6 +192,7 @@ function CommentRowComponent({
               deleteComment={deleteComment}
               reply={handleOnReplyOnAReply}
               creatorId={creatorId}
+              isReply
             />
           ))
         : null}
