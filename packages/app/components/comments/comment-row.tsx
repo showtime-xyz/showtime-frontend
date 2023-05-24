@@ -40,7 +40,7 @@ function CommentRowComponent({
    */
   useIsDarkMode();
   //#region state
-  const lastItemId = useRef<number>(comment.comment_id);
+  const lastItemId = useRef<number>(comment.id);
   const [likeCount, setLikeCount] = useState(comment.like_count);
   const [displayedRepliesCount, setDisplayedRepliesCount] =
     useState(REPLIES_PER_BATCH);
@@ -50,8 +50,8 @@ function CommentRowComponent({
   // I had to remove `key` from CommentRow (Parent) and here, on View,
   // because it was breaking recycling
   // https://shopify.github.io/flash-list/docs/recycling/
-  if (comment.comment_id !== lastItemId.current) {
-    lastItemId.current = comment.comment_id;
+  if (comment.id !== lastItemId.current) {
+    lastItemId.current = comment.id;
     setLikeCount(comment.like_count);
     setDisplayedRepliesCount(REPLIES_PER_BATCH);
   }
@@ -83,13 +83,13 @@ function CommentRowComponent({
   );
 
   const isRepliedByMe = useMemo(
-    () => user?.data.comments.includes(comment.comment_id),
-    [user, comment.comment_id]
+    () => user?.data.comments.includes(comment.id),
+    [user, comment.id]
   );
 
   const isLikedByMe = useMemo(
-    () => user?.data.likes_comment.includes(comment.comment_id),
-    [user, comment.comment_id]
+    () => user?.data.likes_comment.includes(comment.id),
+    [user, comment.id]
   );
 
   //#endregion
@@ -103,16 +103,16 @@ function CommentRowComponent({
       }
 
       if (isLikedByMe) {
-        await unlikeComment(comment.comment_id);
+        await unlikeComment(comment.id);
         setLikeCount((state) => Math.max(state - 1, 0));
       } else {
-        await likeComment(comment.comment_id);
+        await likeComment(comment.id);
         setLikeCount((state) => state + 1);
       }
     },
     [
       navigateToLogin,
-      comment.comment_id,
+      comment.id,
       isAuthenticated,
       isLikedByMe,
       likeComment,
@@ -121,8 +121,8 @@ function CommentRowComponent({
   );
 
   const handleOnDeletePress = useCallback(async () => {
-    return await deleteComment(comment.comment_id);
-  }, [comment.comment_id, deleteComment]);
+    return await deleteComment(comment.id);
+  }, [comment.id, deleteComment]);
 
   const handelOnLoadMoreRepliesPress = useCallback(() => {
     setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);

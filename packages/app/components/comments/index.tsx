@@ -29,7 +29,7 @@ import { InputAccessoryView } from "../input-accessory-view";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
-const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
+const keyExtractor = (item: CommentType) => `comment-${item.id}`;
 const PlatformInputAccessoryView =
   Platform.OS === "ios" ? InputAccessoryView : Fragment;
 

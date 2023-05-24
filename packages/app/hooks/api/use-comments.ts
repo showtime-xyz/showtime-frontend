@@ -16,11 +16,11 @@ export interface Liker {
   img_url: string;
   timestamp: string;
   username: string;
-  comment_id: number;
+  id: number;
 }
 
 export interface CommentType {
-  comment_id: number;
+  id: number;
   added: string;
   text: string;
   commenter_profile_id: number;
@@ -174,15 +174,7 @@ export const useComments = (nftId?: number) => {
         data: {},
       });
 
-      mutateComments((data) => {
-        if (data?.[0]?.comments) {
-          data[0].comments = deleteCommentRecursively(
-            commentId,
-            data[0].comments
-          );
-        }
-        return data;
-      }, true);
+      mutateComments();
     },
     [mutateComments]
   );
@@ -240,24 +232,4 @@ export const useComments = (nftId?: number) => {
     deleteComment,
     newComment,
   };
-};
-
-const deleteCommentRecursively = (
-  commentId: number,
-  comments?: CommentType[]
-) => {
-  return (
-    comments?.reduce((result, comment) => {
-      if (comment.comment_id == commentId) {
-        return result;
-      }
-
-      if (comment.replies && comment.replies.length > 0) {
-        comment.replies = deleteCommentRecursively(commentId, comment.replies);
-      }
-
-      result.push(comment);
-      return result;
-    }, [] as CommentType[]) || []
-  );
 };
