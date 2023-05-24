@@ -1003,3 +1003,20 @@ export function generateRandomLoremIpsum() {
 export const getWebBaseURL = () => {
   return `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN ?? "showtime.xyz"}`;
 };
+
+export const getEmojiFromUnicode = (pythonBytesString?: string) => {
+  if (!pythonBytesString) return null;
+  const unicodeEscapeSequence = pythonBytesString
+    .replace(/^b'/, "")
+    .replace(/'$/, "")
+    .replace(/\\u|\\U/g, "U+");
+
+  // Remove the '\\u' or '\\U' prefix
+  let noPrefix = unicodeEscapeSequence.replace(/^\\u/i, "");
+
+  // Convert hexadecimal to integer
+  let codePoint = parseInt(noPrefix, 16);
+
+  // Return the character
+  return String.fromCodePoint(codePoint);
+};

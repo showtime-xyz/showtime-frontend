@@ -1,4 +1,4 @@
-import { useCallback, useEffect, memo, useState } from "react";
+import { useCallback, useEffect, memo, useRef, useState, useMemo } from "react";
 import { Platform, useWindowDimensions, Keyboard } from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
@@ -40,6 +40,7 @@ import { MessageBox } from "app/components/messages";
 import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useShare } from "app/hooks/use-share";
+import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation } from "app/lib/react-navigation/native";
@@ -52,10 +53,17 @@ import {
   ChannelMessageItem,
   useChannelMessages,
 } from "./hooks/use-channel-messages";
+import {
+  ChannelReactionResponse,
+  useChannelReactions,
+} from "./hooks/use-channel-reactions";
+import { useReactOnMessage } from "./hooks/use-react-on-message";
 import { useSendChannelMessage } from "./hooks/use-send-channel-message";
 
 type MessageItemProps = {
   item: ChannelMessageItem;
+  reactions: ChannelReactionResponse;
+  channelId: string;
 };
 
 type HeaderProps = {
@@ -186,6 +194,13 @@ export const Messages = () => {
   const router = useRouter();
   const share = useShare();
   const isDark = useIsDarkMode();
+  const user = useUser();
+  const isUserAdmin =
+    user.user?.data.channels &&
+    user.user?.data.channels[0] === Number(channelId);
+
+  const channelReactions = useChannelReactions(channelId);
+
   const shareLink = async () => {
     const result = await share({
       url: `${getWebBaseURL()}/channels/${channelId}`,
@@ -199,15 +214,23 @@ export const Messages = () => {
   };
   const { data, isLoading, fetchMore, isLoadingMore } =
     useChannelMessages(channelId);
-  const keyboard = useAnimatedKeyboard();
+  const keyboard =
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
 
   const onLoadMore = () => {
     fetchMore();
   };
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
-    ({ item }) => {
-      return <MessageItem item={item} />;
+    ({ item, extraData }) => {
+      return (
+        <MessageItem
+          item={item}
+          reactions={extraData.reactions}
+          channelId={extraData.channelId}
+        />
+      );
     },
     []
   );
@@ -306,6 +329,11 @@ export const Messages = () => {
     );
   }, [bottomHeight, headerHeight, height, insets.top, isDark, showIntro]);
 
+  const extraData = useMemo(
+    () => ({ reactions: channelReactions.data, channelId }),
+    [channelId, channelReactions.data]
+  );
+
   if (!channelId) {
     return (
       <EmptyPlaceholder
@@ -371,6 +399,7 @@ export const Messages = () => {
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: insets.bottom }}
             style={style}
+            extraData={extraData}
             ListFooterComponent={
               isLoadingMore
                 ? () => (
@@ -382,7 +411,7 @@ export const Messages = () => {
             }
           />
         </View>
-        <MessageInput />
+        {isUserAdmin ? <MessageInput channelId={channelId} /> : null}
       </View>
       {data.length === 0 && listEmptyComponent()}
     </>
@@ -390,10 +419,13 @@ export const Messages = () => {
 };
 
 const MessageInput = ({ channelId }: { channelId?: string }) => {
-  const keyboard = useAnimatedKeyboard();
+  const keyboard =
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
+
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
-  const channelMessages = useChannelMessages(channelId);
+  const inputRef = useRef<any>(null);
   useEffect(() => {
     AvoidSoftInput.setEnabled(false);
 
@@ -418,6 +450,7 @@ const MessageInput = ({ channelId }: { channelId?: string }) => {
   return (
     <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
       <MessageBox
+        ref={inputRef}
         placeholder="Send an update..."
         onSubmit={async (text: string) => {
           if (channelId) {
@@ -425,7 +458,7 @@ const MessageInput = ({ channelId }: { channelId?: string }) => {
               channelId,
               message: text,
             });
-            channelMessages.mutate();
+            inputRef.current?.reset();
           }
 
           return Promise.resolve();
@@ -437,8 +470,10 @@ const MessageInput = ({ channelId }: { channelId?: string }) => {
   );
 };
 
-const MessageItem = memo(({ item }: MessageItemProps) => {
+const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
   const { channel_message } = item;
+  const reactOnMessage = useReactOnMessage(channelId);
+
   return (
     <View tw="mb-5 px-4">
       <View tw="flex-row" style={{ columnGap: 8 }}>
@@ -457,12 +492,19 @@ const MessageItem = memo(({ item }: MessageItemProps) => {
             {channel_message.body}
           </Text>
           <View tw="mt-1 w-full flex-row items-center">
-            <MessageReactions />
+            <MessageReactions
+              reactionGroup={item.reaction_group}
+              channelId={channelId}
+            />
             <View tw="mr-2 flex-1 flex-row justify-end">
               <Reaction
-                selected={"❤️"}
-                onPress={() => {
-                  console.log("pressed");
+                reactions={reactions}
+                selected={10}
+                onPress={async (id) => {
+                  await reactOnMessage.trigger({
+                    messageId: item.channel_message.id,
+                    reactionId: id,
+                  });
                 }}
               />
             </View>
