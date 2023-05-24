@@ -26,28 +26,32 @@ import {
 
 import { breakpoints } from "design-system/theme";
 
-import { useChannelsList } from "./hooks/use-channels-list";
+import {
+  useJoinedChannelsList,
+  useSuggestedChannelsList,
+} from "./hooks/use-channels-list";
 import { CreatorChannelsList as CreatorChannelsListMobile } from "./list";
 import { Messages } from "./messages";
-
-type CreatorChannelsListProps = {
-  item: CreatorChannelsListItemProps;
-  index: number;
-};
-
-type CreatorChannelsListItemProps = {
-  id: string;
-  username: string;
-  date: string;
-  text?: string;
-  members: number;
-  itemType?: "creator";
-  unreadMessages?: number;
-  // TODO: Add more props
-} & { type: "section"; title: string; subtext?: string; tw?: string };
+import {
+  CreatorChannelsListItemProps,
+  CreatorChannelsListProps,
+} from "./types";
 
 const keyExtractor = (item: CreatorChannelsListItemProps) => {
   return item.type === "section" ? item.title : item.id.toString();
+};
+
+const channelsSection = {
+  type: "section",
+  title: "Channels",
+  subtext:
+    "Get exclusive updates, presale access and unreleased content from your favorite creators.",
+};
+
+const suggestedChannelsSection = {
+  type: "section",
+  title: "Popular creators",
+  tw: "text-xl",
 };
 
 const CreatorChannelsHeader = memo(
@@ -81,7 +85,9 @@ CreatorChannelsHeader.displayName = "CreatorChannelsHeader";
 
 const CreatorChannelsListItem = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
-    const time = formatDateRelativeWithIntl(item.date);
+    const time = formatDateRelativeWithIntl(
+      item.latest_message?.updated_at ?? Date.now()
+    );
     const router = useRouter();
     const currentChannel = useMemo(() => router.query["channelId"], [router]);
 
@@ -96,13 +102,13 @@ const CreatorChannelsListItem = memo(
         <View
           tw={[
             "mx-3 my-1 flex-1 cursor-pointer rounded-lg px-2 py-2 transition-colors hover:bg-gray-100",
-            currentChannel === item.id ? "bg-gray-100" : "",
+            currentChannel === item.id.toFixed() ? "bg-gray-100" : "", // TODO: toFixed might to be changed with slugs
           ]}
         >
           <View tw="flex-row items-start justify-start">
             <AvatarHoverCard
-              username={item.username}
-              url={"https://picsum.photos/200?" + item.id}
+              username={item.owner.username}
+              url={item.owner.img_url}
               size={40}
               alt="CreatorPreview Avatar"
               tw={"mr-3"}
@@ -113,7 +119,7 @@ const CreatorChannelsListItem = memo(
                   tw="text-md max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-black dark:text-white"
                   numberOfLines={1}
                 >
-                  {item.username}
+                  {item.owner.username}
                 </Text>
                 <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
               </View>
@@ -121,13 +127,13 @@ const CreatorChannelsListItem = memo(
                 <Text
                   tw={[
                     "text-[13px] ",
-                    item?.unreadMessages
+                    item?.unread
                       ? "font-semibold text-black dark:text-white"
                       : "text-gray-500 dark:text-gray-300",
                   ]}
                   numberOfLines={2}
                 >
-                  {item?.text}
+                  {item?.latest_message?.body}
                 </Text>
               </View>
             </View>
@@ -142,15 +148,13 @@ CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
 const CreatorChannelsListCreator = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
-    const memberCount = new Intl.NumberFormat().format(
-      item.members ?? getRandomNumber() // todo: remove this
-    );
+    const memberCount = new Intl.NumberFormat().format(item.member_count);
     return (
       <View tw="flex-1 px-4 py-3">
         <View tw="flex-row items-start">
           <AvatarHoverCard
-            username={item.username}
-            url={"https://picsum.photos/200?" + item.id}
+            username={item.owner.username}
+            url={item.owner.img_url}
             size={40}
             alt="CreatorPreview Avatar"
             tw={"mr-3"}
@@ -163,7 +167,7 @@ const CreatorChannelsListCreator = memo(
                     tw="text-md max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-black dark:text-white"
                     numberOfLines={1}
                   >
-                    {item.username}
+                    {item.owner.username}
                   </Text>
                 </View>
                 <View tw="mt-1 flex-1">
@@ -187,7 +191,7 @@ const CreatorChannelsListCreator = memo(
             tw="text-[13px] text-gray-500 dark:text-gray-300"
             numberOfLines={2}
           >
-            {item?.text}
+            {item?.owner?.bio ?? "No bio"}
           </Text>
         </View>
       </View>
@@ -210,22 +214,16 @@ export const CreatorChannels = memo(
     const listRef = useRef<any>();
     useScrollToTop(listRef);
 
-    // Start FAKE:
-    const data = useMemo(
-      () => generateFakeData(6, "data"),
-      []
-    ) as unknown as CreatorChannelsListItemProps[];
-    const topCreators = useMemo(
-      () => generateFakeData(15, "creator"),
-      []
-    ) as unknown as CreatorChannelsListItemProps[];
+    const {
+      data: joinedChannelsData,
+      fetchMore,
+      refresh,
+      isRefreshing,
+      isLoadingMore,
+      isLoading,
+    } = useJoinedChannelsList();
 
-    const fetchMore = () => {};
-    const refresh = () => {};
-    const isRefreshing = false;
-    const isLoadingMore = false;
-    const isLoading = false;
-    // End FAKE
+    const { data: suggestedChannelsData } = useSuggestedChannelsList();
 
     // since we're quering two different endpoints, and based on the amount of data from the first endpoint
     // we have to transform our data a bit and decide if we build a section list or a single FlashList
@@ -233,46 +231,30 @@ export const CreatorChannels = memo(
     const transformedData = useMemo(() => {
       // if we have more then 15 items from the first endpoint, we're not going to build a section list
       // we're going to build a single FlashList, but we create a section if `data` is smaller than 15 items
-      if (data.length < 11) {
+      if (joinedChannelsData.length < 11) {
         return [
-          {
-            type: "section",
-            title: "My Channels",
-            subtext:
-              "Get exclusive updates, presale access and unreleased content from your favorite creators.",
-          },
-          ...data.sort((a, b) => {
-            return b.date.localeCompare(a.date); // will remove sort, only fake data
-          }),
-          {
-            type: "section",
-            title: "Popular creators",
-            tw: "text-xl",
-          },
-          // since the backend returns the same schema for both endpoints, we need to differentiate them with a `itemType` prop
-          ...topCreators
-            .map((creator) => ({
-              ...creator,
-              itemType: "creator",
-            }))
-            .sort((a, b) => {
-              return b.date.localeCompare(a.date); // will remove sort, only fake data
-            }),
+          // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
+          ...(joinedChannelsData.length > 0
+            ? [channelsSection, ...joinedChannelsData]
+            : []),
+          // check if we have any suggested channels, if we do, we're going to add a section for them (+ the suggested channels)
+          ...(suggestedChannelsData.length > 0
+            ? [
+                suggestedChannelsSection,
+                ...suggestedChannelsData.map((suggestedChannel) => ({
+                  ...suggestedChannel,
+                  itemType: "creator",
+                })),
+              ]
+            : []),
         ];
       } else {
-        return [
-          {
-            type: "section",
-            title: "Channels",
-            subtext:
-              "Get exclusive updates, presale access and unreleased content from your favorite creators.",
-          },
-          ...data.sort((a, b) => {
-            return b.date.localeCompare(a.date); // will remove sort, only fake data
-          }),
-        ];
+        return [channelsSection, ...joinedChannelsData];
       }
-    }, [data, topCreators]) as CreatorChannelsListItemProps[];
+    }, [
+      joinedChannelsData,
+      suggestedChannelsData,
+    ]) as CreatorChannelsListItemProps[];
 
     const renderItem = useCallback(({ item }: CreatorChannelsListProps) => {
       if (item.type === "section") {
