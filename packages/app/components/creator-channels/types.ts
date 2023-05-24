@@ -36,6 +36,6 @@ export type CreatorChannelsListItemProps = {
   unread: boolean;
   owner: ChannelProfile;
   member_count: number;
-  itemType?: "creator";
+  itemType?: "creator" | "owned";
   // TODO: Add more props
 } & { type: "section"; title: string; subtext?: string; tw?: string };

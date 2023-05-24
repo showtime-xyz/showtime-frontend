@@ -224,14 +224,16 @@ export const CreatorChannelsList = memo(
       // we're going to build a single FlashList, but we create a section if `data` is smaller than 15 items
       if (joinedChannelsData.length < 11) {
         return [
-          // check if we have any owned channels, if we do, we're going to add a section for them (+ the joined channels)
-          ...(ownedChannelsData.length > 0
-            ? [channelsSection, ...ownedChannelsData]
-            : []),
-
           // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
           ...(joinedChannelsData.length > 0
-            ? [channelsSection, ...joinedChannelsData]
+            ? [
+                channelsSection,
+                ...ownedChannelsData.map((suggestedChannel) => ({
+                  ...suggestedChannel,
+                  itemType: "owned",
+                })),
+                ...joinedChannelsData,
+              ]
             : []),
           // check if we have any suggested channels, if we do, we're going to add a section for them (+ the suggested channels)
           ...(suggestedChannelsData.length > 0

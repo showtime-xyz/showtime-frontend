@@ -28,6 +28,7 @@ import { breakpoints } from "design-system/theme";
 
 import {
   useJoinedChannelsList,
+  useOwnedChannelsList,
   useSuggestedChannelsList,
 } from "./hooks/use-channels-list";
 import { CreatorChannelsList as CreatorChannelsListMobile } from "./list";
@@ -214,6 +215,10 @@ export const CreatorChannels = memo(
     const listRef = useRef<any>();
     useScrollToTop(listRef);
 
+    // my own channels
+    const { data: ownedChannelsData } = useOwnedChannelsList();
+
+    // channels I'm a member of
     const {
       data: joinedChannelsData,
       fetchMore,
@@ -223,6 +228,7 @@ export const CreatorChannels = memo(
       isLoading,
     } = useJoinedChannelsList();
 
+    // suggested channels
     const { data: suggestedChannelsData } = useSuggestedChannelsList();
 
     // since we're quering two different endpoints, and based on the amount of data from the first endpoint
@@ -235,7 +241,14 @@ export const CreatorChannels = memo(
         return [
           // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
           ...(joinedChannelsData.length > 0
-            ? [channelsSection, ...joinedChannelsData]
+            ? [
+                channelsSection,
+                ...ownedChannelsData.map((suggestedChannel) => ({
+                  ...suggestedChannel,
+                  itemType: "owned",
+                })),
+                ...joinedChannelsData,
+              ]
             : []),
           // check if we have any suggested channels, if we do, we're going to add a section for them (+ the suggested channels)
           ...(suggestedChannelsData.length > 0
@@ -249,10 +262,11 @@ export const CreatorChannels = memo(
             : []),
         ];
       } else {
-        return [channelsSection, ...joinedChannelsData];
+        return [channelsSection, ...ownedChannelsData, ...joinedChannelsData];
       }
     }, [
       joinedChannelsData,
+      ownedChannelsData,
       suggestedChannelsData,
     ]) as CreatorChannelsListItemProps[];
 
