@@ -15,6 +15,9 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { getEmojiFromUnicode } from "app/utilities";
+
+import { ChannelReactionResponse } from "../creator-channels/hooks/use-channel-reactions";
 import {
   emojiButtonSize,
   reactionButtonSize,
@@ -25,12 +28,13 @@ import { ReactionContext } from "./reaction-context";
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type Props = {
-  onPress?: (emoji: string) => void;
-  selected: string;
+  onPress?: (emojiId: any) => void;
+  selected: number;
+  reactions: ChannelReactionResponse;
 };
 
 export const Reaction = (props: Props) => {
-  const { selected, onPress } = props;
+  const { selected, onPress, reactions } = props;
   const state = useContext(ReactionContext);
   const positionRef = useAnimatedRef<any>();
   const windowDimension = useWindowDimensions();
@@ -49,22 +53,24 @@ export const Reaction = (props: Props) => {
     state.setPosition({ top: pageY, left: pageX });
     state.setReactions(
       <View tw="flex-row overflow-hidden rounded-xl bg-gray-50 dark:bg-gray-800">
-        {reactionEmojis.map((reaction) => (
+        {reactions.map((reaction, index) => (
           <ShowtimePressable
-            key={reaction}
+            key={index}
             tw={`items-center justify-center ${
-              selected === reaction ? "bg-gray-300/50 dark:bg-gray-600/50" : ""
+              selected === reaction.id
+                ? "bg-gray-300/50 dark:bg-gray-600/50"
+                : ""
             }`}
             onPress={() => {
               state.setVisible(false);
-              onPress?.(reaction);
+              onPress?.(reaction.id);
             }}
             style={{
               width: emojiButtonSize,
               height: emojiButtonSize,
             }}
           >
-            <Text tw="text-2xl">{reaction}</Text>
+            <Text tw="text-2xl">{getEmojiFromUnicode(reaction.reaction)}</Text>
           </ShowtimePressable>
         ))}
       </View>

@@ -6,10 +6,20 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { reactionEmojis } from "./constants";
+import { getEmojiFromUnicode } from "app/utilities";
 
-export const MessageReactions = ({ channelId }: { channelId?: string }) => {
+import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
+import { useChannelReactions } from "../creator-channels/hooks/use-channel-reactions";
+
+export const MessageReactions = ({
+  channelId,
+  reactionGroup,
+}: {
+  channelId: string;
+  reactionGroup: ReactionGroup[];
+}) => {
   const router = useRouter();
+  const channelReactions = useChannelReactions(channelId);
 
   const handleReactionPress = useCallback(() => {
     const as = `/channels/${channelId}/reactions`;
@@ -35,11 +45,17 @@ export const MessageReactions = ({ channelId }: { channelId?: string }) => {
 
   return (
     <View tw="max-w-[300px] flex-[5] flex-row justify-between">
-      {reactionEmojis.map((emoji) => {
+      {reactionGroup.map((item) => {
         return (
-          <Pressable key={emoji} onPress={handleReactionPress}>
+          <Pressable key={item.reaction_id} onPress={handleReactionPress}>
             <Text tw="text-xs text-gray-700 dark:text-gray-200">
-              {emoji} 1.2k
+              {getEmojiFromUnicode(
+                channelReactions.data?.find((r) => {
+                  console.log("found ", r);
+                  return item.reaction_id === r.id;
+                })?.reaction
+              )}{" "}
+              {item.count}
             </Text>
           </Pressable>
         );

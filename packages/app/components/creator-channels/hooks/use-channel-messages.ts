@@ -37,11 +37,14 @@ export type ChannelMessage = {
   };
 };
 
-type ReactionGroup = {};
+export type ReactionGroup = {
+  count: number;
+  reaction_id: number;
+};
 
 export type ChannelMessageItem = {
   channel_message: ChannelMessage;
-  reaction_group: ReactionGroup;
+  reaction_group: ReactionGroup[];
 };
 
 type ChannelMessageResponse = Array<ChannelMessageItem>;

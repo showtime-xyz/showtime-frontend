@@ -1,4 +1,4 @@
-import { useCallback, useEffect, memo, useState } from "react";
+import { useCallback, useEffect, memo, useState, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
@@ -51,10 +51,17 @@ import {
   ChannelMessageItem,
   useChannelMessages,
 } from "./hooks/use-channel-messages";
+import {
+  ChannelReactionResponse,
+  useChannelReactions,
+} from "./hooks/use-channel-reactions";
+import { useReactOnMessage } from "./hooks/use-react-on-message";
 import { useSendChannelMessage } from "./hooks/use-send-channel-message";
 
 type MessageItemProps = {
   item: ChannelMessageItem;
+  reactions: ChannelReactionResponse;
+  channelId: string;
 };
 
 type HeaderProps = {
@@ -187,6 +194,8 @@ export const Messages = () => {
     user.user?.data.channels &&
     user.user?.data.channels[0] === Number(channelId);
 
+  const channelReactions = useChannelReactions(channelId);
+
   const shareLink = async () => {
     const result = await share({
       url: `${getWebBaseURL()}/channels/${channelId}`,
@@ -207,8 +216,14 @@ export const Messages = () => {
   };
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
-    ({ item }) => {
-      return <MessageItem item={item} />;
+    ({ item, extraData }) => {
+      return (
+        <MessageItem
+          item={item}
+          reactions={extraData.reactions}
+          channelId={extraData.channelId}
+        />
+      );
     },
     []
   );
@@ -302,6 +317,11 @@ export const Messages = () => {
     );
   }, [isDark, showIntro]);
 
+  const extraData = useMemo(
+    () => ({ reactions: channelReactions.data, channelId }),
+    [channelId, channelReactions.data]
+  );
+
   if (!channelId) {
     return (
       <EmptyPlaceholder
@@ -363,6 +383,7 @@ export const Messages = () => {
           estimatedItemSize={100}
           keyboardDismissMode="on-drag"
           renderItem={renderItem}
+          extraData={extraData}
           contentContainerStyle={{ paddingTop: insets.bottom }}
           style={style}
           ListFooterComponent={
@@ -430,8 +451,9 @@ const MessageInput = ({ channelId }: { channelId?: string }) => {
   );
 };
 
-const MessageItem = memo(({ item }: MessageItemProps) => {
+const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
   const { channel_message } = item;
+  const reactOnMessage = useReactOnMessage();
   return (
     <View tw="mb-5 px-4">
       <View tw="flex-row" style={{ columnGap: 8 }}>
@@ -450,12 +472,19 @@ const MessageItem = memo(({ item }: MessageItemProps) => {
             {channel_message.body}
           </Text>
           <View tw="mt-1 w-full flex-row items-center">
-            <MessageReactions />
+            <MessageReactions
+              reactionGroup={item.reaction_group}
+              channelId={channelId}
+            />
             <View tw="mr-2 flex-1 flex-row justify-end">
               <Reaction
-                selected={"❤️"}
-                onPress={() => {
-                  console.log("pressed");
+                reactions={reactions}
+                selected={10}
+                onPress={(id) => {
+                  reactOnMessage.trigger({
+                    messageId: item.channel_message.id,
+                    reactionId: id,
+                  });
                 }}
               />
             </View>

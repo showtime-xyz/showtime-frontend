@@ -1003,3 +1003,12 @@ export function generateRandomLoremIpsum() {
 export const getWebBaseURL = () => {
   return `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN ?? "showtime.xyz"}`;
 };
+
+export const getEmojiFromUnicode = (unicode?: string) => {
+  if (!unicode) return null;
+  return unicode
+    .split("\\u")
+    .filter(Boolean)
+    .map((hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .join("");
+};
