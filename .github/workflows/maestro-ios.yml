@@ -24,13 +24,12 @@ jobs:
         run: yarn install --immutable
 
       - name: Expo prebuild
-        run: yarn E2E:build
+        run: yarn E2E:build:ios
 
       - name: Build with Xcode
         run: |
           DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
-
-          cd ios/ && E2E=true FLIPPER_DISABLE=1 STAGE=development xcodebuild -workspace Showtime.xcworkspace    \
+          cd ios/ && STAGE=development xcodebuild -workspace Showtime.xcworkspace    \
                     -scheme Showtime                              \
                     -configuration Release                        \
                     -sdk iphonesimulator                          \

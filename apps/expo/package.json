@@ -3,6 +3,8 @@
   "name": "@showtime/expo",
   "scripts": {
     "E2E:build": "E2E=true FLIPPER_DISABLE=1 STAGE=development expo prebuild --skip-dependency-update react-native,react",
+    "E2E:build:ios": "E2E=true FLIPPER_DISABLE=1 STAGE=development expo prebuild --platform ios --no-install --skip-dependency-update react-native,react",
+    "E2E:build:android": "E2E=true FLIPPER_DISABLE=1 STAGE=development expo prebuild --platform android --no-install --skip-dependency-update react-native,react",
     "dev": "yarn start:dev-client",
     "start": "STAGE=development expo start --dev-client",
     "start:prod": "npx expo start --no-dev --minify",
