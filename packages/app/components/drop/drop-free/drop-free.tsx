@@ -455,6 +455,7 @@ export const DropFree = () => {
                             ref={ref}
                             label="Description"
                             tw="flex-1"
+                            helperText="Tell your fans what they get for collecting. You can edit this 30 minutes after the drop is created."
                             multiline
                             textAlignVertical="top"
                             placeholder={descPlaceholder}
@@ -487,6 +488,7 @@ export const DropFree = () => {
                       label="Description"
                       multiline
                       textAlignVertical="top"
+                      helperText="You can edit this 30 minutes after the drop is created."
                       placeholder={descPlaceholder}
                       onBlur={onBlur}
                       errorText={errors.description?.message}
