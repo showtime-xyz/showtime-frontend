@@ -19,6 +19,7 @@ import { formatDateRelativeWithIntl } from "app/utilities";
 
 import {
   useJoinedChannelsList,
+  useOwnedChannelsList,
   useSuggestedChannelsList,
 } from "./hooks/use-channels-list";
 import {
@@ -196,6 +197,10 @@ export const CreatorChannelsList = memo(
     const headerHeight = useHeaderHeight();
     const { height: windowHeight } = useWindowDimensions();
 
+    // my own channels
+    const { data: ownedChannelsData } = useOwnedChannelsList();
+
+    // channels I'm a member of
     const {
       data: joinedChannelsData,
       fetchMore,
@@ -205,6 +210,7 @@ export const CreatorChannelsList = memo(
       isLoading,
     } = useJoinedChannelsList();
 
+    // suggested channels
     const { data: suggestedChannelsData } = useSuggestedChannelsList();
 
     const listRef = useRef<any>();
@@ -218,6 +224,11 @@ export const CreatorChannelsList = memo(
       // we're going to build a single FlashList, but we create a section if `data` is smaller than 15 items
       if (joinedChannelsData.length < 11) {
         return [
+          // check if we have any owned channels, if we do, we're going to add a section for them (+ the joined channels)
+          ...(ownedChannelsData.length > 0
+            ? [channelsSection, ...ownedChannelsData]
+            : []),
+
           // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
           ...(joinedChannelsData.length > 0
             ? [channelsSection, ...joinedChannelsData]
@@ -234,10 +245,11 @@ export const CreatorChannelsList = memo(
             : []),
         ];
       } else {
-        return [channelsSection, ...joinedChannelsData];
+        return [channelsSection, ...ownedChannelsData, ...joinedChannelsData];
       }
     }, [
       joinedChannelsData,
+      ownedChannelsData,
       suggestedChannelsData,
     ]) as CreatorChannelsListItemProps[];
 
