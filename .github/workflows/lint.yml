@@ -5,7 +5,7 @@ on: [pull_request]
 jobs:
   build:
     name: Run ESLint
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Set up repository
         uses: actions/checkout@v3
@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
 
       - name: Obtain Yarn Cache directory
         id: yarn-cache-path

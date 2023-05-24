@@ -26,7 +26,7 @@ concurrency:
 jobs:
   pr-preview:
     name: PR Preview
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Set up repository
         uses: actions/checkout@v3
@@ -36,7 +36,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
 
       - uses: 8BitJonny/gh-get-current-pr@1.3.0
         id: PR

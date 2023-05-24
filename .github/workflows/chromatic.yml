@@ -9,7 +9,7 @@ concurrency:
 jobs:
   deploy-to-chromatic:
     name: Deploy
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Set up repository
         uses: actions/checkout@v3
