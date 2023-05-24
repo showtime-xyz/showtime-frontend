@@ -83,6 +83,6 @@ export const useChannelMessages = (channelId?: string) => {
 
   return {
     ...queryState,
-    data: [],
+    data: newData,
   };
 };
