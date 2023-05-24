@@ -45,7 +45,7 @@ export interface Data {
 export type CommentsPayload = Data;
 
 export const useComments = (nftId?: number) => {
-  const PAGE_SIZE = 5;
+  const PAGE_SIZE = 20;
   //#region state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);

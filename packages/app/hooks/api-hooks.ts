@@ -282,20 +282,6 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
   return { data, isLoading, error };
 };
 
-export const useComments = ({ nftId }: { nftId: number }) => {
-  const PAGE_SIZE = 10;
-  const commentsUrlFn = useCallback(() => {
-    const url = `/v3/comments/${nftId}?limit=${PAGE_SIZE}`;
-    return url;
-  }, [nftId]);
-
-  const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn, {
-    pageSize: PAGE_SIZE,
-  });
-
-  return queryState;
-};
-
 export const useMyInfo = () => {
   const { accessToken } = useAuth();
   const { loginPromise } = useLogInPromise();

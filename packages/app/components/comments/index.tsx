@@ -86,7 +86,6 @@ export function Comments({
   const isDark = useIsDarkMode();
   //#endregion
   //#region variables
-  const dataReversed = useMemo(() => data.slice().reverse() || [], [data]);
 
   //#endregion
 
@@ -166,14 +165,14 @@ export function Comments({
 
   const listEmptyComponent = useCallback(
     () =>
-      !isLoading && !error && !dataReversed.length ? (
+      !isLoading && !error && !data.length ? (
         <EmptyPlaceholder
           text="Be the first to add a comment!"
           title="💬 No comments yet..."
           tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] -mt-5 h-full flex-1"
         />
       ) : null,
-    [isLoading, dataReversed.length, error]
+    [isLoading, data.length, error]
   );
   const listFooterComponent = useCallback(() => {
     if (isLoadingMore)
@@ -195,12 +194,12 @@ export function Comments({
 
   return (
     <View style={styles.container}>
-      {isLoading || (dataReversed.length == 0 && error) ? (
+      {isLoading || (data.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
         <View tw="flex-grow">
           <InfiniteScrollList
-            data={dataReversed}
+            data={data}
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
