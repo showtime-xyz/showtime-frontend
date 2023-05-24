@@ -40,6 +40,7 @@ export type ChannelMessage = {
 export type ReactionGroup = {
   count: number;
   reaction_id: number;
+  is_reacted_by_me: boolean;
 };
 
 export type ChannelMessageItem = {

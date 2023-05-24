@@ -51,7 +51,6 @@ export const MessageReactions = ({
             <Text tw="text-xs text-gray-700 dark:text-gray-200">
               {getEmojiFromUnicode(
                 channelReactions.data?.find((r) => {
-                  console.log("found ", r);
                   return item.reaction_id === r.id;
                 })?.reaction
               )}{" "}

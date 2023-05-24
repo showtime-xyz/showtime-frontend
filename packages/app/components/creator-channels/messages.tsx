@@ -1,4 +1,4 @@
-import { useCallback, useEffect, memo, useState, useMemo } from "react";
+import { useCallback, useEffect, memo, useRef, useState, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
@@ -209,7 +209,9 @@ export const Messages = () => {
   };
   const { data, isLoading, fetchMore, isLoadingMore } =
     useChannelMessages(channelId);
-  const keyboard = useAnimatedKeyboard();
+  const keyboard =
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
 
   const onLoadMore = () => {
     fetchMore();
@@ -404,10 +406,13 @@ export const Messages = () => {
 };
 
 const MessageInput = ({ channelId }: { channelId?: string }) => {
-  const keyboard = useAnimatedKeyboard();
+  const keyboard =
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
+
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
-  const channelMessages = useChannelMessages(channelId);
+  const inputRef = useRef<any>(null);
   useEffect(() => {
     AvoidSoftInput.setEnabled(false);
 
@@ -432,6 +437,7 @@ const MessageInput = ({ channelId }: { channelId?: string }) => {
   return (
     <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
       <MessageBox
+        ref={inputRef}
         placeholder="Send an update..."
         onSubmit={async (text: string) => {
           if (channelId) {
@@ -439,7 +445,7 @@ const MessageInput = ({ channelId }: { channelId?: string }) => {
               channelId,
               message: text,
             });
-            channelMessages.mutate();
+            inputRef.current?.reset();
           }
 
           return Promise.resolve();
@@ -453,7 +459,8 @@ const MessageInput = ({ channelId }: { channelId?: string }) => {
 
 const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
   const { channel_message } = item;
-  const reactOnMessage = useReactOnMessage();
+  const reactOnMessage = useReactOnMessage(channelId);
+
   return (
     <View tw="mb-5 px-4">
       <View tw="flex-row" style={{ columnGap: 8 }}>
@@ -480,8 +487,8 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
               <Reaction
                 reactions={reactions}
                 selected={10}
-                onPress={(id) => {
-                  reactOnMessage.trigger({
+                onPress={async (id) => {
+                  await reactOnMessage.trigger({
                     messageId: item.channel_message.id,
                     reactionId: id,
                   });

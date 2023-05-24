@@ -70,7 +70,9 @@ export const Reaction = (props: Props) => {
               height: emojiButtonSize,
             }}
           >
-            <Text tw="text-2xl">{getEmojiFromUnicode(reaction.reaction)}</Text>
+            <Text tw="text-2xl text-black dark:text-white">
+              {getEmojiFromUnicode(reaction.reaction)}
+            </Text>
           </ShowtimePressable>
         ))}
       </View>
