@@ -39,26 +39,28 @@ export const DropSelect = () => {
     <BottomSheetScrollView useNativeModal={false}>
       <View tw="flex-row flex-wrap">
         <View tw="w-full px-4">
-          <CreateCard
-            title="Creator Updates"
-            icon={
-              <CreatorChannelType color={iconColor} height={24} width={24} />
-            }
-            isNew
-            description="Send an exclusive update to your fans on your channel"
-            onPress={() => {
-              const pathname = `/channels/${user.user?.data.profile.profile_id}`;
-              if (Platform.OS === "web") {
-                router.push(pathname);
-              } else {
-                modalScreenContext?.pop?.({
-                  callback: () => {
-                    router.push(pathname);
-                  },
-                });
+          {user.user?.data.channels && user.user.data.channels.length > 0 ? (
+            <CreateCard
+              title="Creator Updates"
+              icon={
+                <CreatorChannelType color={iconColor} height={24} width={24} />
               }
-            }}
-          />
+              isNew
+              description="Send an exclusive update to your fans on your channel"
+              onPress={() => {
+                const pathname = `/channels/${user.user?.data.channels[0]}`;
+                if (Platform.OS === "web") {
+                  router.push(pathname);
+                } else {
+                  modalScreenContext?.pop?.({
+                    callback: () => {
+                      router.push(pathname);
+                    },
+                  });
+                }
+              }}
+            />
+          ) : null}
         </View>
         {Platform.OS !== "web" && !user.user?.data.profile.verified ? null : (
           <View tw="mt-2.5 w-full px-4">

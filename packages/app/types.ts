@@ -252,6 +252,7 @@ export type IEdition = {
 export type MyInfo = {
   data: {
     follows: Array<{ profile_id: number }>;
+    channels: Array<number>;
     profile: Profile & {
       has_spotify_token: boolean;
       has_apple_music_token: boolean;

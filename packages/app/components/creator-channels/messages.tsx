@@ -46,16 +46,14 @@ import { formatDateRelativeWithIntl, getWebBaseURL } from "app/utilities";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
-import { useChannelMessages } from "./hooks/use-channel-messages";
-
-type TMessageItem = {
-  username: string;
-  text: string;
-};
+import {
+  ChannelMessageItem,
+  useChannelMessages,
+} from "./hooks/use-channel-messages";
+import { useSendChannelMessage } from "./hooks/use-send-channel-message";
 
 type MessageItemProps = {
-  item: TMessageItem;
-  channelId?: string;
+  item: ChannelMessageItem;
 };
 
 type HeaderProps = {
@@ -67,7 +65,7 @@ type HeaderProps = {
 };
 
 const AnimatedInfiniteScrollList =
-  Animated.createAnimatedComponent<InfiniteScrollListProps<TMessageItem>>(
+  Animated.createAnimatedComponent<InfiniteScrollListProps<ChannelMessageItem>>(
     InfiniteScrollList
   );
 
@@ -194,18 +192,19 @@ export const Messages = () => {
       );
     }
   };
-  const { data, isLoading, fetchMore, isLoadingMore } = useChannelMessages();
+  const { data, isLoading, fetchMore, isLoadingMore } =
+    useChannelMessages(channelId);
   const keyboard = useAnimatedKeyboard();
 
   const onLoadMore = () => {
     fetchMore();
   };
 
-  const renderItem: ListRenderItem<TMessageItem> = useCallback(
+  const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item }) => {
-      return <MessageItem item={item} channelId={channelId} />;
+      return <MessageItem item={item} />;
     },
-    [channelId]
+    []
   );
 
   const style = useAnimatedStyle(() => {
@@ -372,14 +371,16 @@ export const Messages = () => {
           ListEmptyComponent={listEmptyComponent}
         />
       </View>
-      <MessageInput />
+      <MessageInput channelId={channelId} />
     </View>
   );
 };
 
-const MessageInput = () => {
+const MessageInput = ({ channelId }: { channelId?: string }) => {
   const keyboard = useAnimatedKeyboard();
   const bottomHeight = usePlatformBottomHeight();
+  const sendMessage = useSendChannelMessage(channelId);
+  const channelMessages = useChannelMessages(channelId);
   useEffect(() => {
     AvoidSoftInput.setEnabled(false);
 
@@ -405,18 +406,26 @@ const MessageInput = () => {
     <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
       <MessageBox
         placeholder="Send an update..."
-        onSubmit={(text: string) => {
+        onSubmit={async (text: string) => {
+          if (channelId) {
+            await sendMessage.trigger({
+              channelId,
+              message: text,
+            });
+            channelMessages.mutate();
+          }
+
           return Promise.resolve();
         }}
-        submitting={false}
+        submitting={sendMessage.isMutating}
         tw="bg-white dark:bg-black"
       />
     </Animated.View>
   );
 };
 
-const MessageItem = memo(({ item, channelId }: MessageItemProps) => {
-  const { username, text } = item;
+const MessageItem = memo(({ item }: MessageItemProps) => {
+  const { channel_message } = item;
   return (
     <View tw="mb-5 px-4">
       <View tw="flex-row" style={{ columnGap: 8 }}>
@@ -424,7 +433,7 @@ const MessageItem = memo(({ item, channelId }: MessageItemProps) => {
         <View tw="flex-1" style={{ rowGap: 8 }}>
           <View tw="flex-row items-baseline" style={{ columnGap: 8 }}>
             <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
-              {username}
+              {channel_message.sent_by.profile.name}
             </Text>
             <Text tw="text-xs text-gray-700 dark:text-gray-200">
               {formatDateRelativeWithIntl(new Date().toISOString())}
@@ -432,10 +441,10 @@ const MessageItem = memo(({ item, channelId }: MessageItemProps) => {
           </View>
 
           <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-            {text}
+            {channel_message.body}
           </Text>
           <View tw="mt-1 w-full flex-row items-center">
-            <MessageReactions channelId={channelId} />
+            <MessageReactions />
             <View tw="mr-2 flex-1 flex-row justify-end">
               <Reaction
                 selected={"❤️"}
