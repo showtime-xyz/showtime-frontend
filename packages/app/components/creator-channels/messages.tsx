@@ -1,5 +1,5 @@
 import { useCallback, useEffect, memo, useState } from "react";
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions, Keyboard } from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
@@ -41,6 +41,8 @@ import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useShare } from "app/hooks/use-share";
 import { Analytics, EVENTS } from "app/lib/analytics";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { useNavigation } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 import { formatDateRelativeWithIntl, getWebBaseURL } from "app/utilities";
 
@@ -174,9 +176,12 @@ const benefits = [
   },
 ];
 export const Messages = () => {
+  const navigation = useNavigation();
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
   const bottomHeight = usePlatformBottomHeight();
   const router = useRouter();
   const share = useShare();
@@ -220,7 +225,12 @@ export const Messages = () => {
   const listEmptyComponent = useCallback(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
     return (
-      <>
+      <View
+        tw="absolute top-24 w-full items-center justify-start"
+        style={{
+          height: height - headerHeight - bottomHeight - insets.top - 126,
+        }}
+      >
         <View tw="mt-6 w-full items-center justify-center">
           <AnimatePresence exitBeforeEnter>
             <MotiView
@@ -292,9 +302,9 @@ export const Messages = () => {
         <View tw="absolute bottom-0.5 w-full items-center justify-center">
           <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`2,300 members will be notified`}</Text>
         </View>
-      </>
+      </View>
     );
-  }, [isDark, showIntro]);
+  }, [bottomHeight, headerHeight, height, insets.top, isDark, showIntro]);
 
   if (!channelId) {
     return (
@@ -304,6 +314,7 @@ export const Messages = () => {
       />
     );
   }
+
   if (isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
@@ -313,66 +324,68 @@ export const Messages = () => {
   }
 
   return (
-    <View
-      tw="animate-fade-in-250 w-full flex-1 bg-white dark:bg-black"
-      style={{
-        paddingTop: insets.top,
-        paddingBottom: Platform.select({
-          web: bottomHeight,
-        }),
-      }}
-    >
-      <Header
-        username="nishanbende"
-        onPressSettings={() => {
-          const as = `/channels/${channelId}/settings`;
-          router.push(
-            Platform.select({
-              native: as,
-              web: {
-                pathname: router.pathname,
-                query: {
-                  ...router.query,
-                  channelsSettingsModal: true,
-                },
-              } as any,
-            }),
-            Platform.select({
-              native: as,
-              web: router.asPath,
-            }),
-            { shallow: true }
-          );
+    <>
+      <View
+        tw="animate-fade-in-250 w-full flex-1 bg-white dark:bg-black"
+        style={{
+          paddingTop: insets.top,
+          paddingBottom: Platform.select({
+            web: bottomHeight,
+          }),
         }}
-        onPressShare={shareLink}
-        members={29}
-        channelId={channelId}
-      />
-      <View tw="web:pb-16 flex-1 overflow-hidden pb-8">
-        <AnimatedInfiniteScrollList
-          data={data}
-          onEndReached={onLoadMore}
-          inverted
-          useWindowScroll={false}
-          estimatedItemSize={100}
-          keyboardDismissMode="on-drag"
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingTop: insets.bottom }}
-          style={style}
-          ListFooterComponent={
-            isLoadingMore
-              ? () => (
-                  <View tw="w-full items-center py-4">
-                    <Spinner size="small" />
-                  </View>
-                )
-              : () => null
-          }
-          ListEmptyComponent={listEmptyComponent}
+      >
+        <Header
+          username="nishanbende"
+          onPressSettings={() => {
+            const as = `/channels/${channelId}/settings`;
+            router.push(
+              Platform.select({
+                native: as,
+                web: {
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    channelsSettingsModal: true,
+                  },
+                } as any,
+              }),
+              Platform.select({
+                native: as,
+                web: router.asPath,
+              }),
+              { shallow: true }
+            );
+          }}
+          onPressShare={shareLink}
+          members={29}
+          channelId={channelId}
         />
+        <View tw="web:pb-16 flex-1 overflow-hidden pb-8">
+          <AnimatedInfiniteScrollList
+            data={data}
+            onEndReached={onLoadMore}
+            inverted
+            useWindowScroll={false}
+            estimatedItemSize={100}
+            keyboardDismissMode="on-drag"
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingTop: insets.bottom }}
+            style={style}
+            ListFooterComponent={
+              isLoadingMore
+                ? () => (
+                    <View tw="w-full items-center py-4">
+                      <Spinner size="small" />
+                    </View>
+                  )
+                : () => null
+            }
+          />
+        </View>
+        <MessageInput />
       </View>
-      <MessageInput channelId={channelId} />
-    </View>
+      {data.length === 0 && listEmptyComponent()}
+    </>
   );
 };
 
