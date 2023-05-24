@@ -20,11 +20,17 @@ export async function getServerSideProps(context) {
     };
 
     const nft = res.data?.data?.item as NFT;
-    const imageUrl = getMediaUrl({
+    let imageUrl = getMediaUrl({
       nft,
       stillPreview: nft?.mime_type?.startsWith("video"),
       optimized: true,
     });
+
+    // lets check if the image is from showtime.xyz (eg Bunny,
+    // since they start with media.showtime.xyz and video.showtime.xyz)
+    if (imageUrl && imageUrl.includes("showtime.xyz/")) {
+      imageUrl = imageUrl + "?class=ogimage";
+    }
 
     if (nft) {
       return {
