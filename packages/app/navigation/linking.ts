@@ -76,7 +76,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       appleMusicAuthNativeWebView: "appleMusicAuthNativeWebView",
       channelsMessage: "channels/:channelId",
       channelsIntro: "channels/intro",
-      channelsCongrats: "channels/congrats",
+      channelsCongrats: "channels/:channelId/congrats",
       channelsMembers: "channels/:channelId/members",
       channelsSettings: "channels/:channelId/settings",
       channelsMessageReactions:

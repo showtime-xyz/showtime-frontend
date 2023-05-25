@@ -19,6 +19,8 @@ import { useUser } from "app/hooks/use-user";
 
 import { breakpoints } from "design-system/theme";
 
+import { useChannelMembers } from "./hooks/use-channel-members";
+
 export const CreatorChannelsIntro = () => {
   const isDark = useIsDarkMode();
   const { user: userProfile } = useUser();
@@ -27,6 +29,8 @@ export const CreatorChannelsIntro = () => {
   const isSmWidth = width >= breakpoints["sm"];
   const imageSize = isSmWidth ? 420 : width;
   const router = useRouter();
+  const channelId = userProfile?.data.channels[0];
+  const { membersCount } = useChannelMembers(channelId?.toString());
 
   return (
     <BottomSheetModalProvider>
@@ -88,7 +92,6 @@ export const CreatorChannelsIntro = () => {
           size="regular"
           onPress={() => {
             Haptics.impactAsync();
-            const channelId = userProfile?.data.channels[0];
             if (!channelId) {
               router.pop();
               return;
@@ -105,7 +108,7 @@ export const CreatorChannelsIntro = () => {
           Enter channel
         </Button>
         <View tw="h-4" />
-        <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`2,300 members awaiting`}</Text>
+        <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members awaiting`}</Text>
       </View>
     </BottomSheetModalProvider>
   );

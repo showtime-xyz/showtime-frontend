@@ -1,61 +1,59 @@
 import React, { useCallback } from "react";
-import { useWindowDimensions, Platform, Linking } from "react-native";
+import { Linking } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
+import { createParam } from "solito";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Congrats,
-  CreatorChannelType,
-  Twitter,
-  Link,
-} from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
-import { useRouter } from "@showtime-xyz/universal.router";
+import { Congrats, Twitter, Link } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useShare } from "app/hooks/use-share";
-import { useUser } from "app/hooks/use-user";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { getTwitterIntent } from "app/utilities";
 
-import { breakpoints } from "design-system/theme";
 import { toast } from "design-system/toast";
 
+type Query = {
+  channelId: string;
+};
+const { useParam } = createParam<Query>();
 export const CreatorChannelsCongrats = () => {
   const isDark = useIsDarkMode();
-  const { user: userProfile } = useUser();
+  const [channelId] = useParam("channelId");
+
   const share = useShare();
   const bottomBarHeight = usePlatformBottomHeight();
-  const { width } = useWindowDimensions();
-  const isSmWidth = width >= breakpoints["sm"];
-  const imageSize = isSmWidth ? 420 : width;
-  const router = useRouter();
-  const url = "https://showtime.xyz/";
+  const url = `https://showtime.xyz/channels/${channelId}`;
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
         url: url,
-        message: ``,
+        message: `Just messaged my exclusive collector channel on @Showtime_xyz: `,
       })
     );
-  }, []);
+  }, [url]);
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(url.toString());
     toast.success("Copied!");
-  }, []);
+  }, [url]);
 
   const shareLink = async () => {
     const result = await share({
       url,
     });
+    if (result.action === "sharedAction") {
+      Analytics.track(
+        EVENTS.USER_SHARED_PROFILE,
+        result.activityType ? { type: result.activityType } : undefined
+      );
+    }
   };
   return (
     <BottomSheetModalProvider>
@@ -79,7 +77,7 @@ export const CreatorChannelsCongrats = () => {
         </Text>
       </View>
       <View
-        tw="absolutew-full px-4"
+        tw="mt-8 w-full px-4"
         style={{
           paddingBottom: Math.max(bottomBarHeight + 8, 24),
         }}

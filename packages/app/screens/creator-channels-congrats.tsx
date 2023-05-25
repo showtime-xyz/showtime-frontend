@@ -6,7 +6,7 @@ export const CreatorChannelsCongratsScreen = withModalScreen(
   CreatorChannelsCongrats,
   {
     title: "",
-    matchingPathname: "/channels/congrats",
+    matchingPathname: "/channels/[channelId]/congrats",
     matchingQueryParam: "channelsCongratsModal",
     tw: "w-full",
     disableBackdropPress: true,

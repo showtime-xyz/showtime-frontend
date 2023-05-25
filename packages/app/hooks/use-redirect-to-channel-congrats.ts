@@ -5,8 +5,8 @@ import { useRouter } from "@showtime-xyz/universal.router";
 export const useRedirectToChannelCongrats = () => {
   const router = useRouter();
 
-  const redirectToChannelCongrats = async () => {
-    const as = `/channels/congrats`;
+  const redirectToChannelCongrats = async (channelId?: string | number) => {
+    const as = `/channels/$${channelId}/congrats`;
     router.push(
       Platform.select({
         native: as,
@@ -14,6 +14,7 @@ export const useRedirectToChannelCongrats = () => {
           pathname: router.pathname,
           query: {
             ...router.query,
+            channelId,
             channelsCongratsModal: true,
           },
         } as any,

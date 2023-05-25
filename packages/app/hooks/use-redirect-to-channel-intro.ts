@@ -28,7 +28,7 @@ export const useRedirectToChannelIntro = () => {
         shallow: true,
       }
     );
-    setHideCreatorChannelIntro(false);
+    setHideCreatorChannelIntro(true);
   };
 
   return redirectToChannelIntro;

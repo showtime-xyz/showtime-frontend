@@ -39,6 +39,7 @@ import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { MessageBox } from "app/components/messages";
 import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-congrats";
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
@@ -55,6 +56,7 @@ import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
+import { useChannelMembers } from "./hooks/use-channel-members";
 import {
   ChannelMessageItem,
   useChannelMessages,
@@ -88,6 +90,7 @@ const AnimatedInfiniteScrollList =
 const Header = (props: HeaderProps) => {
   const router = useRouter();
   const isDark = useIsDarkMode();
+
   const viewMembersList = useCallback(() => {
     const as = `/channels/${props.channelId}/members`;
 
@@ -202,6 +205,8 @@ export const Messages = () => {
   const share = useShare();
   const isDark = useIsDarkMode();
   const user = useUser();
+  const { membersCount } = useChannelMembers(channelId);
+  const redirectToChannelCongrats = useRedirectToChannelCongrats();
   const isUserAdmin =
     user.user?.data.channels &&
     user.user?.data.channels[0] === Number(channelId);
@@ -351,6 +356,11 @@ export const Messages = () => {
     () => ({ reactions: channelReactions.data, channelId }),
     [channelId, channelReactions.data]
   );
+  const sendMessageCallback = useCallback(() => {
+    if (data?.length !== 0) return;
+    redirectToChannelCongrats(channelId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.length, channelId]);
 
   if (!channelId) {
     return (
@@ -403,7 +413,7 @@ export const Messages = () => {
             );
           }}
           onPressShare={shareLink}
-          members={29}
+          members={membersCount}
           channelId={channelId}
         />
         <View
@@ -431,14 +441,25 @@ export const Messages = () => {
             }
           />
         </View>
-        {isUserAdmin ? <MessageInput channelId={channelId} /> : null}
+        {isUserAdmin ? (
+          <MessageInput
+            channelId={channelId}
+            sendMessageCallback={sendMessageCallback}
+          />
+        ) : null}
       </View>
       {data.length === 0 && listEmptyComponent()}
     </>
   );
 };
 
-const MessageInput = ({ channelId }: { channelId?: string }) => {
+const MessageInput = ({
+  channelId,
+  sendMessageCallback,
+}: {
+  channelId?: string;
+  sendMessageCallback?: () => void;
+}) => {
   const keyboard =
     // eslint-disable-next-line react-hooks/rules-of-hooks
     Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
@@ -477,6 +498,7 @@ const MessageInput = ({ channelId }: { channelId?: string }) => {
             await sendMessage.trigger({
               channelId,
               message: text,
+              callback: sendMessageCallback,
             });
             inputRef.current?.reset();
           }

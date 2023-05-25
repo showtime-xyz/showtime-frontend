@@ -29,9 +29,11 @@ export const useSendChannelMessage = (channelId?: string) => {
   const handleSubmit = async ({
     message,
     channelId,
+    callback,
   }: {
     channelId: string;
     message: string;
+    callback?: () => void;
   }) => {
     const optimisticObjectId = Math.random();
     channelMessages.mutate(
@@ -90,6 +92,7 @@ export const useSendChannelMessage = (channelId?: string) => {
         revalidate: true,
       }
     );
+    callback?.();
   };
 
   return {

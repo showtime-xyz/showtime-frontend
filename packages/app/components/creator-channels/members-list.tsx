@@ -1,8 +1,8 @@
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 
-import { useFollowingList } from "app/hooks/api/use-follow-list";
 import { createParam } from "app/navigation/use-param";
 
+import { useChannelMembers } from "./hooks/use-channel-members";
 import { CreatorChannelUserList } from "./user-list";
 
 type Query = {
@@ -13,12 +13,11 @@ const { useParam } = createParam<Query>();
 
 export const CreatorChannelsMembersModal = () => {
   const [channelId] = useParam("channelId");
-  const { data, loading } = useFollowingList(17784243);
-
+  const { data, isLoading } = useChannelMembers(channelId);
   if (!channelId) return null;
   return (
     <BottomSheetModalProvider>
-      <CreatorChannelUserList loading={loading} users={data?.list} />
+      <CreatorChannelUserList loading={isLoading} users={data} />
     </BottomSheetModalProvider>
   );
 };
