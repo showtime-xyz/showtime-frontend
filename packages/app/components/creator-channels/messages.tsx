@@ -45,7 +45,13 @@ import { Analytics, EVENTS } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
-import { formatDateRelativeWithIntl, getWebBaseURL } from "app/utilities";
+import {
+  formatDateRelativeWithIntl,
+  getWebBaseURL,
+  isDesktopWeb,
+} from "app/utilities";
+
+import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
@@ -188,7 +194,8 @@ export const Messages = () => {
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
   const headerHeight = useHeaderHeight();
   const bottomHeight = usePlatformBottomHeight();
   const router = useRouter();
@@ -251,7 +258,10 @@ export const Messages = () => {
       <View
         tw="absolute top-24 w-full items-center justify-start"
         style={{
-          height: height - headerHeight - bottomHeight - insets.top - 126,
+          height:
+            isMdWidth && isDesktopWeb()
+              ? "calc(100% - 160px)"
+              : height - headerHeight - bottomHeight - insets.top - 126,
         }}
       >
         <View tw="mt-6 w-full items-center justify-center">
