@@ -53,6 +53,7 @@ export const useReactOnMessage = (channelId: string) => {
                       });
                     } else {
                       m.reaction_group[index].count += 1;
+                      m.reaction_group[index].self_reacted = true;
                     }
                   }
                 } else {
