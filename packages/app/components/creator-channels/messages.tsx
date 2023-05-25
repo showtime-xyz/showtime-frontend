@@ -406,7 +406,9 @@ export const Messages = () => {
           members={29}
           channelId={channelId}
         />
-        <View tw="web:pb-16 flex-1 overflow-hidden pb-8">
+        <View
+          tw={["flex-1 overflow-hidden", isUserAdmin ? "web:pb-16 pb-8" : ""]}
+        >
           <AnimatedInfiniteScrollList
             data={data}
             onEndReached={onLoadMore}
