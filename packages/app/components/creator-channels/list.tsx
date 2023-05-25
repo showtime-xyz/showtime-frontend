@@ -6,6 +6,7 @@ import { RectButton } from "react-native-gesture-handler";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -104,7 +105,11 @@ const CreatorChannelsListItem = memo(
                   tw="leading-5 text-gray-500 dark:text-gray-300"
                   numberOfLines={2}
                 >
-                  {item?.latest_message?.body}
+                  {item?.latest_message?.body
+                    ? item?.latest_message?.body
+                    : item.itemType === "owned"
+                    ? "Blast exclusive updates to all your fans at once like Music NFT presale access, raffles, unreleased content & more."
+                    : ""}
                 </Text>
               </View>
             </View>
@@ -190,15 +195,14 @@ const suggestedChannelsSection = {
 
 export const CreatorChannelsList = memo(
   ({ web_height = undefined }: { web_height?: number }) => {
-    //const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } = useChannelsList();
-
     const isDark = useIsDarkMode();
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
     const { height: windowHeight } = useWindowDimensions();
 
     // my own channels
-    const { data: ownedChannelsData } = useOwnedChannelsList();
+    const { data: ownedChannelsData, isLoading: isLoadingOwnChannels } =
+      useOwnedChannelsList();
 
     // channels I'm a member of
     const {
@@ -206,8 +210,8 @@ export const CreatorChannelsList = memo(
       fetchMore,
       refresh,
       isRefreshing,
-      isLoadingMore,
-      isLoading,
+      isLoadingMore: isLoadingMoreJoinedChannels,
+      isLoading: isLoadingJoinedChannels,
     } = useJoinedChannelsList();
 
     // suggested channels
@@ -274,14 +278,26 @@ export const CreatorChannelsList = memo(
     }, []);
 
     const ListFooterComponent = useCallback(() => {
-      if (isLoadingMore)
+      if (isLoadingOwnChannels || isLoadingJoinedChannels) {
+        return <CCSkeleton />;
+      }
+      if (
+        !isLoadingOwnChannels &&
+        !isLoadingJoinedChannels &&
+        isLoadingMoreJoinedChannels
+      ) {
         return (
-          <View tw="items-center pb-4">
+          <View tw="items-center pb-4 pt-4">
             <Spinner size="small" />
           </View>
         );
+      }
       return null;
-    }, [isLoadingMore]);
+    }, [
+      isLoadingOwnChannels,
+      isLoadingJoinedChannels,
+      isLoadingMoreJoinedChannels,
+    ]);
 
     return (
       <InfiniteScrollList
@@ -338,3 +354,24 @@ export const CreatorChannelsList = memo(
 );
 
 CreatorChannelsList.displayName = "CreatorChannelsList";
+
+const CCSkeleton = () => {
+  return (
+    <View tw="px-4">
+      {new Array(8).fill(0).map((_, i) => {
+        return (
+          <View tw="flex-row pt-4" key={`${i}`}>
+            <View tw="mr-2 overflow-hidden rounded-full">
+              <Skeleton width={52} height={52} show />
+            </View>
+            <View>
+              <Skeleton width={140} height={14} show />
+              <View tw="h-1" />
+              <Skeleton width={90} height={14} show />
+            </View>
+          </View>
+        );
+      })}
+    </View>
+  );
+};
