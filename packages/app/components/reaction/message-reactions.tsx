@@ -6,8 +6,6 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { getEmojiFromUnicode } from "app/utilities";
-
 import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
 import { useChannelReactions } from "../creator-channels/hooks/use-channel-reactions";
 
@@ -49,11 +47,11 @@ export const MessageReactions = ({
         return (
           <Pressable key={item.reaction_id} onPress={handleReactionPress}>
             <Text tw="text-xs text-gray-700 dark:text-gray-200">
-              {getEmojiFromUnicode(
+              {
                 channelReactions.data?.find((r) => {
                   return item.reaction_id === r.id;
                 })?.reaction
-              )}{" "}
+              }{" "}
               {item.count}
             </Text>
           </Pressable>

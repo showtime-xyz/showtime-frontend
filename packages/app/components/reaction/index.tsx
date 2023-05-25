@@ -15,8 +15,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { getEmojiFromUnicode } from "app/utilities";
-
+import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
 import { ChannelReactionResponse } from "../creator-channels/hooks/use-channel-reactions";
 import {
   emojiButtonSize,
@@ -29,12 +28,12 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type Props = {
   onPress?: (emojiId: any) => void;
-  selected: number;
+  reactionGroup: ReactionGroup[];
   reactions: ChannelReactionResponse;
 };
 
 export const Reaction = (props: Props) => {
-  const { selected, onPress, reactions } = props;
+  const { reactionGroup, onPress, reactions } = props;
   const state = useContext(ReactionContext);
   const positionRef = useAnimatedRef<any>();
   const windowDimension = useWindowDimensions();
@@ -57,7 +56,9 @@ export const Reaction = (props: Props) => {
           <ShowtimePressable
             key={index}
             tw={`items-center justify-center ${
-              selected === reaction.id
+              reactionGroup.findIndex(
+                (r) => r.reaction_id === reaction.id && r.self_reacted
+              ) !== -1
                 ? "bg-gray-300/50 dark:bg-gray-600/50"
                 : ""
             }`}
@@ -71,7 +72,7 @@ export const Reaction = (props: Props) => {
             }}
           >
             <Text tw="text-2xl text-black dark:text-white">
-              {getEmojiFromUnicode(reaction.reaction)}
+              {reaction.reaction}
             </Text>
           </ShowtimePressable>
         ))}

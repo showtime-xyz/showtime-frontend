@@ -499,7 +499,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
             <View tw="mr-2 flex-1 flex-row justify-end">
               <Reaction
                 reactions={reactions}
-                selected={10}
+                reactionGroup={item.reaction_group}
                 onPress={async (id) => {
                   await reactOnMessage.trigger({
                     messageId: item.channel_message.id,

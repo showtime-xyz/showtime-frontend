@@ -43,11 +43,11 @@ export const useReactOnMessage = (channelId: string) => {
                     m.reaction_group.push({
                       reaction_id: reactionId,
                       count: 1,
-                      is_reacted_by_me: true,
+                      self_reacted: true,
                     });
                   } else {
                     // Toggle if reacted by me
-                    if (m.reaction_group[index].is_reacted_by_me) {
+                    if (m.reaction_group[index].self_reacted) {
                       m.reaction_group = m.reaction_group.filter((f) => {
                         return f.reaction_id !== reactionId;
                       });
@@ -59,7 +59,7 @@ export const useReactOnMessage = (channelId: string) => {
                   m.reaction_group.push({
                     reaction_id: reactionId,
                     count: 1,
-                    is_reacted_by_me: true,
+                    self_reacted: true,
                   });
                 }
               }
