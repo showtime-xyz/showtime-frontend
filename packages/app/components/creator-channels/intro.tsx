@@ -62,10 +62,10 @@ export const CreatorChannelsIntro = () => {
           </View>
           <View
             style={{ marginTop: 130 }}
-            tw="items-center justify-center px-6"
+            tw="items-center justify-center px-6 md:px-3"
           >
             <Text
-              tw="text-center font-bold text-gray-900 dark:text-white"
+              tw="text-center font-bold text-gray-900 dark:text-white md:px-3"
               style={{ fontSize: 32 }}
             >
               An exclusive channel for your collectors
@@ -79,7 +79,7 @@ export const CreatorChannelsIntro = () => {
         </View>
       </BottomSheetScrollView>
       <View
-        tw="absolutew-full px-4"
+        tw="web:mt-8 web:relative absolute bottom-0 w-full px-4"
         style={{
           paddingBottom: Math.max(bottomBarHeight + 8, 24),
         }}
@@ -88,7 +88,12 @@ export const CreatorChannelsIntro = () => {
           size="regular"
           onPress={() => {
             Haptics.impactAsync();
-            const pathname = `/channels/${userProfile?.data.profile.profile_id}`;
+            const channelId = userProfile?.data.channels[0];
+            if (!channelId) {
+              router.pop();
+              return;
+            }
+            const pathname = `/channels/${channelId}`;
             if (Platform.OS === "web") {
               router.push(pathname);
             } else {
