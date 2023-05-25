@@ -337,7 +337,15 @@ export const Messages = () => {
         </View>
       </View>
     );
-  }, [bottomHeight, headerHeight, height, insets.top, isDark, showIntro]);
+  }, [
+    bottomHeight,
+    headerHeight,
+    height,
+    insets.top,
+    isDark,
+    isMdWidth,
+    showIntro,
+  ]);
 
   const extraData = useMemo(
     () => ({ reactions: channelReactions.data, channelId }),
