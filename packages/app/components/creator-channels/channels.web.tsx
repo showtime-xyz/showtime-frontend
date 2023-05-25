@@ -98,8 +98,10 @@ const CreatorChannelsListItem = memo(
       >
         <View
           tw={[
-            "mx-3 my-1 flex-1 cursor-pointer rounded-lg px-2 py-2 transition-colors hover:bg-gray-100",
-            currentChannel === item.id.toFixed() ? "bg-gray-100" : "", // TODO: toFixed might to be changed with slugs
+            "mx-3 my-1 flex-1 cursor-pointer rounded-lg px-2 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-900",
+            currentChannel === item.id.toFixed()
+              ? "bg-gray-100 dark:bg-gray-900"
+              : "", // TODO: toFixed might to be changed with slugs
           ]}
         >
           <View tw="flex-row items-start justify-start">
