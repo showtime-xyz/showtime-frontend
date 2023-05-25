@@ -116,9 +116,19 @@ const CreatorChannelsListItem = memo(
                   tw="text-md max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-black dark:text-white"
                   numberOfLines={1}
                 >
-                  {item.owner.username}
+                  {item.owner.name ?? item.owner.username}
                 </Text>
-                <Text tw="ml-2 text-xs text-gray-500">{time}</Text>
+                {item.itemType === "owned" ? (
+                  <Text
+                    tw="text-md ml-3 max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-gray-500 dark:text-white"
+                    numberOfLines={1}
+                  >
+                    you
+                  </Text>
+                ) : null}
+                <Text tw="ml-2 text-xs text-gray-500">
+                  {item?.latest_message?.updated_at ? time : ""}
+                </Text>
               </View>
               <View tw="mt-1">
                 <Text
@@ -130,11 +140,17 @@ const CreatorChannelsListItem = memo(
                   ]}
                   numberOfLines={2}
                 >
-                  {item?.latest_message?.body
-                    ? item?.latest_message?.body
-                    : item.itemType === "owned"
-                    ? "Blast exclusive updates to all your fans at once like Music NFT presale access, raffles, unreleased content & more."
-                    : ""}
+                  {item?.latest_message?.body ? (
+                    item?.latest_message?.body
+                  ) : item.itemType === "owned" ? (
+                    <Text tw="font-semibold">
+                      Blast exclusive updates to all your fans at once like
+                      Music NFT presale access, raffles, unreleased content &
+                      more.
+                    </Text>
+                  ) : (
+                    ""
+                  )}
                 </Text>
               </View>
             </View>
