@@ -495,6 +495,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
             <MessageReactions
               reactionGroup={item.reaction_group}
               channelId={channelId}
+              messageId={channel_message.id}
             />
             <View tw="mr-2 flex-1 flex-row justify-end">
               <Reaction

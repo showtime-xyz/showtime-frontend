@@ -11,41 +11,52 @@ import { useChannelReactions } from "../creator-channels/hooks/use-channel-react
 
 export const MessageReactions = ({
   channelId,
+  messageId,
   reactionGroup,
 }: {
   channelId: string;
   reactionGroup: ReactionGroup[];
+  messageId: number;
 }) => {
   const router = useRouter();
   const channelReactions = useChannelReactions(channelId);
 
-  const handleReactionPress = useCallback(() => {
-    const as = `/channels/${channelId}/reactions`;
+  const handleReactionPress = useCallback(
+    (reactionId: number) => {
+      const as = `/channels/${channelId}/messages/${messageId}/reactions?selectedReactionId=${reactionId}`;
 
-    router.push(
-      Platform.select({
-        native: as,
-        web: {
-          pathname: router.pathname,
-          query: {
-            ...router.query,
-            channelsReactionModal: true,
-          },
-        } as any,
-      }),
-      Platform.select({
-        native: as,
-        web: router.asPath,
-      }),
-      { shallow: true }
-    );
-  }, [channelId, router]);
+      router.push(
+        Platform.select({
+          native: as,
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              channelsReactionModal: true,
+              messageId,
+              channelId,
+              selectedReactionId: reactionId,
+            },
+          } as any,
+        }),
+        Platform.select({
+          native: as,
+          web: router.asPath,
+        }),
+        { shallow: true }
+      );
+    },
+    [router, messageId, channelId]
+  );
 
   return (
     <View tw="max-w-[300px] flex-[5] flex-row justify-between">
       {reactionGroup.map((item) => {
         return (
-          <Pressable key={item.reaction_id} onPress={handleReactionPress}>
+          <Pressable
+            key={item.reaction_id}
+            onPress={() => handleReactionPress(item.reaction_id)}
+          >
             <Text tw="text-xs text-gray-700 dark:text-gray-200">
               {
                 channelReactions.data?.find((r) => {

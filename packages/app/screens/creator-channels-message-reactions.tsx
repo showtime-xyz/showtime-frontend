@@ -6,7 +6,7 @@ export const CreatorChannelsMessageReactionsScreen = withModalScreen(
   MessageReactionUserListModal,
   {
     title: "Reactions",
-    matchingPathname: "/channels/[channelId]/reactions",
+    matchingPathname: "/channels/[channelId]/messages/[messageId]/reactions",
     matchingQueryParam: "channelsReactionModal",
     tw: "w-full web:lg:pb-8",
   }

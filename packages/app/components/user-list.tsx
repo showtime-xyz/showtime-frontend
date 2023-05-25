@@ -33,6 +33,7 @@ type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
   users?: UserItemType[];
   loading: boolean;
   emptyTitle?: string;
+  onEndReached?: () => void;
   ListHeaderComponent?: React.ComponentType<any>;
 };
 export const UserList = ({
