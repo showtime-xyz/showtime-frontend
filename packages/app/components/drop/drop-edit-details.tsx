@@ -26,13 +26,9 @@ import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
-import { useUpdatePresaveReleaseDate } from "app/hooks/use-update-presave-release-date";
+import { useDropEditDetails } from "app/hooks/use-drop-edit-details";
 import { yup } from "app/lib/yup";
 import { createParam } from "app/navigation/use-param";
-
-import { DateTimePicker } from "design-system/date-time-picker";
-
-import { CopySpotifyLinkTutorial } from "./copy-spotify-link-tutorial";
 
 const dropValidationSchema = yup.object({
   spotifyUrl: yup.string().optional().nullable(),
@@ -47,7 +43,7 @@ export const DropEditDetails = () => {
   const isDark = useIsDarkMode();
   const [contractAddress] = useParam("contractAddress");
   const { data } = useCreatorCollectionDetail(contractAddress);
-  console.log(data);
+  const { editDropDetails } = useDropEditDetails();
 
   const defaultValues = useMemo(() => {
     return {
@@ -80,7 +76,7 @@ export const DropEditDetails = () => {
 
   const onSubmit = async (values: typeof defaultValues) => {
     console.log(values);
-
+    editDropDetails(contractAddress, values);
     router.pop();
   };
 
