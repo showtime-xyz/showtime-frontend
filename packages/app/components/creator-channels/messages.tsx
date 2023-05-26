@@ -417,7 +417,7 @@ export const Messages = () => {
           members={membersCount}
           channelId={channelId}
         />
-        <View tw={["flex-1 overflow-hidden", isUserAdmin ? "pb-8" : ""]}>
+        <View tw={["flex-1 overflow-hidden", isUserAdmin ? "pb-12" : ""]}>
           <AnimatedInfiniteScrollList
             data={data}
             onEndReached={onLoadMore}
