@@ -1,15 +1,29 @@
-import { useCallback, useEffect, memo, useRef, useState, useMemo } from "react";
+import {
+  useCallback,
+  useEffect,
+  memo,
+  useRef,
+  useState,
+  useMemo,
+  RefObject,
+  useLayoutEffect,
+} from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { FlashList, FlashListProps } from "@shopify/flash-list";
+import { FlashList } from "@shopify/flash-list";
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle,
-  FadeInDown,
-  FadeOutDown,
   Layout,
+  FadeOut,
+  FadeIn,
+  SequencedTransition,
+  PinwheelOut,
+  PinwheelIn,
+  LightSpeedInLeft,
+  combineTransition,
 } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -19,7 +33,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   ArrowLeft,
   CloseLarge,
-  Edit,
   EyeOffV2,
   GiftV2,
   LockRounded,
@@ -41,7 +54,6 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
@@ -83,28 +95,21 @@ import {
   useChannelReactions,
 } from "./hooks/use-channel-reactions";
 import { useDeleteMessage } from "./hooks/use-delete-message";
-import { useEditChannelMessage } from "./hooks/use-edit-channel-message";
 import { useReactOnMessage } from "./hooks/use-react-on-message";
 import { useSendChannelMessage } from "./hooks/use-send-channel-message";
+import {
+  HeaderProps,
+  IAnimatedInfiniteScrollListWithRef,
+  MessageItemProps,
+} from "./types";
 
-type MessageItemProps = {
-  item: ChannelMessageItem;
-  reactions: ChannelReactionResponse;
-  channelId: string;
-};
-
-type HeaderProps = {
-  username: string;
-  members: number;
-  channelId: string;
-  onPressSettings: () => void;
-  onPressShare: () => void;
-};
-
-const AnimatedInfiniteScrollList =
+export const AnimatedInfiniteScrollList =
   Animated.createAnimatedComponent<InfiniteScrollListProps<ChannelMessageItem>>(
     InfiniteScrollList
   );
+
+const AnimatedInfiniteScrollListWithRef =
+  AnimatedInfiniteScrollList as IAnimatedInfiniteScrollListWithRef;
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -232,25 +237,25 @@ const benefits = [
   },
 ];
 
-const createCellRenderer = () => {
-  const cellRenderer = (props: FlashListProps<any>) => {
-    return (
-      <AnimatedView
-        layout={Layout.springify()}
-        entering={FadeInDown}
-        exiting={FadeOutDown}
-        style={{ transform: [{ scaleY: -1 }] }}
-      >
-        {props.children}
-      </AnimatedView>
-    );
-  };
+const keyExtractor = (item: ChannelMessageItem) =>
+  item.channel_message.id.toString();
 
-  return cellRenderer;
-};
+const CellRendererComponent = memo((props) => {
+  return (
+    <AnimatedView
+      layout={SequencedTransition.reverse().delay(0)}
+      entering={FadeIn.springify()}
+      exiting={FadeOut}
+      style={{ transform: [{ scaleY: -1 }] }}
+      {...props}
+    />
+  );
+});
+
+CellRendererComponent.displayName = "CellRendererComponent";
 
 export const Messages = () => {
-  const listRef = useRef<FlashList<ChannelMessageItem>>(null);
+  const listRef = useRef<FlashList<MessageItemProps>>(null);
   const navigation = useNavigation();
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
@@ -289,7 +294,6 @@ export const Messages = () => {
     Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
 
   const onLoadMore = async () => {
-    listRef.current?.prepareForLayoutAnimationRender();
     fetchMore();
   };
 
@@ -300,6 +304,7 @@ export const Messages = () => {
           item={item}
           reactions={extraData.reactions}
           channelId={extraData.channelId}
+          listRef={listRef}
         />
       );
     },
@@ -416,7 +421,9 @@ export const Messages = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.length, channelId]);
 
-  const cellRenderer = useMemo(() => createCellRenderer(), []);
+  useLayoutEffect(() => {
+    listRef.current?.prepareForLayoutAnimationRender();
+  }, [data, channelReactions]);
 
   if (!channelId) {
     return (
@@ -427,7 +434,7 @@ export const Messages = () => {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || channelReactions.isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
         <Spinner />
@@ -438,17 +445,16 @@ export const Messages = () => {
   return (
     <>
       <View
-        tw="web:animate-fade-in-250 w-full flex-1 bg-white dark:bg-black"
+        tw="w-full flex-1 bg-white dark:bg-black"
         style={{
           paddingTop: insets.top,
           paddingBottom: Platform.select({
             web: bottomHeight,
-            android: bottomHeight,
           }),
         }}
       >
         <Header
-          username="nishanbende"
+          username="Hirbod"
           onPressSettings={() => {
             const as = `/channels/${channelId}/settings`;
             router.push(
@@ -474,21 +480,22 @@ export const Messages = () => {
           channelId={channelId}
         />
         <View tw={["flex-1 overflow-hidden", isUserAdmin ? "pb-12" : ""]}>
-          <AnimatedInfiniteScrollList
+          <AnimatedInfiniteScrollListWithRef
             ref={listRef}
-            keyExtractor={(item) => item.channel_message.id.toFixed()}
+            keyExtractor={keyExtractor}
             data={data}
             onEndReached={onLoadMore}
             inverted
+            drawDistance={height * 2}
             useWindowScroll={false}
-            estimatedItemSize={100}
+            estimatedItemSize={80}
             keyboardDismissMode="on-drag"
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: insets.bottom }}
             style={style}
             extraData={extraData}
-            disableAutoLayout
-            CellRendererComponent={cellRenderer}
+            disableAutoLayout={true}
+            CellRendererComponent={CellRendererComponent}
             ListFooterComponent={
               isLoadingMore
                 ? () => (
@@ -571,188 +578,113 @@ const MessageInput = ({
   );
 };
 
-const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
-  const { channel_message } = item;
-  const reactOnMessage = useReactOnMessage(channelId);
-  const deleteMessage = useDeleteMessage(channelId);
-  const Alert = useAlert();
-  const [showInput, setShowInput] = useState(false);
-  const isDark = useIsDarkMode();
+const MessageItem = memo(
+  ({
+    item,
+    reactions,
+    channelId,
+    listRef,
+  }: MessageItemProps & { listRef: RefObject<FlashList<any>> }) => {
+    const { channel_message } = item;
+    const reactOnMessage = useReactOnMessage(channelId);
+    const deleteMessage = useDeleteMessage(channelId);
+    const Alert = useAlert();
 
-  return (
-    <View tw="mb-5 px-4" style={{ transform: [{ scaleY: -1 }] }}>
-      <View tw="flex-row" style={{ columnGap: 8 }}>
-        <View tw="h-6 w-6">
-          <Avatar size={24} />
-          <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
-        </View>
-        <View tw="flex-1" style={{ rowGap: 8 }}>
-          <View tw="flex-row items-center" style={{ columnGap: 8 }}>
-            <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
-              {channel_message.sent_by.profile.name}
-            </Text>
+    return (
+      <View tw="mb-5 px-4">
+        <View tw="flex-row" style={{ columnGap: 8 }}>
+          <View tw="h-6 w-6">
+            <Avatar size={24} />
+            <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
+          </View>
+          <View tw="flex-1" style={{ rowGap: 8 }}>
+            <View tw="flex-row items-center" style={{ columnGap: 8 }}>
+              <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
+                Hirbod
+              </Text>
 
-            <Text tw="text-xs text-gray-700 dark:text-gray-200">
-              {formatDateRelativeWithIntl(channel_message.updated_at)}
-            </Text>
+              <Text tw="text-xs text-gray-700 dark:text-gray-200">
+                {formatDateRelativeWithIntl(channel_message.updated_at)}
+              </Text>
 
-            <View
-              tw="mr-2 flex-1 flex-row items-center justify-end"
-              style={{ gap: 16 }}
-            >
-              <Reaction
-                reactions={reactions}
-                reactionGroup={item.reaction_group}
-                onPress={async (id) => {
-                  await reactOnMessage.trigger({
-                    messageId: item.channel_message.id,
-                    reactionId: id,
-                  });
-                }}
-              />
-              <View>
-                <DropdownMenuRoot>
-                  <DropdownMenuTrigger>
-                    <MoreHorizontal
-                      color={isDark ? colors.gray[400] : colors.gray[700]}
-                      width={20}
-                      height={20}
-                    />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent loop sideOffset={8}>
-                    <DropdownMenuItem
-                      onSelect={() => {
-                        Alert.alert(
-                          "Are you sure you want to delete this message?",
-                          "",
-                          [
-                            {
-                              text: "Cancel",
-                            },
-                            {
-                              text: "Delete",
-                              style: "destructive",
-                              onPress: () => {
-                                deleteMessage.trigger({
-                                  messageId: item.channel_message.id,
-                                });
+              <View
+                tw="mr-2 flex-1 flex-row items-center justify-end"
+                style={{ gap: 16 }}
+              >
+                <Reaction
+                  reactions={reactions}
+                  reactionGroup={item.reaction_group}
+                  onPress={async (id) => {
+                    await reactOnMessage.trigger({
+                      messageId: item.channel_message.id,
+                      reactionId: id,
+                    });
+                  }}
+                />
+                <View>
+                  <DropdownMenuRoot>
+                    <DropdownMenuTrigger>
+                      <MoreHorizontal color="black" width={20} height={20} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent loop sideOffset={8}>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          Alert.alert(
+                            "Are you sure you want to delete this message?",
+                            "",
+                            [
+                              {
+                                text: "Cancel",
                               },
-                            },
-                          ]
-                        );
-                      }}
-                      key="delete"
-                    >
-                      <MenuItemIcon
-                        Icon={Trash}
-                        ios={{
-                          paletteColors: ["red"],
-                          name: "trash",
+                              {
+                                text: "Delete",
+                                style: "destructive",
+                                onPress: () => {
+                                  deleteMessage.trigger({
+                                    messageId: item.channel_message.id,
+                                  });
+                                },
+                              },
+                            ]
+                          );
                         }}
-                      />
-                      <DropdownMenuItemTitle tw="font-semibold text-red-500">
-                        Delete
-                      </DropdownMenuItemTitle>
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem
-                      onSelect={() => {
-                        setShowInput(true);
-                      }}
-                      key="edit"
-                    >
-                      <MenuItemIcon
-                        Icon={Edit}
-                        ios={{
-                          name: "pencil",
-                        }}
-                      />
-                      <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                        Edit
-                      </DropdownMenuItemTitle>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenuRoot>
+                        key="delete"
+                      >
+                        <MenuItemIcon
+                          Icon={Trash}
+                          ios={{
+                            paletteColors: ["red"],
+                            name: "trash",
+                          }}
+                        />
+                        <DropdownMenuItemTitle tw="font-semibold text-red-500">
+                          Delete
+                        </DropdownMenuItemTitle>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenuRoot>
+                </View>
               </View>
             </View>
-          </View>
 
-          {showInput ? (
-            <EditMessageInput
-              hideInput={() => setShowInput(false)}
-              channelId={channelId}
-              messageId={channel_message.id}
-              defaultValue={channel_message.body}
-            />
-          ) : (
             <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
               {channel_message.body}
             </Text>
-          )}
 
-          {item.reaction_group.length > 0 ? (
-            <View tw="pt-1">
-              <MessageReactions
-                reactionGroup={item.reaction_group}
-                channelId={channelId}
-                messageId={channel_message.id}
-              />
-            </View>
-          ) : null}
+            {item.reaction_group.length > 0 ? (
+              <View tw="pt-1">
+                <MessageReactions
+                  reactionGroup={item.reaction_group}
+                  channelId={channelId}
+                  messageId={channel_message.id}
+                />
+              </View>
+            ) : null}
+          </View>
         </View>
       </View>
-    </View>
-  );
-});
-
-const EditMessageInput = ({
-  defaultValue,
-  hideInput,
-  channelId,
-  messageId,
-}: {
-  defaultValue: string;
-  hideInput: any;
-  channelId: string;
-  messageId: number;
-}) => {
-  const [message, setMessage] = useState(defaultValue);
-  const editMessage = useEditChannelMessage(channelId);
-
-  return (
-    <View>
-      <TextInput
-        autoFocus
-        tw="rounded p-4"
-        value={message}
-        style={{
-          borderWidth: 1,
-          borderColor: colors.gray[500],
-        }}
-        multiline={true}
-        defaultValue={defaultValue}
-        onChangeText={setMessage}
-      />
-      <View tw="mt-2 flex-row justify-between">
-        <Button variant="tertiary" onPress={hideInput}>
-          Cancel
-        </Button>
-        <Button
-          variant="primary"
-          onPress={() => {
-            editMessage.trigger({
-              messageId,
-              message,
-              channelId,
-            });
-            hideInput();
-          }}
-        >
-          Save
-        </Button>
-      </View>
-    </View>
-  );
-};
+    );
+  }
+);
 
 MessageItem.displayName = "MessageItem";
