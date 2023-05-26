@@ -1,36 +1,53 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
+  withTiming,
+  runOnJS,
 } from "react-native-reanimated";
 
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { View } from "@showtime-xyz/universal.view";
 
-import { emojiButtonSize, reactionEmojis } from "./constants";
+import { emojiButtonWidth, reactionEmojis } from "./constants";
 import { ReactionContext } from "./reaction-context";
 
 export const ReactionProvider = ({ children }: any) => {
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [reactions, setReactions] = useState<any>(null);
-  const memoizedValue = useMemo(
-    () => ({ visible, setVisible, setPosition, setReactions }),
-    [visible]
-  );
-  const handleClose = () => setVisible(false);
-
   const animatedV = useSharedValue(0);
-  useEffect(() => {
-    animatedV.value = visible ? 1 : 0;
-  }, [visible, animatedV]);
+  const close = () => {
+    setVisible(false);
+  };
+  const handleClose = () => {
+    animatedV.value = withTiming(0.1, { duration: 150 }, () => {
+      runOnJS(close)();
+    });
+  };
+  const toggle = useCallback(
+    (v: boolean) => {
+      if (v) {
+        setVisible(v);
+        animatedV.value = withSpring(1, { mass: 0.8, stiffness: 150 });
+      } else {
+        animatedV.value = withTiming(0, { duration: 150 }, () => {
+          runOnJS(close)();
+        });
+      }
+    },
+    [animatedV]
+  );
+  const memoizedValue = useMemo(
+    () => ({ visible, setVisible: toggle, setPosition, setReactions }),
+    [toggle, visible]
+  );
 
   const animatedStyle = useAnimatedStyle(() => {
-    const totalRectButtonWidth = emojiButtonSize * reactionEmojis.length;
+    const totalRectButtonWidth = emojiButtonWidth * reactionEmojis.length;
 
-    const newV = withSpring(animatedV.value, { mass: 0.8, stiffness: 150 });
     return {
       willChange: "transform", // make it hardware accelerated on web
       transform: [
@@ -38,14 +55,14 @@ export const ReactionProvider = ({ children }: any) => {
           translateX: totalRectButtonWidth / 2,
         },
         {
-          translateY: -emojiButtonSize / 2,
+          translateY: -emojiButtonWidth / 2,
         },
-        { scale: newV },
+        { scale: animatedV.value },
         {
           translateX: -totalRectButtonWidth / 2,
         },
         {
-          translateY: emojiButtonSize / 2,
+          translateY: emojiButtonWidth / 2,
         },
       ],
     };

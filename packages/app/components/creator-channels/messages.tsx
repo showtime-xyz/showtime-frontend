@@ -410,11 +410,12 @@ export const Messages = () => {
   return (
     <>
       <View
-        tw="animate-fade-in-250 w-full flex-1 bg-white dark:bg-black"
+        tw="web:animate-fade-in-250 w-full flex-1 bg-white dark:bg-black"
         style={{
           paddingTop: insets.top,
           paddingBottom: Platform.select({
             web: bottomHeight,
+            android: bottomHeight,
           }),
         }}
       >

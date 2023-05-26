@@ -10,7 +10,7 @@ import Animated, {
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Reaction as SVGReaction } from "@showtime-xyz/universal.icon";
-import { Pressable as ShowtimePressable } from "@showtime-xyz/universal.pressable";
+import { PressableScale as ShowtimePressable } from "@showtime-xyz/universal.pressable-scale";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -18,8 +18,9 @@ import { View } from "@showtime-xyz/universal.view";
 import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
 import { ChannelReactionResponse } from "../creator-channels/hooks/use-channel-reactions";
 import {
-  emojiButtonSize,
+  emojiButtonWidth,
   reactionButtonSize,
+  emojiButtonHeight,
   reactionEmojis,
 } from "./constants";
 import { ReactionContext } from "./reaction-context";
@@ -40,9 +41,9 @@ export const Reaction = (props: Props) => {
 
   const isDark = useIsDarkMode();
   const setPositions = (pageX: number, pageY: number) => {
-    const totalRectButtonWidth = emojiButtonSize * reactionEmojis.length;
+    const totalRectButtonWidth = emojiButtonWidth * reactionEmojis.length;
     pageX -= totalRectButtonWidth;
-    pageX += emojiButtonSize / 2;
+    pageX += emojiButtonWidth / 2;
 
     // if picker is going out of window
     if (windowDimension.width - pageX < totalRectButtonWidth) {
@@ -51,24 +52,30 @@ export const Reaction = (props: Props) => {
 
     state.setPosition({ top: pageY, left: pageX });
     state.setReactions(
-      <View tw="flex-row overflow-hidden rounded-xl bg-gray-50 dark:bg-gray-800">
+      <View
+        tw="dark:shadow-dark shadow-light flex-row rounded-full bg-white p-2 shadow-md shadow-black/10 dark:bg-black dark:shadow-white/20"
+        style={{
+          gap: 6,
+        }}
+      >
         {reactions.map((reaction, index) => (
           <ShowtimePressable
             key={index}
-            tw={`items-center justify-center ${
+            tw={[
+              "items-center justify-center rounded-full hover:bg-gray-200 hover:dark:bg-gray-700",
               reactionGroup.findIndex(
                 (r) => r.reaction_id === reaction.id && r.self_reacted
               ) !== -1
-                ? "rounded-lg bg-blue-50 p-1 dark:bg-gray-900"
-                : ""
-            }`}
+                ? "bg-gray-100 p-1 dark:bg-gray-900"
+                : "",
+            ]}
             onPress={() => {
               state.setVisible(false);
               onPress?.(reaction.id);
             }}
             style={{
-              width: emojiButtonSize,
-              height: emojiButtonSize,
+              width: emojiButtonWidth,
+              height: emojiButtonHeight,
             }}
           >
             <Text tw="text-2xl text-black dark:text-white">

@@ -62,7 +62,7 @@ export const MessageReactions = ({
               onPress={() => handleReactionPress(item.id)}
               tw={
                 userReaction.self_reacted
-                  ? "rounded-lg bg-blue-50 p-1 dark:bg-gray-900"
+                  ? "rounded-lg bg-gray-50 p-1 dark:bg-gray-900"
                   : undefined
               }
             >
