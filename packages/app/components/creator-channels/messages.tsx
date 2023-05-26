@@ -1,11 +1,15 @@
 import { useCallback, useEffect, memo, useRef, useState, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { FlashList, FlashListProps } from "@shopify/flash-list";
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle,
+  FadeInDown,
+  FadeOutDown,
+  Layout,
 } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -101,6 +105,8 @@ const AnimatedInfiniteScrollList =
   Animated.createAnimatedComponent<InfiniteScrollListProps<ChannelMessageItem>>(
     InfiniteScrollList
   );
+
+const AnimatedView = Animated.createAnimatedComponent(View);
 
 const Header = (props: HeaderProps) => {
   const router = useRouter();
@@ -225,7 +231,26 @@ const benefits = [
     text: "Unreleased content or news",
   },
 ];
+
+const createCellRenderer = () => {
+  const cellRenderer = (props: FlashListProps<any>) => {
+    return (
+      <AnimatedView
+        layout={Layout.springify()}
+        entering={FadeInDown}
+        exiting={FadeOutDown}
+        style={{ transform: [{ scaleY: -1 }] }}
+      >
+        {props.children}
+      </AnimatedView>
+    );
+  };
+
+  return cellRenderer;
+};
+
 export const Messages = () => {
+  const listRef = useRef<FlashList<ChannelMessageItem>>(null);
   const navigation = useNavigation();
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
@@ -263,7 +288,8 @@ export const Messages = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
 
-  const onLoadMore = () => {
+  const onLoadMore = async () => {
+    listRef.current?.prepareForLayoutAnimationRender();
     fetchMore();
   };
 
@@ -390,6 +416,8 @@ export const Messages = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.length, channelId]);
 
+  const cellRenderer = useMemo(() => createCellRenderer(), []);
+
   if (!channelId) {
     return (
       <EmptyPlaceholder
@@ -447,6 +475,8 @@ export const Messages = () => {
         />
         <View tw={["flex-1 overflow-hidden", isUserAdmin ? "pb-12" : ""]}>
           <AnimatedInfiniteScrollList
+            ref={listRef}
+            keyExtractor={(item) => item.channel_message.id.toFixed()}
             data={data}
             onEndReached={onLoadMore}
             inverted
@@ -457,6 +487,8 @@ export const Messages = () => {
             contentContainerStyle={{ paddingTop: insets.bottom }}
             style={style}
             extraData={extraData}
+            disableAutoLayout
+            CellRendererComponent={cellRenderer}
             ListFooterComponent={
               isLoadingMore
                 ? () => (
@@ -548,7 +580,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
   const isDark = useIsDarkMode();
 
   return (
-    <View tw="mb-5 px-4">
+    <View tw="mb-5 px-4" style={{ transform: [{ scaleY: -1 }] }}>
       <View tw="flex-row" style={{ columnGap: 8 }}>
         <View tw="h-6 w-6">
           <Avatar size={24} />
