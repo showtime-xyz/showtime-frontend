@@ -10,20 +10,15 @@ import {
 } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { FlashList } from "@shopify/flash-list";
+import { FlashList, CellContainer } from "@shopify/flash-list";
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle,
-  Layout,
   FadeOut,
   FadeIn,
-  SequencedTransition,
-  PinwheelOut,
-  PinwheelIn,
-  LightSpeedInLeft,
-  combineTransition,
+  Layout,
 } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -112,6 +107,7 @@ const AnimatedInfiniteScrollListWithRef =
   AnimatedInfiniteScrollList as IAnimatedInfiniteScrollListWithRef;
 
 const AnimatedView = Animated.createAnimatedComponent(View);
+const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 
 const Header = (props: HeaderProps) => {
   const router = useRouter();
@@ -240,13 +236,13 @@ const benefits = [
 const keyExtractor = (item: ChannelMessageItem) =>
   item.channel_message.id.toString();
 
-const CellRendererComponent = memo((props) => {
+const ReanimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
+const CellRendererComponent = memo((props: { index: number }) => {
   return (
-    <AnimatedView
-      layout={SequencedTransition.reverse().delay(0)}
+    <ReanimatedCellContainer
+      layout={Layout.springify()}
       entering={FadeIn.springify()}
-      exiting={FadeOut}
-      style={{ transform: [{ scaleY: -1 }] }}
+      exiting={FadeOut.springify()}
       {...props}
     />
   );
@@ -494,7 +490,6 @@ export const Messages = () => {
             contentContainerStyle={{ paddingTop: insets.bottom }}
             style={style}
             extraData={extraData}
-            disableAutoLayout={true}
             CellRendererComponent={CellRendererComponent}
             ListFooterComponent={
               isLoadingMore
