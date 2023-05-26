@@ -51,25 +51,25 @@ export const MessageReactions = ({
 
   return (
     <View tw="w-[40%] min-w-[250px] flex-row justify-between">
-      {reactionGroup.map((item) => {
-        return (
-          <Pressable
-            key={item.reaction_id}
-            onPress={() => handleReactionPress(item.reaction_id)}
-          >
-            <Text
-              tw="text-gray-700 dark:text-gray-200"
-              style={{ fontSize: 13 }}
-            >
-              {
-                channelReactions.data?.find((r) => {
-                  return item.reaction_id === r.id;
-                })?.reaction
-              }{" "}
-              {item.count}
-            </Text>
-          </Pressable>
+      {channelReactions.data?.map((item) => {
+        const userReaction = reactionGroup.find(
+          (r) => r.reaction_id === item.id
         );
+        if (userReaction) {
+          return (
+            <Pressable
+              key={item.id}
+              onPress={() => handleReactionPress(item.id)}
+            >
+              <Text
+                tw="text-gray-700 dark:text-gray-200"
+                style={{ fontSize: 13 }}
+              >
+                {item.reaction} {userReaction.count}
+              </Text>
+            </Pressable>
+          );
+        }
       })}
     </View>
   );
