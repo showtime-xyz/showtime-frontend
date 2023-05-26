@@ -12,6 +12,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { createParam } from "app/navigation/use-param";
 
 import { UserList } from "../user-list";
+import { useChannelMessages } from "./hooks/use-channel-messages";
+import { ChannelMessageItem } from "./hooks/use-channel-messages";
 import { useChannelReactions } from "./hooks/use-channel-reactions";
 import { useReactionsUserList } from "./use-reactions-user-list";
 
@@ -25,19 +27,34 @@ const { useParam } = createParam<Query>();
 export const MessageReactionUserListModal = () => {
   const [channelId] = useParam("channelId");
   const [selectedReactionId] = useParam("selectedReactionId");
+  const [messageId] = useParam("messageId");
   const [index, setIndex] = useState(0);
-  const reactions = useChannelReactions(channelId);
+  const channelMessages = useChannelMessages(channelId);
+  const channelReactions = useChannelReactions(channelId);
+
+  const message = useMemo(() => {
+    let msg: ChannelMessageItem | null = null;
+    channelMessages.data?.forEach((m) => {
+      if (m.channel_message.id === Number(messageId)) {
+        msg = m;
+      }
+    });
+    return msg;
+  }, [channelMessages.data, messageId]);
 
   const routes = useMemo(() => {
-    if (!reactions.data) return [];
-    return reactions.data.map((r, index) => {
+    if (!message) return [];
+    return (message as ChannelMessageItem).reaction_group.map((r, index) => {
+      const reaction = channelReactions.data?.find(
+        (d) => d.id === r.reaction_id
+      );
       return {
         index,
-        title: r.reaction,
-        key: r.id.toString(),
+        title: reaction?.reaction + " " + r.count,
+        key: r.reaction_id.toString(),
       };
     });
-  }, [reactions.data]);
+  }, [channelReactions.data, message]);
 
   useEffect(() => {
     if (!routes || !selectedReactionId) return;
@@ -63,7 +80,7 @@ export const MessageReactionUserListModal = () => {
     [index]
   );
 
-  if (!selectedReactionId || !reactions.data) return null;
+  if (!selectedReactionId || routes.length === 0) return null;
 
   return (
     <View tw="flex-1">
@@ -85,13 +102,18 @@ const ReactionUserList = ({
   mount: boolean;
 }) => {
   const [messageId] = useParam("messageId");
+  const [mounted, setMounted] = useState(false);
   const reactionsUsers = useReactionsUserList(
-    mount ? { messageId, reactionId } : {}
+    mounted ? { messageId, reactionId } : {}
   );
+
+  if (mount && !mounted) {
+    setMounted(true);
+  }
 
   return (
     <UserList
-      loading={reactionsUsers.isLoading}
+      loading={reactionsUsers.isLoading || !mounted}
       users={reactionsUsers.users}
       onEndReached={reactionsUsers.fetchMore}
     />
