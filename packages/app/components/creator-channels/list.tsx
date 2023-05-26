@@ -5,6 +5,7 @@ import { RectButton } from "react-native-gesture-handler";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -31,6 +32,8 @@ import {
 const keyExtractor = (item: CreatorChannelsListItemProps) => {
   return item.type === "section" ? item.title : item.id.toString();
 };
+
+const PlatformPressable = Platform.OS === "web" ? Pressable : RectButton;
 
 const CreatorChannelsHeader = memo(
   ({
@@ -74,7 +77,7 @@ const CreatorChannelsListItem = memo(
     const router = useRouter();
     const isDark = useIsDarkMode();
     return (
-      <RectButton
+      <PlatformPressable
         onPress={() => {
           router.push(`/channels/${item.id}`);
         }}
@@ -131,7 +134,7 @@ const CreatorChannelsListItem = memo(
             </View>
           </View>
         </View>
-      </RectButton>
+      </PlatformPressable>
     );
   }
 );

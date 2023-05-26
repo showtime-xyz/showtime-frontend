@@ -7,6 +7,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronLeft } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -89,11 +90,10 @@ const CreatorChannelsListItem = memo(
     const currentChannel = useMemo(() => router.query["channelId"], [router]);
 
     return (
-      <RectButton
+      <Pressable
         onPress={() => {
           router.push(`/channels/${item.id}`);
         }}
-        underlayColor={"transparent"}
         style={{ width: "100%" }}
       >
         <View
@@ -158,7 +158,7 @@ const CreatorChannelsListItem = memo(
             </View>
           </View>
         </View>
-      </RectButton>
+      </Pressable>
     );
   }
 );
