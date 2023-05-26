@@ -60,6 +60,11 @@ export const MessageReactions = ({
             <Pressable
               key={item.id}
               onPress={() => handleReactionPress(item.id)}
+              tw={
+                userReaction.self_reacted
+                  ? "rounded-lg bg-blue-50 p-1"
+                  : undefined
+              }
             >
               <Text
                 tw="text-gray-700 dark:text-gray-200"
