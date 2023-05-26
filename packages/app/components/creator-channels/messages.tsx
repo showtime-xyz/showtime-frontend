@@ -544,6 +544,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
   const deleteMessage = useDeleteMessage(channelId);
   const Alert = useAlert();
   const [showInput, setShowInput] = useState(false);
+  const isDark = useIsDarkMode();
 
   return (
     <View tw="mb-5 px-4">
@@ -579,7 +580,11 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
               <View>
                 <DropdownMenuRoot>
                   <DropdownMenuTrigger>
-                    <MoreHorizontal color="black" width={20} height={20} />
+                    <MoreHorizontal
+                      color={isDark ? "white" : "dark"}
+                      width={20}
+                      height={20}
+                    />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent loop sideOffset={8}>
                     <DropdownMenuItem
@@ -629,7 +634,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
                           name: "pencil",
                         }}
                       />
-                      <DropdownMenuItemTitle tw="font-semibold">
+                      <DropdownMenuItemTitle tw="font-semibold text-gray-800 dark:text-gray-100">
                         Edit
                       </DropdownMenuItemTitle>
                     </DropdownMenuItem>
@@ -688,7 +693,7 @@ const EditMessageInput = ({
         value={message}
         style={{
           borderWidth: 1,
-          borderColor: colors.gray[400],
+          borderColor: colors.gray[500],
         }}
         multiline={true}
         defaultValue={defaultValue}
