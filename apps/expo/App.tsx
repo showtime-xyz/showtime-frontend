@@ -18,7 +18,8 @@ import { AppProviders } from "app/providers/app-providers";
 
 enableScreens(true);
 enableFreeze(true);
-enableLayoutAnimations(false);
+enableLayoutAnimations(true);
+
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
