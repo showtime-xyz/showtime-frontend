@@ -2,6 +2,8 @@ import useSWRMutation from "swr/mutation";
 
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
+import { captureException } from "app/lib/sentry";
 
 import { useChannelMessages } from "./use-channel-messages";
 
@@ -69,29 +71,36 @@ export const useSendChannelMessage = (channelId?: string) => {
       }
     );
 
-    const res = await trigger({ message, channelId });
+    try {
+      const res = await trigger({ message, channelId });
+      channelMessages.mutate(
+        (d) => {
+          if (d) {
+            d[0] = d[0].map((v) => {
+              if (v.channel_message.id === optimisticObjectId) {
+                return {
+                  channel_message: res,
+                  reaction_group: [],
+                };
+              }
+              return v;
+            });
 
-    channelMessages.mutate(
-      (d) => {
-        if (d) {
-          d[0] = d[0].map((v) => {
-            if (v.channel_message.id === optimisticObjectId) {
-              return {
-                channel_message: res,
-                reaction_group: [],
-              };
-            }
-            return v;
-          });
-
-          return [...d];
+            return [...d];
+          }
+          return d;
+        },
+        {
+          revalidate: false,
         }
-        return d;
-      },
-      {
-        revalidate: true,
-      }
-    );
+      );
+    } catch (e) {
+      captureException(e);
+      Logger.error(e);
+    } finally {
+      channelMessages.mutate();
+    }
+
     callback?.();
   };
 

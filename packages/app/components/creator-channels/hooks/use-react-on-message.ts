@@ -1,6 +1,8 @@
 import useSWRMutation from "swr/mutation";
 
 import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
+import { captureException } from "app/lib/sentry";
 
 import { useChannelMessages } from "./use-channel-messages";
 
@@ -72,12 +74,18 @@ export const useReactOnMessage = (channelId: string) => {
       { revalidate: false }
     );
 
-    await mutateState.trigger({
-      reactionId,
-      messageId,
-    });
-
-    channelMessages.mutate();
+    try {
+      await mutateState.trigger({
+        reactionId,
+        messageId,
+      });
+    } catch (e) {
+      captureException(e);
+      Logger.error(e);
+    } finally {
+      channelMessages.mutate();
+    }
   };
+
   return { ...mutateState, trigger: handleSubmit };
 };

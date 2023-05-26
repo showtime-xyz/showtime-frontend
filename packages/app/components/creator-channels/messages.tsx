@@ -8,6 +8,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -21,6 +22,7 @@ import {
   Settings,
   Share,
   Shopping,
+  Trash,
 } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import {
@@ -53,8 +55,16 @@ import {
   isDesktopWeb,
 } from "app/utilities";
 
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+} from "design-system/dropdown-menu";
 import { breakpoints } from "design-system/theme";
 
+import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
 import { useChannelMembers } from "./hooks/use-channel-members";
@@ -66,6 +76,7 @@ import {
   ChannelReactionResponse,
   useChannelReactions,
 } from "./hooks/use-channel-reactions";
+import { useDeleteMessage } from "./hooks/use-delete-message";
 import { useReactOnMessage } from "./hooks/use-react-on-message";
 import { useSendChannelMessage } from "./hooks/use-send-channel-message";
 
@@ -527,6 +538,8 @@ const MessageInput = ({
 const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
   const { channel_message } = item;
   const reactOnMessage = useReactOnMessage(channelId);
+  const deleteMessage = useDeleteMessage(channelId);
+  const Alert = useAlert();
 
   return (
     <View tw="mb-5 px-4">
@@ -560,7 +573,47 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
                 }}
               />
               <View>
-                <MoreHorizontal color="black" width={20} height={20} />
+                <DropdownMenuRoot>
+                  <DropdownMenuTrigger>
+                    <MoreHorizontal color="black" width={20} height={20} />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent loop sideOffset={8}>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        Alert.alert(
+                          "Are you sure you want to delete this message?",
+                          "",
+                          [
+                            {
+                              text: "Cancel",
+                            },
+                            {
+                              text: "Delete",
+                              style: "destructive",
+                              onPress: () => {
+                                deleteMessage.trigger({
+                                  messageId: item.channel_message.id,
+                                });
+                              },
+                            },
+                          ]
+                        );
+                      }}
+                      key="delete"
+                    >
+                      <MenuItemIcon
+                        Icon={Trash}
+                        ios={{
+                          paletteColors: ["red"],
+                          name: "trash",
+                        }}
+                      />
+                      <DropdownMenuItemTitle tw="font-semibold text-red-500">
+                        Delete
+                      </DropdownMenuItemTitle>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenuRoot>
               </View>
             </View>
           </View>
