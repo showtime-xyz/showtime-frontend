@@ -89,10 +89,36 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
     );
     return (
       <View
-        tw={["flex-row items-center px-4 py-2", tw].join(" ")}
+        tw={["flex-row items-center py-2 pl-6 pr-4", tw].join(" ")}
         style={style}
       >
-        <View tw="mr-2 min-h-[40px] flex-1 flex-row items-center rounded-[32px] bg-gray-100 p-2 pl-3 dark:bg-gray-700">
+        <View
+          tw="mr-2 min-h-[40px] flex-1 flex-row items-center rounded-[20px] bg-gray-100 p-2 pl-3 dark:bg-gray-700"
+          style={{
+            borderBottomLeftRadius: 0,
+          }}
+        >
+          <View
+            tw="absolute -left-2.5 bottom-0 h-5 w-2.5 bg-gray-100 dark:bg-gray-700"
+            style={{
+              borderBottomLeftRadius: 40,
+            }}
+          >
+            <View
+              tw="absolute bottom-0 h-5 w-2.5 bg-white dark:bg-black"
+              style={{
+                borderBottomRightRadius: 10,
+              }}
+            >
+              <View
+                tw="absolute bottom-0 left-[5px] h-[1.5px] w-1 bg-gray-100 dark:bg-gray-700"
+                style={{
+                  borderTopStartRadius: 4,
+                  borderBottomStartRadius: 4,
+                }}
+              />
+            </View>
+          </View>
           {userAvatar ? (
             <Avatar alt="Avatar" tw="mr-2" size={24} url={userAvatar} />
           ) : null}
