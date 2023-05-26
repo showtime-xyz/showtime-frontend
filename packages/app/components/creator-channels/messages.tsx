@@ -526,7 +526,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
               {channel_message.sent_by.profile.name}
             </Text>
             <Text tw="text-xs text-gray-700 dark:text-gray-200">
-              {formatDateRelativeWithIntl(new Date().toISOString())}
+              {formatDateRelativeWithIntl(channel_message.updated_at)}
             </Text>
           </View>
 
