@@ -1,5 +1,5 @@
 import { useCallback, useEffect, memo, useRef, useState, useMemo } from "react";
-import { Platform, useWindowDimensions, Keyboard } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
@@ -15,6 +15,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   ArrowLeft,
   CloseLarge,
+  Edit,
   EyeOffV2,
   GiftV2,
   LockRounded,
@@ -36,6 +37,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
@@ -77,6 +79,7 @@ import {
   useChannelReactions,
 } from "./hooks/use-channel-reactions";
 import { useDeleteMessage } from "./hooks/use-delete-message";
+import { useEditChannelMessage } from "./hooks/use-edit-channel-message";
 import { useReactOnMessage } from "./hooks/use-react-on-message";
 import { useSendChannelMessage } from "./hooks/use-send-channel-message";
 
@@ -540,6 +543,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
   const reactOnMessage = useReactOnMessage(channelId);
   const deleteMessage = useDeleteMessage(channelId);
   const Alert = useAlert();
+  const [showInput, setShowInput] = useState(false);
 
   return (
     <View tw="mb-5 px-4">
@@ -612,15 +616,41 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
                         Delete
                       </DropdownMenuItemTitle>
                     </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        setShowInput(true);
+                      }}
+                      key="edit"
+                    >
+                      <MenuItemIcon
+                        Icon={Edit}
+                        ios={{
+                          name: "pencil",
+                        }}
+                      />
+                      <DropdownMenuItemTitle tw="font-semibold">
+                        Edit
+                      </DropdownMenuItemTitle>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenuRoot>
               </View>
             </View>
           </View>
 
-          <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-            {channel_message.body}
-          </Text>
+          {showInput ? (
+            <EditMessageInput
+              hideInput={() => setShowInput(false)}
+              channelId={channelId}
+              messageId={channel_message.id}
+              defaultValue={channel_message.body}
+            />
+          ) : (
+            <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+              {channel_message.body}
+            </Text>
+          )}
 
           {item.reaction_group.length > 0 ? (
             <View tw="pt-1">
@@ -636,5 +666,54 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
     </View>
   );
 });
+
+const EditMessageInput = ({
+  defaultValue,
+  hideInput,
+  channelId,
+  messageId,
+}: {
+  defaultValue: string;
+  hideInput: any;
+  channelId: string;
+  messageId: number;
+}) => {
+  const [message, setMessage] = useState(defaultValue);
+  const editMessage = useEditChannelMessage(channelId);
+
+  return (
+    <View>
+      <TextInput
+        tw="p-4"
+        value={message}
+        style={{
+          borderWidth: 1,
+          borderColor: colors.gray[400],
+        }}
+        multiline={true}
+        defaultValue={defaultValue}
+        onChangeText={setMessage}
+      />
+      <View tw="mt-2 flex-row justify-between">
+        <Button variant="tertiary" onPress={hideInput}>
+          Cancel
+        </Button>
+        <Button
+          variant="primary"
+          onPress={() => {
+            editMessage.trigger({
+              messageId,
+              message,
+              channelId,
+            });
+            hideInput();
+          }}
+        >
+          Save
+        </Button>
+      </View>
+    </View>
+  );
+};
 
 MessageItem.displayName = "MessageItem";
