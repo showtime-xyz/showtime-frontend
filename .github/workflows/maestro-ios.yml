@@ -29,12 +29,7 @@ jobs:
       - name: Build with Xcode
         run: |
           DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
-          cd ios/ && STAGE=development xcodebuild -workspace Showtime.xcworkspace    \
-                    -scheme Showtime                              \
-                    -configuration Release                        \
-                    -sdk iphonesimulator                          \
-                    -derivedDataPath "$DERIVED_DATA_PATH"         \
-                    clean build
+          STAGE=development EXPO_USE_APPLE_DEVICE=0 yarn expo run:ios
 
           echo "APP_DIR_PATH=${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/Showtime.app" >>$GITHUB_ENV
 
