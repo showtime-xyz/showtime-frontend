@@ -8,6 +8,6 @@ export const CreatorChannelsMessageReactionsScreen = withModalScreen(
     title: "Reactions",
     matchingPathname: "/channels/[channelId]/messages/[messageId]/reactions",
     matchingQueryParam: "channelsReactionModal",
-    tw: "w-full web:lg:pb-8",
+    tw: "min-h-[300px]",
   }
 );

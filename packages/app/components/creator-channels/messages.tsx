@@ -549,18 +549,19 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
             </View>
           </View>
 
-          <View>
-            <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-              {channel_message.body}
-            </Text>
-          </View>
-          <View tw="py-2">
-            <MessageReactions
-              reactionGroup={item.reaction_group}
-              channelId={channelId}
-              messageId={channel_message.id}
-            />
-          </View>
+          <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+            {channel_message.body}
+          </Text>
+
+          {item.reaction_group.length > 0 ? (
+            <View tw="pt-1">
+              <MessageReactions
+                reactionGroup={item.reaction_group}
+                channelId={channelId}
+                messageId={channel_message.id}
+              />
+            </View>
+          ) : null}
         </View>
       </View>
     </View>

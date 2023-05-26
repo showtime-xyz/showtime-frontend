@@ -50,14 +50,17 @@ export const MessageReactions = ({
   );
 
   return (
-    <View tw="max-w-[300px] flex-[5] flex-row justify-between">
+    <View tw="w-[40%] min-w-[250px] flex-row justify-between">
       {reactionGroup.map((item) => {
         return (
           <Pressable
             key={item.reaction_id}
             onPress={() => handleReactionPress(item.reaction_id)}
           >
-            <Text tw="text-xs text-gray-700 dark:text-gray-200">
+            <Text
+              tw="text-gray-700 dark:text-gray-200"
+              style={{ fontSize: 13 }}
+            >
               {
                 channelReactions.data?.find((r) => {
                   return item.reaction_id === r.id;

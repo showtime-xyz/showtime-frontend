@@ -1,13 +1,18 @@
 import { useCallback, useRef, useMemo } from "react";
 
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
-
-import { UserItemType } from "./hooks/use-follower-list";
+import { Profile } from "app/types";
 
 const PAGE_SIZE = 10;
 
 type ReactionUserResponse = {
-  members: UserItemType[];
+  members: {
+    admin: boolean;
+    created_at: string;
+    id: number;
+    profile: Profile;
+    updated_at: string;
+  };
   reaction_id: number;
   self_reacted: boolean;
 };
@@ -43,7 +48,8 @@ export const useReactionsUserList = ({
   );
 
   const users = useMemo(
-    () => queryState.data?.flatMap((d) => d.members) ?? [],
+    () =>
+      queryState.data?.flatMap((d) => d.members).map((f) => f.profile) ?? [],
     [queryState.data]
   );
 
