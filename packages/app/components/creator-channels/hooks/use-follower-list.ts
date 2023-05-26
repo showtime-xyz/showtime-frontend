@@ -1,11 +1,6 @@
 import { useCallback } from "react";
 
-import useSWR from "swr";
-
-import {
-  fetcher,
-  useInfiniteListQuerySWR,
-} from "app/hooks/use-infinite-list-query";
+import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 
 export interface UserItemType {
   img_url?: string;
