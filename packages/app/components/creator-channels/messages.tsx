@@ -22,6 +22,7 @@ import {
   Share,
   Shopping,
 } from "@showtime-xyz/universal.icon";
+import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
@@ -416,9 +417,7 @@ export const Messages = () => {
           members={membersCount}
           channelId={channelId}
         />
-        <View
-          tw={["flex-1 overflow-hidden", isUserAdmin ? "web:pb-16 pb-8" : ""]}
-        >
+        <View tw={["flex-1 overflow-hidden", isUserAdmin ? "pb-8" : ""]}>
           <AnimatedInfiniteScrollList
             data={data}
             onEndReached={onLoadMore}
@@ -521,25 +520,19 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
       <View tw="flex-row" style={{ columnGap: 8 }}>
         <Avatar size={24} />
         <View tw="flex-1" style={{ rowGap: 8 }}>
-          <View tw="flex-row items-baseline" style={{ columnGap: 8 }}>
+          <View tw="flex-row items-center" style={{ columnGap: 8 }}>
             <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
               {channel_message.sent_by.profile.name}
             </Text>
+
             <Text tw="text-xs text-gray-700 dark:text-gray-200">
               {formatDateRelativeWithIntl(channel_message.updated_at)}
             </Text>
-          </View>
 
-          <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-            {channel_message.body}
-          </Text>
-          <View tw="mt-1 w-full flex-row items-center">
-            <MessageReactions
-              reactionGroup={item.reaction_group}
-              channelId={channelId}
-              messageId={channel_message.id}
-            />
-            <View tw="mr-2 flex-1 flex-row justify-end">
+            <View
+              tw="mr-2 flex-1 flex-row items-center justify-end"
+              style={{ gap: 16 }}
+            >
               <Reaction
                 reactions={reactions}
                 reactionGroup={item.reaction_group}
@@ -550,7 +543,23 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
                   });
                 }}
               />
+              <View>
+                <MoreHorizontal color="black" width={20} height={20} />
+              </View>
             </View>
+          </View>
+
+          <View>
+            <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+              {channel_message.body}
+            </Text>
+          </View>
+          <View tw="py-2">
+            <MessageReactions
+              reactionGroup={item.reaction_group}
+              channelId={channelId}
+              messageId={channel_message.id}
+            />
           </View>
         </View>
       </View>
