@@ -18,22 +18,26 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: 16.x
+          node-version: 14.x
 
       - name: Install dependencies
         run: yarn install --immutable
 
       - name: Expo prebuild
-        run: yarn E2E:build:ios
+        run: yarn waldo:build
 
       - name: Build with Xcode
         run: |
           DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
-          STAGE=development EXPO_USE_APPLE_DEVICE=0 yarn expo run:ios
+           STAGE=development EXPO_USE_APPLE_DEVICE=0 yarn expo run:ios    \
+                    --scheme Showtime                              \
+                    --configuration Release                        \
+                    --sdk iphonesimulator                          \
+                    --derivedDataPath "$DERIVED_DATA_PATH"         \
 
           echo "APP_DIR_PATH=${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/Showtime.app" >>$GITHUB_ENV
 
-      - uses: mobile-dev-inc/action-maestro-cloud@v1
+      - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
           app-file: ${{ env.APP_DIR_PATH }}
