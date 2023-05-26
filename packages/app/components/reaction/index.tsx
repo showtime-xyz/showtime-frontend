@@ -59,7 +59,7 @@ export const Reaction = (props: Props) => {
               reactionGroup.findIndex(
                 (r) => r.reaction_id === reaction.id && r.self_reacted
               ) !== -1
-                ? "rounded-lg bg-blue-50 p-1"
+                ? "rounded-lg bg-blue-50 p-1 dark:bg-gray-900"
                 : ""
             }`}
             onPress={() => {

@@ -116,7 +116,7 @@ const Header = (props: HeaderProps) => {
 
   return (
     <View
-      tw="web:pt-2 android:pt-4 flex-row items-center px-4 pb-2"
+      tw="web:pt-2 web:md:py-5 android:pt-4 flex-row items-center px-4 pb-2"
       style={{ columnGap: 8 }}
     >
       <View tw="flex-row items-center" style={{ columnGap: 8 }}>
@@ -124,6 +124,7 @@ const Header = (props: HeaderProps) => {
           onPress={() => {
             router.back();
           }}
+          tw="md:hidden"
         >
           <ArrowLeft
             height={24}
@@ -131,12 +132,15 @@ const Header = (props: HeaderProps) => {
             color={isDark ? "white" : "black"}
           />
         </Pressable>
-        <AvatarHoverCard
-          username={props.username}
-          url={"https://picsum.photos/200"}
-          size={34}
-          alt="Channels Avatar"
-        />
+        <View>
+          <AvatarHoverCard
+            username={props.username}
+            url={"https://picsum.photos/200"}
+            size={34}
+            alt="Channels Avatar"
+          />
+          <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60 " />
+        </View>
       </View>
       <View tw="flex-1" style={{ rowGap: 8 }}>
         <Text
@@ -153,17 +157,31 @@ const Header = (props: HeaderProps) => {
         </Text>
       </View>
       <View tw="flex-row">
-        <Pressable onPress={props.onPressShare} tw="p-2">
+        <Pressable onPress={props.onPressShare} tw="p-2 md:hidden">
           <Share
             height={20}
             width={20}
             color={isDark ? colors.gray["100"] : colors.gray[800]}
           />
         </Pressable>
-        <Pressable onPress={props.onPressSettings} tw="p-2">
+        <Pressable onPress={props.onPressSettings} tw="p-2 md:hidden">
           <Settings
             height={20}
             width={20}
+            color={isDark ? colors.gray["100"] : colors.gray[800]}
+          />
+        </Pressable>
+        <Pressable onPress={props.onPressShare} tw="hidden md:flex">
+          <Share
+            height={24}
+            width={24}
+            color={isDark ? colors.gray["100"] : colors.gray[800]}
+          />
+        </Pressable>
+        <Pressable onPress={props.onPressSettings} tw="ml-4 hidden md:flex">
+          <MoreHorizontal
+            height={24}
+            width={24}
             color={isDark ? colors.gray["100"] : colors.gray[800]}
           />
         </Pressable>
@@ -329,17 +347,11 @@ export const Messages = () => {
             <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-500">
               This channel is not visible to your followers until you post an
               update.
-              <Text
-                tw="ml-1 text-center text-xs text-blue-600"
-                onPress={() => setShowIntro(true)}
-              >
-                Learn more.
-              </Text>
             </Text>
           </View>
         </View>
         <View tw="absolute bottom-0.5 w-full items-center justify-center">
-          <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`2,300 members will be notified`}</Text>
+          <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
         </View>
       </View>
     );
@@ -350,6 +362,7 @@ export const Messages = () => {
     insets.top,
     isDark,
     isMdWidth,
+    membersCount,
     showIntro,
   ]);
 
@@ -518,7 +531,10 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
   return (
     <View tw="mb-5 px-4">
       <View tw="flex-row" style={{ columnGap: 8 }}>
-        <Avatar size={24} />
+        <View tw="h-6 w-6">
+          <Avatar size={24} />
+          <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
+        </View>
         <View tw="flex-1" style={{ rowGap: 8 }}>
           <View tw="flex-row items-center" style={{ columnGap: 8 }}>
             <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
