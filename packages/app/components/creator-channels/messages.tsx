@@ -581,7 +581,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
                 <DropdownMenuRoot>
                   <DropdownMenuTrigger>
                     <MoreHorizontal
-                      color={isDark ? "white" : "dark"}
+                      color={isDark ? colors.gray[400] : colors.gray[700]}
                       width={20}
                       height={20}
                     />
@@ -634,7 +634,7 @@ const MessageItem = memo(({ item, reactions, channelId }: MessageItemProps) => {
                           name: "pencil",
                         }}
                       />
-                      <DropdownMenuItemTitle tw="font-semibold text-gray-800 dark:text-gray-100">
+                      <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
                         Edit
                       </DropdownMenuItemTitle>
                     </DropdownMenuItem>
