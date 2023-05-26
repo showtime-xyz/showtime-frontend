@@ -1,3 +1,25 @@
+import type { FlashList } from "@shopify/flash-list";
+
+import { InfiniteScrollListProps } from "@showtime-xyz/universal.infinite-scroll-list";
+
+import { ChannelMessageItem } from "./hooks/use-channel-messages";
+import { ChannelReactionResponse } from "./hooks/use-channel-reactions";
+import { AnimatedInfiniteScrollList } from "./messages";
+
+export type MessageItemProps = {
+  item: ChannelMessageItem;
+  reactions: ChannelReactionResponse;
+  channelId: string;
+};
+
+export type HeaderProps = {
+  username: string;
+  members: number;
+  channelId: string;
+  onPressSettings: () => void;
+  onPressShare: () => void;
+};
+
 export type CreatorChannelsListProps = {
   item: CreatorChannelsListItemProps;
   index: number;
@@ -39,3 +61,14 @@ export type CreatorChannelsListItemProps = {
   itemType?: "creator" | "owned";
   // TODO: Add more props
 } & { type: "section"; title: string; subtext?: string; tw?: string };
+
+export type AnimatedInfiniteScrollListType = typeof AnimatedInfiniteScrollList;
+
+export interface IAnimatedInfiniteScrollListWithRef
+  extends AnimatedInfiniteScrollListType {
+  (
+    props: InfiniteScrollListProps<ChannelMessageItem> & {
+      ref?: React.Ref<FlashList<MessageItemProps>>;
+    }
+  ): React.ReactElement | null;
+}
