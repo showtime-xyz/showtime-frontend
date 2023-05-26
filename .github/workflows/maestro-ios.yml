@@ -24,7 +24,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Expo prebuild
-        run: yarn waldo:build
+        run: yarn E2E:build:ios
 
       - name: Build with Xcode
         run: |
@@ -33,7 +33,7 @@ jobs:
 
           echo "APP_DIR_PATH=${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/Showtime.app" >>$GITHUB_ENV
 
-      - uses: mobile-dev-inc/action-maestro-cloud@v1.1.1
+      - uses: mobile-dev-inc/action-maestro-cloud@v1
         with:
           api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
           app-file: ${{ env.APP_DIR_PATH }}
