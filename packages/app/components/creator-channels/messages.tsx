@@ -689,6 +689,7 @@ const EditMessageInput = ({
   return (
     <View>
       <TextInput
+        autoFocus
         tw="rounded p-4"
         value={message}
         style={{
