@@ -80,6 +80,7 @@ import { breakpoints } from "design-system/theme";
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
+import { useAnimatedInsert } from "./hooks/use-animated-insert";
 import { useChannelMembers } from "./hooks/use-channel-members";
 import {
   ChannelMessageItem,
@@ -105,9 +106,6 @@ export const AnimatedInfiniteScrollList =
 
 const AnimatedInfiniteScrollListWithRef =
   AnimatedInfiniteScrollList as IAnimatedInfiniteScrollListWithRef;
-
-const AnimatedView = Animated.createAnimatedComponent(View);
-const AnimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 
 const Header = (props: HeaderProps) => {
   const router = useRouter();
@@ -293,6 +291,18 @@ export const Messages = () => {
     fetchMore();
   };
 
+  /*
+  const {
+    configureAnimationOnNextFrame,
+    CellRendererComponent,
+    animationIsRunning,
+  } = useAnimatedInsert({
+    flashList: listRef,
+    data: data as any,
+    animationDuration: 1000,
+  });
+  */
+
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
       return (
@@ -416,10 +426,6 @@ export const Messages = () => {
     redirectToChannelCongrats(channelId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.length, channelId]);
-
-  useLayoutEffect(() => {
-    listRef.current?.prepareForLayoutAnimationRender();
-  }, [data, channelReactions]);
 
   if (!channelId) {
     return (
