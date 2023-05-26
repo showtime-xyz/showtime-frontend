@@ -689,7 +689,7 @@ const EditMessageInput = ({
   return (
     <View>
       <TextInput
-        tw="p-4"
+        tw="rounded p-4"
         value={message}
         style={{
           borderWidth: 1,
