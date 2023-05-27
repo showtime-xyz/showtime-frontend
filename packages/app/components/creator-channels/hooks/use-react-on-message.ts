@@ -50,9 +50,14 @@ export const useReactOnMessage = (channelId: string) => {
                   } else {
                     // Toggle if reacted by me
                     if (m.reaction_group[index].self_reacted) {
-                      m.reaction_group = m.reaction_group.filter((f) => {
-                        return f.reaction_id !== reactionId;
-                      });
+                      if (m.reaction_group[index].count === 1) {
+                        m.reaction_group = m.reaction_group.filter((f) => {
+                          return f.reaction_id !== reactionId;
+                        });
+                      } else {
+                        m.reaction_group[index].count -= 1;
+                        m.reaction_group[index].self_reacted = false;
+                      }
                     } else {
                       m.reaction_group[index].count += 1;
                       m.reaction_group[index].self_reacted = true;
