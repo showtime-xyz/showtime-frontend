@@ -7,6 +7,9 @@ import {
   useMemo,
   RefObject,
   useLayoutEffect,
+  Ref,
+  forwardRef,
+  Component,
 } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
@@ -235,18 +238,25 @@ const keyExtractor = (item: ChannelMessageItem) =>
   item.channel_message.id.toString();
 
 const ReanimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
-const CellRendererComponent = memo((props: { index: number }) => {
-  return (
-    <ReanimatedCellContainer
-      layout={Layout.springify()}
-      entering={FadeIn.springify()}
-      exiting={FadeOut.springify()}
-      {...props}
-    />
-  );
-});
 
-CellRendererComponent.displayName = "CellRendererComponent";
+const CustomCellRenderer = memo(
+  forwardRef(function (
+    props: { index: number; style: { [key: string]: object } },
+    ref: Ref<Component<unknown>>
+  ) {
+    return (
+      <ReanimatedCellContainer
+        {...props}
+        ref={ref}
+        layout={Layout.springify()}
+        entering={FadeIn.springify()}
+        exiting={FadeOut.springify()}
+      />
+    );
+  })
+);
+
+CustomCellRenderer.displayName = "CustomCellRenderer";
 
 export const Messages = () => {
   const listRef = useRef<FlashList<MessageItemProps>>(null);
@@ -496,7 +506,7 @@ export const Messages = () => {
             contentContainerStyle={{ paddingTop: insets.bottom }}
             style={style}
             extraData={extraData}
-            CellRendererComponent={CellRendererComponent}
+            CellRendererComponent={CustomCellRenderer}
             ListFooterComponent={
               isLoadingMore
                 ? () => (
