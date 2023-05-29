@@ -30,7 +30,7 @@ jobs:
         run: |
           DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
           cd ios/ && xcrun xcodebuild -scheme Showtime \
-                    -project 'Showtime.xcodeproj' \
+                    -workspace 'Showtime.xcworkspace' \
                     -configuration Release \
                     -sdk 'iphonesimulator' \
                     -derivedDataPath "$DERIVED_DATA_PATH" \
