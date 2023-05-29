@@ -1,5 +1,3 @@
-import { useCallback, useContext } from "react";
-
 import { Alert } from "@showtime-xyz/universal.alert";
 
 import { axios } from "app/lib/axios";
@@ -15,16 +13,15 @@ export const useDropEditDetails = () => {
     params?: EditDropDetailParams,
     callback?: () => void
   ) => {
-    if (!editionAddress) return { error: "No edition address" };
-    const res = await axios({
-      url: `/v1/edition/draft/${editionAddress}/edit`,
+    await axios({
+      url: `/v1/creator-airdrops/edition/draft/${editionAddress}/edit`,
       method: "POST",
       data: {
         ...params,
       },
+    }).catch((error) => {
+      Alert.alert("Oops, An error occurred.", error?.message);
     });
-    console.log(res);
-
     callback?.();
   };
 
