@@ -29,12 +29,12 @@ jobs:
       - name: Build with Xcode
         run: |
           DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
-          cd ios/ && E2E=true FLIPPER_DISABLE=1 STAGE=development xcodebuild -workspace Showtime.xcworkspace    \
-                    -scheme Showtime                              \
-                    -configuration Release                        \
-                    -sdk iphonesimulator                          \
-                    -derivedDataPath "$DERIVED_DATA_PATH"         \
-                    clean build
+          cd ios/ && xcrun xcodebuild -scheme Showtime \
+                    -project 'Showtime.xcodeproj' \
+                    -configuration Release \
+                    -sdk 'iphonesimulator' \
+                    -derivedDataPath "$DERIVED_DATA_PATH" \
+                    build
 
           echo "APP_DIR_PATH=${DERIVED_DATA_PATH}/Build/Products/Release-iphonesimulator/Showtime.app" >>$GITHUB_ENV
 
