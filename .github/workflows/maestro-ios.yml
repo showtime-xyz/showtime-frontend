@@ -29,7 +29,7 @@ jobs:
       - name: Build with Xcode
         run: |
           DERIVED_DATA_PATH=/tmp/Showtime-$(uuidgen) 
-          cd ios/ && xcrun xcodebuild -scheme Showtime \
+          cd ios/ && E2E=true FLIPPER_DISABLE=1 STAGE=development xcrun xcodebuild -scheme Showtime \
                     -workspace 'Showtime.xcworkspace' \
                     -configuration Release \
                     -sdk 'iphonesimulator' \
