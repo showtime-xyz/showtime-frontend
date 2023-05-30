@@ -38,14 +38,14 @@ export function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="homeTab"
-        component={TrendingNavigator}
+        component={HomeNavigator}
         options={{
           tabBarIcon: HomeTabBarIcon,
         }}
       />
       <BottomTab.Screen
         name="trendingTab"
-        component={HomeNavigator}
+        component={TrendingNavigator}
         options={{
           tabBarIcon: TrendingTabBarIcon,
         }}

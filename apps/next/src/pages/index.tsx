@@ -1,1 +1,1 @@
-export { default } from "app/pages/trending";
+export { default } from "app/pages/home";

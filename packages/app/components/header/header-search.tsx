@@ -1,24 +1,33 @@
+import { Platform } from "react-native";
+
+import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
+import { ArrowLeft, Search, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
+
+import { useUser } from "app/hooks/use-user";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 type HeaderLeftProps = {
   canGoBack?: boolean;
   withBackground?: boolean;
   color?: string;
 };
-export const HeaderLeft = ({
+export const HeaderSearch = ({
   canGoBack,
   withBackground = false,
   color,
 }: HeaderLeftProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
+  const { isAuthenticated } = useUser();
+  const navigateToLogin = useNavigateToLogin();
 
   const canGoHome = router.pathname.split("/").length - 1 >= 2;
-
-  const Icon = canGoBack || canGoHome ? ArrowLeft : Showtime;
+  if (!isAuthenticated) {
+    return <Button onPress={navigateToLogin}>Sign In</Button>;
+  }
 
   return (
     <PressableScale
@@ -34,15 +43,25 @@ export const HeaderLeft = ({
         withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
-        router.push("/");
+        if (canGoBack) {
+          if (Platform.OS === "web" && history?.length <= 1) {
+            router.push("/");
+          } else {
+            router.pop();
+          }
+        } else if (canGoHome) {
+          router.push("/");
+        } else {
+          router.push("/search");
+        }
       }}
     >
-      <Icon
+      <Search
         color={
           color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
         }
-        width={24}
-        height={24}
+        width={20}
+        height={20}
       />
     </PressableScale>
   );

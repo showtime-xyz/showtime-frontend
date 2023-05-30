@@ -163,23 +163,25 @@ function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <AppProviders>
         <Container>
-          {/* @ts-ignore */}
-          {!Component.hideHeader && (
-            <Header
-              canGoBack={
-                router.pathname === "/search" ||
-                router.pathname.split("/").length - 1 >= 2
-              }
-            />
-          )}
+          <View tw="flex-row">
+            {/* @ts-ignore */}
+            {!Component.hideHeader && (
+              <Header
+                canGoBack={
+                  router.pathname === "/search" ||
+                  router.pathname.split("/").length - 1 >= 2
+                }
+              />
+            )}
 
-          <View
-            tw="items-center"
-            style={{
-              minHeight: "100svh",
-            }}
-          >
-            <Component {...pageProps} />
+            <View
+              tw="items-center"
+              style={{
+                minHeight: "100svh",
+              }}
+            >
+              <Component {...pageProps} />
+            </View>
           </View>
           <Footer />
         </Container>

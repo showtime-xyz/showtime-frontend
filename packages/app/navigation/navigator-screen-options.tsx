@@ -1,7 +1,8 @@
 import { Platform } from "react-native";
 
-import { HeaderLeft } from "app/components/header";
+import { HeaderLeft, HeaderRight } from "app/components/header";
 import HeaderCenter from "app/components/header/header-center";
+import { HeaderSearch } from "app/components/header/header-search";
 
 export const screenOptions = ({
   safeAreaTop,
@@ -20,7 +21,7 @@ export const screenOptions = ({
     headerLeft: headerLeft ?? HeaderLeft,
     headerTitle: HeaderCenter,
     headerTitleAlign: "center" as "center",
-    headerRight: headerRight ?? null,
+    headerRight: headerRight ?? HeaderSearch,
     headerTintColor: isDark ? "#fff" : "#000",
     headerTransparent: Platform.OS === "android" ? false : true,
     headerBlurEffect: isDark ? "dark" : "light",
