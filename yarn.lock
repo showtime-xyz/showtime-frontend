@@ -8081,7 +8081,6 @@ __metadata:
     react-native-safe-area-context: 4.5.1
     react-native-screens: ^3.20.0
     react-native-share: ^8.2.1
-    react-native-spotify-remote: "file:../../react-native-spotify-remote.tgz"
     react-native-svg: 13.9.0
     react-native-tab-view: ^3.5.1
     react-native-view-shot: 3.6.0
@@ -29004,15 +29003,6 @@ __metadata:
   version: 8.2.1
   resolution: "react-native-share@npm:8.2.1"
   checksum: 5158518eec9582aa738f61c3e424c1791cb58df8943475812cd3343b36988fadf0609847bdc5d384b6e100d979c6e56003eab3c3934a673be55dff7ae4deb50e
-  languageName: node
-  linkType: hard
-
-"react-native-spotify-remote@file:./react-native-spotify-remote.tgz::locator=showtime%40workspace%3A.":
-  version: 0.3.10
-  resolution: "react-native-spotify-remote@file:./react-native-spotify-remote.tgz::locator=showtime%40workspace%3A."
-  peerDependencies:
-    react-native: ">=0.60"
-  checksum: b24042008db1ebdf46f1c22ee9db33cf998a36a38a2bf99e75124f81cdff42c8dab9629bad1481718bcb95810a4e18c9358f1f71b8c7e7f9f582d18f89748686
   languageName: node
   linkType: hard
 
