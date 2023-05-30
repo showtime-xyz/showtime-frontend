@@ -165,7 +165,7 @@ export const CreatorChannelsTabBarIcon = ({
       }, 2000);
     }
     if (focused) {
-      setOpen(false);
+      onDismiss();
     }
   }, [focused]);
 
@@ -188,7 +188,14 @@ export const CreatorChannelsTabBarIcon = ({
     );
   }
   return (
-    <TabBarIcon tab="/channels">
+    <TabBarIcon
+      onPress={() => {
+        router.push("/channels");
+        if (Platform.OS === "web") {
+          onDismiss();
+        }
+      }}
+    >
       <Tooltip.Root
         onDismiss={onDismiss}
         open={open}
