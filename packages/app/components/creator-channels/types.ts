@@ -1,6 +1,7 @@
-import type { FlashList } from "@shopify/flash-list";
-
-import { InfiniteScrollListProps } from "@showtime-xyz/universal.infinite-scroll-list";
+import {
+  InfiniteScrollList,
+  InfiniteScrollListProps,
+} from "@showtime-xyz/universal.infinite-scroll-list";
 
 import { ChannelMessageItem } from "./hooks/use-channel-messages";
 import { ChannelReactionResponse } from "./hooks/use-channel-reactions";
@@ -68,7 +69,7 @@ export interface IAnimatedInfiniteScrollListWithRef
   extends AnimatedInfiniteScrollListType {
   (
     props: InfiniteScrollListProps<ChannelMessageItem> & {
-      ref?: React.Ref<FlashList<MessageItemProps>>;
+      ref?: React.Ref<typeof InfiniteScrollList>;
     }
   ): React.ReactElement | null;
 }

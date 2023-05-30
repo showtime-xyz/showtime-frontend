@@ -13,7 +13,6 @@ import {
 } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { FlashList, CellContainer } from "@shopify/flash-list";
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
@@ -45,6 +44,7 @@ import {
   InfiniteScrollList,
   InfiniteScrollListProps,
   ListRenderItem,
+  CellContainer,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -83,16 +83,12 @@ import { breakpoints } from "design-system/theme";
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
-import { useAnimatedInsert } from "./hooks/use-animated-insert";
 import { useChannelMembers } from "./hooks/use-channel-members";
 import {
   ChannelMessageItem,
   useChannelMessages,
 } from "./hooks/use-channel-messages";
-import {
-  ChannelReactionResponse,
-  useChannelReactions,
-} from "./hooks/use-channel-reactions";
+import { useChannelReactions } from "./hooks/use-channel-reactions";
 import { useDeleteMessage } from "./hooks/use-delete-message";
 import { useReactOnMessage } from "./hooks/use-react-on-message";
 import { useSendChannelMessage } from "./hooks/use-send-channel-message";
@@ -106,6 +102,7 @@ export const AnimatedInfiniteScrollList =
   Animated.createAnimatedComponent<InfiniteScrollListProps<ChannelMessageItem>>(
     InfiniteScrollList
   );
+type T = typeof InfiniteScrollList;
 
 const AnimatedInfiniteScrollListWithRef =
   AnimatedInfiniteScrollList as IAnimatedInfiniteScrollListWithRef;
@@ -259,7 +256,7 @@ const CustomCellRenderer = memo(
 CustomCellRenderer.displayName = "CustomCellRenderer";
 
 export const Messages = () => {
-  const listRef = useRef<FlashList<MessageItemProps>>(null);
+  const listRef = useRef<typeof InfiniteScrollList>(null);
   const navigation = useNavigation();
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
@@ -595,7 +592,7 @@ const MessageItem = memo(
     reactions,
     channelId,
     listRef,
-  }: MessageItemProps & { listRef: RefObject<FlashList<any>> }) => {
+  }: MessageItemProps & { listRef: RefObject<typeof InfiniteScrollList> }) => {
     const { channel_message } = item;
     const reactOnMessage = useReactOnMessage(channelId);
     const deleteMessage = useDeleteMessage(channelId);

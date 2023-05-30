@@ -6,6 +6,7 @@ import {
   useMemo,
   isValidElement,
   forwardRef,
+  Fragment,
 } from "react";
 
 import type { FlashListProps, ViewToken } from "@shopify/flash-list";
@@ -22,7 +23,7 @@ import { useStableCallback } from "app/hooks/use-stable-callback";
 const measurementsCache: any = {};
 
 const DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE = 80;
-
+export const CellContainer = Fragment;
 const renderComponent = (Component: any) => {
   if (!Component) return null;
   if (isValidElement(Component)) return Component;

@@ -5,9 +5,11 @@ import {
   FlashList,
   FlashListProps,
   ListRenderItemInfo,
+  CellContainer,
 } from "@shopify/flash-list";
 import { ScrollView } from "react-native-gesture-handler";
 
+export { CellContainer };
 export type InfiniteScrollListProps<T> = FlashListProps<T> & {
   index?: number;
   /**
