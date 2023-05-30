@@ -163,7 +163,7 @@ function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <AppProviders>
         <Container>
-          <View tw="flex-row">
+          <View tw="mx-auto max-w-screen-xl flex-col md:flex-row">
             {/* @ts-ignore */}
             {!Component.hideHeader && (
               <Header
@@ -175,7 +175,7 @@ function App({ Component, pageProps, router }: AppProps) {
             )}
 
             <View
-              tw="items-center"
+              tw="w-full items-center md:flex-1"
               style={{
                 minHeight: "100svh",
               }}
@@ -241,7 +241,7 @@ const Container = withColorScheme(
     usePlatformResize(onResize, true);
 
     return (
-      <View tw="bg-gray-100 dark:bg-black dark:md:bg-gray-900">
+      <View tw="bg-white dark:bg-black dark:md:bg-gray-900">
         <div className={fonts}>{children}</div>
       </View>
     );

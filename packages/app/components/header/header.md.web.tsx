@@ -3,16 +3,37 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
 import dynamic from "next/dynamic";
+import { SvgProps } from "react-native-svg";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
+import { Button } from "@showtime-xyz/universal.button";
+import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  Bell,
+  Home,
+  Search,
+  Showtime,
+  ShowtimeBrand,
+  Hot,
+  User,
+  Plus,
+  PhonePortraitOutline,
+} from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
+import { TabBarVertical } from "@showtime-xyz/universal.tab-view";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { WEB_HEADER_HEIGHT } from "app/constants/layout";
+import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
+import { TextLink } from "app/navigation/link";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
@@ -86,29 +107,149 @@ export const NotificationsInHeader = () => {
   );
 };
 
-export const Header = withColorScheme(
+export const HeaderMd = withColorScheme(
   ({ canGoBack }: { canGoBack: boolean }) => {
     const { isHeaderHidden } = useNavigationElements();
+    const { user, isAuthenticated } = useUser();
+
     const isDark = useIsDarkMode();
     const router = useRouter();
-    const { isAuthenticated } = useUser();
+    const iconColor = isDark ? "#fff" : "#000";
+    const HOME_ROUTES = [
+      {
+        title: "Home",
+        key: "Home",
+        icon: Home,
+      },
+      // {
+      //   title: "Channels",
+      //   key: "Channels",
+      //   icon: Home,
+      // },
+      {
+        title: "Trending",
+        key: "Trending",
+        icon: Hot,
+      },
+      {
+        title: "Notifications",
+        key: "Notifications",
+        icon: Bell,
+      },
+      {
+        title: "Profile",
+        key: "Profile",
+        icon: (props: SvgProps) =>
+          isAuthenticated ? (
+            <Avatar
+              url={user?.data?.profile?.img_url}
+              size={28}
+              alt={"Profile Avatar"}
+            />
+          ) : (
+            <User {...props} />
+          ),
+      },
+      {
+        title: "Search",
+        key: "Search",
+        icon: Search,
+      },
+    ];
+    const { index: currentIndex, setIndex, routes } = useTabState(HOME_ROUTES);
 
     if (isHeaderHidden) {
       return null;
     }
     return (
-      <View tw="fixed left-0 right-0 top-0 z-50 hidden w-screen items-center bg-white/60 stroke-inherit backdrop-blur-md dark:bg-black/60 md:flex">
-        <View
-          style={{
-            height: WEB_HEADER_HEIGHT,
-          }}
-          tw="w-full max-w-screen-2xl flex-row justify-between px-4 py-2"
-        >
-          <View tw="items-start">
-            <HeaderCenter isDark={isDark} />
+      <View tw="mr-4 w-52 pl-8">
+        <View tw="flex-row items-center pl-4 pt-8">
+          <Showtime color={iconColor} width={24} height={24} />
+          <View tw="ml-4">
+            <ShowtimeBrand
+              color={iconColor}
+              width={16 * (84 / 16)}
+              height={16}
+            />
           </View>
-          <View tw="items-end">
-            <HeaderRight />
+        </View>
+        <View tw="mt-5 justify-center">
+          {routes.map((item, index) => (
+            <Pressable
+              tw="mt-2 flex-row items-center rounded-2xl px-4 py-3.5 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
+              key={item.key}
+              onPress={() => {
+                setIndex(index);
+              }}
+            >
+              {item.icon({
+                color: iconColor,
+                width: 24,
+                height: 24,
+              })}
+              <Text
+                tw={[
+                  "ml-4 text-lg text-black duration-300 dark:text-white",
+                  currentIndex === index ? "font-bold" : "font-normal",
+                ]}
+              >
+                {item.title}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+        <View tw="mt-6 pl-4">
+          <Button size="regular">Sign in</Button>
+          <Button
+            size="regular"
+            variant="text"
+            tw="mt-4 border border-gray-200 dark:border-gray-600"
+          >
+            <Plus />
+            Create
+          </Button>
+          <Divider tw="my-6" />
+          <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
+            <View tw="flex-row items-center justify-center">
+              <PhonePortraitOutline color={iconColor} width={18} height={18} />
+              <Text tw="ml-1 text-lg font-bold dark:text-white">Get app</Text>
+            </View>
+            <View tw="flex items-center justify-between px-2 pt-3">
+              <TextLink
+                tw="text-base font-bold dark:text-white"
+                href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
+                target="_blank"
+              >
+                <Image
+                  source={{
+                    uri: isDark
+                      ? "/assets/AppStoreDark.png"
+                      : "/assets/AppStoreLight.png",
+                  }}
+                  width={110}
+                  height={32}
+                  tw="duration-150 hover:scale-105"
+                  alt="App Store"
+                />
+              </TextLink>
+              <TextLink
+                tw="text-base font-bold dark:text-white"
+                href="https://play.google.com/store/apps/details?id=io.showtime"
+                target="_blank"
+              >
+                <Image
+                  source={{
+                    uri: isDark
+                      ? "/assets/GooglePlayDark.png"
+                      : "/assets/GooglePlayLight.png",
+                  }}
+                  width={103}
+                  height={30}
+                  tw="duration-150 hover:scale-105"
+                  alt="Google Play"
+                />
+              </TextLink>
+            </View>
           </View>
         </View>
       </View>

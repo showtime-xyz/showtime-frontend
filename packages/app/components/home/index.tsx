@@ -9,8 +9,11 @@ import { View } from "@showtime-xyz/universal.view";
 
 export const Home = () => {
   return (
-    <View tw="w-full flex-1 bg-white dark:bg-black">
-      <Text tw="text-lg text-black dark:text-white">Home V2</Text>
+    <View tw="w-full flex-1 items-center bg-white pt-8 dark:bg-black">
+      <View tw="w-[580px]">
+        <View tw="mb-8 h-[164px] w-full rounded-2xl bg-[#4710E1]"></View>
+        <Text tw="text-lg text-black dark:text-white">Home V2</Text>
+      </View>
     </View>
   );
 };

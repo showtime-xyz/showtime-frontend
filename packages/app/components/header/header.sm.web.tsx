@@ -9,7 +9,7 @@ import { withColorScheme } from "../memo-with-theme";
 import { HeaderLeft } from "./header-left";
 import { HeaderRight } from "./header-right";
 
-export const Header = withColorScheme(
+export const HeaderSm = withColorScheme(
   ({ canGoBack }: { canGoBack: boolean }) => {
     const { isHeaderHidden } = useNavigationElements();
     const router = useRouter();
