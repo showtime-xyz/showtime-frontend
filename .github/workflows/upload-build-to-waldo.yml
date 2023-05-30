@@ -36,7 +36,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Expo prebuild
-        run: yarn waldo:build
+        run: yarn E2E:build
 
       - name: Build with Xcode
         run: |
