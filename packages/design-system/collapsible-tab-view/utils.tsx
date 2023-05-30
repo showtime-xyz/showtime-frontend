@@ -6,7 +6,7 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-export function mScrollTo(ref: any, x: number, y: number, animated: boolean) {
+export function _ScrollTo(ref: any, x: number, y: number, animated: boolean) {
   "worklet";
   if (!ref) return;
   scrollTo(ref, x, y, animated);

@@ -10,7 +10,6 @@ import { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
 import "react-datepicker/dist/react-datepicker.css";
-import { enableExperimentalWebImplementation } from "react-native-gesture-handler";
 
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
@@ -30,6 +29,7 @@ import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropEventScreen } from "app/screens/drop-event";
 import { DropFreeScreen } from "app/screens/drop-free";
 import { DropMusicScreen } from "app/screens/drop-music";
@@ -52,18 +52,10 @@ import { Toaster } from "design-system/toast";
 
 import "../styles/styles.css";
 
-// TODO: remove this once Reanimated ship a fix
-if (typeof window !== "undefined") {
-  // @ts-ignore
-  window._frameTimestamp = null;
-}
-
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
 });
-
-enableExperimentalWebImplementation(true);
 
 function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;
@@ -213,7 +205,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <CheckoutReturnScreen />
         <QRCodeShareScreen />
         <DropViewShareScreen />
-
+        <DropEditDetailsScreen />
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
         <OnboardingScreen />

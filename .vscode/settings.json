@@ -8,13 +8,7 @@
     // already have a Prettier plugin, so don't need this.
     "source.organizeImports": false
   },
-  "tailwindCSS.experimental.classRegex": [
-    "tw=\"([^\"]*)", // <View tw="..." />
-    "tw={\"([^\"}]*)", // <View tw={"..."} />
-    "tw={`([^`}]*)", // <View tw={`...`} />
-    "tw:\"([^\"]*)", // tw:"..."
-    "tw: \"([^\"]*)" // tw: "..."
-  ],
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass", ".*Tw"],
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.svg": "${capture}.tsx, ${capture}.svg",

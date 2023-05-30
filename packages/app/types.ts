@@ -10,6 +10,7 @@ export type BunnyVideoUrls = {
   original?: string | null;
   preview_animation?: string | null;
   thumbnail?: string | null;
+  optimized_thumbnail?: string | null;
   [key: string]: string | null | undefined;
 };
 

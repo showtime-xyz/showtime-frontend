@@ -5,9 +5,10 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 
 export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
   const previewAspectRatio = 382 / 256;
@@ -29,7 +30,7 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
 
   return (
     <View tw="relative flex-1 px-8">
-      <ScrollView tw="flex-1 px-8">
+      <BottomSheetScrollView>
         <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-gray-50 lg:text-4xl">
           Your jaw will drop, too.
         </Text>
@@ -81,9 +82,9 @@ export const DropExplanation = ({ onDone }: { onDone: () => void }) => {
             </View>
           </View>
         </View>
-      </ScrollView>
-      <View style={{ paddingBottom: insets.bottom }}>
-        <Button onPress={onDone} size="regular" tw="z-30 mt-4 lg:mt-8">
+      </BottomSheetScrollView>
+      <View style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
+        <Button onPress={onDone} size="regular" tw="z-30mt-4 lg:mt-8">
           Let's go
         </Button>
       </View>

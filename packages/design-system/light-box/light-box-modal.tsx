@@ -108,8 +108,7 @@ export const LightImageModal = ({
         translateY.value = withTiming(0, timingConfig);
       }
       scale.value = withTiming(1, timingConfig);
-    })
-    .runOnJS(true);
+    });
 
   const imageStyles = useAnimatedStyle(() => {
     const interpolateProgress = (range: [number, number]) =>
@@ -187,15 +186,11 @@ export const LightImageModal = ({
       if (onLongPress) {
         runOnJS(onLongPress)();
       }
-    })
-    .runOnJS(true);
+    });
   // Todo: add pinch
-  const pinchGesture = Gesture.Pinch().enabled(false).runOnJS(true);
+  const pinchGesture = Gesture.Pinch().enabled(false);
   // Todo: add double tab
-  const doubleTapGesture = Gesture.Tap()
-    .numberOfTaps(2)
-    .enabled(false)
-    .runOnJS(true);
+  const doubleTapGesture = Gesture.Tap().numberOfTaps(2).enabled(false);
   const tapGesture = Gesture.Tap()
     .enabled(tapToClose || !!onTap)
     .numberOfTaps(1)
@@ -207,8 +202,7 @@ export const LightImageModal = ({
       if (onTap) {
         runOnJS(onTap)();
       }
-    })
-    .runOnJS(true);
+    });
   return (
     <GestureDetector
       gesture={Gesture.Race(

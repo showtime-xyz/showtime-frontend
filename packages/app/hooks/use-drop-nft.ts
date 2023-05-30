@@ -192,7 +192,6 @@ export const useDropNFT = () => {
         );
         return;
       }
-      toast("Creating... it should take about 10 seconds");
       dispatch({ type: "loading" });
 
       const ipfsHash = await uploadMedia({
@@ -271,17 +270,28 @@ export const useDropNFT = () => {
       ) {
         requestData.release_date = params.releaseDate;
       }
-
       const relayerResponse = await axios({
-        url: "/v1/creator-airdrops/create-gated-edition",
+        url: "/v1/creator-airdrops/edition/draft",
         method: "POST",
         data: requestData,
-      });
+      })
+        .then((res) => {
+          dispatch({
+            type: "success",
+            edition: res?.creator_airdrop_edition,
+          });
+          Analytics.track(EVENTS.DROP_CREATED);
+          mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
+        })
+        .catch((error) => {
+          dispatch({ type: "error", error: error.message });
+        });
+      console.log(relayerResponse);
 
-      console.log("relayer response :: ", relayerResponse);
-      await pollTransaction({
-        transactionId: relayerResponse.relayed_transaction_id,
-      });
+      // console.log("relayer response :: ", relayerResponse);
+      // await pollTransaction({
+      //   transactionId: relayerResponse.relayed_transaction_id,
+      // });
       callback?.();
     } catch (e: any) {
       const errorMessage = formatAPIErrorMessage(e);

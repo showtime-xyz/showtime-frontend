@@ -23,7 +23,7 @@ export const initialiseAppleMusic = async () => {
       },
     });
 
-    // TODO: increment this expiration from backend
-    await delay(60 * 1000);
+    // 2 hours validity
+    await delay(2 * 60 * 60 * 1000);
   }
 };

@@ -71,10 +71,10 @@ export function PinchToZoom(props: PinchToZoomProps) {
         }
 
         if (e.numberOfPointers === 1) {
-          // translationX.value =
-          //   prevTranslationX.value + e.focalX - offsetFromFocalX.value;
-          // translationY.value =
-          //   prevTranslationY.value + e.focalY - offsetFromFocalY.value;
+          translationX.value =
+            prevTranslationX.value + e.focalX - offsetFromFocalX.value;
+          translationY.value =
+            prevTranslationY.value + e.focalY - offsetFromFocalY.value;
           isPinching.value = false;
         } else if (e.numberOfPointers === 2) {
           const newScale = prevScale.value * e.scale;
@@ -125,8 +125,7 @@ export function PinchToZoom(props: PinchToZoomProps) {
         panTranslateY.value = 0;
 
         if (onPinchEnd) runOnJS(onPinchEnd)();
-      })
-      .runOnJS(true);
+      });
 
     return pinch;
 

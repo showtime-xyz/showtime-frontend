@@ -13,6 +13,7 @@ import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropUpdateScreen } from "app/screens/drop-update";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
@@ -186,6 +187,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="dropViewShareModal"
           component={DropViewShareScreen}
+        />
+        <Stack.Screen
+          name="dropEditDetailsModal"
+          component={DropEditDetailsScreen}
         />
         <Stack.Screen name="raffle" component={RaffleScreen} />
       </Stack.Group>

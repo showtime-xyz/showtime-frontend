@@ -38,7 +38,6 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
