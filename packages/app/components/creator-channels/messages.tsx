@@ -56,6 +56,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { MessageBox } from "app/components/messages";
+import { useIntroducingCreatorChannels } from "app/components/onboarding/introducing-creator-channels";
 import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-congrats";
@@ -102,7 +103,6 @@ export const AnimatedInfiniteScrollList =
   Animated.createAnimatedComponent<InfiniteScrollListProps<ChannelMessageItem>>(
     InfiniteScrollList
   );
-type T = typeof InfiniteScrollList;
 
 const AnimatedInfiniteScrollListWithRef =
   AnimatedInfiniteScrollList as IAnimatedInfiniteScrollListWithRef;
@@ -276,6 +276,7 @@ export const Messages = () => {
     user.user?.data.channels[0] === Number(channelId);
 
   const channelReactions = useChannelReactions(channelId);
+  useIntroducingCreatorChannels();
 
   const shareLink = async () => {
     const result = await share({

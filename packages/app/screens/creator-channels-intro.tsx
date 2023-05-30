@@ -11,6 +11,8 @@ export const CreatorChannelsIntroScreen = withModalScreen(
     tw: "w-full",
     disableBackdropPress: true,
     snapPoints: ["100%"],
+    enableContentPanningGesture: false,
+    enableHandlePanningGesture: false,
     closeButtonProps: {
       variant: "text",
       tw: "-mt-4 web:mt-0",

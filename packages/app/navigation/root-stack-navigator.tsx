@@ -208,6 +208,7 @@ export function RootStackNavigator() {
         <Stack.Screen name="raffle" component={RaffleScreen} />
         <Stack.Screen
           name="channelsIntro"
+          options={{ gestureEnabled: false }}
           component={CreatorChannelsIntroScreen}
         />
         <Stack.Screen

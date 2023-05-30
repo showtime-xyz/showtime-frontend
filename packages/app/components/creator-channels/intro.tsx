@@ -16,6 +16,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
+import { setHideCreatorChannelIntro } from "app/lib/mmkv-keys";
 
 import { breakpoints } from "design-system/theme";
 
@@ -103,6 +104,7 @@ export const CreatorChannelsIntro = () => {
               router.pop();
               router.push(pathname);
             }
+            setHideCreatorChannelIntro(true);
           }}
         >
           Enter channel

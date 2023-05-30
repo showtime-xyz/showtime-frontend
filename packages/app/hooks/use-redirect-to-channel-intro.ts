@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useOnboardingPromise } from "app/components/onboarding";
-import { setHideCreatorChannelIntro } from "app/lib/mmkv-keys";
 
 export const useRedirectToChannelIntro = () => {
   const router = useRouter();
@@ -28,7 +27,6 @@ export const useRedirectToChannelIntro = () => {
         shallow: true,
       }
     );
-    setHideCreatorChannelIntro(true);
   };
 
   return redirectToChannelIntro;
