@@ -1,4 +1,4 @@
-import { forwardRef, Ref, Component } from "react";
+import { forwardRef } from "react";
 import {
   Pressable as RNPressable,
   PressableProps as RNPressableProps,
@@ -14,7 +14,7 @@ export type PressableProps = Omit<RNPressableProps, "tw"> & {
 const StyledPressable = styled(RNPressable);
 
 export const Pressable = forwardRef<any, PressableProps>(function (
-  { tw, ...props }: PressableProps,
+  { tw, ...props },
   ref
 ) {
   return (
