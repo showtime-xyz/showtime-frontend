@@ -155,7 +155,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
           {isAuthenticated && (
             <View
-              tw="absolute right-4 z-50"
+              tw="swiper-no-swiping absolute right-4 z-50"
               style={{
                 top: 8,
               }}
