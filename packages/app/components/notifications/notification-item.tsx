@@ -7,6 +7,7 @@ import {
   PlusFilled,
   GiftSolid,
   Spotify,
+  CreatorChannelType,
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -80,7 +81,6 @@ export const NotificationItem = memo(
         case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
         case "CREATED_EDITION_SOLD_OUT":
         case "CREATED_EDITION_EXPIRED":
-        case "CHANNEL_NEW_MESSAGE":
           if (notification.nfts && notification.nfts.length > 0) {
             path = getNFTLink(notification.nfts[0]);
           }
@@ -89,6 +89,10 @@ export const NotificationItem = memo(
           if (notification.nfts && notification.nfts.length > 0) {
             path = `/drop/update/${notification.nfts[0].contract_address}`;
           }
+          break;
+        case "CHANNEL_NEW_MESSAGE":
+        case "CHANNEL_FIRST_MESSAGE":
+          // to determine, currently disabled
           break;
         case "RELEASE_SAVED_TO_SPOTIFY":
           // to determine, currently disabled
@@ -247,7 +251,10 @@ export const getNotificationIcon = (type_name: string) => {
     case "RELEASE_SAVED_TO_SPOTIFY":
       return <Spotify width={20} height={20} color={"#1DB954"} />;
     case "CHANNEL_NEW_MESSAGE":
-      return <Spotify width={20} height={20} color={"#1DB954"} />;
+    case "CHANNEL_FIRST_MESSAGE":
+      return (
+        <CreatorChannelType width={20} height={20} color={colors.indigo[500]} />
+      );
 
     default:
       return undefined;
