@@ -249,8 +249,8 @@ export const DropMusic = () => {
     ? "What is this drop about?"
     : "Why should people collect this drop?";
   const descHelperText = isSaveDrop
-    ? "You cannot edit this after the drop is created."
-    : "Tell your fans what the reward is. You cannot edit this after the drop is created";
+    ? ""
+    : "Promote a collectible, raffle or allow-list to attract more collectors.";
 
   useEffect(() => {
     resetDropState();
@@ -546,7 +546,6 @@ export const DropMusic = () => {
                       textAlignVertical="top"
                       placeholder="What is this drop about?"
                       onBlur={onBlur}
-                      helperText="You cannot edit this after the drop is created."
                       errorText={errors.description?.message}
                       value={value}
                       numberOfLines={3}
@@ -875,7 +874,7 @@ export const DropMusic = () => {
                                   label="Your royalties (%)"
                                   onBlur={onBlur}
                                   placeholder="Enter number"
-                                  helperText="How much you'll earn each time an edition of this drop is sold"
+                                  helperText="Earn royalties each time an edition is sold."
                                   errorText={errors.royalty?.message}
                                   value={value?.toString()}
                                   onChangeText={onChange}
@@ -922,7 +921,17 @@ export const DropMusic = () => {
                             <Fieldset
                               ref={ref}
                               tw="flex-1"
-                              label="Explicit content (18+)"
+                              label={
+                                <View tw="mr-5 flex">
+                                  <Text tw="font-semibold dark:text-white">
+                                    Explicit visual (18+)
+                                  </Text>
+                                  <Text tw="max-w-[100%] pt-1 text-xs dark:text-white">
+                                    Do not check if your song lyrics are
+                                    explicit.
+                                  </Text>
+                                </View>
+                              }
                               switchOnly
                               switchProps={{
                                 checked: value,
