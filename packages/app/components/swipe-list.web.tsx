@@ -117,7 +117,11 @@ export const SwipeList = ({
               width={windowWidth}
               keyboard
               initialSlide={clamp(initialScrollIndex, 0, data.length - 1)}
-              virtual
+              virtual={{
+                enabled: true,
+                addSlidesBefore: 1,
+                addSlidesAfter: 2,
+              }}
               direction="vertical"
               onRealIndexChange={onRealIndexChange}
               onReachEnd={fetchMore}
@@ -126,6 +130,8 @@ export const SwipeList = ({
               noSwipingClass="swiper-no-swiping"
               mousewheel={{
                 noMousewheelClass: "swiper-no-swiping",
+                sensitivity: 1.1,
+                thresholdTime: 600,
               }}
             >
               {data.map((item, index) => (
