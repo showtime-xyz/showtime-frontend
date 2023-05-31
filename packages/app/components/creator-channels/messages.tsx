@@ -104,7 +104,7 @@ import {
   MessageItemProps,
 } from "./types";
 
-const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : Fragment;
+const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export const AnimatedInfiniteScrollList =
