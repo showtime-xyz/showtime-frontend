@@ -6,7 +6,6 @@ import {
   useState,
   useMemo,
   RefObject,
-  useLayoutEffect,
   Ref,
   forwardRef,
   Component,
@@ -39,6 +38,7 @@ import {
   Share,
   Shopping,
   Trash,
+  Flag,
 } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import {
@@ -603,6 +603,7 @@ const MessageItem = memo(
     const [showInput, setShowInput] = useState(false);
     const Alert = useAlert();
     const isDark = useIsDarkMode();
+    const router = useRouter();
 
     return (
       <View tw="mb-5 px-4">
@@ -694,6 +695,36 @@ const MessageItem = memo(
                         />
                         <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
                           Edit
+                        </DropdownMenuItemTitle>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          router.push(
+                            {
+                              pathname:
+                                Platform.OS === "web"
+                                  ? router.pathname
+                                  : "/report",
+                              query: {
+                                ...router.query,
+                                reportModal: true,
+                                channelMessageId: item.channel_message.id,
+                              },
+                            },
+                            Platform.OS === "web" ? router.asPath : undefined
+                          );
+                        }}
+                        key="report"
+                      >
+                        <MenuItemIcon
+                          Icon={Flag}
+                          ios={{
+                            name: "flag",
+                          }}
+                        />
+                        <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
+                          Report
                         </DropdownMenuItemTitle>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
