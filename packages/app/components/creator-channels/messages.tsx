@@ -9,6 +9,7 @@ import {
   Ref,
   forwardRef,
   Component,
+  Fragment,
 } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
@@ -22,6 +23,7 @@ import Animated, {
   Layout,
 } from "react-native-reanimated";
 
+import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
@@ -102,6 +104,7 @@ import {
   MessageItemProps,
 } from "./types";
 
+const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : Fragment;
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export const AnimatedInfiniteScrollList =
@@ -788,16 +791,17 @@ const MessageItem = memo(
                 {channel_message.body}
               </Text>
             )}
-
-            {item.reaction_group.length > 0 ? (
-              <AnimatedView tw="pt-1" layout={Layout}>
-                <MessageReactions
-                  reactionGroup={item.reaction_group}
-                  channelId={channelId}
-                  messageId={channel_message.id}
-                />
-              </AnimatedView>
-            ) : null}
+            <PlatformAnimateHeight>
+              {item.reaction_group.length > 0 ? (
+                <AnimatedView tw="web:animate-fade-in-250 pt-1" layout={Layout}>
+                  <MessageReactions
+                    reactionGroup={item.reaction_group}
+                    channelId={channelId}
+                    messageId={channel_message.id}
+                  />
+                </AnimatedView>
+              ) : null}
+            </PlatformAnimateHeight>
           </View>
         </View>
       </View>
