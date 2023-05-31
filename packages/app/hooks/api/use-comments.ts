@@ -34,6 +34,7 @@ export interface CommentType {
   likers: Liker[];
   parent_id?: number;
   replies?: CommentType[];
+  self_liked?: boolean;
 }
 
 export interface Data {
@@ -97,75 +98,41 @@ export const useComments = (nftId?: number) => {
   //#endregion
 
   //#region callbacks
-  const likeComment = useCallback(
-    async function likeComment(commentId: number) {
-      try {
-        await axios({
-          url: `/v1/likecomment/${commentId}`,
-          method: "POST",
-          data: {},
-        });
+  const likeComment = useCallback(async function likeComment(
+    commentId: number
+  ) {
+    try {
+      await axios({
+        url: `/v1/likecomment/${commentId}`,
+        method: "POST",
+        data: {},
+      });
 
-        Analytics.track(EVENTS.USER_LIKED_COMMENT);
+      Analytics.track(EVENTS.USER_LIKED_COMMENT);
 
-        // mutate customer info
-        mutate<any>(
-          MY_INFO_ENDPOINT,
-          (data?: UserType) => {
-            if (data) {
-              return {
-                data: {
-                  ...data.data,
-                  likes_comment: [...data.data.likes_comment, commentId],
-                },
-              };
-            }
-          },
-          true
-        );
+      return true;
+    } catch (error) {
+      return false;
+    }
+  },
+  []);
+  const unlikeComment = useCallback(async function unlikeComment(
+    commentId: number
+  ) {
+    try {
+      await axios({
+        url: `/v1/unlikecomment/${commentId}`,
+        method: "POST",
+        data: {},
+      });
+      Analytics.track(EVENTS.USER_UNLIKED_COMMENT);
 
-        return true;
-      } catch (error) {
-        return false;
-      }
-    },
-    [mutate]
-  );
-  const unlikeComment = useCallback(
-    async function unlikeComment(commentId: number) {
-      try {
-        await axios({
-          url: `/v1/unlikecomment/${commentId}`,
-          method: "POST",
-          data: {},
-        });
-        Analytics.track(EVENTS.USER_UNLIKED_COMMENT);
-
-        // mutate local data
-        mutate<any>(
-          MY_INFO_ENDPOINT,
-          (data?: UserType) => {
-            if (data) {
-              return {
-                data: {
-                  ...data.data,
-                  likes_comment: data.data.likes_comment.filter(
-                    (item) => item !== commentId
-                  ),
-                },
-              };
-            }
-          },
-          true
-        );
-
-        return true;
-      } catch (error) {
-        return false;
-      }
-    },
-    [mutate]
-  );
+      return true;
+    } catch (error) {
+      return false;
+    }
+  },
+  []);
   const deleteComment = useCallback(
     async function deleteComment(commentId: number) {
       await axios({

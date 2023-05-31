@@ -42,6 +42,8 @@ function CommentRowComponent({
   //#region state
   const lastItemId = useRef<number>(comment.id);
   const [likeCount, setLikeCount] = useState(comment.like_count);
+  const [isLikedByMe, setIsLikedByMe] = useState(comment.self_liked);
+
   const [displayedRepliesCount, setDisplayedRepliesCount] =
     useState(REPLIES_PER_BATCH);
 
@@ -87,11 +89,6 @@ function CommentRowComponent({
     [user, comment.id]
   );
 
-  const isLikedByMe = useMemo(
-    () => user?.data.likes_comment.includes(comment.id),
-    [user, comment.id]
-  );
-
   //#endregion
 
   //#region callbacks
@@ -101,21 +98,19 @@ function CommentRowComponent({
         navigateToLogin();
         return;
       }
-
-      if (isLikedByMe) {
-        await unlikeComment(comment.id);
-        setLikeCount((state) => Math.max(state - 1, 0));
-      } else {
-        await likeComment(comment.id);
-        setLikeCount((state) => state + 1);
+      const handler = isLikedByMe ? unlikeComment : likeComment;
+      const isSuccessed = await handler(comment.id);
+      if (isSuccessed) {
+        setLikeCount((state) => Math.max(state + (isLikedByMe ? -1 : 1), 0));
+        setIsLikedByMe(!isLikedByMe);
       }
     },
     [
-      navigateToLogin,
       comment.id,
       isAuthenticated,
       isLikedByMe,
       likeComment,
+      navigateToLogin,
       unlikeComment,
     ]
   );
