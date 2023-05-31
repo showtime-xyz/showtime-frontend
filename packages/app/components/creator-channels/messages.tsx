@@ -102,6 +102,8 @@ import {
   MessageItemProps,
 } from "./types";
 
+const AnimatedView = Animated.createAnimatedComponent(View);
+
 export const AnimatedInfiniteScrollList =
   Animated.createAnimatedComponent<InfiniteScrollListProps<ChannelMessageItem>>(
     InfiniteScrollList
@@ -788,13 +790,13 @@ const MessageItem = memo(
             )}
 
             {item.reaction_group.length > 0 ? (
-              <View tw="pt-1">
+              <AnimatedView tw="pt-1" layout={Layout}>
                 <MessageReactions
                   reactionGroup={item.reaction_group}
                   channelId={channelId}
                   messageId={channel_message.id}
                 />
-              </View>
+              </AnimatedView>
             ) : null}
           </View>
         </View>

@@ -1,7 +1,13 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import Animated, { Layout, ZoomIn, ZoomOut } from "react-native-reanimated";
+import Animated, {
+  Layout,
+  ZoomIn,
+  ZoomOut,
+  FadeIn,
+  FadeOut,
+} from "react-native-reanimated";
 
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -11,7 +17,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
 import { useChannelReactions } from "../creator-channels/hooks/use-channel-reactions";
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const AnimatedView = Animated.createAnimatedComponent(View);
 
 export const MessageReactions = ({
   channelId,
@@ -54,32 +60,36 @@ export const MessageReactions = ({
   );
 
   return (
-    <View tw="w-[40%] min-w-[250px] flex-row justify-between">
+    <View tw="w-full flex-1 flex-row items-center">
       {channelReactions.data?.map((item, index) => {
         const userReaction = reactionGroup.find(
           (r) => r.reaction_id === item.id
         );
         if (userReaction) {
           return (
-            <AnimatedPressable
+            <AnimatedView
               key={index}
+              tw="mr-3"
               layout={Layout.springify().damping(500).stiffness(100)}
-              entering={ZoomIn}
-              exiting={ZoomOut}
-              onPress={() => handleReactionPress(item.id)}
-              tw={
-                userReaction.self_reacted
-                  ? "rounded-lg bg-gray-50 p-1 dark:bg-gray-900"
-                  : undefined
-              }
+              entering={FadeIn}
+              exiting={FadeOut}
             >
-              <Text
-                tw="text-gray-700 dark:text-gray-200"
-                style={{ fontSize: 13 }}
+              <Pressable
+                onPress={() => handleReactionPress(item.id)}
+                tw={
+                  userReaction.self_reacted
+                    ? "min-h-[30px] min-w-[30px] rounded-lg bg-gray-100 px-2 py-1 dark:bg-gray-900"
+                    : "min-h-[30px] min-w-[30px] px-2 py-1"
+                }
               >
-                {item.reaction} {userReaction.count}
-              </Text>
-            </AnimatedPressable>
+                <Text
+                  tw="h-5 items-center leading-5 text-gray-700 dark:text-gray-200"
+                  style={{ fontSize: 13 }}
+                >
+                  {item.reaction} {userReaction.count}
+                </Text>
+              </Pressable>
+            </AnimatedView>
           );
         }
       })}
