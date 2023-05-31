@@ -14,6 +14,8 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { formatToUSNumber } from "app/utilities";
+
 import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
 import { useChannelReactions } from "../creator-channels/hooks/use-channel-reactions";
 
@@ -86,7 +88,7 @@ export const MessageReactions = ({
                   tw="h-5 items-center leading-5 text-gray-700 dark:text-gray-200"
                   style={{ fontSize: 13 }}
                 >
-                  {item.reaction} {userReaction.count}
+                  {item.reaction} {formatToUSNumber(userReaction.count)}
                 </Text>
               </Pressable>
             </AnimatedView>
