@@ -46,7 +46,8 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       dropEvent: "drop/event",
       dropPrivate: "drop/private",
       dropUpdate: "drop/update/:editionContractAddress",
-      dropEditDetailsModal: "drop/edit-details/:contractAddress",
+      dropEditDetailsModal:
+        "drop/edit-details/:chainName/:contractAddress/:tokenId",
       qrCodeShare: "/qr-code-share/:contractAddress",
       raffle: "/raffle/:contractAddress",
       claim: "claim/:contractAddress",

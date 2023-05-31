@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { Platform } from "react-native";
 
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,27 +6,15 @@ import { Controller, useForm } from "react-hook-form";
 
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
-import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { ErrorText } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InformationCircle } from "@showtime-xyz/universal.icon";
-import { Label } from "@showtime-xyz/universal.label";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { Screen } from "app/components/screen";
-import {
-  CreatorEditionResponse,
-  useCreatorCollectionDetail,
-} from "app/hooks/use-creator-collection-detail";
 import { useDropEditDetails } from "app/hooks/use-drop-edit-details";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { yup } from "app/lib/yup";
 import { createParam } from "app/navigation/use-param";
 
@@ -36,24 +24,30 @@ const dropValidationSchema = yup.object({
 });
 type Query = {
   contractAddress: string;
+  chainName: string;
+  tokenId: string;
 };
 
 const { useParam } = createParam<Query>();
 export const DropEditDetails = () => {
   const isDark = useIsDarkMode();
   const [contractAddress] = useParam("contractAddress");
-  const { data } = useCreatorCollectionDetail(contractAddress);
+  const [tokenId] = useParam("tokenId");
+  const [chainName] = useParam("chainName");
+  const { data, mutate, mutateNFT } = useNFTDetailByTokenId({
+    contractAddress,
+    tokenId,
+    chainName,
+  });
+
   const { editDropDetails } = useDropEditDetails();
 
   const defaultValues = useMemo(() => {
     return {
-      title: data?.creator_airdrop_edition.name || "",
-      description: data?.creator_airdrop_edition.description || "",
+      name: data?.data?.item.token_name || "",
+      description: data?.data?.item.token_description || "",
     };
-  }, [
-    data?.creator_airdrop_edition.description,
-    data?.creator_airdrop_edition.name,
-  ]);
+  }, [data?.data?.item.token_description, data?.data?.item.token_name]);
 
   const {
     control,
@@ -75,9 +69,36 @@ export const DropEditDetails = () => {
   }, [resetForm, defaultValues]);
 
   const onSubmit = async (values: typeof defaultValues) => {
-    console.log(values);
-    editDropDetails(contractAddress, values);
-    router.pop();
+    const res = await editDropDetails(contractAddress, values);
+
+    if (res) {
+      const data = await mutate();
+      const nft = data?.data.item;
+      if (!nft) return;
+      if (
+        Platform.OS === "web" &&
+        router.pathname === "/profile/[username]/[dropSlug]"
+      ) {
+        const username = nft.creator_username;
+        const dropSlug = nft.slug;
+        router.replace(
+          {
+            pathname: "/profile/[username]/[dropSlug]",
+            query: {
+              ...router.query,
+              username: username,
+              dropSlug,
+            },
+          },
+          getNFTSlug(nft),
+          { shallow: true }
+        );
+        mutateNFT();
+      } else {
+        mutateNFT();
+        router.pop();
+      }
+    }
   };
 
   return (
@@ -86,7 +107,7 @@ export const DropEditDetails = () => {
         <View tw="w-full px-4">
           <Controller
             control={control}
-            name="title"
+            name="name"
             render={({ field: { onChange, onBlur, value, ref } }) => {
               return (
                 <Fieldset
@@ -94,7 +115,7 @@ export const DropEditDetails = () => {
                   label="Title"
                   placeholder="Sweet"
                   onBlur={onBlur}
-                  errorText={errors.title?.message}
+                  errorText={errors.name?.message}
                   value={value}
                   onChangeText={onChange}
                   numberOfLines={2}
