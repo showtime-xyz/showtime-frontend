@@ -62,7 +62,7 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           fullScreenGestureEnabled: true,
-          animationDuration: 400,
+          animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
         }}
       >
         <Stack.Screen
