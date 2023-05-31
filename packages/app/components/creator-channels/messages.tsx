@@ -480,6 +480,7 @@ export const Messages = () => {
   return (
     <>
       <View
+        key={channelId}
         tw="w-full flex-1 bg-white dark:bg-black"
         style={{
           paddingTop: insets.top,
