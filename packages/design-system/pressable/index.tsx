@@ -1,3 +1,4 @@
+import { forwardRef, Ref, Component } from "react";
 import {
   Pressable as RNPressable,
   PressableProps as RNPressableProps,
@@ -12,8 +13,17 @@ export type PressableProps = Omit<RNPressableProps, "tw"> & {
 
 const StyledPressable = styled(RNPressable);
 
-export function Pressable({ tw, ...props }: PressableProps) {
+export const Pressable = forwardRef<any, PressableProps>(function (
+  { tw, ...props }: PressableProps,
+  ref
+) {
   return (
-    <StyledPressable {...props} tw={Array.isArray(tw) ? tw.join(" ") : tw} />
+    <StyledPressable
+      ref={ref}
+      {...props}
+      tw={Array.isArray(tw) ? tw.join(" ") : tw}
+    />
   );
-}
+});
+
+Pressable.displayName = "Pressable";
