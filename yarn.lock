@@ -4149,9 +4149,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/cli@npm:0.7.1":
-  version: 0.7.1
-  resolution: "@expo/cli@npm:0.7.1"
+"@expo/cli@npm:0.7.2":
+  version: 0.7.2
+  resolution: "@expo/cli@npm:0.7.2"
   dependencies:
     "@babel/runtime": ^7.20.0
     "@expo/code-signing-certificates": 0.0.5
@@ -4216,7 +4216,7 @@ __metadata:
     ws: ^8.12.1
   bin:
     expo-internal: build/bin/cli
-  checksum: 5b84f3ad6c57fa9c64a0edd99558ada7fca8556d6137213df141b90cd4c93b3605dafce1a72cb11f0448857c220c7be63cde295a2cb13d99ba1f122ea362da05
+  checksum: bb67163e60e0a99c3f089495f549fda984ef4b33222dc8c62dc8c51b5dff12b51ccb1f38e12664b6cf47dfe323f80422b0878c958ddc9b5ef395a8a6286d3227
   languageName: node
   linkType: hard
 
@@ -8011,7 +8011,7 @@ __metadata:
     dotenv: ^16.0.3
     esbuild: ^0.17.16
     events: ^3.3.0
-    expo: ~48.0.17
+    expo: ~48.0.18
     expo-app-loading: ~2.1.1
     expo-application: ~5.1.1
     expo-av: ~13.3.0
@@ -8214,7 +8214,7 @@ __metadata:
     "@storybook/react-native": ^6.5.3
     burnt: ^0.10.0
     design-system: "*"
-    expo: ~48.0.17
+    expo: ~48.0.18
     expo-asset: ~8.6.2
     expo-av: ~13.3.0
     expo-blur: ~12.3.0
@@ -19497,12 +19497,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:~48.0.17":
-  version: 48.0.17
-  resolution: "expo@npm:48.0.17"
+"expo@npm:~48.0.18":
+  version: 48.0.18
+  resolution: "expo@npm:48.0.18"
   dependencies:
     "@babel/runtime": ^7.20.0
-    "@expo/cli": 0.7.1
+    "@expo/cli": 0.7.2
     "@expo/config": 8.0.2
     "@expo/config-plugins": 6.0.2
     "@expo/vector-icons": ^13.0.0
@@ -19525,7 +19525,7 @@ __metadata:
     uuid: ^3.4.0
   bin:
     expo: bin/cli.js
-  checksum: 560aaa0da139560d84fea92bce9bc3aa0c32e157b7676f1c80ee3bece43226fe1f44fe41837b91d00a4107a0cf5291f0e042d5f9ca1591d723dbf5a96a168df3
+  checksum: 0506bccb60bc09901e75375d35ea14ea79da0719798fe556f622c43d8ef43d8561e00f814bc7005e3e0913f3f87988bcbad895c502b12f1afbb0d2bcb3f7cde0
   languageName: node
   linkType: hard
 
