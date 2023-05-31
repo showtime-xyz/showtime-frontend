@@ -62,7 +62,7 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           fullScreenGestureEnabled: true,
-          animationDuration: 400,
+          animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
         }}
       >
         <Stack.Screen
@@ -70,14 +70,7 @@ export function RootStackNavigator() {
           component={ProfileScreen}
           getId={({ params }) => params?.username}
         />
-        <Stack.Screen
-          name="search"
-          component={SearchScreen}
-          options={{
-            animation: "fade",
-            animationDuration: 200,
-          }}
-        />
+        <Stack.Screen name="search" component={SearchScreen} />
         <Stack.Screen
           name="nft"
           component={NftScreen}
