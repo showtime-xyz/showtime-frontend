@@ -168,7 +168,7 @@ const Header = (props: HeaderProps) => {
           onPress={() => router.push(`/@${props.username}`)}
           tw="text-sm font-bold text-gray-900 dark:text-gray-100"
         >
-          {props.username ?? "Loading..."}
+          {props.title ?? "Loading..."}
         </Text>
         <Text
           onPress={viewMembersList}
@@ -472,7 +472,8 @@ export const Messages = () => {
         }}
       >
         <Header
-          username={
+          username={channelDetail.data?.owner.username}
+          title={
             channelDetail.data?.owner.name ?? channelDetail.data?.owner.username
           }
           picture={channelDetail.data?.owner.img_url}

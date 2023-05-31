@@ -29,6 +29,7 @@ export type MessageItemProps = {
 };
 
 export type HeaderProps = {
+  title?: string;
   username?: string;
   members?: number;
   channelId: string;
