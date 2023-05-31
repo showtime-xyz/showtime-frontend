@@ -2,18 +2,19 @@ import { Alert } from "@showtime-xyz/universal.alert";
 
 import { axios } from "app/lib/axios";
 
+import { toast } from "design-system/toast";
+
 export type EditDropDetailParams = {
-  title: string;
+  name: string;
   description: string;
 };
 
 export const useDropEditDetails = () => {
   const editDropDetails = async (
     editionAddress?: string,
-    params?: EditDropDetailParams,
-    callback?: () => void
+    params?: EditDropDetailParams
   ) => {
-    await axios({
+    const res = await axios({
       url: `/v1/creator-airdrops/edition/draft/${editionAddress}/edit`,
       method: "POST",
       data: {
@@ -22,7 +23,10 @@ export const useDropEditDetails = () => {
     }).catch((error) => {
       Alert.alert("Oops, An error occurred.", error?.message);
     });
-    callback?.();
+    if (res) {
+      toast.success("Updated!");
+      return res;
+    }
   };
 
   return {

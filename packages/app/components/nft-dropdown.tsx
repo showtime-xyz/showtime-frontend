@@ -178,9 +178,11 @@ function NFTDropdown({
           ) : null}
           <DropdownMenuItem
             onSelect={() => {
-              const contractAddress =
-                edition?.creator_airdrop_edition.contract_address;
-              const as = `drop/edit-details/${contractAddress}`;
+              const contractAddress = nft?.contract_address;
+              const tokenId = nft?.token_id;
+              const chainName = nft?.chain_name;
+
+              const as = `/drop/edit-details/${chainName}/${contractAddress}/${tokenId}`;
               router.push(
                 Platform.select({
                   native: as,
@@ -189,6 +191,8 @@ function NFTDropdown({
                     query: {
                       ...router.query,
                       contractAddress,
+                      tokenId,
+                      chainName,
                       dropEditDetailsModal: true,
                     },
                   } as any,
