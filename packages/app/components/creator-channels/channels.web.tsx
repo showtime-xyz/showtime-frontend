@@ -186,7 +186,7 @@ const CreatorChannelsListCreator = memo(
                     tw="text-md max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-black dark:text-white"
                     numberOfLines={1}
                   >
-                    {item.owner.username}
+                    {item.owner.name ?? item.owner.username}
                   </Text>
                 </View>
                 <View tw="mt-1 flex-1">

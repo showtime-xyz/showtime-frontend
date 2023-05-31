@@ -7,6 +7,21 @@ import { ChannelMessageItem } from "./hooks/use-channel-messages";
 import { ChannelReactionResponse } from "./hooks/use-channel-reactions";
 import { AnimatedInfiniteScrollList } from "./messages";
 
+export type ChannelLatestMessage = {
+  id: number;
+  body: string;
+  created_at: string;
+  updated_at: string;
+  profile: ChannelProfile;
+  sent_by: {
+    id: number;
+    admin: boolean;
+    created_at: string;
+    updated_at: string;
+    profile: ChannelProfile;
+  };
+};
+
 export type MessageItemProps = {
   item: ChannelMessageItem;
   reactions: ChannelReactionResponse;
@@ -14,8 +29,8 @@ export type MessageItemProps = {
 };
 
 export type HeaderProps = {
-  username: string;
-  members: number;
+  username?: string;
+  members?: number;
   channelId: string;
   onPressSettings: () => void;
   onPressShare: () => void;
@@ -42,20 +57,7 @@ export type CreatorChannelsListItemProps = {
   name: string;
   created_at: string;
   updated_at: string;
-  latest_message: {
-    id: number;
-    body: string;
-    created_at: string;
-    updated_at: string;
-    profile: ChannelProfile;
-    sent_by: {
-      id: number;
-      admin: boolean;
-      created_at: string;
-      updated_at: string;
-      profile: ChannelProfile;
-    };
-  };
+  latest_message: ChannelLatestMessage;
   unread: boolean;
   owner: ChannelProfile;
   member_count: number;
@@ -73,3 +75,14 @@ export interface IAnimatedInfiniteScrollListWithRef
     }
   ): React.ReactElement | null;
 }
+
+export type Channel = {
+  id: number;
+  channel_reactions: ChannelReactionResponse;
+  created_at: string;
+  updated_at: string;
+  member_count: number;
+  name: string;
+  latest_message: ChannelLatestMessage;
+  owner: ChannelProfile;
+};

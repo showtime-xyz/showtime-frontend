@@ -86,12 +86,11 @@ import { breakpoints } from "design-system/theme";
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
-import { useChannelMembers } from "./hooks/use-channel-members";
+import { useChannelById } from "./hooks/use-channel-detail";
 import {
   ChannelMessageItem,
   useChannelMessages,
 } from "./hooks/use-channel-messages";
-import { useChannelReactions } from "./hooks/use-channel-reactions";
 import { useDeleteMessage } from "./hooks/use-delete-message";
 import { useEditChannelMessage } from "./hooks/use-edit-channel-message";
 import { useReactOnMessage } from "./hooks/use-react-on-message";
@@ -169,13 +168,13 @@ const Header = (props: HeaderProps) => {
           onPress={() => router.push(`/@${props.username}`)}
           tw="text-sm font-bold text-gray-900 dark:text-gray-100"
         >
-          {props.username}
+          {props.username ?? "Loading..."}
         </Text>
         <Text
           onPress={viewMembersList}
           tw="text-xs text-gray-900 dark:text-gray-100"
         >
-          {props.members} members
+          {props.members ?? 0} members
         </Text>
       </View>
       <View tw="flex-row">
@@ -272,13 +271,19 @@ export const Messages = () => {
   const share = useShare();
   const isDark = useIsDarkMode();
   const user = useUser();
-  const { membersCount } = useChannelMembers(channelId);
   const redirectToChannelCongrats = useRedirectToChannelCongrats();
   const isUserAdmin =
     user.user?.data.channels &&
     user.user?.data.channels[0] === Number(channelId);
 
-  const channelReactions = useChannelReactions(channelId);
+  const channelDetail = useChannelById(channelId);
+  const membersCount = channelDetail.data?.member_count || 0;
+
+  const channelReactions = useMemo(
+    () => channelDetail.data?.channel_reactions || [],
+    [channelDetail.data?.channel_reactions]
+  );
+
   useIntroducingCreatorChannels();
 
   const shareLink = async () => {
@@ -429,8 +434,8 @@ export const Messages = () => {
   ]);
 
   const extraData = useMemo(
-    () => ({ reactions: channelReactions.data, channelId }),
-    [channelId, channelReactions.data]
+    () => ({ reactions: channelReactions, channelId }),
+    [channelId, channelReactions]
   );
   const sendMessageCallback = useCallback(() => {
     if (data?.length !== 0) return;
@@ -447,7 +452,7 @@ export const Messages = () => {
     );
   }
 
-  if (isLoading || channelReactions.isLoading) {
+  if (isLoading || channelDetail.isLoading) {
     return (
       <View tw="flex-1 items-center justify-center">
         <Spinner />
@@ -467,7 +472,9 @@ export const Messages = () => {
         }}
       >
         <Header
-          username="Hirbod"
+          username={
+            channelDetail.data?.owner.name ?? channelDetail.data?.owner.username
+          }
           onPressSettings={() => {
             const as = `/channels/${channelId}/settings`;
             router.push(
