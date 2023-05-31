@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
+import Animated, { Layout, ZoomIn, ZoomOut } from "react-native-reanimated";
+
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -8,6 +10,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
 import { useChannelReactions } from "../creator-channels/hooks/use-channel-reactions";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const MessageReactions = ({
   channelId,
@@ -51,14 +55,17 @@ export const MessageReactions = ({
 
   return (
     <View tw="w-[40%] min-w-[250px] flex-row justify-between">
-      {channelReactions.data?.map((item) => {
+      {channelReactions.data?.map((item, index) => {
         const userReaction = reactionGroup.find(
           (r) => r.reaction_id === item.id
         );
         if (userReaction) {
           return (
-            <Pressable
-              key={item.id}
+            <AnimatedPressable
+              key={index}
+              layout={Layout.springify().damping(500).stiffness(100)}
+              entering={ZoomIn}
+              exiting={ZoomOut}
               onPress={() => handleReactionPress(item.id)}
               tw={
                 userReaction.self_reacted
@@ -72,7 +79,7 @@ export const MessageReactions = ({
               >
                 {item.reaction} {userReaction.count}
               </Text>
-            </Pressable>
+            </AnimatedPressable>
           );
         }
       })}
