@@ -220,8 +220,12 @@ export const CreatorChannelsList = memo(
     const { height: windowHeight } = useWindowDimensions();
 
     // my own channels
-    const { data: ownedChannelsData, isLoading: isLoadingOwnChannels } =
-      useOwnedChannelsList();
+    const {
+      data: ownedChannelsData,
+      isLoading: isLoadingOwnChannels,
+      refresh: refreshOwnedChannels,
+      isRefreshing: isRefreshingOwnedChannels,
+    } = useOwnedChannelsList();
 
     // channels I'm a member of
     const {
@@ -318,6 +322,10 @@ export const CreatorChannelsList = memo(
       isLoadingMoreJoinedChannels,
     ]);
 
+    const refreshPage = useCallback(async () => {
+      await Promise.all([refreshOwnedChannels(), refresh()]);
+    }, [refresh, refreshOwnedChannels]);
+
     return (
       <InfiniteScrollList
         useWindowScroll={false}
@@ -349,8 +357,8 @@ export const CreatorChannelsList = memo(
         // Todo: unity refresh control same as tab view
         refreshControl={
           <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={refresh}
+            refreshing={isRefreshing || isRefreshingOwnedChannels}
+            onRefresh={refreshPage}
             progressViewOffset={headerHeight}
             tintColor={isDark ? colors.gray[200] : colors.gray[700]}
             colors={[colors.violet[500]]}
