@@ -8,7 +8,7 @@
     "start:dev-client": "yarn expo:prebuild && expo start --dev-client --port=8083",
     "start:dev-client:clear": "yarn start:dev-client -c",
     "eject": "expo eject",
-    "expo:prebuild": "expo prebuild --skip-dependency-update react",
+    "expo:prebuild": "expo prebuild --skip-dependency-update react-native,react",
     "ios": "yarn expo:prebuild && EXPO_USE_APPLE_DEVICE=0 expo run:ios",
     "android": "yarn expo:prebuild && expo run:android",
     "postinstall": "cd ../.. && yarn patch-package",
