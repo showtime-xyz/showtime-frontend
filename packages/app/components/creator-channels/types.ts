@@ -32,6 +32,7 @@ export type HeaderProps = {
   username?: string;
   members?: number;
   channelId: string;
+  picture?: string;
   onPressSettings: () => void;
   onPressShare: () => void;
 };

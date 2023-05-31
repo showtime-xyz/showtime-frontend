@@ -156,7 +156,7 @@ const Header = (props: HeaderProps) => {
         <View>
           <AvatarHoverCard
             username={props.username}
-            url={"https://picsum.photos/200"}
+            url={props.picture}
             size={34}
             alt="Channels Avatar"
           />
@@ -475,6 +475,7 @@ export const Messages = () => {
           username={
             channelDetail.data?.owner.name ?? channelDetail.data?.owner.username
           }
+          picture={channelDetail.data?.owner.img_url}
           onPressSettings={() => {
             const as = `/channels/${channelId}/settings`;
             router.push(
