@@ -30,7 +30,7 @@ export const CreatorChannelsIntro = () => {
   const isSmWidth = width >= breakpoints["sm"];
   const imageSize = isSmWidth ? 420 : width;
   const router = useRouter();
-  const channelId = userProfile?.data.channels[0];
+  const channelId = userProfile?.data.channels?.[0];
   const { membersCount } = useChannelMembers(channelId?.toString());
 
   return (
