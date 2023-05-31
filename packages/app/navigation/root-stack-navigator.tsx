@@ -70,7 +70,14 @@ export function RootStackNavigator() {
           component={ProfileScreen}
           getId={({ params }) => params?.username}
         />
-        <Stack.Screen name="search" component={SearchScreen} />
+        <Stack.Screen
+          name="search"
+          component={SearchScreen}
+          options={{
+            animation: "fade",
+            animationDuration: 200,
+          }}
+        />
         <Stack.Screen
           name="nft"
           component={NftScreen}
