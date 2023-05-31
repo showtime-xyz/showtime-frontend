@@ -790,7 +790,7 @@ const MessageItem = memo(
               initialHeight={item.reaction_group.length > 0 ? 30 : 0}
             >
               {!showInput && item.reaction_group.length > 0 ? (
-                <AnimatedView tw="web:animate-fade-in-250 pt-1" layout={Layout}>
+                <AnimatedView tw="pt-1" layout={Layout}>
                   <MessageReactions
                     reactionGroup={item.reaction_group}
                     channelId={channelId}
