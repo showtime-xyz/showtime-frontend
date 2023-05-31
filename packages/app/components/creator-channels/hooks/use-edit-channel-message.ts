@@ -11,7 +11,7 @@ async function postMessage(
   { arg }: { arg: { channelId: string; messageId: number; message: string } }
 ) {
   return axios({
-    url: `/v1/channels/${arg.channelId}/messages/${arg.messageId}/edit`,
+    url: `/v1/channels/message/${arg.messageId}/edit`,
     method: "POST",
     data: {
       body: arg.message,
@@ -21,7 +21,7 @@ async function postMessage(
 
 export const useEditChannelMessage = (channelId?: string) => {
   const { trigger, isMutating, error } = useSWRMutation(
-    `/v1/channels/${channelId}/messages/{message_id}/send`,
+    `/v1/channels//messages/{message_id}/send`,
     postMessage
   );
   const channelMessages = useChannelMessages(channelId);

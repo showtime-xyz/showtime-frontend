@@ -29,6 +29,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   ArrowLeft,
+  Edit,
   CloseLarge,
   EyeOffV2,
   GiftV2,
@@ -52,6 +53,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
@@ -91,6 +93,7 @@ import {
 } from "./hooks/use-channel-messages";
 import { useChannelReactions } from "./hooks/use-channel-reactions";
 import { useDeleteMessage } from "./hooks/use-delete-message";
+import { useEditChannelMessage } from "./hooks/use-edit-channel-message";
 import { useReactOnMessage } from "./hooks/use-react-on-message";
 import { useSendChannelMessage } from "./hooks/use-send-channel-message";
 import {
@@ -597,19 +600,21 @@ const MessageItem = memo(
     const { channel_message } = item;
     const reactOnMessage = useReactOnMessage(channelId);
     const deleteMessage = useDeleteMessage(channelId);
+    const [showInput, setShowInput] = useState(false);
     const Alert = useAlert();
+    const isDark = useIsDarkMode();
 
     return (
       <View tw="mb-5 px-4">
         <View tw="flex-row" style={{ columnGap: 8 }}>
           <View tw="h-6 w-6">
-            <Avatar size={24} />
+            <Avatar size={24} url={channel_message.sent_by.profile.img_url} />
             <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
           </View>
           <View tw="flex-1" style={{ rowGap: 8 }}>
             <View tw="flex-row items-center" style={{ columnGap: 8 }}>
               <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
-                Hirbod
+                {channel_message.sent_by.profile.name}
               </Text>
 
               <Text tw="text-xs text-gray-700 dark:text-gray-200">
@@ -633,7 +638,11 @@ const MessageItem = memo(
                 <View>
                   <DropdownMenuRoot>
                     <DropdownMenuTrigger>
-                      <MoreHorizontal color="black" width={20} height={20} />
+                      <MoreHorizontal
+                        color={isDark ? colors.gray[400] : colors.gray[700]}
+                        width={20}
+                        height={20}
+                      />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent loop sideOffset={8}>
                       <DropdownMenuItem
@@ -670,15 +679,41 @@ const MessageItem = memo(
                           Delete
                         </DropdownMenuItemTitle>
                       </DropdownMenuItem>
+
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          setShowInput(true);
+                        }}
+                        key="edit"
+                      >
+                        <MenuItemIcon
+                          Icon={Edit}
+                          ios={{
+                            name: "pencil",
+                          }}
+                        />
+                        <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
+                          Edit
+                        </DropdownMenuItemTitle>
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenuRoot>
                 </View>
               </View>
             </View>
 
-            <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-              {channel_message.body}
-            </Text>
+            {showInput ? (
+              <EditMessageInput
+                hideInput={() => setShowInput(false)}
+                channelId={channelId}
+                messageId={channel_message.id}
+                defaultValue={channel_message.body}
+              />
+            ) : (
+              <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+                {channel_message.body}
+              </Text>
+            )}
 
             {item.reaction_group.length > 0 ? (
               <View tw="pt-1">
@@ -695,5 +730,55 @@ const MessageItem = memo(
     );
   }
 );
+
+const EditMessageInput = ({
+  defaultValue,
+  hideInput,
+  channelId,
+  messageId,
+}: {
+  defaultValue: string;
+  hideInput: any;
+  channelId: string;
+  messageId: number;
+}) => {
+  const [message, setMessage] = useState(defaultValue);
+  const editMessage = useEditChannelMessage(channelId);
+
+  return (
+    <View>
+      <TextInput
+        autoFocus
+        tw="rounded p-4"
+        value={message}
+        style={{
+          borderWidth: 1,
+          borderColor: colors.gray[500],
+        }}
+        multiline={true}
+        defaultValue={defaultValue}
+        onChangeText={setMessage}
+      />
+      <View tw="mt-2 flex-row justify-between">
+        <Button variant="tertiary" onPress={hideInput}>
+          Cancel
+        </Button>
+        <Button
+          variant="primary"
+          onPress={() => {
+            editMessage.trigger({
+              messageId,
+              message,
+              channelId,
+            });
+            hideInput();
+          }}
+        >
+          Save
+        </Button>
+      </View>
+    </View>
+  );
+};
 
 MessageItem.displayName = "MessageItem";
