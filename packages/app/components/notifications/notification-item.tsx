@@ -43,6 +43,7 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "collected "],
   ["CREATED_EDITION_SOLD_OUT", "Your drop sold out: "],
   ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
+  ["CHANNEL_NEW_MESSAGE", "Yoyoyo: "],
   [
     "MISSING_MUSIC_RELEASE_METADATA",
     "Spotify song link to notify your fans the song is out. ",
@@ -79,6 +80,7 @@ export const NotificationItem = memo(
         case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
         case "CREATED_EDITION_SOLD_OUT":
         case "CREATED_EDITION_EXPIRED":
+        case "CHANNEL_NEW_MESSAGE":
           if (notification.nfts && notification.nfts.length > 0) {
             path = getNFTLink(notification.nfts[0]);
           }
@@ -243,6 +245,8 @@ export const getNotificationIcon = (type_name: string) => {
       return <GiftSolid width={20} height={20} color={colors.gray[500]} />;
     case "MISSING_MUSIC_RELEASE_METADATA":
     case "RELEASE_SAVED_TO_SPOTIFY":
+      return <Spotify width={20} height={20} color={"#1DB954"} />;
+    case "CHANNEL_NEW_MESSAGE":
       return <Spotify width={20} height={20} color={"#1DB954"} />;
 
     default:
