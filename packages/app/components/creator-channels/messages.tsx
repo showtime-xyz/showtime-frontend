@@ -285,11 +285,6 @@ export const Messages = () => {
   const channelDetail = useChannelById(channelId);
   const membersCount = channelDetail.data?.member_count || 0;
 
-  const channelReactions = useMemo(
-    () => channelDetail.data?.channel_reactions || [],
-    [channelDetail.data?.channel_reactions]
-  );
-
   useIntroducingCreatorChannels();
 
   const shareLink = async () => {
@@ -440,8 +435,8 @@ export const Messages = () => {
   ]);
 
   const extraData = useMemo(
-    () => ({ reactions: channelReactions, channelId }),
-    [channelId, channelReactions]
+    () => ({ reactions: channelDetail.data?.channel_reactions, channelId }),
+    [channelDetail.data?.channel_reactions, channelId]
   );
   const sendMessageCallback = useCallback(() => {
     if (data?.length !== 0) return;
