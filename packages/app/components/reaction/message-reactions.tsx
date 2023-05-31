@@ -1,13 +1,7 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import Animated, {
-  Layout,
-  ZoomIn,
-  ZoomOut,
-  FadeIn,
-  FadeOut,
-} from "react-native-reanimated";
+import Animated, { Layout, FadeIn, FadeOut } from "react-native-reanimated";
 
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
