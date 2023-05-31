@@ -31,10 +31,12 @@ import { View } from "@showtime-xyz/universal.view";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { WEB_HEADER_HEIGHT } from "app/constants/layout";
+import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
 import { TextLink } from "app/navigation/link";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { withColorScheme } from "../memo-with-theme";
@@ -111,6 +113,8 @@ export const HeaderMd = withColorScheme(
   ({ canGoBack }: { canGoBack: boolean }) => {
     const { isHeaderHidden } = useNavigationElements();
     const { user, isAuthenticated } = useUser();
+    const redirectToCreateDrop = useRedirectToCreateDrop();
+    const navigateToLogin = useNavigateToLogin();
 
     const isDark = useIsDarkMode();
     const router = useRouter();
@@ -162,16 +166,9 @@ export const HeaderMd = withColorScheme(
       return null;
     }
     return (
-      <View tw="mr-4 w-52 pl-8">
+      <View tw="mr-4 w-56 pl-8">
         <View tw="flex-row items-center pl-4 pt-8">
-          <Showtime color={iconColor} width={24} height={24} />
-          <View tw="ml-4">
-            <ShowtimeBrand
-              color={iconColor}
-              width={16 * (84 / 16)}
-              height={16}
-            />
-          </View>
+          <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
         </View>
         <View tw="mt-5 justify-center">
           {routes.map((item, index) => (
@@ -198,12 +195,17 @@ export const HeaderMd = withColorScheme(
             </Pressable>
           ))}
         </View>
-        <View tw="mt-6 pl-4">
-          <Button size="regular">Sign in</Button>
+        <View tw="pl-4">
+          {!isAuthenticated && (
+            <Button size="regular" tw="mt-6" onPress={navigateToLogin}>
+              Sign in
+            </Button>
+          )}
           <Button
             size="regular"
             variant="text"
             tw="mt-4 border border-gray-200 dark:border-gray-600"
+            onPress={redirectToCreateDrop}
           >
             <Plus />
             Create

@@ -44,10 +44,11 @@ export const Explanation = ({
             autoPlay
             data={values}
             autoPlayInterval={2000}
-            pagination
+            pagination={{ variant: "dot" }}
             controller
             controllerTw="top-14 web:-top-20"
             scrollAnimationDuration={1000}
+            effect="fade"
             renderItem={({ item }) => (
               <View
                 tw="web:bg-white web:dark:bg-black h-16 pt-10"

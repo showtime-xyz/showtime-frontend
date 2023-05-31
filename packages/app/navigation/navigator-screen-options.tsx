@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Platform } from "react-native";
 
 import { HeaderLeft, HeaderRight } from "app/components/header";
@@ -9,17 +10,19 @@ export const screenOptions = ({
   isDark,
   headerLeft = null,
   headerRight = null,
+  headerCenter = "",
 }: {
   safeAreaTop: number;
   isDark: boolean;
   headerLeft?: any;
   headerRight?: any;
+  headerCenter?: any;
 }) =>
   ({
     animationEnabled: true,
     headerShown: true,
     headerLeft: headerLeft ?? HeaderLeft,
-    headerTitle: HeaderCenter,
+    headerTitle: headerCenter,
     headerTitleAlign: "center" as "center",
     headerRight: headerRight ?? HeaderSearch,
     headerTintColor: isDark ? "#fff" : "#000",

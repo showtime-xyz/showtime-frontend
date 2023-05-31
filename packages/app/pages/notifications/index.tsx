@@ -15,7 +15,11 @@ function NotificationsNavigator() {
   return (
     <NotificationsStack.Navigator
       // @ts-ignore
-      screenOptions={screenOptions({ safeAreaTop, isDark })}
+      screenOptions={screenOptions({
+        safeAreaTop,
+        isDark,
+        headerCenter: "Notifications",
+      })}
     >
       <NotificationsStack.Screen
         name="notifications"

@@ -14,7 +14,11 @@ import "./carousel.css";
 import { Controller } from "./controller";
 import { CarouselProps } from "./types";
 
-function Carousel({
+const paginationClassName = {
+  dot: "dot-pagination",
+  rectangle: "rectangle-pagination",
+};
+export function Carousel({
   renderItem,
   width,
   height,
@@ -25,6 +29,9 @@ function Carousel({
   controller = false,
   controllerTw = "",
   data,
+  effect,
+  tw,
+  pagination,
 }: CarouselProps) {
   const swiperRef = useRef(null);
   const isDark = useIsDarkMode();
@@ -43,18 +50,22 @@ function Carousel({
               }
             : undefined
         }
-        pagination={{
-          horizontalClass: isDark
-            ? "showtime-pagination"
-            : "showtime-pagination",
-          clickable: true,
-        }}
+        pagination={
+          pagination
+            ? {
+                horizontalClass:
+                  paginationClassName[pagination?.variant || "dot"],
+                clickable: true,
+              }
+            : false
+        }
         modules={[Pagination, EffectFade, Autoplay]}
         style={{
           width,
           marginTop: controller ? 30 : 0,
         }}
-        effect={"fade"}
+        className={tw}
+        effect={effect}
         // @ts-ignore
         ref={swiperRef}
       >
@@ -81,5 +92,3 @@ function Carousel({
     </>
   );
 }
-
-export { Carousel };

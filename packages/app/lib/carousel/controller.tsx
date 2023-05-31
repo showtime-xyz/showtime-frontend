@@ -10,12 +10,17 @@ type ControllerProps = {
 };
 export const Controller = ({ prev, next, tw }: ControllerProps) => {
   return (
-    <View tw={["web:px-4 absolute w-full flex-row justify-between", tw]}>
+    <View
+      tw={[
+        "absolute top-1/2 z-10 w-full -translate-y-1/2 flex-row justify-between",
+        tw,
+      ]}
+    >
       <Button
-        variant="text"
-        size="regular"
+        variant="secondary"
+        size="small"
         iconOnly
-        tw="bg-white dark:bg-gray-900"
+        tw="absolute -left-4 border border-gray-200 dark:border-gray-800"
         onPress={() => {
           prev?.();
         }}
@@ -23,10 +28,10 @@ export const Controller = ({ prev, next, tw }: ControllerProps) => {
         <ChevronLeft width={24} height={24} />
       </Button>
       <Button
-        variant="text"
-        size="regular"
+        variant="secondary"
+        size="small"
         iconOnly
-        tw="bg-white dark:bg-gray-900"
+        tw="absolute -right-4 border border-gray-200 dark:border-gray-800"
         onPress={() => {
           next?.();
         }}

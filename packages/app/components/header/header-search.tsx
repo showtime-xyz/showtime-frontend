@@ -28,6 +28,9 @@ export const HeaderSearch = ({
   if (!isAuthenticated) {
     return <Button onPress={navigateToLogin}>Sign In</Button>;
   }
+  if (canGoHome) {
+    return <></>;
+  }
 
   return (
     <PressableScale
@@ -50,7 +53,7 @@ export const HeaderSearch = ({
             router.pop();
           }
         } else if (canGoHome) {
-          router.push("/");
+          router.back();
         } else {
           router.push("/search");
         }
