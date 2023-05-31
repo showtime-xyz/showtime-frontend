@@ -39,6 +39,7 @@ import {
   Shopping,
   Trash,
   Flag,
+  CreatorChannelFilled,
 } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import {
@@ -84,7 +85,6 @@ import {
 import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
-import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
 import { useChannelById } from "./hooks/use-channel-detail";
 import {
@@ -445,10 +445,26 @@ export const Messages = () => {
 
   if (!channelId) {
     return (
-      <EmptyPlaceholder
-        tw="animate-fade-in-250 flex-1"
-        title="Select a channel."
-      />
+      <View tw="animate-fade-in-250 h-full w-full flex-1 items-center justify-center">
+        <View tw="animate-fade-in-250 h-full w-full max-w-sm flex-1 items-center justify-center">
+          <CreatorChannelFilled
+            width={80}
+            height={80}
+            color={isDark ? colors.gray[800] : colors.gray[100]}
+          />
+          <View tw="h-3" />
+          <Text
+            tw="text-center text-gray-900 dark:text-white"
+            style={{ fontSize: 26 }}
+          >
+            No channel joined.
+          </Text>
+          <View tw="h-5" />
+          <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-white">
+            To join a channel, browse popular creators or collect a drop.
+          </Text>
+        </View>
+      </View>
     );
   }
 
