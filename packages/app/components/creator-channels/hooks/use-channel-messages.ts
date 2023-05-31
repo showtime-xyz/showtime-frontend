@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 import { Profile } from "app/types";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 // [
 //     {
