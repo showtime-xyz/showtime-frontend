@@ -1,5 +1,5 @@
 import {
-  InfiniteScrollList,
+  FlashList,
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 
@@ -73,7 +73,7 @@ export interface IAnimatedInfiniteScrollListWithRef
   extends AnimatedInfiniteScrollListType {
   (
     props: InfiniteScrollListProps<ChannelMessageItem> & {
-      ref?: React.Ref<typeof InfiniteScrollList>;
+      ref?: React.Ref<FlashList<any>>;
     }
   ): React.ReactElement | null;
 }

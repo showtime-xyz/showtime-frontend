@@ -47,6 +47,7 @@ import {
   InfiniteScrollListProps,
   ListRenderItem,
   CellContainer,
+  FlashList,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -258,7 +259,7 @@ const CustomCellRenderer = memo(
 CustomCellRenderer.displayName = "CustomCellRenderer";
 
 export const Messages = () => {
-  const listRef = useRef<typeof InfiniteScrollList>(null);
+  const listRef = useRef<FlashList<any>>(null);
   const navigation = useNavigation();
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
@@ -546,6 +547,7 @@ export const Messages = () => {
         </View>
         {isUserAdmin ? (
           <MessageInput
+            listRef={listRef}
             channelId={channelId}
             sendMessageCallback={sendMessageCallback}
           />
@@ -557,9 +559,11 @@ export const Messages = () => {
 };
 
 const MessageInput = ({
+  listRef,
   channelId,
   sendMessageCallback,
 }: {
+  listRef: RefObject<FlashList<any>>;
   channelId?: string;
   sendMessageCallback?: () => void;
 }) => {
@@ -598,6 +602,7 @@ const MessageInput = ({
         placeholder="Send an update..."
         onSubmit={async (text: string) => {
           if (channelId) {
+            listRef.current?.prepareForLayoutAnimationRender();
             await sendMessage.trigger({
               channelId,
               message: text,
@@ -621,7 +626,8 @@ const MessageItem = memo(
     reactions,
     channelId,
     listRef,
-  }: MessageItemProps & { listRef: RefObject<typeof InfiniteScrollList> }) => {
+  }: MessageItemProps & { listRef: RefObject<FlashList<any>> }) => {
+    const lastItemId = useRef<number | null>(null);
     const { channel_message } = item;
     const reactOnMessage = useReactOnMessage(channelId);
     const deleteMessage = useDeleteMessage(channelId);
@@ -629,6 +635,14 @@ const MessageItem = memo(
     const Alert = useAlert();
     const isDark = useIsDarkMode();
     const router = useRouter();
+
+    // reset recycling state
+    if (item.channel_message.id !== lastItemId.current) {
+      if (setShowInput) {
+        setShowInput(false);
+      }
+      lastItemId.current = item.channel_message.id;
+    }
 
     return (
       <View tw="mb-5 px-4">
@@ -655,6 +669,7 @@ const MessageItem = memo(
                   reactions={reactions}
                   reactionGroup={item.reaction_group}
                   onPress={async (id) => {
+                    listRef.current?.prepareForLayoutAnimationRender();
                     await reactOnMessage.trigger({
                       messageId: item.channel_message.id,
                       reactionId: id,
@@ -684,6 +699,7 @@ const MessageItem = memo(
                                 text: "Delete",
                                 style: "destructive",
                                 onPress: () => {
+                                  listRef.current?.prepareForLayoutAnimationRender();
                                   deleteMessage.trigger({
                                     messageId: item.channel_message.id,
                                   });
@@ -802,7 +818,7 @@ const EditMessageInput = ({
   const editMessage = useEditChannelMessage(channelId);
 
   return (
-    <View>
+    <Animated.View entering={FadeIn.springify()} exiting={FadeOut.springify()}>
       <TextInput
         autoFocus
         tw="rounded p-4"
@@ -821,7 +837,10 @@ const EditMessageInput = ({
         </Button>
         <Button
           variant="primary"
+          disabled={message === defaultValue || message === ""}
+          tw={message === defaultValue || message === "" ? "opacity-30" : ""}
           onPress={() => {
+            if (message === defaultValue || message === "") return;
             editMessage.trigger({
               messageId,
               message,
@@ -833,7 +852,7 @@ const EditMessageInput = ({
           Save
         </Button>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
