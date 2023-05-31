@@ -791,7 +791,9 @@ const MessageItem = memo(
                 {channel_message.body}
               </Text>
             )}
-            <PlatformAnimateHeight>
+            <PlatformAnimateHeight
+              initialHeight={item.reaction_group.length > 0 ? 30 : 0}
+            >
               {!showInput && item.reaction_group.length > 0 ? (
                 <AnimatedView tw="web:animate-fade-in-250 pt-1" layout={Layout}>
                   <MessageReactions
