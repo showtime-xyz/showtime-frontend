@@ -13,11 +13,15 @@ import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedKeyboard,
+  useAnimatedScrollHandler,
   useAnimatedStyle,
   KeyboardState,
+  runOnJS,
   interpolate,
   FadeOut,
   FadeIn,
+  SlideInDown,
+  SlideOutDown,
   useAnimatedReaction,
   useSharedValue,
   Layout,
@@ -40,6 +44,7 @@ import {
   Share,
   Shopping,
   Trash,
+  ChevronDown,
   Flag,
   CreatorChannelFilled,
 } from "@showtime-xyz/universal.icon";
@@ -105,6 +110,17 @@ import { HeaderProps, MessageItemProps } from "./types";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
+
+const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
+  return (
+    <Pressable
+      onPress={onPress}
+      tw="items-center justify-center rounded-full bg-black/40 p-1 dark:bg-white/40"
+    >
+      <ChevronDown height={32} width={32} color="white" />
+    </Pressable>
+  );
+};
 
 const Header = (props: HeaderProps) => {
   const router = useRouter();
@@ -250,10 +266,22 @@ export const Messages = () => {
   const share = useShare();
   const isDark = useIsDarkMode();
   const user = useUser();
+  const dimension = useWindowDimensions();
   const redirectToChannelCongrats = useRedirectToChannelCongrats();
   const isUserAdmin =
     user.user?.data.channels &&
     user.user?.data.channels[0] === Number(channelId);
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+
+  const scrollhandler = useAnimatedScrollHandler({
+    onEndDrag: (event) => {
+      if (event.contentOffset.y > dimension.height / 4) {
+        runOnJS(setShowScrollToBottom)(true);
+      } else {
+        runOnJS(setShowScrollToBottom)(false);
+      }
+    },
+  });
 
   const channelDetail = useChannelById(channelId);
   const membersCount = channelDetail.data?.member_count || 0;
@@ -540,6 +568,7 @@ export const Messages = () => {
             data={data}
             onEndReached={onLoadMore}
             inverted
+            onScroll={scrollhandler}
             drawDistance={height * 2}
             useWindowScroll={false}
             estimatedItemSize={80}
@@ -567,6 +596,21 @@ export const Messages = () => {
             channelId={channelId}
             sendMessageCallback={sendMessageCallback}
           />
+        ) : null}
+        {showScrollToBottom ? (
+          <Animated.View entering={SlideInDown} exiting={SlideOutDown}>
+            <View tw="absolute bottom-[50px] right-5">
+              <ScrollToBottomButton
+                onPress={() => {
+                  listRef.current?.scrollToOffset({
+                    offset: 0,
+                    animated: true,
+                  });
+                  setShowScrollToBottom(false);
+                }}
+              />
+            </View>
+          </Animated.View>
         ) : null}
       </View>
     </>
