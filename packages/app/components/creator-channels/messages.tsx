@@ -614,7 +614,6 @@ export const Messages = () => {
                     offset: 0,
                     animated: true,
                   });
-                  setShowScrollToBottom(false);
                 }}
               />
             </View>
