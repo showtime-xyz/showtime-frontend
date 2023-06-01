@@ -338,6 +338,7 @@ export const DropMusic = () => {
         description={getValues("description")}
         file={getValues("file")}
         contractAddress={state.edition?.contract_address}
+        dropCreated
       />
     );
   }

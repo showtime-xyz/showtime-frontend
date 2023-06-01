@@ -28,10 +28,12 @@ import { DropPreview, DropPreviewProps } from "./drop-preview";
 const BUTTON_HEIGHT = 48;
 type DropPreviewShareProps = Omit<DropPreviewProps, "onPressCTA"> & {
   contractAddress?: string;
+  dropCreated?: boolean;
 };
 
 export const DropViewShare = memo(function DropViewShare({
   contractAddress,
+  dropCreated = false,
   ...rest
 }: DropPreviewShareProps) {
   const { bottom } = useSafeAreaInsets();
@@ -58,10 +60,12 @@ export const DropViewShare = memo(function DropViewShare({
     Linking.openURL(
       getTwitterIntent({
         url: qrCodeUrl.toString(),
-        message: `Just collected "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
+        message: `Just ${dropCreated ? "dropped" : "collected"} "${
+          nft?.token_name
+        }" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
       })
     );
-  }, [nft?.token_name, qrCodeUrl]);
+  }, [dropCreated, nft?.token_name, qrCodeUrl]);
 
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(qrCodeUrl.toString());
