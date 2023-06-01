@@ -431,7 +431,7 @@ export const Messages = () => {
                 color={isDark ? colors.gray[200] : colors.gray[600]}
               />
             </View>
-            <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-500">
+            <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-400">
               This channel is not visible to your followers until you post an
               update.
             </Text>
