@@ -115,6 +115,7 @@ function HeaderTabView<T extends Route>({
     />
   );
 }
+
 type TabLoadingProps = {
   index: number;
   style?: StyleProp<ViewStyle>;

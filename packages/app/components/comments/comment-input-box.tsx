@@ -48,7 +48,7 @@ export const CommentInputBox = forwardRef<
       const _newComment = async () => {
         try {
           await onboardingPromise();
-          await submit(text, selectedComment?.comment_id);
+          await submit(text, selectedComment?.id);
           commentInputRef?.current?.reset();
         } catch (error) {
           Alert.alert("Error", "Cannot add comment.", [
@@ -69,13 +69,7 @@ export const CommentInputBox = forwardRef<
 
       setSelectedComment(null);
     },
-    [
-      onboardingPromise,
-      submit,
-      selectedComment?.comment_id,
-      commentInputRef,
-      Alert,
-    ]
+    [onboardingPromise, submit, selectedComment?.id, commentInputRef, Alert]
   );
 
   const handleOnClearPress = useCallback(() => {

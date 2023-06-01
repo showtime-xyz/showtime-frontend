@@ -17,8 +17,6 @@ interface CommentButtonProps {
 export function CommentButton({ nft, vertical, ...rest }: CommentButtonProps) {
   const router = useRouter();
   const { iconColor } = useSocialColor();
-  //const { commentsCount } = useComments(nft?.nft_id ?? -Infinity);
-
   const handleOnPress = useCallback(() => {
     const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/comments`;
 

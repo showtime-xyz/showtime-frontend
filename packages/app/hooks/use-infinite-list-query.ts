@@ -50,6 +50,7 @@ export const useInfiniteListQuerySWR = <T>(
     (isLoadingInitialData ||
       (size > 0 && data && typeof data[size - 1] === "undefined")) ??
     false;
+
   const isEmpty = (data?.[0] as any)?.length === 0;
 
   const isReachingEnd = !PAGE_SIZE

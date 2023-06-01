@@ -69,7 +69,8 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           fullScreenGestureEnabled: true,
-          animationDuration: 400,
+          animationDuration: Platform.OS === "ios" ? 400 : 350,
+          animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
         }}
       >
         <Stack.Screen
@@ -81,7 +82,7 @@ export function RootStackNavigator() {
           name="search"
           component={SearchScreen}
           options={{
-            animation: "fade",
+            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
             animationDuration: 200,
           }}
         />
