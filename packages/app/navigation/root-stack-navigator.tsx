@@ -62,6 +62,7 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           fullScreenGestureEnabled: true,
+          animationDuration: Platform.OS === "ios" ? 400 : 350,
           animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
         }}
       >
