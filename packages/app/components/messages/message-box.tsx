@@ -144,11 +144,10 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
           iconOnly={true}
           disabled={disable}
           onPress={handleSubmit}
+          tw={disable ? "opacity-60" : ""}
           style={{
-            opacity: 1,
             width: 42,
             height: 42,
-            backgroundColor: colors.gray[100],
           }}
         >
           {submitting ? (
