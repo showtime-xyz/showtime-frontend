@@ -304,6 +304,12 @@ export const Raffle = (props?: RaffleModalParams) => {
                   <Text tw="text-2xl font-bold text-black dark:text-white">
                     We have a winner 🎉
                   </Text>
+                  <View tw="h-4" />
+                  <Text tw="text-center text-xs text-gray-400 dark:text-gray-500">
+                    Note: Showtime won't alert the winner or distribute the
+                    prize automatically. You maintain complete control of the
+                    raffle process.
+                  </Text>
                 </View>
               </View>
               <View tw="mx-6">
