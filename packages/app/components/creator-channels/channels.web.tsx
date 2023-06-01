@@ -28,6 +28,7 @@ import {
   useOwnedChannelsList,
   useSuggestedChannelsList,
 } from "./hooks/use-channels-list";
+import { useJoinChannel } from "./hooks/use-join-channel";
 import { CreatorChannelsList as CreatorChannelsListMobile } from "./list";
 import { Messages } from "./messages";
 import {
@@ -167,6 +168,8 @@ CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
 const CreatorChannelsListCreator = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
+    const joinChannel = useJoinChannel();
+
     const memberCount = new Intl.NumberFormat().format(item.member_count);
     return (
       <View tw="flex-1 px-4 py-3">
@@ -196,11 +199,17 @@ const CreatorChannelsListCreator = memo(
                 </View>
               </View>
               <View tw="items-end justify-end">
-                <View tw="rounded-full bg-black p-1 dark:bg-white">
+                <Pressable
+                  tw="rounded-full bg-black p-1 dark:bg-white"
+                  onPress={() => {
+                    joinChannel.trigger({ channelId: item.id });
+                  }}
+                  disabled={joinChannel.isMutating}
+                >
                   <Text tw="px-2.5 py-0.5 text-xs font-bold text-white dark:text-black">
-                    Join
+                    {joinChannel.isMutating ? "Joining..." : "Join"}
                   </Text>
-                </View>
+                </Pressable>
               </View>
             </View>
           </View>

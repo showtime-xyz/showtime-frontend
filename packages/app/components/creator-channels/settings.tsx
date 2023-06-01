@@ -5,6 +5,7 @@ import { Alert } from "@showtime-xyz/universal.alert";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Divider } from "@showtime-xyz/universal.divider";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
@@ -13,17 +14,24 @@ import { View } from "@showtime-xyz/universal.view";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { createParam } from "app/navigation/use-param";
 
+import { useLeaveChannel } from "./hooks/use-leave-channel";
+
 type Query = {
-  channelId: string;
+  channelId: number;
 };
 const { useParam } = createParam<Query>();
 
 export const ChannelsSettings = () => {
-  const [channelId] = useParam("channelId");
+  const [channelId] = useParam("channelId", {
+    parse: (value) => Number(value),
+    initial: undefined,
+  });
   const [showSettings, setShowSettings] = useState(false);
   const [checked, setChecked] = useState(false);
   const insets = useSafeAreaInsets();
   const bototm = usePlatformBottomHeight();
+  const leaveChannel = useLeaveChannel();
+  const router = useRouter();
   return (
     <BottomSheetModalProvider>
       <Divider />
@@ -57,14 +65,22 @@ export const ChannelsSettings = () => {
                       text: "Leave",
                       style: "destructive",
                       onPress: async () => {
-                        console.log("Leave Channel");
+                        if (typeof channelId !== "undefined") {
+                          await leaveChannel.trigger({ channelId });
+                          router.pop();
+                          // If we're on native we need to pop twice to get back of the channel message screen
+                          if (Platform.OS !== "web") {
+                            router.pop();
+                          }
+                        }
                       },
                     },
                   ]
                 );
               }}
+              disabled={leaveChannel.isMutating}
             >
-              Leave Channel
+              {leaveChannel.isMutating ? "Leaving..." : "Leave channel"}
             </Button>
           </View>
         </View>
