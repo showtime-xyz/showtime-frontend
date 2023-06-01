@@ -402,6 +402,7 @@ export const Messages = () => {
     (v) => {
       if (v === KeyboardState.CLOSED) {
         keyboardOpenHeight.value = 0;
+        lastTranslateY.value = 0;
       } else if (v === KeyboardState.OPEN) {
         keyboardOpenHeight.value = keyboard.height.value;
       }
@@ -591,7 +592,6 @@ export const Messages = () => {
             data={data}
             onEndReached={onLoadMore}
             inverted
-            keyboardShouldPersistTaps="handled"
             drawDistance={height * 2}
             useWindowScroll={false}
             estimatedItemSize={80}
@@ -808,7 +808,8 @@ const MessageItem = memo(
                                 textInputBottomY.value =
                                   Dimensions.get("screen").height -
                                   textInputPageY -
-                                  96;
+                                  // Est height of bottom fixed input
+                                  128;
                                 setShowInput(true);
                               }
                             );
@@ -864,7 +865,10 @@ const MessageItem = memo(
             <View ref={viewRef}>
               {showInput ? (
                 <EditMessageInput
-                  hideInput={() => setShowInput(false)}
+                  hideInput={() => {
+                    textInputBottomY.value = 0;
+                    setShowInput(false);
+                  }}
                   channelId={channelId}
                   messageId={channel_message.id}
                   defaultValue={channel_message.body}
