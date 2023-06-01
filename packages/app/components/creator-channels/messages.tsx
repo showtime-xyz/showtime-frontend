@@ -157,7 +157,6 @@ const Header = (props: HeaderProps) => {
             size={34}
             alt="Channels Avatar"
           />
-          <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60 " />
         </View>
       </View>
       <View tw="flex-1" style={{ rowGap: 8 }}>
