@@ -19,6 +19,7 @@ export const AnimatedInfiniteScrollList =
 
 export const AnimatedInfiniteScrollListWithRef =
   AnimatedInfiniteScrollList as IAnimatedInfiniteScrollListWithRef;
+
 export const CustomCellRenderer = memo(
   forwardRef(function (
     props: { index: number; style: { [key: string]: object } },

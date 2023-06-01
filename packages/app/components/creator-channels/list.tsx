@@ -2,6 +2,11 @@ import { useCallback, memo, useRef, useMemo } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { RectButton } from "react-native-gesture-handler";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  SequencedTransition,
+} from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -16,7 +21,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useScrollToTop } from "app/lib/react-navigation/native";
+import {
+  useFocusEffect,
+  useScrollToTop,
+} from "app/lib/react-navigation/native";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import {
@@ -39,6 +47,7 @@ const keyExtractor = (item: CreatorChannelsListItemProps) => {
 };
 
 const PlatformPressable = Platform.OS === "web" ? Pressable : RectButton;
+const AnimatedView = Animated.createAnimatedComponent(View);
 
 const CreatorChannelsHeader = memo(
   ({
@@ -51,7 +60,13 @@ const CreatorChannelsHeader = memo(
     tw?: string;
   }) => {
     return (
-      <View tw="px-4 py-4">
+      <AnimatedView
+        key={title}
+        tw="px-4 py-4"
+        layout={SequencedTransition}
+        entering={FadeIn}
+        exiting={FadeOut}
+      >
         <Text
           tw={[
             "web:text-center text-2xl font-extrabold text-gray-900 dark:text-white",
@@ -67,7 +82,7 @@ const CreatorChannelsHeader = memo(
             </Text>
           </View>
         ) : null}
-      </View>
+      </AnimatedView>
     );
   }
 );
@@ -257,6 +272,7 @@ export const CreatorChannelsList = memo(
     const {
       data: suggestedChannelsData,
       refresh: refreshSuggestedChannels,
+      isLoading: isLoadingSuggestedChannels,
       isRefreshing: isRefreshingSuggestedChannels,
     } = useSuggestedChannelsList();
 
@@ -269,7 +285,7 @@ export const CreatorChannelsList = memo(
       if (joinedChannelsData.length < 11) {
         return [
           // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
-          ...(joinedChannelsData.length > 0
+          ...(joinedChannelsData.length > 0 || ownedChannelsData.length > 0
             ? [
                 channelsSection,
                 ...ownedChannelsData.map((suggestedChannel) => ({
@@ -318,7 +334,11 @@ export const CreatorChannelsList = memo(
     }, []);
 
     const ListFooterComponent = useCallback(() => {
-      if (isLoadingOwnChannels || isLoadingJoinedChannels) {
+      if (
+        isLoadingOwnChannels ||
+        isLoadingJoinedChannels ||
+        isLoadingSuggestedChannels
+      ) {
         return <CCSkeleton />;
       }
       if (
@@ -337,6 +357,7 @@ export const CreatorChannelsList = memo(
       isLoadingOwnChannels,
       isLoadingJoinedChannels,
       isLoadingMoreJoinedChannels,
+      isLoadingSuggestedChannels,
     ]);
 
     const refreshPage = useCallback(async () => {
@@ -400,7 +421,7 @@ export const CreatorChannelsList = memo(
         refreshing={isRefreshing}
         onRefresh={refresh}
         ListFooterComponent={ListFooterComponent}
-        estimatedItemSize={110}
+        estimatedItemSize={80}
       />
     );
   }
