@@ -1,13 +1,16 @@
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
+import { Platform } from "react-native";
+
+import { View } from "@showtime-xyz/universal.view";
 
 import { MessageReactionUserListModal } from "app/components/creator-channels";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-export const CreatorChannelsMessageReactionsScreen = withModalScreen(
-  MessageReactionUserListModal,
-  {
-    title: "Reactions",
-    matchingPathname: "/channels/[channelId]/messages/[messageId]/reactions",
-    matchingQueryParam: "channelsReactionModal",
-    tw: "min-h-[300px]",
-  }
-);
+export const CreatorChannelsMessageReactionsScreen = () => {
+  const headerHeight = useHeaderHeight();
+  return (
+    <>
+      {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
+      <MessageReactionUserListModal />
+    </>
+  );
+};

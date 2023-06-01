@@ -147,6 +147,10 @@ export function RootStackNavigator() {
           options={{ headerTitle: "Update Spotify Link" }}
           component={DropUpdateScreen}
         />
+        <Stack.Screen
+          name="channelsMessageReactions"
+          component={CreatorChannelsMessageReactionsScreen}
+        />
       </Stack.Group>
 
       {/* Modals */}
@@ -215,10 +219,6 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="channelsCongrats"
           component={CreatorChannelsCongratsScreen}
-        />
-        <Stack.Screen
-          name="channelsMessageReactions"
-          component={CreatorChannelsMessageReactionsScreen}
         />
       </Stack.Group>
       <Stack.Group
