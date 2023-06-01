@@ -331,7 +331,7 @@ export const Messages = () => {
     fetchMore();
   };
 
-  /*
+  /* HIRBOD: PLEASE KEEP FOR NOW
   const {
     configureAnimationOnNextFrame,
     CellRendererComponent,
