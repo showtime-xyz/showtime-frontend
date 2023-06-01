@@ -6,23 +6,14 @@ import {
   useState,
   useMemo,
   RefObject,
-  Ref,
-  forwardRef,
-  Component,
 } from "react";
-import {
-  Platform,
-  useWindowDimensions,
-  View as RNView,
-  Dimensions,
-} from "react-native";
+import { Platform, useWindowDimensions, View as RNView } from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle,
-  Extrapolate,
   KeyboardState,
   interpolate,
   FadeOut,
@@ -54,10 +45,7 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import {
-  InfiniteScrollList,
-  InfiniteScrollListProps,
   ListRenderItem,
-  CellContainer,
   FlashList,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -99,6 +87,10 @@ import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { MessageReactions } from "../reaction/message-reactions";
+import {
+  AnimatedInfiniteScrollListWithRef,
+  CustomCellRenderer,
+} from "./animated-cell-container";
 import { useChannelById } from "./hooks/use-channel-detail";
 import {
   ChannelMessageItem,
@@ -108,22 +100,10 @@ import { useDeleteMessage } from "./hooks/use-delete-message";
 import { useEditChannelMessage } from "./hooks/use-edit-channel-message";
 import { useReactOnMessage } from "./hooks/use-react-on-message";
 import { useSendChannelMessage } from "./hooks/use-send-channel-message";
-import {
-  HeaderProps,
-  IAnimatedInfiniteScrollListWithRef,
-  MessageItemProps,
-} from "./types";
+import { HeaderProps, MessageItemProps } from "./types";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
-
-export const AnimatedInfiniteScrollList =
-  Animated.createAnimatedComponent<InfiniteScrollListProps<ChannelMessageItem>>(
-    InfiniteScrollList
-  );
-
-const AnimatedInfiniteScrollListWithRef =
-  AnimatedInfiniteScrollList as IAnimatedInfiniteScrollListWithRef;
 
 const Header = (props: HeaderProps) => {
   const router = useRouter();
@@ -257,30 +237,8 @@ const benefits = [
 const keyExtractor = (item: ChannelMessageItem) =>
   item.channel_message.id.toString();
 
-const ReanimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
-
-const CustomCellRenderer = memo(
-  forwardRef(function (
-    props: { index: number; style: { [key: string]: object } },
-    ref: Ref<Component<unknown>>
-  ) {
-    return (
-      <ReanimatedCellContainer
-        {...props}
-        ref={ref}
-        layout={Layout.springify()}
-        entering={FadeIn.springify()}
-        exiting={FadeOut.springify()}
-      />
-    );
-  })
-);
-
-CustomCellRenderer.displayName = "CustomCellRenderer";
-
 export const Messages = () => {
   const listRef = useRef<FlashList<any>>(null);
-  const navigation = useNavigation();
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();

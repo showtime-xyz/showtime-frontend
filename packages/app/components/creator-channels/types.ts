@@ -3,9 +3,9 @@ import {
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 
+import { AnimatedInfiniteScrollList } from "./animated-cell-container";
 import { ChannelMessageItem } from "./hooks/use-channel-messages";
 import { ChannelReactionResponse } from "./hooks/use-channel-reactions";
-import { AnimatedInfiniteScrollList } from "./messages";
 
 export type ChannelLatestMessage = {
   id: number;

@@ -19,6 +19,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
+import { CustomCellRenderer } from "./animated-cell-container";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,
@@ -246,7 +247,11 @@ export const CreatorChannelsList = memo(
     } = useJoinedChannelsList();
 
     // suggested channels
-    const { data: suggestedChannelsData } = useSuggestedChannelsList();
+    const {
+      data: suggestedChannelsData,
+      refresh: refreshSuggestedChannels,
+      isRefreshing: isRefreshingSuggestedChannels,
+    } = useSuggestedChannelsList();
 
     const listRef = useRef<any>();
     useScrollToTop(listRef);
@@ -331,8 +336,12 @@ export const CreatorChannelsList = memo(
     ]);
 
     const refreshPage = useCallback(async () => {
-      await Promise.all([refreshOwnedChannels(), refresh()]);
-    }, [refresh, refreshOwnedChannels]);
+      await Promise.all([
+        refresh(),
+        refreshOwnedChannels(),
+        refreshSuggestedChannels(),
+      ]);
+    }, [refresh, refreshOwnedChannels, refreshSuggestedChannels]);
 
     return (
       <InfiniteScrollList
@@ -365,7 +374,11 @@ export const CreatorChannelsList = memo(
         // Todo: unity refresh control same as tab view
         refreshControl={
           <RefreshControl
-            refreshing={isRefreshing || isRefreshingOwnedChannels}
+            refreshing={
+              isRefreshing ||
+              isRefreshingOwnedChannels ||
+              isRefreshingSuggestedChannels
+            }
             onRefresh={refreshPage}
             progressViewOffset={headerHeight}
             tintColor={isDark ? colors.gray[200] : colors.gray[700]}
@@ -375,6 +388,7 @@ export const CreatorChannelsList = memo(
             }
           />
         }
+        CellRendererComponent={CustomCellRenderer}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         onEndReached={fetchMore}
