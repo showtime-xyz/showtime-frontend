@@ -9,6 +9,7 @@ import {
 } from "react";
 import { Platform, useWindowDimensions, View as RNView } from "react-native";
 
+import axios, { AxiosError } from "axios";
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
@@ -282,7 +283,6 @@ export const Messages = () => {
       }
     },
     onMomentumEnd: (event) => {
-      console.log("effefe fe", event.contentOffset.y, dimension.height);
       if (event.contentOffset.y > dimension.height / 4) {
         runOnJS(setShowScrollToBottom)(true);
       } else {
@@ -318,7 +318,7 @@ export const Messages = () => {
       );
     }
   };
-  const { data, isLoading, fetchMore, isLoadingMore } =
+  const { data, isLoading, fetchMore, isLoadingMore, error } =
     useChannelMessages(channelId);
   const keyboard =
     Platform.OS !== "web"
@@ -342,6 +342,14 @@ export const Messages = () => {
     animationDuration: 1000,
   });
   */
+
+  useEffect(() => {
+    if (error && axios.isAxiosError(error)) {
+      if (error?.response?.status === 404 || error?.response?.status === 401) {
+        router.push("/channels");
+      }
+    }
+  }, [error, router]);
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
@@ -433,7 +441,7 @@ export const Messages = () => {
                 duration: 600,
               }}
             >
-              {showIntro && (
+              {isUserAdmin && showIntro && (
                 <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 px-4 pb-6 pt-4 dark:bg-gray-900">
                   <View tw="px-6 pt-1">
                     <Text tw="text-sm font-bold text-black dark:text-white">
@@ -458,25 +466,27 @@ export const Messages = () => {
             </MotiView>
           </AnimatePresence>
         </View>
-        <View tw="absolute bottom-4 mt-auto w-full items-center justify-center">
-          <View tw="my-3 max-w-[300px] flex-row items-start justify-start">
-            <View tw="absolute -top-1.5">
-              <EyeOffV2
-                width={18}
-                height={18}
-                color={isDark ? colors.gray[200] : colors.gray[600]}
-              />
+        {isUserAdmin && (
+          <View tw="absolute bottom-4 mt-auto w-full items-center justify-center">
+            <View tw="my-3 max-w-[300px] flex-row items-start justify-start">
+              <View tw="absolute -top-1.5">
+                <EyeOffV2
+                  width={18}
+                  height={18}
+                  color={isDark ? colors.gray[200] : colors.gray[600]}
+                />
+              </View>
+              <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-400">
+                This channel is not visible to your followers until you post an
+                update.
+              </Text>
             </View>
-            <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-400">
-              This channel is not visible to your followers until you post an
-              update.
-            </Text>
+            <Text tw="pt-4 text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
           </View>
-          <Text tw="pt-4 text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
-        </View>
+        )}
       </View>
     );
-  }, [isDark, membersCount, showIntro, windowDimension.height]);
+  }, [isDark, isUserAdmin, membersCount, showIntro, windowDimension.height]);
 
   const extraData = useMemo(
     () => ({ reactions: channelDetail.data?.channel_reactions, channelId }),
