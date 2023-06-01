@@ -69,6 +69,7 @@ import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useNavigation } from "app/lib/react-navigation/native";
+import { Link } from "app/navigation/link";
 import { createParam } from "app/navigation/use-param";
 import {
   formatDateRelativeWithIntl,
@@ -661,15 +662,29 @@ const MessageItem = memo(
     return (
       <View tw="mb-5 px-4" ref={viewRef}>
         <View tw="flex-row" style={{ columnGap: 8 }}>
-          <View tw="h-6 w-6">
-            <Avatar size={24} url={channel_message.sent_by.profile.img_url} />
-            <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
-          </View>
+          <Link
+            href={`/@${
+              item.channel_message.sent_by.profile.username ??
+              item.channel_message.sent_by.profile.wallet_addresses
+            }`}
+          >
+            <View tw="h-6 w-6">
+              <Avatar size={24} url={channel_message.sent_by.profile.img_url} />
+              <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
+            </View>
+          </Link>
           <View tw="flex-1" style={{ rowGap: 8 }}>
             <View tw="flex-row items-center" style={{ columnGap: 8 }}>
-              <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
-                {channel_message.sent_by.profile.name}
-              </Text>
+              <Link
+                href={`/@${
+                  item.channel_message.sent_by.profile.username ??
+                  item.channel_message.sent_by.profile.wallet_addresses
+                }`}
+              >
+                <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
+                  {channel_message.sent_by.profile.name}
+                </Text>
+              </Link>
 
               <Text tw="text-xs text-gray-700 dark:text-gray-200">
                 {formatDateRelativeWithIntl(channel_message.updated_at)}
