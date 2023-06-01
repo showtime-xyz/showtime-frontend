@@ -11,7 +11,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { formatToUSNumber } from "app/utilities";
 
 import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
-import { useChannelReactions } from "../creator-channels/hooks/use-channel-reactions";
+import { ChannelReactionResponse } from "../creator-channels/hooks/use-channel-reactions";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -19,13 +19,14 @@ export const MessageReactions = ({
   channelId,
   messageId,
   reactionGroup,
+  channelReactions,
 }: {
   channelId: string;
   reactionGroup: ReactionGroup[];
   messageId: number;
+  channelReactions: ChannelReactionResponse;
 }) => {
   const router = useRouter();
-  const channelReactions = useChannelReactions(channelId);
 
   const handleReactionPress = useCallback(
     (reactionId: number) => {
@@ -57,7 +58,7 @@ export const MessageReactions = ({
 
   return (
     <View tw="w-full flex-1 flex-row items-center">
-      {channelReactions.data?.map((item, index) => {
+      {channelReactions.map((item, index) => {
         const userReaction = reactionGroup.find(
           (r) => r.reaction_id === item.id
         );

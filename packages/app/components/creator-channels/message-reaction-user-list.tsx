@@ -12,9 +12,9 @@ import { View } from "@showtime-xyz/universal.view";
 import { createParam } from "app/navigation/use-param";
 
 import { UserList } from "../user-list";
+import { useChannelById } from "./hooks/use-channel-detail";
 import { useChannelMessages } from "./hooks/use-channel-messages";
 import { ChannelMessageItem } from "./hooks/use-channel-messages";
-import { useChannelReactions } from "./hooks/use-channel-reactions";
 import { useReactionsUserList } from "./use-reactions-user-list";
 
 type Query = {
@@ -30,7 +30,7 @@ export const MessageReactionUserListModal = () => {
   const [messageId] = useParam("messageId");
   const [index, setIndex] = useState(0);
   const channelMessages = useChannelMessages(channelId);
-  const channelReactions = useChannelReactions(channelId);
+  const channelDetails = useChannelById(channelId);
 
   const message = useMemo(() => {
     let msg: ChannelMessageItem | null = null;
@@ -45,7 +45,7 @@ export const MessageReactionUserListModal = () => {
   const routes = useMemo(() => {
     if (!message) return [];
     return (message as ChannelMessageItem).reaction_group.map((r, index) => {
-      const reaction = channelReactions.data?.find(
+      const reaction = channelDetails.data?.channel_reactions?.find(
         (d) => d.id === r.reaction_id
       );
       return {
@@ -54,7 +54,7 @@ export const MessageReactionUserListModal = () => {
         key: r.reaction_id.toString(),
       };
     });
-  }, [channelReactions.data, message]);
+  }, [channelDetails.data, message]);
 
   useEffect(() => {
     if (!routes || !selectedReactionId) return;

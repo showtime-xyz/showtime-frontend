@@ -849,6 +849,7 @@ const MessageItem = memo(
                   <MessageReactions
                     reactionGroup={item.reaction_group}
                     channelId={channelId}
+                    channelReactions={reactions}
                     messageId={channel_message.id}
                   />
                 </AnimatedView>
