@@ -281,6 +281,14 @@ export const Messages = () => {
         runOnJS(setShowScrollToBottom)(false);
       }
     },
+    onMomentumEnd: (event) => {
+      console.log("effefe fe", event.contentOffset.y, dimension.height);
+      if (event.contentOffset.y > dimension.height / 4) {
+        runOnJS(setShowScrollToBottom)(true);
+      } else {
+        runOnJS(setShowScrollToBottom)(false);
+      }
+    },
   });
 
   const channelDetail = useChannelById(channelId);
@@ -599,7 +607,7 @@ export const Messages = () => {
         ) : null}
         {showScrollToBottom ? (
           <Animated.View entering={SlideInDown} exiting={SlideOutDown}>
-            <View tw="absolute bottom-[50px] right-5">
+            <View tw="absolute bottom-[80px] right-5">
               <ScrollToBottomButton
                 onPress={() => {
                   listRef.current?.scrollToOffset({
