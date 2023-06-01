@@ -191,13 +191,16 @@ const Header = (props: HeaderProps) => {
             color={isDark ? colors.gray["100"] : colors.gray[800]}
           />
         </Pressable>
-        <Pressable onPress={props.onPressSettings} tw="p-2 md:hidden">
-          <Settings
-            height={20}
-            width={20}
-            color={isDark ? colors.gray["100"] : colors.gray[800]}
-          />
-        </Pressable>
+        {!props.isCurrentUserOwner ? (
+          <Pressable onPress={props.onPressSettings} tw="p-2 md:hidden">
+            <Settings
+              height={20}
+              width={20}
+              color={isDark ? colors.gray["100"] : colors.gray[800]}
+            />
+          </Pressable>
+        ) : null}
+
         <Pressable onPress={props.onPressShare} tw="hidden md:flex">
           <Share
             height={24}
@@ -205,13 +208,15 @@ const Header = (props: HeaderProps) => {
             color={isDark ? colors.gray["100"] : colors.gray[800]}
           />
         </Pressable>
-        <Pressable onPress={props.onPressSettings} tw="ml-4 hidden md:flex">
-          <MoreHorizontal
-            height={24}
-            width={24}
-            color={isDark ? colors.gray["100"] : colors.gray[800]}
-          />
-        </Pressable>
+        {!props.isCurrentUserOwner ? (
+          <Pressable onPress={props.onPressSettings} tw="ml-4 hidden md:flex">
+            <MoreHorizontal
+              height={24}
+              width={24}
+              color={isDark ? colors.gray["100"] : colors.gray[800]}
+            />
+          </Pressable>
+        ) : null}
       </View>
     </View>
   );
@@ -303,7 +308,8 @@ export const Messages = () => {
   const keyboard =
     // eslint-disable-next-line react-hooks/rules-of-hooks
     Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
-
+  const isCurrentUserOwner =
+    channelDetail.data?.owner.profile_id === user.user?.data.profile.profile_id;
   const onLoadMore = async () => {
     fetchMore();
   };
@@ -515,6 +521,7 @@ export const Messages = () => {
               { shallow: true }
             );
           }}
+          isCurrentUserOwner={isCurrentUserOwner}
           onPressShare={shareLink}
           members={membersCount}
           channelId={channelId}

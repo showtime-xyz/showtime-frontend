@@ -36,6 +36,7 @@ export type HeaderProps = {
   picture?: string;
   onPressSettings: () => void;
   onPressShare: () => void;
+  isCurrentUserOwner: boolean;
 };
 
 export type CreatorChannelsListProps = {
