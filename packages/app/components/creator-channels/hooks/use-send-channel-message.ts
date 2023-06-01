@@ -6,6 +6,7 @@ import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 
 import { useChannelMessages } from "./use-channel-messages";
+import { useOwnedChannelsList } from "./use-channels-list";
 
 async function postMessage(
   url: string,
@@ -26,6 +27,7 @@ export const useSendChannelMessage = (channelId?: string) => {
     postMessage
   );
   const channelMessages = useChannelMessages(channelId);
+  const joinedChannelsList = useOwnedChannelsList();
 
   const user = useUser();
   const handleSubmit = async ({
@@ -99,6 +101,7 @@ export const useSendChannelMessage = (channelId?: string) => {
       Logger.error(e);
     } finally {
       channelMessages.mutate();
+      joinedChannelsList.refresh();
     }
 
     callback?.();
