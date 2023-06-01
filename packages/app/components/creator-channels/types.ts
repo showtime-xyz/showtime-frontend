@@ -73,7 +73,7 @@ export type AnimatedInfiniteScrollListType = typeof AnimatedInfiniteScrollList;
 export interface IAnimatedInfiniteScrollListWithRef
   extends AnimatedInfiniteScrollListType {
   (
-    props: InfiniteScrollListProps<ChannelMessageItem> & {
+    props: InfiniteScrollListProps<any> & {
       ref?: React.Ref<FlashList<any>>;
     }
   ): React.ReactElement | null;

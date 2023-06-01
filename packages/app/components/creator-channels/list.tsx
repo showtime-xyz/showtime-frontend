@@ -4,7 +4,7 @@ import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -19,7 +19,10 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
-import { CustomCellRenderer } from "./animated-cell-container";
+import {
+  AnimatedInfiniteScrollListWithRef,
+  CustomCellRenderer,
+} from "./animated-cell-container";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,
@@ -223,6 +226,10 @@ const suggestedChannelsSection = {
 
 export const CreatorChannelsList = memo(
   ({ web_height = undefined }: { web_height?: number }) => {
+    const listRef = useRef<FlashList<any>>(null);
+    //@ts-expect-error still no support for FlashList as type
+    useScrollToTop(listRef);
+
     const isDark = useIsDarkMode();
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
@@ -252,9 +259,6 @@ export const CreatorChannelsList = memo(
       refresh: refreshSuggestedChannels,
       isRefreshing: isRefreshingSuggestedChannels,
     } = useSuggestedChannelsList();
-
-    const listRef = useRef<any>();
-    useScrollToTop(listRef);
 
     // since we're quering two different endpoints, and based on the amount of data from the first endpoint
     // we have to transform our data a bit and decide if we build a section list or a single FlashList
@@ -344,7 +348,8 @@ export const CreatorChannelsList = memo(
     }, [refresh, refreshOwnedChannels, refreshSuggestedChannels]);
 
     return (
-      <InfiniteScrollList
+      <AnimatedInfiniteScrollListWithRef
+        ref={listRef}
         useWindowScroll={false}
         data={transformedData}
         getItemType={(item) => {
@@ -395,7 +400,6 @@ export const CreatorChannelsList = memo(
         refreshing={isRefreshing}
         onRefresh={refresh}
         ListFooterComponent={ListFooterComponent}
-        ref={listRef}
         estimatedItemSize={110}
       />
     );
