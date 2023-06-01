@@ -9,17 +9,26 @@ import {
   Ref,
   forwardRef,
   Component,
-  Fragment,
 } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import {
+  Platform,
+  useWindowDimensions,
+  View as RNView,
+  Dimensions,
+} from "react-native";
 
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedKeyboard,
   useAnimatedStyle,
+  Extrapolate,
+  KeyboardState,
+  interpolate,
   FadeOut,
   FadeIn,
+  useAnimatedReaction,
+  useSharedValue,
   Layout,
 } from "react-native-reanimated";
 
@@ -289,8 +298,18 @@ export const Messages = () => {
 
   const channelDetail = useChannelById(channelId);
   const membersCount = channelDetail.data?.member_count || 0;
+  const textInputBottomY = useSharedValue(0);
+  const lastTranslateY = useSharedValue(0);
 
   useIntroducingCreatorChannels();
+
+  useEffect(() => {
+    AvoidSoftInput.setEnabled(false);
+
+    return () => {
+      AvoidSoftInput.setEnabled(true);
+    };
+  }, []);
 
   const shareLink = async () => {
     const result = await share({
@@ -306,8 +325,10 @@ export const Messages = () => {
   const { data, isLoading, fetchMore, isLoadingMore } =
     useChannelMessages(channelId);
   const keyboard =
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
+    Platform.OS !== "web"
+      ? // eslint-disable-next-line react-hooks/rules-of-hooks
+        useAnimatedKeyboard()
+      : { height: { value: 0 }, state: {} };
   const isCurrentUserOwner =
     channelDetail.data?.owner.profile_id === user.user?.data.profile.profile_id;
   const onLoadMore = async () => {
@@ -334,21 +355,58 @@ export const Messages = () => {
           reactions={extraData.reactions}
           channelId={extraData.channelId}
           listRef={listRef}
+          textInputBottomY={textInputBottomY}
         />
       );
     },
-    []
+    [textInputBottomY]
   );
+  const keyboardOpenHeight = useSharedValue(0);
 
   const style = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: -keyboard.height.value,
-        },
-      ],
-    };
+    // Keyboard closing
+    if (keyboardOpenHeight.value) {
+      const translateY = interpolate(
+        keyboard.height.value,
+        [keyboardOpenHeight.value, 0],
+        [lastTranslateY.value, 0]
+      );
+      return {
+        transform: [
+          {
+            translateY,
+          },
+        ],
+      };
+    } else {
+      lastTranslateY.value =
+        // Do not translate if the text input is below the keyboard
+        textInputBottomY.value > keyboard.height.value
+          ? 0
+          : -(keyboard.height.value - textInputBottomY.value);
+      return {
+        transform: [
+          {
+            translateY: lastTranslateY.value,
+          },
+        ],
+      };
+    }
   }, [keyboard]);
+
+  useAnimatedReaction(
+    () => {
+      // @ts-ignore
+      return keyboard.state.value;
+    },
+    (v) => {
+      if (v === KeyboardState.CLOSED) {
+        keyboardOpenHeight.value = 0;
+      } else if (v === KeyboardState.OPEN) {
+        keyboardOpenHeight.value = keyboard.height.value;
+      }
+    }
+  );
 
   const listEmptyComponent = useCallback(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
@@ -533,6 +591,7 @@ export const Messages = () => {
             data={data}
             onEndReached={onLoadMore}
             inverted
+            keyboardShouldPersistTaps="handled"
             drawDistance={height * 2}
             useWindowScroll={false}
             estimatedItemSize={80}
@@ -582,13 +641,6 @@ const MessageInput = ({
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
   const inputRef = useRef<any>(null);
-  useEffect(() => {
-    AvoidSoftInput.setEnabled(false);
-
-    return () => {
-      AvoidSoftInput.setEnabled(true);
-    };
-  }, []);
 
   const bottom = Platform.select({ web: bottomHeight, default: 16 });
 
@@ -633,8 +685,12 @@ const MessageItem = memo(
     item,
     reactions,
     channelId,
+    textInputBottomY,
     listRef,
-  }: MessageItemProps & { listRef: RefObject<FlashList<any>> }) => {
+  }: MessageItemProps & {
+    listRef: RefObject<FlashList<any>>;
+    textInputBottomY: Animated.SharedValue<number>;
+  }) => {
     const lastItemId = useRef<number | null>(null);
     const { channel_message } = item;
     const reactOnMessage = useReactOnMessage(channelId);
@@ -642,7 +698,9 @@ const MessageItem = memo(
     const [showInput, setShowInput] = useState(false);
     const Alert = useAlert();
     const isDark = useIsDarkMode();
+    const user = useUser();
     const router = useRouter();
+    const viewRef = useRef<RNView>(null);
 
     // reset recycling state
     if (item.channel_message.id !== lastItemId.current) {
@@ -693,60 +751,81 @@ const MessageItem = memo(
                         height={20}
                       />
                     </DropdownMenuTrigger>
+
                     <DropdownMenuContent loop sideOffset={8}>
-                      <DropdownMenuItem
-                        onSelect={() => {
-                          Alert.alert(
-                            "Are you sure you want to delete this message?",
-                            "",
-                            [
-                              {
-                                text: "Cancel",
-                              },
-                              {
-                                text: "Delete",
-                                style: "destructive",
-                                onPress: () => {
-                                  listRef.current?.prepareForLayoutAnimationRender();
-                                  deleteMessage.trigger({
-                                    messageId: item.channel_message.id,
-                                  });
+                      {item.channel_message.sent_by.profile.profile_id ===
+                      user.user?.data.profile.profile_id ? (
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            Alert.alert(
+                              "Are you sure you want to delete this message?",
+                              "",
+                              [
+                                {
+                                  text: "Cancel",
                                 },
-                              },
-                            ]
-                          );
-                        }}
-                        key="delete"
-                      >
-                        <MenuItemIcon
-                          Icon={Trash}
-                          ios={{
-                            paletteColors: ["red"],
-                            name: "trash",
+                                {
+                                  text: "Delete",
+                                  style: "destructive",
+                                  onPress: () => {
+                                    listRef.current?.prepareForLayoutAnimationRender();
+                                    deleteMessage.trigger({
+                                      messageId: item.channel_message.id,
+                                    });
+                                  },
+                                },
+                              ]
+                            );
                           }}
-                        />
-                        <DropdownMenuItemTitle tw="font-semibold text-red-500">
-                          Delete
-                        </DropdownMenuItemTitle>
-                      </DropdownMenuItem>
+                          key="delete"
+                        >
+                          <MenuItemIcon
+                            Icon={Trash}
+                            ios={{
+                              paletteColors: ["red"],
+                              name: "trash",
+                            }}
+                          />
+                          <DropdownMenuItemTitle tw="font-semibold text-red-500">
+                            Delete
+                          </DropdownMenuItemTitle>
+                        </DropdownMenuItem>
+                      ) : null}
 
-                      <DropdownMenuItem
-                        onSelect={() => {
-                          setShowInput(true);
-                        }}
-                        key="edit"
-                      >
-                        <MenuItemIcon
-                          Icon={Edit}
-                          ios={{
-                            name: "pencil",
+                      {item.channel_message.sent_by.profile.profile_id ===
+                      user.user?.data.profile.profile_id ? (
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            viewRef.current?.measure(
+                              (
+                                _x,
+                                _y,
+                                _width,
+                                _textInputHeight,
+                                _pageX,
+                                textInputPageY
+                              ) => {
+                                textInputBottomY.value =
+                                  Dimensions.get("screen").height -
+                                  textInputPageY -
+                                  96;
+                                setShowInput(true);
+                              }
+                            );
                           }}
-                        />
-                        <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                          Edit
-                        </DropdownMenuItemTitle>
-                      </DropdownMenuItem>
-
+                          key="edit"
+                        >
+                          <MenuItemIcon
+                            Icon={Edit}
+                            ios={{
+                              name: "pencil",
+                            }}
+                          />
+                          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
+                            Edit
+                          </DropdownMenuItemTitle>
+                        </DropdownMenuItem>
+                      ) : null}
                       <DropdownMenuItem
                         onSelect={() => {
                           router.push(
@@ -782,31 +861,33 @@ const MessageItem = memo(
               </View>
             </View>
 
-            {showInput ? (
-              <EditMessageInput
-                hideInput={() => setShowInput(false)}
-                channelId={channelId}
-                messageId={channel_message.id}
-                defaultValue={channel_message.body}
-              />
-            ) : (
-              <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-                {channel_message.body}
-              </Text>
-            )}
-            <PlatformAnimateHeight
-              initialHeight={item.reaction_group.length > 0 ? 30 : 0}
-            >
-              {!showInput && item.reaction_group.length > 0 ? (
-                <AnimatedView tw="pt-1" layout={Layout}>
-                  <MessageReactions
-                    reactionGroup={item.reaction_group}
-                    channelId={channelId}
-                    messageId={channel_message.id}
-                  />
-                </AnimatedView>
-              ) : null}
-            </PlatformAnimateHeight>
+            <View ref={viewRef}>
+              {showInput ? (
+                <EditMessageInput
+                  hideInput={() => setShowInput(false)}
+                  channelId={channelId}
+                  messageId={channel_message.id}
+                  defaultValue={channel_message.body}
+                />
+              ) : (
+                <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+                  {channel_message.body}
+                </Text>
+              )}
+              <PlatformAnimateHeight
+                initialHeight={item.reaction_group.length > 0 ? 30 : 0}
+              >
+                {!showInput && item.reaction_group.length > 0 ? (
+                  <AnimatedView tw="pt-1" layout={Layout}>
+                    <MessageReactions
+                      reactionGroup={item.reaction_group}
+                      channelId={channelId}
+                      messageId={channel_message.id}
+                    />
+                  </AnimatedView>
+                ) : null}
+              </PlatformAnimateHeight>
+            </View>
           </View>
         </View>
       </View>
@@ -838,6 +919,7 @@ const EditMessageInput = ({
           borderWidth: 1,
           borderColor: colors.gray[500],
         }}
+        onBlur={hideInput}
         multiline={true}
         defaultValue={defaultValue}
         onChangeText={setMessage}
