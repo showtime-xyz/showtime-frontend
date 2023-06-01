@@ -62,6 +62,7 @@ import {
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -585,7 +586,12 @@ export const Messages = () => {
           members={membersCount}
           channelId={channelId}
         />
-        <View tw={["flex-1 overflow-hidden", isUserAdmin ? "pb-12" : ""]}>
+        <View
+          tw={[
+            "flex-1 overflow-hidden",
+            isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
+          ]}
+        >
           <AnimatedInfiniteScrollListWithRef
             ref={listRef}
             keyExtractor={keyExtractor}
@@ -642,7 +648,7 @@ const MessageInput = ({
   const sendMessage = useSendChannelMessage(channelId);
   const inputRef = useRef<any>(null);
 
-  const bottom = Platform.select({ web: bottomHeight, default: 16 });
+  const bottom = Platform.select({ web: bottomHeight, ios: 16, android: 0 });
 
   const style = useAnimatedStyle(() => {
     return {
@@ -701,7 +707,7 @@ const MessageItem = memo(
     const user = useUser();
     const router = useRouter();
     const viewRef = useRef<RNView>(null);
-
+    const windowFrame = useSafeAreaFrame();
     // reset recycling state
     if (item.channel_message.id !== lastItemId.current) {
       if (setShowInput) {
@@ -711,7 +717,7 @@ const MessageItem = memo(
     }
 
     return (
-      <View tw="mb-5 px-4">
+      <View tw="mb-5 px-4" ref={viewRef}>
         <View tw="flex-row" style={{ columnGap: 8 }}>
           <View tw="h-6 w-6">
             <Avatar size={24} url={channel_message.sent_by.profile.img_url} />
@@ -806,10 +812,10 @@ const MessageItem = memo(
                                 textInputPageY
                               ) => {
                                 textInputBottomY.value =
-                                  Dimensions.get("screen").height -
+                                  windowFrame.height -
                                   textInputPageY -
                                   // Est height of bottom fixed input
-                                  128;
+                                  136;
                                 setShowInput(true);
                               }
                             );
@@ -862,36 +868,34 @@ const MessageItem = memo(
               </View>
             </View>
 
-            <View ref={viewRef}>
-              {showInput ? (
-                <EditMessageInput
-                  hideInput={() => {
-                    textInputBottomY.value = 0;
-                    setShowInput(false);
-                  }}
-                  channelId={channelId}
-                  messageId={channel_message.id}
-                  defaultValue={channel_message.body}
-                />
-              ) : (
-                <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-                  {channel_message.body}
-                </Text>
-              )}
-              <PlatformAnimateHeight
-                initialHeight={item.reaction_group.length > 0 ? 30 : 0}
-              >
-                {!showInput && item.reaction_group.length > 0 ? (
-                  <AnimatedView tw="pt-1" layout={Layout}>
-                    <MessageReactions
-                      reactionGroup={item.reaction_group}
-                      channelId={channelId}
-                      messageId={channel_message.id}
-                    />
-                  </AnimatedView>
-                ) : null}
-              </PlatformAnimateHeight>
-            </View>
+            {showInput ? (
+              <EditMessageInput
+                hideInput={() => {
+                  textInputBottomY.value = 0;
+                  setShowInput(false);
+                }}
+                channelId={channelId}
+                messageId={channel_message.id}
+                defaultValue={channel_message.body}
+              />
+            ) : (
+              <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+                {channel_message.body}
+              </Text>
+            )}
+            <PlatformAnimateHeight
+              initialHeight={item.reaction_group.length > 0 ? 30 : 0}
+            >
+              {!showInput && item.reaction_group.length > 0 ? (
+                <AnimatedView tw="pt-1" layout={Layout}>
+                  <MessageReactions
+                    reactionGroup={item.reaction_group}
+                    channelId={channelId}
+                    messageId={channel_message.id}
+                  />
+                </AnimatedView>
+              ) : null}
+            </PlatformAnimateHeight>
           </View>
         </View>
       </View>
