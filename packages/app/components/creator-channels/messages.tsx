@@ -259,6 +259,7 @@ export const Messages = () => {
   const membersCount = channelDetail.data?.member_count || 0;
   const textInputBottomY = useSharedValue(0);
   const lastTranslateY = useSharedValue(0);
+  const windowDimension = useWindowDimensions();
 
   useIntroducingCreatorChannels();
 
@@ -372,13 +373,12 @@ export const Messages = () => {
     const iconColor = isDark ? colors.white : colors.gray[900];
     return (
       <View
-        tw="absolute top-24 w-full items-center justify-start"
-        style={{
-          height:
-            isMdWidth && isDesktopWeb()
-              ? "calc(100% - 160px)"
-              : height - headerHeight - bottomHeight - insets.top - 126,
-        }}
+        tw="ios:scale-y-[-1] android:scale-y-[-1] w-full items-center justify-center"
+        style={
+          Platform.OS !== "web"
+            ? { height: windowDimension.height }
+            : { height: "100%" }
+        }
       >
         <View tw="mt-6 w-full items-center justify-center">
           <AnimatePresence exitBeforeEnter>
@@ -399,13 +399,6 @@ export const Messages = () => {
             >
               {showIntro && (
                 <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 px-4 pb-6 pt-4 dark:bg-gray-900">
-                  <Button
-                    onPress={() => setShowIntro(false)}
-                    iconOnly
-                    variant="text"
-                  >
-                    <CloseLarge width={14} height={14} />
-                  </Button>
                   <View tw="px-6 pt-1">
                     <Text tw="text-sm font-bold text-black dark:text-white">
                       Welcome! Now send your first update.
@@ -428,7 +421,9 @@ export const Messages = () => {
               )}
             </MotiView>
           </AnimatePresence>
-          <View tw="mt-3 max-w-[300px] flex-row items-start justify-start">
+        </View>
+        <View tw="absolute bottom-4 mt-auto w-full items-center justify-center">
+          <View tw="my-3 max-w-[300px] flex-row items-start justify-start">
             <View tw="absolute -top-1.5">
               <EyeOffV2
                 width={18}
@@ -441,22 +436,11 @@ export const Messages = () => {
               update.
             </Text>
           </View>
-        </View>
-        <View tw="absolute bottom-0.5 w-full items-center justify-center">
-          <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
+          <Text tw="pt-4 text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
         </View>
       </View>
     );
-  }, [
-    bottomHeight,
-    headerHeight,
-    height,
-    insets.top,
-    isDark,
-    isMdWidth,
-    membersCount,
-    showIntro,
-  ]);
+  }, [isDark, membersCount, showIntro, windowDimension.height]);
 
   const extraData = useMemo(
     () => ({ reactions: channelDetail.data?.channel_reactions, channelId }),
@@ -565,6 +549,7 @@ export const Messages = () => {
             style={style}
             extraData={extraData}
             CellRendererComponent={CustomCellRenderer}
+            ListEmptyComponent={listEmptyComponent}
             ListFooterComponent={
               isLoadingMore
                 ? () => (
@@ -584,7 +569,6 @@ export const Messages = () => {
           />
         ) : null}
       </View>
-      {data.length === 0 && listEmptyComponent()}
     </>
   );
 };
