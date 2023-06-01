@@ -7,6 +7,7 @@ import {
   PlusFilled,
   GiftSolid,
   Spotify,
+  CreatorChannelType,
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -17,7 +18,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
-import { getFormatDistanceStrictToWeek } from "app/utilities";
+import { formatDateRelativeWithIntl } from "app/utilities";
 
 import {
   NFTSDisplayName,
@@ -43,6 +44,9 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "collected "],
   ["CREATED_EDITION_SOLD_OUT", "Your drop sold out: "],
   ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
+  ["CHANNEL_NEW_MESSAGE", "posted a new message in their channel: "],
+  ["CHANNEL_FIRST_MESSAGE", "just created a collector channel: "],
+
   [
     "MISSING_MUSIC_RELEASE_METADATA",
     "Spotify song link to notify your fans the song is out. ",
@@ -88,6 +92,12 @@ export const NotificationItem = memo(
             path = `/drop/update/${notification.nfts[0].contract_address}`;
           }
           break;
+        case "CHANNEL_NEW_MESSAGE":
+        case "CHANNEL_FIRST_MESSAGE":
+          if (notification.channel) {
+            path = `/channels/${notification.channel.id}`;
+          }
+          break;
         case "RELEASE_SAVED_TO_SPOTIFY":
           // to determine, currently disabled
           break;
@@ -100,6 +110,7 @@ export const NotificationItem = memo(
       notification.actors,
       notification.nfts,
       notification.type_name,
+      notification.channel,
       router,
     ]);
 
@@ -151,7 +162,7 @@ type NotificationDescriptionProps = {
 
 const NotificationDescription = memo(
   ({ notification, setUsers }: NotificationDescriptionProps) => {
-    const formatDistance = getFormatDistanceStrictToWeek(
+    const formatDistance = formatDateRelativeWithIntl(
       notification.to_timestamp
     );
 
@@ -159,14 +170,17 @@ const NotificationDescription = memo(
       return (
         <View tw="flex-1 flex-row justify-between">
           <Text
-            tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] self-center text-gray-600 dark:text-gray-400"
+            tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
             ellipsizeMode="tail"
+            numberOfLines={2}
           >
             Tap here to enter <NFTSDisplayNameText nfts={notification.nfts} />{" "}
             {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
           </Text>
           {Boolean(formatDistance) && (
-            <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+            <View tw="items-end">
+              <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
+            </View>
           )}
         </View>
       );
@@ -176,14 +190,41 @@ const NotificationDescription = memo(
       return (
         <View tw="flex-1 flex-row justify-between">
           <Text
-            tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] self-center text-gray-600 dark:text-gray-400"
+            tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
             ellipsizeMode="tail"
+            numberOfLines={2}
           >
             <NFTSDisplayName nfts={notification.nfts} />{" "}
             {NOTIFICATION_TYPE_COPY.get("RELEASE_SAVED_TO_SPOTIFY")}
           </Text>
           {Boolean(formatDistance) && (
-            <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+            <View tw="items-end">
+              <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
+            </View>
+          )}
+        </View>
+      );
+    }
+
+    if (
+      notification.type_name === "CHANNEL_NEW_MESSAGE" ||
+      notification.type_name === "CHANNEL_FIRST_MESSAGE"
+    ) {
+      return (
+        <View tw="flex-1 flex-row justify-between">
+          <Text
+            tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
+            ellipsizeMode="tail"
+            numberOfLines={2}
+          >
+            <Actors actors={notification.actors} setUsers={setUsers} />
+            {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
+            {notification.description}
+          </Text>
+          {Boolean(formatDistance) && (
+            <View tw="items-end">
+              <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
+            </View>
           )}
         </View>
       );
@@ -192,15 +233,18 @@ const NotificationDescription = memo(
     return (
       <View tw="flex-1 flex-row justify-between">
         <Text
-          tw="text-13 web:max-w-[80%] mr-4 max-w-[70vw] self-center text-gray-600 dark:text-gray-400"
+          tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
+          numberOfLines={2}
         >
           <Actors actors={notification.actors} setUsers={setUsers} />
           {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
           <NFTSDisplayName nfts={notification.nfts} />
         </Text>
         {Boolean(formatDistance) && (
-          <Text tw="text-13 dark:text-white">{`${formatDistance}`}</Text>
+          <View tw="items-end">
+            <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
+          </View>
         )}
       </View>
     );
@@ -244,6 +288,11 @@ export const getNotificationIcon = (type_name: string) => {
     case "MISSING_MUSIC_RELEASE_METADATA":
     case "RELEASE_SAVED_TO_SPOTIFY":
       return <Spotify width={20} height={20} color={"#1DB954"} />;
+    case "CHANNEL_NEW_MESSAGE":
+    case "CHANNEL_FIRST_MESSAGE":
+      return (
+        <CreatorChannelType width={20} height={20} color={colors.indigo[500]} />
+      );
 
     default:
       return undefined;
