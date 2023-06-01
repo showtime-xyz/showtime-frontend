@@ -346,7 +346,7 @@ export const Messages = () => {
   useEffect(() => {
     if (error && axios.isAxiosError(error)) {
       if (error?.response?.status === 404 || error?.response?.status === 401) {
-        router.push("/channels");
+        router.replace("/channels");
       }
     }
   }, [error, router]);
