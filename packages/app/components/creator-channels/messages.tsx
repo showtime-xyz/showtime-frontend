@@ -815,7 +815,7 @@ const MessageItem = memo(
                                   windowFrame.height -
                                   textInputPageY -
                                   // Est height of bottom fixed input
-                                  136;
+                                  150;
                                 setShowInput(true);
                               }
                             );
@@ -921,7 +921,7 @@ const EditMessageInput = ({
     <Animated.View entering={FadeIn.springify()} exiting={FadeOut.springify()}>
       <TextInput
         autoFocus
-        tw="rounded p-4"
+        tw="rounded p-4 text-gray-900 dark:text-gray-50"
         value={message}
         style={{
           borderWidth: 1,
