@@ -25,6 +25,7 @@ import {
   useFocusEffect,
   useScrollToTop,
 } from "app/lib/react-navigation/native";
+import { Link } from "app/navigation/link";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import {
@@ -115,12 +116,16 @@ const CreatorChannelsListItem = memo(
             />
             <View tw="flex-1">
               <View tw="flex-row items-center">
-                <Text
-                  tw="web:max-w-[80%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
-                  numberOfLines={1}
+                <Link
+                  href={`/@${item.owner.username ?? item.owner.wallet_address}`}
                 >
-                  {item.owner.name ?? item.owner.username}
-                </Text>
+                  <Text
+                    tw="web:max-w-[80%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
+                    numberOfLines={1}
+                  >
+                    {item.owner.name ?? item.owner.username}
+                  </Text>
+                </Link>
                 {item.itemType === "owned" ? (
                   <Text
                     tw="web:max-w-[80%] ml-4 overflow-ellipsis whitespace-nowrap text-lg font-medium text-gray-500 dark:text-slate-300"
@@ -180,12 +185,19 @@ const CreatorChannelsListCreator = memo(
             <View tw="flex-1 flex-row items-center justify-center">
               <View tw="flex-1 items-start justify-start">
                 <View tw="flex-1 flex-row items-center justify-start">
-                  <Text
-                    tw="web:max-w-[65%] max-w-[90%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
-                    numberOfLines={1}
+                  <Link
+                    href={`/@${
+                      item.owner.username ?? item.owner.wallet_address
+                    }`}
+                    tw="flex-1"
                   >
-                    {item.owner.username}
-                  </Text>
+                    <Text
+                      tw="web:max-w-[65%] max-w-[90%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
+                      numberOfLines={1}
+                    >
+                      {item.owner.username}
+                    </Text>
+                  </Link>
                   {/* TODO: determine if we keep this */}
                   <Text tw="ml-2 hidden text-xs text-gray-500">{time}</Text>
                 </View>

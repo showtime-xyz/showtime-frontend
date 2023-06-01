@@ -19,6 +19,7 @@ import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
+import { Link } from "app/navigation/link";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
@@ -185,12 +186,18 @@ const CreatorChannelsListCreator = memo(
             <View tw="flex-1 flex-row items-center justify-center">
               <View tw="flex-1 items-start justify-start">
                 <View tw="flex-1 flex-row items-start justify-start">
-                  <Text
-                    tw="text-md max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-black dark:text-white"
-                    numberOfLines={1}
+                  <Link
+                    href={`/@${
+                      item.owner.username ?? item.owner.wallet_address
+                    }`}
                   >
-                    {item.owner.name ?? item.owner.username}
-                  </Text>
+                    <Text
+                      tw="text-md max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-black dark:text-white"
+                      numberOfLines={1}
+                    >
+                      {item.owner.name ?? item.owner.username}
+                    </Text>
+                  </Link>
                 </View>
                 <View tw="mt-1 flex-1">
                   <Text tw="text-[11px] font-bold text-gray-500 dark:text-gray-500">
