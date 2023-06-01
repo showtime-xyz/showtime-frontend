@@ -217,7 +217,7 @@ export const DropFree = () => {
 
   useEffect(() => {
     if (showPreview) {
-      modalScreenContext?.setTitle("Drop Preview");
+      modalScreenContext?.setTitle("Congrats! Now share it.");
     }
     return () => {
       modalScreenContext?.setTitle("Create drop");
@@ -318,6 +318,7 @@ export const DropFree = () => {
         description={getValues("description")}
         file={getValues("file")}
         contractAddress={state.edition?.contract_address}
+        dropCreated
       />
     );
   }
