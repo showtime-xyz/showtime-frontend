@@ -678,6 +678,7 @@ const MessageInput = ({
                 variant="secondary"
                 onPress={() => {
                   setEditMessage(undefined);
+                  inputRef.current?.reset();
                 }}
               >
                 Cancel
