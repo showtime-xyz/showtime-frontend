@@ -569,7 +569,7 @@ export const Messages = () => {
             onEndReached={onLoadMore}
             inverted
             onScroll={scrollhandler}
-            drawDistance={height}
+            drawDistance={height * 2}
             useWindowScroll={false}
             estimatedItemSize={100}
             estimatedListSize={{
