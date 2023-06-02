@@ -42,9 +42,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
   const { width } = useWindowDimensions();
   const isBlocked = getIsBlocked(user.profile_id);
   const isDark = useIsDarkMode();
-  const showFollowButton =
-    typeof user?.channels?.[0]?.id !== "undefined" &&
-    user.channels[0].self_is_member;
+  const showFollowButton = typeof user?.channels?.[0]?.id !== "undefined";
   const { unfollow, follow, isFollowing: isFollowingFn } = useMyInfo();
 
   const isFollowing = useMemo(

@@ -51,7 +51,6 @@ import {
 import { Hidden } from "design-system/hidden";
 import { breakpoints } from "design-system/theme";
 
-import { useLeaveChannel } from "../creator-channels/hooks/use-leave-channel";
 import { FollowButton } from "../follow-button";
 import { ProfileFollows } from "./profile-follows";
 import { ProfileSocial } from "./profile-social";
@@ -96,6 +95,7 @@ export const ProfileTop = ({
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const isSelf = userId === profileId;
   const { unblock } = useBlock();
+  const joinChannel = useJoinChannel();
   const userChannel = profileData?.profile.channels?.[0];
   const { onToggleFollow } = useFollow({
     username,
@@ -103,8 +103,7 @@ export const ProfileTop = ({
 
   const { top } = useSafeAreaInsets();
 
-  const showViewChannelButton =
-    typeof userChannel?.id !== "undefined" && userChannel.self_is_member;
+  const showChannelButton = typeof userChannel?.id !== "undefined";
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+
@@ -302,20 +301,43 @@ export const ProfileTop = ({
                         profileId={profileId}
                       />
                       <View tw="w-2" />
-                      {showViewChannelButton ? (
+                      {showChannelButton ? (
                         <Button
                           size={width < 768 ? "small" : "regular"}
                           style={{
                             backgroundColor: colors.purple[500],
                           }}
                           onPress={async () => {
-                            router.push(
-                              `/channels/${profileData.profile.channels[0].id}`
-                            );
+                            if (userChannel?.self_is_member) {
+                              router.push(`/channels/${userChannel.id}`);
+                            } else {
+                              mutateUserProfile(
+                                (d) => {
+                                  if (d && d.data && d.data.profile) {
+                                    d.data.profile.channels[0].self_is_member =
+                                      true;
+                                    return {
+                                      ...d,
+                                    };
+                                  }
+                                  return d;
+                                },
+                                { revalidate: false }
+                              );
+                              await joinChannel.trigger({
+                                channelId: userChannel.id,
+                              });
+                              mutateUserProfile();
+                            }
                           }}
+                          disabled={joinChannel.isMutating}
                         >
                           <Text tw="font-semibold" style={{ color: "white" }}>
-                            View Channel
+                            {joinChannel.isMutating
+                              ? "Loading..."
+                              : userChannel.self_is_member
+                              ? "View Channel"
+                              : "Join Channel"}
                           </Text>
                         </Button>
                       ) : (
