@@ -4,6 +4,7 @@ import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -101,25 +102,21 @@ const CreatorChannelsListItem = memo(
       >
         <View tw="flex-1 px-4 py-3">
           <View tw="flex-row items-center">
-            <AvatarHoverCard
-              username={item.owner.username}
+            <Avatar
               url={item.owner.img_url}
               size={52}
               alt="CreatorPreview Avatar"
-              tw={"mr-3"}
+              tw={"pointer-events-none mr-3"}
             />
             <View tw="flex-1">
               <View tw="flex-row items-center">
-                <Link
-                  href={`/@${item.owner.username ?? item.owner.wallet_address}`}
+                <Text
+                  tw="web:max-w-[80%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
+                  numberOfLines={1}
                 >
-                  <Text
-                    tw="web:max-w-[80%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
-                    numberOfLines={1}
-                  >
-                    {item.owner.name ?? item.owner.username}
-                  </Text>
-                </Link>
+                  {item.owner.name ?? item.owner.username}
+                </Text>
+
                 {item.itemType === "owned" ? (
                   <Text
                     tw="web:max-w-[80%] ml-4 overflow-ellipsis whitespace-nowrap text-lg font-medium text-gray-500 dark:text-slate-300"
@@ -134,7 +131,7 @@ const CreatorChannelsListItem = memo(
               </View>
               <View tw="mt-2">
                 <Text
-                  tw="whitespace-nowrap leading-5 text-gray-500 dark:text-gray-300"
+                  tw="leading-5 text-gray-500 dark:text-gray-300"
                   numberOfLines={2}
                 >
                   {item?.latest_message?.body ? (
@@ -174,8 +171,7 @@ const CreatorChannelsListCreator = memo(
     return (
       <View tw="flex-1 px-4 py-3">
         <View tw="flex-row items-center">
-          <AvatarHoverCard
-            username={item.owner.username}
+          <Avatar
             url={item.owner.img_url}
             size={52}
             alt="CreatorPreview Avatar"
@@ -454,7 +450,7 @@ CreatorChannelsList.displayName = "CreatorChannelsList";
 
 const CCSkeleton = () => {
   return (
-    <View tw="px-4">
+    <View tw="web:mt-8 px-4">
       {new Array(8).fill(0).map((_, i) => {
         return (
           <View tw="flex-row pt-4" key={`${i}`}>

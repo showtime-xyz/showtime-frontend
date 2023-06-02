@@ -250,12 +250,8 @@ export const CreatorChannels = memo(
     useScrollToTop(listRef);
 
     // my own channels
-    const {
-      data: ownedChannelsData,
-      isLoading: isLoadingOwnChannels,
-      refresh: refreshOwnedChannels,
-      isRefreshing: isRefreshingOwnedChannels,
-    } = useOwnedChannelsList();
+    const { data: ownedChannelsData, isLoading: isLoadingOwnChannels } =
+      useOwnedChannelsList();
 
     // channels I'm a member of
     const {
@@ -270,9 +266,7 @@ export const CreatorChannels = memo(
     // suggested channels
     const {
       data: suggestedChannelsData,
-      refresh: refreshSuggestedChannels,
       isLoading: isLoadingSuggestedChannels,
-      isRefreshing: isRefreshingSuggestedChannels,
     } = useSuggestedChannelsList();
 
     // since we're quering two different endpoints, and based on the amount of data from the first endpoint
