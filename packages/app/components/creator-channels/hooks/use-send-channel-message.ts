@@ -93,7 +93,7 @@ export const useSendChannelMessage = (channelId?: string) => {
           return d;
         },
         {
-          revalidate: false,
+          revalidate: true,
         }
       );
     } catch (e) {

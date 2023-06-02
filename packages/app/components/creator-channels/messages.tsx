@@ -386,6 +386,12 @@ export const Messages = () => {
   */
 
   useEffect(() => {
+    if (isLoadingMore) {
+      enableLayoutAnimations(false);
+    }
+  }, [isLoadingMore]);
+
+  useEffect(() => {
     if (error && axios.isAxiosError(error)) {
       if (error?.response?.status === 404 || error?.response?.status === 401) {
         router.replace("/channels");
@@ -748,13 +754,15 @@ const MessageInput = ({
                   iconOnly
                   onPress={() => {
                     enableLayoutAnimations(true);
-                    editMessages.trigger({
-                      messageId: editMessage.id,
-                      message: inputRef.current.value,
-                      channelId,
+                    requestAnimationFrame(() => {
+                      editMessages.trigger({
+                        messageId: editMessage.id,
+                        message: inputRef.current.value,
+                        channelId,
+                      });
+                      setEditMessage(undefined);
+                      inputRef.current?.reset();
                     });
-                    setEditMessage(undefined);
-                    inputRef.current?.reset();
                   }}
                 >
                   <Check width={20} height={20} />
@@ -861,12 +869,15 @@ const MessageItem = memo(
                   <Reaction
                     reactions={reactions}
                     reactionGroup={item.reaction_group}
-                    onPress={async (id) => {
+                    onPress={(id) => {
                       enableLayoutAnimations(true);
-                      listRef.current?.prepareForLayoutAnimationRender();
-                      await reactOnMessage.trigger({
-                        messageId: item.channel_message.id,
-                        reactionId: id,
+                      requestAnimationFrame(async () => {
+                        listRef.current?.prepareForLayoutAnimationRender();
+
+                        await reactOnMessage.trigger({
+                          messageId: item.channel_message.id,
+                          reactionId: id,
+                        });
                       });
                     }}
                   />
@@ -895,11 +906,13 @@ const MessageItem = memo(
                                   {
                                     text: "Delete",
                                     style: "destructive",
-                                    onPress: async () => {
+                                    onPress: () => {
                                       enableLayoutAnimations(true);
-                                      listRef.current?.prepareForLayoutAnimationRender();
-                                      await deleteMessage.trigger({
-                                        messageId: item.channel_message.id,
+                                      requestAnimationFrame(async () => {
+                                        listRef.current?.prepareForLayoutAnimationRender();
+                                        await deleteMessage.trigger({
+                                          messageId: item.channel_message.id,
+                                        });
                                       });
                                     },
                                   },
