@@ -16,7 +16,10 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
         href={`/@${match}`}
         key={match + i}
         target="_blank"
-        tw={tw ?? "text-13 font-bold text-gray-900 dark:text-gray-100"}
+        tw={[
+          "text-13 font-bold text-gray-900 dark:text-gray-100",
+          tw ? (Array.isArray(tw) ? tw.join(" ") : tw) : "",
+        ]}
       >
         @{match}
       </TextLink>
@@ -38,7 +41,10 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
           href={match.toLowerCase()}
           key={match + i}
           target="_blank"
-          tw={tw ?? "text-13 font-bold text-gray-900 dark:text-gray-100"}
+          tw={[
+            "text-13 font-bold text-gray-900 dark:text-gray-100",
+            tw ? (Array.isArray(tw) ? tw.join(" ") : tw) : "",
+          ]}
         >
           {urlText}
         </TextLink>
