@@ -26,6 +26,7 @@ import Animated, {
   useAnimatedRef,
   SlideOutDown,
   Layout,
+  enableLayoutAnimations,
 } from "react-native-reanimated";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
@@ -253,13 +254,15 @@ const benefits = [
 const keyExtractor = (item: ChannelMessageItem) =>
   item.channel_message.id.toString();
 
+//const getItemType = (item: ChannelMessageItem) => item.reaction_group.length > 0 ? "reaction" : "message";
+
 export const Messages = () => {
   const listRef = useRef<FlashList<any>>(null);
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
-  const { height, width } = useWindowDimensions();
   const bottomHeight = usePlatformBottomHeight();
+  const { height, width } = useWindowDimensions();
   const [editMessage, setEditMessage] = useState<
     undefined | { id: number; text: string }
   >();
@@ -276,6 +279,7 @@ export const Messages = () => {
   const editMessageIdSharedValue = useSharedValue<undefined | number>(
     undefined
   );
+  const isScrolling = useSharedValue<boolean>(false);
   const keyboard =
     Platform.OS !== "web"
       ? // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -305,6 +309,17 @@ export const Messages = () => {
       } else {
         runOnJS(setShowScrollToBottom)(false);
       }
+      if (isScrolling.value) {
+        runOnJS(enableLayoutAnimations)(true);
+      }
+      isScrolling.value = false;
+    },
+    onScroll: () => {
+      if (!isScrolling.value) {
+        // we need to disable LayoutAnimtions when scrolling
+        runOnJS(enableLayoutAnimations)(false);
+      }
+      isScrolling.value = true;
     },
   });
 
@@ -569,17 +584,9 @@ export const Messages = () => {
             onEndReached={onLoadMore}
             inverted
             onScroll={scrollhandler}
-            drawDistance={height * 2}
             useWindowScroll={false}
             estimatedItemSize={90}
-            estimatedListSize={
-              data && data.length
-                ? {
-                    width,
-                    height,
-                  }
-                : undefined
-            }
+            estimatedListSize={{ height, width }}
             keyboardDismissMode="on-drag"
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: insets.bottom }}
@@ -679,13 +686,23 @@ const MessageInput = ({
         placeholder="Send an update..."
         onSubmit={async (text: string) => {
           if (channelId) {
+            enableLayoutAnimations(false);
             listRef.current?.prepareForLayoutAnimationRender();
             await sendMessage.trigger({
               channelId,
               message: text,
               callback: sendMessageCallback,
             });
+            enableLayoutAnimations(true);
+
             inputRef.current?.reset();
+            requestAnimationFrame(() => {
+              listRef.current?.scrollToIndex({
+                index: 0,
+                animated: true,
+                viewOffset: 1000,
+              });
+            });
           }
 
           return Promise.resolve();
@@ -711,6 +728,7 @@ const MessageInput = ({
                   disabled={editMessages.isMutating || !editMessage}
                   iconOnly
                   onPress={() => {
+                    enableLayoutAnimations(true);
                     editMessages.trigger({
                       messageId: editMessage.id,
                       message: inputRef.current.value,
@@ -825,6 +843,7 @@ const MessageItem = memo(
                     reactions={reactions}
                     reactionGroup={item.reaction_group}
                     onPress={async (id) => {
+                      enableLayoutAnimations(true);
                       listRef.current?.prepareForLayoutAnimationRender();
                       await reactOnMessage.trigger({
                         messageId: item.channel_message.id,
@@ -857,9 +876,10 @@ const MessageItem = memo(
                                   {
                                     text: "Delete",
                                     style: "destructive",
-                                    onPress: () => {
+                                    onPress: async () => {
+                                      enableLayoutAnimations(true);
                                       listRef.current?.prepareForLayoutAnimationRender();
-                                      deleteMessage.trigger({
+                                      await deleteMessage.trigger({
                                         messageId: item.channel_message.id,
                                       });
                                     },
@@ -958,6 +978,7 @@ const MessageItem = memo(
                 {item.reaction_group.length > 0 ? (
                   <AnimatedView tw="pt-1" layout={Layout}>
                     <MessageReactions
+                      key={channel_message.id}
                       reactionGroup={item.reaction_group}
                       channelId={channelId}
                       channelReactions={reactions}

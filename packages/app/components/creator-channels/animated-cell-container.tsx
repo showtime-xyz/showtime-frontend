@@ -1,7 +1,8 @@
-import { memo, Ref, forwardRef, Component } from "react";
+import { memo, Ref, forwardRef, Component, useState } from "react";
 
 import Animated, { FadeOut, FadeIn, Layout } from "react-native-reanimated";
 
+import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import {
   CellContainer,
   InfiniteScrollList,
