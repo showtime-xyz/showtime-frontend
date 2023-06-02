@@ -602,7 +602,7 @@ export const Messages = () => {
         ) : null}
         {showScrollToBottom ? (
           <Animated.View entering={SlideInDown} exiting={SlideOutDown}>
-            <View tw="absolute bottom-[80px] right-5">
+            <View tw="absolute bottom-[80px] right-4">
               <ScrollToBottomButton
                 onPress={() => {
                   listRef.current?.scrollToOffset({
