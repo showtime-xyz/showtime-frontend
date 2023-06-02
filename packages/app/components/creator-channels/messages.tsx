@@ -310,17 +310,19 @@ export const Messages = () => {
       } else {
         runOnJS(setShowScrollToBottom)(false);
       }
+      /*
       if (isScrolling.value) {
         //runOnJS(enableLayoutAnimations)(true);
       }
+      */
       isScrolling.value = false;
     },
     onScroll: () => {
       if (!isScrolling.value) {
         // we need to disable LayoutAnimtions when scrolling
+        isScrolling.value = true;
         runOnJS(enableLayoutAnimations)(false);
       }
-      isScrolling.value = true;
     },
   });
 
