@@ -388,7 +388,13 @@ export const CreatorChannelsList = memo(
       <AnimatedInfiniteScrollListWithRef
         ref={listRef}
         useWindowScroll={false}
-        data={transformedData}
+        data={
+          isLoadingOwnChannels ||
+          isLoadingJoinedChannels ||
+          isLoadingSuggestedChannels
+            ? []
+            : transformedData
+        }
         getItemType={(item) => {
           // To achieve better performance, specify the type based on the item
           return item.type === "section"

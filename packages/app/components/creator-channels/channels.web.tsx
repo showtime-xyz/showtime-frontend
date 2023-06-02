@@ -250,8 +250,12 @@ export const CreatorChannels = memo(
     useScrollToTop(listRef);
 
     // my own channels
-    const { data: ownedChannelsData, isLoading: isLoadingOwnChannels } =
-      useOwnedChannelsList();
+    const {
+      data: ownedChannelsData,
+      isLoading: isLoadingOwnChannels,
+      refresh: refreshOwnedChannels,
+      isRefreshing: isRefreshingOwnedChannels,
+    } = useOwnedChannelsList();
 
     // channels I'm a member of
     const {
@@ -264,7 +268,12 @@ export const CreatorChannels = memo(
     } = useJoinedChannelsList();
 
     // suggested channels
-    const { data: suggestedChannelsData } = useSuggestedChannelsList();
+    const {
+      data: suggestedChannelsData,
+      refresh: refreshSuggestedChannels,
+      isLoading: isLoadingSuggestedChannels,
+      isRefreshing: isRefreshingSuggestedChannels,
+    } = useSuggestedChannelsList();
 
     // since we're quering two different endpoints, and based on the amount of data from the first endpoint
     // we have to transform our data a bit and decide if we build a section list or a single FlashList
@@ -275,7 +284,7 @@ export const CreatorChannels = memo(
       if (joinedChannelsData.length < 11) {
         return [
           // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
-          ...(joinedChannelsData.length > 0
+          ...(joinedChannelsData.length > 0 || ownedChannelsData.length > 0
             ? [
                 channelsSection,
                 ...ownedChannelsData.map((suggestedChannel) => ({
@@ -324,13 +333,17 @@ export const CreatorChannels = memo(
     }, []);
 
     const ListFooterComponent = useCallback(() => {
-      if (isLoadingJoinedChannels || isLoadingOwnChannels) {
+      if (
+        isLoadingJoinedChannels ||
+        isLoadingOwnChannels ||
+        isLoadingSuggestedChannels
+      ) {
         return <CCSkeleton />;
       }
 
       if (
-        !isLoadingJoinedChannels &&
         !isLoadingOwnChannels &&
+        !isLoadingJoinedChannels &&
         isLoadingMoreJoinedChannels
       ) {
         return (
@@ -344,6 +357,7 @@ export const CreatorChannels = memo(
     }, [
       isLoadingJoinedChannels,
       isLoadingOwnChannels,
+      isLoadingSuggestedChannels,
       isLoadingMoreJoinedChannels,
     ]);
     const mdHeight = windowHeight - 140;
@@ -377,7 +391,13 @@ export const CreatorChannels = memo(
         <View tw="h-full w-80 overflow-hidden rounded-2xl bg-white dark:bg-black">
           <InfiniteScrollList
             useWindowScroll={false}
-            data={transformedData}
+            data={
+              isLoadingOwnChannels ||
+              isLoadingJoinedChannels ||
+              isLoadingSuggestedChannels
+                ? []
+                : transformedData
+            }
             getItemType={(item) => {
               // To achieve better performance, specify the type based on the item
               return item.type === "section"
