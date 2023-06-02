@@ -17,7 +17,13 @@ import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
   runOnJS,
+  useSharedValue,
+  runOnUI,
+  FadeOut,
+  measure,
+  FadeIn,
   SlideInDown,
+  useAnimatedRef,
   SlideOutDown,
   Layout,
 } from "react-native-reanimated";
@@ -33,6 +39,8 @@ import {
   EyeOffV2,
   GiftV2,
   LockRounded,
+  Check,
+  Close,
   Music,
   Settings,
   Share,
@@ -82,6 +90,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { MessageReactions } from "../reaction/message-reactions";
@@ -259,23 +268,40 @@ export const Messages = () => {
   const share = useShare();
   const isDark = useIsDarkMode();
   const user = useUser();
-  const dimension = useWindowDimensions();
+  const windowDimension = useWindowDimensions();
   const redirectToChannelCongrats = useRedirectToChannelCongrats();
   const isUserAdmin =
     user.user?.data.channels &&
     user.user?.data.channels[0] === Number(channelId);
   const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  const editMessageIdSharedValue = useSharedValue<undefined | number>(
+    undefined
+  );
+  const keyboard =
+    Platform.OS !== "web"
+      ? // eslint-disable-next-line react-hooks/rules-of-hooks
+        useAnimatedKeyboard()
+      : { height: { value: 0 }, state: {} };
+
+  const editMessageItemDimension = useSharedValue({ pageY: 0, height: 0 });
+
+  useEffect(() => {
+    editMessageIdSharedValue.value = editMessage?.id;
+    if (!editMessage) {
+      editMessageItemDimension.value = { pageY: 0, height: 0 };
+    }
+  }, [editMessage, editMessageIdSharedValue, editMessageItemDimension]);
 
   const scrollhandler = useAnimatedScrollHandler({
     onEndDrag: (event) => {
-      if (event.contentOffset.y > dimension.height / 4) {
+      if (event.contentOffset.y > windowDimension.height / 4) {
         runOnJS(setShowScrollToBottom)(true);
       } else {
         runOnJS(setShowScrollToBottom)(false);
       }
     },
     onMomentumEnd: (event) => {
-      if (event.contentOffset.y > dimension.height / 4) {
+      if (event.contentOffset.y > windowDimension.height / 4) {
         runOnJS(setShowScrollToBottom)(true);
       } else {
         runOnJS(setShowScrollToBottom)(false);
@@ -309,11 +335,6 @@ export const Messages = () => {
   };
   const { data, isLoading, fetchMore, isLoadingMore, error } =
     useChannelMessages(channelId);
-  const keyboard =
-    Platform.OS !== "web"
-      ? // eslint-disable-next-line react-hooks/rules-of-hooks
-        useAnimatedKeyboard()
-      : { height: { value: 0 }, state: {} };
   const isCurrentUserOwner =
     channelDetail.data?.owner.profile_id === user.user?.data.profile.profile_id;
   const onLoadMore = async () => {
@@ -349,22 +370,31 @@ export const Messages = () => {
           channelId={extraData.channelId}
           listRef={listRef}
           setEditMessage={setEditMessage}
+          editMessageIdSharedValue={editMessageIdSharedValue}
+          editMessageItemDimension={editMessageItemDimension}
         />
       );
     },
-    []
+    [editMessageIdSharedValue, editMessageItemDimension]
   );
 
   const style = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: -keyboard.height.value,
-        },
-      ],
-    };
+    // Bring edit message to the center of the screen
+    if (
+      editMessageItemDimension.value.height &&
+      editMessageItemDimension.value.pageY < windowDimension.height / 2
+    ) {
+      return {};
+    } else {
+      return {
+        transform: [
+          {
+            translateY: -keyboard.height.value,
+          },
+        ],
+      };
+    }
   }, [keyboard]);
-  const windowDimension = useWindowDimensions();
 
   const listEmptyComponent = useCallback(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
@@ -610,12 +640,13 @@ const MessageInput = ({
   const sendMessage = useSendChannelMessage(channelId);
   const inputRef = useRef<any>(null);
   const editMessages = useEditChannelMessage(channelId);
-
+  const isDark = useIsDarkMode();
   const bottom = Platform.select({ web: bottomHeight, ios: 16, android: 0 });
 
   const style = useAnimatedStyle(() => {
     return {
       bottom,
+      backgroundColor: isDark ? "black" : "white",
       transform: [
         {
           translateY: -keyboard.height.value,
@@ -634,7 +665,12 @@ const MessageInput = ({
   }, [editMessage]);
 
   return (
-    <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
+    <Animated.View
+      style={[
+        { position: "absolute", width: "100%", backgroundColor: "red" },
+        style,
+      ]}
+    >
       <MessageBox
         ref={inputRef}
         placeholder="Send an update..."
@@ -655,31 +691,36 @@ const MessageInput = ({
         tw="bg-white dark:bg-black"
         submitButton={
           editMessage ? (
-            <View tw="flex-row" style={{ gap: 4 }}>
-              <Button
-                disabled={editMessages.isMutating || !editMessage}
-                onPress={() => {
-                  editMessages.trigger({
-                    messageId: editMessage.id,
-                    message: inputRef.current.value,
-                    channelId,
-                  });
-                  setEditMessage(undefined);
-                  inputRef.current?.reset();
-                }}
-              >
-                Save
-              </Button>
-              <Button
-                variant="secondary"
-                onPress={() => {
-                  setEditMessage(undefined);
-                  inputRef.current?.reset();
-                }}
-              >
-                Cancel
-              </Button>
-            </View>
+            <Animated.View entering={FadeIn} exiting={FadeOut}>
+              <View tw="flex-row" style={{ gap: 8 }}>
+                <Button
+                  variant="secondary"
+                  style={{ backgroundColor: colors.red[500] }}
+                  iconOnly
+                  onPress={() => {
+                    setEditMessage(undefined);
+                    inputRef.current?.reset();
+                  }}
+                >
+                  <Close width={20} height={20} />
+                </Button>
+                <Button
+                  disabled={editMessages.isMutating || !editMessage}
+                  iconOnly
+                  onPress={() => {
+                    editMessages.trigger({
+                      messageId: editMessage.id,
+                      message: inputRef.current.value,
+                      channelId,
+                    });
+                    setEditMessage(undefined);
+                    inputRef.current?.reset();
+                  }}
+                >
+                  <Check width={20} height={20} />
+                </Button>
+              </View>
+            </Animated.View>
           ) : null
         }
       />
@@ -694,8 +735,15 @@ const MessageItem = memo(
     channelId,
     listRef,
     setEditMessage,
+    editMessageIdSharedValue,
+    editMessageItemDimension,
   }: MessageItemProps & {
     listRef: RefObject<FlashList<any>>;
+    editMessageIdSharedValue: Animated.SharedValue<number | undefined>;
+    editMessageItemDimension: Animated.SharedValue<{
+      height: number;
+      pageY: number;
+    }>;
   }) => {
     const { channel_message } = item;
     const reactOnMessage = useReactOnMessage(channelId);
@@ -703,6 +751,7 @@ const MessageItem = memo(
     const Alert = useAlert();
     const isDark = useIsDarkMode();
     const user = useUser();
+    const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
     const linkifiedMessage = useMemo(
       () =>
@@ -717,179 +766,207 @@ const MessageItem = memo(
       [channel_message.body]
     );
 
+    const style = useAnimatedStyle(() => {
+      if (editMessageIdSharedValue.value === channel_message.id) {
+        return {
+          backgroundColor: isDark ? colors.gray[800] : colors.gray[100],
+          borderRadius: 8,
+        };
+      }
+      return {
+        backgroundColor: "transparent",
+        borderRadius: 0,
+      };
+    }, [isDark, editMessageIdSharedValue.value, channel_message.id]);
+
     return (
-      <View tw="mb-5 px-4">
-        <View tw="flex-row" style={{ columnGap: 8 }}>
-          <Link
-            href={`/@${
-              item.channel_message.sent_by.profile.username ??
-              item.channel_message.sent_by.profile.wallet_addresses
-            }`}
-          >
-            <View tw="h-6 w-6">
-              <Avatar size={24} url={channel_message.sent_by.profile.img_url} />
-              <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
-            </View>
-          </Link>
-          <View tw="flex-1" style={{ rowGap: 8 }}>
-            <View tw="flex-row items-center" style={{ columnGap: 8 }}>
-              <Link
-                href={`/@${
-                  item.channel_message.sent_by.profile.username ??
-                  item.channel_message.sent_by.profile.wallet_addresses
-                }`}
-              >
-                <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
-                  {channel_message.sent_by.profile.name}
-                </Text>
-              </Link>
-
-              <Text tw="text-xs text-gray-700 dark:text-gray-200">
-                {formatDateRelativeWithIntl(channel_message.updated_at)}
-              </Text>
-
-              <View
-                tw="mr-2 flex-1 flex-row items-center justify-end"
-                style={{ gap: 16 }}
-              >
-                <Reaction
-                  reactions={reactions}
-                  reactionGroup={item.reaction_group}
-                  onPress={async (id) => {
-                    listRef.current?.prepareForLayoutAnimationRender();
-                    await reactOnMessage.trigger({
-                      messageId: item.channel_message.id,
-                      reactionId: id,
-                    });
-                  }}
+      <Animated.View style={style} ref={animatedViewRef}>
+        <View tw="my-2 px-4">
+          <View tw="flex-row" style={{ columnGap: 8 }}>
+            <Link
+              href={`/@${
+                item.channel_message.sent_by.profile.username ??
+                item.channel_message.sent_by.profile.wallet_addresses
+              }`}
+            >
+              <View tw="h-6 w-6">
+                <Avatar
+                  size={24}
+                  url={channel_message.sent_by.profile.img_url}
                 />
-                <View>
-                  <DropdownMenuRoot>
-                    <DropdownMenuTrigger>
-                      <MoreHorizontal
-                        color={isDark ? colors.gray[400] : colors.gray[700]}
-                        width={20}
-                        height={20}
-                      />
-                    </DropdownMenuTrigger>
+                <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
+              </View>
+            </Link>
+            <View tw="flex-1" style={{ rowGap: 8 }}>
+              <View tw="flex-row items-center" style={{ columnGap: 8 }}>
+                <Link
+                  href={`/@${
+                    item.channel_message.sent_by.profile.username ??
+                    item.channel_message.sent_by.profile.wallet_addresses
+                  }`}
+                >
+                  <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
+                    {channel_message.sent_by.profile.name}
+                  </Text>
+                </Link>
 
-                    <DropdownMenuContent loop sideOffset={8}>
-                      {item.channel_message.sent_by.profile.profile_id ===
-                      user.user?.data.profile.profile_id ? (
+                <Text tw="text-xs text-gray-700 dark:text-gray-200">
+                  {formatDateRelativeWithIntl(channel_message.updated_at)}
+                </Text>
+
+                <View
+                  tw="mr-2 flex-1 flex-row items-center justify-end"
+                  style={{ gap: 16 }}
+                >
+                  <Reaction
+                    reactions={reactions}
+                    reactionGroup={item.reaction_group}
+                    onPress={async (id) => {
+                      listRef.current?.prepareForLayoutAnimationRender();
+                      await reactOnMessage.trigger({
+                        messageId: item.channel_message.id,
+                        reactionId: id,
+                      });
+                    }}
+                  />
+                  <View>
+                    <DropdownMenuRoot>
+                      <DropdownMenuTrigger>
+                        <MoreHorizontal
+                          color={isDark ? colors.gray[400] : colors.gray[700]}
+                          width={20}
+                          height={20}
+                        />
+                      </DropdownMenuTrigger>
+
+                      <DropdownMenuContent loop sideOffset={8}>
+                        {item.channel_message.sent_by.profile.profile_id ===
+                        user.user?.data.profile.profile_id ? (
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              Alert.alert(
+                                "Are you sure you want to delete this message?",
+                                "",
+                                [
+                                  {
+                                    text: "Cancel",
+                                  },
+                                  {
+                                    text: "Delete",
+                                    style: "destructive",
+                                    onPress: () => {
+                                      listRef.current?.prepareForLayoutAnimationRender();
+                                      deleteMessage.trigger({
+                                        messageId: item.channel_message.id,
+                                      });
+                                    },
+                                  },
+                                ]
+                              );
+                            }}
+                            key="delete"
+                          >
+                            <MenuItemIcon
+                              Icon={Trash}
+                              ios={{
+                                paletteColors: ["red"],
+                                name: "trash",
+                              }}
+                            />
+                            <DropdownMenuItemTitle tw="font-semibold text-red-500">
+                              Delete
+                            </DropdownMenuItemTitle>
+                          </DropdownMenuItem>
+                        ) : null}
+
+                        {item.channel_message.sent_by.profile.profile_id ===
+                        user.user?.data.profile.profile_id ? (
+                          <DropdownMenuItem
+                            onSelect={() => {
+                              runOnUI(() => {
+                                "worklet";
+                                const values = measure(animatedViewRef);
+                                if (values) {
+                                  editMessageItemDimension.value = {
+                                    height: values.height,
+                                    pageY: values.pageY,
+                                  };
+                                }
+                                runOnJS(setEditMessage)({
+                                  text: item.channel_message.body,
+                                  id: item.channel_message.id,
+                                });
+                              })();
+                            }}
+                            key="edit"
+                          >
+                            <MenuItemIcon
+                              Icon={Edit}
+                              ios={{
+                                name: "pencil",
+                              }}
+                            />
+                            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
+                              Edit
+                            </DropdownMenuItemTitle>
+                          </DropdownMenuItem>
+                        ) : null}
                         <DropdownMenuItem
                           onSelect={() => {
-                            Alert.alert(
-                              "Are you sure you want to delete this message?",
-                              "",
-                              [
-                                {
-                                  text: "Cancel",
+                            router.push(
+                              {
+                                pathname:
+                                  Platform.OS === "web"
+                                    ? router.pathname
+                                    : "/report",
+                                query: {
+                                  ...router.query,
+                                  reportModal: true,
+                                  channelMessageId: item.channel_message.id,
                                 },
-                                {
-                                  text: "Delete",
-                                  style: "destructive",
-                                  onPress: () => {
-                                    listRef.current?.prepareForLayoutAnimationRender();
-                                    deleteMessage.trigger({
-                                      messageId: item.channel_message.id,
-                                    });
-                                  },
-                                },
-                              ]
+                              },
+                              Platform.OS === "web" ? router.asPath : undefined
                             );
                           }}
-                          key="delete"
+                          key="report"
                         >
                           <MenuItemIcon
-                            Icon={Trash}
+                            Icon={Flag}
                             ios={{
-                              paletteColors: ["red"],
-                              name: "trash",
-                            }}
-                          />
-                          <DropdownMenuItemTitle tw="font-semibold text-red-500">
-                            Delete
-                          </DropdownMenuItemTitle>
-                        </DropdownMenuItem>
-                      ) : null}
-
-                      {item.channel_message.sent_by.profile.profile_id ===
-                      user.user?.data.profile.profile_id ? (
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            setEditMessage({
-                              text: item.channel_message.body,
-                              id: item.channel_message.id,
-                            });
-                          }}
-                          key="edit"
-                        >
-                          <MenuItemIcon
-                            Icon={Edit}
-                            ios={{
-                              name: "pencil",
+                              name: "flag",
                             }}
                           />
                           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                            Edit
+                            Report
                           </DropdownMenuItemTitle>
                         </DropdownMenuItem>
-                      ) : null}
-                      <DropdownMenuItem
-                        onSelect={() => {
-                          router.push(
-                            {
-                              pathname:
-                                Platform.OS === "web"
-                                  ? router.pathname
-                                  : "/report",
-                              query: {
-                                ...router.query,
-                                reportModal: true,
-                                channelMessageId: item.channel_message.id,
-                              },
-                            },
-                            Platform.OS === "web" ? router.asPath : undefined
-                          );
-                        }}
-                        key="report"
-                      >
-                        <MenuItemIcon
-                          Icon={Flag}
-                          ios={{
-                            name: "flag",
-                          }}
-                        />
-                        <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                          Report
-                        </DropdownMenuItemTitle>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenuRoot>
+                      </DropdownMenuContent>
+                    </DropdownMenuRoot>
+                  </View>
                 </View>
               </View>
-            </View>
 
-            <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-              {linkifiedMessage}
-            </Text>
-            <PlatformAnimateHeight
-              initialHeight={item.reaction_group.length > 0 ? 30 : 0}
-            >
-              {item.reaction_group.length > 0 ? (
-                <AnimatedView tw="pt-1" layout={Layout}>
-                  <MessageReactions
-                    reactionGroup={item.reaction_group}
-                    channelId={channelId}
-                    channelReactions={reactions}
-                    messageId={channel_message.id}
-                  />
-                </AnimatedView>
-              ) : null}
-            </PlatformAnimateHeight>
+              <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+                {linkifiedMessage}
+              </Text>
+              <PlatformAnimateHeight
+                initialHeight={item.reaction_group.length > 0 ? 30 : 0}
+              >
+                {item.reaction_group.length > 0 ? (
+                  <AnimatedView tw="pt-1" layout={Layout}>
+                    <MessageReactions
+                      reactionGroup={item.reaction_group}
+                      channelId={channelId}
+                      channelReactions={reactions}
+                      messageId={channel_message.id}
+                    />
+                  </AnimatedView>
+                ) : null}
+              </PlatformAnimateHeight>
+            </View>
           </View>
         </View>
-      </View>
+      </Animated.View>
     );
   }
 );
