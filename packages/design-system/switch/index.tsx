@@ -8,25 +8,42 @@ import { Extrapolation } from "react-native-reanimated";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
-const width = 50;
-const height = 28;
-const thumbHeight = 24;
-const thumbWidth = 24;
-const thumbOffset = 2;
+const PRESET_SIZE = {
+  small: {
+    width: 44.5,
+    height: 21.5,
+    thumbHeight: 17.5,
+    thumbWidth: 17.5,
+    thumbOffset: 2,
+  },
+  regular: {
+    width: 50,
+    height: 28,
+    thumbHeight: 24,
+    thumbWidth: 24,
+    thumbOffset: 2,
+  },
+};
 
 export type SwitchProps = {
   checked?: boolean;
   onChange?: (nextValue: boolean) => void;
+  size?: "small" | "regular";
 };
 
 export const Switch = (props: SwitchProps) => {
-  const { checked, onChange, ...rest } = props;
+  const { checked, onChange, size = "regular", ...rest } = props;
 
   const isDark = useIsDarkMode();
+  const width = PRESET_SIZE[size].width;
+  const height = PRESET_SIZE[size].height;
+  const thumbHeight = PRESET_SIZE[size].thumbHeight;
+  const thumbWidth = PRESET_SIZE[size].thumbWidth;
+  const thumbOffset = PRESET_SIZE[size].thumbOffset;
 
   return (
     <Pressable
-      style={styles.pressableStyle}
+      style={[{ width }, styles.pressableStyle]}
       onPress={useCallback(() => {
         if (onChange) {
           onChange(!checked);
@@ -52,7 +69,7 @@ export const Switch = (props: SwitchProps) => {
         />
       </View>
       <MotiView
-        style={styles.thumbStyle}
+        style={[{ height: thumbHeight, width: thumbWidth }, styles.thumbStyle]}
         animate={{
           translateX: checked ? width - thumbWidth - thumbOffset : thumbOffset,
         }}
@@ -66,14 +83,11 @@ export const Switch = (props: SwitchProps) => {
 const styles = StyleSheet.create({
   thumbStyle: {
     position: "absolute",
-    height: thumbHeight,
-    width: thumbWidth,
     backgroundColor: "white",
     borderRadius: 999,
   },
   pressableStyle: {
     justifyContent: "center",
-    width,
   },
   gradientWrapper: { overflow: "hidden", borderRadius: 999 },
 });

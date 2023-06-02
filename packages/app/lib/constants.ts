@@ -183,6 +183,8 @@ export const HIDE_LINK_FOOTER_ROUTER_LIST = [
   "/nft/[chainName]/[contractAddress]/[tokenId]",
   "/list",
   "/profile/[username]/[dropSlug]",
+  "/channels",
+  "/channels/[channelId]",
 ];
 export const SWIPE_LIST_SCREENS = [
   "/home",
@@ -191,5 +193,6 @@ export const SWIPE_LIST_SCREENS = [
   "/nft/[chainName]/[contractAddress]/[tokenId]",
   "/list",
 ];
-
+export const HIDE_MOBILE_WEB_HEADER_SCREENS = ["/channels/[channelId]"];
+export const HIDE_MOBILE_WEB_FOOTER_SCREENS = ["/channels/[channelId]"];
 export const DARK_THEME_PATHNAMES = ["/", "/foryou"];

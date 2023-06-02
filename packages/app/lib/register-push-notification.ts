@@ -1,6 +1,5 @@
 import { Platform } from "react-native";
 
-import * as Application from "expo-application";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
@@ -31,9 +30,6 @@ async function registerForPushNotificationsAsync() {
       lightColor: "#FF231F7C",
     });
   }
-
-  const experienceId = "@showtime-xyz/showtime";
-  const applicationId = Application.applicationId;
 
   let granted = await getNotificationPermissionStatus();
 
@@ -81,8 +77,6 @@ async function registerForPushNotificationsAsync() {
 
   // Get the expo token
   const expoPushToken = await Notifications.getExpoPushTokenAsync({
-    experienceId,
-    applicationId,
     devicePushToken,
   });
   console.log(expoPushToken);

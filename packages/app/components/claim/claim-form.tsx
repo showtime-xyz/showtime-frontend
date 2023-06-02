@@ -448,8 +448,6 @@ export const ClaimForm = ({
             >
               {isLoading ? (
                 "Loading..."
-              ) : state.status === "loading" ? (
-                "Collecting... it should take about 10 seconds"
               ) : state.status === "error" ? (
                 "Failed. Retry!"
               ) : edition.gating_type === "spotify_save" ||
