@@ -219,7 +219,7 @@ const NotificationDescription = memo(
           >
             <Actors actors={notification.actors} setUsers={setUsers} />
             {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
-            {notification.description}
+            {notification.description?.trim()}
           </Text>
           {Boolean(formatDistance) && (
             <View tw="items-end">

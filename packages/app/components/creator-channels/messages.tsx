@@ -263,7 +263,7 @@ export const Messages = () => {
   const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
-  const { height, width } = useWindowDimensions();
+  //const { height, width } = useWindowDimensions();
   const [editMessage, setEditMessage] = useState<
     undefined | { id: number; text: string }
   >();
@@ -611,7 +611,6 @@ export const Messages = () => {
             onScroll={scrollhandler}
             useWindowScroll={false}
             estimatedItemSize={90}
-            estimatedListSize={{ height, width }}
             keyboardDismissMode="on-drag"
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: insets.bottom }}
