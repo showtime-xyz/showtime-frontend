@@ -57,7 +57,7 @@ export const getProfileName = (profile?: Profile) => {
   return "Unnamed";
 };
 
-const DEFAULT_PROFILE_PIC =
+export const DEFAULT_PROFILE_PIC =
   "https://cdn.tryshowtime.com/profile_placeholder2.jpg";
 
 export const getProfileImage = (profile?: Profile) => {

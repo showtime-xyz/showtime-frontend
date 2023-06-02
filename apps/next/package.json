@@ -39,6 +39,7 @@
     "@types/react-datepicker": "^4.10.0",
     "@types/react-dropzone": "^5.1.0",
     "@types/react-stickynode": "^4.0.0",
+    "@vercel/og": "^0.5.6",
     "@walletconnect/web3-provider": "^1.8.0",
     "app": "*",
     "array-to-image": "^1.0.0",

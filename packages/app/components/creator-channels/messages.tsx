@@ -337,6 +337,24 @@ export const Messages = () => {
   }, []);
 
   const shareLink = async () => {
+    // const as = `/channels/${channelId}/share`;
+    // router.push(
+    //   Platform.select({
+    //     native: as,
+    //     web: {
+    //       pathname: router.pathname,
+    //       query: {
+    //         ...router.query,
+    //         channelsShareModal: true,
+    //       },
+    //     } as any,
+    //   }),
+    //   Platform.select({
+    //     native: as,
+    //     web: router.asPath,
+    //   }),
+    //   { shallow: true }
+    // );
     const result = await share({
       url: `${getWebBaseURL()}/channels/${channelId}`,
     });
