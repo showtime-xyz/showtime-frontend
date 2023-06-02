@@ -23,7 +23,7 @@ export const ReactionProvider = ({ children }: any) => {
     setVisible(false);
   };
   const handleClose = () => {
-    animatedV.value = withTiming(0.1, { duration: 150 }, () => {
+    animatedV.value = withTiming(0, { duration: 150 }, () => {
       runOnJS(close)();
     });
   };
