@@ -670,6 +670,7 @@ const MessageInput = ({
                     channelId,
                   });
                   setEditMessage(undefined);
+                  inputRef.current?.reset();
                 }}
               >
                 Save
