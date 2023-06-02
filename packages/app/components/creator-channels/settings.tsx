@@ -67,11 +67,7 @@ export const ChannelsSettings = () => {
                       onPress: async () => {
                         if (typeof channelId !== "undefined") {
                           await leaveChannel.trigger({ channelId });
-                          router.pop();
-                          // If we're on native we need to pop twice to get back of the channel message screen
-                          if (Platform.OS !== "web") {
-                            router.pop();
-                          }
+                          router.replace("/channels");
                         }
                       },
                     },
