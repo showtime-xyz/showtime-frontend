@@ -336,6 +336,7 @@ export const Messages = () => {
 
     return () => {
       AvoidSoftInput.setEnabled(true);
+      enableLayoutAnimations(false);
     };
   }, []);
 

@@ -7,7 +7,6 @@ import { Image } from "expo-image";
 import * as Notifications from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
-import { enableLayoutAnimations } from "react-native-reanimated";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
 import { growthbook } from "app/lib/growthbook";
@@ -18,7 +17,6 @@ import { AppProviders } from "app/providers/app-providers";
 
 enableScreens(true);
 enableFreeze(true);
-enableLayoutAnimations(true);
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
