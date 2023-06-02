@@ -158,7 +158,7 @@ const Header = (props: HeaderProps) => {
       <View tw="flex-row items-center" style={{ columnGap: 8 }}>
         <Pressable
           onPress={() => {
-            router.back();
+            router.replace("/channels");
           }}
           tw="md:hidden"
         >
