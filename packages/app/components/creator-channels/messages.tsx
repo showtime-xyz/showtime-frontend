@@ -537,7 +537,7 @@ export const Messages = () => {
             tw="text-center text-gray-900 dark:text-white"
             style={{ fontSize: 26 }}
           >
-            No channel joined.
+            Select a channel!
           </Text>
           <View tw="h-5" />
           <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-white">
