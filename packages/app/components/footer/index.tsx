@@ -45,6 +45,7 @@ const Footer = () => {
   if (HIDE_MOBILE_WEB_FOOTER_SCREENS.includes(router.pathname)) {
     return null;
   }
+
   return (
     <View
       style={{
@@ -58,7 +59,7 @@ const Footer = () => {
       />
       <CreatorChannelsTabBarIcon
         color={color}
-        focused={router.pathname === "/creator-channels"}
+        focused={router.pathname === "/channels"}
       />
       <CreateTabBarIcon
         color={buttonColor}
