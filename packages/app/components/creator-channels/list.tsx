@@ -1,4 +1,4 @@
-import { useCallback, memo, useRef, useMemo } from "react";
+import { useCallback, memo, useRef, useMemo, RefObject } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { RectButton } from "react-native-gesture-handler";
@@ -44,7 +44,9 @@ import {
 } from "./types";
 
 const keyExtractor = (item: CreatorChannelsListItemProps) => {
-  return item.type === "section" ? item.title : item.id.toString();
+  return item.type === "section"
+    ? item.title
+    : `${item.itemType ?? "listItem"}-${item.id}`;
 };
 
 const PlatformPressable = Platform.OS === "web" ? Pressable : RectButton;
@@ -167,7 +169,13 @@ const CreatorChannelsListItem = memo(
 CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
 const CreatorChannelsListCreator = memo(
-  ({ item }: { item: CreatorChannelsListItemProps }) => {
+  ({
+    item,
+    listRef,
+  }: {
+    item: CreatorChannelsListItemProps;
+    listRef: RefObject<FlashList<any>>;
+  }) => {
     const joinChannel = useJoinChannel();
     const time = formatDateRelativeWithIntl(item.updated_at);
     const memberCount = new Intl.NumberFormat().format(item.member_count);
@@ -209,14 +217,18 @@ const CreatorChannelsListCreator = memo(
               </View>
               <View tw="items-end justify-end">
                 <Pressable
-                  tw="rounded-full bg-black p-1 dark:bg-white"
+                  tw={[
+                    "rounded-full bg-black p-1 dark:bg-white",
+                    joinChannel.isMutating ? "opacity-50" : "",
+                  ]}
                   onPress={() => {
+                    listRef.current?.prepareForLayoutAnimationRender();
                     joinChannel.trigger({ channelId: item.id });
                   }}
                   disabled={joinChannel.isMutating}
                 >
                   <Text tw="px-6 font-bold text-white dark:text-black">
-                    {joinChannel.isMutating ? "Joining..." : "Join"}
+                    Join
                   </Text>
                 </Pressable>
               </View>
@@ -339,7 +351,7 @@ export const CreatorChannelsList = memo(
       }
 
       if (item.itemType === "creator") {
-        return <CreatorChannelsListCreator item={item} />;
+        return <CreatorChannelsListCreator item={item} listRef={listRef} />;
       }
 
       return <CreatorChannelsListItem item={item} />;
