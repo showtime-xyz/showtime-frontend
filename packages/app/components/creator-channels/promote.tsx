@@ -82,7 +82,7 @@ export const ChannelsPromote = () => {
   });
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const imageWidth = isMdWidth ? 390 : width - 60;
+  const imageWidth = isMdWidth ? 390 : width;
   const imageHeight = imageWidth * (475.5 / 390);
   useEffect(() => {
     // Notes: According on App Store rules, must be hide the option if the device doesn't have the app installed.
@@ -342,7 +342,7 @@ export const ChannelsPromote = () => {
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
             <BottomSheetScrollView>
-              <View tw="ios:scale-[0.82] web:pb-10 android:scale-[0.82] web:pt-0 web:pb-2 ios:-mt-10 android:-mt-10  web:self-center select-none">
+              <View tw="web:pb-10 web:pb-2 web:self-center select-none pt-4 md:pt-0">
                 <View collapsable={false} ref={viewRef as any}>
                   <View
                     style={{
