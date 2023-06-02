@@ -572,10 +572,14 @@ export const Messages = () => {
             drawDistance={height * 2}
             useWindowScroll={false}
             estimatedItemSize={100}
-            estimatedListSize={{
-              width,
-              height,
-            }}
+            estimatedListSize={
+              data && data.length
+                ? {
+                    width,
+                    height,
+                  }
+                : undefined
+            }
             keyboardDismissMode="on-drag"
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: insets.bottom }}

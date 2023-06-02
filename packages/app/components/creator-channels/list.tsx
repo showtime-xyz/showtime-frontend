@@ -134,11 +134,11 @@ const CreatorChannelsListItem = memo(
               </View>
               <View tw="mt-2">
                 <Text
-                  tw="leading-5 text-gray-500 dark:text-gray-300"
+                  tw="whitespace-nowrap leading-5 text-gray-500 dark:text-gray-300"
                   numberOfLines={2}
                 >
                   {item?.latest_message?.body ? (
-                    item?.latest_message?.body
+                    item?.latest_message?.body.trim()
                   ) : item.itemType === "owned" ? (
                     <Text tw="font-semibold">
                       Blast exclusive updates to all your fans at once like

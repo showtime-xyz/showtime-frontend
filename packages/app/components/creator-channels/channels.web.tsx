@@ -145,7 +145,7 @@ const CreatorChannelsListItem = memo(
                   numberOfLines={2}
                 >
                   {item?.latest_message?.body ? (
-                    item?.latest_message?.body
+                    item?.latest_message?.body.trim()
                   ) : item.itemType === "owned" ? (
                     <Text tw="font-semibold">
                       Blast exclusive updates to all your fans at once like
