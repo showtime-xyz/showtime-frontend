@@ -58,7 +58,7 @@ const CreatorChannelsHeader = memo(
     return (
       <AnimatedView
         tw="px-4 py-4"
-        layout={Layout}
+        layout={Layout.duration(100)}
         entering={FadeIn}
         exiting={FadeOut}
       >
