@@ -6,6 +6,7 @@ import {
   useState,
   useMemo,
   RefObject,
+  useLayoutEffect,
 } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
@@ -310,7 +311,7 @@ export const Messages = () => {
         runOnJS(setShowScrollToBottom)(false);
       }
       if (isScrolling.value) {
-        runOnJS(enableLayoutAnimations)(true);
+        //runOnJS(enableLayoutAnimations)(true);
       }
       isScrolling.value = false;
     },
@@ -385,7 +386,7 @@ export const Messages = () => {
   });
   */
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isLoadingMore) {
       enableLayoutAnimations(false);
     }
@@ -872,11 +873,12 @@ const MessageItem = memo(
                     onPress={(id) => {
                       enableLayoutAnimations(true);
                       requestAnimationFrame(async () => {
-                        listRef.current?.prepareForLayoutAnimationRender();
-
                         await reactOnMessage.trigger({
                           messageId: item.channel_message.id,
                           reactionId: id,
+                        });
+                        requestAnimationFrame(() => {
+                          enableLayoutAnimations(false);
                         });
                       });
                     }}
@@ -912,6 +914,9 @@ const MessageItem = memo(
                                         listRef.current?.prepareForLayoutAnimationRender();
                                         await deleteMessage.trigger({
                                           messageId: item.channel_message.id,
+                                        });
+                                        requestAnimationFrame(() => {
+                                          enableLayoutAnimations(false);
                                         });
                                       });
                                     },

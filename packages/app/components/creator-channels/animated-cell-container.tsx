@@ -31,7 +31,7 @@ export const CustomCellRenderer = memo(
         {...props}
         ref={ref}
         layout={Layout}
-        entering={FadeIn.delay(100).duration(300)}
+        entering={FadeIn.delay(50).duration(300)}
         exiting={FadeOut.duration(300)}
       />
     );
