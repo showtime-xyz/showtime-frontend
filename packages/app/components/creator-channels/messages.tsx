@@ -90,7 +90,6 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
-import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { MessageReactions } from "../reaction/message-reactions";
@@ -573,6 +572,7 @@ export const Messages = () => {
             drawDistance={height * 2}
             useWindowScroll={false}
             estimatedItemSize={80}
+            estimatedListSize={{ width, height }}
             keyboardDismissMode="on-drag"
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: insets.bottom }}
