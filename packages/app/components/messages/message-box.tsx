@@ -63,10 +63,10 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
 
     //#region callbacks
     const handleReset = useCallback(() => {
+      setValue("");
       // @ts-ignore
       inputRef?.current?.blur();
-      setValue("");
-    }, [inputRef, setValue]);
+    }, [inputRef]);
     const handleFocus = useCallback(() => {
       // @ts-ignore
       inputRef.current.focus();
@@ -138,6 +138,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             onFocus={onFocus}
             onBlur={onBlur}
             maxLength={500}
+            autoCapitalize="none"
             // @ts-ignore RNW >= v19 & RN >= 0.71 supports these props
             readOnly={submitting}
             rows={1}
@@ -150,7 +151,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
           <Button
             size="regular"
             iconOnly={true}
-            disabled={disable}
+            disabled={disable || submitting}
             onPress={handleSubmit}
             tw={disable ? "opacity-60" : ""}
             style={{
