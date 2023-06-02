@@ -5,6 +5,7 @@ import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 
 import { useChannelMessages } from "./use-channel-messages";
+import { useOwnedChannelsList } from "./use-channels-list";
 
 async function deleteMessage(
   url: string,
@@ -22,6 +23,7 @@ export const useDeleteMessage = (channelId?: string) => {
     deleteMessage
   );
   const channelMessages = useChannelMessages(channelId);
+  const joinedChannelsList = useOwnedChannelsList();
 
   const handleSubmit = async ({ messageId }: { messageId: number }) => {
     channelMessages.mutate(
@@ -46,6 +48,7 @@ export const useDeleteMessage = (channelId?: string) => {
       Logger.error(e);
     } finally {
       channelMessages.mutate();
+      joinedChannelsList.refresh();
     }
   };
 
