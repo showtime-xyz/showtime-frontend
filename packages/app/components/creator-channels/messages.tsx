@@ -693,10 +693,11 @@ const MessageInput = ({
               message: text,
               callback: sendMessageCallback,
             });
-            enableLayoutAnimations(true);
 
             inputRef.current?.reset();
             requestAnimationFrame(() => {
+              enableLayoutAnimations(true);
+
               listRef.current?.scrollToIndex({
                 index: 0,
                 animated: true,
