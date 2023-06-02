@@ -26,6 +26,7 @@ export type MessageItemProps = {
   item: ChannelMessageItem;
   reactions: ChannelReactionResponse;
   channelId: string;
+  setEditMessage: (v: undefined | { id: number; text: string }) => void;
 };
 
 export type HeaderProps = {

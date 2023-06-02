@@ -29,6 +29,7 @@ interface MessageBoxProps {
   placeholder: string;
   textInputProps?: TextInputProps;
   tw?: string;
+  submitButton?: React.ReactNode;
 }
 
 export interface MessageBoxMethods {
@@ -49,6 +50,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       onBlur,
       placeholder,
       textInputProps,
+      submitButton,
       tw = "",
     } = props;
     //#region variables
@@ -69,7 +71,9 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       // @ts-ignore
       inputRef.current.focus();
     }, []);
-    const handleTextChange = (text: string) => setValue(text);
+    const handleTextChange = (text: string) => {
+      setValue(text);
+    };
     const handleSubmit = async function handleSubmit() {
       await onSubmit?.(value);
       if (Platform.OS === "web") {
@@ -84,8 +88,9 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
         reset: handleReset,
         focus: handleFocus,
         setValue,
+        value,
       }),
-      [handleReset, handleFocus]
+      [handleReset, handleFocus, value]
     );
     return (
       <View
@@ -139,27 +144,31 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             {...textInputProps}
           />
         </View>
-        <Button
-          size="regular"
-          iconOnly={true}
-          disabled={disable}
-          onPress={handleSubmit}
-          tw={disable ? "opacity-60" : ""}
-          style={{
-            width: 40,
-            height: 40,
-          }}
-        >
-          {submitting ? (
-            <Spinner
-              size="small"
-              color={colors.gray[500]}
-              secondaryColor="transparent"
-            />
-          ) : (
-            <Send width={20} height={20} />
-          )}
-        </Button>
+        {submitButton ? (
+          submitButton
+        ) : (
+          <Button
+            size="regular"
+            iconOnly={true}
+            disabled={disable}
+            onPress={handleSubmit}
+            tw={disable ? "opacity-60" : ""}
+            style={{
+              width: 40,
+              height: 40,
+            }}
+          >
+            {submitting ? (
+              <Spinner
+                size="small"
+                color={colors.gray[500]}
+                secondaryColor="transparent"
+              />
+            ) : (
+              <Send width={20} height={20} />
+            )}
+          </Button>
+        )}
       </View>
     );
   }

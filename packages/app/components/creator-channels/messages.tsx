@@ -16,15 +16,11 @@ import Animated, {
   useAnimatedKeyboard,
   useAnimatedScrollHandler,
   useAnimatedStyle,
-  KeyboardState,
   runOnJS,
-  interpolate,
   FadeOut,
   FadeIn,
   SlideInDown,
   SlideOutDown,
-  useAnimatedReaction,
-  useSharedValue,
   Layout,
 } from "react-native-reanimated";
 
@@ -260,9 +256,10 @@ export const Messages = () => {
   const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
   const { height, width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
-  const headerHeight = useHeaderHeight();
   const bottomHeight = usePlatformBottomHeight();
+  const [editMessage, setEditMessage] = useState<
+    undefined | { id: number; text: string }
+  >();
   const router = useRouter();
   const share = useShare();
   const isDark = useIsDarkMode();
@@ -293,9 +290,6 @@ export const Messages = () => {
 
   const channelDetail = useChannelById(channelId);
   const membersCount = channelDetail.data?.member_count || 0;
-  const textInputBottomY = useSharedValue(0);
-  const lastTranslateY = useSharedValue(0);
-  const windowDimension = useWindowDimensions();
 
   useIntroducingCreatorChannels();
 
@@ -359,59 +353,23 @@ export const Messages = () => {
           reactions={extraData.reactions}
           channelId={extraData.channelId}
           listRef={listRef}
-          textInputBottomY={textInputBottomY}
+          setEditMessage={setEditMessage}
         />
       );
     },
-    [textInputBottomY]
+    []
   );
-  const keyboardOpenHeight = useSharedValue(0);
 
   const style = useAnimatedStyle(() => {
-    // Keyboard closing
-    if (keyboardOpenHeight.value) {
-      const translateY = interpolate(
-        keyboard.height.value,
-        [keyboardOpenHeight.value, 0],
-        [lastTranslateY.value, 0]
-      );
-      return {
-        transform: [
-          {
-            translateY,
-          },
-        ],
-      };
-    } else {
-      lastTranslateY.value =
-        // Do not translate if the text input is below the keyboard
-        textInputBottomY.value > keyboard.height.value
-          ? 0
-          : -(keyboard.height.value - textInputBottomY.value);
-      return {
-        transform: [
-          {
-            translateY: lastTranslateY.value,
-          },
-        ],
-      };
-    }
+    return {
+      transform: [
+        {
+          translateY: -keyboard.height.value,
+        },
+      ],
+    };
   }, [keyboard]);
-
-  useAnimatedReaction(
-    () => {
-      // @ts-ignore
-      return keyboard.state.value;
-    },
-    (v) => {
-      if (v === KeyboardState.CLOSED) {
-        keyboardOpenHeight.value = 0;
-        lastTranslateY.value = 0;
-      } else if (v === KeyboardState.OPEN) {
-        keyboardOpenHeight.value = keyboard.height.value;
-      }
-    }
-  );
+  const windowDimension = useWindowDimensions();
 
   const listEmptyComponent = useCallback(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
@@ -613,6 +571,8 @@ export const Messages = () => {
             listRef={listRef}
             channelId={channelId}
             sendMessageCallback={sendMessageCallback}
+            setEditMessage={setEditMessage}
+            editMessage={editMessage}
           />
         ) : null}
         {showScrollToBottom ? (
@@ -638,10 +598,14 @@ const MessageInput = ({
   listRef,
   channelId,
   sendMessageCallback,
+  editMessage,
+  setEditMessage,
 }: {
   listRef: RefObject<FlashList<any>>;
-  channelId?: string;
+  channelId: string;
   sendMessageCallback?: () => void;
+  editMessage?: undefined | { id: number; text: string };
+  setEditMessage: (v: undefined | { id: number; text: string }) => void;
 }) => {
   const keyboard =
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -650,6 +614,7 @@ const MessageInput = ({
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
   const inputRef = useRef<any>(null);
+  const editMessages = useEditChannelMessage(channelId);
 
   const bottom = Platform.select({ web: bottomHeight, ios: 16, android: 0 });
 
@@ -663,6 +628,15 @@ const MessageInput = ({
       ],
     };
   }, [keyboard, bottom]);
+
+  useEffect(() => {
+    if (editMessage) {
+      inputRef.current?.setValue(editMessage.text);
+      inputRef.current?.focus();
+    } else {
+      inputRef.current?.setValue("");
+    }
+  }, [editMessage]);
 
   return (
     <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
@@ -684,6 +658,33 @@ const MessageInput = ({
         }}
         submitting={sendMessage.isMutating}
         tw="bg-white dark:bg-black"
+        submitButton={
+          editMessage ? (
+            <View tw="flex-row" style={{ gap: 4 }}>
+              <Button
+                disabled={editMessages.isMutating || !editMessage}
+                onPress={() => {
+                  editMessages.trigger({
+                    messageId: editMessage.id,
+                    message: inputRef.current.value,
+                    channelId,
+                  });
+                  setEditMessage(undefined);
+                }}
+              >
+                Save
+              </Button>
+              <Button
+                variant="secondary"
+                onPress={() => {
+                  setEditMessage(undefined);
+                }}
+              >
+                Cancel
+              </Button>
+            </View>
+          ) : null
+        }
       />
     </Animated.View>
   );
@@ -694,33 +695,21 @@ const MessageItem = memo(
     item,
     reactions,
     channelId,
-    textInputBottomY,
     listRef,
+    setEditMessage,
   }: MessageItemProps & {
     listRef: RefObject<FlashList<any>>;
-    textInputBottomY: Animated.SharedValue<number>;
   }) => {
-    const lastItemId = useRef<number | null>(null);
     const { channel_message } = item;
     const reactOnMessage = useReactOnMessage(channelId);
     const deleteMessage = useDeleteMessage(channelId);
-    const [showInput, setShowInput] = useState(false);
     const Alert = useAlert();
     const isDark = useIsDarkMode();
     const user = useUser();
     const router = useRouter();
-    const viewRef = useRef<RNView>(null);
-    const windowFrame = useSafeAreaFrame();
-    // reset recycling state
-    if (item.channel_message.id !== lastItemId.current) {
-      if (setShowInput) {
-        setShowInput(false);
-      }
-      lastItemId.current = item.channel_message.id;
-    }
 
     return (
-      <View tw="mb-5 px-4" ref={viewRef}>
+      <View tw="mb-5 px-4">
         <View tw="flex-row" style={{ columnGap: 8 }}>
           <Link
             href={`/@${
@@ -819,23 +808,10 @@ const MessageItem = memo(
                       user.user?.data.profile.profile_id ? (
                         <DropdownMenuItem
                           onSelect={() => {
-                            viewRef.current?.measure(
-                              (
-                                _x,
-                                _y,
-                                _width,
-                                _textInputHeight,
-                                _pageX,
-                                textInputPageY
-                              ) => {
-                                textInputBottomY.value =
-                                  windowFrame.height -
-                                  textInputPageY -
-                                  // Est height of bottom fixed input
-                                  150;
-                                setShowInput(true);
-                              }
-                            );
+                            setEditMessage({
+                              text: item.channel_message.body,
+                              id: item.channel_message.id,
+                            });
                           }}
                           key="edit"
                         >
@@ -885,25 +861,13 @@ const MessageItem = memo(
               </View>
             </View>
 
-            {showInput ? (
-              <EditMessageInput
-                hideInput={() => {
-                  textInputBottomY.value = 0;
-                  setShowInput(false);
-                }}
-                channelId={channelId}
-                messageId={channel_message.id}
-                defaultValue={channel_message.body}
-              />
-            ) : (
-              <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-                {channel_message.body}
-              </Text>
-            )}
+            <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+              {channel_message.body}
+            </Text>
             <PlatformAnimateHeight
               initialHeight={item.reaction_group.length > 0 ? 30 : 0}
             >
-              {!showInput && item.reaction_group.length > 0 ? (
+              {item.reaction_group.length > 0 ? (
                 <AnimatedView tw="pt-1" layout={Layout}>
                   <MessageReactions
                     reactionGroup={item.reaction_group}
@@ -920,59 +884,5 @@ const MessageItem = memo(
     );
   }
 );
-
-const EditMessageInput = ({
-  defaultValue,
-  hideInput,
-  channelId,
-  messageId,
-}: {
-  defaultValue: string;
-  hideInput: any;
-  channelId: string;
-  messageId: number;
-}) => {
-  const [message, setMessage] = useState(defaultValue);
-  const editMessage = useEditChannelMessage(channelId);
-
-  return (
-    <Animated.View entering={FadeIn.springify()} exiting={FadeOut.springify()}>
-      <TextInput
-        autoFocus
-        tw="rounded p-4 text-gray-900 dark:text-gray-50"
-        value={message}
-        style={{
-          borderWidth: 1,
-          borderColor: colors.gray[500],
-        }}
-        onBlur={hideInput}
-        multiline={true}
-        defaultValue={defaultValue}
-        onChangeText={setMessage}
-      />
-      <View tw="mt-2 flex-row justify-between">
-        <Button variant="tertiary" onPress={hideInput}>
-          Cancel
-        </Button>
-        <Button
-          variant="primary"
-          disabled={message === defaultValue || message === ""}
-          tw={message === defaultValue || message === "" ? "opacity-30" : ""}
-          onPress={() => {
-            if (message === defaultValue || message === "") return;
-            editMessage.trigger({
-              messageId,
-              message,
-              channelId,
-            });
-            hideInput();
-          }}
-        >
-          Save
-        </Button>
-      </View>
-    </Animated.View>
-  );
-};
 
 MessageItem.displayName = "MessageItem";
