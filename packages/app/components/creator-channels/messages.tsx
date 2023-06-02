@@ -569,10 +569,13 @@ export const Messages = () => {
             onEndReached={onLoadMore}
             inverted
             onScroll={scrollhandler}
-            drawDistance={height * 2}
+            drawDistance={height}
             useWindowScroll={false}
-            estimatedItemSize={80}
-            estimatedListSize={{ width, height }}
+            estimatedItemSize={100}
+            estimatedListSize={{
+              width,
+              height,
+            }}
             keyboardDismissMode="on-drag"
             renderItem={renderItem}
             contentContainerStyle={{ paddingTop: insets.bottom }}
