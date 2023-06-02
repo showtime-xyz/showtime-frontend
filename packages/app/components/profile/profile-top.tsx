@@ -328,6 +328,7 @@ export const ProfileTop = ({
                                 channelId: userChannel.id,
                               });
                               mutateUserProfile();
+                              router.push(`/channels/${userChannel.id}`);
                             }
                           }}
                           disabled={joinChannel.isMutating}
