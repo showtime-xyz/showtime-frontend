@@ -123,6 +123,7 @@ type RootStackNavigatorParams = {
   };
   channelsMessage: undefined;
   channelsIntro: undefined;
+  channelsShare: undefined;
   channelsCongrats: undefined;
   channelsMembers: undefined;
 };
