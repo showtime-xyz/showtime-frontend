@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Pressable, useWindowDimensions } from "react-native";
+import { Pressable, useWindowDimensions, Platform } from "react-native";
 
 import Animated, {
   useAnimatedRef,
@@ -78,7 +78,16 @@ export const Reaction = (props: Props) => {
               height: emojiButtonHeight,
             }}
           >
-            <Text tw="text-2xl text-black dark:text-white">
+            <Text
+              tw="text-black dark:text-white"
+              style={{
+                fontSize: 24,
+                lineHeight: Platform.select({
+                  android: 28,
+                  default: undefined,
+                }),
+              }}
+            >
               {reaction.reaction}
             </Text>
           </ShowtimePressable>

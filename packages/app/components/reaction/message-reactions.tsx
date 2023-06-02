@@ -73,15 +73,23 @@ export const MessageReactions = ({
             >
               <Pressable
                 onPress={() => handleReactionPress(item.id)}
-                tw={
+                tw={[
+                  "min-h-[30px] min-w-[30px] items-center justify-center px-2 py-1",
                   userReaction.self_reacted
-                    ? "min-h-[30px] min-w-[30px] rounded-lg bg-gray-100 px-2 py-1 dark:bg-gray-900"
-                    : "min-h-[30px] min-w-[30px] px-2 py-1"
-                }
+                    ? "rounded-lg bg-gray-100 dark:bg-gray-900"
+                    : "",
+                ]}
               >
                 <Text
-                  tw="h-5 items-center leading-5 text-gray-700 dark:text-gray-200"
-                  style={{ fontSize: 13 }}
+                  tw="text-gray-700 dark:text-gray-200"
+                  style={{
+                    fontSize: 13,
+                    lineHeight: Platform.select({
+                      web: 13,
+                      ios: undefined,
+                      android: 18,
+                    }),
+                  }}
                 >
                   {item.reaction} {formatToUSNumber(userReaction.count)}
                 </Text>
