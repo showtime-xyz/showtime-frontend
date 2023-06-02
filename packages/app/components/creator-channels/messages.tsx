@@ -7,9 +7,9 @@ import {
   useMemo,
   RefObject,
 } from "react";
-import { Platform, useWindowDimensions, View as RNView } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
@@ -17,8 +17,6 @@ import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
   runOnJS,
-  FadeOut,
-  FadeIn,
   SlideInDown,
   SlideOutDown,
   Layout,
@@ -32,7 +30,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   ArrowLeft,
   Edit,
-  CloseLarge,
   EyeOffV2,
   GiftV2,
   LockRounded,
@@ -52,12 +49,10 @@ import {
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
@@ -69,14 +64,15 @@ import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-
 import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { useNavigation } from "app/lib/react-navigation/native";
+import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import { createParam } from "app/navigation/use-param";
 import {
+  cleanUserTextInput,
   formatDateRelativeWithIntl,
   getWebBaseURL,
-  isDesktopWeb,
+  limitLineBreaks,
+  removeTags,
 } from "app/utilities";
 
 import {
@@ -86,7 +82,6 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
-import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { MessageReactions } from "../reaction/message-reactions";
@@ -709,6 +704,18 @@ const MessageItem = memo(
     const isDark = useIsDarkMode();
     const user = useUser();
     const router = useRouter();
+    const linkifiedMessage = useMemo(
+      () =>
+        channel_message.body
+          ? linkifyDescription(
+              limitLineBreaks(
+                cleanUserTextInput(removeTags(channel_message.body)),
+                10
+              )
+            )
+          : "",
+      [channel_message.body]
+    );
 
     return (
       <View tw="mb-5 px-4">
@@ -864,7 +871,7 @@ const MessageItem = memo(
             </View>
 
             <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-              {channel_message.body}
+              {linkifiedMessage}
             </Text>
             <PlatformAnimateHeight
               initialHeight={item.reaction_group.length > 0 ? 30 : 0}
