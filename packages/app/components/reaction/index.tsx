@@ -56,6 +56,7 @@ export const Reaction = (props: Props) => {
         tw="dark:shadow-dark shadow-light flex-row rounded-full bg-white p-2 shadow-md shadow-black/10 dark:bg-black dark:shadow-white/20"
         style={{
           gap: 6,
+          elevation: 24,
         }}
       >
         {reactions.map((reaction, index) => (
