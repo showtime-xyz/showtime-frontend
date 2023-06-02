@@ -35,7 +35,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
 
       return (
         <TextLink
-          href={match}
+          href={match.toLowerCase()}
           key={match + i}
           target="_blank"
           tw={tw ?? "text-13 font-bold text-gray-900 dark:text-gray-100"}
