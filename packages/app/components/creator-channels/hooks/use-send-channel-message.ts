@@ -62,7 +62,7 @@ export const useSendChannelMessage = (channelId?: string) => {
           if (d.length === 0) {
             return [[optimisticObject]];
           } else {
-            d[0].unshift(optimisticObject);
+            d[0] = [optimisticObject, ...d[0]];
             return [...d];
           }
         }
@@ -93,14 +93,13 @@ export const useSendChannelMessage = (channelId?: string) => {
           return d;
         },
         {
-          revalidate: false,
+          revalidate: true,
         }
       );
     } catch (e) {
       captureException(e);
       Logger.error(e);
     } finally {
-      channelMessages.mutate();
       joinedChannelsList.refresh();
     }
 
