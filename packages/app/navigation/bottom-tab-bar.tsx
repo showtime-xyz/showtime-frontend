@@ -2,11 +2,6 @@ import { StyleSheet, useWindowDimensions } from "react-native";
 
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { MotiView } from "moti";
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-  useDerivedValue,
-} from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -129,23 +124,9 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
   const nativeBottomTabBarHeightCallback = useBottomTabBarHeightCallback();
   const isHiddenBottomTabbar = isTabBarHidden;
   const isDark = useIsDarkMode();
-  const isHome = useDerivedValue(() => {
-    return state.index === 1 ? 1 : 0;
-  }, [state.index]);
 
-  const activeAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withTiming(isHome.value, { duration: 250 }),
-    };
-  }, [isHome.value]);
-
-  const overlayColor =
-    state.index === 1
-      ? "rgba(0,0,0,.8)"
-      : isDark
-      ? "rgba(0,0,0,.8)"
-      : "rgba(255, 255, 255, 0.8)";
-  const blurType = state.index === 1 ? "dark" : isDark ? "dark" : "light";
+  const overlayColor = isDark ? "rgba(0,0,0,.8)" : "rgba(255, 255, 255, 0.8)";
+  const blurType = isDark ? "dark" : "light";
 
   return (
     <View
@@ -175,11 +156,6 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
         style={[StyleSheet.absoluteFillObject]}
       />
       <ThemeBottomTabbar state={state} {...rest} />
-      <Animated.View
-        style={[StyleSheet.absoluteFillObject, activeAnimatedStyle]}
-      >
-        <ThemeBottomTabbar state={state} {...rest} dark />
-      </Animated.View>
     </View>
   );
 };

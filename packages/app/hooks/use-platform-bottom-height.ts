@@ -4,7 +4,10 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
-import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
+import {
+  BOTTOM_TABBAR_BASE_HEIGHT,
+  HIDE_MOBILE_WEB_FOOTER_SCREENS,
+} from "app/lib/constants";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { breakpoints } from "design-system/theme";
@@ -19,7 +22,11 @@ export const usePlatformBottomHeight = () => {
     return 0;
   }
   if (Platform.OS === "web") {
-    const mobileWebBottomHeight = insets.bottom + MOBILE_WEB_TABS_HEIGHT;
+    const mobileWebBottomHeight = HIDE_MOBILE_WEB_FOOTER_SCREENS.includes(
+      router.pathname
+    )
+      ? 0
+      : insets.bottom + MOBILE_WEB_TABS_HEIGHT;
     const isMdWidth = width >= breakpoints["md"];
     const webBottomTabBarHeight = isMdWidth
       ? insets.bottom

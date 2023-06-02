@@ -13,14 +13,20 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { WEB_HEADER_HEIGHT } from "app/constants/layout";
 import { useUser } from "app/hooks/use-user";
-import { SWIPE_LIST_SCREENS } from "app/lib/constants";
+import {
+  HIDE_MOBILE_WEB_HEADER_SCREENS,
+  SWIPE_LIST_SCREENS,
+} from "app/lib/constants";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
+
+import { breakpoints } from "design-system/theme";
 
 import { withColorScheme } from "../memo-with-theme";
 import HeaderCenter from "./header-center";
 import { HeaderLeft } from "./header-left";
 import { HeaderRight } from "./header-right";
+import { HeaderRightSm } from "./header-right.sm";
 
 const NOTIFICATION_LIST_HEIGHT = "calc(50vh - 64px)";
 export const NotificationsInHeader = () => {
@@ -94,12 +100,14 @@ export const Header = withColorScheme(
     const isDark = useIsDarkMode();
     const router = useRouter();
     const { isAuthenticated } = useUser();
+    const { width } = useWindowDimensions();
+    const isMdWidth = width >= breakpoints["md"];
 
     if (isHeaderHidden) {
       return null;
     }
-    return (
-      <>
+    if (isMdWidth) {
+      return (
         <View tw="fixed left-0 right-0 top-0 z-50 hidden w-screen items-center bg-white/60 stroke-inherit backdrop-blur-md dark:bg-black/60 md:flex">
           <View
             style={{
@@ -115,17 +123,22 @@ export const Header = withColorScheme(
             </View>
           </View>
         </View>
-        <>
-          <View tw={["fixed left-4 top-2 z-10 flex md:hidden"]}>
-            <HeaderLeft withBackground canGoBack={canGoBack} />
+      );
+    }
+    if (HIDE_MOBILE_WEB_HEADER_SCREENS.includes(router.pathname)) {
+      return null;
+    }
+    return (
+      <>
+        <View tw={["fixed left-4 top-2 z-10 flex md:hidden"]}>
+          <HeaderLeft withBackground canGoBack={canGoBack} />
+        </View>
+        {(!SWIPE_LIST_SCREENS.includes(router.pathname) ||
+          !isAuthenticated) && (
+          <View tw={["fixed right-4 top-2 z-10 flex md:hidden"]}>
+            <HeaderRightSm withBackground />
           </View>
-          {(!SWIPE_LIST_SCREENS.includes(router.pathname) ||
-            !isAuthenticated) && (
-            <View tw={["fixed right-4 top-2 z-10 flex md:hidden"]}>
-              <HeaderRight withBackground />
-            </View>
-          )}
-        </>
+        )}
       </>
     );
   }

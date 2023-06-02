@@ -8,12 +8,13 @@ import {
 } from "react";
 import { Platform, StyleSheet, TextInput } from "react-native";
 
-import { ListRenderItemInfo } from "@shopify/flash-list";
+import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -28,7 +29,7 @@ import { InputAccessoryView } from "../input-accessory-view";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
-const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
+const keyExtractor = (item: CommentType) => `comment-${item.id}`;
 const PlatformInputAccessoryView =
   Platform.OS === "ios" ? InputAccessoryView : Fragment;
 
@@ -77,16 +78,14 @@ export function Comments({
     unlikeComment,
     deleteComment,
     newComment,
+    fetchMore,
+    isLoadingMore,
   } = useComments(nft.nft_id);
   const modalListProps = useModalListProps(webListHeight);
   const { bottom } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   //#endregion
   //#region variables
-  const dataReversed = useMemo(
-    () => data?.comments.slice().reverse() || [],
-    [data]
-  );
 
   //#endregion
 
@@ -166,19 +165,25 @@ export function Comments({
 
   const listEmptyComponent = useCallback(
     () =>
-      !isLoading && !error && !dataReversed.length ? (
+      !isLoading && !error && !data.length ? (
         <EmptyPlaceholder
           text="Be the first to add a comment!"
           title="💬 No comments yet..."
           tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] -mt-5 h-full flex-1"
         />
       ) : null,
-    [isLoading, dataReversed.length, error]
+    [isLoading, data.length, error]
   );
-  const listFooterComponent = useCallback(
-    () => <View style={{ height: Math.max(bottom, 20) }} />,
-    [bottom]
-  );
+  const listFooterComponent = useCallback(() => {
+    if (isLoadingMore)
+      return (
+        <View tw="items-center pb-4">
+          <Spinner size="small" />
+        </View>
+      );
+    return <View style={{ height: Math.max(bottom, 20) }} />;
+  }, [bottom, isLoadingMore]);
+
   // run two recycling pools to optimize performance
   const getItemType = useCallback((item: CommentType) => {
     if (item.replies && item.replies?.length > 0) {
@@ -189,12 +194,12 @@ export function Comments({
 
   return (
     <View style={styles.container}>
-      {isLoading || (dataReversed.length == 0 && error) ? (
+      {isLoading || (data.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
         <View tw="flex-grow">
           <InfiniteScrollList
-            data={dataReversed}
+            data={data}
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
@@ -208,6 +213,7 @@ export function Comments({
             contentContainerStyle={styles.contentContainer}
             getItemType={getItemType}
             ListEmptyComponent={listEmptyComponent}
+            onEndReached={fetchMore}
             {...modalListProps}
           />
           {isAuthenticated && mounted && (

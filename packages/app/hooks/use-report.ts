@@ -11,6 +11,7 @@ type Report = {
   nftId?: number | string;
   activityId?: number;
   description?: string;
+  channelMessageId?: number;
 };
 
 function useReport() {
@@ -21,6 +22,7 @@ function useReport() {
       userId,
       nftId,
       activityId,
+      channelMessageId,
       description = "", // TODO: implement a modal to report with a description
     }: Report) => {
       await axios({
@@ -31,6 +33,7 @@ function useReport() {
           description,
           activity_id: activityId,
           profile_id: userId,
+          channel_message_id: channelMessageId,
         },
       });
       mutate(null);

@@ -1,5 +1,3 @@
-import { useWindowDimensions } from "react-native";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Plus } from "@showtime-xyz/universal.icon";
@@ -10,11 +8,11 @@ import { View } from "@showtime-xyz/universal.view";
 import { HeaderDropdown } from "app/components/header-dropdown";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
-import { SWIPE_LIST_SCREENS } from "app/lib/constants";
-import { TrendingTabBarIcon } from "app/navigation/tab-bar-icons";
+import {
+  CreatorChannelsTabBarIcon,
+  TrendingTabBarIcon,
+} from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-
-import { breakpoints } from "design-system/theme";
 
 import { NotificationsInHeader } from "./header";
 
@@ -24,24 +22,21 @@ type HeaderRightProps = {
 export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
   const router = useRouter();
   const { isLoading, isAuthenticated, user } = useUser();
-  const { width } = useWindowDimensions();
   const isDark = useIsDarkMode();
-  const isMdWidth = width >= breakpoints["md"];
-  const navigateToLogin = useNavigateToLogin();
   const redirectToDrop = useRedirectToCreateDrop();
+  const navigateToLogin = useNavigateToLogin();
 
   return (
     <View>
       {!isLoading && (
         <View tw="flex-row items-center">
-          {isAuthenticated && isMdWidth && (
+          {isAuthenticated && (
             <>
               <View tw="mx-2">
-                <TrendingTabBarIcon
+                <CreatorChannelsTabBarIcon
                   color={isDark ? "white" : "black"}
-                  focused={
-                    router.pathname === "/home" || router.pathname === "/foryou"
-                  }
+                  focused={router.pathname.includes("channels")}
+                  tooltipSide="bottom"
                 />
               </View>
               <View tw="mx-2">
@@ -69,43 +64,29 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
           <View tw="flex-row items-center md:mx-2">
             {isAuthenticated ? (
               <HeaderDropdown
-                type={isMdWidth ? "profile" : "settings"}
+                type="profile"
                 withBackground={withBackground}
                 user={user?.data.profile}
               />
             ) : (
               <>
-                {isMdWidth && (
-                  <View tw="mx-3">
-                    <TrendingTabBarIcon
-                      color={isDark ? "white" : "black"}
-                      focused={router.pathname === "/foryou"}
-                    />
-                  </View>
-                )}
-                {withBackground ? (
-                  <Button
-                    onPress={navigateToLogin}
-                    theme={
-                      SWIPE_LIST_SCREENS.includes(router.pathname)
-                        ? "dark"
-                        : undefined
-                    }
-                  >
-                    Sign In
-                  </Button>
-                ) : (
-                  <Button
-                    onPress={navigateToLogin}
-                    variant="primary"
-                    size="regular"
-                    labelTW="font-semibold"
-                  >
-                    Sign In
-                  </Button>
-                )}
+                <View tw="mx-3">
+                  <TrendingTabBarIcon
+                    color={isDark ? "white" : "black"}
+                    focused={router.pathname === "/foryou"}
+                  />
+                </View>
+                <Button
+                  onPress={navigateToLogin}
+                  variant="primary"
+                  size="regular"
+                  labelTW="font-semibold"
+                >
+                  Sign In
+                </Button>
               </>
             )}
+
             {/* {Platform.OS === "web" ? <NetworkButton /> : null} */}
           </View>
         </View>

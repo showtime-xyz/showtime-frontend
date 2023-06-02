@@ -18,6 +18,7 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
+import { getIsShowCreatorChannelIntro } from "app/lib/mmkv-keys";
 import { getTwitterIntent } from "app/utilities";
 
 import { toast } from "design-system/toast";
@@ -28,10 +29,12 @@ import { DropPreview, DropPreviewProps } from "./drop-preview";
 const BUTTON_HEIGHT = 48;
 type DropPreviewShareProps = Omit<DropPreviewProps, "onPressCTA"> & {
   contractAddress?: string;
+  dropCreated?: boolean;
 };
 
 export const DropViewShare = memo(function DropViewShare({
   contractAddress,
+  dropCreated = false,
   ...rest
 }: DropPreviewShareProps) {
   const { bottom } = useSafeAreaInsets();
@@ -58,10 +61,12 @@ export const DropViewShare = memo(function DropViewShare({
     Linking.openURL(
       getTwitterIntent({
         url: qrCodeUrl.toString(),
-        message: `Just collected "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
+        message: `Just ${dropCreated ? "dropped" : "collected"} "${
+          nft?.token_name
+        }" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
       })
     );
-  }, [nft?.token_name, qrCodeUrl]);
+  }, [dropCreated, nft?.token_name, qrCodeUrl]);
 
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(qrCodeUrl.toString());
@@ -110,11 +115,20 @@ export const DropViewShare = memo(function DropViewShare({
                 tw="web:mb-5 mt-2"
                 onPressCTA={() => {
                   if (!nft) return;
+
                   if (Platform.OS !== "web") {
                     router.pop();
-                    router.push(getNFTSlug(nft));
+                    router.push(
+                      `${getNFTSlug(
+                        nft
+                      )}?showCreatorChannelIntro=${getIsShowCreatorChannelIntro()}`
+                    );
                   } else {
-                    router.replace(getNFTSlug(nft));
+                    router.replace(
+                      `${getNFTSlug(
+                        nft
+                      )}?showCreatorChannelIntro=${getIsShowCreatorChannelIntro()}`
+                    );
                   }
                 }}
                 {...rest}
