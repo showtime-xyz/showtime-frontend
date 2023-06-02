@@ -331,11 +331,12 @@ export const ProfileTop = ({
                             }
                           }}
                           disabled={joinChannel.isMutating}
+                          tw={`opacity-${
+                            joinChannel.isMutating ? "50" : "100"
+                          }`}
                         >
                           <Text tw="font-semibold" style={{ color: "white" }}>
-                            {joinChannel.isMutating
-                              ? "Loading..."
-                              : userChannel.self_is_member
+                            {userChannel.self_is_member
                               ? "View Channel"
                               : "Join Channel"}
                           </Text>
