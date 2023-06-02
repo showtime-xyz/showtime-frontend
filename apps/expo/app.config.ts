@@ -1,19 +1,9 @@
 import type { ExpoConfig } from "@expo/config-types";
-import { ExportedConfigWithProps } from "expo/config-plugins";
 
 const path = require("path");
 const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 const { withInfoPlist } = require("@expo/config-plugins");
-
-type EnvConfig = {
-  [key: string]: {
-    scheme: string;
-    icon: string;
-    foregroundImage: string;
-    backgroundImage: string;
-  };
-};
 
 const url = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 
@@ -27,7 +17,7 @@ const semver = require("semver");
 
 const SCHEME = process.env.SCHEME ?? "io.showtime";
 
-const envConfig: EnvConfig = {
+const envConfig = {
   development: {
     scheme: `${SCHEME}.development`,
     icon: "./assets/icon.development.png",
@@ -174,7 +164,7 @@ const expoConfig: ExpoConfig = {
     "./plugins/with-react-native-reanimated-crash-android-fix.js",
     [
       withInfoPlist,
-      (config: ExportedConfigWithProps) => {
+      (config) => {
         if (!config.modResults) {
           config.modResults = {};
         }
@@ -182,8 +172,6 @@ const expoConfig: ExpoConfig = {
           ...config.modResults,
           // Enable 120 FPS animations
           CADisableMinimumFrameDurationOnPhone: true,
-          // let RNS handle status bar management
-          UIViewControllerBasedStatusBarAppearance: false,
           LSApplicationQueriesSchemes: [
             "mailto",
             "instagram",

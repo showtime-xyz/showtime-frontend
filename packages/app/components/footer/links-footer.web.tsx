@@ -13,6 +13,7 @@ export const WebFooter = () => {
   const isDark = useIsDarkMode();
   const { social, links } = useFooter();
   const router = useRouter();
+
   if (HIDE_LINK_FOOTER_ROUTER_LIST.includes(router.pathname)) {
     return null;
   }

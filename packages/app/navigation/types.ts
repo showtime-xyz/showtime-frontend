@@ -12,12 +12,6 @@ type HomeStackParams = {
   settings: undefined;
 };
 
-// TODO: Add correct types, just quick copy-paste from Trending
-type CreatorChannelsStackParams = {
-  channels: undefined;
-  channelId: undefined;
-};
-
 type TrendingStackParams = {
   trending: undefined;
   login: undefined;
@@ -63,7 +57,7 @@ type NextNavigationProps = {
 
 type BottomTabNavigatorParams = {
   homeTab: NavigatorScreenParams<HomeStackParams>;
-  creatorChannelsTab: NavigatorScreenParams<TrendingStackParams>;
+  trendingTab: NavigatorScreenParams<TrendingStackParams>;
   cameraTab: NavigatorScreenParams<CameraStackParams>;
   notificationsTab: NavigatorScreenParams<NotificationsStackParams>;
   profileTab: NavigatorScreenParams<ProfileStackParams>;
@@ -91,8 +85,6 @@ type RootStackNavigatorParams = {
   dropEvent: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;
-  dropEditDetailsModal: undefined;
-  channelsMessageReactions: undefined;
   search: undefined;
   swipeList: SwipeListParams;
   nft: SwipeListParams;
@@ -106,7 +98,6 @@ type RootStackNavigatorParams = {
   following: undefined;
   addEmail: undefined;
   verifyPhoneNumber: undefined;
-  dropExplanation: undefined;
   drop: undefined;
   qrCodeShare: undefined;
   dropViewShareModal: undefined;
@@ -115,24 +106,17 @@ type RootStackNavigatorParams = {
   collectors: undefined;
   spotifyAuth: undefined;
   claimLimitExplanation: undefined;
-  channelsSettings: undefined;
   likers: undefined;
   appleMusicAuthNativeWebView: undefined;
   report: {
     nftId?: string;
     userId?: string;
   };
-  channelsMessage: undefined;
-  channelsIntro: undefined;
-  channelsShare: undefined;
-  channelsCongrats: undefined;
-  channelsMembers: undefined;
 };
 
 export type {
   NextNavigationProps,
   HomeStackParams,
-  CreatorChannelsStackParams,
   TrendingStackParams,
   CameraStackParams,
   CreateStackParams,

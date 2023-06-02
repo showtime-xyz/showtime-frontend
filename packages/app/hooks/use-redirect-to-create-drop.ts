@@ -1,7 +1,5 @@
 import { Platform } from "react-native";
 
-import { MMKV } from "react-native-mmkv";
-
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
 
@@ -9,8 +7,6 @@ import { useOnboardingPromise } from "app/components/onboarding";
 import { useUser } from "app/hooks/use-user";
 import { useLogInPromise } from "app/lib/login-promise";
 
-const store = new MMKV();
-const STORE_KEY = "showExplanationv2";
 export const useRedirectToCreateDrop = () => {
   const { isAuthenticated, user } = useUser();
   const { loginPromise } = useLogInPromise();
@@ -32,38 +28,21 @@ export const useRedirectToCreateDrop = () => {
       // check if user has completed onboarding
       await onboardingPromise();
 
-      if (store.getBoolean(STORE_KEY)) {
-        router.push(
-          Platform.select({
-            native: "/dropExplanation",
-            web: {
-              pathname: router.pathname,
-              query: { ...router.query, dropExplanationModal: true },
-            } as any,
-          }),
-          Platform.select({
-            native: "/dropExplanation",
-            web: router.asPath === "/" ? "/dropExplanation" : router.asPath,
-          }),
-          { shallow: true }
-        );
-      } else {
-        // redirect to create drop
-        router.push(
-          Platform.select({
-            native: "/drop",
-            web: {
-              pathname: router.pathname,
-              query: { ...router.query, dropModal: true },
-            } as any,
-          }),
-          Platform.select({
-            native: "/drop",
-            web: router.asPath === "/" ? "/drop" : router.asPath,
-          }),
-          { shallow: true }
-        );
-      }
+      // redirect to create drop
+      router.push(
+        Platform.select({
+          native: "/drop",
+          web: {
+            pathname: router.pathname,
+            query: { ...router.query, dropModal: true },
+          } as any,
+        }),
+        Platform.select({
+          native: "/drop",
+          web: router.asPath === "/" ? "/drop" : router.asPath,
+        }),
+        { shallow: true }
+      );
     }
   };
 

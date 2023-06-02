@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 
-import { Messages } from "app/components/creator-channels/messages";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
@@ -12,16 +11,8 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
-import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
-import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
-import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
-import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
-import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
-import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
-import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
-import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropUpdateScreen } from "app/screens/drop-update";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
@@ -71,7 +62,7 @@ export function RootStackNavigator() {
         screenOptions={{
           headerShown: false,
           fullScreenGestureEnabled: true,
-          animationDuration: Platform.OS === "ios" ? 400 : undefined,
+          animationDuration: Platform.OS === "ios" ? 400 : 350,
           animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
         }}
       >
@@ -98,7 +89,6 @@ export function RootStackNavigator() {
           component={NftScreen}
           getId={({ params }) => Object.values(params).join("-")}
         />
-        <Stack.Screen name="channelsMessage" component={Messages} />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -138,20 +128,10 @@ export function RootStackNavigator() {
           options={{ headerTitle: "Comments" }}
           component={CommentsScreen}
         />
-
-        <Stack.Screen
-          name="channelsMembers"
-          options={{ headerTitle: "Members" }}
-          component={CreatorChannelsMembersScreen}
-        />
         <Stack.Screen
           name="dropUpdate"
           options={{ headerTitle: "Update Spotify Link" }}
           component={DropUpdateScreen}
-        />
-        <Stack.Screen
-          name="channelsMessageReactions"
-          component={CreatorChannelsMessageReactionsScreen}
         />
       </Stack.Group>
 
@@ -180,11 +160,7 @@ export function RootStackNavigator() {
           name="verifyPhoneNumber"
           component={VerifyPhoneNumberScreen}
         />
-        <Stack.Screen
-          name="dropExplanation"
-          component={DropExplanationScreen}
-        />
-
+        <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen
           name="dropMusic"
           component={DropMusicScreen}
@@ -212,24 +188,7 @@ export function RootStackNavigator() {
           name="dropViewShareModal"
           component={DropViewShareScreen}
         />
-        <Stack.Screen
-          name="dropEditDetailsModal"
-          component={DropEditDetailsScreen}
-        />
         <Stack.Screen name="raffle" component={RaffleScreen} />
-        <Stack.Screen
-          name="channelsIntro"
-          options={{ gestureEnabled: false }}
-          component={CreatorChannelsIntroScreen}
-        />
-        <Stack.Screen
-          name="channelsCongrats"
-          component={CreatorChannelsCongratsScreen}
-        />
-        <Stack.Screen
-          name="channelsShare"
-          component={CreatorChannelsShareScreen}
-        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -243,11 +202,6 @@ export function RootStackNavigator() {
           component={ClaimLimitExplanationScreen}
         />
         <Stack.Screen name="report" component={ReportScreen} />
-        <Stack.Screen name="drop" component={DropScreen} />
-        <Stack.Screen
-          name="channelsSettings"
-          component={CreatorChannelsSettingsScreen}
-        />
       </Stack.Group>
     </Stack.Navigator>
   );

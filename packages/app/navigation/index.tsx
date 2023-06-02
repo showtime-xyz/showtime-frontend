@@ -1,6 +1,8 @@
 import { useState, useRef, useMemo } from "react";
 import { Platform } from "react-native";
 
+import { Image } from "expo-image";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
 import {

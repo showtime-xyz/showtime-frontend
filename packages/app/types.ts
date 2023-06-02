@@ -141,7 +141,6 @@ export interface Profile {
   wallet_addresses_v2: WalletAddressesV2[];
   wallet_addresses_excluding_email_v2: WalletAddressesExcludingEmailV2[];
   bio: string;
-  channels: Array<{ id: number; name: string; self_is_member: boolean }>;
   website_url: string;
   username: string;
   default_list_id: number;
@@ -253,16 +252,10 @@ export type IEdition = {
 export type MyInfo = {
   data: {
     follows: Array<{ profile_id: number }>;
-    channels: Array<number>;
     profile: Profile & {
       has_spotify_token: boolean;
       has_apple_music_token: boolean;
       spotify_artist_id: null | number;
-      channels: Array<{
-        id: number;
-        name: string;
-        self_is_member: boolean;
-      }>;
     };
     likes_nft: number[];
     likes_comment: any[];

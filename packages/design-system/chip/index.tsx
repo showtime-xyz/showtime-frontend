@@ -44,11 +44,7 @@ export const Chip = ({
       ]}
     >
       {React.isValidElement(icon) && <View tw="mr-1.5">{icon}</View>}
-      <Text
-        tw={[textTw ? textTw : "text-gray-500", TEXT_SIZE_TW[size], textTw]}
-      >
-        {label}
-      </Text>
+      <Text tw={["text-gray-500", TEXT_SIZE_TW[size], textTw]}>{label}</Text>
     </View>
   );
 };

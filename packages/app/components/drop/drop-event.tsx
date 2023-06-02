@@ -685,7 +685,7 @@ export const DropEvent = () => {
           onPress={handleSubmit(onSubmit)}
         >
           {state.status === "loading"
-            ? "Creating..."
+            ? "Creating... it should take about 10 seconds"
             : state.status === "error"
             ? "Failed. Please retry!"
             : "Drop now"}

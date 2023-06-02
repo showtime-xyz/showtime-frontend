@@ -17,7 +17,6 @@ import { createParam } from "app/navigation/use-param";
 type Query = {
   nftId: string;
   userId: string;
-  channelMessageId?: number;
 };
 
 const { useParam } = createParam<Query>();
@@ -29,7 +28,6 @@ const NFT_REPORT_LIST = [
   "It's not original content",
 ];
 const PROFILE_REPORT_LIST = ["They are pretending to be someone else"];
-const CHANNEL_MESSAGE_REPORT_LIST = ["This is a spam message"];
 
 export const ReportModal = () => {
   const router = useRouter();
@@ -37,26 +35,8 @@ export const ReportModal = () => {
   const isDark = useIsDarkMode();
   const [nftId] = useParam("nftId");
   const [userId] = useParam("userId");
-  const [channelMessageId] = useParam("channelMessageId", {
-    parse: (value) => Number(value),
-    initial: undefined,
-  });
   const [description, setDescription] = useState("");
-  const reportOption = nftId
-    ? NFT_REPORT_LIST
-    : typeof channelMessageId !== "undefined"
-    ? CHANNEL_MESSAGE_REPORT_LIST
-    : PROFILE_REPORT_LIST;
-
-  const handleSubmit = async (description: string) => {
-    await report({
-      nftId,
-      userId,
-      description,
-      channelMessageId,
-    });
-    router.pop();
-  };
+  const reportOption = nftId ? NFT_REPORT_LIST : PROFILE_REPORT_LIST;
   return (
     <View>
       <View tw="px-4 pb-8 pt-4">
@@ -69,7 +49,8 @@ export const ReportModal = () => {
         <View key={i.toString()}>
           <Pressable
             onPress={async () => {
-              handleSubmit(item);
+              await report({ nftId, userId, description: item });
+              router.pop();
             }}
           >
             <View tw="flex-row items-center justify-between p-4">
@@ -114,7 +95,8 @@ export const ReportModal = () => {
               size="regular"
               tw="mt-4"
               onPress={async () => {
-                handleSubmit(description);
+                await report({ nftId, userId, description });
+                router.pop();
               }}
             >
               Submit
