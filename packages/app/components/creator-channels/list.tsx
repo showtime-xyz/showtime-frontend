@@ -2,11 +2,7 @@ import { useCallback, memo, useRef, useMemo, RefObject } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { RectButton } from "react-native-gesture-handler";
-import Animated, {
-  FadeIn,
-  FadeOut,
-  SequencedTransition,
-} from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -21,10 +17,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import {
-  useFocusEffect,
-  useScrollToTop,
-} from "app/lib/react-navigation/native";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Link } from "app/navigation/link";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
@@ -64,9 +57,8 @@ const CreatorChannelsHeader = memo(
   }) => {
     return (
       <AnimatedView
-        key={title}
         tw="px-4 py-4"
-        layout={SequencedTransition}
+        layout={Layout}
         entering={FadeIn}
         exiting={FadeOut}
       >

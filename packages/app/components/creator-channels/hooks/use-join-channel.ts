@@ -34,8 +34,8 @@ export const useJoinChannel = () => {
       captureException(e);
       Logger.error(e);
     } finally {
-      joinedChannels.mutate();
       suggestedChannels.mutate();
+      joinedChannels.mutate();
     }
   };
 
