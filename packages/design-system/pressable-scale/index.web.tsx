@@ -10,12 +10,6 @@ export function PressableScale({
   ...props
 }: PressableScaleProps) {
   return (
-    <Pressable
-      tw={[
-        "duration-150 active:scale-95",
-        Array.isArray(tw) ? tw.join(" ") : tw,
-      ].join(" ")}
-      {...props}
-    />
+    <Pressable tw={["duration-150 active:scale-95", tw].join(" ")} {...props} />
   );
 }

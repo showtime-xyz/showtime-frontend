@@ -253,7 +253,7 @@ export const Raffle = (props?: RaffleModalParams) => {
                       url={getProfileImage(winnerProfile)}
                       alt={"Winner Avatar"}
                       size={240}
-                      enableSkeleton={Platform.OS !== "web"}
+                      enableSkeleton
                     />
                     <Text tw="absolute -top-8 left-4 -rotate-[25deg] text-7xl">
                       👑

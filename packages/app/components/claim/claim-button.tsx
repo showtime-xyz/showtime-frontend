@@ -231,6 +231,15 @@ export const ClaimButton = ({
         </>
       </Button>
     );
+  } else if (isProgress) {
+    return (
+      <Button {...buttonProps} disabled>
+        <Text tw="text-sm font-bold">
+          Collecting
+          <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
+        </Text>
+      </Button>
+    );
   } else if (edition?.gating_type === "spotify_save") {
     return (
       <Button {...buttonProps} onPress={() => handleCollectPress("spotify")}>

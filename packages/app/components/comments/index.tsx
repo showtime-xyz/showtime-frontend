@@ -8,7 +8,7 @@ import {
 } from "react";
 import { Platform, StyleSheet, TextInput } from "react-native";
 
-import type { ListRenderItemInfo } from "@shopify/flash-list";
+import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";

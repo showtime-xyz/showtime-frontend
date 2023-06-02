@@ -249,8 +249,8 @@ export const DropMusic = () => {
     ? "What is this drop about?"
     : "Why should people collect this drop?";
   const descHelperText = isSaveDrop
-    ? "You can edit this 30 minutes after the drop is created."
-    : "Promote a collectible, raffle or allow-list to attract more collectors. You can edit this 30 minutes after the drop is created.";
+    ? ""
+    : "Promote a collectible, raffle or allow-list to attract more collectors.";
 
   useEffect(() => {
     resetDropState();
@@ -545,7 +545,6 @@ export const DropMusic = () => {
                       label="Description"
                       multiline
                       textAlignVertical="top"
-                      helperText={descHelperText}
                       placeholder="What is this drop about?"
                       onBlur={onBlur}
                       errorText={errors.description?.message}

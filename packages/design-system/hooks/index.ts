@@ -1,12 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  useRef,
-  useEffect,
-  useState,
-  useMemo,
-  useLayoutEffect,
-  EffectCallback,
-} from "react";
+import { useRef, useEffect, useState, useMemo, useLayoutEffect } from "react";
 import { LayoutChangeEvent, Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -271,8 +264,4 @@ export function useLockBodyScroll(isLocked = true) {
       }
     };
   }, [isMounted, isLocked]);
-}
-
-export function useEffectOnce(effect: EffectCallback) {
-  useEffect(effect, []);
 }

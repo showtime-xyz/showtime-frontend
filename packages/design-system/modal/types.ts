@@ -2,14 +2,13 @@ import type { FC, ReactNode } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
 import type { BottomSheetProps as GorhomBottomSheetProps } from "@showtime-xyz/universal.bottom-sheet";
-import { ButtonProps } from "@showtime-xyz/universal.button";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export interface ModalMethods {
   close: () => void;
 }
 
-export type ModalProps = Pick<ModalHeaderProps, "closeButtonProps"> & {
+export interface ModalProps {
   /**
    * Defines the modal title.
    * @default ""
@@ -105,7 +104,7 @@ export type ModalProps = Pick<ModalHeaderProps, "closeButtonProps"> & {
    * @default true
    */
   headerShown?: boolean;
-};
+}
 
 export interface ModalHeaderProps
   extends Pick<ModalProps, "title" | "onClose"> {
@@ -126,11 +125,6 @@ export interface ModalHeaderProps
    * @default undefined
    */
   tw?: TW;
-  /**
-   * header close button.
-   * @default undefined
-   */
-  closeButtonProps?: ButtonProps;
 }
 
 export interface ModalContainerProps
@@ -144,7 +138,6 @@ export interface ModalContainerProps
     | "web_height"
     | "visible"
     | "style"
-    | "closeButtonProps"
   > {
   close: () => void;
   bodyStyle?: StyleProp<ViewStyle>;
