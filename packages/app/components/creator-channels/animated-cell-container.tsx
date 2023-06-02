@@ -29,9 +29,9 @@ export const CustomCellRenderer = memo(
       <ReanimatedCellContainer
         {...props}
         ref={ref}
-        layout={Layout.springify()}
-        entering={FadeIn.springify()}
-        exiting={FadeOut.springify()}
+        layout={Layout}
+        entering={FadeIn.delay(100).duration(300)}
+        exiting={FadeOut.duration(300)}
       />
     );
   })

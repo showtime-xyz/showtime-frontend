@@ -571,7 +571,7 @@ export const Messages = () => {
             onScroll={scrollhandler}
             drawDistance={height * 2}
             useWindowScroll={false}
-            estimatedItemSize={100}
+            estimatedItemSize={90}
             estimatedListSize={
               data && data.length
                 ? {
