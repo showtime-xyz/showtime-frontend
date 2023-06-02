@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -7,12 +8,17 @@ import {
   Copy,
   Flag,
   Slash,
+  UserMinus,
+  UserPlus,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
+import { useFollow } from "app/hooks/use-follow";
 import { useShare } from "app/hooks/use-share";
+import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import type { Profile } from "app/types";
 
@@ -36,6 +42,15 @@ function ProfileDropdown({ user, tw = "" }: Props) {
   const { width } = useWindowDimensions();
   const isBlocked = getIsBlocked(user.profile_id);
   const isDark = useIsDarkMode();
+  const showFollowButton =
+    typeof user?.channels?.[0]?.id !== "undefined" &&
+    user.channels[0].self_is_member;
+  const { unfollow, follow, isFollowing: isFollowingFn } = useMyInfo();
+
+  const isFollowing = useMemo(
+    () => isFollowingFn(user.profile_id),
+    [user.profile_id, isFollowingFn]
+  );
 
   return (
     <DropdownMenuRoot>
@@ -127,6 +142,30 @@ function ProfileDropdown({ user, tw = "" }: Props) {
             Report
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
+
+        {showFollowButton ? (
+          <DropdownMenuItem
+            key="follow"
+            className="danger"
+            onSelect={() => {
+              if (isFollowing) {
+                unfollow(user.profile_id);
+              } else {
+                follow(user.profile_id);
+              }
+            }}
+          >
+            <MenuItemIcon
+              Icon={isFollowing ? UserMinus : UserPlus}
+              ios={{
+                name: isFollowing ? "person.badge.minus" : "person.badge.plus",
+              }}
+            />
+            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              {isFollowing ? "Unfollow User" : "Follow User"}
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+        ) : null}
       </DropdownMenuContent>
     </DropdownMenuRoot>
   );

@@ -96,14 +96,15 @@ export const ProfileTop = ({
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const isSelf = userId === profileId;
   const { unblock } = useBlock();
-  const joinChannel = useJoinChannel();
-  const leaveChannel = useLeaveChannel();
   const userChannel = profileData?.profile.channels?.[0];
   const { onToggleFollow } = useFollow({
     username,
   });
 
   const { top } = useSafeAreaInsets();
+
+  const showViewChannelButton =
+    typeof userChannel?.id !== "undefined" && userChannel.self_is_member;
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+
@@ -301,72 +302,30 @@ export const ProfileTop = ({
                         profileId={profileId}
                       />
                       <View tw="w-2" />
-                      {typeof userChannel?.id !== "undefined" ? (
+                      {showViewChannelButton ? (
                         <Button
                           size={width < 768 ? "small" : "regular"}
-                          iconOnly
-                          variant="tertiary"
-                          onPress={async () => {
-                            if (userChannel?.self_is_member) {
-                              mutateUserProfile(
-                                (d) => {
-                                  if (d && d.data && d.data.profile) {
-                                    d.data.profile.channels[0].self_is_member =
-                                      false;
-                                    return {
-                                      ...d,
-                                    };
-                                  }
-                                  return d;
-                                },
-                                { revalidate: false }
-                              );
-                              await leaveChannel.trigger({
-                                channelId: userChannel.id,
-                              });
-                              mutateUserProfile();
-                            } else {
-                              mutateUserProfile(
-                                (d) => {
-                                  if (d && d.data && d.data.profile) {
-                                    d.data.profile.channels[0].self_is_member =
-                                      true;
-                                    return {
-                                      ...d,
-                                    };
-                                  }
-                                  return d;
-                                },
-                                { revalidate: false }
-                              );
-                              await joinChannel.trigger({
-                                channelId: userChannel.id,
-                              });
-                              mutateUserProfile();
-                            }
+                          style={{
+                            backgroundColor: colors.purple[500],
                           }}
-                          disabled={
-                            joinChannel.isMutating || leaveChannel.isMutating
-                          }
+                          onPress={async () => {
+                            router.push(
+                              `/channels/${profileData.profile.channels[0].id}`
+                            );
+                          }}
                         >
-                          <CreatorChannel
-                            width={24}
-                            height={24}
-                            color={
-                              userChannel?.self_is_member
-                                ? colors.purple[500]
-                                : "gray"
-                            }
-                          />
+                          <Text tw="font-semibold" style={{ color: "white" }}>
+                            View Channel
+                          </Text>
                         </Button>
-                      ) : null}
-                      <View tw="w-2" />
-                      <FollowButton
-                        size={width < 768 ? "small" : "regular"}
-                        name={username}
-                        profileId={profileId}
-                        onToggleFollow={onToggleFollow}
-                      />
+                      ) : (
+                        <FollowButton
+                          size={width < 768 ? "small" : "regular"}
+                          name={username}
+                          profileId={profileId}
+                          onToggleFollow={onToggleFollow}
+                        />
+                      )}
                       <View tw="w-2" />
                     </>
                   ) : null}
