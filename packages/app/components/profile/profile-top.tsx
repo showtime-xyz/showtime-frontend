@@ -305,7 +305,7 @@ export const ProfileTop = ({
                         <Button
                           size={width < 768 ? "small" : "regular"}
                           style={{
-                            backgroundColor: colors.purple[500],
+                            backgroundColor: colors.indigo[600],
                           }}
                           onPress={async () => {
                             if (userChannel?.self_is_member) {
