@@ -702,7 +702,7 @@ const MessageInput = ({
                     inputRef.current?.reset();
                   }}
                 >
-                  <Close width={20} height={20} />
+                  <Close width={20} height={20} color="white" />
                 </Button>
                 <Button
                   disabled={editMessages.isMutating || !editMessage}
