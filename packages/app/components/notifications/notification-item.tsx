@@ -44,7 +44,7 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "collected "],
   ["CREATED_EDITION_SOLD_OUT", "Your drop sold out: "],
   ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
-  ["CHANNEL_NEW_MESSAGE", "posted a new message in their channel: "],
+  ["CHANNEL_NEW_MESSAGE", "broadcasted to their channel: "],
   ["CHANNEL_FIRST_MESSAGE", "just created a collector channel: "],
 
   [
