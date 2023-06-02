@@ -166,6 +166,7 @@ const CreatorChannelsListCreator = memo(
     listRef: RefObject<FlashList<any>>;
   }) => {
     const joinChannel = useJoinChannel();
+    const router = useRouter();
     const time = formatDateRelativeWithIntl(item.updated_at);
     const memberCount = new Intl.NumberFormat().format(item.member_count);
     return (
@@ -209,9 +210,10 @@ const CreatorChannelsListCreator = memo(
                     "rounded-full bg-black p-1 dark:bg-white",
                     joinChannel.isMutating ? "opacity-50" : "",
                   ]}
-                  onPress={() => {
+                  onPress={async () => {
                     listRef.current?.prepareForLayoutAnimationRender();
-                    joinChannel.trigger({ channelId: item.id });
+                    await joinChannel.trigger({ channelId: item.id });
+                    router.push(`/channels/${item.id}`);
                   }}
                   disabled={joinChannel.isMutating}
                 >

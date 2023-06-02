@@ -170,6 +170,7 @@ CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 const CreatorChannelsListCreator = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
     const joinChannel = useJoinChannel();
+    const router = useRouter();
 
     const memberCount = new Intl.NumberFormat().format(item.member_count);
     return (
@@ -207,14 +208,18 @@ const CreatorChannelsListCreator = memo(
               </View>
               <View tw="items-end justify-end">
                 <Pressable
-                  tw="rounded-full bg-black p-1 dark:bg-white"
-                  onPress={() => {
-                    joinChannel.trigger({ channelId: item.id });
+                  tw={[
+                    "rounded-full bg-black p-1 dark:bg-white",
+                    joinChannel.isMutating ? "opacity-50" : "",
+                  ]}
+                  onPress={async () => {
+                    await joinChannel.trigger({ channelId: item.id });
+                    router.push(`/channels/${item.id}`);
                   }}
                   disabled={joinChannel.isMutating}
                 >
-                  <Text tw="px-2.5 py-0.5 text-xs font-bold text-white dark:text-black">
-                    {joinChannel.isMutating ? "Joining..." : "Join"}
+                  <Text tw="px-6 font-bold text-white dark:text-black">
+                    Join
                   </Text>
                 </Pressable>
               </View>
