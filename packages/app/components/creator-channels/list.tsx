@@ -64,7 +64,7 @@ const CreatorChannelsHeader = memo(
       >
         <Text
           tw={[
-            "web:text-center text-2xl font-extrabold text-gray-900 dark:text-white",
+            "web:pt-8 text-2xl font-extrabold text-gray-900 dark:text-white",
             tw,
           ]}
         >
