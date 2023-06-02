@@ -436,6 +436,7 @@ export const CreatorChannelsList = memo(
             }
           />
         }
+        drawDistance={windowHeight * 2}
         CellRendererComponent={CustomCellRenderer}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
