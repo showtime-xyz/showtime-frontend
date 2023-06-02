@@ -645,7 +645,7 @@ const MessageInput = ({
 
   const style = useAnimatedStyle(() => {
     return {
-      bottom,
+      paddingBottom: bottom,
       backgroundColor: isDark ? "black" : "white",
       transform: [
         {
@@ -665,12 +665,7 @@ const MessageInput = ({
   }, [editMessage]);
 
   return (
-    <Animated.View
-      style={[
-        { position: "absolute", width: "100%", backgroundColor: "red" },
-        style,
-      ]}
-    >
+    <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
       <MessageBox
         ref={inputRef}
         placeholder="Send an update..."
