@@ -646,6 +646,7 @@ const MessageInput = ({
   const style = useAnimatedStyle(() => {
     return {
       paddingBottom: bottom,
+      bottom: 0,
       backgroundColor: isDark ? "black" : "white",
       transform: [
         {
