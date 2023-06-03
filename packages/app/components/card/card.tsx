@@ -111,7 +111,15 @@ function Card(props: Props) {
       <RouteComponent
         href={href}
         as={as}
-        viewProps={{ style: [{ flex: 1 }, style] }}
+        viewProps={{
+          style: [
+            {
+              flex: 1,
+              backgroundColor: isDark ? colors.gray[800] : colors.gray[300],
+            },
+            style,
+          ],
+        }}
         style={[
           style as any,
           {
