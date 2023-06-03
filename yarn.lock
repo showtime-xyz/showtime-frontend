@@ -29112,16 +29112,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-svg@npm:9.6.4":
-  version: 9.6.4
-  resolution: "react-native-svg@npm:9.6.4"
-  peerDependencies:
-    react: "*"
-    react-native: ">=0.50.0"
-  checksum: 6b62cf6dc6b6e1f434d643d4b1de8d01469f3ab50985e79b1c3a77c743cb5e830b04b7765dd791af7cdcce1245ebc8dba86380ee6c6849532ba9d4d2be8fc532
-  languageName: node
-  linkType: hard
-
 "react-native-swipe-gestures@npm:^1.0.5":
   version: 1.0.5
   resolution: "react-native-swipe-gestures@npm:1.0.5"
