@@ -602,7 +602,8 @@ export const Messages = () => {
         <View
           tw={[
             "flex-1 overflow-hidden",
-            isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
+            //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
+            "android:pb-12 ios:pb-8 web:pb-12", // since we always show the input, leave the padding
           ]}
         >
           <AnimatedInfiniteScrollListWithRef
@@ -632,24 +633,14 @@ export const Messages = () => {
             }
           />
         </View>
-        {isUserAdmin ? (
-          <MessageInput
-            listRef={listRef}
-            channelId={channelId}
-            sendMessageCallback={sendMessageCallback}
-            setEditMessage={setEditMessage}
-            editMessage={editMessage}
-          />
-        ) : (
-          <MessageBox
-            placeholder="Chat currently unavailable"
-            tw="bg-white text-center dark:bg-black"
-            textInputProps={{
-              editable: false,
-            }}
-            submitButton={<></>}
-          />
-        )}
+        <MessageInput
+          listRef={listRef}
+          channelId={channelId}
+          sendMessageCallback={sendMessageCallback}
+          setEditMessage={setEditMessage}
+          editMessage={editMessage}
+          isUserAdmin={isUserAdmin}
+        />
         {showScrollToBottom ? (
           <Animated.View entering={SlideInDown} exiting={SlideOutDown}>
             <View tw="absolute bottom-[80px] right-4">
@@ -675,12 +666,14 @@ const MessageInput = ({
   sendMessageCallback,
   editMessage,
   setEditMessage,
+  isUserAdmin,
 }: {
   listRef: RefObject<FlashList<any>>;
   channelId: string;
   sendMessageCallback?: () => void;
   editMessage?: undefined | { id: number; text: string };
   setEditMessage: (v: undefined | { id: number; text: string }) => void;
+  isUserAdmin?: boolean;
 }) => {
   const keyboard =
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -717,73 +710,84 @@ const MessageInput = ({
 
   return (
     <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
-      <MessageBox
-        ref={inputRef}
-        placeholder="Send an update..."
-        onSubmit={async (text: string) => {
-          if (channelId) {
-            enableLayoutAnimations(false);
-            listRef.current?.prepareForLayoutAnimationRender();
-            await sendMessage.trigger({
-              channelId,
-              message: text,
-              callback: sendMessageCallback,
-            });
-
-            inputRef.current?.reset();
-            requestAnimationFrame(() => {
-              enableLayoutAnimations(true);
-
-              listRef.current?.scrollToIndex({
-                index: 0,
-                animated: true,
-                viewOffset: 1000,
+      {isUserAdmin ? (
+        <MessageBox
+          ref={inputRef}
+          placeholder="Send an update..."
+          onSubmit={async (text: string) => {
+            if (channelId) {
+              enableLayoutAnimations(false);
+              listRef.current?.prepareForLayoutAnimationRender();
+              await sendMessage.trigger({
+                channelId,
+                message: text,
+                callback: sendMessageCallback,
               });
-            });
-          }
 
-          return Promise.resolve();
-        }}
-        submitting={sendMessage.isMutating}
-        tw="bg-white dark:bg-black"
-        submitButton={
-          editMessage ? (
-            <Animated.View entering={FadeIn} exiting={FadeOut}>
-              <View tw="flex-row" style={{ gap: 8 }}>
-                <Button
-                  variant="secondary"
-                  style={{ backgroundColor: colors.red[500] }}
-                  iconOnly
-                  onPress={() => {
-                    setEditMessage(undefined);
-                    inputRef.current?.reset();
-                  }}
-                >
-                  <Close width={20} height={20} color="white" />
-                </Button>
-                <Button
-                  disabled={editMessages.isMutating || !editMessage}
-                  iconOnly
-                  onPress={() => {
-                    enableLayoutAnimations(true);
-                    requestAnimationFrame(() => {
-                      editMessages.trigger({
-                        messageId: editMessage.id,
-                        message: inputRef.current.value,
-                        channelId,
-                      });
+              inputRef.current?.reset();
+              requestAnimationFrame(() => {
+                enableLayoutAnimations(true);
+
+                listRef.current?.scrollToIndex({
+                  index: 0,
+                  animated: true,
+                  viewOffset: 1000,
+                });
+              });
+            }
+
+            return Promise.resolve();
+          }}
+          submitting={sendMessage.isMutating}
+          tw="bg-white dark:bg-black"
+          submitButton={
+            editMessage ? (
+              <Animated.View entering={FadeIn} exiting={FadeOut}>
+                <View tw="flex-row" style={{ gap: 8 }}>
+                  <Button
+                    variant="secondary"
+                    style={{ backgroundColor: colors.red[500] }}
+                    iconOnly
+                    onPress={() => {
                       setEditMessage(undefined);
                       inputRef.current?.reset();
-                    });
-                  }}
-                >
-                  <Check width={20} height={20} />
-                </Button>
-              </View>
-            </Animated.View>
-          ) : null
-        }
-      />
+                    }}
+                  >
+                    <Close width={20} height={20} color="white" />
+                  </Button>
+                  <Button
+                    disabled={editMessages.isMutating || !editMessage}
+                    iconOnly
+                    onPress={() => {
+                      enableLayoutAnimations(true);
+                      requestAnimationFrame(() => {
+                        editMessages.trigger({
+                          messageId: editMessage.id,
+                          message: inputRef.current.value,
+                          channelId,
+                        });
+                        setEditMessage(undefined);
+                        inputRef.current?.reset();
+                      });
+                    }}
+                  >
+                    <Check width={20} height={20} />
+                  </Button>
+                </View>
+              </Animated.View>
+            ) : null
+          }
+        />
+      ) : (
+        <MessageBox
+          placeholder="Chat currently unavailable"
+          tw="bg-white text-center dark:bg-black"
+          textInputProps={{
+            editable: false,
+          }}
+          submitButton={<></>}
+        />
+      )}
     </Animated.View>
   );
 };
