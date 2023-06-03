@@ -830,6 +830,19 @@ const MessageItem = memo(
       };
     }, [isDark, editMessageIdSharedValue.value, channel_message.id]);
 
+    const messageWasEdited = useMemo(() => {
+      const createdTime = new Date(channel_message.created_at);
+      const updatedTime = new Date(channel_message.updated_at);
+
+      const timeDifference = updatedTime.getTime() - createdTime.getTime(); // Time difference in milliseconds
+
+      const minimumDuration = 2000; // 2 seconds in milliseconds
+
+      if (timeDifference >= minimumDuration) return true;
+
+      return false;
+    }, [channel_message.created_at, channel_message.updated_at]);
+
     return (
       <Animated.View style={style} ref={animatedViewRef}>
         <View tw="my-2 px-4">
@@ -862,7 +875,7 @@ const MessageItem = memo(
                 </Link>
 
                 <Text tw="text-xs text-gray-700 dark:text-gray-200">
-                  {formatDateRelativeWithIntl(channel_message.updated_at)}
+                  {formatDateRelativeWithIntl(channel_message.created_at)}
                 </Text>
 
                 <View
@@ -1008,9 +1021,19 @@ const MessageItem = memo(
                 </View>
               </View>
 
-              <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
-                {linkifiedMessage}
-              </Text>
+              <View tw="flex-row items-center" style={{ columnGap: 5 }}>
+                <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+                  {linkifiedMessage}
+                </Text>
+                {messageWasEdited && (
+                  <Text
+                    tw="text-xs text-gray-500 dark:text-gray-200"
+                    selectable
+                  >
+                    • edited
+                  </Text>
+                )}
+              </View>
               <PlatformAnimateHeight
                 initialHeight={item.reaction_group.length > 0 ? 30 : 0}
               >
