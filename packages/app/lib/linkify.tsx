@@ -3,6 +3,7 @@ import reactStringReplace from "react-string-replace";
 import { TW } from "@showtime-xyz/universal.tailwind";
 
 import { TextLink } from "app/navigation/link";
+import { shortenLongWords } from "app/utilities";
 
 // This function replaces mention tags (@showtime) and URL (http://) with Link components
 export const linkifyDescription = (text?: string, tw?: TW) => {
@@ -46,7 +47,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
             tw ? (Array.isArray(tw) ? tw.join(" ") : tw) : "",
           ]}
         >
-          {urlText}
+          {shortenLongWords(urlText)}
         </TextLink>
       );
     }
