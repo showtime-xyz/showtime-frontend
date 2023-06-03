@@ -298,10 +298,10 @@ export const CreatorChannelsList = memo(
       // we're going to build a single FlashList, but we create a section if `data` is smaller than 15 items
       if (joinedChannelsData.length < 11) {
         return [
+          channelsSection,
           // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
           ...(joinedChannelsData.length > 0 || ownedChannelsData.length > 0
             ? [
-                channelsSection,
                 ...ownedChannelsData.map((suggestedChannel) => ({
                   ...suggestedChannel,
                   itemType: "owned",
@@ -383,67 +383,70 @@ export const CreatorChannelsList = memo(
     }, [refresh, refreshOwnedChannels, refreshSuggestedChannels]);
 
     return (
-      <AnimatedInfiniteScrollListWithRef
-        ref={listRef}
-        useWindowScroll={false}
-        data={
-          isLoadingOwnChannels ||
-          isLoadingJoinedChannels ||
-          isLoadingSuggestedChannels
-            ? []
-            : transformedData
-        }
-        getItemType={(item) => {
-          // To achieve better performance, specify the type based on the item
-          return item.type === "section"
-            ? "sectionHeader"
-            : item.itemType ?? "row";
-        }}
-        style={{
-          height: Platform.select({
-            default: windowHeight - bottomBarHeight,
-            web: web_height ? web_height : windowHeight - bottomBarHeight,
-            ios: windowHeight,
-          }),
-        }}
-        // for blur effect on Native
-        contentContainerStyle={Platform.select({
-          ios: {
-            paddingTop: headerHeight,
-            paddingBottom: bottomBarHeight,
-          },
-          android: {
-            paddingBottom: bottomBarHeight,
-          },
-          default: {},
-        })}
-        // Todo: unity refresh control same as tab view
-        refreshControl={
-          <RefreshControl
-            refreshing={
-              isRefreshing ||
-              isRefreshingOwnedChannels ||
-              isRefreshingSuggestedChannels
-            }
-            onRefresh={refreshPage}
-            progressViewOffset={headerHeight}
-            tintColor={isDark ? colors.gray[200] : colors.gray[700]}
-            colors={[colors.violet[500]]}
-            progressBackgroundColor={
-              isDark ? colors.gray[200] : colors.gray[100]
-            }
-          />
-        }
-        drawDistance={windowHeight * 2}
-        CellRendererComponent={CustomCellRenderer}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        onEndReached={fetchMore}
-        refreshing={isRefreshing}
-        onRefresh={refresh}
-        ListFooterComponent={ListFooterComponent}
-        estimatedItemSize={80}
-      />
+      <>
+        <View tw="web:h-2" />
+        <AnimatedInfiniteScrollListWithRef
+          ref={listRef}
+          useWindowScroll={false}
+          data={
+            isLoadingOwnChannels ||
+            isLoadingJoinedChannels ||
+            isLoadingSuggestedChannels
+              ? []
+              : transformedData
+          }
+          getItemType={(item) => {
+            // To achieve better performance, specify the type based on the item
+            return item.type === "section"
+              ? "sectionHeader"
+              : item.itemType ?? "row";
+          }}
+          style={{
+            height: Platform.select({
+              default: windowHeight - bottomBarHeight,
+              web: web_height ? web_height : windowHeight - bottomBarHeight,
+              ios: windowHeight,
+            }),
+          }}
+          // for blur effect on Native
+          contentContainerStyle={Platform.select({
+            ios: {
+              paddingTop: headerHeight,
+              paddingBottom: bottomBarHeight,
+            },
+            android: {
+              paddingBottom: bottomBarHeight,
+            },
+            default: {},
+          })}
+          // Todo: unity refresh control same as tab view
+          refreshControl={
+            <RefreshControl
+              refreshing={
+                isRefreshing ||
+                isRefreshingOwnedChannels ||
+                isRefreshingSuggestedChannels
+              }
+              onRefresh={refreshPage}
+              progressViewOffset={headerHeight}
+              tintColor={isDark ? colors.gray[200] : colors.gray[700]}
+              colors={[colors.violet[500]]}
+              progressBackgroundColor={
+                isDark ? colors.gray[200] : colors.gray[100]
+              }
+            />
+          }
+          drawDistance={windowHeight * 2}
+          CellRendererComponent={CustomCellRenderer}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          onEndReached={fetchMore}
+          refreshing={isRefreshing}
+          onRefresh={refresh}
+          ListFooterComponent={ListFooterComponent}
+          estimatedItemSize={80}
+        />
+      </>
     );
   }
 );
