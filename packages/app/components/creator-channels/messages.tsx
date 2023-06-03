@@ -640,7 +640,16 @@ export const Messages = () => {
             setEditMessage={setEditMessage}
             editMessage={editMessage}
           />
-        ) : null}
+        ) : (
+          <MessageBox
+            placeholder="Chat currently unavailable"
+            tw="bg-white text-center dark:bg-black"
+            textInputProps={{
+              editable: false,
+            }}
+            submitButton={<></>}
+          />
+        )}
         {showScrollToBottom ? (
           <Animated.View entering={SlideInDown} exiting={SlideOutDown}>
             <View tw="absolute bottom-[80px] right-4">
