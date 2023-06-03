@@ -1,15 +1,12 @@
 import { memo, useCallback } from "react";
 
-import { Chip } from "@showtime-xyz/universal.chip";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Reaction as ReactionIcon } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import {
   InfiniteScrollList,
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -36,6 +33,8 @@ type FollowingListProp = {
 type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
   users?: ChannelMember[];
   loading: boolean;
+  isLoadingMore: boolean;
+  fetchMore: () => void;
   emptyTitle?: string;
   ListHeaderComponent?: React.ComponentType<any>;
 };
@@ -43,6 +42,8 @@ type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
 export const CreatorChannelUserList = ({
   users,
   loading,
+  isLoadingMore,
+  fetchMore,
   emptyTitle = "No users, yet.",
   ListHeaderComponent,
   ...rest
@@ -74,6 +75,16 @@ export const CreatorChannelUserList = ({
     ),
     [emptyTitle]
   );
+
+  const ListFooterComponent = useCallback(() => {
+    if (!isLoadingMore) return null;
+    return (
+      <View tw="items-center pb-4 pt-4">
+        <Spinner size="small" />
+      </View>
+    );
+  }, [isLoadingMore]);
+
   if (loading) {
     return <CreatorChannelUserListItemLoadingIndicator />;
   }
@@ -85,8 +96,10 @@ export const CreatorChannelUserList = ({
       renderItem={renderItem}
       estimatedItemSize={64}
       overscan={8}
+      onEndReached={fetchMore}
       ListEmptyComponent={listEmptyComponent}
       ListHeaderComponent={ListHeaderComponent}
+      ListFooterComponent={ListFooterComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
       {...modalListProps}
       {...rest}
@@ -97,7 +110,6 @@ export const CreatorChannelUserList = ({
 const CCUserListItem = memo(
   ({ item }: { item: ChannelMember } & FollowingListProp) => {
     const { data } = useMyInfo();
-    const isDark = useIsDarkMode();
 
     const { onToggleFollow } = useFollow({
       username: data?.data.profile.username,

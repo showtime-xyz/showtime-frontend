@@ -13,11 +13,17 @@ const { useParam } = createParam<Query>();
 
 export const CreatorChannelsMembersModal = () => {
   const [channelId] = useParam("channelId");
-  const { data, isLoading } = useChannelMembers(channelId);
+  const { data, isLoading, fetchMore, isLoadingMore } =
+    useChannelMembers(channelId);
   if (!channelId) return null;
   return (
     <BottomSheetModalProvider>
-      <CreatorChannelUserList loading={isLoading} users={data} />
+      <CreatorChannelUserList
+        loading={isLoading}
+        users={data}
+        fetchMore={fetchMore}
+        isLoadingMore={isLoadingMore}
+      />
     </BottomSheetModalProvider>
   );
 };

@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 30;
 
 export type ChannelMember = {
   id: number;
@@ -26,10 +26,10 @@ export const useChannelMembers = (channelId?: string) => {
     (index: number, previousPageData: []) => {
       if (previousPageData && !previousPageData.length) return null;
       if (channelId) {
-        return `/v1/channels/${channelId}/members`;
-        // return `/v1/channels/${channelId}/members?page=${
-        //   index + 1
-        // }&limit=${PAGE_SIZE}`;
+        //return `/v1/channels/${channelId}/members`;
+        return `/v1/channels/${channelId}/members?page=${
+          index + 1
+        }&limit=${PAGE_SIZE}`;
       } else {
         return null;
       }
