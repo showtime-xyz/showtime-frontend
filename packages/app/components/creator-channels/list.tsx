@@ -65,7 +65,7 @@ const CreatorChannelsHeader = memo(
       >
         <Text
           tw={[
-            "web:pt-8 text-2xl font-extrabold text-gray-900 dark:text-white",
+            "web:text-xl text-2xl font-extrabold text-gray-900 dark:text-white",
             tw,
           ]}
         >
@@ -73,7 +73,7 @@ const CreatorChannelsHeader = memo(
         </Text>
         {subtext ? (
           <View tw="mt-3">
-            <Text tw="text-sm leading-5 text-gray-500 dark:text-gray-400">
+            <Text tw="web:text-xs  text-sm leading-5 text-gray-500 dark:text-gray-400">
               {subtext}
             </Text>
           </View>
@@ -100,7 +100,7 @@ const CreatorChannelsListItem = memo(
         underlayColor={isDark ? "white" : "black"}
         style={{ width: "100%" }}
       >
-        <View tw="flex-1 px-4 py-3">
+        <View tw="flex-1 px-4 py-2.5">
           <View tw="flex-row items-center">
             <Avatar
               url={item.owner.img_url}
@@ -111,7 +111,12 @@ const CreatorChannelsListItem = memo(
             <View tw="flex-1">
               <View tw="flex-row items-center">
                 <Text
-                  tw="web:max-w-[80%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
+                  tw={[
+                    "web:text-base max-w-[80%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white",
+                    item.itemType === "owned"
+                      ? "web:max-w-[60%] max-w-[70%]"
+                      : "",
+                  ]}
                   numberOfLines={1}
                 >
                   {item.owner.name ?? item.owner.username}
@@ -119,7 +124,7 @@ const CreatorChannelsListItem = memo(
 
                 {item.itemType === "owned" ? (
                   <Text
-                    tw="web:max-w-[80%] ml-4 overflow-ellipsis whitespace-nowrap text-lg font-medium text-gray-500 dark:text-slate-300"
+                    tw="web:max-w-[80%] web:text-base ml-3 overflow-ellipsis whitespace-nowrap text-lg font-medium text-gray-500 dark:text-slate-300"
                     numberOfLines={1}
                   >
                     you
@@ -170,9 +175,10 @@ const CreatorChannelsListCreator = memo(
     const time = formatDateRelativeWithIntl(item.updated_at);
     const memberCount = new Intl.NumberFormat().format(item.member_count);
     return (
-      <View tw="flex-1 px-4 py-3">
+      <View tw="flex-1 px-4 py-2.5">
         <View tw="flex-row items-center">
-          <Avatar
+          <AvatarHoverCard
+            username={item.owner.username ?? item.owner.wallet_address}
             url={item.owner.img_url}
             size={52}
             alt="CreatorPreview Avatar"
@@ -181,20 +187,15 @@ const CreatorChannelsListCreator = memo(
           <View tw="flex-1 justify-center">
             <View tw="flex-1 flex-row items-center justify-center">
               <View tw="flex-1 items-start justify-start">
-                <View tw="flex-1 flex-row items-center justify-start">
-                  <Link
-                    href={`/@${
-                      item.owner.username ?? item.owner.wallet_address
-                    }`}
-                    tw="flex-1"
+                <View tw="w-full flex-1 flex-row items-center justify-start">
+                  <Text
+                    tw={[
+                      "web:text-base w-full max-w-[90%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white",
+                    ]}
+                    numberOfLines={1}
                   >
-                    <Text
-                      tw="web:max-w-[65%] max-w-[90%] overflow-ellipsis whitespace-nowrap text-lg font-semibold text-black dark:text-white"
-                      numberOfLines={1}
-                    >
-                      {item.owner.username}
-                    </Text>
-                  </Link>
+                    {item.owner.username}
+                  </Text>
                   {/* TODO: determine if we keep this */}
                   <Text tw="ml-2 hidden text-xs text-gray-500">{time}</Text>
                 </View>
@@ -384,7 +385,7 @@ export const CreatorChannelsList = memo(
 
     return (
       <>
-        <View tw="web:h-2" />
+        <View tw="web:h-10" />
         <AnimatedInfiniteScrollListWithRef
           ref={listRef}
           useWindowScroll={false}
