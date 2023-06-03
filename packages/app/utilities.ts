@@ -1003,3 +1003,18 @@ export function generateRandomLoremIpsum() {
 export const getWebBaseURL = () => {
   return `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN ?? "showtime.xyz"}`;
 };
+
+export function shortenLongWords(str: string, maxLength: number = 35): string {
+  let words: string[] = str.split(" ");
+  for (let i = 0; i < words.length; i++) {
+    if (words[i].length > maxLength) {
+      let partLengthStart: number = Math.floor((maxLength - 3) * 0.7); // 70% of the length for the start
+      let partLengthEnd: number = maxLength - 3 - partLengthStart; // Remaining for the end
+      words[i] =
+        words[i].substring(0, partLengthStart) +
+        "..." +
+        words[i].substring(words[i].length - partLengthEnd);
+    }
+  }
+  return words.join(" ");
+}
