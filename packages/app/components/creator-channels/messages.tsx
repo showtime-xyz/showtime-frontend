@@ -1035,7 +1035,10 @@ const MessageItem = memo(
               </View>
 
               <View tw="flex-row items-center" style={{ columnGap: 5 }}>
-                <Text selectable tw="text-sm text-gray-900 dark:text-gray-100">
+                <Text
+                  selectable
+                  tw="break-all text-sm text-gray-900 dark:text-gray-100"
+                >
                   {linkifiedMessage}
                 </Text>
                 {messageWasEdited && (
