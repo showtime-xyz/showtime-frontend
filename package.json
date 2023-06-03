@@ -79,7 +79,8 @@
     "eth-block-tracker": "4.4.3",
     "next": "^13.4.1",
     "react-native-mmkv": "2.8.0",
-    "react-native-screens": "3.20.0"
+    "react-native-screens": "3.20.0",
+    "react-native-svg": "13.9.0"
   },
   "react-native": {
     "zlib": "browserify-zlib",
