@@ -720,6 +720,9 @@ const MessageInput = ({
         <MessageBox
           ref={inputRef}
           placeholder="Send an update..."
+          textInputProps={{
+            maxLength: 2000,
+          }}
           onSubmit={async (text: string) => {
             if (channelId) {
               enableLayoutAnimations(false);
@@ -855,6 +858,7 @@ const MessageItem = memo(
       };
     }, [isDark, editMessageIdSharedValue.value, channel_message.id]);
 
+    // check if message was edited
     const messageWasEdited = useMemo(() => {
       const createdTime = new Date(channel_message.created_at);
       const updatedTime = new Date(channel_message.updated_at);
@@ -867,6 +871,20 @@ const MessageItem = memo(
 
       return false;
     }, [channel_message.created_at, channel_message.updated_at]);
+
+    // flag to allow message editing, if message is not older than 2 hours
+    const allowMessageEditing = useMemo(() => {
+      const createdTime = new Date(channel_message.created_at);
+      const currentTime = new Date();
+
+      const timeDifference = currentTime.getTime() - createdTime.getTime(); // Time difference in milliseconds
+
+      const maximumDuration = 7200000; // 2 hours in milliseconds
+
+      if (timeDifference <= maximumDuration) return true;
+
+      return false;
+    }, [channel_message.created_at]);
 
     return (
       <Animated.View style={style} ref={animatedViewRef}>
@@ -979,67 +997,76 @@ const MessageItem = memo(
                           </DropdownMenuItem>
                         ) : null}
 
-                        {item.channel_message.sent_by.profile.profile_id ===
+                        {
+                          // edit message only if message is not older than 2 hours and it belongs to the user
+                          item.channel_message.sent_by.profile.profile_id ===
+                            user.user?.data.profile.profile_id &&
+                          allowMessageEditing ? (
+                            <DropdownMenuItem
+                              onSelect={() => {
+                                runOnUI(() => {
+                                  "worklet";
+                                  const values = measure(animatedViewRef);
+                                  if (values) {
+                                    editMessageItemDimension.value = {
+                                      height: values.height,
+                                      pageY: values.pageY,
+                                    };
+                                  }
+                                  runOnJS(setEditMessage)({
+                                    text: item.channel_message.body,
+                                    id: item.channel_message.id,
+                                  });
+                                })();
+                              }}
+                              key="edit"
+                            >
+                              <MenuItemIcon
+                                Icon={Edit}
+                                ios={{
+                                  name: "pencil",
+                                }}
+                              />
+                              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
+                                Edit
+                              </DropdownMenuItemTitle>
+                            </DropdownMenuItem>
+                          ) : null
+                        }
+                        {item.channel_message.sent_by.profile.profile_id !==
                         user.user?.data.profile.profile_id ? (
                           <DropdownMenuItem
                             onSelect={() => {
-                              runOnUI(() => {
-                                "worklet";
-                                const values = measure(animatedViewRef);
-                                if (values) {
-                                  editMessageItemDimension.value = {
-                                    height: values.height,
-                                    pageY: values.pageY,
-                                  };
-                                }
-                                runOnJS(setEditMessage)({
-                                  text: item.channel_message.body,
-                                  id: item.channel_message.id,
-                                });
-                              })();
+                              router.push(
+                                {
+                                  pathname:
+                                    Platform.OS === "web"
+                                      ? router.pathname
+                                      : "/report",
+                                  query: {
+                                    ...router.query,
+                                    reportModal: true,
+                                    channelMessageId: item.channel_message.id,
+                                  },
+                                },
+                                Platform.OS === "web"
+                                  ? router.asPath
+                                  : undefined
+                              );
                             }}
-                            key="edit"
+                            key="report"
                           >
                             <MenuItemIcon
-                              Icon={Edit}
+                              Icon={Flag}
                               ios={{
-                                name: "pencil",
+                                name: "flag",
                               }}
                             />
                             <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                              Edit
+                              Report
                             </DropdownMenuItemTitle>
                           </DropdownMenuItem>
                         ) : null}
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            router.push(
-                              {
-                                pathname:
-                                  Platform.OS === "web"
-                                    ? router.pathname
-                                    : "/report",
-                                query: {
-                                  ...router.query,
-                                  reportModal: true,
-                                  channelMessageId: item.channel_message.id,
-                                },
-                              },
-                              Platform.OS === "web" ? router.asPath : undefined
-                            );
-                          }}
-                          key="report"
-                        >
-                          <MenuItemIcon
-                            Icon={Flag}
-                            ios={{
-                              name: "flag",
-                            }}
-                          />
-                          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                            Report
-                          </DropdownMenuItemTitle>
-                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenuRoot>
                   </View>
