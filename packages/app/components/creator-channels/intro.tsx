@@ -20,7 +20,7 @@ import { setHideCreatorChannelIntro } from "app/lib/mmkv-keys";
 
 import { breakpoints } from "design-system/theme";
 
-import { useChannelMembers } from "./hooks/use-channel-members";
+import { useChannelById } from "./hooks/use-channel-detail";
 
 export const CreatorChannelsIntro = () => {
   const isDark = useIsDarkMode();
@@ -31,7 +31,7 @@ export const CreatorChannelsIntro = () => {
   const imageSize = isSmWidth ? 420 : width;
   const router = useRouter();
   const channelId = userProfile?.data.channels?.[0];
-  const { membersCount } = useChannelMembers(channelId?.toString());
+  const { data } = useChannelById(channelId?.toString());
 
   return (
     <BottomSheetModalProvider>
@@ -110,7 +110,9 @@ export const CreatorChannelsIntro = () => {
           Enter channel
         </Button>
         <View tw="h-4" />
-        <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members awaiting`}</Text>
+        <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`${
+          data?.member_count ? data?.member_count.toLocaleString() : 0
+        } members awaiting`}</Text>
       </View>
     </BottomSheetModalProvider>
   );
