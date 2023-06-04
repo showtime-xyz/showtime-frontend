@@ -1120,7 +1120,7 @@ const MessageSkeleton = () => {
           return (
             <View tw="flex-row pt-4" key={`${i}`}>
               <View tw="mr-2 overflow-hidden rounded-full">
-                <Skeleton width={24} height={24} show />
+                <Skeleton width={28} height={28} show />
               </View>
               <View>
                 <Skeleton width={140} height={10} show />
