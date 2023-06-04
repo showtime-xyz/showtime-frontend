@@ -837,7 +837,8 @@ const MessageItem = memo(
               limitLineBreaks(
                 cleanUserTextInput(removeTags(channel_message.body)),
                 10
-              )
+              ),
+              "text-[#4E22FF] dark:text-blue-400"
             )
           : "",
       [channel_message.body]
