@@ -382,10 +382,9 @@ export const CreatorChannelsList = memo(
         refreshSuggestedChannels(),
       ]);
     }, [refresh, refreshOwnedChannels, refreshSuggestedChannels]);
-
     return (
       <>
-        <View tw="web:h-10" />
+        <View tw="web:pt-10 native:hidden" />
         <AnimatedInfiniteScrollListWithRef
           ref={listRef}
           useWindowScroll={false}
@@ -405,7 +404,9 @@ export const CreatorChannelsList = memo(
           style={{
             height: Platform.select({
               default: windowHeight - bottomBarHeight,
-              web: web_height ? web_height : windowHeight - bottomBarHeight,
+              web: web_height
+                ? web_height
+                : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
               ios: windowHeight,
             }),
           }}

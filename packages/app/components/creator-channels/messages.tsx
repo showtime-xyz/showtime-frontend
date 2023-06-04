@@ -60,6 +60,7 @@ import {
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -177,55 +178,62 @@ const Header = (props: HeaderProps) => {
           />
         </View>
       </View>
-      <View tw="flex-1" style={{ rowGap: 8 }}>
-        <Text
-          onPress={() => router.push(`/@${props.username}`)}
-          tw="text-sm font-bold text-gray-900 dark:text-gray-100"
-        >
-          {props.title ?? "Loading..."}
-        </Text>
-        <Text
-          onPress={viewMembersList}
-          tw="text-xs text-gray-900 dark:text-gray-100"
-        >
-          {props.members ?? 0} members
-        </Text>
-      </View>
-      <View tw="flex-row">
-        <Pressable onPress={props.onPressShare} tw="p-2 md:hidden">
-          <Share
-            height={20}
-            width={20}
-            color={isDark ? colors.gray["100"] : colors.gray[800]}
-          />
-        </Pressable>
-        {!props.isCurrentUserOwner ? (
-          <Pressable onPress={props.onPressSettings} tw="p-2 md:hidden">
-            <Settings
-              height={20}
-              width={20}
-              color={isDark ? colors.gray["100"] : colors.gray[800]}
-            />
-          </Pressable>
-        ) : null}
+      {props.channelId ? (
+        <>
+          <View tw="flex-1" style={{ rowGap: 8 }}>
+            <Text
+              onPress={() => router.push(`/@${props.username}`)}
+              tw="text-sm font-bold text-gray-900 dark:text-gray-100"
+            >
+              {props.title ?? "Loading..."}
+            </Text>
+            <Text
+              onPress={viewMembersList}
+              tw="text-xs text-gray-900 dark:text-gray-100"
+            >
+              {props.members ?? 0} members
+            </Text>
+          </View>
+          <View tw="flex-row">
+            <Pressable onPress={props.onPressShare} tw="p-2 md:hidden">
+              <Share
+                height={20}
+                width={20}
+                color={isDark ? colors.gray["100"] : colors.gray[800]}
+              />
+            </Pressable>
+            {!props.isCurrentUserOwner ? (
+              <Pressable onPress={props.onPressSettings} tw="p-2 md:hidden">
+                <Settings
+                  height={20}
+                  width={20}
+                  color={isDark ? colors.gray["100"] : colors.gray[800]}
+                />
+              </Pressable>
+            ) : null}
 
-        <Pressable onPress={props.onPressShare} tw="hidden md:flex">
-          <Share
-            height={24}
-            width={24}
-            color={isDark ? colors.gray["100"] : colors.gray[800]}
-          />
-        </Pressable>
-        {!props.isCurrentUserOwner ? (
-          <Pressable onPress={props.onPressSettings} tw="ml-4 hidden md:flex">
-            <MoreHorizontal
-              height={24}
-              width={24}
-              color={isDark ? colors.gray["100"] : colors.gray[800]}
-            />
-          </Pressable>
-        ) : null}
-      </View>
+            <Pressable onPress={props.onPressShare} tw="hidden md:flex">
+              <Share
+                height={24}
+                width={24}
+                color={isDark ? colors.gray["100"] : colors.gray[800]}
+              />
+            </Pressable>
+            {!props.isCurrentUserOwner ? (
+              <Pressable
+                onPress={props.onPressSettings}
+                tw="ml-4 hidden md:flex"
+              >
+                <MoreHorizontal
+                  height={24}
+                  width={24}
+                  color={isDark ? colors.gray["100"] : colors.gray[800]}
+                />
+              </Pressable>
+            ) : null}
+          </View>
+        </>
+      ) : null}
     </View>
   );
 };
@@ -549,11 +557,7 @@ export const Messages = () => {
   }
 
   if (isLoading || channelDetail.isLoading) {
-    return (
-      <View tw="flex-1 items-center justify-center">
-        <Spinner />
-      </View>
-    );
+    return <MessageSkeleton />;
   }
 
   return (
@@ -779,16 +783,22 @@ const MessageInput = ({
           }
         />
       ) : (
-        <MessageBox
-          placeholder="Chat currently unavailable"
-          tw="bg-white text-center dark:bg-black"
-          textInputProps={{
-            editable: false,
-          }}
-          submitButton={<></>}
-        />
+        <MessageBoxUnavailable />
       )}
     </Animated.View>
+  );
+};
+
+const MessageBoxUnavailable = () => {
+  return (
+    <MessageBox
+      placeholder="Chat currently unavailable"
+      tw="bg-white text-center dark:bg-black"
+      textInputProps={{
+        editable: false,
+      }}
+      submitButton={<></>}
+    />
   );
 };
 
@@ -1074,3 +1084,44 @@ const MessageItem = memo(
 );
 
 MessageItem.displayName = "MessageItem";
+
+const MessageSkeleton = () => {
+  const insets = useSafeAreaInsets();
+  const bottomHeight = usePlatformBottomHeight();
+  const isDark = useIsDarkMode();
+  const bottom = Platform.select({ web: bottomHeight, ios: 16, android: 0 });
+
+  const style = {
+    paddingBottom: bottom,
+    bottom: 0,
+    backgroundColor: isDark ? "black" : "white",
+  };
+
+  return (
+    <View
+      tw="h-full w-full flex-1"
+      style={{ paddingTop: insets.top, paddingBottom: insets.bottom + 60 }}
+    >
+      <Header />
+      <View tw="h-full flex-1 justify-end px-4">
+        {new Array(8).fill(0).map((_, i) => {
+          return (
+            <View tw="flex-row pt-4" key={`${i}`}>
+              <View tw="mr-2 overflow-hidden rounded-full">
+                <Skeleton width={24} height={24} show />
+              </View>
+              <View>
+                <Skeleton width={140} height={10} show />
+                <View tw="h-1" />
+                <Skeleton width={90} height={10} show />
+              </View>
+            </View>
+          );
+        })}
+      </View>
+      <View tw="absolute bottom-0 w-full" style={style}>
+        <MessageBoxUnavailable />
+      </View>
+    </View>
+  );
+};

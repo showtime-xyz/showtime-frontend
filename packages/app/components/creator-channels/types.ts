@@ -33,11 +33,11 @@ export type HeaderProps = {
   title?: string;
   username?: string;
   members?: number;
-  channelId: string;
+  channelId?: string;
   picture?: string;
-  onPressSettings: () => void;
-  onPressShare: () => void;
-  isCurrentUserOwner: boolean;
+  onPressSettings?: () => void;
+  onPressShare?: () => void;
+  isCurrentUserOwner?: boolean;
 };
 
 export type CreatorChannelsListProps = {
