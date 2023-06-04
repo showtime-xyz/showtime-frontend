@@ -76,6 +76,7 @@ export interface IAnimatedInfiniteScrollListWithRef
   (
     props: InfiniteScrollListProps<any> & {
       ref?: React.Ref<FlashList<any>>;
+      overscan?: number;
     }
   ): React.ReactElement | null;
 }

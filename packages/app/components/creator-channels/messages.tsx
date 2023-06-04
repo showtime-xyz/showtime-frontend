@@ -615,6 +615,7 @@ export const Messages = memo(() => {
               data={data}
               onEndReached={onLoadMore}
               inverted
+              overscan={4}
               onScroll={scrollhandler}
               useWindowScroll={false}
               estimatedItemSize={90}
