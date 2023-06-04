@@ -1,8 +1,7 @@
-import { memo, Ref, forwardRef, Component, useState } from "react";
+import { memo, Ref, forwardRef, Component } from "react";
 
 import Animated, { FadeOut, FadeIn, Layout } from "react-native-reanimated";
 
-import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import {
   CellContainer,
   InfiniteScrollList,
@@ -13,10 +12,11 @@ import { ChannelMessageItem } from "./hooks/use-channel-messages";
 import { IAnimatedInfiniteScrollListWithRef } from "./types";
 
 const ReanimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
-export const AnimatedInfiniteScrollList =
+export const AnimatedInfiniteScrollList = memo(
   Animated.createAnimatedComponent<InfiniteScrollListProps<ChannelMessageItem>>(
     InfiniteScrollList
-  );
+  )
+);
 
 export const AnimatedInfiniteScrollListWithRef =
   AnimatedInfiniteScrollList as IAnimatedInfiniteScrollListWithRef;

@@ -265,7 +265,7 @@ const keyExtractor = (item: ChannelMessageItem) =>
 
 //const getItemType = (item: ChannelMessageItem) => item.reaction_group.length > 0 ? "reaction" : "message";
 
-export const Messages = () => {
+export const Messages = memo(() => {
   const listRef = useRef<FlashList<any>>(null);
   const [channelId] = useParam("channelId");
   const [showIntro, setShowIntro] = useState(true);
@@ -556,10 +556,6 @@ export const Messages = () => {
     );
   }
 
-  if (isLoading || channelDetail.isLoading) {
-    return <MessageSkeleton />;
-  }
-
   return (
     <>
       <View
@@ -610,32 +606,36 @@ export const Messages = () => {
             "android:pb-12 ios:pb-8 web:pb-12", // since we always show the input, leave the padding
           ]}
         >
-          <AnimatedInfiniteScrollListWithRef
-            ref={listRef}
-            keyExtractor={keyExtractor}
-            data={data}
-            onEndReached={onLoadMore}
-            inverted
-            onScroll={scrollhandler}
-            useWindowScroll={false}
-            estimatedItemSize={90}
-            keyboardDismissMode="on-drag"
-            renderItem={renderItem}
-            contentContainerStyle={{ paddingTop: insets.bottom }}
-            style={style}
-            extraData={extraData}
-            CellRendererComponent={CustomCellRenderer}
-            ListEmptyComponent={listEmptyComponent}
-            ListFooterComponent={
-              isLoadingMore
-                ? () => (
-                    <View tw="w-full items-center py-4">
-                      <Spinner size="small" />
-                    </View>
-                  )
-                : () => null
-            }
-          />
+          {isLoading || channelDetail.isLoading ? (
+            <MessageSkeleton />
+          ) : (
+            <AnimatedInfiniteScrollListWithRef
+              ref={listRef}
+              keyExtractor={keyExtractor}
+              data={data}
+              onEndReached={onLoadMore}
+              inverted
+              onScroll={scrollhandler}
+              useWindowScroll={false}
+              estimatedItemSize={90}
+              keyboardDismissMode="on-drag"
+              renderItem={renderItem}
+              contentContainerStyle={{ paddingTop: insets.bottom }}
+              style={style}
+              extraData={extraData}
+              CellRendererComponent={CustomCellRenderer}
+              ListEmptyComponent={listEmptyComponent}
+              ListFooterComponent={
+                isLoadingMore
+                  ? () => (
+                      <View tw="w-full items-center py-4">
+                        <Spinner size="small" />
+                      </View>
+                    )
+                  : () => null
+              }
+            />
+          )}
         </View>
         <MessageInput
           listRef={listRef}
@@ -662,7 +662,9 @@ export const Messages = () => {
       </View>
     </>
   );
-};
+});
+
+Messages.displayName = "Messages";
 
 const MessageInput = ({
   listRef,
@@ -1086,23 +1088,8 @@ const MessageItem = memo(
 MessageItem.displayName = "MessageItem";
 
 const MessageSkeleton = () => {
-  const insets = useSafeAreaInsets();
-  const bottomHeight = usePlatformBottomHeight();
-  const isDark = useIsDarkMode();
-  const bottom = Platform.select({ web: bottomHeight, ios: 16, android: 0 });
-
-  const style = {
-    paddingBottom: bottom,
-    bottom: 0,
-    backgroundColor: isDark ? "black" : "white",
-  };
-
   return (
-    <View
-      tw="h-full w-full flex-1"
-      style={{ paddingTop: insets.top, paddingBottom: insets.bottom + 60 }}
-    >
-      <Header />
+    <View tw="web:pb-4 h-full w-full flex-1 pb-4">
       <View tw="h-full flex-1 justify-end px-4">
         {new Array(8).fill(0).map((_, i) => {
           return (
@@ -1118,9 +1105,6 @@ const MessageSkeleton = () => {
             </View>
           );
         })}
-      </View>
-      <View tw="absolute bottom-0 w-full" style={style}>
-        <MessageBoxUnavailable />
       </View>
     </View>
   );
