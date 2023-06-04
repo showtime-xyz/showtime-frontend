@@ -1090,7 +1090,7 @@ const MessageItem = memo(
                 )}
               </View>
               <PlatformAnimateHeight
-                initialHeight={item.reaction_group.length > 0 ? 30 : 0}
+                initialHeight={item.reaction_group.length > 0 ? 34 : 0}
               >
                 {item.reaction_group.length > 0 ? (
                   <AnimatedView tw="pt-1" layout={Layout}>
