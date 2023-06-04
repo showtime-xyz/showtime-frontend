@@ -171,7 +171,7 @@ export const ProfileTop = ({
 
   return (
     <>
-      <View tw="overflow-hidden bg-gray-400 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]">
+      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]">
         <Skeleton
           height={coverHeight}
           width={coverWidth}
