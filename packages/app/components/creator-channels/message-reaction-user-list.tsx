@@ -44,17 +44,22 @@ export const MessageReactionUserListModal = () => {
 
   const routes = useMemo(() => {
     if (!message) return [];
-    return (message as ChannelMessageItem).reaction_group.map((r, index) => {
-      const reaction = channelDetails.data?.channel_reactions?.find(
-        (d) => d.id === r.reaction_id
-      );
-      return {
-        index,
-        title: reaction?.reaction + " " + r.count,
-        key: r.reaction_id.toString(),
-      };
-    });
-  }, [channelDetails.data, message]);
+    let idx = 0;
+    return channelDetails.data?.channel_reactions
+      .map((r) => {
+        const messageReaction = (
+          message as ChannelMessageItem
+        ).reaction_group.find((m) => m.reaction_id === r.id);
+        if (messageReaction) {
+          return {
+            index: idx++,
+            title: r?.reaction + " " + messageReaction.count,
+            key: messageReaction.reaction_id.toString(),
+          };
+        }
+      })
+      .filter(Boolean) as Route[];
+  }, [channelDetails.data?.channel_reactions, message]);
 
   useEffect(() => {
     if (!routes || !selectedReactionId) return;
