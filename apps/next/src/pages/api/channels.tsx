@@ -16,9 +16,13 @@ const fontBold = fetch(`${baseURL}/assets/Inter-Bold.otf`).then((res) =>
 );
 
 export default async function handler(req: NextRequest) {
-  const { searchParams } = req.nextUrl;
+  const { search } = req.nextUrl;
+
+  const paramsString = decodeURIComponent(search).replace(/&amp;/g, "&");
+  const searchParams = new URLSearchParams(paramsString);
   const username = searchParams.get("username");
   const image = searchParams.get("image");
+
   const fontBoldData = await fontBold;
   const fontSemiBoldData = await fontSemiBold;
 
