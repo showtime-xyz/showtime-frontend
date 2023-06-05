@@ -109,7 +109,6 @@ export const Notifications = memo(
         />
       );
     }
-    //yes
 
     if (isLoading && data.length === 0 && isLoadingMore) {
       return (
