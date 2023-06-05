@@ -437,7 +437,7 @@ export const Messages = memo(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
     return (
       <View
-        tw="ios:scale-y-[-1] android:scale-y-[-1] w-full items-center justify-center"
+        tw="ios:scale-y-[-1] android:scale-y-[-1] web:justify-start w-full items-center justify-center"
         style={
           Platform.OS !== "web"
             ? { height: windowDimension.height }
