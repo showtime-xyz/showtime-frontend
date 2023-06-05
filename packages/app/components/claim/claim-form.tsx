@@ -436,7 +436,7 @@ export const ClaimForm = ({
               <Text tw="font-semibold">
                 {getCreatorUsernameFromNFT(nft?.data.item)}
               </Text>
-              's creator channel
+              's channel
             </Text>
           </View>
 
