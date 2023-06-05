@@ -32,7 +32,7 @@ import {
 
 const StyledRectButton = styled(RectButton);
 const PlatformButton =
-  Platform.OS !== "web" ? memo(StyledRectButton) : Pressable;
+  Platform.OS === "ios" ? memo(StyledRectButton) : Pressable;
 
 export type NotificationItemProp = {
   notification: NotificationType;
@@ -136,6 +136,7 @@ export const NotificationItem = memo(
           onPress={notificationPressHandler}
           tw={"web:px-2 flex w-full flex-row justify-between px-4 py-3.5"}
           underlayColor={isDark ? colors.gray[100] : colors.gray[800]}
+          rippleColor={isDark ? colors.gray[100] : colors.gray[800]}
         >
           {icon}
           <View tw="mx-2">
