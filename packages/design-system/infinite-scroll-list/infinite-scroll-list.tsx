@@ -9,6 +9,12 @@ import {
 } from "@shopify/flash-list";
 import { ScrollView } from "react-native-gesture-handler";
 
+const ScrollViewWithRef = React.forwardRef((props, ref) => (
+  <ScrollView {...props} ref={ref} onMomentumScrollEnd={() => {}} />
+)) as typeof ScrollView;
+
+ScrollViewWithRef.displayName = "ScrollViewWithRef";
+
 export { CellContainer, FlashList };
 export type InfiniteScrollListProps<T> = FlashListProps<T> & {
   index?: number;
@@ -54,7 +60,7 @@ function FlashListComponent<T>(
     return (
       <View style={[{ height: "100%" }, style]}>
         <FlashList
-          renderScrollComponent={ScrollView}
+          renderScrollComponent={ScrollViewWithRef}
           {...rest}
           numColumns={numColumns}
           ref={ref}
@@ -65,7 +71,7 @@ function FlashListComponent<T>(
   } else {
     return (
       <FlashList
-        renderScrollComponent={ScrollView}
+        renderScrollComponent={ScrollViewWithRef}
         {...rest}
         numColumns={numColumns}
         renderItem={renderItem}
