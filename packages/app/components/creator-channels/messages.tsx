@@ -825,7 +825,7 @@ const MessageItem = memo(
                 cleanUserTextInput(removeTags(channel_message.body)),
                 10
               ),
-              "text-[#4E22FF] dark:text-blue-400"
+              "text-[#4E22FF] dark:text-blue-400 web:text-[#4E22FF] web:dark:text-blue-400"
             )
           : "",
       [channel_message.body]
