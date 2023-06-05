@@ -81,14 +81,14 @@ export const Notifications = memo(
     );
 
     const ListFooterComponent = useCallback(() => {
-      if (isLoadingMore)
+      if (isLoadingMore && data.length > 0 && !isLoading)
         return (
           <View tw="items-center pb-4">
             <Spinner size="small" />
           </View>
         );
       return null;
-    }, [isLoadingMore]);
+    }, [isLoadingMore, isLoading, data.length]);
 
     useEffect(() => {
       (async function resetNotificationLastOpenedTime() {
@@ -105,8 +105,16 @@ export const Notifications = memo(
       return (
         <EmptyPlaceholder
           title="You have no notifications yet."
-          tw="min-h-[70vh]"
+          tw="flex-1 items-center justify-center"
         />
+      );
+    }
+
+    if (isLoading && data.length === 0 && isLoadingMore) {
+      return (
+        <View tw="flex-1 items-center justify-center">
+          <Spinner size="small" />
+        </View>
       );
     }
 
