@@ -124,13 +124,6 @@ export const ClaimButton = ({
   };
 
   const handleCollectPress = (type: "free" | "appleMusic" | "spotify") => {
-    if (
-      claimStates.status === "loading" &&
-      claimStates.signaturePrompt === false
-    ) {
-      toast("Please wait for the previous collect to complete.");
-      return;
-    }
     dispatch({ type: "initial" });
 
     if (

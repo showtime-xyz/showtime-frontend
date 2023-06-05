@@ -21,6 +21,8 @@ import {
   ledgerWalletHack,
 } from "app/utilities";
 
+import { toast } from "design-system/toast";
+
 import { useSendFeedback } from "./use-send-feedback";
 import { useWallet } from "./use-wallet";
 
@@ -296,9 +298,8 @@ export const useClaimNFT = (edition: IEdition) => {
     closeModal,
   }: ClaimNFTParams) => {
     if (edition?.minter_address) {
-      const relayerResponse = await axios({
-        url:
-          "/v1/creator-airdrops/mint-gated-edition/" + edition.contract_address,
+      await axios({
+        url: `/v1/creator-airdrops/edition/${edition.contract_address}/claim`,
         method: "POST",
         data: {
           password: password !== "" ? password : undefined,
@@ -309,12 +310,14 @@ export const useClaimNFT = (edition: IEdition) => {
               }
             : undefined,
         },
-      });
-      closeModal?.();
-      await pollTransaction(
-        relayerResponse.relayed_transaction_id,
-        edition.contract_address
-      );
+      })
+        .catch((error) => {
+          Alert.alert("Oops. An error occurred.", error.message);
+        })
+        .then(() => {
+          toast.success("Collected!");
+          closeModal?.();
+        });
     }
   };
 
