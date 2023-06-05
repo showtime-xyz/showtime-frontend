@@ -40,6 +40,14 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
                 />
               </View>
               <View tw="mx-2">
+                <TrendingTabBarIcon
+                  color={isDark ? "white" : "black"}
+                  focused={
+                    router.pathname === "/home" || router.pathname === "/foryou"
+                  }
+                />
+              </View>
+              <View tw="mx-2">
                 <NotificationsInHeader />
               </View>
               <View tw="mx-2">
