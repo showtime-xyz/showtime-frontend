@@ -1,5 +1,9 @@
 import { memo, useMemo, useCallback } from "react";
+import { Platform } from "react-native";
 
+import { RectButton } from "react-native-gesture-handler";
+
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   HeartFilled,
   MarketFilled,
@@ -11,7 +15,7 @@ import {
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { colors, styled } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -25,6 +29,10 @@ import {
   NFTSDisplayNameText,
   getNFTLink,
 } from "./nfts-display-name";
+
+const StyledRectButton = styled(RectButton);
+const PlatformButton =
+  Platform.OS !== "web" ? memo(StyledRectButton) : Pressable;
 
 export type NotificationItemProp = {
   notification: NotificationType;
@@ -61,6 +69,7 @@ export const NotificationItem = memo(
       () => getNotificationIcon(notification.type_name),
       [notification.type_name]
     );
+    const isDark = useIsDarkMode();
 
     const notificationPressHandler = useCallback(() => {
       let path = "";
@@ -122,14 +131,11 @@ export const NotificationItem = memo(
     }
 
     return (
-      <View tw="flex-row items-center p-4">
-        <Pressable
+      <View tw="web:md:hover:bg-gray-100 web:md:dark:hover:bg-gray-800 web:rounded-md select-none flex-row items-center overflow-hidden md:mx-2">
+        <PlatformButton
           onPress={notificationPressHandler}
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
+          tw={"web:px-2 flex w-full flex-row justify-between px-4 py-3.5"}
+          underlayColor={isDark ? colors.gray[100] : colors.gray[800]}
         >
           {icon}
           <View tw="mx-2">
@@ -147,7 +153,7 @@ export const NotificationItem = memo(
             notification={notification}
             setUsers={setUsers}
           />
-        </Pressable>
+        </PlatformButton>
       </View>
     );
   }
