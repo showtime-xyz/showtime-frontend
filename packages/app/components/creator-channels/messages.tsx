@@ -301,7 +301,7 @@ export const Messages = memo(() => {
   }, [editMessage, editMessageIdSharedValue, editMessageItemDimension]);
 
   const scrollhandler = useAnimatedScrollHandler({
-    onEndDrag: (event) => {
+    onMomentumBegin: (event) => {
       if (event.contentOffset.y > windowDimension.height / 4) {
         runOnJS(setShowScrollToBottom)(true);
       } else {
@@ -639,6 +639,10 @@ export const Messages = memo(() => {
                     offset: 0,
                     animated: true,
                   });
+                  // since android does not trigger onMomentScrollEnd imperatively, we need to hide the button manually
+                  if (Platform.OS === "android") {
+                    setShowScrollToBottom(false);
+                  }
                 }}
               />
             </View>
