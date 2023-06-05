@@ -189,7 +189,7 @@ const Header = (props: HeaderProps) => {
             </Text>
             <Text
               onPress={viewMembersList}
-              tw="text-xs text-gray-900 dark:text-gray-100"
+              tw="text-xs text-[#4E22FF] dark:text-blue-400"
             >
               {props.members ?? 0} members
             </Text>
