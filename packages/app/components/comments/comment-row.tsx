@@ -43,8 +43,6 @@ function CommentRowComponent({
   const lastItemId = useRef<number>(comment.id);
   const [likeCount, setLikeCount] = useState(comment.like_count);
   const [isLikedByMe, setIsLikedByMe] = useState(comment.self_liked);
-  console.log(creatorId);
-
   const [displayedRepliesCount, setDisplayedRepliesCount] =
     useState(REPLIES_PER_BATCH);
 
