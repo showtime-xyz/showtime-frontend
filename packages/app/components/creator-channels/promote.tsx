@@ -81,7 +81,8 @@ export const ChannelsPromote = () => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const imageWidth = isMdWidth ? 390 : width - 32;
-  const imageHeight = imageWidth * (475.5 / 390);
+  const imageHeight =
+    imageWidth * (475.5 / 390) - (Platform.OS === "web" ? 110 : 0);
   useEffect(() => {
     // Notes: According on App Store rules, must be hide the option if the device doesn't have the app installed.
     const checkInstalled = async () => {
@@ -374,22 +375,30 @@ export const ChannelsPromote = () => {
                           />
                         </View>
                       </View>
-                      <Text
-                        tw="text-center text-black"
-                        style={{ fontSize: 23 }}
-                      >
-                        Go to{" "}
-                        <Text style={{ fontSize: 23, fontWeight: "600" }}>
-                          showtime.xyz
-                        </Text>{" "}
-                        & search "@
-                        <Text style={{ fontSize: 23, fontWeight: "600" }}>
+                      {Platform.OS === "web" ? (
+                        <Text tw="text-center text-2xl font-bold text-black">
+                          @
                           {channelDetails?.owner?.username ||
                             channelDetails?.owner?.name}
                         </Text>
-                        " to get exclusive updates, presale access, raffles &
-                        more.
-                      </Text>
+                      ) : (
+                        <Text
+                          tw="text-center text-black"
+                          style={{ fontSize: 23 }}
+                        >
+                          Go to{" "}
+                          <Text style={{ fontSize: 23, fontWeight: "600" }}>
+                            showtime.xyz
+                          </Text>{" "}
+                          & search "@
+                          <Text style={{ fontSize: 23, fontWeight: "600" }}>
+                            {channelDetails?.owner?.username ||
+                              channelDetails?.owner?.name}
+                          </Text>
+                          " to get exclusive updates, presale access, raffles &
+                          more.
+                        </Text>
+                      )}
                     </View>
                     <View tw="absolute bottom-6">
                       <Image
