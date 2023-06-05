@@ -83,7 +83,7 @@ export const Notifications = memo(
     const ListFooterComponent = useCallback(() => {
       if (isLoadingMore && data.length > 0 && !isLoading)
         return (
-          <View tw="items-center pb-4">
+          <View tw="items-center pb-2 pt-2">
             <Spinner size="small" />
           </View>
         );
