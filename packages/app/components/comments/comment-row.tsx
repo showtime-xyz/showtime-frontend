@@ -43,7 +43,6 @@ function CommentRowComponent({
   const lastItemId = useRef<number>(comment.id);
   const [likeCount, setLikeCount] = useState(comment.like_count);
   const [isLikedByMe, setIsLikedByMe] = useState(comment.self_liked);
-
   const [displayedRepliesCount, setDisplayedRepliesCount] =
     useState(REPLIES_PER_BATCH);
 
@@ -80,8 +79,8 @@ function CommentRowComponent({
   );
 
   const isMyComment = useMemo(
-    () => user?.data.profile.profile_id === comment.commenter_profile_id,
-    [user, comment.commenter_profile_id]
+    () => user?.data.profile.profile_id === comment.commenter_profile,
+    [user, comment.commenter_profile]
   );
 
   const isRepliedByMe = useMemo(
