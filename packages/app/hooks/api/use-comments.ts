@@ -5,8 +5,6 @@ import { useSWRConfig } from "swr";
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
-import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
-import { UserType } from "app/types";
 
 export interface Liker {
   profile_id: number;
@@ -23,7 +21,7 @@ export interface CommentType {
   id: number;
   added: string;
   text: string;
-  commenter_profile_id: number;
+  commenter_profile: number;
   nft_id: number;
   name: string;
   img_url: string;
