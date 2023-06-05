@@ -18,6 +18,7 @@ export async function getServerSideProps(context) {
         ? "http://localhost:3000"
         : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
     }/api/channels?username=${username}&image=${imageUrl}`;
+
     return {
       props: {
         meta: {
