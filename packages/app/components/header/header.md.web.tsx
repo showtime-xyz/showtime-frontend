@@ -166,91 +166,101 @@ export const HeaderMd = withColorScheme(
       return null;
     }
     return (
-      <View tw="mr-4 w-56 pl-8">
-        <View tw="flex-row items-center pl-4 pt-8">
-          <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
-        </View>
-        <View tw="mt-5 justify-center">
-          {routes.map((item, index) => (
-            <Pressable
-              tw="mt-2 flex-row items-center rounded-2xl px-4 py-3.5 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
-              key={item.key}
-              onPress={() => {
-                setIndex(index);
-              }}
+      <View tw="mr-4 h-full w-56">
+        <View tw="fixed top-0 h-full w-56 pl-8">
+          <View tw="flex-row items-center pl-4 pt-8">
+            <ShowtimeBrand
+              color={iconColor}
+              width={19 * (84 / 16)}
+              height={19}
+            />
+          </View>
+          <View tw="mt-5 justify-center">
+            {routes.map((item, index) => (
+              <Pressable
+                tw="mt-2 flex-row items-center rounded-2xl px-4 py-3.5 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
+                key={item.key}
+                onPress={() => {
+                  setIndex(index);
+                }}
+              >
+                {item.icon({
+                  color: iconColor,
+                  width: 24,
+                  height: 24,
+                })}
+                <Text
+                  tw={[
+                    "ml-4 text-lg text-black duration-300 dark:text-white",
+                    currentIndex === index ? "font-bold" : "font-normal",
+                  ]}
+                >
+                  {item.title}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+          <View tw="pl-4">
+            {!isAuthenticated && (
+              <Button size="regular" tw="mt-6" onPress={navigateToLogin}>
+                Sign in
+              </Button>
+            )}
+            <Button
+              size="regular"
+              variant="text"
+              tw="mt-4 border border-gray-200 dark:border-gray-600"
+              onPress={redirectToCreateDrop}
             >
-              {item.icon({
-                color: iconColor,
-                width: 24,
-                height: 24,
-              })}
-              <Text
-                tw={[
-                  "ml-4 text-lg text-black duration-300 dark:text-white",
-                  currentIndex === index ? "font-bold" : "font-normal",
-                ]}
-              >
-                {item.title}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-        <View tw="pl-4">
-          {!isAuthenticated && (
-            <Button size="regular" tw="mt-6" onPress={navigateToLogin}>
-              Sign in
+              <Plus />
+              Create
             </Button>
-          )}
-          <Button
-            size="regular"
-            variant="text"
-            tw="mt-4 border border-gray-200 dark:border-gray-600"
-            onPress={redirectToCreateDrop}
-          >
-            <Plus />
-            Create
-          </Button>
-          <Divider tw="my-6" />
-          <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
-            <View tw="flex-row items-center justify-center">
-              <PhonePortraitOutline color={iconColor} width={18} height={18} />
-              <Text tw="ml-1 text-lg font-bold dark:text-white">Get app</Text>
-            </View>
-            <View tw="flex items-center justify-between px-2 pt-3">
-              <TextLink
-                tw="text-base font-bold dark:text-white"
-                href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
-                target="_blank"
-              >
-                <Image
-                  source={{
-                    uri: isDark
-                      ? "/assets/AppStoreDark.png"
-                      : "/assets/AppStoreLight.png",
-                  }}
-                  width={110}
-                  height={32}
-                  tw="duration-150 hover:scale-105"
-                  alt="App Store"
+            <Divider tw="my-6" />
+            <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
+              <View tw="flex-row items-center justify-center">
+                <PhonePortraitOutline
+                  color={iconColor}
+                  width={18}
+                  height={18}
                 />
-              </TextLink>
-              <TextLink
-                tw="text-base font-bold dark:text-white"
-                href="https://play.google.com/store/apps/details?id=io.showtime"
-                target="_blank"
-              >
-                <Image
-                  source={{
-                    uri: isDark
-                      ? "/assets/GooglePlayDark.png"
-                      : "/assets/GooglePlayLight.png",
-                  }}
-                  width={103}
-                  height={30}
-                  tw="duration-150 hover:scale-105"
-                  alt="Google Play"
-                />
-              </TextLink>
+                <Text tw="ml-1 text-lg font-bold dark:text-white">Get app</Text>
+              </View>
+              <View tw="flex items-center justify-between px-2 pt-3">
+                <TextLink
+                  tw="text-base font-bold dark:text-white"
+                  href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
+                  target="_blank"
+                >
+                  <Image
+                    source={{
+                      uri: isDark
+                        ? "/assets/AppStoreDark.png"
+                        : "/assets/AppStoreLight.png",
+                    }}
+                    width={110}
+                    height={32}
+                    tw="duration-150 hover:scale-105"
+                    alt="App Store"
+                  />
+                </TextLink>
+                <TextLink
+                  tw="text-base font-bold dark:text-white"
+                  href="https://play.google.com/store/apps/details?id=io.showtime"
+                  target="_blank"
+                >
+                  <Image
+                    source={{
+                      uri: isDark
+                        ? "/assets/GooglePlayDark.png"
+                        : "/assets/GooglePlayLight.png",
+                    }}
+                    width={103}
+                    height={30}
+                    tw="duration-150 hover:scale-105"
+                    alt="Google Play"
+                  />
+                </TextLink>
+              </View>
             </View>
           </View>
         </View>

@@ -32,7 +32,7 @@ export const Home = () => {
 
   const ListHeaderComponent = useCallback(() => {
     return (
-      <View tw="h-[164px] w-full px-4" style={{ width: windowWidth }}>
+      <View tw="w-full px-4 md:px-0">
         <Carousel
           loop
           width={pagerWidth}

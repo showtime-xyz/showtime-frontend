@@ -61,7 +61,7 @@ export function Carousel({
       {pagination && !!progressValue && (
         <View
           tw={[
-            "absolute bottom-4 z-10 w-full flex-row justify-center",
+            "absolute bottom-12 z-10 w-full flex-row items-center justify-center pl-4",
             pagination.tw || "",
           ]}
           style={{ zIndex: 999 }}

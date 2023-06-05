@@ -12,7 +12,7 @@ export const Controller = ({ prev, next, tw }: ControllerProps) => {
   return (
     <View
       tw={[
-        "absolute top-1/2 z-10 w-full -translate-y-1/2 flex-row justify-between",
+        "absolute top-1/2 z-10 w-full -translate-y-4  flex-row justify-between",
         tw,
       ]}
     >
