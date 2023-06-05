@@ -88,6 +88,7 @@ export type Channel = {
   updated_at: string;
   member_count: number;
   name: string;
-  latest_message: ChannelLatestMessage;
+  latest_message?: ChannelLatestMessage;
+  latest_message_updated_at: string | null;
   owner: ChannelProfile;
 };
