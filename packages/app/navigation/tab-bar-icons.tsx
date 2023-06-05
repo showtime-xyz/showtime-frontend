@@ -153,6 +153,7 @@ export const CreatorChannelsTabBarIcon = ({
   const isSet = useRef(false);
 
   const onDismiss = () => {
+    setOpen(false);
     store.set(STORE_KEY, true);
     isSet.current = true;
     setShowTip(false);
@@ -167,7 +168,7 @@ export const CreatorChannelsTabBarIcon = ({
     if (focused) {
       onDismiss();
     }
-  }, [focused]);
+  }, [focused, router]);
 
   if (!showTip) {
     return (
