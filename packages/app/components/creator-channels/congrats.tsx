@@ -28,7 +28,7 @@ export const CreatorChannelsCongrats = () => {
   const isDark = useIsDarkMode();
   const [channelId] = useParam("channelId");
 
-  const share = useShare();
+  const { share, canShare } = useShare();
   const bottomBarHeight = usePlatformBottomHeight();
   const url = `https://showtime.xyz/channels/${channelId}`;
   const shareWithTwitterIntent = useCallback(() => {
@@ -113,17 +113,19 @@ export const CreatorChannelsCongrats = () => {
               </Text>
             </>
           </Button>
-          <Button
-            size="regular"
-            tw="ml-4"
-            iconOnly
-            onPress={() => {
-              Haptics.impactAsync();
-              onCopyLink();
-            }}
-          >
-            <Link />
-          </Button>
+          {canShare && (
+            <Button
+              size="regular"
+              tw="ml-4"
+              iconOnly
+              onPress={() => {
+                Haptics.impactAsync();
+                onCopyLink();
+              }}
+            >
+              <Link />
+            </Button>
+          )}
         </View>
       </View>
     </BottomSheetModalProvider>

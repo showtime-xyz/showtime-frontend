@@ -55,8 +55,6 @@ import { toast } from "design-system/toast";
 
 import { useChannelById } from "./hooks/use-channel-detail";
 
-const StyledLinearGradient = styled(LinearGradient);
-const PlatformBlurView = Platform.OS === "web" ? View : styled(BlurView);
 type ChannelsPromoteParams = {
   channelId?: string | undefined;
 };
@@ -82,7 +80,7 @@ export const ChannelsPromote = () => {
   });
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const imageWidth = isMdWidth ? 390 : width;
+  const imageWidth = isMdWidth ? 390 : width - 32;
   const imageHeight = imageWidth * (475.5 / 390);
   useEffect(() => {
     // Notes: According on App Store rules, must be hide the option if the device doesn't have the app installed.
@@ -342,7 +340,7 @@ export const ChannelsPromote = () => {
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
             <BottomSheetScrollView>
-              <View tw="web:pb-10 web:pb-2 web:self-center select-none pt-4 md:pt-0">
+              <View tw="web:mb-16 web:self-center select-none items-center justify-center pt-4">
                 <View collapsable={false} ref={viewRef as any}>
                   <View
                     style={{
@@ -407,7 +405,7 @@ export const ChannelsPromote = () => {
           </BottomSheetModalProvider>
           <View
             tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black"
-            style={{ paddingBottom: bottom }}
+            style={{ paddingBottom: Math.max(bottom, 8) }}
           >
             {shareButtons
               .filter((item) => item.visable)

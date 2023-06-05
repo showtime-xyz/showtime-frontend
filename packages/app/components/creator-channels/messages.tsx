@@ -72,16 +72,13 @@ import { useIntroducingCreatorChannels } from "app/components/onboarding/introdu
 import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-congrats";
-import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
-import { Analytics, EVENTS } from "app/lib/analytics";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import { createParam } from "app/navigation/use-param";
 import {
   cleanUserTextInput,
   formatDateRelativeWithIntl,
-  getWebBaseURL,
   limitLineBreaks,
   removeTags,
 } from "app/utilities";
@@ -276,7 +273,6 @@ export const Messages = memo(() => {
     undefined | { id: number; text: string }
   >();
   const router = useRouter();
-  const share = useShare();
   const isDark = useIsDarkMode();
   const user = useUser();
   const windowDimension = useWindowDimensions();
@@ -367,15 +363,6 @@ export const Messages = memo(() => {
       }),
       { shallow: true }
     );
-    // const result = await share({
-    //   url: `${getWebBaseURL()}/channels/${channelId}`,
-    // });
-    // if (result.action === "sharedAction") {
-    //   Analytics.track(
-    //     EVENTS.USER_SHARED_PROFILE,
-    //     result.activityType ? { type: result.activityType } : undefined
-    //   );
-    // }
   };
   const { data, isLoading, fetchMore, isLoadingMore, error } =
     useChannelMessages(channelId);
