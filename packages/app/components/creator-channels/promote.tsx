@@ -149,7 +149,7 @@ export const ChannelsPromote = () => {
     ? "Just messaged my collector channel on @Showtime_xyz. Join to check it out:"
     : `Just joined ${getTwitterIntentUsername(
         userProfiles?.data?.profile
-      )} collector channel on @Showtime_xyz. Check it out:`;
+      )} channel on @Showtime_xyz. Check it out:`;
 
   const checkPhotosPermission = useCallback(async () => {
     let hasPermission = false;
