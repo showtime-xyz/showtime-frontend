@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Linking } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
@@ -16,7 +16,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useShare } from "app/hooks/use-share";
 import { Analytics, EVENTS } from "app/lib/analytics";
-import { getTwitterIntent } from "app/utilities";
+import { getTwitterIntent, getWebBaseURL } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -30,7 +30,10 @@ export const CreatorChannelsCongrats = () => {
 
   const { share, canShare } = useShare();
   const bottomBarHeight = usePlatformBottomHeight();
-  const url = `https://showtime.xyz/channels/${channelId}`;
+  const url = useMemo(
+    () => `${getWebBaseURL()}/channels/` + channelId?.replace("$", ""),
+    [channelId]
+  );
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
