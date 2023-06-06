@@ -340,14 +340,14 @@ export const Messages = memo(() => {
   useIntroducingCreatorChannels();
 
   useEffect(() => {
-    AvoidSoftInput.setEnabled(false);
-    KeyboardController.setInputMode(
+    AvoidSoftInput?.setEnabled(false);
+    KeyboardController?.setInputMode(
       AndroidSoftInputModes.SOFT_INPUT_ADJUST_NOTHING
     );
 
     return () => {
-      AvoidSoftInput.setEnabled(true);
-      KeyboardController.setDefaultMode();
+      AvoidSoftInput?.setEnabled(true);
+      KeyboardController?.setDefaultMode();
       enableLayoutAnimations(false);
     };
   }, []);
