@@ -616,7 +616,9 @@ export const Messages = memo(() => {
                 onScroll={scrollhandler}
                 useWindowScroll={false}
                 estimatedItemSize={90}
-                keyboardDismissMode="on-drag"
+                keyboardDismissMode={
+                  Platform.OS === "ios" ? "interactive" : "on-drag"
+                }
                 renderItem={renderItem}
                 contentContainerStyle={{ paddingTop: insets.bottom }}
                 extraData={extraData}
