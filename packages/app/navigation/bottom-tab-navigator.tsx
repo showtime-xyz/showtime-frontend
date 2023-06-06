@@ -8,14 +8,16 @@ import { useUser } from "app/hooks/use-user";
 
 import { BottomTabbar } from "./bottom-tab-bar";
 import {
+  CreatorChannelsTabBarIcon,
   HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
-  TrendingTabBarIcon,
 } from "./tab-bar-icons";
 
+const CreatorChannelsNavigator = dynamic(
+  () => import("../pages/creator-channels")
+);
 const HomeNavigator = dynamic(() => import("../pages/home"));
-const TrendingNavigator = dynamic(() => import("../pages/trending"));
 const CreateNavigator = dynamic(() => import("../pages/create"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
 const ProfileNavigator = dynamic(() => import("../pages/profile"));
@@ -44,10 +46,10 @@ export function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="trendingTab"
-        component={TrendingNavigator}
+        name="creatorChannelsTab"
+        component={CreatorChannelsNavigator}
         options={{
-          tabBarIcon: TrendingTabBarIcon,
+          tabBarIcon: CreatorChannelsTabBarIcon,
         }}
       />
       {width < 768 && (

@@ -38,6 +38,7 @@ export function AnimateHeight({
 
   const containerStyle = useAnimatedStyle(() => {
     return {
+      willChange: "transform, scroll-position, contents", // make it hardware accelerated on web
       height: withTiming(
         hide ? 0 : measuredHeight.value + extraHeight,
         transition,

@@ -6,6 +6,7 @@ export interface ModalScreenOptions extends ModalProps {
   matchingQueryParam: string;
   snapPoints?: Array<number | string>;
   backPressHandlerEnabled?: boolean;
+  onScreenDismiss?: () => void;
 }
 export type PopCallback = (() => void) | undefined | null;
 

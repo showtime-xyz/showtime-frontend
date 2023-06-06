@@ -24,7 +24,7 @@ export const getNFTURL = (nft: NFT | undefined) => {
 };
 
 export const useShareNFT = () => {
-  const share = useShare();
+  const { share } = useShare();
 
   const shareNFT = async (nft?: NFT) => {
     if (!nft) return;

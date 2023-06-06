@@ -5,9 +5,19 @@ import {
   FlashList,
   FlashListProps,
   ListRenderItemInfo,
+  CellContainer,
 } from "@shopify/flash-list";
 import { ScrollView } from "react-native-gesture-handler";
 
+// Here for reference: https://github.com/software-mansion/react-native-reanimated/pull/3948
+// this has to be done like so to fix momentum scroll end not firing for Android
+const ScrollViewWithRef = React.forwardRef((props, ref) => (
+  <ScrollView {...props} ref={ref} onMomentumScrollEnd={() => {}} />
+)) as typeof ScrollView;
+
+ScrollViewWithRef.displayName = "ScrollViewWithRef";
+
+export { CellContainer, FlashList };
 export type InfiniteScrollListProps<T> = FlashListProps<T> & {
   index?: number;
   /**
@@ -24,6 +34,7 @@ export type InfiniteScrollListProps<T> = FlashListProps<T> & {
   }>;
 
   preserveScrollPosition?: boolean;
+  useWindowScroll?: boolean;
 };
 
 function FlashListComponent<T>(
@@ -51,7 +62,7 @@ function FlashListComponent<T>(
     return (
       <View style={[{ height: "100%" }, style]}>
         <FlashList
-          renderScrollComponent={ScrollView}
+          renderScrollComponent={ScrollViewWithRef}
           {...rest}
           numColumns={numColumns}
           ref={ref}
@@ -62,7 +73,7 @@ function FlashListComponent<T>(
   } else {
     return (
       <FlashList
-        renderScrollComponent={ScrollView}
+        renderScrollComponent={ScrollViewWithRef}
         {...rest}
         numColumns={numColumns}
         renderItem={renderItem}

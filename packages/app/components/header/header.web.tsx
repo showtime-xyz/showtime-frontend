@@ -70,10 +70,12 @@ export const NotificationsInHeader = () => {
         sideOffset={12}
       >
         <View
-          tw="dark:shadow-light shadow-light z-50 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
+          tw="dark:shadow-light shadow-light z-50 w-[480px] overflow-hidden rounded-xl bg-white dark:bg-black md:max-w-md"
           style={Platform.select({
             web: {
-              height: NOTIFICATION_LIST_HEIGHT,
+              height: NOTIFICATION_LIST_HEIGHT + 16,
+              paddingTop: 8,
+              paddingBottom: 8,
             },
             default: {},
           })}

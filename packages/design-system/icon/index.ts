@@ -130,6 +130,18 @@ export { default as AddPhoto } from "./AddPhoto";
 export { default as Raffle } from "./Raffle";
 export { default as PauseOutline } from "./PauseOutline";
 export { default as RaffleHorizontal } from "./RaffleHorizontal";
+export { default as CreatorChannel } from "./CreatorChannel";
+export { default as CreatorChannelFilled } from "./CreatorChannelFilled";
+export { default as CreatorChannelType } from "./CreatorChannelType";
+export { default as GiftV2 } from "./GiftV2";
+export { default as LockRounded } from "./LockRounded";
+export { default as MusicDropType } from "./MusicDropType";
+export { default as Music } from "./Music";
+export { default as Shopping } from "./Shopping";
+export { default as FreeDropType } from "./FreeDropType";
+export { default as Congrats } from "./Congrats";
+export { default as EyeOffV2 } from "./EyeOffV2";
+
 //#region social icons
 export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";
@@ -145,5 +157,6 @@ export { default as TwitterOutline } from "./TwitterOutline";
 export { default as AppleMusic } from "./AppleMusic";
 export { default as PreAddAppleMusic } from "./PreAddAppleMusic";
 export { default as ListenOnAppleMusic } from "./ListenOnAppleMusic";
+export { default as Reaction } from "./Reaction";
 
 //#endregion

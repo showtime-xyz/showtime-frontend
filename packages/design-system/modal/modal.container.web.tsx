@@ -47,6 +47,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       tw: propTw = "",
       headerShown = true,
       visible,
+      closeButtonProps,
     }: ModalContainerProps,
     ref
   ) {
@@ -87,7 +88,13 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
               tw={[...MODAL_CONTAINER_TW, web_height, propTw]}
               style={style}
             >
-              {headerShown && <ModalHeader title={title} onClose={close} />}
+              {headerShown && (
+                <ModalHeader
+                  title={title}
+                  onClose={close}
+                  closeButtonProps={closeButtonProps}
+                />
+              )}
               <View
                 tw={MODAL_BODY_TW}
                 style={bodyStyle}

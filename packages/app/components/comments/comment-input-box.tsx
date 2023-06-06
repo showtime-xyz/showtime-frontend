@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useImperativeHandle, useState } from "react";
-import { ViewStyle } from "react-native";
+import { Platform, ViewStyle } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
@@ -48,7 +48,7 @@ export const CommentInputBox = forwardRef<
       const _newComment = async () => {
         try {
           await onboardingPromise();
-          await submit(text, selectedComment?.comment_id);
+          await submit(text, selectedComment?.id);
           commentInputRef?.current?.reset();
         } catch (error) {
           Alert.alert("Error", "Cannot add comment.", [
@@ -69,13 +69,7 @@ export const CommentInputBox = forwardRef<
 
       setSelectedComment(null);
     },
-    [
-      onboardingPromise,
-      submit,
-      selectedComment?.comment_id,
-      commentInputRef,
-      Alert,
-    ]
+    [onboardingPromise, submit, selectedComment?.id, commentInputRef, Alert]
   );
 
   const handleOnClearPress = useCallback(() => {
@@ -108,8 +102,15 @@ export const CommentInputBox = forwardRef<
       <MessageBox
         ref={commentInputRef}
         submitting={submitting}
+        placeholder="Add a comment..."
         onSubmit={handleOnSubmitComment}
         userAvatar={user?.data.profile.img_url}
+        textInputProps={{
+          ...(Platform.OS === "ios"
+            ? { keyboardType: "twitter" }
+            : { inputMode: "text" }),
+        }}
+        tw="web:pb-0"
       />
     </>
   );

@@ -28,5 +28,8 @@ export const useShare = () => {
     }
   };
 
-  return share;
+  return {
+    share,
+    canShare: Platform.OS === "web" ? navigator.canShare : true,
+  };
 };

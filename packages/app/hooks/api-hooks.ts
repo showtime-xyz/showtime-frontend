@@ -119,13 +119,12 @@ export const useTrendingNFTS = ({ filter }: { filter?: string }) => {
 export const USER_PROFILE_KEY = "/v4/profile_server/";
 export const useUserProfile = ({ address }: { address?: string | null }) => {
   const queryKey = address ? USER_PROFILE_KEY + address : null;
-  const { data, error, isLoading } = useSWR<{
+  const { data, error, isLoading, mutate } = useSWR<{
     data?: UserProfile;
   }>(queryKey, fetcher, {
     revalidateIfStale: false,
     focusThrottleInterval: 200000,
   });
-  const { mutate } = useSWRConfig();
 
   const { data: myInfoData } = useMyInfo();
   // if it's current user's profile, we get the profile from my info cache to make mutation easier, e.g. mutating username
@@ -150,7 +149,7 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
     isLoading,
     isError: Boolean(error),
     error,
-    mutate: () => mutate(queryKey, userProfile),
+    mutate,
   };
 };
 
@@ -280,20 +279,6 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
     fetcher
   );
   return { data, isLoading, error };
-};
-
-export const useComments = ({ nftId }: { nftId: number }) => {
-  const PAGE_SIZE = 10;
-  const commentsUrlFn = useCallback(() => {
-    const url = `/v2/comments/${nftId}?limit=${PAGE_SIZE}`;
-    return url;
-  }, [nftId]);
-
-  const queryState = useInfiniteListQuerySWR<any>(commentsUrlFn, {
-    pageSize: PAGE_SIZE,
-  });
-
-  return queryState;
 };
 
 export const useMyInfo = () => {
