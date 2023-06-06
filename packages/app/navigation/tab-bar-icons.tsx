@@ -1,13 +1,17 @@
-import { Suspense } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
+
+import { MMKV } from "react-native-mmkv";
+import * as Tooltip from "universal-tooltip";
+import type { ContentProps } from "universal-tooltip";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Bell,
   BellFilled,
-  Compass,
-  CompassFilled,
+  CreatorChannel,
+  CreatorChannelFilled,
   Home,
   HomeFilled,
   Hot,
@@ -17,7 +21,9 @@ import {
   User,
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import type { TW } from "@showtime-xyz/universal.tailwind";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { TW, colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
@@ -27,6 +33,9 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
+
+const store = new MMKV();
+const STORE_KEY = "showCreatorChannelTip";
 
 type TabBarIconProps = {
   color?: string;
@@ -73,7 +82,7 @@ function TabBarIcon({ tab, children, tw, onPress }: TabBarButtonProps) {
     );
   }
 
-  return <View tw="h-12 w-12 items-center justify-center">{children}</View>;
+  return <View tw="h-12 w-14 items-center justify-center">{children}</View>;
 }
 
 export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
@@ -95,7 +104,6 @@ export const HomeTabBarIcon = ({ color, focused }: TabBarIconProps) => {
 
 export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
   const isDark = useIsDarkMode();
-
   return (
     <TabBarIcon tab="/" tw={tw}>
       <Showtime
@@ -127,6 +135,115 @@ export const CreateTabBarIcon = ({
       >
         <Plus width={24} height={24} color={color} />
       </View>
+    </TabBarIcon>
+  );
+};
+
+export const CreatorChannelsTabBarIcon = ({
+  color,
+  focused,
+  tooltipSide = "top",
+}: TabBarIconProps & {
+  tooltipSide?: ContentProps["side"];
+}) => {
+  const router = useRouter();
+  const [showTip, setShowTip] = useState(false);
+  const [open, setOpen] = useState(true);
+  const [badgeNumber, setBadgeNumber] = useState(0);
+  const isSet = useRef(false);
+
+  const onDismiss = () => {
+    setOpen(false);
+    store.set(STORE_KEY, true);
+    isSet.current = true;
+    setShowTip(false);
+  };
+  useEffect(() => {
+    if (!store.getBoolean(STORE_KEY) && !isSet.current && !focused) {
+      setTimeout(() => {
+        setShowTip(true);
+        isSet.current = true;
+      }, 2000);
+    }
+    if (focused) {
+      onDismiss();
+    }
+  }, [focused, router]);
+
+  if (!showTip) {
+    return (
+      <TabBarIcon tab="/channels">
+        {focused ? (
+          <CreatorChannelFilled width={24} height={24} color={color} />
+        ) : (
+          <CreatorChannel width={24} height={24} color={color} />
+        )}
+        {badgeNumber > 0 && (
+          <View tw="web:-top-0.5 absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
+            <Text tw="text-xs font-medium text-white">
+              {badgeNumber > 99 ? "99" : badgeNumber}
+            </Text>
+          </View>
+        )}
+      </TabBarIcon>
+    );
+  }
+  return (
+    <TabBarIcon
+      onPress={() => {
+        router.push("/channels");
+        if (Platform.OS === "web") {
+          onDismiss();
+        }
+      }}
+    >
+      <Tooltip.Root
+        onDismiss={onDismiss}
+        open={open}
+        disableDismissWhenTouchOutside
+        usePopover
+      >
+        <Tooltip.Trigger>
+          <View tw="items-center justify-center">
+            <View tw="w-14 flex-row items-center justify-center rounded-full bg-indigo-700 md:h-12 md:w-12">
+              <CreatorChannel width={24} height={24} color="#fff" />
+              {badgeNumber > 0 && (
+                <Text tw="ml-1 text-sm font-medium text-white md:hidden">
+                  {badgeNumber > 99 ? "99+" : badgeNumber}
+                </Text>
+              )}
+            </View>
+          </View>
+        </Tooltip.Trigger>
+        <Tooltip.Content
+          sideOffset={3}
+          containerStyle={{
+            paddingLeft: 10,
+            paddingRight: 10,
+            paddingTop: 6,
+            paddingBottom: 6,
+          }}
+          className="web:outline-none"
+          side={tooltipSide}
+          presetAnimation="fadeIn"
+          backgroundColor={colors.indigo[700]}
+          borderRadius={12}
+          onTap={() => {
+            router.push("/channels");
+            if (Platform.OS === "web") {
+              onDismiss();
+            }
+          }}
+          dismissDuration={500}
+          maxWidth={200}
+        >
+          <Tooltip.Text
+            textSize={14}
+            textColor="#fff"
+            text={"Check out new broadcasts from your creators"}
+          />
+        </Tooltip.Content>
+      </Tooltip.Root>
     </TabBarIcon>
   );
 };

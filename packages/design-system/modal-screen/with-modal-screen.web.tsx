@@ -18,6 +18,7 @@ function withModalScreen<P extends object>(
     title: titleProp,
     matchingPathname,
     matchingQueryParam,
+    onScreenDismiss,
     ...rest
   }: ModalScreenOptions
 ) {
@@ -54,6 +55,7 @@ function withModalScreen<P extends object>(
         router.pop();
       }
       isLayouted.current = false;
+      onScreenDismiss?.();
     }, [router]);
 
     useIsomorphicLayoutEffect(() => {

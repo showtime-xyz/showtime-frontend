@@ -18,6 +18,7 @@ function withModalScreen<P extends {}>(
     title: titleProp,
     snapPoints = ["90%", "100%"],
     backPressHandlerEnabled = true,
+    onScreenDismiss,
     ...rest
   }: ModalScreenOptions
 ) {
@@ -39,6 +40,7 @@ function withModalScreen<P extends {}>(
     const onClose = useCallback(() => {
       router.pop();
       closeCallback.current?.();
+      onScreenDismiss?.();
     }, [router]);
 
     useLayoutEffect(() => {

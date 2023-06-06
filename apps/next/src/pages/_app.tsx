@@ -27,9 +27,16 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
+import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
+import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
+import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
+import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
+import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
+import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEventScreen } from "app/screens/drop-event";
+import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropFreeScreen } from "app/screens/drop-free";
 import { DropMusicScreen } from "app/screens/drop-music";
 import { DropPrivateScreen } from "app/screens/drop-private";
@@ -190,6 +197,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <FollowersScreen />
         <FollowingScreen />
         <DropScreen />
+        <DropExplanationScreen />
         <ClaimScreen />
         <RaffleScreen />
         <CollectorsScreen />
@@ -204,7 +212,12 @@ function App({ Component, pageProps, router }: AppProps) {
         <CheckoutReturnScreen />
         <QRCodeShareScreen />
         <DropViewShareScreen />
-
+        <CreatorChannelsCongratsScreen />
+        <CreatorChannelsIntroScreen />
+        <CreatorChannelsMembersScreen />
+        <CreatorChannelsSettingsScreen />
+        <CreatorChannelsMessageReactionsScreen />
+        <CreatorChannelsShareScreen />
         {/* Settings that renders on top of other modals */}
         <EditProfileScreen />
         <OnboardingScreen />
@@ -239,7 +252,7 @@ const Container = withColorScheme(
     usePlatformResize(onResize, true);
 
     return (
-      <View tw="bg-gray-100 dark:bg-black dark:md:bg-gray-900">
+      <View tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900">
         <div className={fonts}>{children}</div>
       </View>
     );

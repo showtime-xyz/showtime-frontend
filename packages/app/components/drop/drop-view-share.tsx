@@ -18,6 +18,7 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
+import { getIsShowCreatorChannelIntro } from "app/lib/mmkv-keys";
 import { getTwitterIntent } from "app/utilities";
 
 import { toast } from "design-system/toast";
@@ -114,11 +115,12 @@ export const DropViewShare = memo(function DropViewShare({
                 tw="web:mb-5 mt-2"
                 onPressCTA={() => {
                   if (!nft) return;
+
                   if (Platform.OS !== "web") {
                     router.pop();
-                    router.push(getNFTSlug(nft));
+                    router.push(`${getNFTSlug(nft)}`);
                   } else {
-                    router.replace(getNFTSlug(nft));
+                    router.replace(`${getNFTSlug(nft)}`);
                   }
                 }}
                 {...rest}

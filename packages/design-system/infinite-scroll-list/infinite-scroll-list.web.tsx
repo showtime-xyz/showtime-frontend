@@ -6,6 +6,7 @@ import {
   useMemo,
   isValidElement,
   forwardRef,
+  Fragment,
 } from "react";
 
 import type { FlashListProps, ViewToken } from "@shopify/flash-list";
@@ -22,7 +23,7 @@ import { useStableCallback } from "app/hooks/use-stable-callback";
 const measurementsCache: any = {};
 
 const DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE = 80;
-
+export const CellContainer = Fragment;
 const renderComponent = (Component: any) => {
   if (!Component) return null;
   if (isValidElement(Component)) return Component;
@@ -52,6 +53,7 @@ function InfiniteScrollListImpl<Item>(
     overscan,
     style,
     useWindowScroll = true,
+    inverted,
     preserveScrollPosition = false,
   } = props;
   let count = data?.length ?? 0;
@@ -131,7 +133,7 @@ function InfiniteScrollListImpl<Item>(
       return;
     }
 
-    if (data && lastItem.index >= data.length - 1) {
+    if (data && data?.length > 0 && lastItem.index >= data.length - 1) {
       onEndReached?.();
     }
   }, [data, onEndReached, renderedItems]);
@@ -161,6 +163,30 @@ function InfiniteScrollListImpl<Item>(
     preserveScrollPosition,
   ]);
 
+  const transformStyle = inverted ? { transform: "scaleY(-1)" } : {};
+
+  useEffect(() => {
+    const handleScroll = (e: WheelEvent) => {
+      e.preventDefault();
+      const currentTarget = e.currentTarget as HTMLElement;
+
+      if (currentTarget) {
+        currentTarget.scrollTop -= e.deltaY;
+      }
+    };
+    if (inverted) {
+      parentRef.current?.addEventListener("wheel", handleScroll, {
+        passive: false,
+      });
+    }
+
+    return () => {
+      if (inverted) {
+        parentRef.current?.removeEventListener("wheel", handleScroll);
+      }
+    };
+  }, [inverted]);
+
   return (
     <>
       <div
@@ -168,6 +194,7 @@ function InfiniteScrollListImpl<Item>(
           flex: 1,
           display: "flex",
           flexDirection: "column",
+          ...transformStyle,
         }}
       >
         <div
@@ -192,15 +219,18 @@ function InfiniteScrollListImpl<Item>(
               : {}
           }
         >
-          {HeaderComponent}
+          <div style={transformStyle}>{HeaderComponent}</div>
           <div
             ref={scrollMarginOffseRef}
             style={{
               height:
-                rowVirtualizer.getTotalSize() -
-                (useWindowScroll ? 0 : parentOffsetRef.current),
+                rowVirtualizer.getTotalSize() === 0
+                  ? "100%"
+                  : rowVirtualizer.getTotalSize() -
+                    (useWindowScroll ? 0 : parentOffsetRef.current),
               width: "100%",
               position: "relative",
+              flex: 1,
             }}
           >
             <div
@@ -209,12 +239,23 @@ function InfiniteScrollListImpl<Item>(
                 top: 0,
                 left: 0,
                 width: "100%",
+                minHeight:
+                  rowVirtualizer.getTotalSize() === 0 ? "100%" : undefined,
                 transform: `translateY(${
                   renderedItems[0]?.start - rowVirtualizer.options.scrollMargin
                 }px)`,
               }}
             >
-              {data?.length === 0 && EmptyComponent}
+              <div
+                style={{
+                  height: "100%",
+                  position: "absolute",
+                  inset: 0,
+                  ...transformStyle,
+                }}
+              >
+                {data?.length === 0 && EmptyComponent}
+              </div>
               {renderedItems.map((virtualItem) => {
                 const index = virtualItem.index;
                 return (
@@ -222,7 +263,7 @@ function InfiniteScrollListImpl<Item>(
                     key={virtualItem.key}
                     data-index={index}
                     ref={rowVirtualizer.measureElement}
-                    style={{ width: "100%" }}
+                    style={{ width: "100%", ...transformStyle }}
                   >
                     {typeof data?.[index] !== "undefined" ? (
                       <div
@@ -267,7 +308,9 @@ function InfiniteScrollListImpl<Item>(
                   </div>
                 );
               })}
-              {!useWindowScroll && FooterComponent}
+              <div style={transformStyle}>
+                {!useWindowScroll && FooterComponent}
+              </div>
             </div>
           </div>
 

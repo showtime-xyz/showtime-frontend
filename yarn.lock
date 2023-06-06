@@ -7455,6 +7455,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@resvg/resvg-wasm@npm:2.4.1":
+  version: 2.4.1
+  resolution: "@resvg/resvg-wasm@npm:2.4.1"
+  checksum: 855aa1e5f1b228b9d2fe87e5d12b628c64b43a513fb67cd78b2eb447684d6b0861543a77ff8b878b21bf89b048ffeff73267685967d9f20cb8ef2c350dac5c81
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-babel@npm:^5.2.0":
   version: 5.3.1
   resolution: "@rollup/plugin-babel@npm:5.3.1"
@@ -8114,6 +8121,7 @@ __metadata:
     react-native-get-random-values: ^1.8.0
     react-native-image-colors: ^1.5.2
     react-native-ios-context-menu: ^1.15.3
+    react-native-keyboard-controller: ^1.5.5
     react-native-level-fs: ^3.0.1
     react-native-localhost: ^1.0.0
     react-native-mmkv: 2.8.0
@@ -8147,7 +8155,7 @@ __metadata:
     ts-jest: ^29.1.0
     tty-browserify: 0.0.1
     typescript: ^5.0.4
-    universal-tooltip: ^0.5.0
+    universal-tooltip: ^0.6.1
     url: ~0.11.0
     use-timer: ^2.0.1
     use-unmount-signal: ^1.0.0
@@ -8193,6 +8201,7 @@ __metadata:
     "@types/react-datepicker": ^4.10.0
     "@types/react-dropzone": ^5.1.0
     "@types/react-stickynode": ^4.0.0
+    "@vercel/og": ^0.5.6
     "@walletconnect/web3-provider": ^1.8.0
     app: "*"
     array-to-image: ^1.0.0
@@ -8215,7 +8224,7 @@ __metadata:
     next-images: ^1.8.5
     next-pwa: ^5.6.0
     patch-package: ^7.0.0
-    postcss: ^8.4.21
+    postcss: ^8.4.23
     postinstall-postinstall: ^2.1.0
     raf: ^3.4.1
     react-datepicker: ^4.11.0
@@ -8327,6 +8336,18 @@ __metadata:
     typescript: ^5.0.4
   languageName: unknown
   linkType: soft
+
+"@shuding/opentype.js@npm:1.4.0-beta.0":
+  version: 1.4.0-beta.0
+  resolution: "@shuding/opentype.js@npm:1.4.0-beta.0"
+  dependencies:
+    fflate: ^0.7.3
+    string.prototype.codepointat: ^0.2.1
+  bin:
+    ot: bin/ot
+  checksum: af3478c40c068c7f6b6050b274a10837fcd1417c072b6af2b9d4fa48b8efe0bc93ec4b5f80b186678672f7d293027151389c66a4c5a156b48b810b8e8f3f5cdf
+  languageName: node
+  linkType: hard
 
 "@sideway/address@npm:^4.1.3":
   version: 4.1.4
@@ -11021,6 +11042,17 @@ __metadata:
   peerDependencies:
     "@vanilla-extract/css": ^1.0.0
   checksum: 522b96afe856a72d76072ab41453edc35117772a6ac829c8a5ad09cddd69152e152b1cbda0b4344d50dbde59d0effa39301beb7acf319ef88f485966c89c80fd
+  languageName: node
+  linkType: hard
+
+"@vercel/og@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "@vercel/og@npm:0.5.6"
+  dependencies:
+    "@resvg/resvg-wasm": 2.4.1
+    satori: 0.9.1
+    yoga-wasm-web: 0.3.3
+  checksum: ea6e01b3d45cd6733cdd8133288f15cb5aa77c1cd96a2e899b40cfecba329e3490f5f81087db64e3ded5027198651a3da5d1582f0278ffdd001034b2a59e6960
   languageName: node
   linkType: hard
 
@@ -14244,6 +14276,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base64-js@npm:0.0.8":
+  version: 0.0.8
+  resolution: "base64-js@npm:0.0.8"
+  checksum: e95d2fa4b9000789fedd1e1ebac7830a70f5b1c06c72b2cf7862a48335af5d42229c0deda5085b2c8e403e479b612a55cd682bd4438838980d07cfc21c91e750
+  languageName: node
+  linkType: hard
+
 "base64-js@npm:^1.0.2, base64-js@npm:^1.1.2, base64-js@npm:^1.2.3, base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
@@ -16305,6 +16344,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"css-background-parser@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "css-background-parser@npm:0.1.0"
+  checksum: cf53bef8d5df8538af7179f787fe04f4ac53c60089b338bf167b3e18be13817e395d48e303ca13493927b6fc11b4c24db2b144054c8ed3a55a044c6d177a08a5
+  languageName: node
+  linkType: hard
+
+"css-box-shadow@npm:1.0.0-3":
+  version: 1.0.0-3
+  resolution: "css-box-shadow@npm:1.0.0-3"
+  checksum: 1b7f15b291261023bb57e8718849951f313ee54e5cc3c72a90fac8d141138ea73562ad28006533f4ed92cb672ccbba2d6483ecb187a6c7f800936b006ba27925
+  languageName: node
+  linkType: hard
+
 "css-color-keywords@npm:^1.0.0":
   version: 1.0.0
   resolution: "css-color-keywords@npm:1.0.0"
@@ -17345,6 +17398,13 @@ __metadata:
   version: 0.13.1
   resolution: "emittery@npm:0.13.1"
   checksum: 2b089ab6306f38feaabf4f6f02792f9ec85fc054fda79f44f6790e61bbf6bc4e1616afb9b232e0c5ec5289a8a452f79bfa6d905a6fd64e94b49981f0934001c6
+  languageName: node
+  linkType: hard
+
+"emoji-regex@npm:^10.2.1":
+  version: 10.2.1
+  resolution: "emoji-regex@npm:10.2.1"
+  checksum: 1aa2d16881c56531fdfc03d0b36f5c2b6221cc4097499a5665b88b711dc3fb4d5b8804f0ca6f00c56e5dcf89bac75f0487eee85da1da77df3a33accc6ecbe426
   languageName: node
   linkType: hard
 
@@ -19830,6 +19890,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fflate@npm:^0.7.3":
+  version: 0.7.4
+  resolution: "fflate@npm:0.7.4"
+  checksum: b812ab26047432db70ff4c73eb45ad53bd0774575b4818b9c61c2921e89ec65d1259f06ec1618f2ac55e6a2f2e29b6dc09173d213b46580bc69efae5344bf8f1
+  languageName: node
+  linkType: hard
+
 "figures@npm:^2.0.0":
   version: 2.0.0
   resolution: "figures@npm:2.0.0"
@@ -21162,6 +21229,13 @@ __metadata:
   dependencies:
     source-map: ^0.7.3
   checksum: b5f874eaa65b70d88df7a4ce3b20d73312bb0bc73410f1b63d708f02e1c532ae16975da84e23b977eab8592ac95d7e6fc0c4094c78604fd0a092ed886c62aa7a
+  languageName: node
+  linkType: hard
+
+"hex-rgb@npm:^4.1.0":
+  version: 4.3.0
+  resolution: "hex-rgb@npm:4.3.0"
+  checksum: e654648db8647446f0111c68690d9b340eb192a93c8b2c6789a2b8deb5c20e757515ae209c5ae67074acfddf8575f9fc645d4ffaa0596d859457b08e180d791d
   languageName: node
   linkType: hard
 
@@ -24029,6 +24103,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"linebreak@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "linebreak@npm:1.1.0"
+  dependencies:
+    base64-js: 0.0.8
+    unicode-trie: ^2.0.0
+  checksum: 65cb66900b4b60d99bb761fb4143d8673ad5dd57dd850fcd921fe425a5a8e3c4416ebee76a68058a90d88b5033a50b210f522558a7e0c7d95ca907b5a2b52520
+  languageName: node
+  linkType: hard
+
 "lines-and-columns@npm:^1.1.6":
   version: 1.2.4
   resolution: "lines-and-columns@npm:1.2.4"
@@ -26714,17 +26798,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pako@npm:^0.2.5, pako@npm:~0.2.0":
+  version: 0.2.9
+  resolution: "pako@npm:0.2.9"
+  checksum: 055f9487cd57fbb78df84315873bbdd089ba286f3499daed47d2effdc6253e981f5db6898c23486de76d4a781559f890d643bd3a49f70f1b4a18019c98aa5125
+  languageName: node
+  linkType: hard
+
 "pako@npm:^1.0.5, pako@npm:~1.0.5":
   version: 1.0.11
   resolution: "pako@npm:1.0.11"
   checksum: 1be2bfa1f807608c7538afa15d6f25baa523c30ec870a3228a89579e474a4d992f4293859524e46d5d87fd30fa17c5edf34dbef0671251d9749820b488660b16
-  languageName: node
-  linkType: hard
-
-"pako@npm:~0.2.0":
-  version: 0.2.9
-  resolution: "pako@npm:0.2.9"
-  checksum: 055f9487cd57fbb78df84315873bbdd089ba286f3499daed47d2effdc6253e981f5db6898c23486de76d4a781559f890d643bd3a49f70f1b4a18019c98aa5125
   languageName: node
   linkType: hard
 
@@ -26781,6 +26865,16 @@ __metadata:
     xml-parse-from-string: ^1.0.0
     xml2js: ^0.4.5
   checksum: 879e5435be44f22b8c4934e2e1d2754a6d90a9ddb16309360daff965e1428d877b673f3d1fafaab4fef437c912a0db9f85545e0dd375ec62df7d4d328450d257
+  languageName: node
+  linkType: hard
+
+"parse-css-color@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "parse-css-color@npm:0.2.1"
+  dependencies:
+    color-name: ^1.1.4
+    hex-rgb: ^4.1.0
+  checksum: 3751e81fe904b491612ee4c92235b476d16419b88a0da2822319b657ff35311f5ffc13cd092bd385d17319058dc2188e5bcbee7d476516a77b90f6aa556d88d9
   languageName: node
   linkType: hard
 
@@ -28670,6 +28764,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-keyboard-controller@npm:^1.5.5":
+  version: 1.5.5
+  resolution: "react-native-keyboard-controller@npm:1.5.5"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-reanimated: ">=2.3.0"
+  checksum: 9d27a00e9b8bb931708ed6af6ce4e587b6493ce2833b05402251f1994b0bf9ffe231b739fc1997a2b918cf1caa315cbe8c3e8280e3bed886f2542ee40bca0e2c
+  languageName: node
+  linkType: hard
+
 "react-native-level-fs@npm:^3.0.1":
   version: 3.0.1
   resolution: "react-native-level-fs@npm:3.0.1"
@@ -30220,6 +30325,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"satori@npm:0.9.1":
+  version: 0.9.1
+  resolution: "satori@npm:0.9.1"
+  dependencies:
+    "@shuding/opentype.js": 1.4.0-beta.0
+    css-background-parser: ^0.1.0
+    css-box-shadow: 1.0.0-3
+    css-to-react-native: ^3.0.0
+    emoji-regex: ^10.2.1
+    linebreak: ^1.1.0
+    parse-css-color: ^0.2.1
+    postcss-value-parser: ^4.2.0
+    yoga-wasm-web: ^0.3.3
+  checksum: 1b00705a3f0a0d24b18188a856d7d047dd7b8611fc6a426ece339aa1d7f771e85d0b17aa1fdb0b5e42c5aec7c198a41c7906f4829ed7a97f2ee34fc107184b1d
+  languageName: node
+  linkType: hard
+
 "sax@npm:>=0.6.0, sax@npm:^1.2.4":
   version: 1.2.4
   resolution: "sax@npm:1.2.4"
@@ -31450,6 +31572,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"string.prototype.codepointat@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "string.prototype.codepointat@npm:0.2.1"
+  checksum: bafa15844d7ea5bed24a01fa8954327c0c49226cefe68ab70573f1338f6a4680587db962724924f2cceb91abe408e11bd38c80095f25ee080f136a6c9d300f00
+  languageName: node
+  linkType: hard
+
 "string.prototype.matchall@npm:^4.0.0 || ^3.0.1, string.prototype.matchall@npm:^4.0.6, string.prototype.matchall@npm:^4.0.7":
   version: 4.0.7
   resolution: "string.prototype.matchall@npm:4.0.7"
@@ -32363,6 +32492,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tiny-inflate@npm:^1.0.0":
+  version: 1.0.3
+  resolution: "tiny-inflate@npm:1.0.3"
+  checksum: 4086a1f8938dafa4a20c63b099aeb47bf8fef5aca991bf4ea4b35dd2684fa52363b2c19b3e76660311e7613cb7c4f063bc48751b9bdf9555e498d997c30bc2d6
+  languageName: node
+  linkType: hard
+
 "tinycolor2@npm:^1.4.1":
   version: 1.4.2
   resolution: "tinycolor2@npm:1.4.2"
@@ -33082,6 +33218,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unicode-trie@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "unicode-trie@npm:2.0.0"
+  dependencies:
+    pako: ^0.2.5
+    tiny-inflate: ^1.0.0
+  checksum: 19e637ce20953ec1fbfa9087abef4746a50352679b833be27924e4ba7ad753cc4073b74263747ccfccb5e38b30b17468cbb96f361eb49903ff8602396280b5a4
+  languageName: node
+  linkType: hard
+
 "union-value@npm:^1.0.0":
   version: 1.0.1
   resolution: "union-value@npm:1.0.1"
@@ -33140,6 +33286,19 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 6f289f207c5b3176e1e3349d68d3aeb333518e4b77fcefeaa0695683cb18341fdfab00af74ab572eaf5bf1c99b1ca0d557bd80c37a863a9a79abf71ec5934dfc
+  languageName: node
+  linkType: hard
+
+"universal-tooltip@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "universal-tooltip@npm:0.6.1"
+  peerDependencies:
+    "@radix-ui/react-popover": "*"
+    "@radix-ui/react-tooltip": "*"
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: c2bbc239e6e32e4cc5e8867575c11f4b7abf022cd4ede7ef8780d7ff672a47388d9ed992b1e3324c2ae5f9eb01d14dd459ae483bf9c7d608021541eebd3cbc42
   languageName: node
   linkType: hard
 
@@ -35032,6 +35191,13 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"yoga-wasm-web@npm:0.3.3, yoga-wasm-web@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "yoga-wasm-web@npm:0.3.3"
+  checksum: ff65192a832975ff531a1b6eae160c2da859c250feaa58b6389b684f9b48f53fda849a7ea49d12d241198309e671e6bd230a44e7155af9573d7843ac48831c98
   languageName: node
   linkType: hard
 
