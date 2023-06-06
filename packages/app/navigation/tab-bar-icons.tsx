@@ -159,7 +159,7 @@ export const CreatorChannelsTabBarIcon = ({
     setShowTip(false);
   };
   useEffect(() => {
-    if (!store.getBoolean(STORE_KEY) && !isSet.current) {
+    if (!store.getBoolean(STORE_KEY) && !isSet.current && !focused) {
       setTimeout(() => {
         setShowTip(true);
         isSet.current = true;
