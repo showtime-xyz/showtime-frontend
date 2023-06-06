@@ -33,27 +33,67 @@ export const Home = () => {
   const ListHeaderComponent = useCallback(() => {
     return (
       <View tw="w-full px-4 md:px-0">
-        <Carousel
-          loop
-          width={pagerWidth}
-          height={164}
-          autoPlay={isAutoPlay}
-          autoPlayInterval={3000}
-          data={data}
-          controller
-          tw="mb-8 w-full rounded-2xl"
-          pagination={{ variant: "rectangle" }}
-          renderItem={({ index }) => (
-            <View
-              key={index}
-              tw="h-full"
-              style={{
-                backgroundColor: `#${index + 2}7${index + 4}0E1`,
-                width: pagerWidth,
+        <View>
+          <Carousel
+            loop
+            width={pagerWidth}
+            height={164}
+            autoPlay={isAutoPlay}
+            autoPlayInterval={3000}
+            data={data}
+            controller
+            tw="mb-8 w-full rounded-2xl"
+            pagination={{ variant: "rectangle" }}
+            renderItem={({ index }) => (
+              <View
+                key={index}
+                tw="h-full"
+                style={{
+                  backgroundColor: `#${index + 2}7${index + 4}0E1`,
+                  width: pagerWidth,
+                }}
+              />
+            )}
+          />
+        </View>
+        <View>
+          <View tw="w-full flex-row items-center justify-between py-4">
+            <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+              Trending
+            </Text>
+            <Text
+              tw="text-sm font-semibold text-indigo-700"
+              onPress={() => {
+                console.log("See all");
               }}
-            />
-          )}
-        />
+            >
+              see all
+            </Text>
+          </View>
+          <Carousel
+            loop
+            width={pagerWidth}
+            height={164}
+            autoPlay={isAutoPlay}
+            autoPlayInterval={3000}
+            data={data}
+            controller
+            spaceBetween={32}
+            slidesPerView={3}
+            tw="mb-8 w-full rounded-2xl"
+            pagination={{ variant: "rectangle" }}
+            renderItem={({ index }) => (
+              <View
+                key={index}
+                tw="h-full"
+                style={{
+                  backgroundColor: `#${index + 2}7${index + 4}0E1`,
+                  width: 170,
+                }}
+              />
+            )}
+          />
+        </View>
       </View>
     );
   }, [data, isAutoPlay, pagerWidth]);
