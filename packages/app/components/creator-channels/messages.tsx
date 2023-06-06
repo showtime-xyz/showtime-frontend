@@ -13,11 +13,6 @@ import { Platform, useWindowDimensions } from "react-native";
 import axios from "axios";
 import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
-import {
-  useReanimatedKeyboardAnimation,
-  KeyboardController,
-  AndroidSoftInputModes,
-} from "react-native-keyboard-controller";
 import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
@@ -77,6 +72,11 @@ import { Reaction } from "app/components/reaction";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-congrats";
 import { useUser } from "app/hooks/use-user";
+import {
+  useReanimatedKeyboardAnimation,
+  KeyboardController,
+  AndroidSoftInputModes,
+} from "app/lib/keyboard-controller";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import { createParam } from "app/navigation/use-param";

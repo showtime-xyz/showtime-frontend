@@ -1,6 +1,5 @@
 import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { KeyboardProvider } from "react-native-keyboard-controller";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
@@ -11,6 +10,7 @@ import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
 import { growthbook } from "app/lib/growthbook";
+import { KeyboardProvider } from "app/lib/keyboard-controller";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { BiconomyProvider } from "app/providers/biconomy-provider";
