@@ -1,7 +1,6 @@
 import { useCallback, useReducer, Suspense, useMemo } from "react";
-import { Platform } from "react-native";
+import { Platform, StatusBar } from "react-native";
 
-import { useFocusEffect } from "@react-navigation/native";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -67,7 +66,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     profileId: profileData?.data?.profile.profile_id,
   });
   const router = useRouter();
-
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
   const {

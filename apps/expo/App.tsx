@@ -5,7 +5,6 @@ import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-s
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
 import { Image } from "expo-image";
 import * as Notifications from "expo-notifications";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
 import { growthbook } from "app/lib/growthbook";
@@ -53,14 +52,6 @@ LogBox.ignoreLogs([
 function App() {
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null);
-
-  useEffect(() => {
-    //AvoidSoftInput.setEnabled(true);
-
-    return () => {
-      //AvoidSoftInput.setEnabled(false);
-    };
-  }, []);
 
   useEffect(() => {
     // Load feature definitions from API

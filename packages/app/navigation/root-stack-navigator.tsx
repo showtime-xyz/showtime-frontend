@@ -72,12 +72,16 @@ export function RootStackNavigator() {
           fullScreenGestureEnabled: true,
           animationDuration: Platform.OS === "ios" ? 400 : undefined,
           animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
+          statusBarStyle: "inverted",
         }}
       >
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
           getId={({ params }) => params?.username}
+          options={{
+            statusBarStyle: "light",
+          }}
         />
         <Stack.Screen
           name="search"
