@@ -185,7 +185,7 @@ const CardLargeScreen = ({
           nft?.loading ? "opacity-50" : "opacity-100",
           "overflow-hidden rounded-2xl",
           "flex-1",
-          "shadow-light bg-white dark:bg-black",
+          "bg-white dark:bg-black",
           tw,
         ]}
       >

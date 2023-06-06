@@ -182,7 +182,7 @@ function App({ Component, pageProps, router }: AppProps) {
             )}
 
             <View
-              tw="w-full items-center md:ml-auto md:w-[calc(100vw-270px)]"
+              tw="w-full items-center md:ml-auto md:w-[calc(100vw-260px)]"
               style={{
                 minHeight: "100svh",
               }}
@@ -254,7 +254,7 @@ const Container = withColorScheme(
     usePlatformResize(onResize, true);
 
     return (
-      <View tw="bg-white dark:bg-black dark:md:bg-gray-900">
+      <View tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900">
         <div className={fonts}>{children}</div>
       </View>
     );

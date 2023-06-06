@@ -7,7 +7,7 @@ import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { withColorScheme } from "../memo-with-theme";
 import { HeaderLeft } from "./header-left";
-import { HeaderRight } from "./header-right";
+import { HeaderRightSm } from "./header-right.sm";
 
 export const HeaderSm = withColorScheme(
   ({ canGoBack }: { canGoBack: boolean }) => {
@@ -26,7 +26,7 @@ export const HeaderSm = withColorScheme(
         {(!SWIPE_LIST_SCREENS.includes(router.pathname) ||
           !isAuthenticated) && (
           <View tw={["fixed right-4 top-2 z-10 flex md:hidden"]}>
-            <HeaderRight withBackground />
+            <HeaderRightSm withBackground />
           </View>
         )}
       </>

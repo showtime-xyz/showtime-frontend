@@ -68,7 +68,8 @@ export const Notifications = memo(
     const isDark = useIsDarkMode();
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
-    const { height: windowHeight } = useWindowDimensions();
+    const { width, height: windowHeight } = useWindowDimensions();
+    const isMdWidth = width >= breakpoints["md"];
     const [users, setUsers] = useState<
       Pick<Actor, "profile_id" | "username">[]
     >([]);
@@ -123,7 +124,7 @@ export const Notifications = memo(
     return (
       <>
         <InfiniteScrollList
-          useWindowScroll={false}
+          useWindowScroll={isMdWidth}
           data={data}
           ListHeaderComponent={Platform.select({
             web: hideHeader ? undefined : Header,
