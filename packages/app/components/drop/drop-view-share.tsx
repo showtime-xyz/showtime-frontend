@@ -115,20 +115,11 @@ export const DropViewShare = memo(function DropViewShare({
                 tw="web:mb-5 mt-2"
                 onPressCTA={() => {
                   if (!nft) return;
-
                   if (Platform.OS !== "web") {
                     router.pop();
-                    router.push(
-                      `${getNFTSlug(
-                        nft
-                      )}?showCreatorChannelIntro=${getIsShowCreatorChannelIntro()}`
-                    );
+                    router.push(`${getNFTSlug(nft)}`);
                   } else {
-                    router.replace(
-                      `${getNFTSlug(
-                        nft
-                      )}?showCreatorChannelIntro=${getIsShowCreatorChannelIntro()}`
-                    );
+                    router.replace(`${getNFTSlug(nft)}`);
                   }
                 }}
                 {...rest}

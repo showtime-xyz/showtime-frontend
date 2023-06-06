@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -14,8 +14,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { UserContext } from "app/context/user-context";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { useUser } from "app/hooks/use-user";
 import { setHideCreatorChannelIntro } from "app/lib/mmkv-keys";
 
 import { breakpoints } from "design-system/theme";
@@ -24,13 +24,13 @@ import { useChannelById } from "./hooks/use-channel-detail";
 
 export const CreatorChannelsIntro = () => {
   const isDark = useIsDarkMode();
-  const { user: userProfile } = useUser();
+  const context = useContext(UserContext);
   const bottomBarHeight = usePlatformBottomHeight();
   const { width } = useWindowDimensions();
   const isSmWidth = width >= breakpoints["sm"];
   const imageSize = isSmWidth ? 420 : width;
   const router = useRouter();
-  const channelId = userProfile?.data.channels?.[0];
+  const channelId = context?.user?.data.channels?.[0];
   const { data } = useChannelById(channelId?.toString());
 
   return (
@@ -43,7 +43,7 @@ export const CreatorChannelsIntro = () => {
         <View>
           <View tw="self-center rounded-full border border-gray-300 dark:border-gray-700">
             <Avatar
-              url={userProfile?.data.profile.img_url}
+              url={context?.user?.data.profile.img_url}
               enableSkeleton={Platform.OS !== "web"}
               size={140}
             />
