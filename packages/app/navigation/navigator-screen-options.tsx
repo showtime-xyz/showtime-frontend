@@ -27,7 +27,7 @@ export const screenOptions = ({
     headerBackVisible: false,
     headerBackTitleVisible: false,
     headerShadowVisible: false,
-    fullScreenGestureEnabled: false,
+    fullScreenGestureEnabled: true,
     animationDuration: 400,
     statusBarStyle: isDark ? "light" : "dark",
     statusBarAnimation: "fade",
