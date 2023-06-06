@@ -4,7 +4,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
   useAccount,
   useSignMessage,
-  useSigner,
+  useWalletClient,
   useNetwork,
   useDisconnect,
 } from "wagmi";
@@ -35,7 +35,7 @@ const useWallet = (): UseWalletReturnType => {
     },
   });
   const { signMessageAsync } = useSignMessage();
-  const { data: wagmiSigner } = useSigner();
+  const { data: wagmiSigner } = useWalletClient();
   const { chain } = useNetwork();
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
@@ -54,7 +54,7 @@ const useWallet = (): UseWalletReturnType => {
       } else if (magicWalletAddress) {
         setAddress(magicWalletAddress);
       } else if (web3) {
-        const address = await web3.getSigner().getAddress();
+        const address = web3.account?.address;
         setAddress(address);
       } else {
         setAddress(undefined);
@@ -63,7 +63,10 @@ const useWallet = (): UseWalletReturnType => {
   }, [web3, wagmiData?.address, magicWalletAddress]);
 
   const connected =
-    (wagmiData.isConnected && !!wagmiSigner?.provider && !!chain) || isMagic;
+    (wagmiData.isConnected && !!wagmiSigner?.account.address && !!chain) ||
+    isMagic;
+
+  console.log("connected ", wagmiSigner);
 
   const result = useMemo(() => {
     return {

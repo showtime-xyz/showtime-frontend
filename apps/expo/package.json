@@ -114,6 +114,7 @@
     "expo-system-ui": "~2.2.1",
     "expo-updates": "~0.16.4",
     "expo-web-browser": "~12.1.1",
+    "fastestsmallesttextencoderdecoder": "^1.0.22",
     "https-browserify": "~1.0.0",
     "inherits": "^2.0.4",
     "moti": "0.25.1",

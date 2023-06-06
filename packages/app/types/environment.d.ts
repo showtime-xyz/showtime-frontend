@@ -8,6 +8,7 @@ declare global {
       NEXT_PUBLIC_STRIPE_KEY: string;
       NEXT_PUBLIC_AMPLITUDE_API_KEY: string;
       GROWTHBOOK_FEATURES_ENDPOINT: string;
+      NEXT_PUBLIC_ALCHEMY_API_KEY: string;
       E2E: string;
     }
   }

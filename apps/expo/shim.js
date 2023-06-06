@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 
+import "fastestsmallesttextencoderdecoder";
 import "react-native-get-random-values";
 import { btoa, atob, toByteArray } from "react-native-quick-base64";
 

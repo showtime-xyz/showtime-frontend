@@ -34,7 +34,7 @@ const useWallet = (): UseWalletReturnType => {
       } else if (mobileSDK.address) {
         setAddress(mobileSDK.address);
       } else if (web3) {
-        const address = await web3.getSigner().getAddress();
+        const address = web3.account?.address;
         setAddress(address);
       } else {
         setAddress(undefined);

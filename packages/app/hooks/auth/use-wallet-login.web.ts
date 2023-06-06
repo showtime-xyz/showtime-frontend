@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from "react";
 
-import { useSigner } from "wagmi";
+import { useWalletClient } from "wagmi";
 
 import { useWallet } from "app/hooks/use-wallet";
 import { useAccessToken } from "app/lib/access-token";
@@ -27,7 +27,7 @@ export function useWalletLogin() {
   const [showSignMessage, setShowSignMessage] = useState(false);
   const walletConnector = useWallet();
 
-  const wagmiSigner = useSigner();
+  const wagmiSigner = useWalletClient();
 
   const { isAuthenticated } = useUser();
   const accessToken = useAccessToken();
@@ -107,9 +107,8 @@ export function useWalletLogin() {
 
   // TODO: below thing doesn't work. Keeping it for now
   const handleSetWeb3 = async () => {
-    if (wagmiSigner.data?.provider) {
-      //@ts-ignore
-      setWeb3(wagmiSigner.data.provider);
+    if (wagmiSigner.data) {
+      setWeb3(wagmiSigner.data);
     }
   };
 
