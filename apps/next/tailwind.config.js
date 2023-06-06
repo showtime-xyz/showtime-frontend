@@ -4,9 +4,11 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 const plugin = require("tailwindcss/plugin");
 const { colors } = require("design-system/tailwind/colors");
 const { textSizes } = require("design-system/typography");
-
-const MAX_CONTENT_WIDTH = 1140;
-const MAX_HEADER_WIDTH = 1440;
+const {
+  MAX_CONTENT_WIDTH,
+  MAX_HEADER_WIDTH,
+  DESKTOP_CONTENT_WIDTH,
+} = require("app/constants/layout");
 
 module.exports = {
   darkMode: "class",
@@ -22,6 +24,7 @@ module.exports = {
         screen: "100vw",
         "screen-xl": `${MAX_CONTENT_WIDTH}px`,
         "screen-2xl": `${MAX_HEADER_WIDTH}px`,
+        "screen-content": `${DESKTOP_CONTENT_WIDTH}px`,
         60: "240px",
       },
       boxShadow: {

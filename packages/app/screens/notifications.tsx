@@ -11,7 +11,7 @@ import { useTrackPageViewed } from "app/lib/analytics";
 const NotificationsScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Notifications" });
   return (
-    <View tw="w-full max-w-screen-2xl flex-1 bg-white dark:bg-black md:px-6">
+    <View tw="max-w-screen-content w-full flex-1 bg-white dark:bg-black md:px-6">
       <ErrorBoundary>
         <Suspense
           fallback={

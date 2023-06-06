@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Suspense } from "react";
+import { useEffect, useRef, useState, Suspense, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
@@ -25,16 +25,18 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { TabBarVertical } from "@showtime-xyz/universal.tab-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { WEB_HEADER_HEIGHT } from "app/constants/layout";
+import { useFooter } from "app/hooks/use-footer";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
-import { TextLink } from "app/navigation/link";
+import { Link, TextLink } from "app/navigation/link";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
@@ -115,60 +117,71 @@ export const HeaderMd = withColorScheme(
     const { user, isAuthenticated } = useUser();
     const redirectToCreateDrop = useRedirectToCreateDrop();
     const navigateToLogin = useNavigateToLogin();
-
+    const { links, social } = useFooter();
     const isDark = useIsDarkMode();
     const router = useRouter();
     const iconColor = isDark ? "#fff" : "#000";
-    const HOME_ROUTES = [
-      {
-        title: "Home",
-        key: "Home",
-        icon: Home,
-      },
-      // {
-      //   title: "Channels",
-      //   key: "Channels",
-      //   icon: Home,
-      // },
-      {
-        title: "Trending",
-        key: "Trending",
-        icon: Hot,
-      },
-      {
-        title: "Notifications",
-        key: "Notifications",
-        icon: Bell,
-      },
-      {
-        title: "Profile",
-        key: "Profile",
-        icon: (props: SvgProps) =>
-          isAuthenticated ? (
-            <Avatar
-              url={user?.data?.profile?.img_url}
-              size={28}
-              alt={"Profile Avatar"}
-            />
-          ) : (
-            <User {...props} />
-          ),
-      },
-      {
-        title: "Search",
-        key: "Search",
-        icon: Search,
-      },
-    ];
-    const { index: currentIndex, setIndex, routes } = useTabState(HOME_ROUTES);
+    const HOME_ROUTES = useMemo(
+      () => [
+        {
+          title: "Home",
+          key: "Home",
+          icon: Home,
+          pathname: "/",
+        },
+        // {
+        //   title: "Channels",
+        //   key: "Channels",
+        //   icon: Home,
+        // },
+        {
+          title: "Trending",
+          key: "Trending",
+          icon: Hot,
+          pathname: "/trending",
+        },
+        {
+          title: "Notifications",
+          key: "Notifications",
+          icon: Bell,
+          pathname: "/notifications",
+        },
+        {
+          title: "Profile",
+          key: "Profile",
+          icon: (props: SvgProps) =>
+            isAuthenticated ? (
+              <Avatar
+                url={user?.data?.profile?.img_url}
+                size={28}
+                alt={"Profile Avatar"}
+              />
+            ) : (
+              <User {...props} />
+            ),
+          pathname: `@${user?.data?.profile.username}`,
+        },
+        {
+          title: "Search",
+          key: "Search",
+          icon: Search,
+          pathname: "/search",
+        },
+      ],
+      [
+        isAuthenticated,
+        user?.data?.profile?.img_url,
+        user?.data?.profile.username,
+      ]
+    );
 
     if (isHeaderHidden) {
       return null;
     }
     return (
-      <View tw="mr-4 h-full w-56">
-        <View tw="fixed top-0 h-full w-56 pl-8">
-          <View tw="flex-row items-center pl-4 pt-8">
+      <View tw="fixed top-0 h-full px-8">
+        <View tw="h-full w-48">
+          <View tw="flex-row items-center pt-8">
             <ShowtimeBrand
               color={iconColor}
               width={19 * (84 / 16)}
@@ -176,12 +189,12 @@ export const HeaderMd = withColorScheme(
             />
           </View>
           <View tw="mt-5 justify-center">
-            {routes.map((item, index) => (
+            {HOME_ROUTES.map((item, index) => (
               <Pressable
                 tw="mt-2 flex-row items-center rounded-2xl px-4 py-3.5 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
                 key={item.key}
                 onPress={() => {
-                  setIndex(index);
+                  router.push(item.pathname);
                 }}
               >
                 {item.icon({
@@ -192,7 +205,9 @@ export const HeaderMd = withColorScheme(
                 <Text
                   tw={[
                     "ml-4 text-lg text-black duration-300 dark:text-white",
-                    currentIndex === index ? "font-bold" : "font-normal",
+                    item.pathname === router.pathname
+                      ? "font-bold"
+                      : "font-normal",
                   ]}
                 >
                   {item.title}
@@ -200,68 +215,99 @@ export const HeaderMd = withColorScheme(
               </Pressable>
             ))}
           </View>
-          <View tw="pl-4">
-            {!isAuthenticated && (
-              <Button size="regular" tw="mt-6" onPress={navigateToLogin}>
-                Sign in
-              </Button>
-            )}
-            <Button
-              size="regular"
-              variant="text"
-              tw="mt-4 border border-gray-200 dark:border-gray-600"
-              onPress={redirectToCreateDrop}
-            >
-              <Plus />
-              Create
+          {!isAuthenticated && (
+            <Button size="regular" tw="mt-6" onPress={navigateToLogin}>
+              Sign in
             </Button>
-            <Divider tw="my-6" />
-            <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
-              <View tw="flex-row items-center justify-center">
-                <PhonePortraitOutline
-                  color={iconColor}
-                  width={18}
-                  height={18}
-                />
-                <Text tw="ml-1 text-lg font-bold dark:text-white">Get app</Text>
-              </View>
-              <View tw="flex items-center justify-between px-2 pt-3">
-                <TextLink
-                  tw="text-base font-bold dark:text-white"
-                  href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
-                  target="_blank"
-                >
-                  <Image
-                    source={{
-                      uri: isDark
-                        ? "/assets/AppStoreDark.png"
-                        : "/assets/AppStoreLight.png",
-                    }}
-                    width={110}
-                    height={32}
-                    tw="duration-150 hover:scale-105"
-                    alt="App Store"
-                  />
-                </TextLink>
-                <TextLink
-                  tw="text-base font-bold dark:text-white"
-                  href="https://play.google.com/store/apps/details?id=io.showtime"
-                  target="_blank"
-                >
-                  <Image
-                    source={{
-                      uri: isDark
-                        ? "/assets/GooglePlayDark.png"
-                        : "/assets/GooglePlayLight.png",
-                    }}
-                    width={103}
-                    height={30}
-                    tw="duration-150 hover:scale-105"
-                    alt="Google Play"
-                  />
-                </TextLink>
-              </View>
+          )}
+          <Button
+            size="regular"
+            variant="text"
+            tw="mt-4 border border-gray-200 dark:border-gray-600"
+            onPress={redirectToCreateDrop}
+          >
+            <Plus />
+            Create
+          </Button>
+          <Divider tw="my-6" />
+          <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
+            <View tw="flex-row items-center justify-center">
+              <PhonePortraitOutline color={iconColor} width={18} height={18} />
+              <Text tw="ml-1 text-lg font-bold dark:text-white">Get app</Text>
             </View>
+            <View tw="flex items-center justify-between px-2 pt-3">
+              <TextLink
+                tw="text-base font-bold dark:text-white"
+                href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
+                target="_blank"
+              >
+                <Image
+                  source={{
+                    uri: isDark
+                      ? "/assets/AppStoreDark.png"
+                      : "/assets/AppStoreLight.png",
+                  }}
+                  width={110}
+                  height={32}
+                  tw="duration-150 hover:scale-105"
+                  alt="App Store"
+                />
+              </TextLink>
+              <TextLink
+                tw="text-base font-bold dark:text-white"
+                href="https://play.google.com/store/apps/details?id=io.showtime"
+                target="_blank"
+              >
+                <Image
+                  source={{
+                    uri: isDark
+                      ? "/assets/GooglePlayDark.png"
+                      : "/assets/GooglePlayLight.png",
+                  }}
+                  width={103}
+                  height={30}
+                  tw="duration-150 hover:scale-105"
+                  alt="Google Play"
+                />
+              </TextLink>
+            </View>
+          </View>
+        </View>
+        <View tw="absolute bottom-2 inline-block">
+          <View tw="inline-block">
+            {links.map((item, index) => (
+              <TextLink
+                href={item.link}
+                target="_blank"
+                tw="text-xs text-gray-500 dark:text-gray-300"
+                key={item.title}
+              >
+                {item.title}
+                {` · `}
+              </TextLink>
+            ))}
+          </View>
+          <Text tw="text-xs text-gray-500 dark:text-gray-300">
+            © 2023 Showtime Technologies, Inc.
+          </Text>
+          <View tw="mt-4 inline-block w-full">
+            {social.map((item) => (
+              <Link
+                href={item.link}
+                hrefAttrs={{
+                  target: "_blank",
+                  rel: "noreferrer",
+                }}
+                key={item.title}
+                tw="inline-block w-1/4"
+              >
+                {item?.icon({
+                  color: colors.gray[400],
+                  width: 20,
+                  height: 20,
+                })}
+              </Link>
+            ))}
           </View>
         </View>
       </View>

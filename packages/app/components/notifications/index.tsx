@@ -24,6 +24,8 @@ import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
+import { breakpoints } from "design-system/theme";
+
 import { EmptyPlaceholder } from "../empty-placeholder";
 
 const Header = () => {
@@ -57,7 +59,9 @@ export const Notifications = ({
   const isDark = useIsDarkMode();
   const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
-  const { height: windowHeight } = useWindowDimensions();
+  const { width, height: windowHeight } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
+
   const [users, setUsers] = useState<Pick<Actor, "profile_id" | "username">[]>(
     []
   );
@@ -108,7 +112,7 @@ export const Notifications = ({
   return (
     <>
       <InfiniteScrollList
-        useWindowScroll={false}
+        useWindowScroll={isMdWidth}
         data={data}
         ListHeaderComponent={Platform.select({
           web: hideHeader ? undefined : Header,

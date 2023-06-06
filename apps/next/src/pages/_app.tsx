@@ -163,7 +163,7 @@ function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <AppProviders>
         <Container>
-          <View tw="mx-auto max-w-screen-xl flex-col md:flex-row">
+          <View tw="mx-auto flex-col md:flex-row">
             {/* @ts-ignore */}
             {!Component.hideHeader && (
               <Header
@@ -175,7 +175,7 @@ function App({ Component, pageProps, router }: AppProps) {
             )}
 
             <View
-              tw="w-full items-center md:flex-1"
+              tw="w-full items-center md:ml-auto md:w-[calc(100vw-270px)]"
               style={{
                 minHeight: "100svh",
               }}

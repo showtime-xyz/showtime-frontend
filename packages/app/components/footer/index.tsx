@@ -33,7 +33,7 @@ const Footer = () => {
   const { isTabBarHidden } = useNavigationElements();
 
   if (width >= 768) {
-    return <WebFooter />;
+    return null;
   }
 
   if (isTabBarHidden) {
