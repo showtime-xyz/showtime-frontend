@@ -95,11 +95,17 @@ export function RootStackNavigator() {
           name="nft"
           component={NftScreen}
           getId={({ params }) => Object.values(params).join("-")}
+          options={{
+            statusBarStyle: "light",
+          }}
         />
         <Stack.Screen
           name="dropSlug"
           component={NftScreen}
           getId={({ params }) => Object.values(params).join("-")}
+          options={{
+            statusBarStyle: "light",
+          }}
         />
         <Stack.Screen name="channelsMessage" component={Messages} />
       </Stack.Group>
