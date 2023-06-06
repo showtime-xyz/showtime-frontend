@@ -72,7 +72,7 @@ export function RootStackNavigator() {
           fullScreenGestureEnabled: true,
           animationDuration: Platform.OS === "ios" ? 400 : undefined,
           animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
-          statusBarStyle: "inverted",
+          statusBarStyle: isDark ? "light" : "dark",
         }}
       >
         <Stack.Screen

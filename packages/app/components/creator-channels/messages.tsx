@@ -12,6 +12,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import axios from "axios";
 import { MotiView, AnimatePresence } from "moti";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 import {
   useReanimatedKeyboardAnimation,
   KeyboardController,
@@ -339,11 +340,13 @@ export const Messages = memo(() => {
   useIntroducingCreatorChannels();
 
   useEffect(() => {
+    AvoidSoftInput.setEnabled(false);
     KeyboardController.setInputMode(
       AndroidSoftInputModes.SOFT_INPUT_ADJUST_NOTHING
     );
 
     return () => {
+      AvoidSoftInput.setEnabled(true);
       KeyboardController.setDefaultMode();
       enableLayoutAnimations(false);
     };
