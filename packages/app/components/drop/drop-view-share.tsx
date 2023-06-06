@@ -115,6 +115,7 @@ export const DropViewShare = memo(function DropViewShare({
                 tw="web:mb-5 mt-2"
                 onPressCTA={() => {
                   if (!nft) return;
+
                   if (Platform.OS !== "web") {
                     router.pop();
                     router.push(`${getNFTSlug(nft)}`);

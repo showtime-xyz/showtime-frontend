@@ -20,8 +20,6 @@ import { setHideCreatorChannelIntro } from "app/lib/mmkv-keys";
 
 import { breakpoints } from "design-system/theme";
 
-import { useChannelById } from "./hooks/use-channel-detail";
-
 export const CreatorChannelsIntro = () => {
   const isDark = useIsDarkMode();
   const context = useContext(UserContext);
@@ -31,7 +29,6 @@ export const CreatorChannelsIntro = () => {
   const imageSize = isSmWidth ? 420 : width;
   const router = useRouter();
   const channelId = context?.user?.data.channels?.[0];
-  const { data } = useChannelById(channelId?.toString());
 
   return (
     <BottomSheetModalProvider>

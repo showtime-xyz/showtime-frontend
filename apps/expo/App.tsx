@@ -5,7 +5,6 @@ import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-s
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
 import { Image } from "expo-image";
 import * as Notifications from "expo-notifications";
-import { StatusBar } from "expo-status-bar";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
@@ -141,7 +140,6 @@ function App() {
 
   return (
     <AppProviders>
-      <StatusBar style="auto" />
       <RootStackNavigator />
     </AppProviders>
   );

@@ -1,7 +1,8 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import { Keyboard, Platform, TextInput } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -39,6 +40,14 @@ export const Search = () => {
     () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
     []
   );
+
+  useEffect(() => {
+    AvoidSoftInput.setEnabled(false);
+
+    return () => {
+      AvoidSoftInput.setEnabled(true);
+    };
+  }, []);
 
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
