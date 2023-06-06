@@ -40,7 +40,6 @@ import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";

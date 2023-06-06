@@ -204,10 +204,6 @@ export const DropEvent = () => {
 
   const pickFile = useFilePicker();
 
-  /*
-  const share = useShare();
-  */
-
   // if (state.transactionHash) {
   //   return <View>
   //     <Text>Loading</Text>

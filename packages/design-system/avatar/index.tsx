@@ -72,6 +72,7 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
             source={imageSource}
             width={size}
             height={size}
+            transition={300}
             borderRadius={borderRadius}
             resizeMode="cover"
             tw={IMAGE_TW}

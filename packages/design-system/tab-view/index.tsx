@@ -28,6 +28,9 @@ export * from "./tab-bar-single";
 export * from "./scrollable-auto-width-tab-bar";
 export * from "./scrollable-tab-bar";
 export * from "./tab-bar-vertical";
+export { ScollableAutoWidthTabBar } from "./scrollable-auto-width-tab-bar";
+export { ScollableTabBar } from "./scrollable-tab-bar";
+
 type TabBarProps<T extends Route> = CollapsibleTabViewProps<T> & {
   autoWidthTabBar?: boolean;
   hideTabBar?: boolean;

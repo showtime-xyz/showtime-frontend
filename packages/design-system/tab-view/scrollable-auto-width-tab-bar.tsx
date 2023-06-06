@@ -14,7 +14,6 @@ import {
   TabBar,
 } from "react-native-tab-view";
 
-import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -73,7 +72,6 @@ export const ScollableAutoWidthTabBar = ({
       return -contentWidth;
     }
 
-    if (routes.length <= 1) return tabsWidth[0] / 2 + 8 ?? -contentWidth;
     const inputRange = routes.map((_, i) => i);
     const indicatorOutputRange = Object.values(tabsWidth).map(
       (value) => value / contentWidth
@@ -86,6 +84,8 @@ export const ScollableAutoWidthTabBar = ({
         ];
       return [...acc, acc[i - 1] + (tabsWidth[i - 1] + tabsWidth[i]) / 2 + 32];
     }, []);
+
+    if (routes.length === 1) return outputRange[0];
 
     return position.interpolate({
       inputRange,
@@ -109,6 +109,8 @@ export const ScollableAutoWidthTabBar = ({
     const outputRange = Object.values(tabsWidth).map(
       (value) => value / contentWidth
     );
+
+    if (inputRange.length === 1) return outputRange[0];
 
     return position.interpolate({
       inputRange,
