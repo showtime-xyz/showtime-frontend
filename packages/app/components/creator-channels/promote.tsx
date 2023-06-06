@@ -13,9 +13,7 @@ import {
   View as RNView,
 } from "react-native";
 
-import { BlurView } from "expo-blur";
 import * as Clipboard from "expo-clipboard";
-import { LinearGradient } from "expo-linear-gradient";
 import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
@@ -36,12 +34,13 @@ import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors, styled } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useUserProfile } from "app/hooks/api-hooks";
 import { useUser } from "app/hooks/use-user";
 import domtoimage from "app/lib/dom-to-image";
 import { Logger } from "app/lib/logger";
@@ -49,6 +48,7 @@ import Share from "app/lib/react-native-share";
 import { captureRef, CaptureOptions } from "app/lib/view-shot";
 import { createParam } from "app/navigation/use-param";
 import { getTwitterIntent, getWebBaseURL } from "app/utilities";
+import { getTwitterIntentUsername } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 import { toast } from "design-system/toast";
@@ -64,6 +64,13 @@ export const ChannelsPromote = () => {
   const [channelId] = useParam("channelId");
   const modalScreenContext = useModalScreenContext();
   const { data: channelDetails } = useChannelById(channelId);
+  const { data: userProfiles } = useUserProfile({
+    address:
+      channelDetails?.owner?.username ||
+      channelDetails?.owner?.name ||
+      channelDetails?.owner?.wallet_address,
+  });
+
   const user = useUser();
   const isUserAdmin =
     user.user?.data.channels &&
@@ -137,12 +144,13 @@ export const ChannelsPromote = () => {
     () => `${getWebBaseURL()}/channels/${channelId}`,
     [channelId]
   );
-  const username =
-    channelDetails?.owner?.username || channelDetails?.owner?.name;
 
   const twitterIntent = isUserAdmin
     ? "Just messaged my collector channel on @Showtime_xyz. Join to check it out:"
-    : `Just join @${username} collector channel on @Showtime_xyz. Check it out:`;
+    : `Just joined ${getTwitterIntentUsername(
+        userProfiles?.data?.profile
+      )} channel on @Showtime_xyz. Check it out:`;
+
   const checkPhotosPermission = useCallback(async () => {
     let hasPermission = false;
     if (status?.granted) {
