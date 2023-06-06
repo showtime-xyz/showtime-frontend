@@ -8074,7 +8074,7 @@ __metadata:
     react-native-get-random-values: ^1.8.0
     react-native-image-colors: ^1.5.2
     react-native-ios-context-menu: ^1.15.3
-    react-native-keyboard-controller: "github:kirillzyusko/react-native-keyboard-controller#fix/check-js-thread-before-sending-event"
+    react-native-keyboard-controller: ^1.5.5
     react-native-level-fs: ^3.0.1
     react-native-localhost: ^1.0.0
     react-native-mmkv: 2.8.0
@@ -28879,14 +28879,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-keyboard-controller@github:kirillzyusko/react-native-keyboard-controller#fix/check-js-thread-before-sending-event":
-  version: 1.5.4
-  resolution: "react-native-keyboard-controller@https://github.com/kirillzyusko/react-native-keyboard-controller.git#commit=9e13f7077daa5290ecfd0d8373e387ae340cf358"
+"react-native-keyboard-controller@npm:^1.5.5":
+  version: 1.5.5
+  resolution: "react-native-keyboard-controller@npm:1.5.5"
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-reanimated: ">=2.3.0"
-  checksum: 099b1a3bcbd726f6df55fe225d0c22941290b728e6a2981475e5c8d3199a7c7ac7d743d93a35350e027fa53d5f15777d18a29dfa5f19314a48077aa2baec8bf0
+  checksum: 9d27a00e9b8bb931708ed6af6ce4e587b6493ce2833b05402251f1994b0bf9ffe231b739fc1997a2b918cf1caa315cbe8c3e8280e3bed886f2542ee40bca0e2c
   languageName: node
   linkType: hard
 
