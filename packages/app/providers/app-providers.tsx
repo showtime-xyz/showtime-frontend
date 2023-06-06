@@ -13,7 +13,6 @@ import { growthbook } from "app/lib/growthbook";
 import { KeyboardProvider } from "app/lib/keyboard-controller";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
-import { BiconomyProvider } from "app/providers/biconomy-provider";
 import { ClaimProvider } from "app/providers/claim-provider";
 import { DropProvider } from "app/providers/drop-provider";
 import { FeedProvider } from "app/providers/feed-provider";
@@ -45,15 +44,13 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                     {/* @ts-ignore */}
                                     <GrowthBookProvider growthbook={growthbook}>
                                       <FeedProvider>
-                                        <BiconomyProvider>
-                                          <MuteProvider>
-                                            <ClaimProvider>
-                                              <DropProvider>
-                                                {children}
-                                              </DropProvider>
-                                            </ClaimProvider>
-                                          </MuteProvider>
-                                        </BiconomyProvider>
+                                        <MuteProvider>
+                                          <ClaimProvider>
+                                            <DropProvider>
+                                              {children}
+                                            </DropProvider>
+                                          </ClaimProvider>
+                                        </MuteProvider>
                                       </FeedProvider>
                                     </GrowthBookProvider>
                                   </BottomSheetModalProvider>
