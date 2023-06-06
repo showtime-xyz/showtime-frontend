@@ -2,7 +2,6 @@ import { useCallback, useReducer, Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { useFocusEffect } from "@react-navigation/native";
-import { setStatusBarStyle } from "expo-status-bar";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -102,14 +101,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
       }
     },
     { ...defaultFilters }
-  );
-  useFocusEffect(
-    useCallback(() => {
-      setStatusBarStyle("light");
-      return () => {
-        setStatusBarStyle("auto");
-      };
-    }, [])
   );
 
   const emptyBodyComponent = useMemo(() => {

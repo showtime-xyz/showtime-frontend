@@ -12,9 +12,12 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import axios from "axios";
 import { MotiView, AnimatePresence } from "moti";
-import { AvoidSoftInput } from "react-native-avoid-softinput";
+import {
+  useReanimatedKeyboardAnimation,
+  KeyboardController,
+  AndroidSoftInputModes,
+} from "react-native-keyboard-controller";
 import Animated, {
-  useAnimatedKeyboard,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   runOnJS,
@@ -288,7 +291,7 @@ export const Messages = memo(() => {
   const keyboard =
     Platform.OS !== "web"
       ? // eslint-disable-next-line react-hooks/rules-of-hooks
-        useAnimatedKeyboard()
+        useReanimatedKeyboardAnimation()
       : { height: { value: 0 }, state: {} };
 
   const editMessageItemDimension = useSharedValue({ pageY: 0, height: 0 });
@@ -336,10 +339,12 @@ export const Messages = memo(() => {
   useIntroducingCreatorChannels();
 
   useEffect(() => {
-    AvoidSoftInput.setEnabled(false);
+    KeyboardController.setInputMode(
+      AndroidSoftInputModes.SOFT_INPUT_ADJUST_NOTHING
+    );
 
     return () => {
-      AvoidSoftInput.setEnabled(true);
+      KeyboardController.setDefaultMode();
       enableLayoutAnimations(false);
     };
   }, []);
@@ -518,6 +523,13 @@ export const Messages = memo(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.length, channelId]);
 
+  const fakeView = useAnimatedStyle(
+    () => ({
+      height: Math.abs(keyboard.height.value),
+    }),
+    [keyboard]
+  );
+
   if (!channelId) {
     return (
       <View tw="animate-fade-in-250 h-full w-full flex-1 items-center justify-center">
@@ -583,7 +595,7 @@ export const Messages = memo(() => {
           members={membersCount}
           channelId={channelId}
         />
-        <View
+        <AnimatedView
           tw={[
             "flex-1 overflow-hidden",
             //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
@@ -593,35 +605,36 @@ export const Messages = memo(() => {
           {isLoading || channelDetail.isLoading ? (
             <MessageSkeleton />
           ) : (
-            <AnimatedInfiniteScrollListWithRef
-              ref={listRef}
-              keyExtractor={keyExtractor}
-              data={data}
-              onEndReached={onLoadMore}
-              inverted
-              overscan={4}
-              onScroll={scrollhandler}
-              useWindowScroll={false}
-              estimatedItemSize={90}
-              keyboardDismissMode="on-drag"
-              renderItem={renderItem}
-              contentContainerStyle={{ paddingTop: insets.bottom }}
-              style={style}
-              extraData={extraData}
-              CellRendererComponent={CustomCellRenderer}
-              ListEmptyComponent={listEmptyComponent}
-              ListFooterComponent={
-                isLoadingMore
-                  ? () => (
-                      <View tw="w-full items-center py-4">
-                        <Spinner size="small" />
-                      </View>
-                    )
-                  : () => null
-              }
-            />
+            <>
+              <AnimatedInfiniteScrollListWithRef
+                ref={listRef}
+                keyExtractor={keyExtractor}
+                data={data}
+                onEndReached={onLoadMore}
+                inverted
+                overscan={4}
+                onScroll={scrollhandler}
+                useWindowScroll={false}
+                estimatedItemSize={90}
+                keyboardDismissMode="on-drag"
+                renderItem={renderItem}
+                contentContainerStyle={{ paddingTop: insets.bottom }}
+                extraData={extraData}
+                CellRendererComponent={CustomCellRenderer}
+                ListEmptyComponent={listEmptyComponent}
+                ListFooterComponent={
+                  isLoadingMore
+                    ? () => (
+                        <View tw="w-full items-center py-4">
+                          <Spinner size="small" />
+                        </View>
+                      )
+                    : () => null
+                }
+              />
+            </>
           )}
-        </View>
+        </AnimatedView>
         <MessageInput
           listRef={listRef}
           channelId={channelId}
@@ -629,7 +642,10 @@ export const Messages = memo(() => {
           setEditMessage={setEditMessage}
           editMessage={editMessage}
           isUserAdmin={isUserAdmin}
+          keyboard={keyboard}
         />
+        <AnimatedView style={fakeView} />
+
         {showScrollToBottom ? (
           <Animated.View entering={SlideInDown} exiting={SlideOutDown}>
             <View tw="absolute bottom-[80px] right-4">
@@ -662,18 +678,16 @@ const MessageInput = ({
   editMessage,
   setEditMessage,
   isUserAdmin,
+  keyboard,
 }: {
   listRef: RefObject<FlashList<any>>;
   channelId: string;
+  keyboard: any;
   sendMessageCallback?: () => void;
   editMessage?: undefined | { id: number; text: string };
   setEditMessage: (v: undefined | { id: number; text: string }) => void;
   isUserAdmin?: boolean;
 }) => {
-  const keyboard =
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    Platform.OS !== "web" ? useAnimatedKeyboard() : { height: { value: 0 } };
-
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
   const inputRef = useRef<any>(null);
@@ -683,14 +697,10 @@ const MessageInput = ({
 
   const style = useAnimatedStyle(() => {
     return {
-      paddingBottom: bottom,
       bottom: 0,
+      paddingBottom: bottom,
       backgroundColor: isDark ? "black" : "white",
-      transform: [
-        {
-          translateY: -keyboard.height.value,
-        },
-      ],
+      transform: [{ translateY: keyboard.height.value }],
     };
   }, [keyboard, bottom]);
 
