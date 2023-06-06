@@ -72,12 +72,16 @@ export function RootStackNavigator() {
           fullScreenGestureEnabled: true,
           animationDuration: Platform.OS === "ios" ? 400 : undefined,
           animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
+          statusBarStyle: isDark ? "light" : "dark",
         }}
       >
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
           getId={({ params }) => params?.username}
+          options={{
+            statusBarStyle: "light",
+          }}
         />
         <Stack.Screen
           name="search"
@@ -91,11 +95,17 @@ export function RootStackNavigator() {
           name="nft"
           component={NftScreen}
           getId={({ params }) => Object.values(params).join("-")}
+          options={{
+            statusBarStyle: "light",
+          }}
         />
         <Stack.Screen
           name="dropSlug"
           component={NftScreen}
           getId={({ params }) => Object.values(params).join("-")}
+          options={{
+            statusBarStyle: "light",
+          }}
         />
         <Stack.Screen name="channelsMessage" component={Messages} />
       </Stack.Group>

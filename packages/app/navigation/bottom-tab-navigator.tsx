@@ -46,7 +46,7 @@ export function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="creatorChannelsTab"
+        name="channelsTab"
         component={CreatorChannelsNavigator}
         options={{
           tabBarIcon: CreatorChannelsTabBarIcon,
