@@ -899,7 +899,7 @@ const MessageItem = memo(
 
       const timeDifference = currentTime.getTime() - createdTime.getTime(); // Time difference in milliseconds
 
-      const maximumDuration = 37200000; // 2 hours in milliseconds
+      const maximumDuration = 7200000; // 2 hours in milliseconds
 
       if (timeDifference <= maximumDuration) return true;
 
