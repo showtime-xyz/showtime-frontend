@@ -9,7 +9,10 @@ export async function deleteAppCache() {
   storage.delete("showExplanationv2");
   // TODO: showClaimExplanation is not used anymore, remove soon
   storage.delete("showClaimExplanation");
-
+  if (__DEV__) {
+    storage.delete("showCreatorChannelTip");
+    storage.delete("showCreatorChannelIntro");
+  }
   await Image.clearDiskCache();
   await Image.clearMemoryCache();
   ImageColors.cache.clear();
