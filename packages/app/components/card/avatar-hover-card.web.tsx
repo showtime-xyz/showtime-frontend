@@ -142,7 +142,7 @@ export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
                     <ClampText
                       text={bioWithMentions}
                       maxLines={3}
-                      tw="max-w-full break-all text-sm text-gray-900 dark:text-white"
+                      tw="max-w-full text-sm text-gray-900 dark:text-white"
                     />
                   </View>
                 ) : null}

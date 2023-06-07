@@ -49,7 +49,19 @@ export const ClampText = ({
     return null;
   }
   return (
-    <Text tw={tw} ref={textRef as any} onTextLayout={onTextLayout}>
+    <Text
+      tw={tw}
+      ref={textRef as any}
+      onTextLayout={onTextLayout}
+      style={
+        Platform.OS === "web"
+          ? {
+              // @ts-ignore
+              wordBreak: "break-word",
+            }
+          : {}
+      }
+    >
       {innerText}
       {(showMore || showLess) && (isPureText || Platform.OS !== "web") && (
         <Text
