@@ -467,7 +467,7 @@ CreatorChannelsList.displayName = "CreatorChannelsList";
 
 const CCSkeleton = () => {
   return (
-    <View tw="web:mt-8 mb-10 px-4">
+    <View tw="web:mt-8 px-4">
       {new Array(8).fill(0).map((_, i) => {
         return (
           <View tw="flex-row pt-4" key={`${i}`}>
