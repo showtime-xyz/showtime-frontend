@@ -1121,7 +1121,7 @@ MessageItem.displayName = "MessageItem";
 
 const MessageSkeleton = () => {
   return (
-    <View tw="web:pb-4 h-full w-full flex-1 pb-4">
+    <View tw="web:pb-4 h-full w-full flex-1 pb-14">
       <View tw="h-full flex-1 justify-end px-4">
         {new Array(8).fill(0).map((_, i) => {
           return (

@@ -19,7 +19,6 @@ import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { Link } from "app/navigation/link";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import {
@@ -322,7 +321,18 @@ export const CreatorChannelsList = memo(
             : []),
         ];
       } else {
-        return [channelsSection, ...ownedChannelsData, ...joinedChannelsData];
+        return [
+          channelsSection,
+          ...(ownedChannelsData.length > 0
+            ? [
+                ...ownedChannelsData.map((suggestedChannel) => ({
+                  ...suggestedChannel,
+                  itemType: "owned",
+                })),
+              ]
+            : []),
+          ...joinedChannelsData,
+        ];
       }
     }, [
       joinedChannelsData,
@@ -457,7 +467,7 @@ CreatorChannelsList.displayName = "CreatorChannelsList";
 
 const CCSkeleton = () => {
   return (
-    <View tw="web:mt-8 px-4">
+    <View tw="web:mt-8 mb-10 px-4">
       {new Array(8).fill(0).map((_, i) => {
         return (
           <View tw="flex-row pt-4" key={`${i}`}>

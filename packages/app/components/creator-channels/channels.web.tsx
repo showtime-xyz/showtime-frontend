@@ -305,7 +305,18 @@ export const CreatorChannels = memo(
             : []),
         ];
       } else {
-        return [channelsSection, ...ownedChannelsData, ...joinedChannelsData];
+        return [
+          channelsSection,
+          ...(ownedChannelsData.length > 0
+            ? [
+                ...ownedChannelsData.map((suggestedChannel) => ({
+                  ...suggestedChannel,
+                  itemType: "owned",
+                })),
+              ]
+            : []),
+          ...joinedChannelsData,
+        ];
       }
     }, [
       joinedChannelsData,
