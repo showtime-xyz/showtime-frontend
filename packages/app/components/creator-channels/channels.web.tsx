@@ -214,7 +214,7 @@ const CreatorChannelsListCreator = memo(
                   ]}
                   onPress={async () => {
                     await joinChannel.trigger({ channelId: item.id });
-                    router.push(`/channels/${item.id}`);
+                    router.push(`/channels/${item.id}?fresh=channel`);
                   }}
                   disabled={joinChannel.isMutating}
                 >
