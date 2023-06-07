@@ -240,6 +240,7 @@ const Header = (props: HeaderProps) => {
 };
 type Query = {
   channelId: string;
+  fresh?: string;
 };
 const { useParam } = createParam<Query>();
 const benefits = [
@@ -269,6 +270,7 @@ const keyExtractor = (item: ChannelMessageItem) =>
 export const Messages = memo(() => {
   const listRef = useRef<FlashList<any>>(null);
   const [channelId] = useParam("channelId");
+  const [fresh] = useParam("fresh");
   const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
@@ -412,7 +414,7 @@ export const Messages = memo(() => {
   // TODO: show a modal to ask the user to join the channel
   // for now we redirect to the profile instead
   useEffect(() => {
-    if (error && axios.isAxiosError(error)) {
+    if (!fresh && error && axios.isAxiosError(error)) {
       if (error?.response?.status === 401 && channelDetail.data?.owner) {
         router.replace(
           `/@${
@@ -422,7 +424,7 @@ export const Messages = memo(() => {
         );
       }
     }
-  }, [channelDetail.data?.owner, error, router]);
+  }, [channelDetail.data?.owner, error, router, fresh]);
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
@@ -441,6 +443,7 @@ export const Messages = memo(() => {
     [editMessageIdSharedValue, editMessageItemDimension]
   );
 
+  // TODO: add back to keyboard controller?
   const style = useAnimatedStyle(() => {
     // Bring edit message to the center of the screen
     if (
@@ -449,13 +452,7 @@ export const Messages = memo(() => {
     ) {
       return {};
     } else {
-      return {
-        transform: [
-          {
-            translateY: -keyboard.height.value,
-          },
-        ],
-      };
+      return {};
     }
   }, [keyboard]);
 
@@ -902,7 +899,7 @@ const MessageItem = memo(
 
       const timeDifference = currentTime.getTime() - createdTime.getTime(); // Time difference in milliseconds
 
-      const maximumDuration = 7200000; // 2 hours in milliseconds
+      const maximumDuration = 37200000; // 2 hours in milliseconds
 
       if (timeDifference <= maximumDuration) return true;
 

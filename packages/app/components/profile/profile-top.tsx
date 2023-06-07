@@ -9,11 +9,9 @@ import Animated, {
 import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Gift as GiftIcon,
-  CreatorChannel,
   InformationCircle as InformationCircleIcon,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
@@ -86,7 +84,6 @@ export const ProfileTop = ({
   const name = getProfileName(profileData?.profile);
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
-  const { colorScheme } = useColorScheme();
   const { user, isIncompletedProfile } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
   const coverWidth = useContentWidth(ContentLayoutOffset.PROFILE_COVER);
@@ -309,7 +306,9 @@ export const ProfileTop = ({
                           }}
                           onPress={async () => {
                             if (userChannel?.self_is_member) {
-                              router.push(`/channels/${userChannel.id}`);
+                              router.push(
+                                `/channels/${userChannel.id}?fresh=profile`
+                              );
                             } else {
                               mutateUserProfile(
                                 (d) => {
@@ -328,7 +327,9 @@ export const ProfileTop = ({
                                 channelId: userChannel.id,
                               });
                               mutateUserProfile();
-                              router.push(`/channels/${userChannel.id}`);
+                              router.push(
+                                `/channels/${userChannel.id}?fresh=profile`
+                              );
                             }
                           }}
                           disabled={joinChannel.isMutating}
