@@ -68,6 +68,7 @@
     "@tradle/react-native-http": "^2.0.1",
     "@types/tinycolor2": "^1.4.3",
     "@walletconnect/react-native-dapp": "^1.8.0",
+    "@web3modal/react-native": "^1.0.0-alpha.7",
     "app": "*",
     "array-to-image": "^1.0.0",
     "assert": "^2.0.0",
