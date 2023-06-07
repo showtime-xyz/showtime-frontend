@@ -38,7 +38,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
           <TextLink
             href={match.toLowerCase()}
             key={match + i}
-            target={"_blank"}
+            target="_blank"
             title={urlText}
             tw={[
               "text-13 font-bold text-gray-900 dark:text-gray-100",
