@@ -1078,7 +1078,7 @@ const MessageItem = memo(
                 </View>
               </View>
 
-              <View tw="flex-row items-center" style={{ columnGap: 5 }}>
+              <Text>
                 <Text
                   selectable
                   tw="break-all text-sm text-gray-900 dark:text-gray-100"
@@ -1090,10 +1090,10 @@ const MessageItem = memo(
                     tw="text-xs text-gray-500 dark:text-gray-200"
                     selectable
                   >
-                    • edited
+                    {` • edited`}
                   </Text>
                 )}
-              </View>
+              </Text>
               <PlatformAnimateHeight
                 initialHeight={item.reaction_group.length > 0 ? 34 : 0}
               >
