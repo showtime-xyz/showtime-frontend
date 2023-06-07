@@ -618,7 +618,7 @@ export const Messages = memo(() => {
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
-                estimatedItemSize={90}
+                estimatedItemSize={120}
                 keyboardDismissMode={
                   Platform.OS === "ios" ? "interactive" : "on-drag"
                 }
