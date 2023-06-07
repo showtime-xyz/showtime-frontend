@@ -398,13 +398,31 @@ export const Messages = memo(() => {
     }
   }, [isLoadingMore]);
 
+  // the channel does not exist, redirect to the channels page
   useEffect(() => {
     if (error && axios.isAxiosError(error)) {
-      if (error?.response?.status === 404 || error?.response?.status === 401) {
+      if (error?.response?.status === 404) {
         router.replace("/channels");
       }
     }
   }, [error, router]);
+
+  // this check is an extra check in case of 401 error
+  // the user most likely follwed a link to a channel that they are not a member of
+  // TODO: show a modal to ask the user to join the channel
+  // for now we redirect to the profile instead
+  useEffect(() => {
+    if (error && axios.isAxiosError(error)) {
+      if (error?.response?.status === 401 && channelDetail.data?.owner) {
+        router.replace(
+          `/@${
+            channelDetail.data?.owner.username ??
+            channelDetail.data?.owner.wallet_address
+          }`
+        );
+      }
+    }
+  }, [channelDetail.data?.owner, error, router]);
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
