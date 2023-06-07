@@ -5,14 +5,19 @@ import { View } from "@showtime-xyz/universal.view";
 type ControllerProps = {
   prev: () => void;
   next: () => void;
-
-  tw: string;
+  tw?: string;
+  progress?: number;
 };
-export const Controller = ({ prev, next, tw }: ControllerProps) => {
+export const Controller = ({
+  prev,
+  next,
+  tw = "",
+  progress = undefined,
+}: ControllerProps) => {
   return (
     <View
       tw={[
-        "absolute top-1/2 z-10 w-full -translate-y-4  flex-row justify-between",
+        "absolute top-1/2 z-10 hidden w-full -translate-y-4 flex-row  justify-between md:flex",
         tw,
       ]}
     >
@@ -20,7 +25,14 @@ export const Controller = ({ prev, next, tw }: ControllerProps) => {
         variant="secondary"
         size="small"
         iconOnly
-        tw="absolute -left-4 border border-gray-200 dark:border-gray-800"
+        tw={[
+          "absolute -left-4 border border-gray-200 transition-all dark:border-gray-800",
+          progress === undefined
+            ? ""
+            : progress <= 0
+            ? "opacity-0"
+            : "opacity-100",
+        ]}
         onPress={() => {
           prev?.();
         }}
@@ -31,7 +43,14 @@ export const Controller = ({ prev, next, tw }: ControllerProps) => {
         variant="secondary"
         size="small"
         iconOnly
-        tw="absolute -right-4 border border-gray-200 dark:border-gray-800"
+        tw={[
+          "absolute -right-4 border border-gray-200 transition-all dark:border-gray-800",
+          progress === undefined
+            ? ""
+            : progress <= 1
+            ? "opacity-100"
+            : "opacity-0",
+        ]}
         onPress={() => {
           next?.();
         }}

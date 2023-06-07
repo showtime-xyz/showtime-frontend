@@ -62,7 +62,6 @@ export function Carousel({
         modules={[Pagination, EffectFade, Autoplay]}
         style={{
           width,
-          marginTop: controller ? 30 : 0,
         }}
         className={tw}
         effect={effect}

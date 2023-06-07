@@ -40,7 +40,7 @@ export enum ClaimStatus {
   Expired,
   Normal,
 }
-export const getClaimStatus = (edition: CreatorEditionResponse) => {
+export const getClaimStatus = (edition?: CreatorEditionResponse) => {
   if (!edition) return undefined;
   if (
     edition.total_claimed_count ===
