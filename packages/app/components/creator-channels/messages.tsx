@@ -190,7 +190,7 @@ const Header = (props: HeaderProps) => {
             </Text>
             <Text
               onPress={viewMembersList}
-              tw="text-xs text-[#4E22FF] dark:text-blue-400"
+              tw="text-xs text-indigo-600 dark:text-blue-400"
             >
               {props.members ?? 0} members
             </Text>
@@ -859,7 +859,7 @@ const MessageItem = memo(
                 cleanUserTextInput(removeTags(channel_message.body)),
                 10
               ),
-              "!text-[#4E22FF] dark:!text-blue-400"
+              "!text-indigo-600 dark:!text-blue-400"
             )
           : "",
       [channel_message.body]

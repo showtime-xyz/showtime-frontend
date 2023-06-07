@@ -19,7 +19,6 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
     /\b(https?:\/\/\S+|www\.\S+|\b[A-Za-z0-9-]+\.[A-Za-z0-9-.]+(?:\/\S*)?\b)/gi,
     (match, i) => {
       const parsed = parse(match);
-
       if (parsed.isIcann || match.startsWith("http:")) {
         // Add https:// if not present
         if (!match.startsWith("http://") && !match.startsWith("https://")) {
@@ -28,6 +27,13 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
 
         const urlText = match.replace(/https?:\/\//gi, "");
 
+        // check if the domain is showtime.xyz
+        if (parsed.domain === "showtime.xyz") {
+          match = match.replace(
+            /(www\.|http:\/\/|https:\/\/|showtime\.xyz)/gi,
+            ""
+          );
+        }
         return (
           <TextLink
             href={match.toLowerCase()}
