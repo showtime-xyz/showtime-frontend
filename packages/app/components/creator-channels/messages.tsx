@@ -340,14 +340,14 @@ export const Messages = memo(() => {
   useIntroducingCreatorChannels();
 
   useEffect(() => {
-    AvoidSoftInput?.setEnabled(false);
-    KeyboardController?.setInputMode(
+    AvoidSoftInput.setEnabled(false);
+    KeyboardController.setInputMode(
       AndroidSoftInputModes.SOFT_INPUT_ADJUST_NOTHING
     );
 
     return () => {
-      AvoidSoftInput?.setEnabled(true);
-      KeyboardController?.setDefaultMode();
+      AvoidSoftInput.setEnabled(true);
+      KeyboardController.setDefaultMode();
       enableLayoutAnimations(false);
     };
   }, []);
@@ -1081,7 +1081,15 @@ const MessageItem = memo(
               <View tw="flex-row items-center" style={{ columnGap: 5 }}>
                 <Text
                   selectable
-                  tw="break-all text-sm text-gray-900 dark:text-gray-100"
+                  tw="text-sm text-gray-900 dark:text-gray-100"
+                  style={
+                    Platform.OS === "web"
+                      ? {
+                          // @ts-ignore
+                          wordBreak: "break-word",
+                        }
+                      : {}
+                  }
                 >
                   {linkifiedMessage}
                 </Text>
