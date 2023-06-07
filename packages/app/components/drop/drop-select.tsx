@@ -89,7 +89,7 @@ export const DropSelect = () => {
             icon={<MusicDropType color={iconColor} height={24} width={24} />}
             description="Promote your latest music: give your fans a free collectible for saving your song to their library."
             onPress={() => {
-              if (!canCreateMusicDrop) {
+              if (canCreateMusicDrop) {
                 if (Platform.OS !== "web") {
                   modalScreenContext?.pop?.({
                     callback: () => {
