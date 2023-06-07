@@ -56,24 +56,29 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
   );
 
   // Then, match @-mentions
+  replacedText = reactStringReplace(replacedText, /@(\w+)/g, (match, i) => (
+    <TextLink
+      href={`/@${match}`}
+      key={match + i}
+      target="_blank"
+      title="Open profile"
+      tw={[
+        "text-13 font-bold text-gray-900 dark:text-gray-100",
+        tw ? (Array.isArray(tw) ? tw.join(" ") : tw) : "",
+      ]}
+    >
+      @{match}
+    </TextLink>
+  ));
+
   replacedText = reactStringReplace(
     replacedText,
-    /(?<!\/)@(\w+)/g,
+    /\/(<TextLink href={`\/@\w+`}.+?<\/TextLink>)/g,
     (match, i) => {
-      return (
-        <TextLink
-          href={`/@${match}`}
-          key={match + i}
-          target="_blank"
-          title="Open profile"
-          tw={[
-            "text-13 font-bold text-gray-900 dark:text-gray-100",
-            tw ? (Array.isArray(tw) ? tw.join(" ") : tw) : "",
-          ]}
-        >
-          @{match}
-        </TextLink>
-      );
+      if (match) {
+        const username = match.match(/`\/@(\w+)`/)?.[1];
+        return `/@${username}`;
+      }
     }
   );
 
