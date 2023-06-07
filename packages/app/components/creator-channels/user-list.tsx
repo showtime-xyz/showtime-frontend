@@ -129,6 +129,7 @@ const CCUserListItem = memo(
             <View tw="mr-2 h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
               {item?.profile.img_url && (
                 <Image
+                  recyclingKey={item?.profile.img_url}
                   source={{ uri: item?.profile.img_url }}
                   alt={
                     item?.profile.username ?? item?.profile.wallet_address ?? ""

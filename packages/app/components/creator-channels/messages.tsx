@@ -240,6 +240,7 @@ const Header = (props: HeaderProps) => {
 };
 type Query = {
   channelId: string;
+  fresh?: string;
 };
 const { useParam } = createParam<Query>();
 const benefits = [
@@ -269,6 +270,7 @@ const keyExtractor = (item: ChannelMessageItem) =>
 export const Messages = memo(() => {
   const listRef = useRef<FlashList<any>>(null);
   const [channelId] = useParam("channelId");
+  const [fresh] = useParam("fresh");
   const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
@@ -398,13 +400,31 @@ export const Messages = memo(() => {
     }
   }, [isLoadingMore]);
 
+  // the channel does not exist, redirect to the channels page
   useEffect(() => {
     if (error && axios.isAxiosError(error)) {
-      if (error?.response?.status === 404 || error?.response?.status === 401) {
+      if (error?.response?.status === 404) {
         router.replace("/channels");
       }
     }
   }, [error, router]);
+
+  // this check is an extra check in case of 401 error
+  // the user most likely follwed a link to a channel that they are not a member of
+  // TODO: show a modal to ask the user to join the channel
+  // for now we redirect to the profile instead
+  useEffect(() => {
+    if (!fresh && error && axios.isAxiosError(error)) {
+      if (error?.response?.status === 401 && channelDetail.data?.owner) {
+        router.replace(
+          `/@${
+            channelDetail.data?.owner.username ??
+            channelDetail.data?.owner.wallet_address
+          }`
+        );
+      }
+    }
+  }, [channelDetail.data?.owner, error, router, fresh]);
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
@@ -423,6 +443,7 @@ export const Messages = memo(() => {
     [editMessageIdSharedValue, editMessageItemDimension]
   );
 
+  // TODO: add back to keyboard controller?
   const style = useAnimatedStyle(() => {
     // Bring edit message to the center of the screen
     if (
@@ -431,13 +452,7 @@ export const Messages = memo(() => {
     ) {
       return {};
     } else {
-      return {
-        transform: [
-          {
-            translateY: -keyboard.height.value,
-          },
-        ],
-      };
+      return {};
     }
   }, [keyboard]);
 
@@ -618,7 +633,7 @@ export const Messages = memo(() => {
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
-                estimatedItemSize={90}
+                estimatedItemSize={120}
                 keyboardDismissMode={
                   Platform.OS === "ios" ? "interactive" : "on-drag"
                 }
@@ -1129,7 +1144,7 @@ MessageItem.displayName = "MessageItem";
 
 const MessageSkeleton = () => {
   return (
-    <View tw="web:pb-4 h-full w-full flex-1 pb-4">
+    <View tw="web:pb-4 h-full w-full flex-1 pb-14">
       <View tw="h-full flex-1 justify-end px-4">
         {new Array(8).fill(0).map((_, i) => {
           return (

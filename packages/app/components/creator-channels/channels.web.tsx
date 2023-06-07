@@ -286,8 +286,8 @@ export const CreatorChannels = memo(
           // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
           ...(joinedChannelsData.length > 0 || ownedChannelsData.length > 0
             ? [
-                ...ownedChannelsData.map((suggestedChannel) => ({
-                  ...suggestedChannel,
+                ...ownedChannelsData.map((ownedChannel) => ({
+                  ...ownedChannel,
                   itemType: "owned",
                 })),
                 ...joinedChannelsData,
@@ -305,7 +305,18 @@ export const CreatorChannels = memo(
             : []),
         ];
       } else {
-        return [channelsSection, ...ownedChannelsData, ...joinedChannelsData];
+        return [
+          channelsSection,
+          ...(ownedChannelsData.length > 0
+            ? [
+                ...ownedChannelsData.map((ownedChannel) => ({
+                  ...ownedChannel,
+                  itemType: "owned",
+                })),
+              ]
+            : []),
+          ...joinedChannelsData,
+        ];
       }
     }, [
       joinedChannelsData,
