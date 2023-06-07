@@ -1081,7 +1081,15 @@ const MessageItem = memo(
               <Text>
                 <Text
                   selectable
-                  tw="break-all text-sm text-gray-900 dark:text-gray-100"
+                  tw="text-sm text-gray-900 dark:text-gray-100"
+                  style={
+                    Platform.OS === "web"
+                      ? {
+                          // @ts-ignore
+                          wordBreak: "break-word",
+                        }
+                      : {}
+                  }
                 >
                   {linkifiedMessage}
                 </Text>
