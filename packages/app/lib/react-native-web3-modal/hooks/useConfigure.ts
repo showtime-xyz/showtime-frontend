@@ -1,22 +1,24 @@
-import { useCallback, useEffect } from 'react';
-import { Alert, useColorScheme } from 'react-native';
-import { SUBSCRIBER_EVENTS } from '@walletconnect/core';
-import { ExplorerCtrl } from '../controllers/ExplorerCtrl';
-import { OptionsCtrl } from '../controllers/OptionsCtrl';
-import { ConfigCtrl } from '../controllers/ConfigCtrl';
-import { ClientCtrl } from '../controllers/ClientCtrl';
-import { AccountCtrl } from '../controllers/AccountCtrl';
-import { WcConnectionCtrl } from '../controllers/WcConnectionCtrl';
-import type { IProviderMetadata } from '../types/coreTypes';
-import { createUniversalProvider } from '../utils/ProviderUtil';
-import { removeDeepLinkWallet } from '../utils/StorageUtil';
-import { ThemeCtrl } from '../controllers/ThemeCtrl';
+import { useCallback, useEffect } from "react";
+import { Alert, useColorScheme } from "react-native";
+
+import { SUBSCRIBER_EVENTS } from "@walletconnect/core";
+
+import { AccountCtrl } from "../controllers/AccountCtrl";
+import { ClientCtrl } from "../controllers/ClientCtrl";
+import { ConfigCtrl } from "../controllers/ConfigCtrl";
+import { ExplorerCtrl } from "../controllers/ExplorerCtrl";
+import { OptionsCtrl } from "../controllers/OptionsCtrl";
+import { ThemeCtrl } from "../controllers/ThemeCtrl";
+import { WcConnectionCtrl } from "../controllers/WcConnectionCtrl";
+import type { IProviderMetadata } from "../types/coreTypes";
+import { createUniversalProvider } from "../utils/ProviderUtil";
+import { removeDeepLinkWallet } from "../utils/StorageUtil";
 
 interface Props {
   projectId: string;
   providerMetadata: IProviderMetadata;
   relayUrl?: string;
-  themeMode?: 'light' | 'dark';
+  themeMode?: "light" | "dark";
 }
 
 export function useConfigure({
@@ -73,7 +75,7 @@ export function useConfigure({
           OptionsCtrl.setIsDataLoaded(true);
         }
       } catch (error) {
-        Alert.alert('Error', 'Error fetching wallets');
+        Alert.alert("Error", "Error fetching wallets");
       }
     }
     fetchWallets();
@@ -92,7 +94,7 @@ export function useConfigure({
         });
         if (provider) {
           ClientCtrl.setProvider(provider);
-          provider.on('display_uri', onDisplayUri);
+          provider.on("display_uri", onDisplayUri);
           provider.client.core.relayer.subscriber.on(
             SUBSCRIBER_EVENTS.deleted,
             onSessionDelete
@@ -106,7 +108,8 @@ export function useConfigure({
           ClientCtrl.setInitialized(true);
         }
       } catch (error) {
-        Alert.alert('Error', 'Error initializing provider');
+        console.log("error ", error);
+        Alert.alert("Error", "Error initializing provider");
       }
     }
     if (!ClientCtrl.provider() && projectId && providerMetadata) {

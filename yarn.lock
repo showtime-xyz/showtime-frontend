@@ -8043,6 +8043,7 @@ __metadata:
     "@types/react": 18.0.35
     "@types/tinycolor2": ^1.4.3
     "@types/uuid": ^9.0.1
+    "@walletconnect/react-native-compat": ^2.7.8
     "@walletconnect/react-native-dapp": ^1.8.0
     "@web3modal/react-native": ^1.0.0-alpha.7
     app: "*"
@@ -11653,6 +11654,19 @@ __metadata:
     "@react-native-async-storage/async-storage": "*"
     react-native-get-random-values: "*"
   checksum: 8dc5acf3b815d0f9324982d7afdf358dea560e7fcde92bc246142587aedd94b8cb3216efc1f3c2e1d91decd4c0f0bbce664732942596e46d52371d8831c8dc14
+  languageName: node
+  linkType: hard
+
+"@walletconnect/react-native-compat@npm:^2.7.8":
+  version: 2.7.8
+  resolution: "@walletconnect/react-native-compat@npm:2.7.8"
+  dependencies:
+    events: 3.3.0
+    fast-text-encoding: ^1.0.6
+  peerDependencies:
+    "@react-native-async-storage/async-storage": "*"
+    react-native-get-random-values: "*"
+  checksum: a14a71f0b13121f654a00fa44baab5f96b0316546c579d76dc5f3f3ff1ea4a31ebcb3df8b1d314220df7542227cdb432681f81e7c9105458e376165feed7b195
   languageName: node
   linkType: hard
 

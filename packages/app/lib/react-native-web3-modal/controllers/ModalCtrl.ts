@@ -1,14 +1,14 @@
-import { proxy } from 'valtio';
+import { proxy } from "valtio";
 
-import type { ModalCtrlState } from '../types/controllerTypes';
-import { ClientCtrl } from './ClientCtrl';
-import { OptionsCtrl } from './OptionsCtrl';
-import { AccountCtrl } from './AccountCtrl';
-import { RouterCtrl } from './RouterCtrl';
+import type { ModalCtrlState } from "../types/controllerTypes";
+import { AccountCtrl } from "./AccountCtrl";
+import { ClientCtrl } from "./ClientCtrl";
+import { OptionsCtrl } from "./OptionsCtrl";
+import { RouterCtrl } from "./RouterCtrl";
 
 // -- types -------------------------------------------------------- //
 export interface OpenOptions {
-  route?: 'ConnectWallet' | 'Qrcode' | 'WalletExplorer' | 'Account';
+  route?: "ConnectWallet" | "Qrcode" | "WalletExplorer" | "Account";
 }
 
 // -- initial state ------------------------------------------------ //
@@ -27,15 +27,15 @@ export const ModalCtrl = {
       const { initialized } = ClientCtrl.state;
 
       if (options?.route) {
-        if (!isConnected && options.route === 'Account') {
-          RouterCtrl.replace('ConnectWallet');
+        if (!isConnected && options.route === "Account") {
+          RouterCtrl.replace("ConnectWallet");
         } else {
           RouterCtrl.replace(options.route);
         }
       } else if (isConnected) {
-        RouterCtrl.replace('Account');
+        RouterCtrl.replace("Account");
       } else {
-        RouterCtrl.replace('ConnectWallet');
+        RouterCtrl.replace("ConnectWallet");
       }
 
       // Open modal if async data is ready

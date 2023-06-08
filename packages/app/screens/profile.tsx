@@ -22,8 +22,7 @@ const ProfileScreen = withColorScheme(() => {
   const cleanedUsername =
     username && username !== "" ? username?.replace(/@/g, "") : null;
   const { user } = useUser();
-  const { userAddress } = useCurrentUserAddress();
-
+  const userAddress = user?.data.profile.wallet_addresses[0];
   return (
     <BottomSheetModalProvider>
       <ErrorBoundary>

@@ -1,9 +1,10 @@
-import { proxy } from 'valtio/vanilla';
-import type { WcConnectionCtrlState } from '../types/controllerTypes';
+import { proxy } from "valtio/vanilla";
+
+import type { WcConnectionCtrlState } from "../types/controllerTypes";
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<WcConnectionCtrlState>({
-  pairingUri: '',
+  pairingUri: "",
   pairingError: false,
 });
 
@@ -11,16 +12,16 @@ const state = proxy<WcConnectionCtrlState>({
 export const WcConnectionCtrl = {
   state,
 
-  setPairingUri(pairingUri: WcConnectionCtrlState['pairingUri']) {
+  setPairingUri(pairingUri: WcConnectionCtrlState["pairingUri"]) {
     state.pairingUri = pairingUri;
   },
 
-  setPairingError(pairingError: WcConnectionCtrlState['pairingError']) {
+  setPairingError(pairingError: WcConnectionCtrlState["pairingError"]) {
     state.pairingError = pairingError;
   },
 
   resetConnection() {
-    state.pairingUri = '';
+    state.pairingUri = "";
     state.pairingError = false;
   },
 };

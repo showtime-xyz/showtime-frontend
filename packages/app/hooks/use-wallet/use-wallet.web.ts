@@ -66,8 +66,6 @@ const useWallet = (): UseWalletReturnType => {
     (wagmiData.isConnected && !!wagmiSigner?.account.address && !!chain) ||
     isMagic;
 
-  console.log("connected ", wagmiSigner);
-
   const result = useMemo(() => {
     return {
       address,

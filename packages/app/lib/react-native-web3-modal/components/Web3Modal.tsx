@@ -1,21 +1,22 @@
-import { useEffect } from 'react';
-import { StyleSheet, Alert, SafeAreaView, View } from 'react-native';
-import Modal from 'react-native-modal';
-import { useSnapshot } from 'valtio';
-import type { SessionTypes } from '@walletconnect/types';
+import { useEffect } from "react";
+import { StyleSheet, Alert, SafeAreaView, View } from "react-native";
 
-import Web3ModalHeader from './Web3ModalHeader';
-import { ModalCtrl } from '../controllers/ModalCtrl';
-import { Web3ModalRouter } from './Web3ModalRouter';
-import { AccountCtrl } from '../controllers/AccountCtrl';
-import { ClientCtrl } from '../controllers/ClientCtrl';
-import { useOrientation } from '../hooks/useOrientation';
-import type { IProviderMetadata, ISessionParams } from '../types/coreTypes';
-import { useConfigure } from '../hooks/useConfigure';
-import { defaultSessionParams } from '../constants/Config';
-import { ConfigCtrl } from '../controllers/ConfigCtrl';
-import { setDeepLinkWallet } from '../utils/StorageUtil';
-import useTheme from '../hooks/useTheme';
+import type { SessionTypes } from "@walletconnect/types";
+import Modal from "react-native-modal";
+import { useSnapshot } from "valtio";
+
+import { defaultSessionParams } from "../constants/Config";
+import { AccountCtrl } from "../controllers/AccountCtrl";
+import { ClientCtrl } from "../controllers/ClientCtrl";
+import { ConfigCtrl } from "../controllers/ConfigCtrl";
+import { ModalCtrl } from "../controllers/ModalCtrl";
+import { useConfigure } from "../hooks/useConfigure";
+import { useOrientation } from "../hooks/useOrientation";
+import useTheme from "../hooks/useTheme";
+import type { IProviderMetadata, ISessionParams } from "../types/coreTypes";
+import { setDeepLinkWallet } from "../utils/StorageUtil";
+import Web3ModalHeader from "./Web3ModalHeader";
+import { Web3ModalRouter } from "./Web3ModalRouter";
 
 interface Web3ModalProps {
   projectId: string;
@@ -23,7 +24,7 @@ interface Web3ModalProps {
   sessionParams?: ISessionParams;
   relayUrl?: string;
   onCopyClipboard?: (value: string) => void;
-  themeMode?: 'dark' | 'light';
+  themeMode?: "dark" | "light";
 }
 
 export function Web3Modal({
@@ -51,20 +52,20 @@ export function Web3Modal({
       AccountCtrl.getAccount();
       ModalCtrl.close();
     } catch (error) {
-      Alert.alert('Error', 'Error setting deep link wallet');
+      Alert.alert("Error", "Error setting deep link wallet");
     }
   };
 
   const onSessionError = async () => {
     ConfigCtrl.setRecentWalletDeepLink(undefined);
     ModalCtrl.close();
-    Alert.alert('Error', 'Error with session');
+    Alert.alert("Error", "Error with session");
   };
 
   const onConnect = async () => {
     const provider = ClientCtrl.provider();
     try {
-      if (!provider) throw new Error('Provider not initialized');
+      if (!provider) throw new Error("Provider not initialized");
 
       if (!isConnected) {
         const session = await provider.connect(sessionParams);
@@ -79,7 +80,7 @@ export function Web3Modal({
 
   useEffect(() => {
     if (!projectId) {
-      Alert.alert('Error', 'Please provide a projectId');
+      Alert.alert("Error", "Please provide a projectId");
     }
   }, [projectId]);
 
@@ -114,7 +115,7 @@ export function Web3Modal({
 const styles = StyleSheet.create({
   modal: {
     margin: 0,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   container: {
     borderTopLeftRadius: 8,

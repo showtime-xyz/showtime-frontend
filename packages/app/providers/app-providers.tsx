@@ -20,8 +20,9 @@ import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
-import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
+
+import { WalletProvider } from "./wallet-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -31,8 +32,8 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           <KeyboardProvider statusBarTranslucent>
             <SafeAreaProvider style={{ backgroundColor: "black" }}>
               <WalletMobileSDKProvider>
-                <WalletProvider>
-                  <Web3Provider>
+                <Web3Provider>
+                  <WalletProvider>
                     <AlertProvider>
                       <LightBoxProvider>
                         <SnackbarProvider>
@@ -61,8 +62,8 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                         </SnackbarProvider>
                       </LightBoxProvider>
                     </AlertProvider>
-                  </Web3Provider>
-                </WalletProvider>
+                  </WalletProvider>
+                </Web3Provider>
               </WalletMobileSDKProvider>
             </SafeAreaProvider>
           </KeyboardProvider>

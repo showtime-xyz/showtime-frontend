@@ -19,6 +19,8 @@ export const useIsOnline = () => {
 
     return unsubscribe;
   }, []);
+
+  console.log("is online ", isOnline);
   return {
     isOnline,
   };

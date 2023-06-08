@@ -629,20 +629,6 @@ export function isDesktopWeb(): boolean {
   return Platform.OS === "web" && !isAndroid() && !isIOS();
 }
 
-// TODO: https://github.com/LedgerHQ/ledgerjs/issues/466
-export const ledgerWalletHack = (signature?: string) => {
-  if (signature) {
-    const lastByteOfSignature = signature.slice(-2);
-    if (lastByteOfSignature === "00" || lastByteOfSignature === "01") {
-      const temp = parseInt(lastByteOfSignature, 16) + 27;
-      const newSignature = signature.slice(0, -2) + temp.toString(16);
-      return newSignature;
-    }
-  }
-
-  return signature;
-};
-
 export function isClassComponent(component: any) {
   return (
     typeof component === "function" && !!component.prototype.isReactComponent

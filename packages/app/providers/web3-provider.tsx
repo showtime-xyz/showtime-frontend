@@ -7,7 +7,7 @@ import { mainnet } from "viem/chains";
 import { Web3Context, Web3ContextType } from "app/context/web3-context";
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useMagic, Relayer } from "app/lib/magic";
-import { useWalletConnect } from "app/lib/walletconnect";
+import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 
 interface Web3ProviderProps {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ export function Web3Provider({
     undefined
   );
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
-  const connector = useWalletConnect();
+  const web3Modal = useWeb3Modal();
   const mobileSDK = useWalletMobileSDK();
   const { magic } = useMagic();
   const [magicWalletAddress, setMagicWalletAddress] = useState<
@@ -45,28 +45,19 @@ export function Web3Provider({
 
   // (Native only) initialises wallet connect native web3 provider
   useEffect(() => {
-    if (Platform.OS !== "web" && connector.connected) {
+    if (Platform.OS !== "web" && web3Modal.isConnected) {
       (async function setWeb3Provider() {
-        const WalletConnectProvider = (
-          await import("@walletconnect/web3-provider")
-        ).default;
-        const walletConnectProvider = new WalletConnectProvider({
-          connector,
-          qrcode: false,
-          infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
-        });
+        if (web3Modal.provider) {
+          const client = createWalletClient({
+            chain: mainnet,
+            transport: custom(web3Modal.provider),
+          });
 
-        await walletConnectProvider.enable();
-
-        const client = createWalletClient({
-          chain: mainnet,
-          transport: custom(walletConnectProvider),
-        });
-
-        setWeb3(client);
+          setWeb3(client);
+        }
       })();
     }
-  }, [connector]);
+  }, [web3Modal.isConnected, web3Modal.provider]);
 
   // (Native only) initializes wallet mobile sdk provider
   useEffect(() => {

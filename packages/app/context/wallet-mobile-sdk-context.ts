@@ -1,7 +1,5 @@
 import { createContext } from "react";
 
-import type { Bytes } from "@ethersproject/bytes";
-
 type Metadata = {
   name: string;
 };
@@ -13,7 +11,7 @@ type WalletMobileSDKContextType = {
   onConnected: () => Promise<void>;
   connect: () => Promise<void>;
   disconnect: () => void;
-  personalSign: (message: string | Bytes, address: string) => Promise<string>;
+  personalSign: (message: string, address: string) => Promise<string>;
 };
 
 export const WalletMobileSDKContext =
