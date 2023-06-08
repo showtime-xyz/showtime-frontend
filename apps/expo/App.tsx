@@ -8,6 +8,7 @@ import * as Notifications from "expo-notifications";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
+import { useExpoUpdate } from "app/hooks/use-expo-update";
 import { growthbook } from "app/lib/growthbook";
 import { Logger } from "app/lib/logger";
 import { Sentry } from "app/lib/sentry";
@@ -51,6 +52,9 @@ LogBox.ignoreLogs([
 ]);
 
 function App() {
+  // check for updates as early as possible
+  useExpoUpdate();
+
   const [notification, setNotification] =
     useState<Notifications.Notification | null>(null);
 
