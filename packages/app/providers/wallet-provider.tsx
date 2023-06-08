@@ -1,11 +1,5 @@
-import { memo, useCallback } from "react";
-import { Linking, Platform } from "react-native";
+import { useCallback } from "react";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import WCProvider, {
-  RenderQrcodeModalProps,
-  WalletService,
-} from "@walletconnect/react-native-dapp";
 import { FullWindowOverlay } from "react-native-screens";
 
 import { Image } from "@showtime-xyz/universal.image";
