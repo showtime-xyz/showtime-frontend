@@ -189,6 +189,8 @@ export const Default = () => {
           <IconItem icon={Icon.MusicDropType} title="MusicDropType" />
           <IconItem icon={Icon.Music} title="Music" />
           <IconItem icon={Icon.Shopping} title="Shopping" />
+          <IconItem icon={Icon.Sendv2} title="Sendv2" />
+          <IconItem icon={Icon.Messagev2} title="Messagev2" />
         </View>
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>

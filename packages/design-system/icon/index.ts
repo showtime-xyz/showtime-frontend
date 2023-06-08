@@ -141,6 +141,8 @@ export { default as Shopping } from "./Shopping";
 export { default as FreeDropType } from "./FreeDropType";
 export { default as Congrats } from "./Congrats";
 export { default as EyeOffV2 } from "./EyeOffV2";
+export { default as Sendv2 } from "./Sendv2";
+export { default as Messagev2 } from "./Messagev2";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

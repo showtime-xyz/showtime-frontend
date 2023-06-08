@@ -126,7 +126,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
 
   return (
     <View tw="w-full">
-      <View tw="px-4 md:px-0">
+      <View tw="web:mt-12 web:md:mt-0 px-4 md:px-0">
         <Carousel
           loop
           width={pagerWidth}
