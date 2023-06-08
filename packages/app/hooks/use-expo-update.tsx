@@ -74,7 +74,7 @@ export function useExpoUpdate() {
     } else if (
       // check if its been 30 minutes since the last check and the app was backgrounded
       appBackgrounded.current &&
-      differenceInMinutes(new Date(), appBackgrounded.current) > 30
+      differenceInMinutes(new Date(), appBackgrounded.current) > 15
     ) {
       checkUpdate(true);
     }
