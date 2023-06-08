@@ -116,6 +116,7 @@ const FollowingListUser = memo(
             <View tw="mr-2 h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
               {item?.img_url && (
                 <Image
+                  recyclingKey={item?.img_url}
                   source={{ uri: item.img_url }}
                   alt={item.username ?? item.wallet_address ?? ""}
                   width={32}

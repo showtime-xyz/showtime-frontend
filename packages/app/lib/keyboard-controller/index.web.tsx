@@ -2,6 +2,7 @@ export const useReanimatedKeyboardAnimation = () => {};
 
 export const KeyboardController = {
   setInputMode: () => {},
+  setDefaultMode: () => {},
 };
 
 export const AndroidSoftInputModes = {};

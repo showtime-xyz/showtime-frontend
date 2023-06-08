@@ -35,13 +35,13 @@ export const ScollableAutoWidthTabBar = ({
   const isDark = useIsDarkMode();
   const indicatorFadeAnim = useRef(new Animated.Value(0)).current;
   const { width } = useWindowDimensions();
+  const measuredTabWidths = React.useRef<Record<string, number>>({});
+
   const contentWidth = useMemo(
     () => (width < maxContentWidth ? width : maxContentWidth),
     [maxContentWidth, width]
   );
-  const [tabsWidth, setTabsWidth] = useState<{
-    [index: number]: number;
-  }>({});
+  const [tabsWidth, setTabsWidth] = useState<Record<string, number>>({});
 
   const getActiveOpacityText = (
     position: Animated.AnimatedInterpolation<number>,
@@ -64,14 +64,6 @@ export const ScollableAutoWidthTabBar = ({
     position: Animated.AnimatedInterpolation<number>,
     routes: Route[]
   ) => {
-    if (
-      routes.length === 0 ||
-      Object.keys(tabsWidth)?.length === 0 ||
-      Object.keys(tabsWidth)?.length !== routes.length
-    ) {
-      return -contentWidth;
-    }
-
     const inputRange = routes.map((_, i) => i);
     const indicatorOutputRange = Object.values(tabsWidth).map(
       (value) => value / contentWidth
@@ -98,13 +90,6 @@ export const ScollableAutoWidthTabBar = ({
     position: Animated.AnimatedInterpolation<number>,
     routes: Route[]
   ) => {
-    if (
-      routes.length === 0 ||
-      Object.keys(tabsWidth)?.length === 0 ||
-      Object.keys(tabsWidth)?.length !== routes.length
-    ) {
-      return 0;
-    }
     const inputRange = routes.map((_, i) => i);
     const outputRange = Object.values(tabsWidth).map(
       (value) => value / contentWidth
@@ -130,11 +115,16 @@ export const ScollableAutoWidthTabBar = ({
       width: number;
     }) => {
       const index = navigationState.routes.indexOf(route);
-      setTabsWidth(
-        Object.assign(tabsWidth, {
-          [index]: width,
-        })
-      );
+      measuredTabWidths.current[index] = width;
+
+      if (
+        navigationState.routes.every(
+          (r, i) => typeof measuredTabWidths.current[i] === "number"
+        )
+      ) {
+        setTabsWidth({ ...measuredTabWidths.current });
+      }
+
       if (index === navigationState.routes.length - 1) {
         Animated.timing(indicatorFadeAnim, {
           toValue: 1,
@@ -143,7 +133,7 @@ export const ScollableAutoWidthTabBar = ({
         }).start();
       }
     },
-    [indicatorFadeAnim, tabsWidth]
+    [indicatorFadeAnim]
   );
 
   return (
@@ -162,6 +152,11 @@ export const ScollableAutoWidthTabBar = ({
       ]}
       indicatorContainerStyle={{ zIndex: 1 }}
       renderIndicator={({ position, navigationState }) => {
+        if (
+          navigationState.routes.length === 0 ||
+          Object.keys(tabsWidth)?.length !== navigationState.routes.length
+        )
+          return null;
         return (
           <Animated.View
             style={[
