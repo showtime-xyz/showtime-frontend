@@ -805,7 +805,7 @@ const MessageInput = ({
 const MessageBoxUnavailable = () => {
   return (
     <MessageBox
-      placeholder="Chat currently unavailable"
+      placeholder="This channel is read-only"
       tw="bg-white text-center dark:bg-black"
       textInputProps={{
         editable: false,
