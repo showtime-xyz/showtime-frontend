@@ -271,7 +271,6 @@ export const Messages = memo(() => {
   const listRef = useRef<FlashList<any>>(null);
   const [channelId] = useParam("channelId");
   const [fresh] = useParam("fresh");
-  const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   //const { height, width } = useWindowDimensions();
@@ -444,6 +443,7 @@ export const Messages = memo(() => {
   );
 
   // TODO: add back to keyboard controller?
+  /*
   const style = useAnimatedStyle(() => {
     // Bring edit message to the center of the screen
     if (
@@ -455,6 +455,7 @@ export const Messages = memo(() => {
       return {};
     }
   }, [keyboard]);
+  */
 
   const introCompensation = useAnimatedStyle(
     () => ({
@@ -484,7 +485,7 @@ export const Messages = memo(() => {
         ]}
       >
         <View tw="mt-6 w-full items-center justify-center">
-          {isUserAdmin && showIntro && (
+          {isUserAdmin && (
             <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 pb-3 pt-3 dark:bg-gray-900">
               <View tw="px-6 pt-1">
                 <Text tw="text-sm font-bold text-black dark:text-white">
@@ -536,7 +537,6 @@ export const Messages = memo(() => {
     isDark,
     isUserAdmin,
     membersCount,
-    showIntro,
     windowDimension.height,
   ]);
 
