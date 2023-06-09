@@ -805,7 +805,7 @@ const MessageInput = ({
 const MessageBoxUnavailable = () => {
   return (
     <MessageBox
-      placeholder="This channel is read-only"
+      placeholder="Coming soon..."
       tw="bg-white text-center dark:bg-black"
       textInputProps={{
         editable: false,
