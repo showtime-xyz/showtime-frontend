@@ -271,7 +271,6 @@ export const Messages = memo(() => {
   const listRef = useRef<FlashList<any>>(null);
   const [channelId] = useParam("channelId");
   const [fresh] = useParam("fresh");
-  const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   //const { height, width } = useWindowDimensions();
@@ -444,6 +443,7 @@ export const Messages = memo(() => {
   );
 
   // TODO: add back to keyboard controller?
+  /*
   const style = useAnimatedStyle(() => {
     // Bring edit message to the center of the screen
     if (
@@ -455,21 +455,38 @@ export const Messages = memo(() => {
       return {};
     }
   }, [keyboard]);
+  */
+
+  const introCompensation = useAnimatedStyle(
+    () => ({
+      top: keyboard.height.value / 2 + 16,
+    }),
+    [keyboard]
+  );
+
+  const introFooterCompensation = useAnimatedStyle(
+    () => ({
+      bottom:
+        keyboard.height.value === 0 ? 16 : -(keyboard.height.value / 2) + 16,
+    }),
+    [keyboard]
+  );
 
   const listEmptyComponent = useCallback(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
     return (
-      <View
+      <AnimatedView
         tw="ios:scale-y-[-1] android:scale-y-[1] web:justify-start android:rotate-180 w-full items-center justify-center"
-        style={
+        style={[
           Platform.OS !== "web"
             ? { height: windowDimension.height }
-            : { height: "100%" }
-        }
+            : { height: "100%" },
+          introCompensation,
+        ]}
       >
         <View tw="mt-6 w-full items-center justify-center">
-          {isUserAdmin && showIntro && (
-            <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 px-4 pb-6 pt-4 dark:bg-gray-900">
+          {isUserAdmin && (
+            <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 pb-3 pt-3 dark:bg-gray-900">
               <View tw="px-6 pt-1">
                 <Text tw="text-sm font-bold text-black dark:text-white">
                   Welcome! Now send your first update.
@@ -479,8 +496,9 @@ export const Messages = memo(() => {
                   All your collectors will join automatically after your first
                   update. We recommend at least 2 updates a week on:
                 </Text>
+                <View tw="h-1" />
                 {benefits.map((item, i) => (
-                  <View tw="mt-2 flex-row items-center" key={i.toString()}>
+                  <View tw="mt-1 flex-row items-center" key={i.toString()}>
                     {item.icon({ width: 20, height: 20, color: iconColor })}
                     <Text tw="ml-3 text-sm font-semibold text-black dark:text-white">
                       {item.text}
@@ -492,7 +510,10 @@ export const Messages = memo(() => {
           )}
         </View>
         {isUserAdmin && (
-          <View tw="absolute bottom-4 mt-auto w-full items-center justify-center">
+          <AnimatedView
+            tw="web:mb-4 absolute bottom-4 mt-auto w-full items-center justify-center"
+            style={introFooterCompensation}
+          >
             <View tw="my-3 max-w-[300px] flex-row items-start justify-start">
               <View tw="absolute -top-1.5">
                 <EyeOffV2
@@ -502,16 +523,22 @@ export const Messages = memo(() => {
                 />
               </View>
               <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-400">
-                This channel is not visible to your followers until you post an
-                update.
+                This channel is hidden until your first message.
               </Text>
             </View>
-            <Text tw="pt-4 text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
-          </View>
+            <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
+          </AnimatedView>
         )}
-      </View>
+      </AnimatedView>
     );
-  }, [isDark, isUserAdmin, membersCount, showIntro, windowDimension.height]);
+  }, [
+    introCompensation,
+    introFooterCompensation,
+    isDark,
+    isUserAdmin,
+    membersCount,
+    windowDimension.height,
+  ]);
 
   const extraData = useMemo(
     () => ({ reactions: channelDetail.data?.channel_reactions, channelId }),
@@ -599,7 +626,7 @@ export const Messages = memo(() => {
           tw={[
             "flex-1 overflow-hidden",
             //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
-            "android:pb-12 ios:pb-8 web:pb-12", // since we always show the input, leave the padding
+            "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
           ]}
         >
           {isLoading || channelDetail.isLoading ? (
@@ -648,7 +675,6 @@ export const Messages = memo(() => {
           editMessage={editMessage}
           isUserAdmin={isUserAdmin}
           keyboard={keyboard}
-          hasData={data.length > 0}
         />
         <AnimatedView style={fakeView} />
 
@@ -685,7 +711,6 @@ const MessageInput = ({
   setEditMessage,
   isUserAdmin,
   keyboard,
-  hasData,
 }: {
   listRef: RefObject<FlashList<any>>;
   channelId: string;
@@ -694,21 +719,41 @@ const MessageInput = ({
   editMessage?: undefined | { id: number; text: string };
   setEditMessage: (v: undefined | { id: number; text: string }) => void;
   isUserAdmin?: boolean;
-  hasData: boolean;
 }) => {
+  const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
   const inputRef = useRef<any>(null);
   const editMessages = useEditChannelMessage(channelId);
   const isDark = useIsDarkMode();
-  const bottom = Platform.select({ web: bottomHeight, ios: 16, android: 0 });
+  const bottom = Platform.select({
+    web: bottomHeight,
+    ios: insets.bottom / 2,
+    android: 0,
+  });
+
+  useEffect(() => {
+    // autofocus with ref is more stable than autoFocus prop
+    setTimeout(() => {
+      // prevent some UI jank on android
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
+    }, 600);
+  }, []);
 
   const style = useAnimatedStyle(() => {
     return {
-      bottom: 0,
       paddingBottom: bottom,
+      bottom: 0,
       backgroundColor: isDark ? "black" : "white",
-      transform: [{ translateY: keyboard.height.value }],
+      transform: [
+        {
+          translateY:
+            keyboard.height.value -
+            (keyboard.height.value ? -(insets.bottom / 2) : 0),
+        },
+      ],
     };
   }, [keyboard, bottom]);
 
@@ -729,7 +774,6 @@ const MessageInput = ({
           placeholder="Send an update..."
           textInputProps={{
             maxLength: 2000,
-            autoFocus: hasData,
           }}
           onSubmit={async (text: string) => {
             if (channelId) {
