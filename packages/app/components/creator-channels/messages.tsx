@@ -460,7 +460,7 @@ export const Messages = memo(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
     return (
       <View
-        tw="ios:scale-y-[-1] android:scale-y-[-1] web:justify-start w-full items-center justify-center"
+        tw="ios:scale-y-[-1] android:scale-y-[1] web:justify-start android:rotate-180 w-full items-center justify-center"
         style={
           Platform.OS !== "web"
             ? { height: windowDimension.height }
@@ -468,46 +468,28 @@ export const Messages = memo(() => {
         }
       >
         <View tw="mt-6 w-full items-center justify-center">
-          <AnimatePresence exitBeforeEnter>
-            <MotiView
-              from={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              exitTransition={{
-                type: "timing",
-                duration: 600,
-              }}
-            >
-              {isUserAdmin && showIntro && (
-                <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 px-4 pb-6 pt-4 dark:bg-gray-900">
-                  <View tw="px-6 pt-1">
-                    <Text tw="text-sm font-bold text-black dark:text-white">
-                      Welcome! Now send your first update.
+          {isUserAdmin && showIntro && (
+            <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 px-4 pb-6 pt-4 dark:bg-gray-900">
+              <View tw="px-6 pt-1">
+                <Text tw="text-sm font-bold text-black dark:text-white">
+                  Welcome! Now send your first update.
+                </Text>
+                <View tw="h-2" />
+                <Text tw="text-sm text-gray-900 dark:text-white">
+                  All your collectors will join automatically after your first
+                  update. We recommend at least 2 updates a week on:
+                </Text>
+                {benefits.map((item, i) => (
+                  <View tw="mt-2 flex-row items-center" key={i.toString()}>
+                    {item.icon({ width: 20, height: 20, color: iconColor })}
+                    <Text tw="ml-3 text-sm font-semibold text-black dark:text-white">
+                      {item.text}
                     </Text>
-                    <View tw="h-2" />
-                    <Text tw="text-sm text-gray-900 dark:text-white">
-                      All your collectors will join automatically after your
-                      first update. We recommend at least 2 updates a week on:
-                    </Text>
-                    {benefits.map((item, i) => (
-                      <View tw="mt-2 flex-row items-center" key={i.toString()}>
-                        {item.icon({ width: 20, height: 20, color: iconColor })}
-                        <Text tw="ml-3 text-sm font-semibold text-black dark:text-white">
-                          {item.text}
-                        </Text>
-                      </View>
-                    ))}
                   </View>
-                </View>
-              )}
-            </MotiView>
-          </AnimatePresence>
+                ))}
+              </View>
+            </View>
+          )}
         </View>
         {isUserAdmin && (
           <View tw="absolute bottom-4 mt-auto w-full items-center justify-center">
@@ -630,10 +612,13 @@ export const Messages = memo(() => {
                 data={data}
                 onEndReached={onLoadMore}
                 inverted
+                scrollEnabled={data.length > 0}
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
                 estimatedItemSize={120}
+                // android > 12 flips the scrollbar to the left, FlashList bug
+                showsVerticalScrollIndicator={Platform.OS !== "android"}
                 keyboardDismissMode={
                   Platform.OS === "ios" ? "interactive" : "on-drag"
                 }
@@ -963,7 +948,14 @@ const MessageItem = memo(
                   />
                   <View>
                     <DropdownMenuRoot>
-                      <DropdownMenuTrigger>
+                      <DropdownMenuTrigger
+                        // @ts-expect-error - RNW
+                        style={Platform.select({
+                          web: {
+                            cursor: "pointer",
+                          },
+                        })}
+                      >
                         <MoreHorizontal
                           color={isDark ? colors.gray[400] : colors.gray[700]}
                           width={20}
