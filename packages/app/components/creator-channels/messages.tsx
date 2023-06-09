@@ -648,6 +648,7 @@ export const Messages = memo(() => {
           editMessage={editMessage}
           isUserAdmin={isUserAdmin}
           keyboard={keyboard}
+          hasData={data.length > 0}
         />
         <AnimatedView style={fakeView} />
 
@@ -684,6 +685,7 @@ const MessageInput = ({
   setEditMessage,
   isUserAdmin,
   keyboard,
+  hasData,
 }: {
   listRef: RefObject<FlashList<any>>;
   channelId: string;
@@ -692,6 +694,7 @@ const MessageInput = ({
   editMessage?: undefined | { id: number; text: string };
   setEditMessage: (v: undefined | { id: number; text: string }) => void;
   isUserAdmin?: boolean;
+  hasData: boolean;
 }) => {
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
@@ -726,6 +729,7 @@ const MessageInput = ({
           placeholder="Send an update..."
           textInputProps={{
             maxLength: 2000,
+            autoFocus: hasData,
           }}
           onSubmit={async (text: string) => {
             if (channelId) {
