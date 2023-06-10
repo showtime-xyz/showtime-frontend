@@ -11,7 +11,6 @@ import {
 import { Platform, useWindowDimensions } from "react-native";
 
 import axios from "axios";
-import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedScrollHandler,
