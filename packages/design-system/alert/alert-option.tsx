@@ -11,7 +11,7 @@ type AlertBtnType = AlertButton & {
 // get Alert btn preset style type.
 const getAlertBtnVariant = (style: AlertButton["style"]) => {
   const variantMap = new Map<AlertButton["style"], ButtonVariant>([
-    ["cancel", "text"],
+    ["cancel", "outlined"],
     ["default", "primary"],
     ["destructive", "danger"],
   ]);
@@ -27,7 +27,7 @@ export const AlertOption = memo<AlertBtnType>(function AlertBtn({
   return (
     <Button
       variant={getAlertBtnVariant(style)}
-      size="regular"
+      size="small"
       onPress={() => {
         onPress?.(text);
         hide();

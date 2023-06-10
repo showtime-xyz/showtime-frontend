@@ -12,13 +12,13 @@ export type AlertProps = {
 export const Alert = ({ title, message, renderBtns }: AlertProps) => {
   return (
     <>
-      <Text tw="text-center text-lg font-bold text-gray-900 dark:text-white">
+      <Text tw="text-center text-base font-bold text-gray-900 dark:text-white">
         {title}
       </Text>
       {Boolean(message) && (
         <>
           <View tw="h-4" />
-          <Text tw="text-center text-base text-gray-900 dark:text-white">
+          <Text tw="text-center text-sm text-gray-900 dark:text-white">
             {message}
           </Text>
         </>
