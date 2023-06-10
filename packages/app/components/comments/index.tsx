@@ -1,11 +1,4 @@
-import {
-  useCallback,
-  useMemo,
-  useRef,
-  Fragment,
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useRef, useEffect } from "react";
 import { Platform, StyleSheet, TextInput } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
@@ -13,11 +6,9 @@ import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CommentRow } from "app/components/comments/comment-row";
@@ -32,13 +23,10 @@ import {
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { InputAccessoryView } from "../input-accessory-view";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
 const keyExtractor = (item: CommentType) => `comment-${item.id}`;
-const PlatformInputAccessoryView =
-  Platform.OS === "ios" ? InputAccessoryView : Fragment;
 
 type CommentsProps = {
   nft: NFT;
