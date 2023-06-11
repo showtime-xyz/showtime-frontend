@@ -40,7 +40,8 @@ import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { ClaimButtonSimplified } from "../claim/claim-button-simplified";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 import { ListMedia } from "../media";
-import { TrendingCarousel } from "./trending-carousel";
+import { HomeSlider } from "./home-slider";
+import { PopularCreators } from "./popular-creators";
 
 const windowWidth = Dimensions.get("window").width;
 const TrendingItem = ({ index, nft, width, style }: any) => {
@@ -164,10 +165,11 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             </Text>
           </View>
           <View tw="mb-8 w-full rounded-2xl">
-            <TrendingCarousel data={data} renderItem={renderItem} />
+            <HomeSlider data={data} renderItem={renderItem} />
           </View>
         </View>
       )}
+      <PopularCreators />
     </View>
   );
 });

@@ -19,32 +19,25 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { DESKTOP_CONTENT_WIDTH } from "app/constants/layout";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useFeed } from "app/hooks/use-feed";
-import { useFollow } from "app/hooks/use-follow";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { Carousel } from "app/lib/carousel";
 import { linkifyDescription } from "app/lib/linkify";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { TextLink } from "app/navigation/link";
 import { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
-import { DEFAULT_AVATAR_PIC } from "design-system/avatar/constants";
 import { breakpoints } from "design-system/theme";
 
 import { AvatarHoverCard } from "../card/avatar-hover-card";
-import { ClaimedBy, ClaimedByReduced } from "../feed-item/claimed-by";
-import { EngagementIcons } from "../feed-item/engagement-icons";
+import { ClaimedBy } from "../feed-item/claimed-by";
 import { NSFWGate } from "../feed-item/nsfw-gate";
-import { FollowButton } from "../follow-button";
 import { FollowButtonSmall } from "../follow-button-small";
 import { ListMedia } from "../media";
 import { FeedEngagementIcons } from "./engagement-icons";
 import { ListHeaderComponent } from "./header";
-import { TrendingCarousel } from "./trending-carousel";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;

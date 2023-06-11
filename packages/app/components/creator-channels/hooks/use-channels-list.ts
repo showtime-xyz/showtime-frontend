@@ -2,9 +2,12 @@ import { useCallback, useMemo } from "react";
 
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 
-export type CreatorChannel = {
-  // todo: add props
-};
+import { Channel } from "../types";
+
+export type CreatorChannel = Omit<
+  Channel,
+  "latest_message_updated_at" | "latest_message"
+>;
 
 const PAGE_SIZE = 15;
 

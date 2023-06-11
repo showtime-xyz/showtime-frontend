@@ -11,7 +11,7 @@ import { breakpoints } from "design-system/theme";
 
 type Props = Pick<CarouselProps, "data" | "height" | "renderItem">;
 
-export function TrendingCarousel({ data, renderItem, height }: Props) {
+export function HomeSlider({ data, renderItem, height }: Props) {
   const swiperRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const { width } = useWindowDimensions();

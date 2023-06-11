@@ -5,8 +5,6 @@ import type { ButtonProps } from "@showtime-xyz/universal.button";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 
-import { useMyInfo } from "app/hooks/api-hooks";
-
 import { FollowButton } from "./follow-button";
 
 type ToggleFollowParams = ButtonProps & {
