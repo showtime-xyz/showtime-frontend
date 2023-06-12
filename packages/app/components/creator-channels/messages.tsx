@@ -776,6 +776,7 @@ const MessageInput = ({
           }}
           onSubmit={async (text: string) => {
             if (channelId) {
+              inputRef.current?.reset();
               enableLayoutAnimations(false);
               listRef.current?.prepareForLayoutAnimationRender();
               await sendMessage.trigger({
@@ -783,8 +784,6 @@ const MessageInput = ({
                 message: text,
                 callback: sendMessageCallback,
               });
-
-              inputRef.current?.reset();
               requestAnimationFrame(() => {
                 enableLayoutAnimations(true);
 
@@ -798,7 +797,7 @@ const MessageInput = ({
 
             return Promise.resolve();
           }}
-          submitting={sendMessage.isMutating}
+          submitting={editMessages.isMutating || sendMessage.isMutating}
           tw="bg-white dark:bg-black"
           submitButton={
             editMessage ? (
@@ -819,15 +818,17 @@ const MessageInput = ({
                     disabled={editMessages.isMutating || !editMessage}
                     iconOnly
                     onPress={() => {
+                      const newMessage = inputRef.current?.value;
+                      if (newMessage.trim().length === 0) return;
+                      inputRef.current?.reset();
                       enableLayoutAnimations(true);
                       requestAnimationFrame(() => {
                         editMessages.trigger({
                           messageId: editMessage.id,
-                          message: inputRef.current.value,
+                          message: newMessage,
                           channelId,
                         });
                         setEditMessage(undefined);
-                        inputRef.current?.reset();
                       });
                     }}
                   >
