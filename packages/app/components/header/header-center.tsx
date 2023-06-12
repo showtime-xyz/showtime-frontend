@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { Platform, TextInput } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
@@ -24,8 +24,14 @@ const SearchInHeader = () => {
   const { loading, data } = useSearch(term);
   const inputRef = useRef<TextInput>();
 
+  // since the search returns weird results with "undefined" in the list, we filter them out
+  const filteredData = useMemo(
+    () => data?.filter((item) => item.name && item.username !== "undefined"),
+    [data]
+  );
+
   useEffect(() => {
-    if (term !== "") {
+    if (term !== "" && term.length > 1) {
       setIsOpen(true);
     } else {
       setIsOpen(false);
@@ -106,7 +112,7 @@ const SearchInHeader = () => {
           {data ? (
             <InfiniteScrollList
               useWindowScroll={false}
-              data={data}
+              data={filteredData}
               renderItem={renderItem}
               keyboardShouldPersistTaps="handled"
               estimatedItemSize={64}

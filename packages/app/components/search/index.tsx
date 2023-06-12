@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState, useEffect } from "react";
+import { useCallback, useRef, useState, useEffect, useMemo } from "react";
 import { Keyboard, Platform, TextInput } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
@@ -39,6 +39,12 @@ export const Search = () => {
   const Separator = useCallback(
     () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
     []
+  );
+
+  // since the search returns weird results with "undefined" in the list, we filter them out
+  const filteredData = useMemo(
+    () => data?.filter((item) => item.name && item.username !== "undefined"),
+    [data]
   );
 
   useEffect(() => {
@@ -128,7 +134,7 @@ export const Search = () => {
       </View>
       {data ? (
         <InfiniteScrollList
-          data={data}
+          data={filteredData}
           renderItem={renderItem}
           ItemSeparatorComponent={Separator}
           keyboardShouldPersistTaps="handled"
