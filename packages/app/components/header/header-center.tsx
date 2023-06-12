@@ -26,11 +26,9 @@ const SearchInHeader = () => {
 
   // since the search returns weird results with "undefined" in the list, we filter them out
   const filteredData = useMemo(
-    () => data?.filter((item) => item.username),
+    () => data?.filter((item) => item.username || item.address),
     [data]
   );
-
-  console.log(data);
 
   useEffect(() => {
     if (term !== "" && term.length > 1) {
