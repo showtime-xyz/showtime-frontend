@@ -819,6 +819,7 @@ const MessageInput = ({
                     iconOnly
                     onPress={() => {
                       const newMessage = inputRef.current?.value;
+                      if (newMessage.trim().length === 0) return;
                       inputRef.current?.reset();
                       enableLayoutAnimations(true);
                       requestAnimationFrame(() => {
