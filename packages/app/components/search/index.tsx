@@ -43,7 +43,7 @@ export const Search = () => {
 
   // since the search returns weird results with "undefined" in the list, we filter them out
   const filteredData = useMemo(
-    () => data?.filter((item) => item.name && item.username !== "undefined"),
+    () => data?.filter((item) => item.username),
     [data]
   );
 
