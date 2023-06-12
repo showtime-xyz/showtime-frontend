@@ -143,6 +143,8 @@ export { default as Congrats } from "./Congrats";
 export { default as EyeOffV2 } from "./EyeOffV2";
 export { default as Sendv2 } from "./Sendv2";
 export { default as Messagev2 } from "./Messagev2";
+export { default as MusicBadge } from "./MusicBadge";
+export { default as RaffleBadge } from "./RaffleBadge";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

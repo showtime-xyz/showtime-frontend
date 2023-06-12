@@ -6,6 +6,8 @@ import {
   SpotifyPure,
   RaffleHorizontal,
   Music,
+  MusicBadge,
+  RaffleBadge,
 } from "@showtime-xyz/universal.icon";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -73,8 +75,8 @@ export const ContentType = ({ edition, ...rest }: ContentTypeTooltipProps) => {
       <TextTooltip
         side="bottom"
         triggerElement={
-          <View tw="rounded bg-black/60">
-            <Music color="#fff" />
+          <View tw="h-[18px] w-8 items-center justify-center rounded-full bg-black/60">
+            <MusicBadge color="#fff" width={10} height={13} />
           </View>
         }
         text={contentGatingType[edition?.gating_type].text}
@@ -88,13 +90,9 @@ export const ContentType = ({ edition, ...rest }: ContentTypeTooltipProps) => {
       <TextTooltip
         side="bottom"
         triggerElement={
-          <>
-            <View
-              tw="rounded bg-black/60"
-              style={StyleSheet.absoluteFillObject}
-            />
-            <RaffleHorizontal />
-          </>
+          <View tw="h-[18px] w-8 items-center justify-center rounded-full bg-black/60">
+            <RaffleBadge width={15} height={10} />
+          </View>
         }
         text="Raffle Drop"
         {...rest}

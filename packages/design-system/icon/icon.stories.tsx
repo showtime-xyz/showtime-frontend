@@ -191,6 +191,8 @@ export const Default = () => {
           <IconItem icon={Icon.Shopping} title="Shopping" />
           <IconItem icon={Icon.Sendv2} title="Sendv2" />
           <IconItem icon={Icon.Messagev2} title="Messagev2" />
+          <IconItem icon={Icon.RaffleBadge} title="RaffleBadge" />
+          <IconItem icon={Icon.MusicBadge} title="MusicBadge" />
         </View>
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>

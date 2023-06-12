@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useWindowDimensions, Dimensions, Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
@@ -12,7 +12,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ContentTypeTooltip } from "app/components/content-type-tooltip";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useFeed } from "app/hooks/use-feed";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -82,7 +81,7 @@ const ContentItem = ({
             ) : null}
           </View>
           <Text tw="text-xs text-gray-600 dark:text-gray-400">
-            {`${123}Followers`}
+            {`${0}Followers`}
           </Text>
         </View>
 

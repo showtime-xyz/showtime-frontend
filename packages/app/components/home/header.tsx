@@ -1,4 +1,4 @@
-import { useState, useRef, memo, useCallback, useMemo } from "react";
+import { memo, useCallback } from "react";
 import {
   useWindowDimensions,
   Dimensions,
@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -125,14 +126,27 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           tw="mb-2 w-full rounded-2xl"
           pagination={{ variant: "rectangle" }}
           renderItem={({ index }) => (
-            <View
+            <LinearGradient
               key={index}
-              tw="h-full"
+              colors={["#98C4FF", "#5EFEFE", "#FFE8B6"]}
+              locations={[-0.17, 0.23, 2.89]}
+              start={{ x: -0.08, y: 0.36 }}
+              end={{ x: 1.08, y: 0.63 }}
               style={{
-                backgroundColor: `#${index + 2}7${index + 4}0E1`,
                 width: pagerWidth,
+                height: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingHorizontal: 60,
               }}
-            />
+            >
+              <Text
+                style={{ fontSize: 40, lineHeight: 48 }}
+                tw="text-center font-semibold text-gray-600"
+              >
+                Engage everyone with accessible web3 tools
+              </Text>
+            </LinearGradient>
           )}
         />
       </View>
