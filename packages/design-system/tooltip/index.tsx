@@ -32,6 +32,7 @@ export const Root = ({ children, ...rest }: RootProps) => {
 };
 
 export const Trigger = Tooltip.Trigger;
+export const Portal = Tooltip.Portal;
 
 export const Content = (props: ContentProps) => {
   const isDark = useIsDarkMode();

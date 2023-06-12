@@ -3,7 +3,6 @@ import { useWindowDimensions } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import dynamic from "next/dynamic";
 
-import { useExpoUpdate } from "app/hooks/use-expo-update";
 import { useUser } from "app/hooks/use-user";
 
 import { BottomTabbar } from "./bottom-tab-bar";
@@ -27,8 +26,6 @@ const BottomTab = createBottomTabNavigator();
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const { user } = useUser();
-
-  useExpoUpdate();
 
   return (
     <BottomTab.Navigator

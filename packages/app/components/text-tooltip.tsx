@@ -57,27 +57,29 @@ export const TextTooltip = ({
           {triggerElement}
         </TriggerView>
       </Tooltip.Trigger>
-      <Tooltip.Content
-        sideOffset={3}
-        containerStyle={{
-          paddingLeft: 16,
-          paddingRight: 16,
-          paddingTop: 8,
-          paddingBottom: 8,
-        }}
-        className="web:outline-none"
-        side={side}
-        presetAnimation="fadeIn"
-        backgroundColor={isDark ? "#fff" : "#000"}
-        borderRadius={16}
-      >
-        <Tooltip.Text
-          textSize={16}
-          fontWeight="bold"
-          textColor={isDark ? "#000" : "#fff"}
-          text={text}
-        />
-      </Tooltip.Content>
+      <Tooltip.Portal>
+        <Tooltip.Content
+          sideOffset={3}
+          containerStyle={{
+            paddingLeft: 16,
+            paddingRight: 16,
+            paddingTop: 8,
+            paddingBottom: 8,
+          }}
+          className="web:outline-none"
+          side={side}
+          presetAnimation="fadeIn"
+          backgroundColor={isDark ? "#fff" : "#000"}
+          borderRadius={16}
+        >
+          <Tooltip.Text
+            textSize={16}
+            fontWeight="bold"
+            textColor={isDark ? "#000" : "#fff"}
+            text={text}
+          />
+        </Tooltip.Content>
+      </Tooltip.Portal>
     </Tooltip.Root>
   );
 };

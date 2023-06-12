@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, useEffect } from "react";
+import { useCallback, useState, useMemo } from "react";
 
 import { TabView } from "react-native-tab-view";
 
@@ -9,7 +9,6 @@ import {
 } from "@showtime-xyz/universal.tab-view";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useTabState } from "app/hooks/use-tab-state";
 import { createParam } from "app/navigation/use-param";
 
 import { UserList } from "../user-list";
@@ -59,9 +58,9 @@ export const MessageReactionUserListModal = () => {
       .filter(Boolean) as Route[];
   }, [channelDetails.data?.channel_reactions, message]);
 
-  const { index, setIndex } = useTabState(routes, {
-    defaultIndex: routes.findIndex((r) => r.key === selectedReactionId),
-  });
+  const [index, setIndex] = useState(
+    routes.findIndex((r) => r.key === selectedReactionId)
+  );
 
   const renderScene = useCallback(
     ({

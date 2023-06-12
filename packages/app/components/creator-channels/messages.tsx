@@ -11,7 +11,6 @@ import {
 import { Platform, useWindowDimensions } from "react-native";
 
 import axios from "axios";
-import { MotiView, AnimatePresence } from "moti";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedScrollHandler,
@@ -271,7 +270,6 @@ export const Messages = memo(() => {
   const listRef = useRef<FlashList<any>>(null);
   const [channelId] = useParam("channelId");
   const [fresh] = useParam("fresh");
-  const [showIntro, setShowIntro] = useState(true);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   //const { height, width } = useWindowDimensions();
@@ -444,6 +442,7 @@ export const Messages = memo(() => {
   );
 
   // TODO: add back to keyboard controller?
+  /*
   const style = useAnimatedStyle(() => {
     // Bring edit message to the center of the screen
     if (
@@ -455,62 +454,65 @@ export const Messages = memo(() => {
       return {};
     }
   }, [keyboard]);
+  */
+
+  const introCompensation = useAnimatedStyle(
+    () => ({
+      top: keyboard.height.value / 2 + 16,
+    }),
+    [keyboard]
+  );
+
+  const introFooterCompensation = useAnimatedStyle(
+    () => ({
+      bottom:
+        keyboard.height.value === 0 ? 16 : -(keyboard.height.value / 2) + 16,
+    }),
+    [keyboard]
+  );
 
   const listEmptyComponent = useCallback(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
     return (
-      <View
-        tw="ios:scale-y-[-1] android:scale-y-[-1] web:justify-start w-full items-center justify-center"
-        style={
+      <AnimatedView
+        tw="ios:scale-y-[-1] android:scale-y-[1] web:justify-start android:rotate-180 w-full items-center justify-center"
+        style={[
           Platform.OS !== "web"
             ? { height: windowDimension.height }
-            : { height: "100%" }
-        }
+            : { height: "100%" },
+          introCompensation,
+        ]}
       >
         <View tw="mt-6 w-full items-center justify-center">
-          <AnimatePresence exitBeforeEnter>
-            <MotiView
-              from={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              exitTransition={{
-                type: "timing",
-                duration: 600,
-              }}
-            >
-              {isUserAdmin && showIntro && (
-                <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 px-4 pb-6 pt-4 dark:bg-gray-900">
-                  <View tw="px-6 pt-1">
-                    <Text tw="text-sm font-bold text-black dark:text-white">
-                      Welcome! Now send your first update.
+          {isUserAdmin && (
+            <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 pb-3 pt-3 dark:bg-gray-900">
+              <View tw="px-6 pt-1">
+                <Text tw="text-sm font-bold text-black dark:text-white">
+                  Welcome! Now send your first update.
+                </Text>
+                <View tw="h-2" />
+                <Text tw="text-sm text-gray-900 dark:text-white">
+                  All your collectors will join automatically after your first
+                  update. We recommend at least 2 updates a week on:
+                </Text>
+                <View tw="h-1" />
+                {benefits.map((item, i) => (
+                  <View tw="mt-1 flex-row items-center" key={i.toString()}>
+                    {item.icon({ width: 20, height: 20, color: iconColor })}
+                    <Text tw="ml-3 text-sm font-semibold text-black dark:text-white">
+                      {item.text}
                     </Text>
-                    <View tw="h-2" />
-                    <Text tw="text-sm text-gray-900 dark:text-white">
-                      All your collectors will join automatically after your
-                      first update. We recommend at least 2 updates a week on:
-                    </Text>
-                    {benefits.map((item, i) => (
-                      <View tw="mt-2 flex-row items-center" key={i.toString()}>
-                        {item.icon({ width: 20, height: 20, color: iconColor })}
-                        <Text tw="ml-3 text-sm font-semibold text-black dark:text-white">
-                          {item.text}
-                        </Text>
-                      </View>
-                    ))}
                   </View>
-                </View>
-              )}
-            </MotiView>
-          </AnimatePresence>
+                ))}
+              </View>
+            </View>
+          )}
         </View>
         {isUserAdmin && (
-          <View tw="absolute bottom-4 mt-auto w-full items-center justify-center">
+          <AnimatedView
+            tw="web:mb-4 absolute bottom-4 mt-auto w-full items-center justify-center"
+            style={introFooterCompensation}
+          >
             <View tw="my-3 max-w-[300px] flex-row items-start justify-start">
               <View tw="absolute -top-1.5">
                 <EyeOffV2
@@ -520,16 +522,22 @@ export const Messages = memo(() => {
                 />
               </View>
               <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-400">
-                This channel is not visible to your followers until you post an
-                update.
+                This channel is hidden until your first message.
               </Text>
             </View>
-            <Text tw="pt-4 text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
-          </View>
+            <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
+          </AnimatedView>
         )}
-      </View>
+      </AnimatedView>
     );
-  }, [isDark, isUserAdmin, membersCount, showIntro, windowDimension.height]);
+  }, [
+    introCompensation,
+    introFooterCompensation,
+    isDark,
+    isUserAdmin,
+    membersCount,
+    windowDimension.height,
+  ]);
 
   const extraData = useMemo(
     () => ({ reactions: channelDetail.data?.channel_reactions, channelId }),
@@ -617,7 +625,7 @@ export const Messages = memo(() => {
           tw={[
             "flex-1 overflow-hidden",
             //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
-            "android:pb-12 ios:pb-8 web:pb-12", // since we always show the input, leave the padding
+            "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
           ]}
         >
           {isLoading || channelDetail.isLoading ? (
@@ -630,10 +638,13 @@ export const Messages = memo(() => {
                 data={data}
                 onEndReached={onLoadMore}
                 inverted
+                scrollEnabled={data.length > 0}
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
                 estimatedItemSize={120}
+                // android > 12 flips the scrollbar to the left, FlashList bug
+                showsVerticalScrollIndicator={Platform.OS !== "android"}
                 keyboardDismissMode={
                   Platform.OS === "ios" ? "interactive" : "on-drag"
                 }
@@ -708,19 +719,40 @@ const MessageInput = ({
   setEditMessage: (v: undefined | { id: number; text: string }) => void;
   isUserAdmin?: boolean;
 }) => {
+  const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
   const inputRef = useRef<any>(null);
   const editMessages = useEditChannelMessage(channelId);
   const isDark = useIsDarkMode();
-  const bottom = Platform.select({ web: bottomHeight, ios: 16, android: 0 });
+  const bottom = Platform.select({
+    web: bottomHeight,
+    ios: insets.bottom / 2,
+    android: 0,
+  });
+
+  useEffect(() => {
+    // autofocus with ref is more stable than autoFocus prop
+    setTimeout(() => {
+      // prevent some UI jank on android
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
+    }, 600);
+  }, []);
 
   const style = useAnimatedStyle(() => {
     return {
-      bottom: 0,
       paddingBottom: bottom,
+      bottom: 0,
       backgroundColor: isDark ? "black" : "white",
-      transform: [{ translateY: keyboard.height.value }],
+      transform: [
+        {
+          translateY:
+            keyboard.height.value -
+            (keyboard.height.value ? -(insets.bottom / 2) : 0),
+        },
+      ],
     };
   }, [keyboard, bottom]);
 
@@ -744,6 +776,7 @@ const MessageInput = ({
           }}
           onSubmit={async (text: string) => {
             if (channelId) {
+              inputRef.current?.reset();
               enableLayoutAnimations(false);
               listRef.current?.prepareForLayoutAnimationRender();
               await sendMessage.trigger({
@@ -751,8 +784,6 @@ const MessageInput = ({
                 message: text,
                 callback: sendMessageCallback,
               });
-
-              inputRef.current?.reset();
               requestAnimationFrame(() => {
                 enableLayoutAnimations(true);
 
@@ -766,7 +797,7 @@ const MessageInput = ({
 
             return Promise.resolve();
           }}
-          submitting={sendMessage.isMutating}
+          submitting={editMessages.isMutating || sendMessage.isMutating}
           tw="bg-white dark:bg-black"
           submitButton={
             editMessage ? (
@@ -787,15 +818,17 @@ const MessageInput = ({
                     disabled={editMessages.isMutating || !editMessage}
                     iconOnly
                     onPress={() => {
+                      const newMessage = inputRef.current?.value;
+                      if (newMessage.trim().length === 0) return;
+                      inputRef.current?.reset();
                       enableLayoutAnimations(true);
                       requestAnimationFrame(() => {
                         editMessages.trigger({
                           messageId: editMessage.id,
-                          message: inputRef.current.value,
+                          message: newMessage,
                           channelId,
                         });
                         setEditMessage(undefined);
-                        inputRef.current?.reset();
                       });
                     }}
                   >
@@ -816,7 +849,7 @@ const MessageInput = ({
 const MessageBoxUnavailable = () => {
   return (
     <MessageBox
-      placeholder="Chat currently unavailable"
+      placeholder="Coming soon..."
       tw="bg-white text-center dark:bg-black"
       textInputProps={{
         editable: false,
@@ -963,7 +996,14 @@ const MessageItem = memo(
                   />
                   <View>
                     <DropdownMenuRoot>
-                      <DropdownMenuTrigger>
+                      <DropdownMenuTrigger
+                        // @ts-expect-error - RNW
+                        style={Platform.select({
+                          web: {
+                            cursor: "pointer",
+                          },
+                        })}
+                      >
                         <MoreHorizontal
                           color={isDark ? colors.gray[400] : colors.gray[700]}
                           width={20}

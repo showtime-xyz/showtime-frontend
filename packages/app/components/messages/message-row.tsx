@@ -7,6 +7,7 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { HeartFilled, Heart, Trash } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -271,9 +272,9 @@ function MessageRowComponent({
               )}
             </View>
             <View tw="justify-center py-0">
-              <Text tw="px-0 text-[10px] text-gray-500" onPress={onReplyPress}>
-                Reply
-              </Text>
+              <Pressable onPress={onReplyPress} hitSlop={5}>
+                <Text tw="px-0 text-[10px] text-gray-500">Reply</Text>
+              </Pressable>
             </View>
 
             <View
