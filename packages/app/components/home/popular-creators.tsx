@@ -109,7 +109,7 @@ export const PopularCreators = memo(function PopularCreators() {
     ),
     [pagerWidth]
   );
-
+  if (data.length === 0) return null;
   return (
     <View tw="w-full pl-4 md:pl-0">
       <View tw="w-full flex-row items-center justify-between py-4 pr-4">

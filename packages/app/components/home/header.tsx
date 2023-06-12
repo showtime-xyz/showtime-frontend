@@ -8,15 +8,6 @@ import {
 
 import { ResizeMode } from "expo-av";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.image";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -24,16 +15,13 @@ import { View } from "@showtime-xyz/universal.view";
 import { DESKTOP_CONTENT_WIDTH } from "app/constants/layout";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { Carousel } from "app/lib/carousel";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { TextLink } from "app/navigation/link";
 import { NFT } from "app/types";
 import { getCreatorUsernameFromNFT } from "app/utilities";
 
-import { DEFAULT_AVATAR_PIC } from "design-system/avatar/constants";
 import { breakpoints } from "design-system/theme";
 
 import { AvatarHoverCard } from "../card/avatar-hover-card";
@@ -41,7 +29,6 @@ import { ClaimButtonSimplified } from "../claim/claim-button-simplified";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 import { ListMedia } from "../media";
 import { HomeSlider } from "./home-slider";
-import { PopularCreators } from "./popular-creators";
 
 const windowWidth = Dimensions.get("window").width;
 const TrendingItem = ({ index, nft, width, style }: any) => {
@@ -169,7 +156,6 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           </View>
         </View>
       )}
-      <PopularCreators />
     </View>
   );
 });

@@ -3,22 +3,16 @@ import { useWindowDimensions, Dimensions, Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.image";
 import {
   InfiniteScrollList,
   ListRenderItemInfo,
 } from "@showtime-xyz/universal.infinite-scroll-list";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import { Spinner } from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ContentTypeTooltip } from "app/components/content-type-tooltip";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useFeed } from "app/hooks/use-feed";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -36,8 +30,10 @@ import { ClaimedBy } from "../feed-item/claimed-by";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 import { FollowButtonSmall } from "../follow-button-small";
 import { ListMedia } from "../media";
+import { ContentType } from "./content-type";
 import { FeedEngagementIcons } from "./engagement-icons";
 import { ListHeaderComponent } from "./header";
+import { PopularCreators } from "./popular-creators";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -131,6 +127,9 @@ const ContentItem = ({
               optimizedWidth={300}
               loading={index > 0 ? "lazy" : "eager"}
             />
+            <View tw="absolute right-1.5 top-1.5">
+              <ContentType edition={edition} />
+            </View>
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
           </View>
           <FeedEngagementIcons nft={nft} edition={edition} />
@@ -148,8 +147,16 @@ export const Home = () => {
   const { data } = useFeed();
   const mediaSize = isMdWidth ? 300 : width - 48 - 56;
   const keyExtractor = useCallback((item: any, index: any) => `${index}`, []);
-  const renderItem = ({ item, ...rest }: ListRenderItemInfo<NFT>) => {
-    return <ContentItem nft={item} mediaSize={mediaSize} {...rest} />;
+  const renderItem = ({ item, index }: ListRenderItemInfo<NFT>) => {
+    if (index === 0) {
+      return (
+        <View>
+          <ContentItem nft={item} mediaSize={mediaSize} index={index} />
+          <PopularCreators />
+        </View>
+      );
+    }
+    return <ContentItem nft={item} mediaSize={mediaSize} index={index} />;
   };
   return (
     <View tw="w-full flex-1 items-center bg-white dark:bg-black md:pt-8">
@@ -158,7 +165,7 @@ export const Home = () => {
           data={data}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
-          estimatedItemSize={64}
+          estimatedItemSize={600}
           overscan={8}
           ListHeaderComponent={ListHeaderComponent}
           contentContainerStyle={{
