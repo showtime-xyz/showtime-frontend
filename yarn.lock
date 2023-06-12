@@ -8195,7 +8195,7 @@ __metadata:
     resize-observer-polyfill: ^1.5.1
     screenfull: ^6.0.2
     setimmediate: ^1.0.5
-    swiper: ^9.3.2
+    swiper: 9.3.2
     swr: ^2.1.5
     tailwindcss: ^3.3.1
     wagmi: ^0.12.10
@@ -32122,12 +32122,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swiper@npm:^9.3.2":
-  version: 9.4.0
-  resolution: "swiper@npm:9.4.0"
+"swiper@npm:9.3.2":
+  version: 9.3.2
+  resolution: "swiper@npm:9.3.2"
   dependencies:
     ssr-window: ^4.0.2
-  checksum: 6d4865a325880b093ebf757cc626a77de0cfaba7641cb3be0ffbf759dd272ea5c50f384b86e1456cd40e33ac0b7279c4f0665c88f1042f6ee5dc9f8f7d1c9a90
+  checksum: 9ccb6a0ef67d71ac780d7d1f3b2c2daf6f1846d3df8810aff6dcb8501c87b7769540a869cdd83eb902e5278396e5379cb32d9ed397234f7700ef55f0209f4592
   languageName: node
   linkType: hard
 
