@@ -141,7 +141,7 @@ export const Search = () => {
           estimatedItemSize={64}
           {...keyboardDismissProp}
         />
-      ) : loading && term ? (
+      ) : loading && term && term.length > 1 ? (
         <SearchItemSkeleton />
       ) : null}
     </>
