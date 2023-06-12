@@ -8195,7 +8195,7 @@ __metadata:
     resize-observer-polyfill: ^1.5.1
     screenfull: ^6.0.2
     setimmediate: ^1.0.5
-    swiper: ^9.4.0
+    swiper: ^9.3.2
     swr: ^2.1.5
     tailwindcss: ^3.3.1
     wagmi: ^0.12.10
@@ -32122,7 +32122,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swiper@npm:^9.4.0":
+"swiper@npm:^9.3.2":
   version: 9.4.0
   resolution: "swiper@npm:9.4.0"
   dependencies:

@@ -71,7 +71,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "screenfull": "^6.0.2",
     "setimmediate": "^1.0.5",
-    "swiper": "^9.4.0",
+    "swiper": "^9.3.2",
     "swr": "^2.1.5",
     "wagmi": "^0.12.10",
     "web3modal": "^1.9.12"
