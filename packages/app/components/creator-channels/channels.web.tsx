@@ -370,7 +370,7 @@ export const CreatorChannels = memo(
       isLoadingSuggestedChannels,
       isLoadingMoreJoinedChannels,
     ]);
-    const mdHeight = windowHeight - 140;
+    const mdHeight = windowHeight - 80;
 
     if (!isMdWidth) {
       if (router.query["channelId"]) {
@@ -386,7 +386,7 @@ export const CreatorChannels = memo(
 
     return (
       <View
-        tw="mt-24 w-full max-w-screen-lg flex-row px-4"
+        tw="mt-12 w-full max-w-screen-lg flex-row px-4"
         style={{ height: mdHeight }}
       >
         <Button

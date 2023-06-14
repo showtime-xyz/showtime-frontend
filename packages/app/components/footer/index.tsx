@@ -53,10 +53,7 @@ const Footer = () => {
       }}
       tw="safe-bottom fixed bottom-0 left-0 right-0 z-50 h-12 flex-row items-center justify-between px-4 pt-1 backdrop-blur-md"
     >
-      <HomeTabBarIcon
-        color={color}
-        focused={router.pathname === "/" || router.pathname === "/trending"}
-      />
+      <HomeTabBarIcon color={color} focused={router.pathname === "/"} />
       <CreatorChannelsTabBarIcon
         color={color}
         focused={router.pathname === "/channels"}

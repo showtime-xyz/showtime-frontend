@@ -146,17 +146,20 @@ export const Home = () => {
   const { data } = useFeed();
   const mediaSize = isMdWidth ? 300 : width - 48 - 56;
   const keyExtractor = useCallback((item: any, index: any) => `${index}`, []);
-  const renderItem = ({ item, index }: ListRenderItemInfo<NFT>) => {
-    if (index === 0) {
-      return (
-        <View>
-          <ContentItem nft={item} mediaSize={mediaSize} index={index} />
-          <PopularCreators />
-        </View>
-      );
-    }
-    return <ContentItem nft={item} mediaSize={mediaSize} index={index} />;
-  };
+  const renderItem = useCallback(
+    ({ item, index }: ListRenderItemInfo<NFT>) => {
+      if (index === 0) {
+        return (
+          <View>
+            <ContentItem nft={item} mediaSize={mediaSize} index={index} />
+            <PopularCreators />
+          </View>
+        );
+      }
+      return <ContentItem nft={item} mediaSize={mediaSize} index={index} />;
+    },
+    [mediaSize]
+  );
   return (
     <View tw="w-full flex-1 items-center bg-white dark:bg-black md:pt-8">
       <View tw="max-w-screen-content w-full">

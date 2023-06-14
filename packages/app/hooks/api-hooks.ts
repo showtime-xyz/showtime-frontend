@@ -101,7 +101,7 @@ export const useTrendingNFTS = ({ filter }: { filter?: string }) => {
     if (filter === "music") {
       return "/v3/trending/nfts/music";
     }
-    return "/v3/trending/nfts";
+    return "/v3/trending/nfts/all";
   }, [filter]);
 
   const { data, isLoading, error, mutate } = useSWR<NFT[]>(

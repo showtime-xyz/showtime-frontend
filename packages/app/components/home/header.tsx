@@ -9,6 +9,7 @@ import {
 import { ResizeMode } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -79,13 +80,12 @@ const TrendingItem = ({ index, nft, width, style }: any) => {
       </View>
       <View tw="mt-2">
         <Text tw="max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
-          {`METAGIRL (Remix) METAGIRL (Remix) `}
+          {nft?.token_name}
         </Text>
       </View>
       {edition && (
         <View tw="mt-2.5 flex-row items-center">
           <ClaimButtonSimplified edition={edition} tw="mr-3" />
-
           <Text tw="text-xs font-bold text-gray-900 dark:text-white">
             {edition?.total_claimed_count.toLocaleString()}
           </Text>
@@ -100,7 +100,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const { data, mutate, isLoading } = useTrendingNFTS({});
-
+  const router = useRouter();
   const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth - 32;
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => (
@@ -119,7 +119,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         <Carousel
           loop
           width={pagerWidth}
-          height={164}
+          height={isMdWidth ? 164 : 104}
           autoPlayInterval={3000}
           data={new Array(5).fill(0)}
           controller
@@ -141,7 +141,10 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               }}
             >
               <Text
-                style={{ fontSize: 40, lineHeight: 48 }}
+                style={{
+                  fontSize: isMdWidth ? 40 : 23,
+                  lineHeight: isMdWidth ? 48 : 28,
+                }}
                 tw="text-center font-semibold text-gray-600"
               >
                 Engage everyone with accessible web3 tools
@@ -160,6 +163,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               tw="text-sm font-semibold text-indigo-700"
               onPress={() => {
                 console.log("See all");
+                router.push("/trending");
               }}
             >
               see all

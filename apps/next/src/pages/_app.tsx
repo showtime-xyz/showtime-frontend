@@ -182,7 +182,7 @@ function App({ Component, pageProps, router }: AppProps) {
             )}
 
             <View
-              tw="w-full items-center md:ml-auto md:w-[calc(100vw-260px)]"
+              tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]"
               style={{
                 minHeight: "100svh",
               }}

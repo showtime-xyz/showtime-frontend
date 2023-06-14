@@ -88,6 +88,7 @@ type RootStackNavigatorParams = {
   dropSlug: SwipeListParams & {
     dropSlug?: string;
   };
+  trending: undefined;
   dropEvent: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;
