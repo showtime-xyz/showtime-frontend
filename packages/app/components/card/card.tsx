@@ -173,6 +173,7 @@ const CardLargeScreen = ({
     tokenId: nft?.token_id,
     chainName: nft?.chain_name,
   });
+
   return (
     <LikeContextProvider nft={nft}>
       <View
@@ -228,6 +229,7 @@ const CardLargeScreen = ({
           </RouteComponent>
           <RouteComponent
             href={href}
+            as={as}
             onPress={handleOnPress}
             // @ts-ignore
             dataset={{ testId: "nft-card-title-link" }}
