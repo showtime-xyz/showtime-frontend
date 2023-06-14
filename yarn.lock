@@ -8560,7 +8560,7 @@ __metadata:
     bn.js: ^5.2.1
     browserify-zlib: ~0.2.0
     buffer: ^6.0.3
-    burnt: ^0.11.5
+    burnt: ^0.11.7
     comment-json: ^4.2.3
     console-browserify: ^1.2.0
     constants-browserify: ^1.0.0
@@ -8570,7 +8570,7 @@ __metadata:
     dotenv: ^16.1.4
     esbuild: ^0.18.2
     events: ^3.3.0
-    expo: ~48.0.19
+    expo: ~48.0.18
     expo-app-loading: ~2.1.1
     expo-application: ~5.1.1
     expo-av: ~13.3.0
@@ -8774,9 +8774,9 @@ __metadata:
     "@storybook/addon-ondevice-controls": ^6.5.3
     "@storybook/addon-ondevice-notes": ^6.5.3
     "@storybook/react-native": ^6.5.3
-    burnt: ^0.11.5
+    burnt: ^0.11.7
     design-system: "*"
-    expo: ~48.0.19
+    expo: ~48.0.18
     expo-asset: ~8.6.2
     expo-av: ~13.3.0
     expo-blur: ~12.3.0
@@ -15512,9 +15512,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"burnt@npm:^0.11.5":
-  version: 0.11.5
-  resolution: "burnt@npm:0.11.5"
+"burnt@npm:^0.11.7":
+  version: 0.11.7
+  resolution: "burnt@npm:0.11.7"
   dependencies:
     sf-symbols-typescript: ^1.0.0
     sonner: ^0.3.5
@@ -15522,7 +15522,7 @@ __metadata:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 5ed1d7ab01f5dbf63072df68eab7a1978502d83d384cded68202225e3361d28a9c9d6dd5a15e00c95bff93e07e74d83a0b6ca1ad3343567226e5a0e8e5731f53
+  checksum: 4b7d74e0400a2a81712ec0d11d2e41175304d95dae425fe5bbc1fa560103d1d51455a53c33f8b7196c28506c853c8b4b0c303ea04a34cbb1009079a35ae37c35
   languageName: node
   linkType: hard
 
@@ -20207,7 +20207,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo@npm:~48.0.19":
+"expo@npm:~48.0.18":
   version: 48.0.19
   resolution: "expo@npm:48.0.19"
   dependencies:
