@@ -29,7 +29,6 @@ export const ChannelsSettings = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [checked, setChecked] = useState(false);
   const insets = useSafeAreaInsets();
-  const bototm = usePlatformBottomHeight();
   const leaveChannel = useLeaveChannel();
   const router = useRouter();
   return (
@@ -40,15 +39,14 @@ export const ChannelsSettings = () => {
           Notifications
         </Text>
         <View tw="mt-4 flex-row items-center justify-between">
-          <Text tw="text-sm text-black dark:text-white">Creator Updates</Text>
+          <Text tw="text-sm text-black dark:text-white">Creator updates</Text>
           <Switch size="small" checked={checked} onChange={setChecked} />
         </View>
         <Divider tw="my-4" />
-        <Text tw="text-sm font-bold text-black dark:text-white">
-          Leave channel
-        </Text>
-        <View tw="mt-3 flex-row items-center justify-between">
-          <Text tw="text-sm text-black dark:text-white">Leave channel</Text>
+        <View tw="flex-row items-center justify-between">
+          <Text tw="text-sm font-bold text-black dark:text-white">
+            Leave channel
+          </Text>
           <View>
             <Button
               variant="danger"
@@ -76,7 +74,7 @@ export const ChannelsSettings = () => {
               }}
               disabled={leaveChannel.isMutating}
             >
-              {leaveChannel.isMutating ? "Leaving..." : "Leave channel"}
+              {leaveChannel.isMutating ? "Leaving..." : "Leave"}
             </Button>
           </View>
         </View>
