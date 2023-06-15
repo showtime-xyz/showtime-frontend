@@ -129,7 +129,6 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             <LinearGradient
               key={index}
               colors={["#98C4FF", "#5EFEFE", "#FFE8B6"]}
-              locations={[-0.17, 0.23, 2.89]}
               start={{ x: -0.08, y: 0.36 }}
               end={{ x: 1.08, y: 0.63 }}
               style={{

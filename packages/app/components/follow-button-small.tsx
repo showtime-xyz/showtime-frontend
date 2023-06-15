@@ -23,7 +23,7 @@ export const FollowButtonSmall = memo<ToggleFollowParams>(
           return (
             <Pressable
               tw={[
-                "h-full rounded-full border border-gray-300 px-3.5 py-1.5 dark:border-gray-600",
+                "h-[22px] items-center justify-center rounded-full border border-gray-300 px-3.5 dark:border-gray-600",
                 tw,
               ]}
               {...rest}

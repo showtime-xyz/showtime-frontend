@@ -47,7 +47,7 @@ export function Carousel({
     return undefined;
   }, [effect, fadeAnimationStyle]);
   return (
-    <>
+    <View>
       <StyledRNRCarousel
         ref={carouselRef}
         data={data}
@@ -89,7 +89,7 @@ export function Carousel({
           tw={controllerTw}
         />
       )} */}
-    </>
+    </View>
   );
 }
 type PaginationItemProps = {
