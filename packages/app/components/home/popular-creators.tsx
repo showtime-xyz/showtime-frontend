@@ -9,7 +9,6 @@ import {
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CreatorChannel as CreatorChannelIcon } from "@showtime-xyz/universal.icon";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -20,9 +19,8 @@ import {
   CreatorChannel,
 } from "app/components/creator-channels/hooks/use-channels-list";
 import { DESKTOP_CONTENT_WIDTH } from "app/constants/layout";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
+import { RectButton } from "design-system/rect-button";
 import { breakpoints } from "design-system/theme";
 
 import { useJoinChannel } from "../creator-channels/hooks/use-join-channel";
@@ -48,12 +46,13 @@ const PopularCreatorItem = ({
 
   return (
     <View
-      tw="h-[230px] w-full"
+      tw="w-full"
       style={{
         width: Platform.select({
           web: undefined,
           default: width,
         }),
+        height: 230,
       }}
     >
       <View tw="h-[84px] w-[84px]">
@@ -82,14 +81,14 @@ const PopularCreatorItem = ({
           {item?.owner?.bio}
         </Text>
       </View>
-      <PressableScale
+      <RectButton
         tw={[
           "absolute bottom-0 h-5 items-center justify-center rounded-full border border-gray-300 px-3.5 dark:border-gray-600",
         ]}
         onPress={onJoinChannel}
       >
         <Text tw="text-xs font-bold text-gray-900 dark:text-white">Join</Text>
-      </PressableScale>
+      </RectButton>
     </View>
   );
 };

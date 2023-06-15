@@ -161,7 +161,6 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             <Text
               tw="text-sm font-semibold text-indigo-700"
               onPress={() => {
-                console.log("See all");
                 router.push("/trending");
               }}
             >
