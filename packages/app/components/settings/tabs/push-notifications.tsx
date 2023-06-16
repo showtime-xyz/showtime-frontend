@@ -179,7 +179,7 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
         {Object.entries(notificationGroups).map(([group, keys], index) => (
           <View key={group}>
             <View tw={index === 0 ? "mb-4 mt-2" : "my-4"}>
-              <Text tw="text-lg font-bold">{group}</Text>
+              <Text tw="text-lg font-bold dark:text-white">{group}</Text>
             </View>
             {keys.map((key, index) => {
               const value = data[key];
