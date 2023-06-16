@@ -20,6 +20,7 @@ import {
   Plus,
   PhonePortraitOutline,
   CreatorChannel,
+  Settings,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -154,6 +155,13 @@ export const HeaderMd = withColorScheme(
           focused: router.pathname === "/notifications",
         },
         {
+          title: "Settings",
+          key: "Settings",
+          icon: Settings,
+          pathname: "/settings",
+          focused: router.pathname === "/settings",
+        },
+        {
           title: "Profile",
           key: "Profile",
           icon: (props: SvgProps) =>
@@ -200,12 +208,10 @@ export const HeaderMd = withColorScheme(
           </View>
           <View tw="-ml-4 mt-5 w-44 justify-center">
             {HOME_ROUTES.map((item, index) => (
-              <Pressable
+              <Link
                 tw="mt-2 flex-row items-center rounded-2xl py-3.5 pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
                 key={item.key}
-                onPress={() => {
-                  router.push(item.pathname);
-                }}
+                href={item.pathname}
               >
                 {item.icon({
                   color: iconColor,
@@ -220,7 +226,7 @@ export const HeaderMd = withColorScheme(
                 >
                   {item.title}
                 </Text>
-              </Pressable>
+              </Link>
             ))}
           </View>
           <View tw="w-40">

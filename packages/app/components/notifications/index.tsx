@@ -11,6 +11,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { NotificationsSettingIcon } from "app/components/header/notifications-setting-icon";
 import { NotificationItem } from "app/components/notifications/notification-item";
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -36,6 +37,9 @@ const Header = () => {
       <Text tw="text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
         Notifications
       </Text>
+      <View tw="absolute right-2 top-2">
+        <NotificationsSettingIcon />
+      </View>
     </View>
   ) : (
     <View style={{ height: headerHeight }} />

@@ -1,8 +1,6 @@
-import { Fragment } from "react";
 import { Platform } from "react-native";
 
-import { HeaderLeft, HeaderRight } from "app/components/header";
-import HeaderCenter from "app/components/header/header-center";
+import { HeaderLeft } from "app/components/header";
 import { HeaderSearch } from "app/components/header/header-search";
 
 export const screenOptions = ({
@@ -24,7 +22,7 @@ export const screenOptions = ({
     headerLeft: headerLeft ?? HeaderLeft,
     headerTitle: headerCenter,
     headerTitleAlign: "center" as "center",
-    headerRight: headerRight ?? HeaderSearch,
+    headerRight: headerRight,
     headerTintColor: isDark ? "#fff" : "#000",
     headerTransparent: Platform.OS === "android" ? false : true,
     headerBlurEffect: isDark ? "dark" : "light",

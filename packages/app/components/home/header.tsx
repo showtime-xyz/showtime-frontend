@@ -121,7 +121,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           width={pagerWidth}
           height={isMdWidth ? 164 : 104}
           autoPlayInterval={3000}
-          data={new Array(5).fill(0)}
+          data={new Array(2).fill(0)}
           controller
           tw="mb-2 w-full rounded-2xl"
           pagination={{ variant: "rectangle" }}
@@ -167,7 +167,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               see all
             </Text>
           </View>
-          <View tw="mb-8 w-full rounded-2xl">
+          <View tw="w-full rounded-2xl">
             <HomeSlider data={data} renderItem={renderItem} />
           </View>
         </View>

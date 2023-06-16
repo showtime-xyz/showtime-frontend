@@ -32,7 +32,7 @@ export const SettingsMd = () => {
   }, [index]);
 
   return (
-    <View tw="w-full max-w-screen-xl flex-1 px-4 pb-8 pt-28">
+    <View tw="w-full max-w-screen-xl flex-1 px-4 pb-8">
       <View tw="flex-row">
         <View
           style={{
@@ -40,9 +40,11 @@ export const SettingsMd = () => {
             marginRight: LEFT_SLIDE_MARGIN,
           }}
         >
-          <Sticky top={112} enabled>
+          <Sticky top={48} enabled>
             <View>
-              <Text tw="text-2xl text-black dark:text-white">Settings</Text>
+              <Text tw="text-2xl font-bold text-black dark:text-white">
+                Settings
+              </Text>
               <TabBarVertical
                 onPress={(i) => {
                   setIndex(i);

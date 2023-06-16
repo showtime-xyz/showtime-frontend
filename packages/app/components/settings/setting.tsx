@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
 import { Platform } from "react-native";
 
+import { createParam } from "solito";
+
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
   HeaderTabView,
@@ -17,14 +19,23 @@ import { EditNicknameModal } from "./setting-edit-nickname-moda";
 import { SettingsHeader } from "./setting-header";
 import { SettingTabsScene, SETTINGS_ROUTES } from "./tabs";
 
+type Query = {
+  tab: string;
+};
+
+const { useParam } = createParam<Query>();
+
 const SettingsTabs = () => {
   const headerHeight = useHeaderHeight();
   const { bottom } = useSafeAreaInsets();
   const [editingWallet, setEditingWallet] = useState<
     WalletAddressesV2 | undefined
   >(undefined);
+  const [tab] = useParam("tab");
 
-  const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
+  const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES, {
+    defaultIndex: tab ? Number(tab) : 0,
+  });
 
   const renderScene = useCallback(
     ({

@@ -14,12 +14,15 @@ type Props = Pick<CarouselProps, "data" | "height" | "renderItem">;
 export function HomeSlider({ data, renderItem, height }: Props) {
   const swiperRef = useRef(null);
   const [progress, setProgress] = useState(0);
+  const [allowSlideNext, setAllowSlideNext] = useState(false);
+  const [allowSlidePrev, setAllowSlidePrev] = useState(false);
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const onProgress = useCallback(
-    (_: any, progress: number) => {
+    (_: any) => {
       if (!isMdWidth) return;
-      setProgress(progress);
+      setAllowSlideNext(_.allowSlideNext);
+      setAllowSlidePrev(_.allowSlidePrev);
     },
     [isMdWidth]
   );
@@ -49,7 +52,8 @@ export function HomeSlider({ data, renderItem, height }: Props) {
       </Swiper>
 
       <Controller
-        progress={progress}
+        allowSlideNext={allowSlideNext}
+        allowSlidePrev={allowSlidePrev}
         prev={() => (swiperRef.current as any)?.swiper.slidePrev()}
         next={() => (swiperRef.current as any)?.swiper.slideNext()}
       />

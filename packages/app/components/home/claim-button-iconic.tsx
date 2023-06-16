@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { Showtime, Check } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -15,14 +16,19 @@ import { FeedSocialButton } from "../feed-social-button";
 
 export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
   const router = useRouter();
-  const { data: edition } = useCreatorCollectionDetail(
+  const { data: edition, loading } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
   const status = getClaimStatus(edition);
 
-  if (!edition) {
-    return null;
+  if (loading) {
+    return (
+      <View tw="pb-6">
+        <Skeleton height={56} width={56} radius={999} show={true} />
+      </View>
+    );
   }
+  if (!edition) return null;
   if (status === ClaimStatus.Soldout) {
     return (
       <FeedSocialButton

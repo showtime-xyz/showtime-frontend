@@ -566,7 +566,7 @@ export const Messages = memo(() => {
             color={isDark ? colors.gray[800] : colors.gray[100]}
           />
           <View tw="h-3" />
-          <Text tw="text-center text-2xl text-gray-900 dark:text-white">
+          <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-white">
             Select a channel!
           </Text>
           <View tw="h-5" />

@@ -187,7 +187,6 @@ export const HIDE_LINK_FOOTER_ROUTER_LIST = [
   "/channels/[channelId]",
 ];
 export const SWIPE_LIST_SCREENS = [
-  "/home",
   "/foryou",
   "/profile/[username]/[dropSlug]",
   "/nft/[chainName]/[contractAddress]/[tokenId]",

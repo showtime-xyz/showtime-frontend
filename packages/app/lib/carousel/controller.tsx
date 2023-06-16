@@ -6,13 +6,15 @@ type ControllerProps = {
   prev: () => void;
   next: () => void;
   tw?: string;
-  progress?: number;
+  allowSlideNext?: boolean;
+  allowSlidePrev?: boolean;
 };
 export const Controller = ({
   prev,
   next,
   tw = "",
-  progress = undefined,
+  allowSlideNext = false,
+  allowSlidePrev = false,
 }: ControllerProps) => {
   return (
     <View
@@ -27,11 +29,7 @@ export const Controller = ({
         iconOnly
         tw={[
           "absolute -left-4 border border-gray-200 transition-all dark:border-gray-800",
-          progress === undefined
-            ? ""
-            : progress <= 0
-            ? "opacity-0"
-            : "opacity-100",
+          allowSlidePrev ? "opacity-100" : "opacity-0",
         ]}
         onPress={() => {
           prev?.();
@@ -45,11 +43,7 @@ export const Controller = ({
         iconOnly
         tw={[
           "absolute -right-4 border border-gray-200 transition-all dark:border-gray-800",
-          progress === undefined
-            ? ""
-            : progress <= 1
-            ? "opacity-100"
-            : "opacity-0",
+          allowSlideNext ? "opacity-100" : "opacity-0",
         ]}
         onPress={() => {
           next?.();

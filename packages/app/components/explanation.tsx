@@ -56,7 +56,7 @@ export const Explanation = ({
               >
                 {item.title && (
                   <>
-                    <Text tw="text-center text-2xl text-gray-900 dark:text-white">
+                    <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-white">
                       {item.title}
                     </Text>
                     <View tw="h-4" />

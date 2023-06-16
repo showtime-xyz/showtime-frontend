@@ -10,12 +10,10 @@ import { useUser } from "app/hooks/use-user";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 type HeaderLeftProps = {
-  canGoBack?: boolean;
   withBackground?: boolean;
   color?: string;
 };
 export const HeaderSearch = ({
-  canGoBack,
   withBackground = false,
   color,
 }: HeaderLeftProps) => {
@@ -27,9 +25,6 @@ export const HeaderSearch = ({
   const canGoHome = router.pathname.split("/").length - 1 >= 2;
   if (!isAuthenticated) {
     return <Button onPress={navigateToLogin}>Sign In</Button>;
-  }
-  if (canGoHome) {
-    return <></>;
   }
 
   return (
@@ -46,13 +41,7 @@ export const HeaderSearch = ({
         withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
-        if (canGoBack) {
-          if (Platform.OS === "web" && history?.length <= 1) {
-            router.push("/");
-          } else {
-            router.pop();
-          }
-        } else if (canGoHome) {
+        if (canGoHome) {
           router.back();
         } else {
           router.push("/search");

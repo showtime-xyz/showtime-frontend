@@ -2,6 +2,9 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { View } from "@showtime-xyz/universal.view";
+
+import { ShowtimeBrandLogo } from "../showtime-brand";
 
 type HeaderLeftProps = {
   canGoBack?: boolean;
@@ -17,7 +20,7 @@ export const HeaderLeft = ({
   const router = useRouter();
 
   const canGoHome = router.pathname.split("/").length - 1 >= 2;
-
+  const isHome = router.pathname === "/";
   const Icon = canGoBack || canGoHome ? ArrowLeft : Showtime;
 
   return (
@@ -25,8 +28,6 @@ export const HeaderLeft = ({
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       style={[
         {
-          height: 32,
-          width: 32,
           justifyContent: "center",
           alignItems: "center",
           borderRadius: 999,
@@ -37,13 +38,21 @@ export const HeaderLeft = ({
         router.push("/");
       }}
     >
-      <Icon
-        color={
-          color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
-        }
-        width={24}
-        height={24}
-      />
+      {isHome ? (
+        <ShowtimeBrandLogo
+          color={
+            color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
+          }
+        />
+      ) : (
+        <Icon
+          color={
+            color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
+          }
+          width={24}
+          height={24}
+        />
+      )}
     </PressableScale>
   );
 };

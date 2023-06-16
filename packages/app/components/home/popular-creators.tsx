@@ -110,7 +110,7 @@ export const PopularCreators = memo(function PopularCreators() {
   );
   if (data.length === 0) return null;
   return (
-    <View tw="w-full pl-4 md:pl-0">
+    <View tw="mt-2 w-full pl-4 md:pl-0">
       <View tw="w-full flex-row items-center justify-between py-4 pr-4">
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           Popular artists
@@ -124,7 +124,7 @@ export const PopularCreators = memo(function PopularCreators() {
           see all
         </Text>
       </View>
-      <View tw="mb-8 w-full rounded-2xl">
+      <View tw="mb-2 w-full rounded-2xl">
         <HomeSlider data={data} renderItem={renderItem} />
       </View>
     </View>
