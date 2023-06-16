@@ -1,16 +1,19 @@
 import { useMemo } from "react";
+import { Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
 
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
+import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { linkifyDescription } from "app/lib/linkify";
-import { TextLink } from "app/navigation/link";
+import { Link, LinkProps, TextLink } from "app/navigation/link";
 import { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
@@ -21,6 +24,24 @@ import { FollowButtonSmall } from "../follow-button-small";
 import { ListMedia } from "../media";
 import { ContentType } from "./content-type";
 import { FeedEngagementIcons } from "./engagement-icons";
+
+const RouteComponent = ({
+  children,
+  onPress,
+  ...rest
+}: (LinkProps | PressableProps) & {
+  onPress: () => void;
+  children: React.ReactNode;
+}) => {
+  if (Platform.OS === "web") {
+    return <Link {...(rest as LinkProps)}>{children}</Link>;
+  }
+  return (
+    <Pressable onPress={onPress} {...(rest as PressableProps)}>
+      {children}
+    </Pressable>
+  );
+};
 
 export const HomeItem = ({
   nft,
@@ -76,7 +97,12 @@ export const HomeItem = ({
           tw="ml-auto"
         />
       </View>
-      <View tw="mt-3">
+      <RouteComponent
+        as={getNFTSlug(nft)}
+        href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
+        onPress={() => {}}
+        tw="mt-3"
+      >
         <Text tw="text-base font-bold text-gray-900 dark:text-white">
           {nft?.token_name}
         </Text>
@@ -112,7 +138,7 @@ export const HomeItem = ({
           </View>
           <FeedEngagementIcons nft={nft} edition={edition} />
         </View>
-      </View>
+      </RouteComponent>
     </View>
   );
 };
