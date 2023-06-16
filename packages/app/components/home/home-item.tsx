@@ -1,5 +1,4 @@
-import { useCallback, useMemo } from "react";
-import { useWindowDimensions, Dimensions, Platform } from "react-native";
+import { useMemo } from "react";
 
 import { ResizeMode } from "expo-av";
 
@@ -81,23 +80,17 @@ export const HomeItem = ({
         <Text tw="text-base font-bold text-gray-900 dark:text-white">
           {nft?.token_name}
         </Text>
-
         <View tw="h-2" />
         <ClampText
           tw="text-sm text-gray-600 dark:text-gray-400"
           maxLines={4}
           text={description}
         />
-
-        {detailData?.data?.item?.multiple_owners_list &&
-        detailData.data.item.multiple_owners_list.length > 0 ? (
-          <View tw="mt-3">
-            <ClaimedBy
-              claimersList={detailData?.data.item?.multiple_owners_list}
-              nft={nft}
-            />
-          </View>
-        ) : null}
+        <ClaimedBy
+          claimersList={detailData?.data.item?.multiple_owners_list}
+          nft={nft}
+          tw="mt-3"
+        />
         <View tw="mt-3 flex-row items-center">
           <View
             tw="overflow-hidden rounded-2xl"
