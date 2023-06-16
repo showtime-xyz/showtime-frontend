@@ -1,8 +1,23 @@
+import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
+import { fetcher } from "app/hooks/use-infinite-list-query";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
+
+import { ChannelSetting } from "../types";
+
+export const useChannelSettings = (channelId?: string) => {
+  const queryState = useSWR<ChannelSetting>(
+    channelId ? `/v1/channels/member/${channelId}/settings` : null,
+    fetcher
+  );
+
+  return {
+    ...queryState,
+  };
+};
 
 async function editSettings(
   url: string,
@@ -17,7 +32,7 @@ async function editSettings(
 
 export const useEditChannelSettings = (channelId?: string) => {
   const { trigger, isMutating, error } = useSWRMutation(
-    `/v1/channels/member/${channelId}/settings/edit`,
+    `/v1/channels/member/${channelId}/settings`,
     editSettings
   );
 
@@ -29,7 +44,10 @@ export const useEditChannelSettings = (channelId?: string) => {
     muted: boolean;
   }) => {
     try {
-      await trigger({ muted, channelId });
+      await trigger(
+        { muted, channelId },
+        { optimisticData: (current) => ({ ...current, muted }) }
+      );
     } catch (e) {
       captureException(e);
       Logger.error(e);

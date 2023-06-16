@@ -92,3 +92,7 @@ export type Channel = {
   latest_message_updated_at: string | null;
   owner: ChannelProfile;
 };
+
+export type ChannelSetting = {
+  muted: boolean;
+};
