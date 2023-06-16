@@ -11,7 +11,7 @@ import {
 
 async function leaveChannel(
   url: string,
-  { arg }: { arg: { channelId: number } }
+  { arg }: { arg: { channelId: string } }
 ) {
   return axios({
     url: `/v1/channels/${arg.channelId}/leave`,
@@ -27,7 +27,7 @@ export const useLeaveChannel = () => {
   const joinedChannels = useJoinedChannelsList();
   const suggestedChannels = useSuggestedChannelsList();
 
-  const handleSubmit = async ({ channelId }: { channelId: number }) => {
+  const handleSubmit = async ({ channelId }: { channelId: string }) => {
     try {
       await trigger({ channelId });
     } catch (e) {
