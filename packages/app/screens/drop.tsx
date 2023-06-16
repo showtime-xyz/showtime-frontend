@@ -2,11 +2,7 @@ import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
 import { CreateDropSteps } from "app/components/drop/create-drop-steps/create-drop-steps";
 
-const DropModal = () => {
-  return <CreateDropSteps />;
-};
-
-export const DropScreen = withModalScreen(DropModal, {
+export const DropScreen = withModalScreen(CreateDropSteps, {
   title: "Create",
   matchingPathname: "/drop",
   matchingQueryParam: "dropModal",

@@ -56,10 +56,10 @@ export const SelectDropType = (props: StepProps) => {
           <Text>Pre-Save Drop</Text>
           <ChevronRight color={"white"} />
         </Button>
-        <View tw="mt-4 w-[80%] self-center" style={{ rowGap: 8 }}>
+        <View tw="mt-4 w-[70%] self-center" style={{ rowGap: 8 }}>
           <View>
             <View tw="flex-row" style={{ columnGap: 8 }}>
-              <Raffle color={iconColor} />
+              <Raffle color={iconColor} width={20} height={20} />
               <View>
                 <Text>Offer Raffles</Text>
                 <Text>Gift an NFT to attract collectors</Text>
@@ -68,7 +68,7 @@ export const SelectDropType = (props: StepProps) => {
           </View>
           <View>
             <View tw="flex-row" style={{ columnGap: 8 }}>
-              <CreatorChannel color={iconColor} />
+              <CreatorChannel color={iconColor} width={20} height={20} />
               <View>
                 <Text>Build a fanbase</Text>
                 <Text>Collectors auto-join your channel</Text>
@@ -77,7 +77,7 @@ export const SelectDropType = (props: StepProps) => {
           </View>
           <View>
             <View tw="flex-row" style={{ columnGap: 8 }}>
-              <CollectorList color={iconColor} />
+              <CollectorList color={iconColor} width={20} height={20} />
               <View>
                 <Text>Collector lists</Text>
                 <Text>Share a link to instantly create</Text>
