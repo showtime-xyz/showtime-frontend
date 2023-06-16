@@ -3,6 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ArrowLeft, ChevronRight, Raffle } from "@showtime-xyz/universal.icon";
@@ -234,7 +235,7 @@ const CreateDropStepSongURI = (props: StepProps) => {
           style={{ borderRadius: 4 }}
           file={props.file}
         />
-        <Text tw="ml-1 text-base font-semibold text-gray-600">
+        <Text tw="ml-2 text-base font-semibold text-gray-600">
           {props.title}
         </Text>
       </View>
@@ -254,6 +255,29 @@ const CreateDropStepSongURI = (props: StepProps) => {
             </View>
           </View>
         </View>
+      </View>
+
+      <View tw="mt-8 flex-row">
+        <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
+          This drop will be owned by you
+        </Text>
+      </View>
+
+      <Pressable tw="mt-2 flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900">
+        <Checkbox
+          onChange={() => {}}
+          checked={false}
+          aria-label="I agree to the terms and conditions"
+        />
+
+        <Text tw="px-4 text-gray-600 dark:text-gray-400">
+          I have the rights to publish this content, and understand it will be
+          minted on the Polygon network.
+        </Text>
+      </Pressable>
+
+      <View tw="mt-4">
+        <Button size="regular">Create Drop</Button>
       </View>
     </Layout>
   );
