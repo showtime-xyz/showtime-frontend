@@ -11,7 +11,7 @@ import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
 
 type MediaPickerProps = {
-  value?: File;
+  value?: File | string | null;
   onChange: (fileObj: FilePickerResolveValue) => void;
   disabled?: boolean;
   errorMessage?: string;
@@ -20,7 +20,6 @@ type MediaPickerProps = {
 export const MediaPicker = (props: MediaPickerProps) => {
   const { disabled, onChange, value, errorMessage } = props;
   const pickFile = useFilePicker();
-  const { width: windowWidth } = useWindowDimensions();
   const isDark = useIsDarkMode();
 
   return (
@@ -42,12 +41,7 @@ export const MediaPicker = (props: MediaPickerProps) => {
         >
           {value ? (
             <View>
-              <Preview
-                file={value}
-                width={windowWidth >= 768 ? 256 : 120}
-                height={windowWidth >= 768 ? 256 : 120}
-                style={previewBorderStyle}
-              />
+              <Preview file={value} style={previewBorderStyle} />
               <View tw="absolute h-full w-full items-center justify-center">
                 <View tw="flex-row items-center shadow-lg">
                   <FlipIcon width={20} height={20} color="white" />
@@ -83,4 +77,4 @@ export const MediaPicker = (props: MediaPickerProps) => {
   );
 };
 
-const previewBorderStyle = { borderRadius: 16 };
+const previewBorderStyle = { borderRadius: 16, width: "100%", aspectRatio: 1 };

@@ -1,10 +1,15 @@
 import { useState } from "react";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
+import { Button } from "@showtime-xyz/universal.button";
 import { ArrowLeft } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { MAX_FILE_SIZE } from "app/hooks/use-drop-nft";
+import { FilePickerResolveValue } from "app/lib/file-picker";
 
 import { MediaPicker } from "./media-picker";
 import { SelectDropType } from "./select-drop-type";
@@ -86,18 +91,48 @@ const SelectDropTypeStep = (props: StepProps) => {
 };
 
 const CreateDropStepMedia = (props: StepProps) => {
+  const [file, setFile] = useState<File | string | null>(null);
+  const Alert = useAlert();
+  const handleFileChange = (fileObj: FilePickerResolveValue) => {
+    const { file, size } = fileObj;
+    let extension;
+    // On Native file is a string uri
+    if (typeof file === "string") {
+      extension = file.split(".").pop();
+    }
+    if (size && size > MAX_FILE_SIZE) {
+      Alert.alert(
+        "Oops, this file is too large (>30MB). Please upload a smaller file."
+      );
+      return;
+    }
+    if (
+      extension === "mov" ||
+      (typeof file === "object" && file.type === "video/quicktime")
+    ) {
+    } else {
+      setFile(file);
+    }
+  };
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
       <Text tw="text-center text-xl">
         Upload an image or video for your paid unlockable.
       </Text>
       <View tw="mt-8 items-center">
-        <MediaPicker onChange={() => {}} />
+        <MediaPicker onChange={handleFileChange} value={file} />
         <Text tw="pt-4 text-sm text-gray-800">
           This could be an alternative album cover, unreleased content, or a
           short video snippet promoting your upcoming release.
         </Text>
       </View>
+      <Button
+        size="regular"
+        tw="mt-8 w-full self-center"
+        onPress={props.handleNextStep}
+      >
+        Next
+      </Button>
     </Layout>
   );
 };
