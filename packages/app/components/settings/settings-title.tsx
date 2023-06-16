@@ -5,6 +5,7 @@ import { View } from "@showtime-xyz/universal.view";
 type Props = {
   title: string;
   titleTw?: string;
+  descTw?: string;
   desc?: string;
   buttonText?: string;
   buttonProps?: ButtonProps;
@@ -19,6 +20,7 @@ export const SettingsTitle = ({
   onPress,
   tw = "",
   titleTw = "text-xl font-bold text-gray-900 dark:text-white",
+  descTw = "mt-4",
   buttonProps = {},
 }: Props) => {
   return (
@@ -38,8 +40,9 @@ export const SettingsTitle = ({
       </View>
       {Boolean(desc) && (
         <>
-          <View tw="h-6" />
-          <Text tw="text-sm text-gray-900 dark:text-white">{desc}</Text>
+          <View tw={descTw}>
+            <Text tw="text-sm text-gray-900 dark:text-white">{desc}</Text>
+          </View>
         </>
       )}
     </View>
