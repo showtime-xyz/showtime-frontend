@@ -1,9 +1,9 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { Drop } from "app/components/drop";
+import { CreateDropSteps } from "app/components/drop/create-drop-steps/create-drop-steps";
 
 const DropModal = () => {
-  return <Drop />;
+  return <CreateDropSteps />;
 };
 
 export const DropScreen = withModalScreen(DropModal, {
@@ -11,9 +11,7 @@ export const DropScreen = withModalScreen(DropModal, {
   matchingPathname: "/drop",
   matchingQueryParam: "dropModal",
   tw: "w-full web:lg:pb-8",
-  snapPoints: [400],
+  snapPoints: [400, "100%"],
   useNativeModal: false,
-  closeButtonProps: {
-    variant: "text",
-  },
+  headerShown: false,
 });

@@ -31,6 +31,7 @@ function withModalScreen<P extends {}>(
       {
         setTitle,
         pop: () => {},
+        snapToIndex: () => {},
       }
     );
     const modalRef = useRef<ModalMethods>(null);
@@ -50,6 +51,9 @@ function withModalScreen<P extends {}>(
           pop: (params) => {
             closeCallback.current = params?.callback;
             modalRef.current?.close();
+          },
+          snapToIndex: (position: number) => {
+            modalRef.current?.snapToIndex(position);
           },
         });
       }

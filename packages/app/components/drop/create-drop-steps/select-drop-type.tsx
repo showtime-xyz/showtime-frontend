@@ -19,10 +19,9 @@ import { View } from "@showtime-xyz/universal.view";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useUser } from "app/hooks/use-user";
 
-export const DropSelect = () => {
-  const modalScreenContext = useModalScreenContext();
+import { StepProps } from "./types";
 
-  const router = useRouter();
+export const SelectDropType = (props: StepProps) => {
   const user = useUser({
     redirectTo: "/login",
     redirectIfProfileIncomplete: true,
@@ -38,22 +37,8 @@ export const DropSelect = () => {
   const iconColor = isDark ? "#fff" : "#121212";
   return (
     <BottomSheetScrollView useNativeModal={false}>
-      <View tw="justify-center p-4" style={{ rowGap: 8 }}>
-        <Button
-          size="regular"
-          tw="w-full"
-          onPress={() => {
-            if (Platform.OS !== "web") {
-              modalScreenContext?.pop?.({
-                callback: () => {
-                  router.push("/drop/free");
-                },
-              });
-            } else {
-              router.replace("/drop/free");
-            }
-          }}
-        >
+      <View tw="justify-center" style={{ rowGap: 8 }}>
+        <Button size="regular" tw="w-full" onPress={props.handleNextStep}>
           <Text>Paid Collectible Badge</Text>
           <ChevronRight color={"white"} />
         </Button>
@@ -62,15 +47,7 @@ export const DropSelect = () => {
           tw="w-full"
           onPress={() => {
             if (canCreateMusicDrop) {
-              if (Platform.OS !== "web") {
-                modalScreenContext?.pop?.({
-                  callback: () => {
-                    router.push("/drop/music");
-                  },
-                });
-              } else {
-                router.replace("/drop/music");
-              }
+              props.handleNextStep();
             } else {
               Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
             }
@@ -79,7 +56,7 @@ export const DropSelect = () => {
           <Text>Pre-Save Drop</Text>
           <ChevronRight color={"white"} />
         </Button>
-        <View tw="mt-4 w-[70%] self-center" style={{ rowGap: 8 }}>
+        <View tw="mt-4 w-[80%] self-center" style={{ rowGap: 8 }}>
           <View>
             <View tw="flex-row" style={{ columnGap: 8 }}>
               <Raffle color={iconColor} />
