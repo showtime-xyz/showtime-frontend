@@ -1,6 +1,7 @@
 import React from "react";
 import { Linking, Platform } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -8,6 +9,11 @@ import {
   ChevronRight,
   FreeDropType,
   MusicDropType,
+} from "@showtime-xyz/universal.icon";
+import {
+  Raffle,
+  CreatorChannel,
+  CollectorList,
 } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -37,73 +43,59 @@ export const DropSelect = () => {
   const iconColor = isDark ? "#fff" : "#121212";
   return (
     <BottomSheetScrollView useNativeModal={false}>
-      <View tw="flex-row flex-wrap">
-        <View tw="w-full px-4">
-          {user.user?.data.channels && user.user.data.channels.length > 0 ? (
-            <CreateCard
-              title="Creator Updates"
-              icon={
-                <CreatorChannelType color={iconColor} height={24} width={24} />
-              }
-              isNew
-              description="Send an exclusive update to your fans on your channel"
-              onPress={() => {
-                const pathname = `/channels/${user.user?.data.channels[0]}`;
-                if (Platform.OS === "web") {
-                  router.push(pathname);
-                } else {
-                  modalScreenContext?.pop?.({
-                    callback: () => {
-                      router.push(pathname);
-                    },
-                  });
-                }
-              }}
-            />
-          ) : null}
-        </View>
-        {Platform.OS !== "web" && !user.user?.data.profile.verified ? null : (
-          <View tw="mt-2.5 w-full px-4">
-            <CreateCard
-              title="Drops: Free digital collectibles"
-              description="Share a link to instantly create a collector list and connect with your fans."
-              icon={<FreeDropType color={iconColor} height={24} width={24} />}
-              onPress={() => {
-                if (Platform.OS !== "web") {
-                  modalScreenContext?.pop?.({
-                    callback: () => {
-                      router.push("/drop/free");
-                    },
-                  });
-                } else {
-                  router.replace("/drop/free");
-                }
-              }}
-            />
-          </View>
-        )}
-
-        <View tw="mt-2.5 w-full px-4">
-          <CreateCard
-            title="Pre-Save on Spotify or Apple Music"
-            icon={<MusicDropType color={iconColor} height={24} width={24} />}
-            description="Promote your latest music: give your fans a free collectible for saving your song to their library."
-            onPress={() => {
-              if (canCreateMusicDrop) {
-                if (Platform.OS !== "web") {
-                  modalScreenContext?.pop?.({
-                    callback: () => {
-                      router.push("/drop/music");
-                    },
-                  });
-                } else {
-                  router.replace("/drop/music");
-                }
+      <View tw="justify-center p-4" style={{ rowGap: 8 }}>
+        <Button size="regular" tw="w-full">
+          Paid Collectible Badge
+        </Button>
+        <Button
+          size="regular"
+          tw="w-full"
+          onPress={() => {
+            if (canCreateMusicDrop) {
+              if (Platform.OS !== "web") {
+                modalScreenContext?.pop?.({
+                  callback: () => {
+                    router.push("/drop/music");
+                  },
+                });
               } else {
-                Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
+                router.replace("/drop/music");
               }
-            }}
-          />
+            } else {
+              Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
+            }
+          }}
+        >
+          Pre-Save Drop
+        </Button>
+        <View tw="mt-4 w-[70%] self-center" style={{ rowGap: 8 }}>
+          <View>
+            <View tw="flex-row" style={{ columnGap: 8 }}>
+              <Raffle color={iconColor} />
+              <View>
+                <Text>Offer Raffles</Text>
+                <Text>Gift an NFT to attract collectors</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <View tw="flex-row" style={{ columnGap: 8 }}>
+              <CreatorChannel color={iconColor} />
+              <View>
+                <Text>Build a fanbase</Text>
+                <Text>Collectors auto-join your channel</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <View tw="flex-row" style={{ columnGap: 8 }}>
+              <CollectorList color={iconColor} />
+              <View>
+                <Text>Collector lists</Text>
+                <Text>Share a link to instantly create</Text>
+              </View>
+            </View>
+          </View>
         </View>
       </View>
     </BottomSheetScrollView>
