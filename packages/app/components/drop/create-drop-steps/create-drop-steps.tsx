@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useWindowDimensions } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
@@ -160,12 +161,18 @@ const CreateDropStepTitle = (
     file?: File | string;
   }
 ) => {
+  const { width: windowWidth } = useWindowDimensions();
+
+  const mediaDimension = Math.min(347, windowWidth - 32);
+
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
       <View tw="mt-8 items-center">
         <Preview
           file={props.file}
-          style={{ width: "100%", aspectRatio: 1, borderRadius: 16 }}
+          width={mediaDimension}
+          height={mediaDimension}
+          style={{ borderRadius: 16 }}
         />
       </View>
       <Button
