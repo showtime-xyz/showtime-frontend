@@ -8,6 +8,7 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Preview } from "app/components/preview";
 import { MAX_FILE_SIZE } from "app/hooks/use-drop-nft";
 import { FilePickerResolveValue } from "app/lib/file-picker";
 
@@ -26,6 +27,38 @@ type CreateDropStep =
 export const CreateDropSteps = () => {
   const [step, setStep] = useState<CreateDropStep>("select-drop");
   const modalContext = useModalScreenContext();
+  const [formValues, setFormValues] = useState({
+    title: "",
+    description: "",
+    price: "",
+    file: undefined,
+  });
+  const Alert = useAlert();
+
+  const handleFileChange = (fileObj: FilePickerResolveValue) => {
+    const { file, size } = fileObj;
+    let extension;
+    // On Native file is a string uri
+    if (typeof file === "string") {
+      extension = file.split(".").pop();
+    }
+    if (size && size > MAX_FILE_SIZE) {
+      Alert.alert(
+        "Oops, this file is too large (>30MB). Please upload a smaller file."
+      );
+      return;
+    }
+    if (
+      extension === "mov" ||
+      (typeof file === "object" && file.type === "video/quicktime")
+    ) {
+    } else {
+      setFormValues({
+        ...formValues,
+        file,
+      });
+    }
+  };
 
   switch (step) {
     case "select-drop":
@@ -47,10 +80,12 @@ export const CreateDropSteps = () => {
           handleNextStep={() => {
             setStep("title");
           }}
+          handleFileChange={handleFileChange}
           handlePrevStep={() => {
             modalContext?.snapToIndex(0);
             setStep("select-drop");
           }}
+          file={formValues.file}
         />
       );
     case "title":
@@ -58,6 +93,7 @@ export const CreateDropSteps = () => {
         <CreateDropStepTitle
           handleNextStep={() => setStep("song-uri")}
           handlePrevStep={() => setStep("media")}
+          file={formValues.file}
         />
       );
     case "song-uri":
@@ -90,37 +126,19 @@ const SelectDropTypeStep = (props: StepProps) => {
   );
 };
 
-const CreateDropStepMedia = (props: StepProps) => {
-  const [file, setFile] = useState<File | string | null>(null);
-  const Alert = useAlert();
-  const handleFileChange = (fileObj: FilePickerResolveValue) => {
-    const { file, size } = fileObj;
-    let extension;
-    // On Native file is a string uri
-    if (typeof file === "string") {
-      extension = file.split(".").pop();
-    }
-    if (size && size > MAX_FILE_SIZE) {
-      Alert.alert(
-        "Oops, this file is too large (>30MB). Please upload a smaller file."
-      );
-      return;
-    }
-    if (
-      extension === "mov" ||
-      (typeof file === "object" && file.type === "video/quicktime")
-    ) {
-    } else {
-      setFile(file);
-    }
-  };
+const CreateDropStepMedia = (
+  props: StepProps & {
+    file?: File | string;
+    handleFileChange: (file: FilePickerResolveValue) => void;
+  }
+) => {
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
       <Text tw="text-center text-xl">
         Upload an image or video for your paid unlockable.
       </Text>
       <View tw="mt-8 items-center">
-        <MediaPicker onChange={handleFileChange} value={file} />
+        <MediaPicker onChange={props.handleFileChange} value={props.file} />
         <Text tw="pt-4 text-sm text-gray-800">
           This could be an alternative album cover, unreleased content, or a
           short video snippet promoting your upcoming release.
@@ -137,8 +155,28 @@ const CreateDropStepMedia = (props: StepProps) => {
   );
 };
 
-const CreateDropStepTitle = (props: StepProps) => {
-  return <Text>Set title</Text>;
+const CreateDropStepTitle = (
+  props: StepProps & {
+    file?: File | string;
+  }
+) => {
+  return (
+    <Layout onBackPress={props.handlePrevStep} title="Create">
+      <View tw="mt-8 items-center">
+        <Preview
+          file={props.file}
+          style={{ width: "100%", aspectRatio: 1, borderRadius: 16 }}
+        />
+      </View>
+      <Button
+        size="regular"
+        tw="mt-8 w-full self-center"
+        onPress={props.handleNextStep}
+      >
+        Next
+      </Button>
+    </Layout>
+  );
 };
 
 const CreateDropStepSongURI = (props: StepProps) => {

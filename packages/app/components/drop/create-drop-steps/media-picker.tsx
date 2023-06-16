@@ -21,15 +21,18 @@ export const MediaPicker = (props: MediaPickerProps) => {
   const { disabled, onChange, value, errorMessage } = props;
   const pickFile = useFilePicker();
   const isDark = useIsDarkMode();
+  const { width: windowWidth } = useWindowDimensions();
+
+  const mediaDimension = Math.min(347, windowWidth - 32);
 
   return (
     <DropFileZone onChange={onChange} disabled={disabled}>
       <View tw="z-1">
         <Pressable
-          tw={`w-full items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64 ${
+          tw={`items-center justify-center overflow-hidden rounded-lg ${
             disabled ? "opacity-40" : ""
           }`}
-          style={{ aspectRatio: 1 }}
+          style={{ height: mediaDimension, width: mediaDimension }}
           disabled={disabled}
           onPress={async () => {
             const file = await pickFile({
@@ -40,8 +43,13 @@ export const MediaPicker = (props: MediaPickerProps) => {
           }}
         >
           {value ? (
-            <View>
-              <Preview file={value} style={previewBorderStyle} />
+            <View tw="w-full">
+              <Preview
+                file={value}
+                style={previewBorderStyle}
+                width={mediaDimension}
+                height={mediaDimension}
+              />
               <View tw="absolute h-full w-full items-center justify-center">
                 <View tw="flex-row items-center shadow-lg">
                   <FlipIcon width={20} height={20} color="white" />
@@ -77,4 +85,6 @@ export const MediaPicker = (props: MediaPickerProps) => {
   );
 };
 
-const previewBorderStyle = { borderRadius: 16, width: "100%", aspectRatio: 1 };
+const previewBorderStyle = {
+  borderRadius: 16,
+};
