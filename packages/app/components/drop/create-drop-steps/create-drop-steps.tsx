@@ -4,10 +4,11 @@ import { useWindowDimensions } from "react-native";
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { ArrowLeft } from "@showtime-xyz/universal.icon";
+import { ArrowLeft, Raffle } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -194,6 +195,11 @@ const CreateDropStepTitle = (
           textAlignVertical="top"
           numberOfLines={3}
         />
+        <View tw="absolute right-3 top-3 flex-row items-center">
+          <Raffle color="black" width={18} height={18} />
+          <Text tw="mx-1 text-xs font-bold text-gray-800">Raffle</Text>
+          <Switch checked size="small" />
+        </View>
       </View>
       <View>
         <Text tw="mt-4">
