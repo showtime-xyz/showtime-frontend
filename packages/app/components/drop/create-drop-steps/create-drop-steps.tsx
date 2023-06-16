@@ -3,8 +3,9 @@ import { useWindowDimensions } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
+import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { ArrowLeft, Raffle } from "@showtime-xyz/universal.icon";
+import { ArrowLeft, ChevronRight, Raffle } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
@@ -32,10 +33,11 @@ export const CreateDropSteps = () => {
   const [step, setStep] = useState<CreateDropStep>("select-drop");
   const modalContext = useModalScreenContext();
   const [formValues, setFormValues] = useState({
-    title: "",
-    description: "",
+    title: "Tell me tell me Pre-Save",
+    description:
+      "Promote an unreleased or live song to Spotify and Apple Music by pasting URLs below",
     price: "",
-    file: undefined,
+    file: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
   });
   const Alert = useAlert();
 
@@ -102,14 +104,17 @@ export const CreateDropSteps = () => {
       );
     case "song-uri":
       return (
-        <CreateDropMoreOptions
+        <CreateDropStepSongURI
           handleNextStep={() => setStep("preview")}
           handlePrevStep={() => setStep("title")}
+          file={formValues.file}
+          description={formValues.description}
+          title={formValues.title}
         />
       );
     case "more-options":
       return (
-        <CreateDropStepSongURI
+        <CreateDropMoreOptions
           handleNextStep={() => setStep("song-uri")}
           handlePrevStep={() => setStep("song-uri")}
         />
@@ -219,7 +224,39 @@ const CreateDropStepTitle = (
 };
 
 const CreateDropStepSongURI = (props: StepProps) => {
-  return <Text>URI</Text>;
+  return (
+    <Layout onBackPress={props.handlePrevStep} title="Create">
+      <View tw="flex-row items-center">
+        <Preview
+          width={40}
+          height={40}
+          resizeMode="cover"
+          style={{ borderRadius: 4 }}
+          file={props.file}
+        />
+        <Text tw="ml-1 text-base font-semibold text-gray-600">
+          {props.title}
+        </Text>
+      </View>
+      <View tw="mt-8">
+        <Text tw="text-sm font-semibold">Music Details</Text>
+        <Text tw="pt-1 text-gray-600">{props.description}</Text>
+        <View tw="mt-8 rounded-lg bg-gray-100 p-4">
+          <View tw="flex-row items-center justify-between">
+            <Text tw="text-sm font-semibold">More options</Text>
+            <ChevronRight color="black" width={24} height={24} />
+          </View>
+          <View tw="items-start">
+            <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
+              <DataPill tw="bg-white" label="Open Edition" type="text" />
+              <DataPill tw="bg-white" label="10% Royalties" type="text" />
+              <DataPill tw="bg-white" label="Duration: 1 month" type="text" />
+            </View>
+          </View>
+        </View>
+      </View>
+    </Layout>
+  );
 };
 
 const CreateDropMoreOptions = (props: StepProps) => {
