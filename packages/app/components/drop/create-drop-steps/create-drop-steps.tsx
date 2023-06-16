@@ -3,9 +3,11 @@ import { useWindowDimensions } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ArrowLeft } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -175,9 +177,33 @@ const CreateDropStepTitle = (
           style={{ borderRadius: 16 }}
         />
       </View>
+      <View tw="mt-4">
+        <Fieldset
+          label="Title"
+          placeholder="Give your drop a title"
+          numberOfLines={2}
+          multiline
+        />
+      </View>
+      <View tw="mt-4">
+        <Fieldset
+          label="Description"
+          tw="flex-1"
+          placeholder="Why should people collect this drop? Raffle Automatically selects a winner once your song is live."
+          multiline
+          textAlignVertical="top"
+          numberOfLines={3}
+        />
+      </View>
+      <View>
+        <Text tw="mt-4">
+          Promote a collectible, raffle or allow-list to attract more
+          collectors. You can edit up to 30 minutes after creating.
+        </Text>
+      </View>
       <Button
         size="regular"
-        tw="mt-8 w-full self-center"
+        tw="mt-4 w-full self-center"
         onPress={props.handleNextStep}
       >
         Next
@@ -200,8 +226,8 @@ const Layout = (props: {
   children: any;
 }) => {
   return (
-    <View tw="flex-1 px-4 py-8">
-      <View tw="mb-8 flex-row items-center">
+    <View tw="flex-1 py-8">
+      <View tw="mx-4 mb-8 flex-row items-center">
         <Pressable tw="absolute" onPress={props.onBackPress}>
           <ArrowLeft color="black" width={24} height={24} />
         </Pressable>
@@ -209,7 +235,7 @@ const Layout = (props: {
           <Text tw="text-lg">{props.title}</Text>
         </View>
       </View>
-      {props.children}
+      <ScrollView tw="px-4">{props.children}</ScrollView>
     </View>
   );
 };
