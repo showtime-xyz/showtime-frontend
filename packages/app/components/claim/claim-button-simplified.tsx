@@ -41,13 +41,8 @@ export const ClaimButtonSimplified = ({
   ...rest
 }: ClaimButtonProps) => {
   const isDark = useIsDarkMode();
-  const { claimAppleMusicGatedDrop, isMutating: isAppleMusicCollectLoading } =
-    useAppleMusicGatedClaim(edition.creator_airdrop_edition);
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const { state: claimStates, dispatch } = useContext(ClaimContext);
-  const { claimSpotifyGatedDrop, isMutating: isSpotifyCollectLoading } =
-    useSpotifyGatedClaim(edition.creator_airdrop_edition);
-  const { isAuthenticated, user } = useUser();
 
   const handleCollectPress = (type: "free" | "appleMusic" | "spotify") => {
     if (
@@ -59,27 +54,7 @@ export const ClaimButtonSimplified = ({
     }
     dispatch({ type: "initial" });
 
-    if (
-      (edition.gating_type === "spotify_presave" ||
-        edition.gating_type === "spotify_save" ||
-        edition?.gating_type === "music_presave" ||
-        edition.gating_type === "multi_provider_music_save" ||
-        edition.gating_type === "multi_provider_music_presave") &&
-      !isAuthenticated
-    ) {
-      if (type === "spotify") {
-        Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
-        claimSpotifyGatedDrop({});
-      } else if (type === "appleMusic") {
-        Analytics.track(EVENTS.APPLE_MUSIC_SAVE_PRESSED_BEFORE_LOGIN);
-        claimAppleMusicGatedDrop({});
-      }
-    } else {
-      redirectToClaimDrop(
-        edition.creator_airdrop_edition.contract_address,
-        type
-      );
-    }
+    redirectToClaimDrop(edition.creator_airdrop_edition.contract_address, type);
   };
 
   const status = getClaimStatus(edition);
