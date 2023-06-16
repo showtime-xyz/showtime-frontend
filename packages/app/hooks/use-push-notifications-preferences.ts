@@ -24,7 +24,6 @@ async function editPushSettings(
   url: string,
   { arg }: { arg: { pushKey: any; pushValue: boolean } }
 ) {
-  console.log(arg);
   return axios({
     url: `/v1/notifications/preferences/push`,
     method: "PATCH",
