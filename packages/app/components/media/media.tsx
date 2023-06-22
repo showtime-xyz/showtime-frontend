@@ -36,6 +36,7 @@ type Props = {
   optimizedWidth?: number;
   loading?: "eager" | "lazy";
   withVideoBackdrop?: boolean;
+  quality?: number;
 };
 
 function MediaImplementation({
@@ -49,6 +50,7 @@ function MediaImplementation({
   edition,
   videoRef,
   optimizedWidth = 800,
+  quality = 70,
   loading = "lazy",
   withVideoBackdrop = false,
 }: Props) {
@@ -90,7 +92,7 @@ function MediaImplementation({
         >
           <Image
             source={{
-              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=70`,
+              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=${quality}&sharpen=true`,
             }}
             recyclingKey={mediaUri}
             blurhash={item?.blurhash}
@@ -123,7 +125,7 @@ function MediaImplementation({
               uri: mediaUri,
             }}
             posterSource={{
-              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=70`,
+              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=${quality}&sharpen=true`,
             }}
             width={width}
             height={height}
