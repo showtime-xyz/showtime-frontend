@@ -194,7 +194,7 @@
     "jest-next-dynamic": "^1.0.1",
     "metro-minify-esbuild": "^0.2.0",
     "react-test-renderer": "18.2.0",
-    "semver": "^7.4.0",
+    "semver": "^7.5.2",
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4",
     "zx": "^7.2.1"
