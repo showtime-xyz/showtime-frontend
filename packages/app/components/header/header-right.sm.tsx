@@ -9,6 +9,8 @@ import { useUser } from "app/hooks/use-user";
 import { SWIPE_LIST_SCREENS } from "app/lib/constants";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
+import { HeaderSearch } from "./header-search";
+
 type HeaderRightProps = {
   withBackground?: boolean;
 };
@@ -19,6 +21,9 @@ export const HeaderRightSm = ({ withBackground }: HeaderRightProps) => {
 
   if (router.pathname === "/notifications") {
     return <NotificationsSettingIcon />;
+  }
+  if (router.pathname === "/") {
+    return <HeaderSearch />;
   }
   return (
     <View>

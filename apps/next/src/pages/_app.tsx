@@ -171,15 +171,12 @@ function App({ Component, pageProps, router }: AppProps) {
       <AppProviders>
         <Container>
           <View tw="mx-auto flex-col md:flex-row">
-            {/* @ts-ignore */}
-            {!Component.hideHeader && (
-              <Header
-                canGoBack={
-                  router.pathname === "/search" ||
-                  router.pathname.split("/").length - 1 >= 2
-                }
-              />
-            )}
+            <Header
+              canGoBack={
+                router.pathname === "/search" ||
+                router.pathname.split("/").length - 1 >= 2
+              }
+            />
 
             <View
               tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]"

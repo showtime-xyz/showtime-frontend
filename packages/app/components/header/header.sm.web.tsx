@@ -1,7 +1,10 @@
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
-import { SWIPE_LIST_SCREENS } from "app/lib/constants";
+import {
+  HIDE_MOBILE_WEB_HEADER_SCREENS,
+  SWIPE_LIST_SCREENS,
+} from "app/lib/constants";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { withColorScheme } from "../memo-with-theme";
@@ -14,6 +17,9 @@ export const HeaderSm = withColorScheme(
     const router = useRouter();
 
     if (isHeaderHidden) {
+      return null;
+    }
+    if (HIDE_MOBILE_WEB_HEADER_SCREENS.includes(router.pathname)) {
       return null;
     }
     if (SWIPE_LIST_SCREENS.includes(router.pathname)) {

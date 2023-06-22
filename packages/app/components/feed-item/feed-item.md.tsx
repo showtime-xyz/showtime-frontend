@@ -60,16 +60,14 @@ import { useMuted } from "app/providers/mute-provider";
 import { NFT } from "app/types";
 import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
+import { breakpoints } from "design-system/theme";
+
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
 
-// NFT detail width is the width of the NFT detail on the right side of the feed item
-const NFT_DETAIL_WIDTH = 380;
-// Media padding is the padding between the media and the content
-const MEDIA_PADDING = 160;
 // Media header height is the height of the header of the media
 
 const MEDIA_HEADER_HEIGHT = 80;
@@ -164,12 +162,16 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     height: itemHeight,
     width: windowWidth,
   };
+  // Media padding is the padding between the media and the content
+  const media_padding = windowWidth > breakpoints["xl"] ? 160 : 20;
 
+  // NFT detail width is the width of the NFT detail on the right side of the feed item
+  const NFT_DETAIL_WIDTH = windowWidth > breakpoints["xl"] ? 380 : 280;
   const mediaHeight =
     Math.min(windowWidth, feedItemStyle.height) -
-    MEDIA_PADDING -
+    media_padding -
     MEDIA_HEADER_HEIGHT;
-  const maxContentWidth = contentWidth - NFT_DETAIL_WIDTH - MEDIA_PADDING;
+  const maxContentWidth = contentWidth - NFT_DETAIL_WIDTH - media_padding;
   const mediaWidth = useMemo(() => {
     return Math.min(
       mediaHeight *
@@ -267,7 +269,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         style={{
           height: itemHeight,
           paddingTop: headerHeight,
-          width: contentWidth,
+          width: Math.min(windowWidth - 248, contentWidth),
         }}
       >
         <View tw="flex-1 bg-gray-100 dark:bg-black" ref={container}>
@@ -322,7 +324,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               </Suspense>
             </View>
           </View>
-          <View tw="items-center justify-center px-20 pb-20">
+          <View tw="items-center justify-center px-4 xl:px-20 xl:pb-20">
             <View
               style={{
                 height: mediaHeight,

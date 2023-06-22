@@ -12,19 +12,11 @@ import { HeaderMd } from "./header.md.web";
 import { HeaderSm } from "./header.sm.web";
 
 export const Header = withColorScheme(() => {
-  const { isHeaderHidden } = useNavigationElements();
-  const router = useRouter();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
 
-  if (isHeaderHidden) {
-    return null;
-  }
   if (isMdWidth) {
     return <HeaderMd />;
-  }
-  if (HIDE_MOBILE_WEB_HEADER_SCREENS.includes(router.pathname)) {
-    return null;
   }
   return <HeaderSm />;
 });

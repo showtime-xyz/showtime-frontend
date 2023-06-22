@@ -106,7 +106,7 @@ export const SwipeList = ({
     <View
       testID="swipeList"
       id="slidelist"
-      tw="fixed inset-0 h-screen overflow-hidden bg-gray-100 dark:bg-black"
+      tw="h-screen overflow-hidden bg-gray-100 dark:bg-black"
     >
       <VideoConfigContext.Provider value={videoConfig}>
         <SwiperActiveIndexContext.Provider value={activeIndex}>
