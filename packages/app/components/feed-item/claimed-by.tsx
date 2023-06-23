@@ -27,7 +27,11 @@ export const ClaimedBy = ({
     [claimersList]
   );
   if (!claimersList || claimersList?.length <= 1) {
-    return null;
+    return (
+      <Text tw="font-bold text-gray-400 dark:text-gray-500">
+        Not collected yet
+      </Text>
+    );
   }
 
   const firstClaimer = claimersList[1];

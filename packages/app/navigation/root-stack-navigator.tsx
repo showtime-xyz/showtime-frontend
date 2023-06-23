@@ -163,7 +163,11 @@ export function RootStackNavigator() {
           name="channelsMessageReactions"
           component={CreatorChannelsMessageReactionsScreen}
         />
-        <Stack.Screen name="trending" component={TrendingScreen} />
+        <Stack.Screen
+          name="trending"
+          options={{ headerTitle: "Trending" }}
+          component={TrendingScreen}
+        />
       </Stack.Group>
 
       {/* Modals */}

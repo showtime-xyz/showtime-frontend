@@ -4,16 +4,17 @@ import { Platform } from "react-native";
 import { ResizeMode } from "expo-av";
 
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { RouteComponent } from "app/components/route-component";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { linkifyDescription } from "app/lib/linkify";
-import { Link, LinkProps, TextLink } from "app/navigation/link";
+import { Link, TextLink } from "app/navigation/link";
 import { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
@@ -25,24 +26,6 @@ import { ListMedia } from "../media";
 import { ContentType } from "./content-type";
 import { FeedEngagementIcons } from "./engagement-icons";
 
-const RouteComponent = ({
-  children,
-  onPress,
-  ...rest
-}: (LinkProps | PressableProps) & {
-  onPress: () => void;
-  children: React.ReactNode;
-}) => {
-  if (Platform.OS === "web") {
-    return <Link {...(rest as LinkProps)}>{children}</Link>;
-  }
-  return (
-    <Pressable onPress={onPress} {...(rest as PressableProps)}>
-      {children}
-    </Pressable>
-  );
-};
-
 export const HomeItem = ({
   nft,
   mediaSize,
@@ -52,6 +35,7 @@ export const HomeItem = ({
   index: number;
   mediaSize: number;
 }) => {
+  const router = useRouter();
   const description = useMemo(
     () => linkifyDescription(removeTags(nft?.token_description)),
     [nft?.token_description]
@@ -65,6 +49,7 @@ export const HomeItem = ({
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+
   return (
     <View tw="mb-2 mt-6 px-4 md:px-0">
       <View tw="flex-row items-center">
@@ -74,18 +59,24 @@ export const HomeItem = ({
           size={40}
         />
         <View tw="ml-2 justify-center">
-          <View tw="-mt-1.5 mb-1 flex flex-row items-center">
-            <TextLink
-              href={`/@${nft.creator_username ?? nft.creator_address}`}
-              tw="text-sm font-medium text-gray-900 dark:text-white"
-            >
+          <Link
+            href={`/@${nft.creator_username ?? nft.creator_address}`}
+            tw="flex-row items-center justify-center"
+          >
+            <Text tw="text-sm font-medium text-gray-900 dark:text-white">
               {getCreatorUsernameFromNFT(nft)}
-            </TextLink>
-
+            </Text>
             {nft.creator_verified ? (
-              <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+              <VerificationBadge
+                style={{
+                  marginLeft: 4,
+                  marginBottom: Platform.select({ web: -1, default: 0 }),
+                }}
+                size={13}
+              />
             ) : null}
-          </View>
+          </Link>
+          <View tw="h-2" />
           <Text tw="text-xs text-gray-600 dark:text-gray-400">
             {`${0} Followers`}
           </Text>
@@ -98,10 +89,9 @@ export const HomeItem = ({
         />
       </View>
       <View tw="mt-3">
-        <Link
+        <RouteComponent
           as={getNFTSlug(nft)}
           href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
-          onPress={() => {}}
         >
           <Text tw="text-base font-bold text-gray-900 dark:text-white">
             {nft?.token_name}
@@ -113,14 +103,15 @@ export const HomeItem = ({
             maxLines={4}
             text={description}
           />
-        </Link>
-        <ClaimedBy
-          claimersList={detailData?.data.item?.multiple_owners_list}
-          nft={nft}
-          tw="mt-3"
-        />
+        </RouteComponent>
+        <View tw="mt-3 min-h-[20px]">
+          <ClaimedBy
+            claimersList={detailData?.data.item?.multiple_owners_list}
+            nft={nft}
+          />
+        </View>
         <View tw="mt-3 flex-row items-center">
-          <Link
+          <RouteComponent
             as={getNFTSlug(nft)}
             href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
           >
@@ -146,7 +137,7 @@ export const HomeItem = ({
                 variant="thumbnail"
               />
             </View>
-          </Link>
+          </RouteComponent>
           <FeedEngagementIcons nft={nft} edition={edition} />
         </View>
       </View>

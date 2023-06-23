@@ -91,6 +91,9 @@ export const ClaimButtonSimplified = ({
   return (
     <PressableScale
       tw={["h-5 items-center justify-center rounded-full px-4", tw]}
+      disabled={
+        status === ClaimStatus.Expired || status === ClaimStatus.Claimed
+      }
       onPress={() => {
         let type: "free" | "appleMusic" | "spotify" = "free";
         if (edition?.gating_type === "spotify_save") {

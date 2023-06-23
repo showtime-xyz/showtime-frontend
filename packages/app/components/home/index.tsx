@@ -43,6 +43,11 @@ export const Home = () => {
     },
     [mediaSize]
   );
+
+  const ListFooterComponent = useCallback(() => {
+    return <View style={{ height: Math.max(bottom, 20) }} />;
+  }, [bottom]);
+
   return (
     <View tw="w-full flex-1 items-center bg-white dark:bg-black md:pt-8">
       <View tw="max-w-screen-content w-full">
@@ -53,8 +58,8 @@ export const Home = () => {
           estimatedItemSize={600}
           overscan={8}
           ListHeaderComponent={ListHeaderComponent}
+          ListFooterComponent={ListFooterComponent}
           contentContainerStyle={{
-            paddingBottom: bottom,
             paddingTop: Platform.select({
               android: 0,
               default: headerHeight,

@@ -96,8 +96,11 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
 
   if (loading) {
     return (
-      <View tw="pb-6">
+      <View tw="mb-4">
         <Skeleton height={56} width={56} radius={999} show={true} />
+        <View tw="mt-2 items-center">
+          <Skeleton height={16} width={32} radius={6} show={true} />
+        </View>
       </View>
     );
   }

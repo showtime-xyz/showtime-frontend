@@ -7,7 +7,9 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ListMedia } from "app/components/media";
+import { RouteComponent } from "app/components/route-component";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { TextLink } from "app/navigation/link";
 import { getCreatorUsernameFromNFT } from "app/utilities";
 
@@ -30,20 +32,27 @@ export const TrendingCard = ({ index, nft, width }: any) => {
         }),
       }}
     >
-      <View tw="h-[124px] w-[124px] overflow-hidden rounded-2xl">
-        <ListMedia
-          item={nft}
-          resizeMode={ResizeMode.COVER}
-          optimizedWidth={248}
-          loading={index > 0 ? "lazy" : "eager"}
-        />
-        <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
-        <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black">
-          <Text tw="font-bold text-white" style={{ fontSize: 15 }}>
-            {index + 1}
-          </Text>
+      <RouteComponent
+        as={getNFTSlug(nft)}
+        href={`${getNFTSlug(
+          nft
+        )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
+      >
+        <View tw="h-[124px] w-[124px] overflow-hidden rounded-2xl">
+          <ListMedia
+            item={nft}
+            resizeMode={ResizeMode.COVER}
+            optimizedWidth={248}
+            loading={index > 0 ? "lazy" : "eager"}
+          />
+          <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
+          <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black">
+            <Text tw="font-bold text-white" style={{ fontSize: 15 }}>
+              {index + 1}
+            </Text>
+          </View>
         </View>
-      </View>
+      </RouteComponent>
       <View tw="mt-1.5 flex-row items-center">
         <AvatarHoverCard
           username={nft?.creator_username || nft?.creator_address_nonens}
@@ -60,11 +69,17 @@ export const TrendingCard = ({ index, nft, width }: any) => {
         <View tw="w-1" />
         <VerificationBadge size={12} />
       </View>
-      <View tw="mt-2">
+      <RouteComponent
+        as={getNFTSlug(nft)}
+        href={`${getNFTSlug(
+          nft
+        )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
+        tw="mt-2"
+      >
         <Text tw="max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
           {nft?.token_name}
         </Text>
-      </View>
+      </RouteComponent>
       {edition && (
         <View tw="mt-2.5 flex-row items-center">
           <ClaimButtonSimplified edition={edition} tw="mr-3" />
