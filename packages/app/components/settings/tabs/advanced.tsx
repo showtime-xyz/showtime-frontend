@@ -29,6 +29,7 @@ export const AdvancedTab = ({ index = 0 }: AdvancedTabProps) => {
       <SettingsTitle
         title="Advanced"
         desc="Manage your account and additional options."
+        descTw="mt-1"
       />
       <View tw="mt-6 px-4 md:px-0">
         <AccountSettingItem
