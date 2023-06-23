@@ -97,48 +97,59 @@ export const HomeItem = ({
           tw="ml-auto"
         />
       </View>
-      <RouteComponent
-        as={getNFTSlug(nft)}
-        href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
-        onPress={() => {}}
-        tw="mt-3"
-      >
-        <Text tw="text-base font-bold text-gray-900 dark:text-white">
-          {nft?.token_name}
-        </Text>
-        <View tw="h-2" />
-        <ClampText
-          tw="text-sm text-gray-600 dark:text-gray-400"
-          maxLines={4}
-          text={description}
-        />
+      <View tw="mt-3">
+        <Link
+          as={getNFTSlug(nft)}
+          href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
+          onPress={() => {}}
+        >
+          <Text tw="text-base font-bold text-gray-900 dark:text-white">
+            {nft?.token_name}
+          </Text>
+
+          <View tw="h-2" />
+          <ClampText
+            tw="text-sm text-gray-600 dark:text-gray-400"
+            maxLines={4}
+            text={description}
+          />
+        </Link>
         <ClaimedBy
           claimersList={detailData?.data.item?.multiple_owners_list}
           nft={nft}
           tw="mt-3"
         />
         <View tw="mt-3 flex-row items-center">
-          <View
-            tw="overflow-hidden rounded-2xl"
-            style={{
-              width: mediaSize,
-              height: mediaSize,
-            }}
+          <Link
+            as={getNFTSlug(nft)}
+            href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
           >
-            <ListMedia
-              item={nft}
-              resizeMode={ResizeMode.COVER}
-              optimizedWidth={300}
-              loading={index > 0 ? "lazy" : "eager"}
-            />
-            <View tw="absolute right-1.5 top-1.5">
-              <ContentType edition={edition} />
+            <View
+              tw="overflow-hidden rounded-2xl"
+              style={{
+                width: mediaSize,
+                height: mediaSize,
+              }}
+            >
+              <ListMedia
+                item={nft}
+                resizeMode={ResizeMode.COVER}
+                optimizedWidth={300}
+                loading={index > 0 ? "lazy" : "eager"}
+              />
+              <View tw="absolute right-1.5 top-1.5">
+                <ContentType edition={edition} />
+              </View>
+              <NSFWGate
+                show={nft.nsfw}
+                nftId={nft.nft_id}
+                variant="thumbnail"
+              />
             </View>
-            <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
-          </View>
+          </Link>
           <FeedEngagementIcons nft={nft} edition={edition} />
         </View>
-      </RouteComponent>
+      </View>
     </View>
   );
 };

@@ -1,5 +1,4 @@
-import { useRef, useCallback, useMemo } from "react";
-import { Dimensions, FlatList, FlatListProps } from "react-native";
+import { FlatList, FlatListProps } from "react-native";
 
 type Props<T> = Pick<FlatListProps<T>, "data" | "renderItem">;
 export function HomeSlider<T>({ data, ...rest }: Props<T>) {

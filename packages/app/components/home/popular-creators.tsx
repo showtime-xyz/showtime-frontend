@@ -1,4 +1,4 @@
-import { useState, useRef, memo, useCallback, useMemo } from "react";
+import { memo, useCallback } from "react";
 import {
   useWindowDimensions,
   Dimensions,
@@ -28,7 +28,6 @@ import { HomeSlider } from "./home-slider";
 
 const windowWidth = Dimensions.get("window").width;
 const PopularCreatorItem = ({
-  index,
   item,
   width,
 }: {
@@ -95,7 +94,7 @@ const PopularCreatorItem = ({
 export const PopularCreators = memo(function PopularCreators() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { data, mutate, isLoading } = useSuggestedChannelsList();
+  const { data } = useSuggestedChannelsList();
   const router = useRouter();
   const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth - 32;
   const renderItem = useCallback(

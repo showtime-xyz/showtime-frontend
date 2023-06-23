@@ -33,7 +33,15 @@ import { ListMedia } from "../media";
 import { HomeSlider } from "./home-slider";
 
 const windowWidth = Dimensions.get("window").width;
-const TrendingItem = ({ index, nft, width, style }: any) => {
+const TrendingItem = ({
+  index,
+  nft,
+  width,
+}: {
+  nft: NFT;
+  width: number;
+  index: number;
+}) => {
   const { data: edition } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
@@ -52,7 +60,7 @@ const TrendingItem = ({ index, nft, width, style }: any) => {
         <ListMedia
           item={nft}
           resizeMode={ResizeMode.COVER}
-          optimizedWidth={248}
+          optimizedWidth={300}
           loading={index > 0 ? "lazy" : "eager"}
         />
         <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
@@ -95,11 +103,9 @@ const TrendingItem = ({ index, nft, width, style }: any) => {
   );
 };
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
-  const bottom = usePlatformBottomHeight();
-  const headerHeight = useHeaderHeight();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { data, mutate, isLoading } = useTrendingNFTS({});
+  const { data } = useTrendingNFTS({});
   const router = useRouter();
   const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth - 32;
   const renderItem = useCallback(
@@ -152,7 +158,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )}
         />
       </View>
-      {data.length > 0 && (
+      {data.length > 0 ? (
         <View tw="w-full pl-4 md:pl-0">
           <View tw="w-full flex-row items-center justify-between py-4 pr-4">
             <Text tw="text-sm font-bold text-gray-900 dark:text-white">
@@ -171,7 +177,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             <HomeSlider data={data} renderItem={renderItem} />
           </View>
         </View>
-      )}
+      ) : null}
     </View>
   );
 });
