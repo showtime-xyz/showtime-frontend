@@ -69,7 +69,7 @@
     "@types/tinycolor2": "^1.4.3",
     "@walletconnect/react-native-compat": "^2.7.8",
     "@walletconnect/react-native-dapp": "^1.8.0",
-    "@web3modal/react-native": "^1.0.0-alpha.7",
+    "@web3modal/react-native": "^1.0.0-alpha.8",
     "app": "*",
     "array-to-image": "^1.0.0",
     "assert": "^2.0.0",
