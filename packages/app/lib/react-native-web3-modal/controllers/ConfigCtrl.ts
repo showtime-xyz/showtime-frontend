@@ -1,10 +1,10 @@
-import { proxy } from 'valtio';
+import { proxy } from "valtio";
 
-import type { ConfigCtrlState } from '../types/controllerTypes';
+import type { ConfigCtrlState } from "../types/controllerTypes";
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<ConfigCtrlState>({
-  projectId: '',
+  projectId: "",
   recentWalletDeepLink: undefined,
 });
 
@@ -12,7 +12,7 @@ const state = proxy<ConfigCtrlState>({
 export const ConfigCtrl = {
   state,
 
-  setProjectId(projectId: ConfigCtrlState['projectId']) {
+  setProjectId(projectId: ConfigCtrlState["projectId"]) {
     if (projectId !== state.projectId) {
       state.projectId = projectId;
     }

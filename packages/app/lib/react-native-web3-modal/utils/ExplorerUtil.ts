@@ -1,17 +1,18 @@
-import { Alert, Linking, Platform } from 'react-native';
-import type { ListingParams, ListingResponse } from '../types/controllerTypes';
-import { CoreUtil } from './CoreUtil';
-import { ConfigCtrl } from '../controllers/ConfigCtrl';
+import { Alert, Linking, Platform } from "react-native";
+
+import { ConfigCtrl } from "../controllers/ConfigCtrl";
+import type { ListingParams, ListingResponse } from "../types/controllerTypes";
+import { CoreUtil } from "./CoreUtil";
 
 // -- Helpers -------------------------------------------------------
-const W3M_API = 'https://explorer-api.walletconnect.com';
+const W3M_API = "https://explorer-api.walletconnect.com";
 
 async function fetchListings(
   endpoint: string,
   params: ListingParams
 ): Promise<ListingResponse> {
   const url = new URL(endpoint, W3M_API);
-  url.searchParams.append('projectId', ConfigCtrl.state.projectId);
+  url.searchParams.append("projectId", ConfigCtrl.state.projectId);
 
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
@@ -30,9 +31,9 @@ async function fetchListings(
 export const ExplorerUtil = {
   async getListings(params: ListingParams) {
     const platform = Platform.select({
-      ios: 'iOS',
-      android: 'Android',
-      default: 'Mobile',
+      ios: "iOS",
+      android: "Android",
+      default: "Mobile",
     });
 
     return fetchListings(`/w3m/v1/get${platform}Listings`, params);
@@ -60,13 +61,13 @@ export const ExplorerUtil = {
           if (universalUrl) {
             Linking.openURL(universalUrl);
           } else {
-            throw new Error('No valid link found for this wallet');
+            throw new Error("No valid link found for this wallet");
           }
         });
       } else if (universalUrl) {
         await Linking.openURL(universalUrl);
       } else {
-        throw new Error('No valid link found for this wallet');
+        throw new Error("No valid link found for this wallet");
       }
     } catch (error) {
       Alert.alert(`Unable to open the app`);

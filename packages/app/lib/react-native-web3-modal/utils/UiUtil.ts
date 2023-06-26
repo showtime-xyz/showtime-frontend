@@ -8,22 +8,20 @@ export const UiUtil = {
   },
   generateAvatarColors(address: string) {
     if (!address)
-      return ['#47A1FF', '#A20E40', '#B226B4', '#155D82', '#41DCC2'];
+      return ["#47A1FF", "#A20E40", "#B226B4", "#155D82", "#41DCC2"];
     const seedArr = address.match(/.{1,7}/g)?.splice(0, 5);
     const colors: string[] = [];
 
     seedArr?.forEach((seed) => {
       let hash = 0;
       for (let i = 0; i < seed.length; i += 1) {
-        // eslint-disable-next-line no-bitwise
         hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-        // eslint-disable-next-line no-bitwise
+
         hash = hash & hash;
       }
 
       const rgb = [0, 0, 0];
       for (let i = 0; i < 3; i += 1) {
-        // eslint-disable-next-line no-bitwise
         const value = (hash >> (i * 8)) & 255;
         rgb[i] = value;
       }

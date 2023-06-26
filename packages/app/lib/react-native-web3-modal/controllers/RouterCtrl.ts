@@ -1,25 +1,25 @@
-import { proxy } from 'valtio';
+import { proxy } from "valtio";
 
-import type { RouterCtrlState } from '../types/controllerTypes';
+import type { RouterCtrlState } from "../types/controllerTypes";
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<RouterCtrlState>({
-  history: ['ConnectWallet'],
-  view: 'ConnectWallet',
+  history: ["ConnectWallet"],
+  view: "ConnectWallet",
 });
 
 // -- controller --------------------------------------------------- //
 export const RouterCtrl = {
   state,
 
-  push(view: RouterCtrlState['view']) {
+  push(view: RouterCtrlState["view"]) {
     if (view !== state.view) {
       state.view = view;
       state.history.push(view);
     }
   },
 
-  replace(view: RouterCtrlState['view']) {
+  replace(view: RouterCtrlState["view"]) {
     state.view = view;
     state.history = [view];
   },
@@ -28,7 +28,7 @@ export const RouterCtrl = {
     if (state.history.length > 1) {
       state.history.pop();
       const [last] = state.history.slice(-1);
-      state.view = last || 'ConnectWallet';
+      state.view = last || "ConnectWallet";
     }
   },
 };

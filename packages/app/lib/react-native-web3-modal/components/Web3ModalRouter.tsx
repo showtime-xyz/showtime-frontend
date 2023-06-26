@@ -1,13 +1,14 @@
-import { useMemo } from 'react';
-import { useSnapshot } from 'valtio';
+import { useMemo } from "react";
 
-import QRCodeView from '../views/QRCodeView';
-import ViewAllExplorer from '../views/ViewAllExplorer';
-import { RouterCtrl } from '../controllers/RouterCtrl';
-import InitialExplorer from '../views/InitialExplorer';
-import { Account } from '../views/Account';
-import { Error } from '../views/Error';
-import { useOrientation } from '../hooks/useOrientation';
+import { useSnapshot } from "valtio";
+
+import { RouterCtrl } from "../controllers/RouterCtrl";
+import { useOrientation } from "../hooks/useOrientation";
+import { Account } from "../views/Account";
+import { Error } from "../views/Error";
+import InitialExplorer from "../views/InitialExplorer";
+import QRCodeView from "../views/QRCodeView";
+import ViewAllExplorer from "../views/ViewAllExplorer";
 
 interface Props {
   onCopyClipboard?: (value: string) => void;
@@ -19,13 +20,13 @@ export function Web3ModalRouter(props: Props) {
 
   const ViewComponent = useMemo(() => {
     switch (routerState.view) {
-      case 'ConnectWallet':
+      case "ConnectWallet":
         return InitialExplorer;
-      case 'WalletExplorer':
+      case "WalletExplorer":
         return ViewAllExplorer;
-      case 'Qrcode':
+      case "Qrcode":
         return QRCodeView;
-      case 'Account':
+      case "Account":
         return Account;
       default:
         return Error;

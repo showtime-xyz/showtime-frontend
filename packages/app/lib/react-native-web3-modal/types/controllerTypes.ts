@@ -1,5 +1,5 @@
-import type { IUniversalProvider } from '@walletconnect/universal-provider';
-import type { ethers } from 'ethers';
+import type { IUniversalProvider } from "@walletconnect/universal-provider";
+import type { ethers } from "ethers";
 
 // -- ClientCtrl ------------------------------------------- //
 export interface ClientCtrlState {
@@ -44,7 +44,7 @@ export interface ExplorerCtrlState {
 
 // -- ThemeCtrl --------------------------------------------- //
 export interface ThemeCtrlState {
-  themeMode: 'dark' | 'light';
+  themeMode: "dark" | "light";
 }
 
 export interface ListingParams {
@@ -84,10 +84,10 @@ export interface ListingResponse {
 
 // -- RouterCtrl --------------------------------------------- //
 export type RouterView =
-  | 'ConnectWallet'
-  | 'Qrcode'
-  | 'WalletExplorer'
-  | 'Account';
+  | "ConnectWallet"
+  | "Qrcode"
+  | "WalletExplorer"
+  | "Account";
 
 export interface RouterCtrlState {
   history: RouterView[];

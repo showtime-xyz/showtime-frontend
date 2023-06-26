@@ -5,12 +5,12 @@ import {
   StyleSheet,
   StyleProp,
   ViewStyle,
-} from 'react-native';
+} from "react-native";
 
-import type { Listing } from '../types/controllerTypes';
-import { ExplorerUtil } from '../utils/ExplorerUtil';
-import { ConfigCtrl } from '../controllers/ConfigCtrl';
-import useTheme from '../hooks/useTheme';
+import { ConfigCtrl } from "../controllers/ConfigCtrl";
+import useTheme from "../hooks/useTheme";
+import type { Listing } from "../types/controllerTypes";
+import { ExplorerUtil } from "../utils/ExplorerUtil";
 
 interface Props {
   currentWCURI?: string;
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   container: {
     width: 80,
     height: 80,
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 16,
   },
   icon: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     maxWidth: 100,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });
 

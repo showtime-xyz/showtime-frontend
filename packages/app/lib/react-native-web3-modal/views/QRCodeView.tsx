@@ -1,15 +1,16 @@
-import { useEffect, useRef } from 'react';
-import { ActivityIndicator, Animated, StyleSheet } from 'react-native';
-import { useSnapshot } from 'valtio';
+import { useEffect, useRef } from "react";
+import { ActivityIndicator, Animated, StyleSheet } from "react-native";
 
-import NavHeader from '../components/NavHeader';
-import QRCode from '../components/QRCode';
-import CopyIcon from '../assets/CopyLarge';
-import { RouterCtrl } from '../controllers/RouterCtrl';
-import { WcConnectionCtrl } from '../controllers/WcConnectionCtrl';
-import type { RouterProps } from '../types/routerTypes';
-import { ThemeCtrl } from '../controllers/ThemeCtrl';
-import useTheme from '../hooks/useTheme';
+import { useSnapshot } from "valtio";
+
+import CopyIcon from "../assets/CopyLarge";
+import NavHeader from "../components/NavHeader";
+import QRCode from "../components/QRCode";
+import { RouterCtrl } from "../controllers/RouterCtrl";
+import { ThemeCtrl } from "../controllers/ThemeCtrl";
+import { WcConnectionCtrl } from "../controllers/WcConnectionCtrl";
+import useTheme from "../hooks/useTheme";
+import type { RouterProps } from "../types/routerTypes";
 
 function QRCodeView({
   onCopyClipboard,

@@ -1,6 +1,6 @@
-import { proxy } from 'valtio';
+import { proxy } from "valtio";
 
-import type { OptionsCtrlState } from '../types/controllerTypes';
+import type { OptionsCtrlState } from "../types/controllerTypes";
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<OptionsCtrlState>({
@@ -11,7 +11,7 @@ const state = proxy<OptionsCtrlState>({
 export const OptionsCtrl = {
   state,
 
-  setIsDataLoaded(isDataLoaded: OptionsCtrlState['isDataLoaded']) {
+  setIsDataLoaded(isDataLoaded: OptionsCtrlState["isDataLoaded"]) {
     state.isDataLoaded = isDataLoaded;
   },
 };

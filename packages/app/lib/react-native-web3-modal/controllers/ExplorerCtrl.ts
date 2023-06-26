@@ -1,10 +1,10 @@
-import { proxy } from 'valtio';
+import { proxy } from "valtio";
 
 import type {
   ExplorerCtrlState,
   ListingParams,
-} from '../types/controllerTypes';
-import { ExplorerUtil } from '../utils/ExplorerUtil';
+} from "../types/controllerTypes";
+import { ExplorerUtil } from "../utils/ExplorerUtil";
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<ExplorerCtrlState>({

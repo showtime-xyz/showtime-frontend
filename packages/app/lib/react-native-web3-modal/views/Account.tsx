@@ -1,14 +1,15 @@
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { useSnapshot } from 'valtio';
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 
-import CopyIcon from '../assets/Copy';
-import { AccountCtrl } from '../controllers/AccountCtrl';
-import { UiUtil } from '../utils/UiUtil';
-import Web3Text from '../components/Web3Text';
-import type { RouterProps } from 'src/types/routerTypes';
-import Web3Avatar from '../components/Web3Avatar';
-import ConnectionBadge from '../components/ConnectionBadge';
-import useTheme from '../hooks/useTheme';
+import type { RouterProps } from "src/types/routerTypes";
+import { useSnapshot } from "valtio";
+
+import CopyIcon from "../assets/Copy";
+import ConnectionBadge from "../components/ConnectionBadge";
+import Web3Avatar from "../components/Web3Avatar";
+import Web3Text from "../components/Web3Text";
+import { AccountCtrl } from "../controllers/AccountCtrl";
+import useTheme from "../hooks/useTheme";
+import { UiUtil } from "../utils/UiUtil";
 
 export function Account({ onCopyClipboard }: RouterProps) {
   const Theme = useTheme();
@@ -26,12 +27,12 @@ export function Account({ onCopyClipboard }: RouterProps) {
         <View style={styles.header}>
           <View>
             <Web3Avatar
-              address={accountState.address ?? ''}
+              address={accountState.address ?? ""}
               style={styles.avatar}
             />
             <View style={styles.row}>
               <Web3Text style={styles.address}>
-                {UiUtil.truncate(accountState.address ?? '')}
+                {UiUtil.truncate(accountState.address ?? "")}
               </Web3Text>
               {onCopyClipboard && (
                 <TouchableOpacity onPress={onCopy} style={styles.button}>
@@ -49,12 +50,12 @@ export function Account({ onCopyClipboard }: RouterProps) {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   header: {
     padding: 24,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   avatar: {
     height: 70,
@@ -64,14 +65,14 @@ const styles = StyleSheet.create({
   },
   address: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   button: {
     marginLeft: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 });

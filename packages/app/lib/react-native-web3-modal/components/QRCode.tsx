@@ -1,19 +1,20 @@
-import { useMemo } from 'react';
-import { Svg } from 'react-native-svg';
-import { View, StyleSheet } from 'react-native';
+import { useMemo } from "react";
+import { View, StyleSheet } from "react-native";
 
-import { QRCodeUtil } from '../utils/QRCodeUtil';
-import WCLogo from '../assets/WCLogo';
-import { DarkTheme, LightTheme } from '../constants/Colors';
+import { Svg } from "react-native-svg";
+
+import WCLogo from "../assets/WCLogo";
+import { DarkTheme, LightTheme } from "../constants/Colors";
+import { QRCodeUtil } from "../utils/QRCodeUtil";
 
 interface Props {
   uri: string;
   size: number;
-  theme?: 'light' | 'dark';
+  theme?: "light" | "dark";
 }
 
-function QRCode({ uri, size, theme = 'light' }: Props) {
-  const tintColor = theme === 'light' ? LightTheme.accent : DarkTheme.accent;
+function QRCode({ uri, size, theme = "light" }: Props) {
+  const tintColor = theme === "light" ? LightTheme.accent : DarkTheme.accent;
   const dots = useMemo(
     () => QRCodeUtil.generate(uri, size, size / 4, theme),
     [uri, size, theme]
@@ -31,11 +32,11 @@ function QRCode({ uri, size, theme = 'light' }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   logo: {
-    position: 'absolute',
+    position: "absolute",
   },
 });
 

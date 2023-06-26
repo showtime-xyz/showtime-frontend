@@ -7,11 +7,11 @@ import {
   StyleProp,
   ViewStyle,
   ImageStyle,
-} from 'react-native';
+} from "react-native";
 
-import useTheme from '../hooks/useTheme';
-import type { Listing } from '../types/controllerTypes';
-import { ExplorerUtil } from '../utils/ExplorerUtil';
+import useTheme from "../hooks/useTheme";
+import type { Listing } from "../types/controllerTypes";
+import { ExplorerUtil } from "../utils/ExplorerUtil";
 
 interface Props {
   onPress: any;
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   container: {
     width: 80,
     height: 80,
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 16,
   },
   icons: {
@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 16,
     borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   icon: {
     height: 23,
@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   text: {
     marginTop: 5,
     maxWidth: 100,
-    fontWeight: '600',
+    fontWeight: "600",
     fontSize: 12,
   },
 });

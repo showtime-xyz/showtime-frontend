@@ -1,7 +1,7 @@
-import { ethers } from 'ethers';
-import { proxy, ref } from 'valtio';
+import { ethers } from "ethers";
+import { proxy, ref } from "valtio";
 
-import type { ClientCtrlState } from '../types/controllerTypes';
+import type { ClientCtrlState } from "../types/controllerTypes";
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<ClientCtrlState>({
@@ -15,17 +15,17 @@ const state = proxy<ClientCtrlState>({
 export const ClientCtrl = {
   state,
 
-  setProvider(provider: ClientCtrlState['provider']) {
+  setProvider(provider: ClientCtrlState["provider"]) {
     if (!state.initialized && provider) {
       state.provider = ref(provider);
     }
   },
 
-  setInitialized(initialized: ClientCtrlState['initialized']) {
+  setInitialized(initialized: ClientCtrlState["initialized"]) {
     state.initialized = initialized;
   },
 
-  setSessionTopic(topic: ClientCtrlState['sessionTopic']) {
+  setSessionTopic(topic: ClientCtrlState["sessionTopic"]) {
     if (topic && state.provider) {
       state.sessionTopic = topic;
       state.web3Provider = ref(

@@ -1,6 +1,6 @@
 export const CoreUtil = {
   isHttpUrl(url: string) {
-    return url.startsWith('http://') || url.startsWith('https://');
+    return url.startsWith("http://") || url.startsWith("https://");
   },
 
   formatNativeUrl(appUrl: string, wcUri: string): string | undefined {
@@ -10,8 +10,8 @@ export const CoreUtil = {
       return this.formatUniversalUrl(appUrl, wcUri);
     }
     let safeAppUrl = appUrl;
-    if (!safeAppUrl.includes('://')) {
-      safeAppUrl = appUrl.replaceAll('/', '').replaceAll(':', '');
+    if (!safeAppUrl.includes("://")) {
+      safeAppUrl = appUrl.replaceAll("/", "").replaceAll(":", "");
       safeAppUrl = `${safeAppUrl}://`;
     }
 
@@ -27,7 +27,7 @@ export const CoreUtil = {
       return this.formatNativeUrl(appUrl, wcUri);
     }
     let plainAppUrl = appUrl;
-    if (appUrl.endsWith('/')) {
+    if (appUrl.endsWith("/")) {
       plainAppUrl = appUrl.slice(0, -1);
     }
 

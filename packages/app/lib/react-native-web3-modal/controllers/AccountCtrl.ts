@@ -1,7 +1,7 @@
-import { proxy } from 'valtio';
+import { proxy } from "valtio";
 
-import type { AccountCtrlState } from '../types/controllerTypes';
-import { ClientCtrl } from './ClientCtrl';
+import type { AccountCtrlState } from "../types/controllerTypes";
+import { ClientCtrl } from "./ClientCtrl";
 
 // -- initial state ------------------------------------------------ //
 const state = proxy<AccountCtrlState>({
@@ -23,11 +23,11 @@ export const AccountCtrl = {
     }
   },
 
-  setAddress(address: AccountCtrlState['address']) {
+  setAddress(address: AccountCtrlState["address"]) {
     state.address = address;
   },
 
-  setIsConnected(isConnected: AccountCtrlState['isConnected']) {
+  setIsConnected(isConnected: AccountCtrlState["isConnected"]) {
     state.isConnected = isConnected;
   },
 

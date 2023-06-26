@@ -4,16 +4,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { useSnapshot } from 'valtio';
+} from "react-native";
 
-import WCLogo from '../assets/LogoLockup';
-import CloseIcon from '../assets/Close';
-import DisconnectIcon from '../assets/Disconnect';
-import { RouterCtrl } from '../controllers/RouterCtrl';
-import { ClientCtrl } from '../controllers/ClientCtrl';
-import { ModalCtrl } from '../controllers/ModalCtrl';
-import useTheme from '../hooks/useTheme';
+import { useSnapshot } from "valtio";
+
+import CloseIcon from "../assets/Close";
+import DisconnectIcon from "../assets/Disconnect";
+import WCLogo from "../assets/LogoLockup";
+import { ClientCtrl } from "../controllers/ClientCtrl";
+import { ModalCtrl } from "../controllers/ModalCtrl";
+import { RouterCtrl } from "../controllers/RouterCtrl";
+import useTheme from "../hooks/useTheme";
 
 interface Web3ModalHeaderProps {
   onClose: () => void;
@@ -32,7 +33,7 @@ export function Web3ModalHeader({ onClose }: Web3ModalHeaderProps) {
     <SafeAreaView style={styles.container}>
       <WCLogo width={181} height={28} fill="white" />
       <View style={styles.row}>
-        {routerState.view === 'Account' && (
+        {routerState.view === "Account" && (
           <TouchableOpacity
             style={[
               styles.buttonContainer,
@@ -61,29 +62,29 @@ export function Web3ModalHeader({ onClose }: Web3ModalHeaderProps) {
 const styles = StyleSheet.create({
   container: {
     height: 46,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginHorizontal: 10,
   },
   row: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   buttonContainer: {
     height: 28,
     width: 28,
     borderRadius: 14,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     ...Platform.select({
       ios: {
-        shadowColor: 'rgba(0, 0, 0, 0.12)',
+        shadowColor: "rgba(0, 0, 0, 0.12)",
         shadowOpacity: 1,
         shadowOffset: { width: 0, height: 4 },
       },
       android: {
-        borderColor: 'rgba(0, 0, 0, 0.12)',
+        borderColor: "rgba(0, 0, 0, 0.12)",
         borderWidth: 1,
         elevation: 4,
       },

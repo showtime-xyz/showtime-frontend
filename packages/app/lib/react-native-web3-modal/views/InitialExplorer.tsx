@@ -1,18 +1,19 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { StyleSheet, View, Animated, ActivityIndicator } from 'react-native';
-import { useSnapshot } from 'valtio';
+import { useEffect, useMemo, useRef } from "react";
+import { StyleSheet, View, Animated, ActivityIndicator } from "react-native";
 
-import WalletItem from '../components/WalletItem';
-import ViewAllBox from '../components/ViewAllBox';
-import QRIcon from '../assets/QRCode';
-import NavHeader from '../components/NavHeader';
-import type { Listing } from '../types/controllerTypes';
-import { RouterCtrl } from '../controllers/RouterCtrl';
-import { ExplorerCtrl } from '../controllers/ExplorerCtrl';
-import { OptionsCtrl } from '../controllers/OptionsCtrl';
-import { WcConnectionCtrl } from '../controllers/WcConnectionCtrl';
-import type { RouterProps } from '../types/routerTypes';
-import useTheme from '../hooks/useTheme';
+import { useSnapshot } from "valtio";
+
+import QRIcon from "../assets/QRCode";
+import NavHeader from "../components/NavHeader";
+import ViewAllBox from "../components/ViewAllBox";
+import WalletItem from "../components/WalletItem";
+import { ExplorerCtrl } from "../controllers/ExplorerCtrl";
+import { OptionsCtrl } from "../controllers/OptionsCtrl";
+import { RouterCtrl } from "../controllers/RouterCtrl";
+import { WcConnectionCtrl } from "../controllers/WcConnectionCtrl";
+import useTheme from "../hooks/useTheme";
+import type { Listing } from "../types/controllerTypes";
+import type { RouterProps } from "../types/routerTypes";
 
 function InitialExplorer({ windowHeight, isPortrait }: RouterProps) {
   const Theme = useTheme();
@@ -42,7 +43,7 @@ function InitialExplorer({ windowHeight, isPortrait }: RouterProps) {
     <Animated.View style={{ opacity: fadeAnim }}>
       <NavHeader
         title="Connect your wallet"
-        onActionPress={() => RouterCtrl.push('Qrcode')}
+        onActionPress={() => RouterCtrl.push("Qrcode")}
         actionIcon={QRIcon}
       />
       {loading ? (
@@ -61,7 +62,7 @@ function InitialExplorer({ windowHeight, isPortrait }: RouterProps) {
             />
           ))}
           <ViewAllBox
-            onPress={() => RouterCtrl.push('WalletExplorer')}
+            onPress={() => RouterCtrl.push("WalletExplorer")}
             wallets={viewAllWallets}
             style={isPortrait && styles.wallet}
           />
@@ -73,13 +74,13 @@ function InitialExplorer({ windowHeight, isPortrait }: RouterProps) {
 
 const styles = StyleSheet.create({
   explorerContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
   },
   wallet: {
-    width: '25%',
+    width: "25%",
   },
 });
 

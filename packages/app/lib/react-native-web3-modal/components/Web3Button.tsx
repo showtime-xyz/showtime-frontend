@@ -5,13 +5,14 @@ import {
   Text,
   TouchableOpacity,
   ViewStyle,
-} from 'react-native';
-import { useSnapshot } from 'valtio';
+} from "react-native";
 
-import { ModalCtrl } from '../controllers/ModalCtrl';
-import { AccountCtrl } from '../controllers/AccountCtrl';
-import { ClientCtrl } from '../controllers/ClientCtrl';
-import useTheme from '../hooks/useTheme';
+import { useSnapshot } from "valtio";
+
+import { AccountCtrl } from "../controllers/AccountCtrl";
+import { ClientCtrl } from "../controllers/ClientCtrl";
+import { ModalCtrl } from "../controllers/ModalCtrl";
+import useTheme from "../hooks/useTheme";
 
 interface Props {
   style?: StyleProp<ViewStyle>;
@@ -47,16 +48,16 @@ export function Web3Button({ style }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 20,
     width: 150,
     height: 50,
     borderWidth: 1,
   },
   text: {
-    color: 'white',
-    fontWeight: '700',
+    color: "white",
+    fontWeight: "700",
   },
 });

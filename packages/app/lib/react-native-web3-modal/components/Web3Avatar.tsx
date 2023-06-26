@@ -1,8 +1,9 @@
-import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import Svg, { Defs, Circle, RadialGradient, Stop } from 'react-native-svg';
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-import useTheme from '../hooks/useTheme';
-import { UiUtil } from '../utils/UiUtil';
+import Svg, { Defs, Circle, RadialGradient, Stop } from "react-native-svg";
+
+import useTheme from "../hooks/useTheme";
+import { UiUtil } from "../utils/UiUtil";
 
 interface Props {
   address: string;

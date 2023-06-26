@@ -1,5 +1,6 @@
-import { StyleProp, Text, TextStyle } from 'react-native';
-import useTheme from '../hooks/useTheme';
+import { StyleProp, Text, TextStyle } from "react-native";
+
+import useTheme from "../hooks/useTheme";
 
 interface Props {
   children: React.ReactNode;

@@ -2,7 +2,7 @@ import type {
   ConnectParams,
   Metadata,
   IUniversalProvider,
-} from '@walletconnect/universal-provider';
+} from "@walletconnect/universal-provider";
 
 export type IProvider = IUniversalProvider;
 

@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useSnapshot } from 'valtio';
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import useTheme from '../hooks/useTheme';
-import Backward from '../assets/Backward';
-import { RouterCtrl } from '../controllers/RouterCtrl';
+import { useSnapshot } from "valtio";
+
+import Backward from "../assets/Backward";
+import { RouterCtrl } from "../controllers/RouterCtrl";
+import useTheme from "../hooks/useTheme";
 
 interface Props {
   title: string;
@@ -61,19 +62,19 @@ function NavHeader({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 16,
     paddingHorizontal: 24,
   },
   button: {
     width: 24,
     height: 24,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   title: {
-    fontWeight: '600',
+    fontWeight: "600",
     fontSize: 20,
     lineHeight: 24,
   },
