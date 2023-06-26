@@ -212,36 +212,6 @@ const wallets = {
       universal: "",
     },
   },
-  alphaWallet: {
-    id: "138f51c8d00ac7b9ac9d8dc75344d096a7dfe370a568aa167eabc0a21830ed98",
-    name: "AlphaWallet",
-    homepage: "https://alphawallet.com/",
-    image_id: "5b1cddfb-056e-4e78-029a-54de5d70c500",
-    order: 26,
-    app: {
-      browser: "",
-      ios: "https://apps.apple.com/us/app/alphawallet-eth-wallet/id1358230430",
-      android:
-        "https://play.google.com/store/apps/details?id=io.stormbird.wallet",
-      mac: null,
-      windows: null,
-      linux: null,
-      chrome: null,
-      firefox: null,
-      safari: null,
-      edge: null,
-      opera: null,
-    },
-    injected: null,
-    mobile: {
-      native: "awallet://",
-      universal: "https://aw.app",
-    },
-    desktop: {
-      native: null,
-      universal: null,
-    },
-  },
 } as const;
 
 const getImageUrl = (imageId: string) => {
@@ -255,7 +225,6 @@ const WALLETS = [
   "trustWallet", // Trust Wallet
   "rainbow", // Rainbow
   "ledgerLive", // Ledger Live
-  "alphaWallet",
 ] as const;
 
 function WalletConnectQRCodeModal(props: RenderModalProps) {
