@@ -1,8 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 
-import type { Bytes } from "@ethersproject/bytes";
-import { numberToHex, sanitizeHex, utf8ToHex } from "@walletconnect/encoding";
-import { ethers } from "ethers";
 import { createWalletClient, custom } from "viem";
 import { mainnet } from "viem/chains";
 
@@ -27,7 +24,7 @@ const useWallet = (): UseWalletReturnType => {
   const coinbaseMobileSDKInstanceRef = useLatestValueRef(mobileSDK);
 
   const walletConnected = web3Modal.isConnected || mobileSDK.connected;
-  console.log("efef 3324 ", web3Modal.address, web3Modal.isConnected);
+  //console.log("efef 3324 ", web3Modal.address, web3Modal.isConnected);
   useEffect(() => {
     (async function fetchUserAddress() {
       if (web3Modal.address) {
@@ -161,7 +158,6 @@ const useWallet = (): UseWalletReturnType => {
     };
   }, [
     web3Modal.isConnected,
-    web3Modal.provider,
     mobileSDK.connected,
     mobileSDK.metadata?.name,
     address,
