@@ -389,7 +389,7 @@ export const CreatorChannels = memo(
         tw="mt-12 w-full max-w-screen-lg flex-row px-4"
         style={{ height: mdHeight }}
       >
-        <Button
+        {/* <Button
           iconOnly
           size="regular"
           variant="secondary"
@@ -397,7 +397,7 @@ export const CreatorChannels = memo(
           onPress={() => router.push("/")}
         >
           <ChevronLeft width={24} height={24} />
-        </Button>
+        </Button> */}
         <View tw="h-full w-80 overflow-hidden rounded-2xl bg-white dark:bg-black">
           <InfiniteScrollList
             useWindowScroll={false}

@@ -76,7 +76,7 @@ const PopularCreatorItem = ({
           {`${item?.member_count} members`}
         </Text>
         <View tw="h-2.5" />
-        <Text tw="text-sm text-gray-600 dark:text-gray-300" numberOfLines={4}>
+        <Text tw="text-xs text-gray-600 dark:text-gray-300" numberOfLines={4}>
           {item?.owner?.bio}
         </Text>
       </View>
@@ -117,7 +117,7 @@ export const PopularCreators = memo(function PopularCreators() {
         </Text>
         {isShowSeeAll && (
           <Text
-            tw="text-sm font-semibold text-indigo-700"
+            tw="text-sm font-semibold text-indigo-600"
             onPress={() => {
               router.push("/channels");
             }}

@@ -1,11 +1,10 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useWindowDimensions, Dimensions, Platform } from "react-native";
 
 import {
   InfiniteScrollList,
   ListRenderItemInfo,
 } from "@showtime-xyz/universal.infinite-scroll-list";
-import Spinner from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useFeed } from "app/hooks/use-feed";

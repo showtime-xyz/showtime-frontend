@@ -20,6 +20,7 @@ import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { getNFTSlug } from "app/hooks/use-share-nft";
+import { useUser } from "app/hooks/use-user";
 import { Carousel } from "app/lib/carousel";
 import { TextLink } from "app/navigation/link";
 import { NFT } from "app/types";
@@ -118,8 +119,8 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const isMdWidth = width >= breakpoints["md"];
   const { data } = useTrendingNFTS({});
   const { width: scrollbarWidth } = useScrollbarSize();
-
   const router = useRouter();
+
   const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
   const pagerWidth = isMdWidth
     ? Math.min(DESKTOP_CONTENT_WIDTH, width - 248)
@@ -180,9 +181,9 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             <Text tw="text-sm font-bold text-gray-900 dark:text-white">
               Trending
             </Text>
-            {isShowSeeAll && (
+            {!isShowSeeAll && (
               <Text
-                tw="text-sm font-semibold text-indigo-700"
+                tw="text-sm font-semibold text-indigo-600"
                 onPress={() => {
                   router.push("/trending");
                 }}

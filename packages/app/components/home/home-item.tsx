@@ -108,6 +108,7 @@ export const HomeItem = ({
         <View tw="mt-3 min-h-[20px]">
           <ClaimedBy
             claimersList={detailData?.data.item?.multiple_owners_list}
+            avatarSize={18}
             nft={nft}
           />
         </View>

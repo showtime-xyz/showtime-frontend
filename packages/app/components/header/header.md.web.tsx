@@ -44,8 +44,6 @@ import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { withColorScheme } from "../memo-with-theme";
-import HeaderCenter from "./header-center";
-import { HeaderRight } from "./header-right";
 
 const NOTIFICATION_LIST_HEIGHT = "calc(50vh - 64px)";
 export const NotificationsInHeader = () => {
@@ -123,66 +121,73 @@ export const HeaderMd = withColorScheme(() => {
   const iconColor = isDark ? "#fff" : "#000";
 
   const HOME_ROUTES = useMemo(
-    () => [
-      {
-        title: "Home",
-        key: "Home",
-        icon: Home,
-        pathname: "/",
-        focused: router.pathname === "/",
-      },
-      {
-        title: "Channels",
-        key: "Channels",
-        icon: CreatorChannel,
-        pathname: "/channels",
-        focused: router.pathname.includes("channels"),
-      },
-      {
-        title: "Trending",
-        key: "Trending",
-        icon: Hot,
-        pathname: "/trending",
-        focused: router.pathname === "/trending",
-      },
-      {
-        title: "Notifications",
-        key: "Notifications",
-        icon: Bell,
-        pathname: "/notifications",
-        focused: router.pathname === "/notifications",
-      },
-      {
-        title: "Settings",
-        key: "Settings",
-        icon: Settings,
-        pathname: "/settings",
-        focused: router.pathname === "/settings",
-      },
-      {
-        title: "Profile",
-        key: "Profile",
-        icon: (props: SvgProps) =>
-          isAuthenticated ? (
-            <Avatar
-              url={user?.data?.profile?.img_url}
-              size={28}
-              alt={"Profile Avatar"}
-            />
-          ) : (
-            <User {...props} />
-          ),
-        pathname: `@${user?.data?.profile.username}`,
-        focused: router.asPath === `/@${user?.data?.profile.username}`,
-      },
-      {
-        title: "Search",
-        key: "Search",
-        icon: Search,
-        pathname: "/search",
-        focused: router.pathname === "/search",
-      },
-    ],
+    () =>
+      [
+        {
+          title: "Home",
+          key: "Home",
+          icon: Home,
+          pathname: "/",
+          focused: router.pathname === "/",
+          visible: true,
+        },
+        {
+          title: "Channels",
+          key: "Channels",
+          icon: CreatorChannel,
+          pathname: "/channels",
+          focused: router.pathname.includes("channels"),
+          visible: isAuthenticated,
+        },
+        {
+          title: "Trending",
+          key: "Trending",
+          icon: Hot,
+          pathname: "/trending",
+          focused: router.pathname === "/trending",
+          visible: true,
+        },
+        {
+          title: "Notifications",
+          key: "Notifications",
+          icon: Bell,
+          pathname: "/notifications",
+          focused: router.pathname === "/notifications",
+          visible: isAuthenticated,
+        },
+        {
+          title: "Settings",
+          key: "Settings",
+          icon: Settings,
+          pathname: "/settings",
+          focused: router.pathname === "/settings",
+          visible: isAuthenticated,
+        },
+        {
+          title: "Search",
+          key: "Search",
+          icon: Search,
+          pathname: "/search",
+          focused: router.pathname === "/search",
+        },
+        {
+          title: "Profile",
+          key: "Profile",
+          icon: (props: SvgProps) =>
+            isAuthenticated ? (
+              <Avatar
+                url={user?.data?.profile?.img_url}
+                size={28}
+                alt={"Profile Avatar"}
+              />
+            ) : (
+              <User {...props} />
+            ),
+          pathname: `@${user?.data?.profile.username}`,
+          focused: router.asPath === `/@${user?.data?.profile.username}`,
+          visible: isAuthenticated,
+        },
+      ].filter((item) => !!item?.visible),
     [
       isAuthenticated,
       router.asPath,
@@ -193,15 +198,21 @@ export const HeaderMd = withColorScheme(() => {
   );
 
   return (
-    <View tw="fixed top-0 h-full bg-white pl-6 dark:bg-black">
-      <View tw="h-full w-56">
-        <View tw="flex-row items-center pt-8">
+    <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
+      <View
+        tw="h-full w-60 overflow-y-auto pl-4"
+        style={{ maxHeight: "calc(100vh - 130px)" }}
+      >
+        <Link href="/" tw="flex-row items-center pt-8">
           <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
-        </View>
+        </Link>
         <View tw="-ml-4 mt-5 w-44 justify-center">
           {HOME_ROUTES.map((item) => (
             <Link
-              tw="mt-2 flex-row items-center rounded-2xl py-3.5 pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
+              tw={[
+                "mt-2 flex-row items-center rounded-2xl py-3.5 pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
+                item.focused && "bg-gray-50 dark:bg-gray-900",
+              ].join(" ")}
               key={item.key}
               href={item.pathname}
             >
@@ -224,7 +235,11 @@ export const HeaderMd = withColorScheme(() => {
         <View tw="w-40">
           {!isAuthenticated && (
             <Button size="regular" tw="mt-6" onPress={navigateToLogin}>
-              Sign in
+              <>
+                <Text tw="text-base font-bold text-white dark:text-black">
+                  Sign in
+                </Text>
+              </>
             </Button>
           )}
           <Button
@@ -233,16 +248,20 @@ export const HeaderMd = withColorScheme(() => {
             tw="mt-4 border border-gray-200 dark:border-gray-600"
             onPress={redirectToCreateDrop}
           >
-            <Plus />
-            Create
+            <>
+              <Plus width={20} height={20} color={isDark ? "#fff" : "#000"} />
+              <Text tw="ml-2 text-base font-bold text-black dark:text-white">
+                Create
+              </Text>
+            </>
           </Button>
           <Divider tw="my-6" />
           <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
             <View tw="flex-row items-center justify-center">
               <PhonePortraitOutline color={iconColor} width={18} height={18} />
-              <Text tw="ml-1 text-lg font-bold dark:text-white">Get app</Text>
+              <Text tw="text-15 ml-1 font-bold dark:text-white">Get App</Text>
             </View>
-            <View tw="flex items-center justify-between px-2 pt-3">
+            <View tw="flex items-center justify-between px-2 pt-4">
               <TextLink
                 tw="text-base font-bold dark:text-white"
                 href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
@@ -281,9 +300,9 @@ export const HeaderMd = withColorScheme(() => {
           </View>
         </View>
       </View>
-      <View tw="absolute bottom-2 inline-block">
+      <View tw="absolute bottom-2 inline-block pl-3">
         <View tw="inline-block">
-          {links.map((item, index) => (
+          {links.map((item) => (
             <TextLink
               href={item.link}
               target="_blank"

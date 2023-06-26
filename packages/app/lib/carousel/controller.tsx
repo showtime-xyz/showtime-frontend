@@ -29,8 +29,8 @@ export const Controller = ({
         iconOnly
         tw={[
           "absolute -left-4 border border-gray-200 transition-all dark:border-gray-800",
-          allowSlidePrev ? "opacity-100" : "opacity-0",
         ]}
+        style={{ opacity: allowSlidePrev ? 1 : 0 }}
         onPress={() => {
           prev?.();
         }}
@@ -43,8 +43,8 @@ export const Controller = ({
         iconOnly
         tw={[
           "absolute -right-4 border border-gray-200 transition-all dark:border-gray-800",
-          allowSlideNext ? "opacity-100" : "opacity-0",
         ]}
+        style={{ opacity: allowSlideNext ? 1 : 0 }}
         onPress={() => {
           next?.();
         }}

@@ -136,13 +136,6 @@ body {
   padding-right: 0 !important;
 }
 
-/* For Next.js <Image /> https://nextjs.org/docs/api-reference/next/image#known-browser-bugs */
-/* For Safari v15+ */
-@supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  img[loading="lazy"] {
-    clip-path: inset(0.6px);
-  }
-}
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

@@ -34,7 +34,7 @@ export function Carousel({
   pagination,
 }: CarouselProps) {
   const swiperRef = useRef(null);
-  const isDark = useIsDarkMode();
+
   return (
     <>
       <Swiper
@@ -81,9 +81,11 @@ export function Carousel({
         ))}
       </Swiper>
 
-      {controller && data.length > 0 && (
+      {controller && data.length > 1 && (
         <Controller
           prev={() => (swiperRef.current as any)?.swiper.slidePrev()}
+          allowSlideNext
+          allowSlidePrev
           next={() => (swiperRef.current as any)?.swiper.slideNext()}
           tw={controllerTw}
         />

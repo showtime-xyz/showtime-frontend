@@ -45,9 +45,16 @@ export const ClaimedBy = ({
               <AvatarHoverCard
                 username={item?.username || item?.wallet_address}
                 url={item?.img_url}
-                tw="rounded-full border border-gray-300"
                 size={avatarSize}
                 alt="Claimed by Avatar"
+              />
+              <View
+                tw="absolute rounded-full border border-white dark:border-black"
+                style={{
+                  width: avatarSize,
+                  height: avatarSize,
+                }}
+                pointerEvents="none"
               />
             </View>
           );
