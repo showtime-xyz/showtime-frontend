@@ -1,10 +1,11 @@
 import { useMemo } from "react";
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
 
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -93,11 +94,11 @@ export const HomeItem = ({
           as={getNFTSlug(nft)}
           href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
         >
-          <Text tw="text-base font-bold text-gray-900 dark:text-white">
+          <Text tw="text-15 font-bold text-gray-900 dark:text-white">
             {nft?.token_name}
           </Text>
 
-          <View tw="h-2" />
+          <View tw="h-3" />
           <ClampText
             tw="text-sm text-gray-600 dark:text-gray-400"
             maxLines={4}
@@ -125,7 +126,7 @@ export const HomeItem = ({
               <ListMedia
                 item={nft}
                 resizeMode={ResizeMode.COVER}
-                optimizedWidth={300}
+                optimizedWidth={600}
                 loading={index > 0 ? "lazy" : "eager"}
               />
               <View tw="absolute right-1.5 top-1.5">
@@ -139,6 +140,53 @@ export const HomeItem = ({
             </View>
           </RouteComponent>
           <FeedEngagementIcons nft={nft} edition={edition} />
+        </View>
+      </View>
+    </View>
+  );
+};
+export const HomeItemSketelon = () => {
+  const { width } = useWindowDimensions();
+
+  return (
+    <View tw="mb-8">
+      <View tw="mb-3 flex-row items-center">
+        <Skeleton width={40} height={40} radius={999} show />
+        <View tw="ml-2 justify-center">
+          <Skeleton width={110} height={14} radius={4} show />
+          <View tw="h-2" />
+          <Skeleton width={60} height={12} radius={4} show />
+        </View>
+        <Skeleton tw="ml-auto" width={74} height={22} radius={999} show />
+      </View>
+      <Skeleton width={200} height={20} radius={4} show />
+      <Skeleton
+        width={Math.min(width, 400)}
+        height={16}
+        radius={4}
+        show
+        tw="my-3"
+      />
+      <Skeleton width={300} height={16} radius={4} show />
+      <Skeleton width={160} height={20} radius={4} show tw="my-3" />
+      <View tw="flex-row items-center">
+        <Skeleton width={300} height={300} radius={16} show />
+        <View tw="ml-4">
+          <View tw="mb-4">
+            <Skeleton height={56} width={56} radius={999} show={true} />
+            <View tw="mt-2 items-center">
+              <Skeleton height={16} width={32} radius={6} show={true} />
+            </View>
+          </View>
+          <View tw="mb-4">
+            <Skeleton height={56} width={56} radius={999} show={true} />
+            <View tw="mt-2 items-center">
+              <Skeleton height={16} width={32} radius={6} show={true} />
+            </View>
+          </View>
+          <View tw="mb-4">
+            <Skeleton height={56} width={56} radius={999} show={true} />
+          </View>
         </View>
       </View>
     </View>

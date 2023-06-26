@@ -18,7 +18,7 @@ import { NSFWGate } from "../feed-item/nsfw-gate";
 import { AvatarHoverCard } from "./avatar-hover-card";
 
 export const TrendingCard = ({ index, nft, width }: any) => {
-  const { data: edition } = useCreatorCollectionDetail(
+  const { data: edition, loading } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
 
@@ -82,8 +82,8 @@ export const TrendingCard = ({ index, nft, width }: any) => {
       </RouteComponent>
       {edition && (
         <View tw="mt-2.5 flex-row items-center">
-          <ClaimButtonSimplified edition={edition} tw="mr-3" />
-          <Text tw="text-xs font-bold text-gray-900 dark:text-white">
+          <ClaimButtonSimplified edition={edition} loading={loading} />
+          <Text tw="ml-3 text-xs font-bold text-gray-900 dark:text-white">
             {edition?.total_claimed_count.toLocaleString()}
           </Text>
         </View>

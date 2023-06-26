@@ -97,6 +97,7 @@ module.exports = {
         ".text-xs": textSizes["text-xs"],
         ".text-13": textSizes["text-13"],
         ".text-sm": textSizes["text-sm"],
+        ".text-15": textSizes["text-15"],
         ".text-base": textSizes["text-base"],
         ".text-lg": {
           ...textSizes["text-lg"],

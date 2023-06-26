@@ -86,7 +86,7 @@ const TrendingItem = ({
         <View tw="w-2" />
         <TextLink
           href={`/@${nft.creator_username ?? nft.creator_address}`}
-          tw="inline-block max-w-[100px] flex-nowrap overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
+          tw="text-13 inline-block max-w-[100px] flex-nowrap overflow-hidden text-ellipsis whitespace-nowrap font-medium text-gray-900 dark:text-white"
         >
           {getCreatorUsernameFromNFT(nft)}
         </TextLink>
@@ -98,7 +98,7 @@ const TrendingItem = ({
         href={`${getNFTSlug(
           nft
         )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
-        tw="mt-2"
+        tw="mt-2.5"
       >
         <Text tw="max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
           {nft?.token_name}
