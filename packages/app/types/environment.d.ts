@@ -10,6 +10,7 @@ declare global {
       GROWTHBOOK_FEATURES_ENDPOINT: string;
       NEXT_PUBLIC_ALCHEMY_API_KEY: string;
       E2E: string;
+      NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: string;
     }
   }
   interface Window {

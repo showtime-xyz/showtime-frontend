@@ -24,7 +24,6 @@ const useWallet = (): UseWalletReturnType => {
   const coinbaseMobileSDKInstanceRef = useLatestValueRef(mobileSDK);
 
   const walletConnected = web3Modal.isConnected || mobileSDK.connected;
-  //console.log("efef 3324 ", web3Modal.address, web3Modal.isConnected);
   useEffect(() => {
     (async function fetchUserAddress() {
       if (web3Modal.address) {

@@ -16,7 +16,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   ]
 );
 
-const projectId = "81ad3fc9d9d9a2958b53fd0855af4f2a";
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
 
 const { wallets } = getDefaultWallets({
   appName: "Showtime",

@@ -15,7 +15,7 @@ import { Web3Modal } from "app/lib/react-native-web3-modal";
 import { RenderModalProps } from "app/lib/react-native-web3-modal/components/Web3Modal";
 import { scheme } from "app/lib/scheme";
 
-const projectId = "81ad3fc9d9d9a2958b53fd0855af4f2a";
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
 export const providerMetadata: IProviderMetadata = {
   name: "Showtime",
   description: "Connect with Showtime",

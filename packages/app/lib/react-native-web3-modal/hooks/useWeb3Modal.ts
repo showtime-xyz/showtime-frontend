@@ -13,7 +13,6 @@ export function useWeb3Modal() {
   const modalState = useSnapshot(ModalCtrl.state);
   const accountState = useSnapshot(AccountCtrl.state);
   const clientState = useSnapshot(ClientCtrl.state);
-  console.log("accountState ", accountState);
 
   return {
     isOpen: modalState.open,
