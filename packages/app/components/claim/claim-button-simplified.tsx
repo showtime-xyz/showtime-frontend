@@ -12,6 +12,7 @@ import {
   PreAddAppleMusic,
 } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -30,14 +31,16 @@ import { toast } from "design-system/toast";
 import { ClaimStatus, getClaimStatus } from "./claim-button";
 
 type ClaimButtonProps = {
-  edition: CreatorEditionResponse;
+  edition?: CreatorEditionResponse;
   tw?: string;
   style?: StyleProp<ViewStyle>;
+  loading?: boolean;
 };
 
 export const ClaimButtonSimplified = ({
   edition,
   tw = "",
+  loading,
   ...rest
 }: ClaimButtonProps) => {
   const isDark = useIsDarkMode();
@@ -53,8 +56,12 @@ export const ClaimButtonSimplified = ({
       return;
     }
     dispatch({ type: "initial" });
-
-    redirectToClaimDrop(edition.creator_airdrop_edition.contract_address, type);
+    if (edition) {
+      redirectToClaimDrop(
+        edition.creator_airdrop_edition.contract_address,
+        type
+      );
+    }
   };
 
   const status = getClaimStatus(edition);
@@ -89,35 +96,37 @@ export const ClaimButtonSimplified = ({
   }, [status]);
 
   return (
-    <PressableScale
-      tw={["h-5 items-center justify-center rounded-full px-4", tw]}
-      disabled={
-        status === ClaimStatus.Expired || status === ClaimStatus.Claimed
-      }
-      onPress={() => {
-        let type: "free" | "appleMusic" | "spotify" = "free";
-        if (edition?.gating_type === "spotify_save") {
-          type = "spotify";
-        } else if (edition?.gating_type === "multi_provider_music_presave") {
-          type = edition?.creator_spotify_id ? "spotify" : "appleMusic";
-        } else if (edition?.gating_type === "multi_provider_music_save") {
-          type = edition?.spotify_track_url ? "spotify" : "appleMusic";
-        } else if (
-          edition?.gating_type === "music_presave" ||
-          edition?.gating_type === "spotify_presave"
-        ) {
-          type = "spotify";
+    <Skeleton width={72} height={20} radius={999} show={loading}>
+      <PressableScale
+        tw={["h-5 items-center justify-center rounded-full px-4", tw]}
+        disabled={
+          status === ClaimStatus.Expired || status === ClaimStatus.Claimed
         }
-        handleCollectPress(type);
-      }}
-      style={{
-        backgroundColor: buttonBgColor,
-      }}
-      {...rest}
-    >
-      <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
-        {buttonText}
-      </Text>
-    </PressableScale>
+        onPress={() => {
+          let type: "free" | "appleMusic" | "spotify" = "free";
+          if (edition?.gating_type === "spotify_save") {
+            type = "spotify";
+          } else if (edition?.gating_type === "multi_provider_music_presave") {
+            type = edition?.creator_spotify_id ? "spotify" : "appleMusic";
+          } else if (edition?.gating_type === "multi_provider_music_save") {
+            type = edition?.spotify_track_url ? "spotify" : "appleMusic";
+          } else if (
+            edition?.gating_type === "music_presave" ||
+            edition?.gating_type === "spotify_presave"
+          ) {
+            type = "spotify";
+          }
+          handleCollectPress(type);
+        }}
+        style={{
+          backgroundColor: buttonBgColor,
+        }}
+        {...rest}
+      >
+        <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
+          {buttonText}
+        </Text>
+      </PressableScale>
+    </Skeleton>
   );
 };

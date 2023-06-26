@@ -1,12 +1,10 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
-import { Message, Messagev2 } from "@showtime-xyz/universal.icon";
+import { Messagev2 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-import { SocialButton } from "app/components/social-button";
-import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
 
@@ -19,7 +17,6 @@ interface CommentButtonProps {
 
 export function FeedCommentButton({ nft, ...rest }: CommentButtonProps) {
   const router = useRouter();
-  const { iconColor } = useSocialColor();
   const handleOnPress = useCallback(() => {
     const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/comments`;
 

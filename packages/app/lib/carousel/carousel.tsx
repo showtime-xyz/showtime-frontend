@@ -13,7 +13,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { colors, styled } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Controller } from "./controller";
 import { CarouselProps } from "./types";
 
 const StyledRNRCarousel = styled(RNRCarousel);
@@ -58,7 +57,7 @@ export function Carousel({
         customAnimation={effectAnimation}
         {...rest}
       />
-      {pagination && !!progressValue && (
+      {pagination && !!progressValue && data.length > 1 && (
         <View
           tw={[
             "absolute bottom-4 z-10 w-full flex-row items-center justify-center",

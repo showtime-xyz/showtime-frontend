@@ -95,6 +95,7 @@ export const PopularCreators = memo(function PopularCreators() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const { data } = useSuggestedChannelsList();
+  const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
   const router = useRouter();
   const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth - 32;
   const renderItem = useCallback(
@@ -114,14 +115,16 @@ export const PopularCreators = memo(function PopularCreators() {
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           Popular artists
         </Text>
-        <Text
-          tw="text-sm font-semibold text-indigo-700"
-          onPress={() => {
-            router.push("/channels");
-          }}
-        >
-          see all
-        </Text>
+        {isShowSeeAll && (
+          <Text
+            tw="text-sm font-semibold text-indigo-700"
+            onPress={() => {
+              router.push("/channels");
+            }}
+          >
+            see all
+          </Text>
+        )}
       </View>
       <View tw="mb-2 w-full rounded-2xl">
         <HomeSlider data={data} renderItem={renderItem} />

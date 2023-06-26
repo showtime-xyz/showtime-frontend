@@ -50,7 +50,7 @@ export const Home = () => {
 
   return (
     <View tw="w-full flex-1 items-center bg-white dark:bg-black md:pt-8">
-      <View tw="max-w-screen-content w-full">
+      <View tw="lg:max-w-screen-content w-full">
         <InfiniteScrollList
           data={data}
           keyExtractor={keyExtractor}

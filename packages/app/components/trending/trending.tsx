@@ -85,7 +85,7 @@ export const Trending = () => {
 
   return (
     <View tw="min-h-screen w-full bg-white dark:bg-black">
-      <View tw="max-w-screen-content mx-auto w-full px-4">
+      <View tw="md:max-w-screen-content mx-auto w-full px-4">
         <ErrorBoundary>
           <InfiniteScrollList
             useWindowScroll={isMdWidth}

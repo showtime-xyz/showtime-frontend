@@ -14,7 +14,7 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { linkifyDescription } from "app/lib/linkify";
-import { Link, TextLink } from "app/navigation/link";
+import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 

@@ -12,7 +12,7 @@ const NotificationsScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Notifications" });
   return (
     <View tw="w-full flex-1 bg-white dark:bg-black">
-      <View tw="max-w-screen-content mx-auto w-full flex-1 bg-white dark:bg-black md:px-6">
+      <View tw="md:max-w-screen-content mx-auto w-full flex-1 bg-white dark:bg-black md:px-6">
         <ErrorBoundary>
           <Suspense
             fallback={

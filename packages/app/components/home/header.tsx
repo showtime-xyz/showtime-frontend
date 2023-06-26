@@ -18,10 +18,9 @@ import { RouteComponent } from "app/components/route-component";
 import { DESKTOP_CONTENT_WIDTH } from "app/constants/layout";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { Carousel } from "app/lib/carousel";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { TextLink } from "app/navigation/link";
 import { NFT } from "app/types";
 import { getCreatorUsernameFromNFT } from "app/utilities";
@@ -34,8 +33,6 @@ import { NSFWGate } from "../feed-item/nsfw-gate";
 import { ListMedia } from "../media";
 import { HomeSlider } from "./home-slider";
 
-const windowWidth = Dimensions.get("window").width;
-
 const TrendingItem = ({
   index,
   nft,
@@ -45,7 +42,7 @@ const TrendingItem = ({
   width: number;
   index: number;
 }) => {
-  const { data: edition } = useCreatorCollectionDetail(
+  const { data: edition, loading } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
 
@@ -107,14 +104,12 @@ const TrendingItem = ({
           {nft?.token_name}
         </Text>
       </RouteComponent>
-      {edition && (
-        <View tw="mt-2.5 flex-row items-center">
-          <ClaimButtonSimplified edition={edition} tw="mr-3" />
-          <Text tw="text-xs font-bold text-gray-900 dark:text-white">
-            {edition?.total_claimed_count.toLocaleString()}
-          </Text>
-        </View>
-      )}
+      <View tw="mt-2.5 flex-row items-center">
+        <ClaimButtonSimplified edition={edition} loading={loading} />
+        <Text tw="ml-3 text-xs font-bold text-gray-900 dark:text-white">
+          {edition?.total_claimed_count.toLocaleString()}
+        </Text>
+      </View>
     </View>
   );
 };
@@ -122,8 +117,13 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const { data } = useTrendingNFTS({});
+  const { width: scrollbarWidth } = useScrollbarSize();
+
   const router = useRouter();
-  const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth - 32;
+  const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
+  const pagerWidth = isMdWidth
+    ? Math.min(DESKTOP_CONTENT_WIDTH, width - 248)
+    : width - 32 - scrollbarWidth;
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => (
       <TrendingItem
@@ -143,7 +143,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           width={pagerWidth}
           height={isMdWidth ? 164 : 104}
           autoPlayInterval={3000}
-          data={new Array(2).fill(0)}
+          data={new Array(1).fill(0)}
           controller
           tw="mb-2 w-full rounded-2xl"
           pagination={{ variant: "rectangle" }}
@@ -180,14 +180,16 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             <Text tw="text-sm font-bold text-gray-900 dark:text-white">
               Trending
             </Text>
-            <Text
-              tw="text-sm font-semibold text-indigo-700"
-              onPress={() => {
-                router.push("/trending");
-              }}
-            >
-              see all
-            </Text>
+            {isShowSeeAll && (
+              <Text
+                tw="text-sm font-semibold text-indigo-700"
+                onPress={() => {
+                  router.push("/trending");
+                }}
+              >
+                see all
+              </Text>
+            )}
           </View>
           <View tw="w-full rounded-2xl">
             <HomeSlider data={data} renderItem={renderItem} />
