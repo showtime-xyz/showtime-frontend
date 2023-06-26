@@ -6,7 +6,7 @@ import {
   isConnected,
   resetSession,
 } from "@coinbase/wallet-mobile-sdk";
-import { ethers } from "ethers";
+import type { Bytes } from "@ethersproject/bytes";
 import { MMKV } from "react-native-mmkv";
 
 import { WalletMobileSDKContext } from "app/context/wallet-mobile-sdk-context";
@@ -77,7 +77,7 @@ export function WalletMobileSDKProvider({
   }, []);
 
   const personalSign = useCallback(
-    async (message: string | ethers.utils.Bytes, address: string) => {
+    async (message: string | Bytes, address: string) => {
       const action = {
         method: "personal_sign",
         params: {

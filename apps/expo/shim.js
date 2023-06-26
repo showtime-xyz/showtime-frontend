@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 
-import "react-native-get-random-values";
+import "@walletconnect/react-native-compat";
 import { btoa, atob, toByteArray } from "react-native-quick-base64";
 
 if (typeof __dirname === "undefined") global.__dirname = "/";

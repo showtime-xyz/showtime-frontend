@@ -26,8 +26,8 @@ import * as loginStorage from "app/lib/login";
 import { loginPromiseCallbacks } from "app/lib/login-promise";
 import * as logoutStorage from "app/lib/logout";
 import { useMagic } from "app/lib/magic";
+import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 import { deleteRefreshToken } from "app/lib/refresh-token";
-import { useWalletConnect } from "app/lib/walletconnect";
 import type { AuthenticationStatus, MyInfo } from "app/types";
 
 import { MY_INFO_ENDPOINT } from "./user-provider";
@@ -58,7 +58,7 @@ export function AuthProvider({
 
   //#region hooks
   const { mutate } = useSWRConfig();
-  const connector = useWalletConnect();
+  const web3Modal = useWeb3Modal();
   const mobileSDK = useWalletMobileSDK();
   const { setWeb3 } = useWeb3();
   const { magic } = useMagic();
@@ -125,8 +125,8 @@ export function AuthProvider({
       deleteRefreshToken();
       deleteAccessToken();
 
-      if (connector && connector.connected) {
-        connector.killSession();
+      if (web3Modal && web3Modal.isConnected) {
+        web3Modal.disconnect();
       }
 
       if (mobileSDK && mobileSDK.connected) {
@@ -135,7 +135,7 @@ export function AuthProvider({
 
       magic?.user?.logout();
 
-      setWeb3(undefined);
+      setWeb3(null);
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
 
@@ -145,7 +145,7 @@ export function AuthProvider({
     },
     [
       onWagmiDisconnect,
-      connector,
+      web3Modal,
       mobileSDK,
       magic?.user,
       setWeb3,

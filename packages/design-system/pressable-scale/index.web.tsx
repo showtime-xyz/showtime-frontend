@@ -4,11 +4,7 @@ export type PressableScaleProps = PressableProps & {
   scaleTo?: number;
 };
 
-export function PressableScale({
-  scaleTo = 0.95,
-  tw,
-  ...props
-}: PressableScaleProps) {
+export function PressableScale({ tw, ...props }: PressableScaleProps) {
   return (
     <Pressable
       tw={[

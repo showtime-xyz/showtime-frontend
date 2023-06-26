@@ -1,11 +1,11 @@
 import { createContext } from "react";
 
-import type { Web3Provider } from "@ethersproject/providers";
+import type { WalletClient } from "viem";
 
-type Web3ContextType = {
-  web3?: Web3Provider;
+export type Web3ContextType = {
+  web3?: (WalletClient & { isMagic?: boolean }) | null;
   isMagic?: boolean;
-  setWeb3: (web3?: Web3Provider) => void;
+  setWeb3: (web3: (WalletClient & { isMagic?: boolean }) | null) => void;
   setMountRelayerOnApp: (hide: boolean) => void;
   magicWalletAddress?: string;
 };

@@ -1,8 +1,6 @@
 import { useCallback, memo, useRef, useMemo } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
-import { RectButton } from "react-native-gesture-handler";
-
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronLeft } from "@showtime-xyz/universal.icon";
@@ -241,223 +239,219 @@ const CreatorChannelsListCreator = memo(
 
 CreatorChannelsListCreator.displayName = "CreatorChannelsListCreator";
 
-export const CreatorChannels = memo(
-  ({ web_height = undefined }: { web_height?: number }) => {
-    //const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } = useChannelsList();
+export const CreatorChannels = memo(() => {
+  //const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } = useChannelsList();
 
-    const isDark = useIsDarkMode();
-    const bottomBarHeight = usePlatformBottomHeight();
-    const headerHeight = useHeaderHeight();
-    const { height: windowHeight, width } = useWindowDimensions();
-    const isMdWidth = width >= breakpoints["md"];
-    const router = useRouter();
-    const listRef = useRef<any>();
-    useScrollToTop(listRef);
+  const isDark = useIsDarkMode();
+  const bottomBarHeight = usePlatformBottomHeight();
+  const headerHeight = useHeaderHeight();
+  const { height: windowHeight, width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
+  const router = useRouter();
+  const listRef = useRef<any>();
+  useScrollToTop(listRef);
 
-    // my own channels
-    const { data: ownedChannelsData, isLoading: isLoadingOwnChannels } =
-      useOwnedChannelsList();
+  // my own channels
+  const { data: ownedChannelsData, isLoading: isLoadingOwnChannels } =
+    useOwnedChannelsList();
 
-    // channels I'm a member of
-    const {
-      data: joinedChannelsData,
-      fetchMore,
-      refresh,
-      isRefreshing,
-      isLoadingMore: isLoadingMoreJoinedChannels,
-      isLoading: isLoadingJoinedChannels,
-    } = useJoinedChannelsList();
+  // channels I'm a member of
+  const {
+    data: joinedChannelsData,
+    fetchMore,
+    refresh,
+    isRefreshing,
+    isLoadingMore: isLoadingMoreJoinedChannels,
+    isLoading: isLoadingJoinedChannels,
+  } = useJoinedChannelsList();
 
-    // suggested channels
-    const {
-      data: suggestedChannelsData,
-      isLoading: isLoadingSuggestedChannels,
-    } = useSuggestedChannelsList();
+  // suggested channels
+  const { data: suggestedChannelsData, isLoading: isLoadingSuggestedChannels } =
+    useSuggestedChannelsList();
 
-    // since we're quering two different endpoints, and based on the amount of data from the first endpoint
-    // we have to transform our data a bit and decide if we build a section list or a single FlashList
-    // we're going to useMemo for that and return the data in the format we need
-    const transformedData = useMemo(() => {
-      // if we have more then 15 items from the first endpoint, we're not going to build a section list
-      // we're going to build a single FlashList, but we create a section if `data` is smaller than 15 items
-      if (joinedChannelsData.length < 11) {
-        return [
-          channelsSection,
-          // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
-          ...(joinedChannelsData.length > 0 || ownedChannelsData.length > 0
-            ? [
-                ...ownedChannelsData.map((ownedChannel) => ({
-                  ...ownedChannel,
-                  itemType: "owned",
-                })),
-                ...joinedChannelsData,
-              ]
-            : []),
-          // check if we have any suggested channels, if we do, we're going to add a section for them (+ the suggested channels)
-          ...(suggestedChannelsData.length > 0
-            ? [
-                suggestedChannelsSection,
-                ...suggestedChannelsData.map((suggestedChannel) => ({
-                  ...suggestedChannel,
-                  itemType: "creator",
-                })),
-              ]
-            : []),
-        ];
-      } else {
-        return [
-          channelsSection,
-          ...(ownedChannelsData.length > 0
-            ? [
-                ...ownedChannelsData.map((ownedChannel) => ({
-                  ...ownedChannel,
-                  itemType: "owned",
-                })),
-              ]
-            : []),
-          ...joinedChannelsData,
-        ];
-      }
-    }, [
-      joinedChannelsData,
-      ownedChannelsData,
-      suggestedChannelsData,
-    ]) as CreatorChannelsListItemProps[];
+  // since we're quering two different endpoints, and based on the amount of data from the first endpoint
+  // we have to transform our data a bit and decide if we build a section list or a single FlashList
+  // we're going to useMemo for that and return the data in the format we need
+  const transformedData = useMemo(() => {
+    // if we have more then 15 items from the first endpoint, we're not going to build a section list
+    // we're going to build a single FlashList, but we create a section if `data` is smaller than 15 items
+    if (joinedChannelsData.length < 11) {
+      return [
+        channelsSection,
+        // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
+        ...(joinedChannelsData.length > 0 || ownedChannelsData.length > 0
+          ? [
+              ...ownedChannelsData.map((ownedChannel) => ({
+                ...ownedChannel,
+                itemType: "owned",
+              })),
+              ...joinedChannelsData,
+            ]
+          : []),
+        // check if we have any suggested channels, if we do, we're going to add a section for them (+ the suggested channels)
+        ...(suggestedChannelsData.length > 0
+          ? [
+              suggestedChannelsSection,
+              ...suggestedChannelsData.map((suggestedChannel) => ({
+                ...suggestedChannel,
+                itemType: "creator",
+              })),
+            ]
+          : []),
+      ];
+    } else {
+      return [
+        channelsSection,
+        ...(ownedChannelsData.length > 0
+          ? [
+              ...ownedChannelsData.map((ownedChannel) => ({
+                ...ownedChannel,
+                itemType: "owned",
+              })),
+            ]
+          : []),
+        ...joinedChannelsData,
+      ];
+    }
+  }, [
+    joinedChannelsData,
+    ownedChannelsData,
+    suggestedChannelsData,
+  ]) as CreatorChannelsListItemProps[];
 
-    const renderItem = useCallback(({ item }: CreatorChannelsListProps) => {
-      if (item.type === "section") {
-        return (
-          <CreatorChannelsHeader
-            title={item.title}
-            subtext={item?.subtext}
-            tw={item.tw}
-          />
-        );
-      }
-
-      if (item.itemType === "creator") {
-        return <CreatorChannelsListCreator item={item} />;
-      }
-
-      return <CreatorChannelsListItem item={item} />;
-    }, []);
-
-    const ListFooterComponent = useCallback(() => {
-      if (
-        isLoadingJoinedChannels ||
-        isLoadingOwnChannels ||
-        isLoadingSuggestedChannels
-      ) {
-        return <CCSkeleton />;
-      }
-
-      if (
-        !isLoadingOwnChannels &&
-        !isLoadingJoinedChannels &&
-        isLoadingMoreJoinedChannels
-      ) {
-        return (
-          <View tw="items-center pb-4 pt-4">
-            <Spinner size="small" />
-          </View>
-        );
-      }
-
-      return null;
-    }, [
-      isLoadingJoinedChannels,
-      isLoadingOwnChannels,
-      isLoadingSuggestedChannels,
-      isLoadingMoreJoinedChannels,
-    ]);
-    const mdHeight = windowHeight - 140;
-
-    if (!isMdWidth) {
-      if (router.query["channelId"]) {
-        return <Messages />;
-      }
-
+  const renderItem = useCallback(({ item }: CreatorChannelsListProps) => {
+    if (item.type === "section") {
       return (
-        <View tw="w-full">
-          <CreatorChannelsListMobile />
+        <CreatorChannelsHeader
+          title={item.title}
+          subtext={item?.subtext}
+          tw={item.tw}
+        />
+      );
+    }
+
+    if (item.itemType === "creator") {
+      return <CreatorChannelsListCreator item={item} />;
+    }
+
+    return <CreatorChannelsListItem item={item} />;
+  }, []);
+
+  const ListFooterComponent = useCallback(() => {
+    if (
+      isLoadingJoinedChannels ||
+      isLoadingOwnChannels ||
+      isLoadingSuggestedChannels
+    ) {
+      return <CCSkeleton />;
+    }
+
+    if (
+      !isLoadingOwnChannels &&
+      !isLoadingJoinedChannels &&
+      isLoadingMoreJoinedChannels
+    ) {
+      return (
+        <View tw="items-center pb-4 pt-4">
+          <Spinner size="small" />
         </View>
       );
     }
 
+    return null;
+  }, [
+    isLoadingJoinedChannels,
+    isLoadingOwnChannels,
+    isLoadingSuggestedChannels,
+    isLoadingMoreJoinedChannels,
+  ]);
+  const mdHeight = windowHeight - 140;
+
+  if (!isMdWidth) {
+    if (router.query["channelId"]) {
+      return <Messages />;
+    }
+
     return (
-      <View
-        tw="mt-24 w-full max-w-screen-lg flex-row px-4"
-        style={{ height: mdHeight }}
-      >
-        <Button
-          iconOnly
-          size="regular"
-          variant="secondary"
-          tw="absolute md:hidden lg:-left-12 lg:flex"
-          onPress={() => router.push("/")}
-        >
-          <ChevronLeft width={24} height={24} />
-        </Button>
-        <View tw="h-full w-80 overflow-hidden rounded-2xl bg-white dark:bg-black">
-          <InfiniteScrollList
-            useWindowScroll={false}
-            data={
-              isLoadingOwnChannels ||
-              isLoadingJoinedChannels ||
-              isLoadingSuggestedChannels
-                ? []
-                : transformedData
-            }
-            getItemType={(item) => {
-              // To achieve better performance, specify the type based on the item
-              return item.type === "section"
-                ? "sectionHeader"
-                : item.itemType ?? "row";
-            }}
-            style={{
-              height: mdHeight,
-            }}
-            // for blur effect on Native
-            contentContainerStyle={Platform.select({
-              ios: {
-                paddingTop: headerHeight,
-                paddingBottom: bottomBarHeight,
-              },
-              android: {
-                paddingBottom: bottomBarHeight,
-              },
-              default: {},
-            })}
-            // Todo: unity refresh control same as tab view
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefreshing}
-                onRefresh={refresh}
-                progressViewOffset={headerHeight}
-                tintColor={isDark ? colors.gray[200] : colors.gray[700]}
-                colors={[colors.violet[500]]}
-                progressBackgroundColor={
-                  isDark ? colors.gray[200] : colors.gray[100]
-                }
-              />
-            }
-            renderItem={renderItem}
-            keyExtractor={keyExtractor}
-            onEndReached={fetchMore}
-            refreshing={isRefreshing}
-            onRefresh={refresh}
-            ListFooterComponent={ListFooterComponent}
-            ref={listRef}
-            estimatedItemSize={110}
-          />
-        </View>
-        <View tw="ml-3 h-full flex-1 overflow-hidden rounded-2xl bg-white dark:bg-black">
-          <Messages />
-        </View>
+      <View tw="w-full">
+        <CreatorChannelsListMobile />
       </View>
     );
   }
-);
+
+  return (
+    <View
+      tw="mt-24 w-full max-w-screen-lg flex-row px-4"
+      style={{ height: mdHeight }}
+    >
+      <Button
+        iconOnly
+        size="regular"
+        variant="secondary"
+        tw="absolute md:hidden lg:-left-12 lg:flex"
+        onPress={() => router.push("/")}
+      >
+        <ChevronLeft width={24} height={24} />
+      </Button>
+      <View tw="h-full w-80 overflow-hidden rounded-2xl bg-white dark:bg-black">
+        <InfiniteScrollList
+          useWindowScroll={false}
+          data={
+            isLoadingOwnChannels ||
+            isLoadingJoinedChannels ||
+            isLoadingSuggestedChannels
+              ? []
+              : transformedData
+          }
+          getItemType={(item) => {
+            // To achieve better performance, specify the type based on the item
+            return item.type === "section"
+              ? "sectionHeader"
+              : item.itemType ?? "row";
+          }}
+          style={{
+            height: mdHeight,
+          }}
+          // for blur effect on Native
+          contentContainerStyle={Platform.select({
+            ios: {
+              paddingTop: headerHeight,
+              paddingBottom: bottomBarHeight,
+            },
+            android: {
+              paddingBottom: bottomBarHeight,
+            },
+            default: {},
+          })}
+          // Todo: unity refresh control same as tab view
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={refresh}
+              progressViewOffset={headerHeight}
+              tintColor={isDark ? colors.gray[200] : colors.gray[700]}
+              colors={[colors.violet[500]]}
+              progressBackgroundColor={
+                isDark ? colors.gray[200] : colors.gray[100]
+              }
+            />
+          }
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          onEndReached={fetchMore}
+          refreshing={isRefreshing}
+          onRefresh={refresh}
+          ListFooterComponent={ListFooterComponent}
+          ref={listRef}
+          estimatedItemSize={110}
+        />
+      </View>
+      <View tw="ml-3 h-full flex-1 overflow-hidden rounded-2xl bg-white dark:bg-black">
+        <Messages />
+      </View>
+    </View>
+  );
+});
 
 CreatorChannels.displayName = "CreatorChannels";
 
