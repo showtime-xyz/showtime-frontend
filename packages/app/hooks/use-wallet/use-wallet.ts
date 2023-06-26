@@ -137,7 +137,7 @@ const useWallet = (): UseWalletReturnType => {
           });
 
           const signature = await walletClient.signMessage({
-            account: walletConnectInstanceRef.current.address,
+            account: walletConnectInstanceRef.current.address as `0x${string}`,
             message: args.message,
           });
 
