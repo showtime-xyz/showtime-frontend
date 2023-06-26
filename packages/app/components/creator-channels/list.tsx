@@ -19,7 +19,6 @@ import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { Link } from "app/navigation/link";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import {
@@ -214,7 +213,7 @@ const CreatorChannelsListCreator = memo(
                   onPress={async () => {
                     listRef.current?.prepareForLayoutAnimationRender();
                     await joinChannel.trigger({ channelId: item.id });
-                    router.push(`/channels/${item.id}`);
+                    router.push(`/channels/${item.id}?fresh=channel`);
                   }}
                   disabled={joinChannel.isMutating}
                 >
@@ -303,8 +302,8 @@ export const CreatorChannelsList = memo(
           // check if we have any joined channels, if we do, we're going to add a section for them (+ the joined channels)
           ...(joinedChannelsData.length > 0 || ownedChannelsData.length > 0
             ? [
-                ...ownedChannelsData.map((suggestedChannel) => ({
-                  ...suggestedChannel,
+                ...ownedChannelsData.map((ownedChannel) => ({
+                  ...ownedChannel,
                   itemType: "owned",
                 })),
                 ...joinedChannelsData,
@@ -322,7 +321,18 @@ export const CreatorChannelsList = memo(
             : []),
         ];
       } else {
-        return [channelsSection, ...ownedChannelsData, ...joinedChannelsData];
+        return [
+          channelsSection,
+          ...(ownedChannelsData.length > 0
+            ? [
+                ...ownedChannelsData.map((ownedChannel) => ({
+                  ...ownedChannel,
+                  itemType: "owned",
+                })),
+              ]
+            : []),
+          ...joinedChannelsData,
+        ];
       }
     }, [
       joinedChannelsData,

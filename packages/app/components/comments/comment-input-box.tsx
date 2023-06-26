@@ -3,6 +3,7 @@ import { Platform, ViewStyle } from "react-native";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
+import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import { Close } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -39,6 +40,16 @@ export const CommentInputBox = forwardRef<
   );
   const { user } = useUser();
   const { onboardingPromise } = useOnboardingPromise();
+
+  useEffectOnce(() => {
+    setTimeout(() => {
+      requestAnimationFrame(() => {
+        if (Platform.OS !== "web") {
+          commentInputRef?.current?.focus();
+        }
+      });
+    }, 600);
+  });
 
   //#endregion
 

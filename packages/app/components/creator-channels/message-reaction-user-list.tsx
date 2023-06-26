@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, useEffect } from "react";
+import { useCallback, useState, useMemo } from "react";
 
 import { TabView } from "react-native-tab-view";
 
@@ -28,10 +28,8 @@ export const MessageReactionUserListModal = () => {
   const [channelId] = useParam("channelId");
   const [selectedReactionId] = useParam("selectedReactionId");
   const [messageId] = useParam("messageId");
-  const [index, setIndex] = useState(0);
   const channelMessages = useChannelMessages(channelId);
   const channelDetails = useChannelById(channelId);
-
   const message = useMemo(() => {
     let msg: ChannelMessageItem | null = null;
     channelMessages.data?.forEach((m) => {
@@ -41,7 +39,6 @@ export const MessageReactionUserListModal = () => {
     });
     return msg;
   }, [channelMessages.data, messageId]);
-
   const routes = useMemo(() => {
     if (!message) return [];
     let idx = 0;
@@ -61,13 +58,9 @@ export const MessageReactionUserListModal = () => {
       .filter(Boolean) as Route[];
   }, [channelDetails.data?.channel_reactions, message]);
 
-  useEffect(() => {
-    if (!routes || !selectedReactionId) return;
-    const index = routes.findIndex((r) => r.key === selectedReactionId);
-    if (index !== -1) {
-      setIndex(index);
-    }
-  }, [routes, selectedReactionId]);
+  const [index, setIndex] = useState(
+    routes.findIndex((r) => r.key === selectedReactionId)
+  );
 
   const renderScene = useCallback(
     ({
@@ -85,7 +78,13 @@ export const MessageReactionUserListModal = () => {
     [index]
   );
 
-  if (!selectedReactionId || routes.length === 0) return null;
+  if (
+    !selectedReactionId ||
+    routes.length === 0 ||
+    channelDetails.isLoading ||
+    channelMessages.isLoading
+  )
+    return null;
 
   return (
     <View tw="flex-1">

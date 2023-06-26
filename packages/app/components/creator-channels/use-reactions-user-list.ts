@@ -26,8 +26,8 @@ export const useReactionsUserList = ({
 }) => {
   let indexRef = useRef(0);
   const messagesUrl = useCallback(
-    (index: number, previousPageData: []) => {
-      if (previousPageData && !previousPageData.length) return null;
+    (index: number, previousPageData: any) => {
+      if (previousPageData && !previousPageData?.members.length) return null;
       indexRef.current = index;
       if (reactionId && messageId) {
         return `v1/channels/message/${messageId}/reactions/${reactionId}?page=${

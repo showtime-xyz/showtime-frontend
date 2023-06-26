@@ -205,7 +205,7 @@ export const CreatorChannelsTabBarIcon = ({
       >
         <Tooltip.Trigger>
           <View tw="items-center justify-center">
-            <View tw="w-14 flex-row items-center justify-center rounded-full bg-indigo-700 md:h-12 md:w-12">
+            <View tw="h-[35px] w-[75px] flex-row items-center justify-center rounded-full bg-indigo-700 md:h-12 md:w-12">
               <CreatorChannel width={24} height={24} color="#fff" />
               {badgeNumber > 0 && (
                 <Text tw="ml-1 text-sm font-medium text-white md:hidden">
@@ -216,7 +216,7 @@ export const CreatorChannelsTabBarIcon = ({
           </View>
         </Tooltip.Trigger>
         <Tooltip.Content
-          sideOffset={3}
+          sideOffset={5}
           containerStyle={{
             paddingLeft: 10,
             paddingRight: 10,

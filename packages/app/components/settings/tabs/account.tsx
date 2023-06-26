@@ -46,6 +46,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
       <SettingsTitle
         title="Connected Accounts"
         desc="Manage the accounts connected to your profile."
+        descTw="mt-1"
       />
       <View tw="mt-6 px-4 md:px-0">
         <ConnectSpotify />
