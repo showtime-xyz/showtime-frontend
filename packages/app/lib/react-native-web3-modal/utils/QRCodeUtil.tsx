@@ -154,6 +154,7 @@ export const QRCodeUtil = {
     // Drawing lines for dots that are close to each other
     Object.entries(circlesToConnect)
       // Only get dots that have more than one dot on the x axis
+      // eslint-disable-next-line unused-imports/no-unused-vars
       .filter(([_, cys]) => cys.length > 1)
       // Removing dots with no neighbors
       .map(([cx, cys]) => {

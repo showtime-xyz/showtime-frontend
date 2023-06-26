@@ -119,6 +119,7 @@ export function formatToUSNumber(number: number) {
   }
 }
 
+/* Note by HIRBOD: keep it
 function getVideoUrlByClosestWidth(
   videoData: BunnyVideoUrls,
   targetWidth: number = 1280
@@ -146,6 +147,7 @@ function getVideoUrlByClosestWidth(
 
   return videoData.original;
 }
+*/
 
 function getVideoUrl(
   videoData: BunnyVideoUrls,

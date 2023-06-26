@@ -149,6 +149,9 @@ export const CreatorChannelsTabBarIcon = ({
   const router = useRouter();
   const [showTip, setShowTip] = useState(false);
   const [open, setOpen] = useState(true);
+  // TODO: use real badge number once API is ready
+  // @ts-ignore
+  // eslint-disable-next-line unused-imports/no-unused-vars
   const [badgeNumber, setBadgeNumber] = useState(0);
   const isSet = useRef(false);
 
