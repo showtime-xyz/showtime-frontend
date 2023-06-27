@@ -146,7 +146,7 @@ export const HeaderMd = withColorScheme(() => {
         <Link href="/" tw="flex-row items-center pt-8">
           <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
         </Link>
-        <View tw="-ml-4 mt-5 w-44 justify-center">
+        <View tw="-ml-4 mt-5 w-48 justify-center">
           {HOME_ROUTES.map((item) => (
             <Link
               tw={[
