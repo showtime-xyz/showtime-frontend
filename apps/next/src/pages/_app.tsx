@@ -17,7 +17,6 @@ import { View } from "@showtime-xyz/universal.view";
 import Footer from "app/components/footer";
 import Header from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
-import { DESKTOP_LEFT_MENU_WIDTH } from "app/constants/layout";
 import { useScript } from "app/hooks/use-script";
 import { initialiseAppleMusic } from "app/lib/apple-music-auth/apple-music-auth";
 import { Sentry } from "app/lib/sentry";
@@ -180,7 +179,7 @@ function App({ Component, pageProps, router }: AppProps) {
             />
 
             <View
-              tw={`w-full items-center md:ml-auto md:w-[calc(100vw-${DESKTOP_LEFT_MENU_WIDTH}px)]`}
+              tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]"
               style={{
                 minHeight: "100svh",
               }}
