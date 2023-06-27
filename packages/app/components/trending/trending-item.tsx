@@ -84,7 +84,7 @@ export const TrendingItem = ({
         <View tw="w-2" />
         <TextLink
           href={`/@${nft.creator_username ?? nft.creator_address}`}
-          tw="text-13 inline-block max-w-[100px] flex-nowrap overflow-hidden text-ellipsis whitespace-nowrap font-medium text-gray-900 dark:text-white"
+          tw="text-13 inline-block max-w-[128px] flex-nowrap overflow-hidden text-ellipsis whitespace-nowrap font-medium text-gray-900 dark:text-white"
         >
           {getCreatorUsernameFromNFT(nft)}
         </TextLink>
@@ -98,11 +98,17 @@ export const TrendingItem = ({
         )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
         tw="mt-2.5"
       >
-        <Text tw="max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
+        <Text
+          tw="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white"
+          style={{ maxWidth: mediaWidth }}
+        >
           {nft?.token_name}
         </Text>
       </RouteComponent>
-      <View tw="mt-2.5 flex-row items-center">
+      <View
+        tw="mt-2.5 flex-row items-center justify-between"
+        style={{ maxWidth: mediaWidth }}
+      >
         <ClaimButtonSimplified edition={edition} loading={loading} />
         {edition ? (
           <Text tw="ml-3 text-xs font-bold text-gray-900 dark:text-white">

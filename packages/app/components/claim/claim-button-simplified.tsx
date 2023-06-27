@@ -100,7 +100,7 @@ export const ClaimButtonSimplified = ({
   }
   return (
     <PressableScale
-      tw={["h-5 items-center justify-center rounded-full px-4", tw]}
+      tw={["h-6 w-24 items-center justify-center rounded-full", tw]}
       disabled={
         status === ClaimStatus.Expired || status === ClaimStatus.Claimed
       }
