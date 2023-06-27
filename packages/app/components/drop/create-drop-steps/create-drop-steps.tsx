@@ -38,7 +38,9 @@ export const CreateDropSteps = () => {
     description:
       "Promote an unreleased or live song to Spotify and Apple Music by pasting URLs below",
     price: "",
-    file: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
+    file: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png" as
+      | string
+      | File,
   });
   const Alert = useAlert();
 
@@ -59,6 +61,7 @@ export const CreateDropSteps = () => {
       extension === "mov" ||
       (typeof file === "object" && file.type === "video/quicktime")
     ) {
+      console.log("MOV file detected");
     } else {
       setFormValues({
         ...formValues,
@@ -79,6 +82,9 @@ export const CreateDropSteps = () => {
             modalContext?.snapToIndex(0);
             modalContext?.pop();
           }}
+          title={formValues.title}
+          description={formValues.description}
+          file={formValues.file}
         />
       );
     case "media":
@@ -92,6 +98,8 @@ export const CreateDropSteps = () => {
             modalContext?.snapToIndex(0);
             setStep("select-drop");
           }}
+          description={formValues.description}
+          title={formValues.title}
           file={formValues.file}
         />
       );
@@ -101,6 +109,8 @@ export const CreateDropSteps = () => {
           handleNextStep={() => setStep("song-uri")}
           handlePrevStep={() => setStep("media")}
           file={formValues.file}
+          title={formValues.title}
+          description={formValues.description}
         />
       );
     case "song-uri":
@@ -118,6 +128,9 @@ export const CreateDropSteps = () => {
         <CreateDropMoreOptions
           handleNextStep={() => setStep("song-uri")}
           handlePrevStep={() => setStep("song-uri")}
+          title={formValues.title}
+          description={formValues.description}
+          file={formValues.file}
         />
       );
     default:
@@ -131,6 +144,9 @@ const SelectDropTypeStep = (props: StepProps) => {
       <SelectDropType
         handleNextStep={props.handleNextStep}
         handlePrevStep={props.handlePrevStep}
+        title={props.title}
+        description={props.description}
+        file={props.file}
       />
     </Layout>
   );
@@ -143,24 +159,32 @@ const CreateDropStepMedia = (
   }
 ) => {
   return (
-    <Layout onBackPress={props.handlePrevStep} title="Create">
-      <Text tw="text-center text-xl">
-        Upload an image or video for your paid unlockable.
-      </Text>
-      <View tw="mt-8 items-center">
-        <MediaPicker onChange={props.handleFileChange} value={props.file} />
-        <Text tw="pt-4 text-sm text-gray-800">
-          This could be an alternative album cover, unreleased content, or a
-          short video snippet promoting your upcoming release.
+    <Layout
+      onBackPress={props.handlePrevStep}
+      title="Create"
+      handleNextPress={props.handleNextStep}
+    >
+      <ScrollView tw="px-4">
+        <Text tw="text-center text-xl">
+          Upload an image or video for your paid unlockable.
         </Text>
+        <View tw="mt-8 items-center">
+          <MediaPicker onChange={props.handleFileChange} value={props.file} />
+          <Text tw="py-4 text-sm text-gray-700">
+            This could be an alternative album cover, unreleased content, or a
+            short video snippet promoting your upcoming release.
+          </Text>
+        </View>
+      </ScrollView>
+      <View tw="mt-4 px-4">
+        <Button
+          size="regular"
+          tw="w-full self-center"
+          onPress={props.handleNextStep}
+        >
+          Next
+        </Button>
       </View>
-      <Button
-        size="regular"
-        tw="mt-8 w-full self-center"
-        onPress={props.handleNextStep}
-      >
-        Next
-      </Button>
     </Layout>
   );
 };
@@ -176,50 +200,52 @@ const CreateDropStepTitle = (
 
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
-      <View tw="mt-8 items-center">
-        <Preview
-          file={props.file}
-          width={mediaDimension}
-          height={mediaDimension}
-          style={{ borderRadius: 16 }}
-        />
-      </View>
-      <View tw="mt-4">
-        <Fieldset
-          label="Title"
-          placeholder="Give your drop a title"
-          numberOfLines={2}
-          multiline
-        />
-      </View>
-      <View tw="mt-4">
-        <Fieldset
-          label="Description"
-          tw="flex-1"
-          placeholder="Why should people collect this drop? Raffle Automatically selects a winner once your song is live."
-          multiline
-          textAlignVertical="top"
-          numberOfLines={3}
-        />
-        <View tw="absolute right-3 top-3 flex-row items-center">
-          <Raffle color="black" width={18} height={18} />
-          <Text tw="mx-1 text-xs font-bold text-gray-800">Raffle</Text>
-          <Switch checked size="small" />
+      <ScrollView tw="px-4">
+        <View tw="mt-8 items-center">
+          <Preview
+            file={props.file}
+            width={mediaDimension}
+            height={mediaDimension}
+            style={{ borderRadius: 16 }}
+          />
         </View>
-      </View>
-      <View>
-        <Text tw="mt-4">
-          Promote a collectible, raffle or allow-list to attract more
-          collectors. You can edit up to 30 minutes after creating.
-        </Text>
-      </View>
-      <Button
-        size="regular"
-        tw="mt-4 w-full self-center"
-        onPress={props.handleNextStep}
-      >
-        Next
-      </Button>
+        <View tw="mt-4">
+          <Fieldset
+            label="Title"
+            placeholder="Give your drop a title"
+            numberOfLines={2}
+            multiline
+          />
+        </View>
+        <View tw="mt-4">
+          <Fieldset
+            label="Description"
+            tw="flex-1"
+            placeholder="Why should people collect this drop? Raffle Automatically selects a winner once your song is live."
+            multiline
+            textAlignVertical="top"
+            numberOfLines={3}
+          />
+          <View tw="absolute right-3 top-3 flex-row items-center">
+            <Raffle color="black" width={18} height={18} />
+            <Text tw="mx-1 text-xs font-bold text-gray-800">Raffle</Text>
+            <Switch checked size="small" />
+          </View>
+        </View>
+        <View>
+          <Text tw="mt-4">
+            Promote a collectible, raffle or allow-list to attract more
+            collectors. You can edit up to 30 minutes after creating.
+          </Text>
+        </View>
+        <Button
+          size="regular"
+          tw="mt-4 w-full self-center"
+          onPress={props.handleNextStep}
+        >
+          Next
+        </Button>
+      </ScrollView>
     </Layout>
   );
 };
@@ -291,6 +317,7 @@ const Layout = (props: {
   title: string;
   onBackPress: () => void;
   children: any;
+  handleNextPress: () => void;
 }) => {
   return (
     <View tw="flex-1 py-8">
@@ -302,7 +329,7 @@ const Layout = (props: {
           <Text tw="text-lg">{props.title}</Text>
         </View>
       </View>
-      <ScrollView tw="px-4">{props.children}</ScrollView>
+      {props.children}
     </View>
   );
 };

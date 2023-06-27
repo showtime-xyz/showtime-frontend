@@ -58,27 +58,27 @@ export const SelectDropType = (props: StepProps) => {
         </Button>
         <View tw="mt-4 w-[70%] self-center" style={{ rowGap: 8 }}>
           <View>
-            <View tw="flex-row" style={{ columnGap: 8 }}>
+            <View tw="flex-row" style={{ columnGap: 12 }}>
               <Raffle color={iconColor} width={20} height={20} />
-              <View>
+              <View style={{ gap: 2 }}>
                 <Text>Offer Raffles</Text>
                 <Text>Gift an NFT to attract collectors</Text>
               </View>
             </View>
           </View>
           <View>
-            <View tw="flex-row" style={{ columnGap: 8 }}>
+            <View tw="flex-row" style={{ columnGap: 12 }}>
               <CreatorChannel color={iconColor} width={20} height={20} />
-              <View>
+              <View style={{ gap: 2 }}>
                 <Text>Build a fanbase</Text>
                 <Text>Collectors auto-join your channel</Text>
               </View>
             </View>
           </View>
           <View>
-            <View tw="flex-row" style={{ columnGap: 8 }}>
+            <View tw="flex-row" style={{ columnGap: 12 }}>
               <CollectorList color={iconColor} width={20} height={20} />
-              <View>
+              <View style={{ gap: 2 }}>
                 <Text>Collector lists</Text>
                 <Text>Share a link to instantly create</Text>
               </View>
@@ -87,50 +87,5 @@ export const SelectDropType = (props: StepProps) => {
         </View>
       </View>
     </BottomSheetScrollView>
-  );
-};
-
-const CreateCard = ({
-  title,
-  description,
-  onPress,
-  icon,
-  isNew = false,
-}: {
-  title: string;
-  description: string;
-  onPress: () => void;
-  icon: React.ReactNode;
-  isNew?: boolean;
-}) => {
-  return (
-    <PressableScale
-      onPress={onPress}
-      tw="flex-row justify-between rounded-xl bg-gray-100 py-4 pl-4 pr-2 dark:bg-gray-900"
-    >
-      {icon}
-      <View tw="ml-2 mt-1 flex-1 flex-row items-center justify-between">
-        <View tw="flex-1">
-          <View tw="flex-row ">
-            <Text tw="text-base font-semibold text-gray-900 dark:text-gray-100">
-              {title}
-            </Text>
-            {isNew && (
-              <Chip
-                label="New"
-                tw="-mt-0.5 ml-1 bg-indigo-700 p-1 md:px-1.5"
-                textTw="text-white"
-                variant="text"
-              />
-            )}
-          </View>
-          <View tw="h-2" />
-          <Text tw="text-sm text-gray-900 dark:text-gray-100">
-            {description}
-          </Text>
-        </View>
-        <ChevronRight color={"#696969"} width={24} height={24} />
-      </View>
-    </PressableScale>
   );
 };
