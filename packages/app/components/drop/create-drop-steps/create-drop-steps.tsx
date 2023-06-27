@@ -22,6 +22,10 @@ import { MediaPicker } from "./media-picker";
 import { SelectDropType } from "./select-drop-type";
 import { StepProps } from "./types";
 
+const SECONDS_IN_A_DAY = 24 * 60 * 60;
+const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
+const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
+
 type CreateDropStep =
   | "media"
   | "title"
@@ -121,6 +125,7 @@ export const CreateDropSteps = () => {
           file={formValues.file}
           description={formValues.description}
           title={formValues.title}
+          handleMoreOptions={() => setStep("more-options")}
         />
       );
     case "more-options":
@@ -250,74 +255,156 @@ const CreateDropStepTitle = (
   );
 };
 
-const CreateDropStepSongURI = (props: StepProps) => {
+const CreateDropStepSongURI = (
+  props: StepProps & { handleMoreOptions: () => void }
+) => {
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
-      <View tw="flex-row items-center">
-        <Preview
-          width={40}
-          height={40}
-          resizeMode="cover"
-          style={{ borderRadius: 4 }}
-          file={props.file}
-        />
-        <Text tw="ml-2 text-base font-semibold text-gray-600">
-          {props.title}
-        </Text>
-      </View>
-      <View tw="mt-8">
-        <Text tw="text-sm font-semibold">Music Details</Text>
-        <Text tw="pt-1 text-gray-600">{props.description}</Text>
-        <View tw="mt-8 rounded-lg bg-gray-100 p-4">
-          <View tw="flex-row items-center justify-between">
-            <Text tw="text-sm font-semibold">More options</Text>
-            <ChevronRight color="black" width={24} height={24} />
-          </View>
-          <View tw="items-start">
-            <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
-              <DataPill tw="bg-white" label="Open Edition" type="text" />
-              <DataPill tw="bg-white" label="10% Royalties" type="text" />
-              <DataPill tw="bg-white" label="Duration: 1 month" type="text" />
+      <ScrollView tw="px-4">
+        <View tw="flex-row items-center">
+          <Preview
+            width={40}
+            height={40}
+            resizeMode="cover"
+            style={{ borderRadius: 4 }}
+            file={props.file}
+          />
+          <Text tw="ml-2 text-base font-semibold text-gray-600">
+            {props.title}
+          </Text>
+        </View>
+        <View tw="mt-8">
+          <Text tw="text-sm font-semibold">Music Details</Text>
+          <Text tw="pt-1 text-gray-600">{props.description}</Text>
+          <View tw="mt-8 rounded-lg bg-gray-100 p-4">
+            <Pressable
+              tw="flex-row items-center justify-between"
+              onPress={props.handleMoreOptions}
+            >
+              <Text tw="text-sm font-semibold">More options</Text>
+              <ChevronRight color="black" width={24} height={24} />
+            </Pressable>
+            <View tw="items-start">
+              <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
+                <DataPill tw="bg-white" label="Open Edition" type="text" />
+                <DataPill tw="bg-white" label="10% Royalties" type="text" />
+                <DataPill tw="bg-white" label="Duration: 1 month" type="text" />
+              </View>
             </View>
           </View>
         </View>
-      </View>
 
-      <View tw="mt-8 flex-row">
-        <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
-          This drop will be owned by you
-        </Text>
-      </View>
+        <View tw="mt-8 flex-row">
+          <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
+            This drop will be owned by you
+          </Text>
+        </View>
 
-      <Pressable tw="mt-2 flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900">
-        <Checkbox
-          onChange={() => {}}
-          checked={false}
-          aria-label="I agree to the terms and conditions"
-        />
+        <Pressable tw="mt-4 flex-1 flex-row items-center rounded-xl bg-gray-100 dark:bg-gray-900">
+          <Checkbox
+            onChange={() => {}}
+            checked={false}
+            aria-label="I agree to the terms and conditions"
+          />
 
-        <Text tw="px-4 text-gray-600 dark:text-gray-400">
-          I have the rights to publish this content, and understand it will be
-          minted on the Polygon network.
-        </Text>
-      </Pressable>
+          <Text tw="px-4 text-gray-600 dark:text-gray-400">
+            I have the rights to publish this content, and understand it will be
+            minted on the Polygon network.
+          </Text>
+        </Pressable>
 
-      <View tw="mt-4">
-        <Button size="regular">Create Drop</Button>
-      </View>
+        <View tw="mt-4">
+          <Button size="regular">Create Drop</Button>
+        </View>
+      </ScrollView>
     </Layout>
   );
 };
 
 const CreateDropMoreOptions = (props: StepProps) => {
-  return <Text>More options</Text>;
+  const [isUnlimited, setIsUnlimited] = useState(false);
+
+  const durationOptions = [
+    { label: "1 day", value: SECONDS_IN_A_DAY },
+    { label: "1 week", value: SECONDS_IN_A_WEEK },
+    { label: "1 month", value: SECONDS_IN_A_MONTH },
+  ];
+  return (
+    <Layout onBackPress={props.handlePrevStep} title="More options">
+      <View tw="flex-1 flex-row">
+        <Fieldset
+          tw={isUnlimited ? "flex-1 opacity-40" : "flex-1 opacity-100"}
+          label="Edition size"
+          placeholder="Enter number"
+          helperText="How many editions will be available to collect"
+          disabled={isUnlimited}
+        />
+
+        <Pressable
+          onPress={() => setIsUnlimited((isUnlimited) => !isUnlimited)}
+          tw="absolute right-4 top-10 flex-row items-center"
+          style={{ opacity: 1 }}
+        >
+          <Text tw="mr-2 text-base font-medium text-gray-600 dark:text-gray-400">
+            Unlimited
+          </Text>
+          <Checkbox
+            onChange={() => setIsUnlimited((isUnlimited) => !isUnlimited)}
+            checked={isUnlimited}
+            aria-label="unlimited editions for drop"
+          />
+        </Pressable>
+      </View>
+      <Fieldset
+        tw="flex-1"
+        label="Your royalties (%)"
+        placeholder="Enter number"
+        helperText="Earn royalties each time an edition is sold."
+      />
+      <Fieldset
+        tw="w-full"
+        label="Duration"
+        helperText="How long the drop will be available to claim"
+        selectOnly
+        select={{
+          options: durationOptions,
+          placeholder: "Duration",
+          onChange: () => {},
+        }}
+      />
+      <Fieldset
+        tw="flex-1"
+        label={
+          <View tw="mr-5 flex">
+            <Text tw="font-semibold dark:text-white">
+              Explicit visual (18+)
+            </Text>
+            <Text tw="max-w-[100%] pt-1 text-xs dark:text-white">
+              Do not check if your song lyrics are explicit.
+            </Text>
+          </View>
+        }
+        switchOnly
+        switchProps={{
+          checked: false,
+          onChange: () => {},
+        }}
+      />
+      <Button
+        size="regular"
+        tw="w-full self-center"
+        onPress={props.handlePrevStep}
+      >
+        Save
+      </Button>
+    </Layout>
+  );
 };
 
 const Layout = (props: {
   title: string;
   onBackPress: () => void;
   children: any;
-  handleNextPress: () => void;
 }) => {
   return (
     <View tw="flex-1 py-8">
