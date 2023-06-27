@@ -2,7 +2,6 @@ import React from "react";
 import { Linking, Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Chip } from "@showtime-xyz/universal.chip";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronRight } from "@showtime-xyz/universal.icon";
 import {
@@ -11,7 +10,6 @@ import {
   CollectorList,
 } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -30,18 +28,17 @@ export const SelectDropType = (props: StepProps) => {
     !!user.user?.data.profile.spotify_artist_id ||
     !!user.user?.data.profile.apple_music_artist_id;
   const isDark = useIsDarkMode();
+  const modalScreenContext = useModalScreenContext();
+  const router = useRouter();
 
   if (user.isIncompletedProfile) {
     return null;
   }
   const iconColor = isDark ? "#fff" : "#121212";
+
   return (
     <BottomSheetScrollView useNativeModal={false}>
       <View tw="justify-center" style={{ rowGap: 8 }}>
-        <Button size="regular" tw="w-full" onPress={props.handleNextStep}>
-          <Text>Paid Collectible Badge</Text>
-          <ChevronRight color={"white"} />
-        </Button>
         <Button
           size="regular"
           tw="w-full"
@@ -54,6 +51,24 @@ export const SelectDropType = (props: StepProps) => {
           }}
         >
           <Text>Pre-Save Drop</Text>
+          <ChevronRight color={"white"} />
+        </Button>
+        <Button
+          size="regular"
+          tw="w-full"
+          onPress={() => {
+            if (Platform.OS !== "web") {
+              modalScreenContext?.pop?.({
+                callback: () => {
+                  router.push("/drop/free");
+                },
+              });
+            } else {
+              router.replace("/drop/free");
+            }
+          }}
+        >
+          <Text>Digital art collectible</Text>
           <ChevronRight color={"white"} />
         </Button>
         <View tw="mt-4 w-[70%] self-center" style={{ rowGap: 8 }}>
