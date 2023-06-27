@@ -243,6 +243,8 @@ const CreateDropStepTitle = (
             collectors. You can edit up to 30 minutes after creating.
           </Text>
         </View>
+      </ScrollView>
+      <View tw="p-4">
         <Button
           size="regular"
           tw="mt-4 w-full self-center"
@@ -250,7 +252,7 @@ const CreateDropStepTitle = (
         >
           Next
         </Button>
-      </ScrollView>
+      </View>
     </Layout>
   );
 };
@@ -407,8 +409,8 @@ const Layout = (props: {
   children: any;
 }) => {
   return (
-    <View tw="flex-1 py-8">
-      <View tw="mx-4 mb-8 flex-row items-center">
+    <View tw="flex-1">
+      <View tw="mx-4 my-8 flex-row items-center">
         <Pressable tw="absolute" onPress={props.onBackPress}>
           <ArrowLeft color="black" width={24} height={24} />
         </Pressable>

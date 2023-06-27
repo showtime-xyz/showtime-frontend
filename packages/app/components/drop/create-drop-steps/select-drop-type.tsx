@@ -38,7 +38,7 @@ export const SelectDropType = (props: StepProps) => {
 
   return (
     <BottomSheetScrollView useNativeModal={false}>
-      <View tw="justify-center" style={{ rowGap: 8 }}>
+      <View tw="justify-center px-4" style={{ rowGap: 8 }}>
         <Button
           size="regular"
           tw="w-full"
