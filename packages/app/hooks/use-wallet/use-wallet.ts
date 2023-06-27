@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 
-import type { Bytes } from "@ethersproject/bytes";
-import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { createWalletClient, custom } from "viem";
+import { mainnet } from "viem/chains";
 
 import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
+import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 
 import { ConnectResult, UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
@@ -13,46 +14,46 @@ import { useRandomWallet } from "./use-random-wallet";
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
-  const connector = useWalletConnect();
+  const web3Modal = useWeb3Modal();
   const { web3, isMagic, magicWalletAddress } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
   const [address, setAddress] = useState<string | undefined>();
 
   // we use this hook to prevent stale values in closures
-  const walletConnectInstanceRef = useLatestValueRef(connector);
+  const walletConnectInstanceRef = useLatestValueRef(web3Modal);
   const coinbaseMobileSDKInstanceRef = useLatestValueRef(mobileSDK);
 
-  const walletConnected = connector.connected || mobileSDK.connected;
-
+  const walletConnected = web3Modal.isConnected || mobileSDK.connected;
   useEffect(() => {
     (async function fetchUserAddress() {
-      if (connector.session?.accounts?.[0]) {
-        const getAddress = (await import("@ethersproject/address")).getAddress;
-        setAddress(getAddress(connector.session.accounts[0]));
+      if (web3Modal.address) {
+        setAddress(web3Modal.address);
       } else if (magicWalletAddress) {
         setAddress(magicWalletAddress);
       } else if (mobileSDK.address) {
         setAddress(mobileSDK.address);
       } else if (web3) {
-        const address = await web3.getSigner().getAddress();
+        const address = web3.account?.address;
         setAddress(address);
       } else {
         setAddress(undefined);
       }
     })();
-  }, [web3, connector.session, magicWalletAddress, mobileSDK.address]);
+  }, [web3, magicWalletAddress, mobileSDK.address, web3Modal.address]);
 
   // WalletConnect connected
   useEffect(() => {
-    if (walletConnectedPromiseResolveCallback.current && connector.connected) {
-      const getAddress = require("@ethersproject/address").getAddress;
+    if (
+      walletConnectedPromiseResolveCallback.current &&
+      web3Modal.isConnected
+    ) {
       walletConnectedPromiseResolveCallback.current({
-        address: getAddress(connector.session?.accounts?.[0]),
-        walletName: connector.peerMeta?.name,
+        address: web3Modal.address,
+        walletName: "",
       });
       walletConnectedPromiseResolveCallback.current = null;
     }
-  }, [connector]);
+  }, [web3Modal]);
 
   // Coinbase connected
   useEffect(() => {
@@ -73,12 +74,12 @@ const useWallet = (): UseWalletReturnType => {
   useEffect(() => {
     if (
       walletDisconnectedPromiseResolveCallback.current &&
-      !connector.connected
+      !web3Modal.isConnected
     ) {
       walletDisconnectedPromiseResolveCallback.current();
       walletDisconnectedPromiseResolveCallback.current = null;
     }
-  }, [connector]);
+  }, [web3Modal]);
 
   // Coinbase disconnected
   useEffect(() => {
@@ -92,12 +93,12 @@ const useWallet = (): UseWalletReturnType => {
   }, [mobileSDK]);
 
   const result = useMemo(() => {
-    const wcConnected = connector.connected;
+    const wcConnected = web3Modal.isConnected;
     const mobileSDKConnected = mobileSDK.connected;
 
     let walletName: string | undefined;
     if (wcConnected) {
-      walletName = connector.peerMeta?.name;
+      walletName = "";
     } else if (mobileSDKConnected) {
       walletName = mobileSDK.metadata?.name;
     }
@@ -105,14 +106,14 @@ const useWallet = (): UseWalletReturnType => {
     return {
       address,
       connect: async () => {
-        walletConnectInstanceRef.current.connect();
+        walletConnectInstanceRef.current.open();
         return new Promise<ConnectResult>((resolve) => {
           walletConnectedPromiseResolveCallback.current = resolve;
         });
       },
       disconnect: async () => {
-        if (walletConnectInstanceRef.current.connected) {
-          walletConnectInstanceRef.current.killSession();
+        if (walletConnectInstanceRef.current.isConnected) {
+          walletConnectInstanceRef.current.disconnect();
         } else if (coinbaseMobileSDKInstanceRef.current.connected) {
           coinbaseMobileSDKInstanceRef.current.disconnect();
         }
@@ -124,16 +125,22 @@ const useWallet = (): UseWalletReturnType => {
       name: walletName,
       connected: walletConnected || isMagic,
       networkChanged: undefined,
-      signMessageAsync: async (args: { message: string | Bytes }) => {
-        if (walletConnectInstanceRef.current.connected) {
-          const getAddress = (await import("@ethersproject/address"))
-            .getAddress;
+      signMessageAsync: async (args: { message: string }) => {
+        if (
+          walletConnectInstanceRef.current.isConnected &&
+          walletConnectInstanceRef.current.provider &&
+          walletConnectInstanceRef.current.address
+        ) {
+          const walletClient = createWalletClient({
+            chain: mainnet,
+            transport: custom(walletConnectInstanceRef.current.provider),
+          });
 
-          const signature =
-            await walletConnectInstanceRef.current.signPersonalMessage([
-              args.message,
-              getAddress(walletConnectInstanceRef.current.session.accounts[0]),
-            ]);
+          const signature = await walletClient.signMessage({
+            account: walletConnectInstanceRef.current.address as `0x${string}`,
+            message: args.message,
+          });
+
           return signature;
         } else if (
           coinbaseMobileSDKInstanceRef.current.connected &&
@@ -149,8 +156,7 @@ const useWallet = (): UseWalletReturnType => {
       },
     };
   }, [
-    connector.connected,
-    connector.peerMeta?.name,
+    web3Modal.isConnected,
     mobileSDK.connected,
     mobileSDK.metadata?.name,
     address,

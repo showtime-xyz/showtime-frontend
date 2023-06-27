@@ -19,6 +19,7 @@ export const useIsOnline = () => {
 
     return unsubscribe;
   }, []);
+
   return {
     isOnline,
   };

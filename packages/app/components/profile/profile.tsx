@@ -65,6 +65,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
+
   const router = useRouter();
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 

@@ -13,7 +13,6 @@ export type PressableScaleProps = ComponentProps<typeof MotiPressable> & {
 const StyledMotiPressable = styled(MotiPressable);
 export function PressableScale({
   scaleTo = 0.95,
-  role,
   tw,
   ...props
 }: PressableScaleProps) {

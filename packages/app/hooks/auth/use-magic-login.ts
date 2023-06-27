@@ -1,5 +1,8 @@
 import { useCallback } from "react";
 
+import { createWalletClient, custom } from "viem";
+import { mainnet } from "viem/chains";
+
 import { useWeb3 } from "app/hooks/use-web3";
 import {
   BYPASS_EMAIL,
@@ -33,11 +36,12 @@ export function useMagicLogin() {
           phone_number: phoneNumber,
         });
 
-        const Web3Provider = (await import("@ethersproject/providers"))
-          .Web3Provider;
-        // @ts-ignore
-        const web3 = new Web3Provider(magic.rpcProvider);
-        setWeb3(web3);
+        const client = createWalletClient({
+          chain: mainnet,
+          transport: custom(magic.rpcProvider),
+        });
+
+        setWeb3({ ...client, isMagic: true });
       } catch (error) {
         logout();
         throw error;
@@ -86,11 +90,12 @@ export function useMagicLogin() {
           email: overrideEmail,
         });
 
-        const Web3Provider = (await import("@ethersproject/providers"))
-          .Web3Provider;
-        // @ts-ignore
-        const web3 = new Web3Provider(magicInstance.rpcProvider);
-        setWeb3(web3);
+        const client = createWalletClient({
+          chain: mainnet,
+          transport: custom(magic.rpcProvider),
+        });
+
+        setWeb3({ ...client, isMagic: true });
       } catch (error) {
         logout();
         throw error;
