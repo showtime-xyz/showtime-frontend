@@ -27,6 +27,7 @@ export const FeedEngagementIcons = memo<EngagementIconsProps>(
           <ClaimButtonIconic nft={nft} tw="mb-4" />
           <FeedCommentButton nft={nft} tw="mb-4" />
           <FeedSocialButton onPress={() => shareNFT(nft)}>
+            <View tw="h-0.5" />
             <Sendv2 color="#000" />
           </FeedSocialButton>
         </View>

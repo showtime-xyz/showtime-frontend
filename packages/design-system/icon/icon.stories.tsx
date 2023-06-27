@@ -77,6 +77,7 @@ export const Default = () => {
           <IconItem icon={Icon.Bookmark} title="Bookmark" />
           <IconItem icon={Icon.Boost} title="Boost" />
           <IconItem icon={Icon.Check1} title="Check1" />
+          <IconItem icon={Icon.Check2} title="Check2" />
           <IconItem icon={Icon.Check} title="Check" />
           <IconItem icon={Icon.CheckFilled} title="CheckFilled" />
           <IconItem icon={Icon.ChevronDown} title="ChevronDown" />

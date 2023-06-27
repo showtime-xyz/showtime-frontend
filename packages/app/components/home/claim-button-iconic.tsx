@@ -1,7 +1,7 @@
 import { useCallback, useContext } from "react";
 import { Platform } from "react-native";
 
-import { Showtime, Check } from "@showtime-xyz/universal.icon";
+import { Showtime, Check2 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -175,8 +175,8 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
         }
         {...rest}
       >
-        <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full bg-green-500" />
-        <Check height={25} width={25} color={"#000"} />
+        <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full bg-[#66D654]" />
+        <Check2 height={18} width={18} color={"#000"} />
       </FeedSocialButton>
     );
   }

@@ -83,13 +83,7 @@ export const HomeItem = ({
           </Link>
           <View tw="h-2" />
           <Text tw="text-xs text-gray-600 dark:text-gray-400">
-            {/* {`${0} Followers`} */}
-            {formatDistanceToNowStrict(
-              convertUTCDateToLocalDate(nft.token_created),
-              {
-                addSuffix: true,
-              }
-            )}
+            {`${nft?.creator_followers_count} Followers`}
           </Text>
         </View>
 

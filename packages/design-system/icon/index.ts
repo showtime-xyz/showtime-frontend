@@ -11,6 +11,7 @@ export { default as BellFilled } from "./BellFilled";
 export { default as Bookmark } from "./Bookmark";
 export { default as Boost } from "./Boost";
 export { default as Check1 } from "./Check1";
+export { default as Check2 } from "./Check2";
 export { default as Check } from "./Check";
 export { default as CheckFilled } from "./CheckFilled";
 export { default as CheckFilled1 } from "./CheckFilled1";
