@@ -6,6 +6,7 @@ import { SvgProps } from "react-native-svg";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
+import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -19,6 +20,12 @@ import {
   PhonePortraitOutline,
   CreatorChannel,
   Settings,
+  Menu,
+  Edit,
+  Moon,
+  Sun,
+  DarkMode,
+  LogOut,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -27,82 +34,26 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ErrorBoundary } from "app/components/error-boundary";
-import { Notifications } from "app/components/notifications";
+import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
+import { useAuth } from "app/hooks/auth/use-auth";
 import { useFooter } from "app/hooks/use-footer";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
-import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuItemTitle,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from "design-system/dropdown-menu";
+
 import { withColorScheme } from "../memo-with-theme";
-
-const NOTIFICATION_LIST_HEIGHT = "calc(50vh - 64px)";
-export const NotificationsInHeader = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
-  const isDark = useIsDarkMode();
-  const prevPath = useRef(router.pathname);
-  const prevQuery = useRef(router.query);
-
-  useEffect(() => {
-    if (
-      Platform.OS === "web" &&
-      isOpen &&
-      (prevPath.current !== router.pathname ||
-        prevQuery.current !== router.query)
-    ) {
-      setIsOpen(false);
-    }
-    prevPath.current = router.pathname;
-    prevQuery.current = router.query;
-  }, [router.pathname, isOpen, router.query]);
-
-  return (
-    <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
-      <Popover.Trigger />
-
-      <Popover.Anchor>
-        <NotificationsTabBarIcon
-          color={isDark ? "white" : "black"}
-          focused={router.pathname === "/notifications"}
-          onPress={() => {
-            setIsOpen(!isOpen);
-          }}
-        />
-      </Popover.Anchor>
-
-      <Popover.Content
-        onOpenAutoFocus={(e) => e.preventDefault()}
-        onCloseAutoFocus={(e) => e.preventDefault()}
-        sideOffset={12}
-      >
-        <View
-          tw="dark:shadow-light shadow-light z-50 w-[480px] overflow-hidden rounded-3xl bg-white dark:bg-black md:max-w-md"
-          style={Platform.select({
-            web: {
-              height: NOTIFICATION_LIST_HEIGHT,
-            },
-            default: {},
-          })}
-        >
-          <ErrorBoundary>
-            <Suspense
-              fallback={
-                <View tw="p-4">
-                  <Spinner />
-                </View>
-              }
-            >
-              <Notifications web_height={NOTIFICATION_LIST_HEIGHT} hideHeader />
-            </Suspense>
-          </ErrorBoundary>
-        </View>
-      </Popover.Content>
-    </Popover.Root>
-  );
-};
 
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
@@ -112,6 +63,8 @@ export const HeaderMd = withColorScheme(() => {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const iconColor = isDark ? "#fff" : "#000";
+  const { setColorScheme } = useColorScheme();
+  const { logout } = useAuth();
 
   const HOME_ROUTES = useMemo(
     () =>
@@ -148,14 +101,7 @@ export const HeaderMd = withColorScheme(() => {
           focused: router.pathname === "/notifications",
           visible: isAuthenticated,
         },
-        {
-          title: "Settings",
-          key: "Settings",
-          icon: Settings,
-          pathname: "/settings",
-          focused: router.pathname === "/settings",
-          visible: isAuthenticated,
-        },
+
         {
           title: "Search",
           key: "Search",
@@ -195,7 +141,7 @@ export const HeaderMd = withColorScheme(() => {
     <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
       <View
         tw="h-full w-60 overflow-y-auto pl-4"
-        style={{ maxHeight: "calc(100vh - 130px)" }}
+        style={{ maxHeight: "calc(100vh - 110px)" }}
       >
         <Link href="/" tw="flex-row items-center pt-8">
           <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
@@ -217,7 +163,7 @@ export const HeaderMd = withColorScheme(() => {
               })}
               <Text
                 tw={[
-                  "ml-4 text-lg text-black duration-300 dark:text-white",
+                  "ml-4 text-lg text-black dark:text-white",
                   item.focused ? "font-bold" : "font-normal",
                 ]}
               >
@@ -225,6 +171,131 @@ export const HeaderMd = withColorScheme(() => {
               </Text>
             </Link>
           ))}
+          <DropdownMenuRoot>
+            <DropdownMenuTrigger>
+              <View
+                tw={[
+                  "mt-2 h-[50px] cursor-pointer flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
+                ]}
+              >
+                <Menu width={24} height={24} color={iconColor} />
+                <Text tw={["ml-4 text-lg text-black dark:text-white"]}>
+                  More
+                </Text>
+              </View>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="center" side="bottom" sideOffset={0}>
+              {isAuthenticated && (
+                <DropdownMenuItem
+                  onSelect={() => router.push("/settings")}
+                  key="your-settings"
+                >
+                  <MenuItemIcon Icon={Settings} />
+
+                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                    Settings
+                  </DropdownMenuItemTitle>
+                </DropdownMenuItem>
+              )}
+
+              {isAuthenticated && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    router.push(
+                      Platform.select({
+                        native: "/profile/edit",
+                        web: {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            editProfileModal: true,
+                          },
+                        } as any,
+                      }),
+                      Platform.select({
+                        native: "/profile/edit",
+                        web: router.asPath,
+                      })
+                    );
+                  }}
+                  key="edit-profile"
+                >
+                  <MenuItemIcon
+                    Icon={Edit}
+                    ios={{
+                      name: "square.and.pencil",
+                    }}
+                  />
+
+                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                    Edit Profile
+                  </DropdownMenuItemTitle>
+                </DropdownMenuItem>
+              )}
+
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger key="nested-group-trigger">
+                  <MenuItemIcon
+                    Icon={isDark ? Moon : Sun}
+                    ios={{
+                      name: isDark ? "moon" : "sun.max",
+                    }}
+                  />
+
+                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                    Theme
+                  </DropdownMenuItemTitle>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent>
+                  <DropdownMenuItem
+                    onSelect={() => setColorScheme("light")}
+                    key="nested-group-1"
+                  >
+                    <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
+                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                      Light
+                    </DropdownMenuItemTitle>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => setColorScheme("dark")}
+                    key="nested-group-2"
+                  >
+                    <MenuItemIcon Icon={Moon} ios={{ name: "moon" }} />
+                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                      Dark
+                    </DropdownMenuItemTitle>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => setColorScheme(null)}
+                    key="nested-group-3"
+                  >
+                    <MenuItemIcon
+                      Icon={DarkMode}
+                      ios={{
+                        name: "circle.righthalf.filled",
+                      }}
+                    />
+                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                      System
+                    </DropdownMenuItemTitle>
+                  </DropdownMenuItem>
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+
+              {isAuthenticated && (
+                <DropdownMenuItem destructive onSelect={logout} key="sign-out">
+                  <MenuItemIcon
+                    Icon={LogOut}
+                    ios={{ name: "rectangle.portrait.and.arrow.right" }}
+                  />
+                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                    Sign Out
+                  </DropdownMenuItemTitle>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenuRoot>
         </View>
         <View tw="w-40">
           {!isAuthenticated && (
@@ -294,7 +365,7 @@ export const HeaderMd = withColorScheme(() => {
           </View>
         </View>
       </View>
-      <View tw="absolute bottom-2 inline-block pl-3">
+      <View tw="absolute bottom-0 inline-block pl-3">
         <View tw="inline-block">
           {links.map((item) => (
             <TextLink
@@ -311,7 +382,7 @@ export const HeaderMd = withColorScheme(() => {
         <Text tw="text-xs text-gray-500 dark:text-gray-300">
           © 2023 Showtime Technologies, Inc.
         </Text>
-        <View tw="mt-4 inline-block w-full">
+        <View tw="mt-2 inline-block w-full">
           {social.map((item) => (
             <Link
               href={item.link}

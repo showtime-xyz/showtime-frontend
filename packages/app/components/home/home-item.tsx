@@ -1,11 +1,9 @@
 import { useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -18,11 +16,7 @@ import { getNFTSlug } from "app/hooks/use-share-nft";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
-import {
-  convertUTCDateToLocalDate,
-  getCreatorUsernameFromNFT,
-  removeTags,
-} from "app/utilities";
+import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
 import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { ClaimedBy } from "../feed-item/claimed-by";

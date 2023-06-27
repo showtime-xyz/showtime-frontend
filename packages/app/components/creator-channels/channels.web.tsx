@@ -244,7 +244,7 @@ export const CreatorChannels = memo(() => {
   const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight, width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
+  const isLgWidth = width >= breakpoints["lg"];
   const router = useRouter();
   const listRef = useRef<any>();
   useScrollToTop(listRef);
@@ -365,13 +365,17 @@ export const CreatorChannels = memo(() => {
   ]);
   const mdHeight = windowHeight;
 
-  if (!isMdWidth) {
+  if (!isLgWidth) {
     if (router.query["channelId"]) {
-      return <Messages />;
+      return (
+        <View tw="w-full flex-1 border-l border-neutral-300 dark:border-neutral-700">
+          <Messages />
+        </View>
+      );
     }
 
     return (
-      <View tw="w-full">
+      <View tw="w-full border-l border-neutral-300 bg-white pt-4 dark:border-neutral-700 dark:bg-black">
         <CreatorChannelsListMobile />
       </View>
     );

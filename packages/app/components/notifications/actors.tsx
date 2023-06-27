@@ -1,3 +1,4 @@
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 
 import type { NotificationItemProp } from "app/components/notifications/notification-item";
@@ -53,16 +54,19 @@ export const ActorLink = ({
 }: {
   actor: Pick<Actor, "username" | "wallet_address">;
 }) => {
+  const router = useRouter();
   return (
-    <TextLink
-      href={`/@${actor.username ?? actor.wallet_address}`}
+    <Text
       tw="text-13 font-bold text-black dark:text-white"
+      onPress={() => {
+        router.push(`/@${actor.username ?? actor.wallet_address}`);
+      }}
     >
       {actor.username ? (
         <>@{actor.username}</>
       ) : (
         <>{formatAddressShort(actor.wallet_address)}</>
       )}
-    </TextLink>
+    </Text>
   );
 };

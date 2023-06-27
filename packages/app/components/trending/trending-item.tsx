@@ -136,7 +136,7 @@ export const TrendingSkeletonItem = ({ presetWidth = 182 }) => {
         <Skeleton width={60} height={16} radius={4} tw="ml-2" />
       </View>
       <Skeleton width={140} height={13} radius={4} tw="mt-2" />
-      <Skeleton width={80} height={20} radius={999} tw="mt-2" />
+      <Skeleton width={80} height={24} radius={999} tw="mt-2" />
     </View>
   );
 };

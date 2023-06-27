@@ -35,10 +35,10 @@ export const Home = () => {
     ({ item, index }: ListRenderItemInfo<NFT>) => {
       if (index === 0) {
         return (
-          <View>
+          <>
             <HomeItem nft={item} mediaSize={mediaSize} index={index} />
             <PopularCreators />
-          </View>
+          </>
         );
       }
       return <HomeItem nft={item} mediaSize={mediaSize} index={index} />;
@@ -58,7 +58,7 @@ export const Home = () => {
   }, [bottom]);
   const ListEmptyComponent = useCallback(() => {
     return (
-      <View tw="mt-6 px-4" style={{ height: height - 200 }}>
+      <View tw="mt-6 px-4 md:px-0" style={{ height: height - 200 }}>
         {isLoading ? (
           <>
             <HomeItemSketelon />

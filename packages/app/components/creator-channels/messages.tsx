@@ -161,7 +161,7 @@ const Header = (props: HeaderProps) => {
           onPress={() => {
             router.replace("/channels");
           }}
-          tw="md:hidden"
+          tw="lg:hidden"
         >
           <ArrowLeft
             height={24}

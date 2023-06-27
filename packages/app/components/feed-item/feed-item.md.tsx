@@ -17,7 +17,7 @@ import { useSwiper } from "swiper/react";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
-  Close,
+  ChevronLeft,
   Muted,
   Maximize,
   ChevronDown,
@@ -281,7 +281,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               iconOnly
               tw="bg-white px-3 dark:bg-gray-900"
             >
-              <Close width={24} height={24} />
+              <ChevronLeft width={24} height={24} />
             </Button>
             <View tw="swiper-no-swiping flex-row items-center">
               {nft?.mime_type?.includes("video") ? (
