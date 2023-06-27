@@ -24,7 +24,7 @@ export const PushNotificationTab = ({ index = 0 }: PushNotificationTabProp) => {
         title="Push Notifications"
         desc="Manage your app notifications."
       />
-      <View tw="mt-0 px-4 md:mt-4 md:px-0">
+      <View tw="mt-0 px-4 lg:mt-4 lg:px-0">
         {isLoading ? (
           <View tw="animate-fade-in-250 h-28 items-center justify-center">
             <Spinner />

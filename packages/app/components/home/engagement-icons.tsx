@@ -18,7 +18,7 @@ export type EngagementIconsProps = {
 };
 
 export const FeedEngagementIcons = memo<EngagementIconsProps>(
-  function EngagementIcons({ nft, tw = "", edition }) {
+  function EngagementIcons({ nft, tw = "" }) {
     const { shareNFT } = useShareNFT();
 
     return (
@@ -26,7 +26,7 @@ export const FeedEngagementIcons = memo<EngagementIconsProps>(
         <View tw="relative z-10">
           <ClaimButtonIconic nft={nft} tw="mb-4" />
           <FeedCommentButton nft={nft} tw="mb-4" />
-          <FeedSocialButton tw="mb-4" onPress={() => shareNFT(nft)}>
+          <FeedSocialButton onPress={() => shareNFT(nft)}>
             <Sendv2 color="#000" />
           </FeedSocialButton>
         </View>

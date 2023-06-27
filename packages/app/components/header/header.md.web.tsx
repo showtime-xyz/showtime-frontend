@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, Suspense, useMemo } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
-import dynamic from "next/dynamic";
 import { SvgProps } from "react-native-svg";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -13,7 +12,6 @@ import {
   Bell,
   Home,
   Search,
-  Showtime,
   ShowtimeBrand,
   Hot,
   User,
@@ -23,25 +21,20 @@ import {
   Settings,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { TabBarVertical } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
-import { WEB_HEADER_HEIGHT } from "app/constants/layout";
 import { useFooter } from "app/hooks/use-footer";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useTabState } from "app/hooks/use-tab-state";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
 import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { withColorScheme } from "../memo-with-theme";
 
@@ -169,6 +162,7 @@ export const HeaderMd = withColorScheme(() => {
           icon: Search,
           pathname: "/search",
           focused: router.pathname === "/search",
+          visible: true,
         },
         {
           title: "Profile",
@@ -210,8 +204,8 @@ export const HeaderMd = withColorScheme(() => {
           {HOME_ROUTES.map((item) => (
             <Link
               tw={[
-                "mt-2 flex-row items-center rounded-2xl py-3.5 pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
-                item.focused && "bg-gray-50 dark:bg-gray-900",
+                "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
+                item.focused && "bg-coolGray-50 dark:bg-gray-800",
               ].join(" ")}
               key={item.key}
               href={item.pathname}

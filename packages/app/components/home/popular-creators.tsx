@@ -127,7 +127,11 @@ export const PopularCreators = memo(function PopularCreators() {
         )}
       </View>
       <View tw="mb-2 w-full rounded-2xl">
-        <HomeSlider data={data} renderItem={renderItem} />
+        <HomeSlider
+          data={data}
+          slidesPerView={isMdWidth ? 3.5 : 2.2}
+          renderItem={renderItem}
+        />
       </View>
     </View>
   );

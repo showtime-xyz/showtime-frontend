@@ -22,7 +22,7 @@ export const SettingsTitle = ({
   buttonProps = {},
 }: Props) => {
   return (
-    <View tw={["flex p-4 md:p-0", tw]}>
+    <View tw={["flex p-4 lg:p-0", tw]}>
       <View tw="h-8 flex-row items-center justify-between">
         {Boolean(title) && <Text tw={titleTw}>{title}</Text>}
         {Boolean(buttonText) && (

@@ -33,11 +33,11 @@ const Header = () => {
   const headerHeight = useHeaderHeight();
 
   return Platform.OS === "web" ? (
-    <View tw="w-full flex-row justify-center px-4 py-4">
+    <View tw="w-full flex-row justify-center pb-4 pb-4 pt-8">
       <Text tw="text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
         Notifications
       </Text>
-      <View tw="absolute right-2 top-2">
+      <View tw="absolute right-2 top-6">
         <NotificationsSettingIcon />
       </View>
     </View>

@@ -260,7 +260,7 @@ const colors = {
     darkest: "#0a0a0f",
   },
   coolGray: {
-    50: "#f9fafb",
+    50: "#f9f9f9",
     100: "#f3f4f6",
     200: "#e5e7eb",
     300: "#d1d5db",

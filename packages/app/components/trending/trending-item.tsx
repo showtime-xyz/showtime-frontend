@@ -1,7 +1,8 @@
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
 
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -11,20 +12,38 @@ import { RouteComponent } from "app/components/route-component";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { TextLink } from "app/navigation/link";
+import { NFT } from "app/types";
 import { getCreatorUsernameFromNFT } from "app/utilities";
 
+import { breakpoints } from "design-system/theme";
+
+import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { ClaimButtonSimplified } from "../claim/claim-button-simplified";
 import { NSFWGate } from "../feed-item/nsfw-gate";
-import { AvatarHoverCard } from "./avatar-hover-card";
 
-export const TrendingCard = ({ index, nft, width }: any) => {
+export const TrendingItem = ({
+  index,
+  nft,
+  width,
+  tw = "",
+  presetWidth = 172,
+}: {
+  index: number;
+  nft: NFT;
+  width?: number;
+  presetWidth?: number;
+  tw?: string;
+}) => {
   const { data: edition, loading } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
+  const { width: windowWidth } = useWindowDimensions();
+  const isMdWidth = windowWidth > breakpoints["md"];
+  const mediaWidth = isMdWidth ? presetWidth : (windowWidth - 32 - 10) / 2;
 
   return (
     <View
-      tw="h-full w-full pb-4"
+      tw={["h-full w-full pb-4", tw]}
       style={{
         width: Platform.select({
           web: undefined,
@@ -38,15 +57,18 @@ export const TrendingCard = ({ index, nft, width }: any) => {
           nft
         )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
       >
-        <View tw="h-[124px] w-[124px] overflow-hidden rounded-2xl">
+        <View
+          tw="overflow-hidden rounded-2xl"
+          style={{ width: mediaWidth, height: mediaWidth }}
+        >
           <ListMedia
             item={nft}
             resizeMode={ResizeMode.COVER}
-            optimizedWidth={248}
+            optimizedWidth={350}
             loading={index > 0 ? "lazy" : "eager"}
           />
           <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
-          <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black">
+          <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black/50">
             <Text tw="font-bold text-white" style={{ fontSize: 15 }}>
               {index + 1}
             </Text>
@@ -62,7 +84,7 @@ export const TrendingCard = ({ index, nft, width }: any) => {
         <View tw="w-2" />
         <TextLink
           href={`/@${nft.creator_username ?? nft.creator_address}`}
-          tw="inline-block max-w-[100px] flex-nowrap overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white"
+          tw="text-13 inline-block max-w-[100px] flex-nowrap overflow-hidden text-ellipsis whitespace-nowrap font-medium text-gray-900 dark:text-white"
         >
           {getCreatorUsernameFromNFT(nft)}
         </TextLink>
@@ -74,20 +96,41 @@ export const TrendingCard = ({ index, nft, width }: any) => {
         href={`${getNFTSlug(
           nft
         )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
-        tw="mt-2"
+        tw="mt-2.5"
       >
         <Text tw="max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
           {nft?.token_name}
         </Text>
       </RouteComponent>
-      {edition && (
-        <View tw="mt-2.5 flex-row items-center">
-          <ClaimButtonSimplified edition={edition} loading={loading} />
+      <View tw="mt-2.5 flex-row items-center">
+        <ClaimButtonSimplified edition={edition} loading={loading} />
+        {edition ? (
           <Text tw="ml-3 text-xs font-bold text-gray-900 dark:text-white">
-            {edition?.total_claimed_count.toLocaleString()}
+            {`${edition?.total_claimed_count.toLocaleString()}/${
+              edition?.creator_airdrop_edition.edition_size > 0
+                ? `${edition?.creator_airdrop_edition.edition_size.toLocaleString()}`
+                : "∞"
+            }`}
           </Text>
-        </View>
-      )}
+        ) : null}
+      </View>
+    </View>
+  );
+};
+
+export const TrendingSkeletonItem = ({ presetWidth = 182 }) => {
+  const { width } = useWindowDimensions();
+  const isMdWidth = width > breakpoints["md"];
+  const mediaWidth = isMdWidth ? presetWidth : (width - 32 - 10) / 2;
+  return (
+    <View tw="mr-2.5 pb-4">
+      <Skeleton width={mediaWidth} height={mediaWidth} radius={16} />
+      <View tw="my-1 flex-row items-center">
+        <Skeleton width={30} height={30} radius={999} />
+        <Skeleton width={60} height={16} radius={4} tw="ml-2" />
+      </View>
+      <Skeleton width={140} height={13} radius={4} tw="mt-2" />
+      <Skeleton width={80} height={20} radius={999} tw="mt-2" />
     </View>
   );
 };

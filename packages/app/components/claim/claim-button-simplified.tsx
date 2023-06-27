@@ -95,38 +95,39 @@ export const ClaimButtonSimplified = ({
     return "Collect";
   }, [status]);
 
+  if (loading) {
+    return <Skeleton width={72} height={20} radius={999} show tw={tw} />;
+  }
   return (
-    <Skeleton width={72} height={20} radius={999} show={loading}>
-      <PressableScale
-        tw={["h-5 items-center justify-center rounded-full px-4", tw]}
-        disabled={
-          status === ClaimStatus.Expired || status === ClaimStatus.Claimed
+    <PressableScale
+      tw={["h-5 items-center justify-center rounded-full px-4", tw]}
+      disabled={
+        status === ClaimStatus.Expired || status === ClaimStatus.Claimed
+      }
+      onPress={() => {
+        let type: "free" | "appleMusic" | "spotify" = "free";
+        if (edition?.gating_type === "spotify_save") {
+          type = "spotify";
+        } else if (edition?.gating_type === "multi_provider_music_presave") {
+          type = edition?.creator_spotify_id ? "spotify" : "appleMusic";
+        } else if (edition?.gating_type === "multi_provider_music_save") {
+          type = edition?.spotify_track_url ? "spotify" : "appleMusic";
+        } else if (
+          edition?.gating_type === "music_presave" ||
+          edition?.gating_type === "spotify_presave"
+        ) {
+          type = "spotify";
         }
-        onPress={() => {
-          let type: "free" | "appleMusic" | "spotify" = "free";
-          if (edition?.gating_type === "spotify_save") {
-            type = "spotify";
-          } else if (edition?.gating_type === "multi_provider_music_presave") {
-            type = edition?.creator_spotify_id ? "spotify" : "appleMusic";
-          } else if (edition?.gating_type === "multi_provider_music_save") {
-            type = edition?.spotify_track_url ? "spotify" : "appleMusic";
-          } else if (
-            edition?.gating_type === "music_presave" ||
-            edition?.gating_type === "spotify_presave"
-          ) {
-            type = "spotify";
-          }
-          handleCollectPress(type);
-        }}
-        style={{
-          backgroundColor: buttonBgColor,
-        }}
-        {...rest}
-      >
-        <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
-          {buttonText}
-        </Text>
-      </PressableScale>
-    </Skeleton>
+        handleCollectPress(type);
+      }}
+      style={{
+        backgroundColor: buttonBgColor,
+      }}
+      {...rest}
+    >
+      <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
+        {buttonText}
+      </Text>
+    </PressableScale>
   );
 };

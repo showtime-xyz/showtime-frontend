@@ -27,7 +27,7 @@ const SettingsTabs = () => {
     redirectTo: "/login",
     redirectIfProfileIncomplete: true,
   });
-  const isMdWidth = width >= breakpoints["md"];
+  const isLgWidth = width >= breakpoints["lg"];
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);
 
   if (!isAuthenticated) {
@@ -37,10 +37,10 @@ const SettingsTabs = () => {
       </View>
     );
   }
-  return isMdWidth ? (
+  return isLgWidth ? (
     <SettingsMd />
   ) : (
-    <View tw="h-screen w-full overflow-auto bg-white dark:bg-black">
+    <View tw="h-screen w-full overflow-auto border-l-0 border-neutral-300 bg-white dark:border-neutral-700 dark:bg-black md:border-l">
       <SettingsHeader
         index={index}
         setIndex={setIndex}

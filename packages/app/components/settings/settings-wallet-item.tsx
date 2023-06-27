@@ -165,7 +165,7 @@ export const SettingsWalletItem = (props: Props) => {
 
   return (
     <>
-      <View tw="mt-6 px-4 md:px-0">
+      <View tw="mt-6 px-4 lg:px-0">
         <View tw="w-full flex-row items-start justify-between py-1 md:rounded-2xl md:bg-white md:dark:bg-black">
           <View tw="self-start rounded-full bg-gray-200 p-1 dark:bg-gray-700">
             {isEthereumAddress ? (

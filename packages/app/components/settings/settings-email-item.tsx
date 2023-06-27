@@ -53,7 +53,7 @@ export const SettingsEmailItem = (props: EmailItemProps) => {
   }, [getCurrentMagicUser]);
 
   return (
-    <View tw="w-full flex-row items-center justify-between px-4 py-5 md:px-0">
+    <View tw="w-full flex-row items-center justify-between px-4 py-5 lg:px-0">
       <View tw="flex-1 flex-row items-center">
         <CheckFilled1 color={colors.black} width={20} height={20} />
         <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-white">

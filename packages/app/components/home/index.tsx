@@ -5,6 +5,7 @@ import {
   InfiniteScrollList,
   ListRenderItemInfo,
 } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useFeed } from "app/hooks/use-feed";
@@ -46,11 +47,18 @@ export const Home = () => {
   );
 
   const ListFooterComponent = useCallback(() => {
-    return <View style={{ height: Math.max(bottom, 20) }} />;
+    return (
+      <View
+        style={{ height: Math.max(bottom, 30) }}
+        tw="items-center justify-center"
+      >
+        <Text tw="text-sm text-gray-600 dark:text-gray-400">No more data.</Text>
+      </View>
+    );
   }, [bottom]);
   const ListEmptyComponent = useCallback(() => {
     return (
-      <View tw="mt-6" style={{ height: height - 200 }}>
+      <View tw="mt-6 px-4" style={{ height: height - 200 }}>
         {isLoading ? (
           <>
             <HomeItemSketelon />

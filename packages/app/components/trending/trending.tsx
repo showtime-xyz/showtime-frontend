@@ -1,38 +1,42 @@
-import { useCallback, useMemo, createContext, useContext } from "react";
+import { useCallback } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { TabBarSingle } from "@showtime-xyz/universal.tab-view";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { TrendingCard } from "app/components/card/trending-card";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
+import {
+  TrendingItem,
+  TrendingSkeletonItem,
+} from "app/components/trending/trending-item";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useFeed } from "app/hooks/use-feed";
 import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
-import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
 
-const MOBILE_HEADER_HEIGHT = 88;
-
 const Header = () => {
   const headerHeight = useHeaderHeight();
   return (
     <>
-      {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
-      <View tw="flex-row justify-between bg-white py-4 dark:bg-black">
-        <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+      <View
+        style={{
+          height: Platform.select({
+            android: 8,
+            default: headerHeight + 8,
+          }),
+        }}
+      />
+      <View tw="hidden flex-row justify-between bg-white pb-4 pt-6 dark:bg-black md:flex">
+        <Text tw="font-bold text-gray-900 dark:text-white md:text-xl">
           Trending
         </Text>
       </View>
@@ -42,7 +46,7 @@ const Header = () => {
 export const Trending = () => {
   const { height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
-  const bottomBarHeight = usePlatformBottomHeight();
+  const { bottom } = useSafeAreaInsets();
   const { width } = useScrollbarSize();
   const isMdWidth = contentWidth + width > breakpoints["md"];
 
@@ -56,14 +60,11 @@ export const Trending = () => {
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
       return (
-        <TrendingCard
+        <TrendingItem
           nft={item}
-          showClaimButton
-          as={getNFTSlug(item)}
-          href={`${getNFTSlug(
-            item
-          )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
           index={index}
+          tw="px-2.5 md:px-0"
+          presetWidth={182}
         />
       );
     },
@@ -73,33 +74,52 @@ export const Trending = () => {
   const ListEmptyComponent = useCallback(() => {
     if (isLoading) {
       return (
-        <View tw="mx-auto max-w-screen-xl flex-row justify-center pt-20 md:px-4">
-          <Spinner />
+        <View tw="mx-auto w-full max-w-screen-xl justify-center px-4 md:px-0">
+          <View tw="flex-row">
+            <TrendingSkeletonItem />
+            <TrendingSkeletonItem />
+            {isMdWidth && <TrendingSkeletonItem />}
+          </View>
+          <View tw="flex-row">
+            <TrendingSkeletonItem />
+            <TrendingSkeletonItem />
+            {isMdWidth && <TrendingSkeletonItem />}
+          </View>
+          <View tw="flex-row">
+            <TrendingSkeletonItem />
+            <TrendingSkeletonItem />
+            {isMdWidth && <TrendingSkeletonItem />}
+          </View>
+          <View tw="flex-row">
+            <TrendingSkeletonItem />
+            <TrendingSkeletonItem />
+            {isMdWidth && <TrendingSkeletonItem />}
+          </View>
         </View>
       );
     }
     return (
       <EmptyPlaceholder title={"No drops, yet."} tw="h-[50vh]" hideLoginBtn />
     );
-  }, [isLoading]);
+  }, [isLoading, isMdWidth]);
 
   return (
     <View tw="min-h-screen w-full bg-white dark:bg-black">
-      <View tw="md:max-w-screen-content mx-auto w-full px-4">
+      <View tw="md:max-w-screen-content mx-auto w-full">
         <ErrorBoundary>
           <InfiniteScrollList
             useWindowScroll={isMdWidth}
             data={list}
             preserveScrollPosition
             keyExtractor={keyExtractor}
-            numColumns={2}
+            numColumns={isMdWidth ? 3 : 2}
             renderItem={renderItem}
             style={{
-              height: screenHeight - bottomBarHeight - MOBILE_HEADER_HEIGHT,
+              height: screenHeight - Math.max(bottom, 8),
             }}
             ListEmptyComponent={ListEmptyComponent}
             ListHeaderComponent={Header}
-            estimatedItemSize={225}
+            estimatedItemSize={275}
           />
         </ErrorBoundary>
       </View>

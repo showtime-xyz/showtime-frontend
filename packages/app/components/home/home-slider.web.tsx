@@ -9,9 +9,16 @@ import { CarouselProps } from "app/lib/carousel/types";
 
 import { breakpoints } from "design-system/theme";
 
-type Props = Pick<CarouselProps, "data" | "height" | "renderItem">;
+type Props = Pick<CarouselProps, "data" | "height" | "renderItem"> & {
+  slidesPerView?: number;
+};
 
-export function HomeSlider({ data, renderItem, height }: Props) {
+export function HomeSlider({
+  data,
+  renderItem,
+  height,
+  slidesPerView = 2.2,
+}: Props) {
   const swiperRef = useRef(null);
   const [allowSlideNext, setAllowSlideNext] = useState(false);
   const [allowSlidePrev, setAllowSlidePrev] = useState(false);
@@ -35,9 +42,9 @@ export function HomeSlider({ data, renderItem, height }: Props) {
     <>
       <Swiper
         height={height}
-        slidesPerView={isMdWidth ? 3.5 : 2.2}
+        slidesPerView={slidesPerView}
         className="h-full w-full"
-        spaceBetween={16}
+        spaceBetween={10}
         ref={swiperRef}
         onProgress={onProgress}
       >

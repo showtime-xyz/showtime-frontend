@@ -1,129 +1,44 @@
 import { memo, useCallback } from "react";
 import {
   useWindowDimensions,
-  Dimensions,
   Platform,
   ListRenderItemInfo,
 } from "react-native";
 
-import { ResizeMode } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { RouteComponent } from "app/components/route-component";
-import { DESKTOP_CONTENT_WIDTH } from "app/constants/layout";
+import {
+  TrendingItem,
+  TrendingSkeletonItem,
+} from "app/components/trending/trending-item";
+import {
+  DESKTOP_CONTENT_WIDTH,
+  DESKTOP_LEFT_MENU_WIDTH,
+} from "app/constants/layout";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
-import { getNFTSlug } from "app/hooks/use-share-nft";
-import { useUser } from "app/hooks/use-user";
 import { Carousel } from "app/lib/carousel";
-import { TextLink } from "app/navigation/link";
 import { NFT } from "app/types";
-import { getCreatorUsernameFromNFT } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { AvatarHoverCard } from "../card/avatar-hover-card";
-import { ClaimButtonSimplified } from "../claim/claim-button-simplified";
-import { NSFWGate } from "../feed-item/nsfw-gate";
-import { ListMedia } from "../media";
+import { EmptyPlaceholder } from "../empty-placeholder";
 import { HomeSlider } from "./home-slider";
 
-const TrendingItem = ({
-  index,
-  nft,
-  width,
-}: {
-  nft: NFT;
-  width: number;
-  index: number;
-}) => {
-  const { data: edition, loading } = useCreatorCollectionDetail(
-    nft?.creator_airdrop_edition_address
-  );
-
-  return (
-    <View
-      tw="h-full w-full pb-4"
-      style={{
-        width: Platform.select({
-          web: undefined,
-          default: width,
-        }),
-      }}
-    >
-      <RouteComponent
-        as={getNFTSlug(nft)}
-        href={`${getNFTSlug(
-          nft
-        )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
-      >
-        <View tw="h-[124px] w-[124px] overflow-hidden rounded-2xl">
-          <ListMedia
-            item={nft}
-            resizeMode={ResizeMode.COVER}
-            optimizedWidth={300}
-            loading={index > 0 ? "lazy" : "eager"}
-          />
-          <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
-          <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black">
-            <Text tw="font-bold text-white" style={{ fontSize: 15 }}>
-              {index + 1}
-            </Text>
-          </View>
-        </View>
-      </RouteComponent>
-      <View tw="mt-1.5 flex-row items-center">
-        <AvatarHoverCard
-          username={nft?.creator_username || nft?.creator_address_nonens}
-          url={nft.creator_img_url}
-          size={30}
-        />
-        <View tw="w-2" />
-        <TextLink
-          href={`/@${nft.creator_username ?? nft.creator_address}`}
-          tw="text-13 inline-block max-w-[100px] flex-nowrap overflow-hidden text-ellipsis whitespace-nowrap font-medium text-gray-900 dark:text-white"
-        >
-          {getCreatorUsernameFromNFT(nft)}
-        </TextLink>
-        <View tw="w-1" />
-        <VerificationBadge size={12} />
-      </View>
-      <RouteComponent
-        as={getNFTSlug(nft)}
-        href={`${getNFTSlug(
-          nft
-        )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
-        tw="mt-2.5"
-      >
-        <Text tw="max-w-[160px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
-          {nft?.token_name}
-        </Text>
-      </RouteComponent>
-      <View tw="mt-2.5 flex-row items-center">
-        <ClaimButtonSimplified edition={edition} loading={loading} />
-        <Text tw="ml-3 text-xs font-bold text-gray-900 dark:text-white">
-          {edition?.total_claimed_count.toLocaleString()}
-        </Text>
-      </View>
-    </View>
-  );
-};
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { data } = useTrendingNFTS({});
+  const { data, isLoading } = useTrendingNFTS({});
   const { width: scrollbarWidth } = useScrollbarSize();
   const router = useRouter();
 
   const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
   const pagerWidth = isMdWidth
-    ? Math.min(DESKTOP_CONTENT_WIDTH, width - 248)
+    ? Math.min(DESKTOP_CONTENT_WIDTH, width - DESKTOP_LEFT_MENU_WIDTH)
     : width - 32 - scrollbarWidth;
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => (
@@ -167,36 +82,52 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
                   fontSize: isMdWidth ? 40 : 23,
                   lineHeight: isMdWidth ? 48 : 28,
                 }}
-                tw="text-center font-semibold text-gray-600"
+                tw="text-center font-semibold"
               >
-                Engage everyone with accessible web3 tools
+                Create. Collect. Connect.
               </Text>
             </LinearGradient>
           )}
         />
       </View>
-      {data.length > 0 ? (
-        <View tw="w-full pl-4 md:pl-0">
-          <View tw="w-full flex-row items-center justify-between py-4 pr-4">
-            <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-              Trending
+      <View tw="w-full pl-4 md:pl-0">
+        <View tw="w-full flex-row items-center justify-between py-4 pr-4">
+          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+            Trending
+          </Text>
+          {isShowSeeAll && (
+            <Text
+              tw="text-sm font-semibold text-indigo-600"
+              onPress={() => {
+                router.push("/trending");
+              }}
+            >
+              see all
             </Text>
-            {!isShowSeeAll && (
-              <Text
-                tw="text-sm font-semibold text-indigo-600"
-                onPress={() => {
-                  router.push("/trending");
-                }}
-              >
-                see all
-              </Text>
-            )}
-          </View>
-          <View tw="w-full rounded-2xl">
-            <HomeSlider data={data} renderItem={renderItem} />
-          </View>
+          )}
         </View>
-      ) : null}
+        <View tw="w-full rounded-2xl">
+          {isLoading ? (
+            <View tw="flex-row overflow-hidden">
+              <TrendingSkeletonItem presetWidth={172} />
+              <TrendingSkeletonItem presetWidth={172} />
+              <TrendingSkeletonItem presetWidth={172} />
+              <TrendingSkeletonItem presetWidth={172} />
+            </View>
+          ) : data.length > 0 ? (
+            <HomeSlider
+              data={data}
+              slidesPerView={isMdWidth ? 3.24 : 2.2}
+              renderItem={renderItem}
+            />
+          ) : (
+            <EmptyPlaceholder
+              title={"No trending drops, yet."}
+              tw="h-[275px]"
+            />
+          )}
+        </View>
+      </View>
     </View>
   );
 });

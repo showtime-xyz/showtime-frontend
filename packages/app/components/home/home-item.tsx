@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
@@ -17,7 +18,11 @@ import { getNFTSlug } from "app/hooks/use-share-nft";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
-import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
+import {
+  convertUTCDateToLocalDate,
+  getCreatorUsernameFromNFT,
+  removeTags,
+} from "app/utilities";
 
 import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { ClaimedBy } from "../feed-item/claimed-by";
@@ -36,7 +41,6 @@ export const HomeItem = ({
   index: number;
   mediaSize: number;
 }) => {
-  const router = useRouter();
   const description = useMemo(
     () => linkifyDescription(removeTags(nft?.token_description)),
     [nft?.token_description]
@@ -79,7 +83,13 @@ export const HomeItem = ({
           </Link>
           <View tw="h-2" />
           <Text tw="text-xs text-gray-600 dark:text-gray-400">
-            {`${0} Followers`}
+            {/* {`${0} Followers`} */}
+            {formatDistanceToNowStrict(
+              convertUTCDateToLocalDate(nft.token_created),
+              {
+                addSuffix: true,
+              }
+            )}
           </Text>
         </View>
 
@@ -185,7 +195,7 @@ export const HomeItemSketelon = () => {
               <Skeleton height={16} width={32} radius={6} show={true} />
             </View>
           </View>
-          <View tw="mb-4">
+          <View>
             <Skeleton height={56} width={56} radius={999} show={true} />
           </View>
         </View>

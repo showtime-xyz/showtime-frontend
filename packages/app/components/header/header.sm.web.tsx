@@ -8,8 +8,10 @@ import {
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 import { withColorScheme } from "../memo-with-theme";
+import HeaderCenter from "./header-center";
 import { HeaderLeft } from "./header-left";
 import { HeaderRightSm } from "./header-right.sm";
+import { HeaderTitle } from "./header-title";
 
 export const HeaderSm = withColorScheme(
   ({ canGoBack }: { canGoBack: boolean }) => {
@@ -53,6 +55,7 @@ export const HeaderSm = withColorScheme(
           ]}
         >
           <HeaderLeft canGoBack={canGoBack} />
+          <HeaderTitle />
           <HeaderRightSm />
         </View>
       </>

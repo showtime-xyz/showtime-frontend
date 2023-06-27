@@ -32,7 +32,7 @@ export interface NotificationType {
 }
 
 export const useNotifications = () => {
-  const PAGE_SIZE = 15;
+  const PAGE_SIZE = 20;
   const { isAuthenticated } = useUser();
   const { data: myInfoData } = useMyInfo();
 
