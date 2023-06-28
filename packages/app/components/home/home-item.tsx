@@ -125,7 +125,7 @@ export const HomeItem = ({
               <ListMedia
                 item={nft}
                 resizeMode={ResizeMode.COVER}
-                optimizedWidth={600}
+                optimizedWidth={mediaSize * 2}
                 loading={index > 0 ? "lazy" : "eager"}
               />
               <View tw="absolute right-1.5 top-1.5">
