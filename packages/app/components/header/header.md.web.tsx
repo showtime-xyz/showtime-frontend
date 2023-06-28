@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Popover from "@radix-ui/react-popover";
 import { SvgProps } from "react-native-svg";
 
@@ -47,7 +46,6 @@ import { useFooter } from "app/hooks/use-footer";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
-import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import {
@@ -103,7 +101,7 @@ const NotificationsInHeader = () => {
             tw="h-screen w-[332px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
             style={{
               // @ts-ignore
-              boxShadow: "20px 0 20px rgba(0,0,0,.08)",
+              boxShadow: "16px 8px 20px rgba(0,0,0,.04)",
             }}
           >
             <ErrorBoundary>
@@ -163,7 +161,7 @@ const SearchInHeader = () => {
             tw="h-screen w-[332px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
             style={{
               // @ts-ignore
-              boxShadow: "20px 0 20px rgba(0,0,0,.08)",
+              boxShadow: "16px 8px 20px rgba(0,0,0,.04)",
             }}
           >
             <ErrorBoundary>
@@ -499,6 +497,7 @@ export const HeaderMd = withColorScheme(() => {
               <Link
                 href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
                 target="_blank"
+                tw="duration-150 hover:scale-105"
               >
                 <Image
                   source={{
@@ -506,14 +505,13 @@ export const HeaderMd = withColorScheme(() => {
                   }}
                   width={120}
                   height={40}
-                  tw="duration-150 hover:scale-105"
                   alt="App Store"
                 />
               </Link>
               <Link
                 href="https://play.google.com/store/apps/details?id=io.showtime"
                 target="_blank"
-                tw="mt-2"
+                tw="mt-2 duration-150 hover:scale-105"
               >
                 <Image
                   source={{
@@ -521,7 +519,6 @@ export const HeaderMd = withColorScheme(() => {
                   }}
                   width={120}
                   height={40}
-                  tw="duration-150 hover:scale-105"
                   alt="Google Play"
                 />
               </Link>
