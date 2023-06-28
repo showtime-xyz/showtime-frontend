@@ -33,12 +33,12 @@ const Header = () => {
   const headerHeight = useHeaderHeight();
 
   return Platform.OS === "web" ? (
-    <View tw="w-full flex-row justify-center pb-4 pb-4 pt-8">
-      <Text tw="text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
+    <View tw="hidden w-full flex-row pb-4 pl-4 pt-8 md:flex">
+      <Text tw="text-lg font-bold text-gray-900 dark:text-white">
         Notifications
       </Text>
       <View tw="absolute right-2 top-6">
-        <NotificationsSettingIcon />
+        <NotificationsSettingIcon size={24} />
       </View>
     </View>
   ) : (
@@ -72,8 +72,7 @@ export const Notifications = memo(
     const isDark = useIsDarkMode();
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
-    const { width, height: windowHeight } = useWindowDimensions();
-    const isMdWidth = width >= breakpoints["md"];
+    const { height: windowHeight } = useWindowDimensions();
     const [users, setUsers] = useState<
       Pick<Actor, "profile_id" | "username">[]
     >([]);
@@ -128,7 +127,7 @@ export const Notifications = memo(
     return (
       <>
         <InfiniteScrollList
-          useWindowScroll={isMdWidth}
+          useWindowScroll={false}
           data={data}
           ListHeaderComponent={Platform.select({
             web: hideHeader ? undefined : Header,
@@ -166,6 +165,7 @@ export const Notifications = memo(
               }
             />
           }
+          containerTw="pretty-scrollbar"
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           onEndReached={fetchMore}

@@ -28,9 +28,11 @@ export const ClaimedBy = ({
   );
   if (!claimersList || claimersList?.length <= 1) {
     return (
-      <Text tw="font-bold text-gray-400 dark:text-gray-500">
-        Not collected yet
-      </Text>
+      <View tw={tw}>
+        <Text tw="font-bold text-gray-400 dark:text-gray-500">
+          Not collected yet
+        </Text>
+      </View>
     );
   }
 

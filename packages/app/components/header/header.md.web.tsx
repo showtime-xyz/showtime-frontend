@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, Suspense, useMemo } from "react";
 import { Platform } from "react-native";
 
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Popover from "@radix-ui/react-popover";
 import { SvgProps } from "react-native-svg";
 
@@ -11,8 +12,9 @@ import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Bell,
+  BellFilled,
   Home,
-  Search,
+  Search as SearchIcon,
   ShowtimeBrand,
   Hot,
   User,
@@ -26,6 +28,8 @@ import {
   Sun,
   DarkMode,
   LogOut,
+  ChevronRight,
+  SearchFilled,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -35,11 +39,15 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
+import { ErrorBoundary } from "app/components/error-boundary";
+import { Notifications } from "app/components/notifications";
+import { Search } from "app/components/search";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useFooter } from "app/hooks/use-footer";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
+import { NotificationsTabBarIcon } from "app/navigation/tab-bar-icons";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import {
@@ -55,6 +63,157 @@ import {
 
 import { withColorScheme } from "../memo-with-theme";
 
+const NotificationsInHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const isDark = useIsDarkMode();
+  const prevPath = useRef(router.pathname);
+  const prevQuery = useRef(router.query);
+
+  useEffect(() => {
+    if (
+      Platform.OS === "web" &&
+      isOpen &&
+      (prevPath.current !== router.pathname ||
+        prevQuery.current !== router.query)
+    ) {
+      setIsOpen(false);
+    }
+    prevPath.current = router.pathname;
+    prevQuery.current = router.query;
+  }, [router.pathname, isOpen, router.query]);
+  const Icon = isOpen ? BellFilled : Bell;
+  return (
+    <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger>
+        <View
+          tw={[
+            "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
+          ].join(" ")}
+        >
+          <Icon color={isDark ? "#fff" : "#000"} width={24} height={24} />
+          <Text tw={["ml-4 text-lg text-black dark:text-white"]}>
+            Notifications
+          </Text>
+        </View>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Content sideOffset={36} side="right" align="center">
+          <View
+            tw="h-screen w-[332px] overflow-hidden border-neutral-200 bg-white dark:border-l dark:border-r dark:border-neutral-700 dark:bg-black"
+            style={{
+              // @ts-ignore
+              boxShadow: "8px 0 20px rgba(0,0,0,.08)",
+            }}
+          >
+            <ErrorBoundary>
+              <Suspense
+                fallback={
+                  <View tw="p-4">
+                    <Spinner />
+                  </View>
+                }
+              >
+                <Notifications />
+              </Suspense>
+            </ErrorBoundary>
+          </View>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  );
+};
+
+const SearchInHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const isDark = useIsDarkMode();
+  const prevPath = useRef(router.pathname);
+  const prevQuery = useRef(router.query);
+
+  useEffect(() => {
+    if (
+      Platform.OS === "web" &&
+      isOpen &&
+      (prevPath.current !== router.pathname ||
+        prevQuery.current !== router.query)
+    ) {
+      setIsOpen(false);
+    }
+    prevPath.current = router.pathname;
+    prevQuery.current = router.query;
+  }, [router.pathname, isOpen, router.query]);
+
+  const Icon = isOpen ? SearchFilled : SearchIcon;
+  return (
+    <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
+      <Popover.Trigger>
+        <View
+          tw={[
+            "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
+          ].join(" ")}
+        >
+          <Icon color={isDark ? "#fff" : "#000"} width={24} height={24} />
+          <Text tw={["ml-4 text-lg text-black dark:text-white"]}>Search</Text>
+        </View>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Content sideOffset={36} side="right" align="center">
+          <View
+            tw="h-screen w-[332px] overflow-hidden border-neutral-200 bg-white dark:border-l dark:border-r dark:border-neutral-700 dark:bg-black"
+            style={{
+              // @ts-ignore
+              boxShadow: "8px 0 20px rgba(0,0,0,.08)",
+            }}
+          >
+            <ErrorBoundary>
+              <Suspense
+                fallback={
+                  <View tw="p-4">
+                    <Spinner />
+                  </View>
+                }
+              >
+                <Search />
+              </Suspense>
+            </ErrorBoundary>
+          </View>
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover.Root>
+  );
+};
+const MenuItem = ({
+  focused,
+  href,
+  icon,
+  title,
+}: {
+  focused?: boolean;
+  href: string;
+  icon: any;
+  title: string;
+}) => {
+  return (
+    <Link
+      tw={[
+        "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
+        focused && "bg-coolGray-50 dark:bg-gray-800",
+      ].join(" ")}
+      href={href}
+    >
+      {icon()}
+      <Text
+        tw={[
+          "ml-4 text-lg text-black dark:text-white",
+          focused ? "font-bold" : "font-normal",
+        ]}
+      >
+        {title}
+      </Text>
+    </Link>
+  );
+};
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
   const redirectToCreateDrop = useRedirectToCreateDrop();
@@ -63,8 +222,9 @@ export const HeaderMd = withColorScheme(() => {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const iconColor = isDark ? "#fff" : "#000";
-  const { setColorScheme } = useColorScheme();
+  const { colorScheme, setColorScheme } = useColorScheme();
   const { logout } = useAuth();
+  console.log(colorScheme);
 
   const HOME_ROUTES = useMemo(
     () =>
@@ -98,16 +258,14 @@ export const HeaderMd = withColorScheme(() => {
           key: "Notifications",
           icon: Bell,
           pathname: "/notifications",
-          focused: router.pathname === "/notifications",
           visible: isAuthenticated,
         },
 
         {
           title: "Search",
           key: "Search",
-          icon: Search,
+          icon: SearchIcon,
           pathname: "/search",
-          focused: router.pathname === "/search",
           visible: true,
         },
         {
@@ -147,30 +305,29 @@ export const HeaderMd = withColorScheme(() => {
           <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
         </Link>
         <View tw="-ml-4 mt-5 w-48 justify-center">
-          {HOME_ROUTES.map((item) => (
-            <Link
-              tw={[
-                "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
-                item.focused && "bg-coolGray-50 dark:bg-gray-800",
-              ].join(" ")}
-              key={item.key}
-              href={item.pathname}
-            >
-              {item.icon({
-                color: iconColor,
-                width: 24,
-                height: 24,
-              })}
-              <Text
-                tw={[
-                  "ml-4 text-lg text-black dark:text-white",
-                  item.focused ? "font-bold" : "font-normal",
-                ]}
-              >
-                {item.title}
-              </Text>
-            </Link>
-          ))}
+          {HOME_ROUTES.map((item) => {
+            if (item.key === "Notifications") {
+              return <NotificationsInHeader />;
+            }
+            if (item.key === "Search") {
+              return <SearchInHeader />;
+            }
+            return (
+              <MenuItem
+                focused={item.focused}
+                href={item.pathname}
+                icon={() =>
+                  item.icon({
+                    color: iconColor,
+                    width: 24,
+                    height: 24,
+                  })
+                }
+                title={item.title}
+                key={item.pathname}
+              />
+            );
+          })}
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
               <View
@@ -185,7 +342,12 @@ export const HeaderMd = withColorScheme(() => {
               </View>
             </DropdownMenuTrigger>
 
-            <DropdownMenuContent align="center" side="bottom" sideOffset={0}>
+            <DropdownMenuContent
+              align="center"
+              tw="w-48"
+              side="bottom"
+              sideOffset={0}
+            >
               {isAuthenticated && (
                 <DropdownMenuItem
                   onSelect={() => router.push("/settings")}
@@ -243,11 +405,19 @@ export const HeaderMd = withColorScheme(() => {
                     }}
                   />
 
-                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  <DropdownMenuItemTitle tw="w-full font-semibold text-gray-700 dark:text-neutral-300">
                     Theme
                   </DropdownMenuItemTitle>
+
+                  <View tw="absolute right-0">
+                    <ChevronRight
+                      width={20}
+                      height={20}
+                      color={isDark ? "#fff" : colors.gray[900]}
+                    />
+                  </View>
                 </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
+                <DropdownMenuSubContent alignOffset={-8} sideOffset={4}>
                   <DropdownMenuItem
                     onSelect={() => setColorScheme("light")}
                     key="nested-group-1"

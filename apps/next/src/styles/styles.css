@@ -146,7 +146,25 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
-
+.pretty-scrollbar::-webkit-scrollbar-thumb {
+  height: 56px;
+  border-radius: 8px;
+  border: 4px solid transparent;
+  background-clip: content-box;
+  /* background-color: transparent; */
+  transition: background-color 2s;
+  transition-duration: 200ms;
+}
+.pretty-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+}
+[data-color-scheme="dark"] .pretty-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #6b6b6b;
+}
+.pretty-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  background: transparent;
+}
 .react-datepicker__input-container {
   display: flex;
 }

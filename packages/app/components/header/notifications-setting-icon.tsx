@@ -3,7 +3,7 @@ import { Settings } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 
-export const NotificationsSettingIcon = () => {
+export const NotificationsSettingIcon = ({ size = 24 }) => {
   const router = useRouter();
   const isDark = useIsDarkMode();
 
@@ -14,7 +14,7 @@ export const NotificationsSettingIcon = () => {
       }}
       tw="h-8 w-8 items-center justify-center rounded-full"
     >
-      <Settings width={24} height={24} color={isDark ? "#FFF" : "#000"} />
+      <Settings width={size} height={size} color={isDark ? "#FFF" : "#000"} />
     </PressableScale>
   );
 };

@@ -96,7 +96,7 @@ export const ClaimButtonSimplified = ({
   }, [status]);
 
   if (loading) {
-    return <Skeleton width={72} height={20} radius={999} show tw={tw} />;
+    return <Skeleton width={96} height={24} radius={999} show tw={tw} />;
   }
   return (
     <PressableScale

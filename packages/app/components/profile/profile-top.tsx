@@ -207,7 +207,7 @@ export const ProfileTop = ({
           </>
         </Skeleton>
       </View>
-      <View tw="mx-2">
+      <View tw="mx-2 md:mx-4 xl:mx-2">
         <View tw="flex-row justify-between">
           <View
             tw="flex-row items-end"

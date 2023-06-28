@@ -25,7 +25,7 @@ const DropdownMenuSubContent = DropdownMenu.SubContent;
 
 const StyledDropdownMenuContent = styled(DropdownMenu.Content);
 
-const DropdownMenuContent = DropdownMenu.menuify(
+const DropdownMenuContent = DropdownMenu.create(
   ({
     tw,
     ...props
@@ -41,7 +41,7 @@ const DropdownMenuContent = DropdownMenu.menuify(
 
 const StyledDropdownMenuItem = styled(DropdownMenu.Item);
 
-const DropdownMenuItem = DropdownMenu.menuify(
+const DropdownMenuItem = DropdownMenu.create(
   ({
     tw,
     children,
@@ -65,7 +65,7 @@ const DropdownMenuItem = DropdownMenu.menuify(
 
 const StyledDropdownMenuItemTitle = styled(DropdownMenu.ItemTitle);
 
-const DropdownMenuItemTitle = DropdownMenu.menuify(
+const DropdownMenuItemTitle = DropdownMenu.create(
   ({
     tw,
     ...props
@@ -83,7 +83,7 @@ const DropdownMenuItemTitle = DropdownMenu.menuify(
 
 const StyledDropdownMenuItemSubtitle = styled(DropdownMenu.ItemSubtitle);
 
-const DropdownMenuItemSubtitle = DropdownMenu.menuify(
+const DropdownMenuItemSubtitle = DropdownMenu.create(
   ({
     tw,
     ...props
@@ -102,7 +102,7 @@ const DropdownMenuItemSubtitle = DropdownMenu.menuify(
 
 const StyledDropdownMenuItemIndicator = styled(DropdownMenu.ItemIndicator);
 
-const DropdownMenuItemIndicator = DropdownMenu.menuify(
+const DropdownMenuItemIndicator = DropdownMenu.create(
   ({
     tw,
     ...props
@@ -117,7 +117,7 @@ const DropdownMenuItemIndicator = DropdownMenu.menuify(
 
 const StyledDropdownMenuSeparator = styled(DropdownMenu.Separator);
 
-const DropdownMenuSeparator = DropdownMenu.menuify(
+const DropdownMenuSeparator = DropdownMenu.create(
   ({
     tw,
     ...props
@@ -132,7 +132,7 @@ const DropdownMenuSeparator = DropdownMenu.menuify(
 
 const StyledDropdownMenuSubTrigger = styled(DropdownMenu.SubTrigger);
 
-const DropdownMenuSubTrigger = DropdownMenu.menuify(
+const DropdownMenuSubTrigger = DropdownMenu.create(
   ({
     tw,
     children,
@@ -154,7 +154,7 @@ const DropdownMenuSubTrigger = DropdownMenu.menuify(
 
 const StyledDropdownMenuItemIcon = styled(DropdownMenu.ItemIcon);
 
-const DropdownMenuItemIcon = DropdownMenu.menuify(
+const DropdownMenuItemIcon = DropdownMenu.create(
   ({
     tw,
     ...props
@@ -169,7 +169,7 @@ const DropdownMenuItemIcon = DropdownMenu.menuify(
 
 const StyledDropdownMenuItemImage = styled(DropdownMenu.ItemImage);
 
-const DropdownMenuItemImage = DropdownMenu.menuify(
+const DropdownMenuItemImage = DropdownMenu.create(
   ({
     tw,
     ...props
@@ -184,7 +184,7 @@ const DropdownMenuItemImage = DropdownMenu.menuify(
 
 const StyledDropdownMenuLabel = styled(DropdownMenu.Label);
 
-const DropdownMenuLabel = DropdownMenu.menuify(
+const DropdownMenuLabel = DropdownMenu.create(
   ({
     tw,
     ...props

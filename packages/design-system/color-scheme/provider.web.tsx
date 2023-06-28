@@ -26,7 +26,6 @@ export function ColorSchemeProvider({
   const [colorScheme, setColorScheme] = useState<"dark" | "light">(
     getPersistedColorScheme() ?? deviceColorScheme
   );
-
   const changeTheme = useCallback((newColorScheme: ColorSchemeName) => {
     if (!newColorScheme) return;
     persistColorScheme(newColorScheme);

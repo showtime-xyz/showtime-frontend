@@ -34,6 +34,7 @@ function InfiniteScrollListImpl<Item>(
     useWindowScroll?: boolean;
     preserveScrollPosition?: boolean;
     overscan?: number;
+    containerTw?: string;
   },
   ref: any
 ) {
@@ -55,6 +56,7 @@ function InfiniteScrollListImpl<Item>(
     useWindowScroll = true,
     inverted,
     preserveScrollPosition = false,
+    containerTw = "",
   } = props;
   let count = data?.length ?? 0;
   if (numColumns) {
@@ -205,6 +207,7 @@ function InfiniteScrollListImpl<Item>(
               ref.current = v;
             }
           }}
+          className={containerTw}
           style={
             !useWindowScroll
               ? {

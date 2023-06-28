@@ -28,6 +28,7 @@ type InputProps = Pick<TextInputProps, "aria-label"> & {
   autoFocus?: boolean;
   inputStyle?: StyleProp<TextStyle>;
   autocomplete?: "on" | "off";
+  borderRadius?: number;
 };
 
 let idCounter = 0;
@@ -60,9 +61,10 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
     isInvalid,
     autoFocus,
     autocomplete,
+    borderRadius = 9999,
     ...rest
   } = props;
-  const { onFocus, onBlur, focused } = useOnFocus();
+  const { onFocus, onBlur } = useOnFocus();
   const isDark = useIsDarkMode();
   const inputId = useId(props.id);
   const helperTextId = useId();
@@ -83,15 +85,12 @@ export const Input = forwardRef((props: InputProps, ref: any) => {
       ) : null}
 
       <View
-        tw={[
-          "transition-all duration-300",
-          focused.value ? "dark:shadow-dark shadow-light" : "",
-        ]}
+        tw={["transition-all duration-300"]}
         style={[
           {
             flexDirection: "row",
             alignItems: "center",
-            borderRadius: 9999,
+            borderRadius: borderRadius,
             backgroundColor: isDark ? colors.gray[900] : colors.gray[100],
             borderColor: isInvalid ? colors.red[500] : undefined,
             borderWidth: isInvalid ? 1 : undefined,
