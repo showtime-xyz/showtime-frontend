@@ -136,7 +136,7 @@ const CreatorChannelsListItem = memo(
                     "text-[13px] ",
                     item?.unread
                       ? "font-semibold text-black dark:text-white"
-                      : "text-gray-500 dark:text-gray-300",
+                      : "text-gray-500 dark:text-gray-200",
                   ]}
                   numberOfLines={2}
                 >
@@ -224,7 +224,7 @@ const CreatorChannelsListCreator = memo(
         </View>
         <View tw="ml-[40px] mt-1 pl-3">
           <Text
-            tw="text-[13px] text-gray-500 dark:text-gray-300"
+            tw="text-[13px] text-gray-500 dark:text-gray-200"
             numberOfLines={2}
           >
             {item?.owner?.bio ?? "No bio"}
@@ -368,14 +368,14 @@ export const CreatorChannels = memo(() => {
   if (!isLgWidth) {
     if (router.query["channelId"]) {
       return (
-        <View tw="w-full flex-1 border-l border-neutral-300 dark:border-neutral-700">
+        <View tw="w-full flex-1 border-l border-gray-200 dark:border-gray-800">
           <Messages />
         </View>
       );
     }
 
     return (
-      <View tw="w-full border-l border-neutral-300 bg-white pt-4 dark:border-neutral-700 dark:bg-black">
+      <View tw="w-full border-l border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-black">
         <CreatorChannelsListMobile />
       </View>
     );
@@ -383,7 +383,7 @@ export const CreatorChannels = memo(() => {
 
   return (
     <View tw="h-screen w-full flex-row bg-white dark:bg-black">
-      <View tw="h-full w-80 overflow-hidden border-l border-r border-neutral-300 dark:border-neutral-700">
+      <View tw="h-full w-80 overflow-hidden border-l border-r border-gray-200 dark:border-gray-800">
         <InfiniteScrollList
           useWindowScroll={false}
           data={

@@ -100,10 +100,10 @@ const NotificationsInHeader = () => {
       <Popover.Portal>
         <Popover.Content sideOffset={36} side="right" align="center">
           <View
-            tw="h-screen w-[332px] overflow-hidden border-neutral-200 bg-white dark:border-l dark:border-r dark:border-neutral-700 dark:bg-black"
+            tw="h-screen w-[332px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
             style={{
               // @ts-ignore
-              boxShadow: "8px 0 20px rgba(0,0,0,.08)",
+              boxShadow: "20px 0 20px rgba(0,0,0,.08)",
             }}
           >
             <ErrorBoundary>
@@ -160,10 +160,10 @@ const SearchInHeader = () => {
       <Popover.Portal>
         <Popover.Content sideOffset={36} side="right" align="center">
           <View
-            tw="h-screen w-[332px] overflow-hidden border-neutral-200 bg-white dark:border-l dark:border-r dark:border-neutral-700 dark:bg-black"
+            tw="h-screen w-[332px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
             style={{
               // @ts-ignore
-              boxShadow: "8px 0 20px rgba(0,0,0,.08)",
+              boxShadow: "20px 0 20px rgba(0,0,0,.08)",
             }}
           >
             <ErrorBoundary>

@@ -40,7 +40,7 @@ const SettingsTabs = () => {
   return isLgWidth ? (
     <SettingsMd />
   ) : (
-    <View tw="h-screen w-full overflow-auto border-l-0 border-neutral-300 bg-white dark:border-neutral-700 dark:bg-black md:border-l">
+    <View tw="h-screen w-full overflow-auto border-l-0 border-gray-200 bg-white dark:border-gray-800 dark:bg-black md:border-l">
       <SettingsHeader
         index={index}
         setIndex={setIndex}

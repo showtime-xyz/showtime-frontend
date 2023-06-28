@@ -153,7 +153,7 @@ const Header = (props: HeaderProps) => {
 
   return (
     <View
-      tw="web:pt-2 web:md:py-5 android:pt-4 flex-row items-center border-neutral-300 px-4 pb-2 dark:border-neutral-700 md:border-b"
+      tw="web:pt-2 web:md:py-5 android:pt-4 flex-row items-center border-gray-200 px-4 pb-2 dark:border-gray-800 md:border-b"
       style={{ columnGap: 8 }}
     >
       <View tw="flex-row items-center" style={{ columnGap: 8 }}>
