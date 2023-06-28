@@ -222,9 +222,8 @@ export const HeaderMd = withColorScheme(() => {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const iconColor = isDark ? "#fff" : "#000";
-  const { colorScheme, setColorScheme } = useColorScheme();
+  const { setColorScheme } = useColorScheme();
   const { logout } = useAuth();
-  console.log(colorScheme);
 
   const HOME_ROUTES = useMemo(
     () =>
@@ -497,40 +496,39 @@ export const HeaderMd = withColorScheme(() => {
               <Text tw="text-15 ml-1 font-bold dark:text-white">Get App</Text>
             </View>
             <View tw="flex items-center justify-between px-2 pt-4">
-              <TextLink
-                tw="text-base font-bold dark:text-white"
+              <Link
                 href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
                 target="_blank"
               >
                 <Image
                   source={{
-                    uri: isDark
-                      ? "/assets/AppStoreDark.png"
-                      : "/assets/AppStoreLight.png",
+                    uri: !isDark
+                      ? "/assets/AppStoreDark1.png"
+                      : "/assets/AppStoreLight1.png",
                   }}
-                  width={110}
-                  height={32}
+                  width={120}
+                  height={40}
                   tw="duration-150 hover:scale-105"
                   alt="App Store"
                 />
-              </TextLink>
-              <TextLink
-                tw="text-base font-bold dark:text-white"
+              </Link>
+              <Link
                 href="https://play.google.com/store/apps/details?id=io.showtime"
                 target="_blank"
+                tw="mt-2"
               >
                 <Image
                   source={{
-                    uri: isDark
-                      ? "/assets/GooglePlayDark.png"
-                      : "/assets/GooglePlayLight.png",
+                    uri: !isDark
+                      ? "/assets/GooglePlayDark1.png"
+                      : "/assets/GooglePlayLight1.png",
                   }}
-                  width={103}
-                  height={30}
+                  width={120}
+                  height={40}
                   tw="duration-150 hover:scale-105"
                   alt="Google Play"
                 />
-              </TextLink>
+              </Link>
             </View>
           </View>
         </View>
