@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { useWindowDimensions, Platform } from "react-native";
+import { useState, useRef } from "react";
+import {
+  useWindowDimensions,
+  Platform,
+  ScrollView as RNScrollView,
+} from "react-native";
 
 import { Controller } from "react-hook-form";
 
@@ -36,14 +40,11 @@ import { FilePickerResolveValue } from "app/lib/file-picker";
 import { DateTimePicker } from "design-system/date-time-picker";
 
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
+import { DropPreview } from "../drop-preview";
 import { MediaPicker } from "./media-picker";
 import { useMusicDropForm } from "./music-drop-form-utils";
 import { SelectDropType } from "./select-drop-type";
 import { StepProps } from "./types";
-
-const SECONDS_IN_A_DAY = 24 * 60 * 60;
-const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
-const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
 
 type CreateDropStep =
   | "media"
@@ -54,7 +55,7 @@ type CreateDropStep =
   | "select-drop";
 
 export const CreateDropSteps = () => {
-  const [step, setStep] = useState<CreateDropStep>("song-uri");
+  const [step, setStep] = useState<CreateDropStep>("media");
   const modalContext = useModalScreenContext();
   const {
     control,
@@ -64,12 +65,17 @@ export const CreateDropSteps = () => {
     getValues,
     clearErrors,
     trigger,
+    handleSubmit,
   } = useMusicDropForm();
 
   const Alert = useAlert();
   const title = getValues("title");
   const description = getValues("description");
   const file = getValues("file");
+
+  const onSubmit = async () => {
+    console.log("submitting");
+  };
 
   const handleFileChange = (fileObj: FilePickerResolveValue) => {
     const { file, size } = fileObj;
@@ -181,6 +187,32 @@ export const CreateDropSteps = () => {
           description={description}
         />
       );
+    case "preview":
+      return (
+        <>
+          <DropPreview
+            title={title}
+            description={description}
+            onPressCTA={() => {
+              setStep("media");
+            }}
+            ctaCopy="Edit Drop"
+            file={file}
+            spotifyUrl={getValues("spotifyUrl")}
+            appleMusicTrackUrl={getValues("appleMusicTrackUrl")}
+            releaseDate={getValues("releaseDate")}
+          />
+          <View tw="px-4">
+            <Button
+              variant="primary"
+              size="regular"
+              onPress={handleSubmit(onSubmit)}
+            >
+              Drop Now
+            </Button>
+          </View>
+        </>
+      );
     default:
       return null;
   }
@@ -257,7 +289,7 @@ const CreateDropStepTitle = (props: StepProps) => {
   const mediaDimension = Math.min(347, windowWidth - 32);
 
   return (
-    <Layout onBackPress={props.handlePrevStep} title="Create">
+    <Layout onBackPress={handlePrevStep} title="Create">
       <ScrollView tw="px-4">
         <View tw="mt-8 items-center">
           <Preview
@@ -341,7 +373,9 @@ const CreateDropStepTitle = (props: StepProps) => {
           size="regular"
           tw="mt-4 w-full self-center"
           onPress={async () => {
-            const res = await trigger(["title", "description"]);
+            const res = await trigger(["title", "description"], {
+              shouldFocus: true,
+            });
             if (res) {
               handleNextStep();
             }
@@ -398,11 +432,12 @@ const CreateDropStepSongURI = (
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
   const isDark = useIsDarkMode();
-
   const { errors, control, handleNextStep, trigger } = props;
+  const scrollViewRef = useRef<RNScrollView>(null);
+
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
-      <ScrollView tw="px-4">
+      <RNScrollView ref={scrollViewRef} style={{ paddingHorizontal: 16 }}>
         <View tw="flex-row items-center">
           <Preview
             width={40}
@@ -648,15 +683,25 @@ const CreateDropStepSongURI = (
         {errors.hasAcceptedTerms?.message ? (
           <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
         ) : null}
-      </ScrollView>
+      </RNScrollView>
 
       <View tw="mx-4 mt-4">
         <Button
           size="regular"
           onPress={async () => {
-            const res = await trigger();
+            const res = await trigger(
+              ["releaseDate", "spotifyUrl", "appleMusicTrackUrl"],
+              {
+                shouldFocus: true,
+              }
+            );
             if (res) {
-              handleNextStep();
+              const hasAcceptedTerms = await trigger("hasAcceptedTerms");
+              if (hasAcceptedTerms) {
+                handleNextStep();
+              } else {
+                scrollViewRef.current?.scrollTo({ y: 10000, animated: true });
+              }
             }
           }}
         >
@@ -677,17 +722,20 @@ const CreateDropStepSongURI = (
   );
 };
 
+const SECONDS_IN_A_DAY = 24 * 60 * 60;
+const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
+const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
+const durationOptions = [
+  { label: "1 day", value: SECONDS_IN_A_DAY },
+  { label: "1 week", value: SECONDS_IN_A_WEEK },
+  { label: "1 month", value: SECONDS_IN_A_MONTH },
+];
 const CreateDropMoreOptions = (props: StepProps) => {
   const [isUnlimited, setIsUnlimited] = useState(false);
-  const { control, errors, handleFileChange, handlePrevStep, handleNextStep } =
-    props;
-  const durationOptions = [
-    { label: "1 day", value: SECONDS_IN_A_DAY },
-    { label: "1 week", value: SECONDS_IN_A_WEEK },
-    { label: "1 month", value: SECONDS_IN_A_MONTH },
-  ];
+  const { control, errors, handlePrevStep } = props;
+
   return (
-    <Layout onBackPress={props.handlePrevStep} title="More options">
+    <Layout onBackPress={handlePrevStep} title="More options">
       <ScrollView tw="px-4">
         <View tw="flex-1 flex-row">
           <Controller
@@ -801,11 +849,7 @@ const CreateDropMoreOptions = (props: StepProps) => {
         </View>
       </ScrollView>
       <View tw="px-4">
-        <Button
-          size="regular"
-          tw="w-full self-center"
-          onPress={props.handlePrevStep}
-        >
+        <Button size="regular" tw="w-full self-center" onPress={handlePrevStep}>
           Save
         </Button>
       </View>
