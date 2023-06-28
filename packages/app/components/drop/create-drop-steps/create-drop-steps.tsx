@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, Platform } from "react-native";
 
 import { Controller } from "react-hook-form";
 
@@ -8,18 +8,34 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
-import { ArrowLeft, ChevronRight, Raffle } from "@showtime-xyz/universal.icon";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  AppleMusic,
+  ArrowLeft,
+  ChevronRight,
+  InformationCircle,
+  Raffle,
+  Spotify,
+} from "@showtime-xyz/universal.icon";
+import { Label } from "@showtime-xyz/universal.label";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Switch } from "@showtime-xyz/universal.switch";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Preview } from "app/components/preview";
 import { MAX_FILE_SIZE } from "app/hooks/use-drop-nft";
+import { useUser } from "app/hooks/use-user";
 import { FilePickerResolveValue } from "app/lib/file-picker";
 
+import { DateTimePicker } from "design-system/date-time-picker";
+
+import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { MediaPicker } from "./media-picker";
 import { useMusicDropForm } from "./music-drop-form-utils";
 import { SelectDropType } from "./select-drop-type";
@@ -38,7 +54,7 @@ type CreateDropStep =
   | "select-drop";
 
 export const CreateDropSteps = () => {
-  const [step, setStep] = useState<CreateDropStep>("select-drop");
+  const [step, setStep] = useState<CreateDropStep>("song-uri");
   const modalContext = useModalScreenContext();
   const {
     control,
@@ -49,15 +65,7 @@ export const CreateDropSteps = () => {
     clearErrors,
     trigger,
   } = useMusicDropForm();
-  const [formValues, setFormValues] = useState({
-    title: "Tell me tell me Pre-Save",
-    description:
-      "Promote an unreleased or live song to Spotify and Apple Music by pasting URLs below",
-    price: "",
-    file: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png" as
-      | string
-      | File,
-  });
+
   const Alert = useAlert();
   const title = getValues("title");
   const description = getValues("description");
@@ -346,9 +354,51 @@ const CreateDropStepTitle = (props: StepProps) => {
   );
 };
 
+const getDefaultDate = () => {
+  const now = new Date();
+  const day = now.getDay();
+  // Local time 12:00AM the upcoming Friday is ideal.
+  const minus = 5 - day;
+
+  if (day <= 4) {
+    const thisWeek = new Date(
+      new Date(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() + 1,
+        0,
+        0,
+        0
+      )
+    );
+    const thisWeekFriday = thisWeek.setDate(thisWeek.getDate() + minus);
+    return new Date(thisWeekFriday);
+  }
+  // If not, fallback to 12:00AM local time the next week
+  const nextweek = new Date(
+    new Date(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + 1,
+      0,
+      0,
+      0
+    )
+  );
+  const nextFriday = nextweek.setDate(nextweek.getDate() + minus + 7);
+  return new Date(nextFriday);
+};
+
 const CreateDropStepSongURI = (
   props: StepProps & { handleMoreOptions: () => void }
 ) => {
+  const [isSaveDrop, setIsSaveDrop] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const user = useUser();
+  const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
+    useState(false);
+  const isDark = useIsDarkMode();
+
   const { errors, control, handleNextStep, trigger } = props;
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
@@ -365,10 +415,192 @@ const CreateDropStepSongURI = (
             {props.title}
           </Text>
         </View>
-        <View tw="mt-8">
+        <View tw="mt-4">
           <Text tw="text-sm font-semibold">Music Details</Text>
           <Text tw="pt-1 text-gray-600">{props.description}</Text>
-          <View tw="mt-8 rounded-lg bg-gray-100 p-4">
+          <View tw="z-10 mt-4 flex-row">
+            <Controller
+              key="releaseDate"
+              control={control}
+              defaultValue={getDefaultDate()}
+              name="releaseDate"
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => {
+                const dateValue =
+                  typeof value === "string"
+                    ? new Date(value)
+                    : value ?? getDefaultDate();
+
+                return (
+                  <View
+                    tw={`flex-1 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800 ${
+                      isSaveDrop ? "opacity-40" : ""
+                    }`}
+                  >
+                    {Platform.OS !== "web" ? (
+                      <Pressable
+                        onPress={() => {
+                          setShowDatePicker(!showDatePicker);
+                        }}
+                      >
+                        <Text tw="font-bold text-gray-900 dark:text-white">
+                          Streaming Services Release Date
+                        </Text>
+                        <Text tw="pt-4 text-base text-gray-900 dark:text-white">
+                          {(dateValue as Date).toDateString()}
+                        </Text>
+                      </Pressable>
+                    ) : (
+                      <Text tw="font-bold text-gray-900 dark:text-white">
+                        Streaming Services Release Date
+                      </Text>
+                    )}
+
+                    <View tw="t-0 l-0 w-full flex-row pt-2">
+                      <DateTimePicker
+                        disabled={isSaveDrop}
+                        onChange={(v) => {
+                          onChange(v);
+                          setShowDatePicker(false);
+                        }}
+                        minimumDate={getDefaultDate()}
+                        value={dateValue}
+                        type="datetime"
+                        open={showDatePicker}
+                      />
+                    </View>
+                    {error && !isSaveDrop ? (
+                      <Text tw="pt-3 font-bold leading-5 text-red-500">
+                        {error.message}
+                      </Text>
+                    ) : null}
+                  </View>
+                );
+              }}
+            />
+            <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
+              <Checkbox
+                checked={isSaveDrop}
+                onChange={() => {
+                  setIsSaveDrop(!isSaveDrop);
+                }}
+                aria-label="Live Now"
+              />
+              <Text
+                tw="ml-2 font-bold text-black dark:text-white"
+                onPress={() => {
+                  setIsSaveDrop(!isSaveDrop);
+                }}
+              >
+                Live Now
+              </Text>
+            </View>
+          </View>
+          <View tw="mt-4">
+            <Controller
+              control={control}
+              name="spotifyUrl"
+              render={({ field: { onChange, onBlur, value, ref } }) => {
+                return (
+                  <Fieldset
+                    ref={ref}
+                    helperText={
+                      isSaveDrop ? (
+                        "Press the ⓘ button to learn how to get that link. Please note that providing a Playlist link is not allowed."
+                      ) : (
+                        <Text tw="text-sm leading-6 text-gray-700 dark:text-gray-300">
+                          <Text tw="text-sm font-bold leading-6 text-gray-700 dark:text-gray-300">
+                            {`Go to Spotify for Artists → Music → Upcoming. `}
+                          </Text>
+                          Click "Copy URI" and paste it here. Track URI also
+                          allowed.
+                        </Text>
+                      )
+                    }
+                    label={
+                      <View tw="flex-row gap-1">
+                        <Spotify
+                          height={22}
+                          width={22}
+                          color={isDark ? "white" : "black"}
+                        />
+                        <Label tw="font-bold text-gray-900 dark:text-white">
+                          {isSaveDrop ? "Spotify Song Link" : "Spotify URI "}
+                        </Label>
+                        {isSaveDrop ? (
+                          <PressableHover
+                            onPress={() => {
+                              setShowCopySpotifyLinkTutorial(true);
+                            }}
+                          >
+                            <InformationCircle
+                              height={18}
+                              width={18}
+                              color={
+                                isDark ? colors.gray[400] : colors.gray[600]
+                              }
+                            />
+                          </PressableHover>
+                        ) : null}
+                      </View>
+                    }
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder={
+                      isSaveDrop
+                        ? "https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
+                        : "spotify:album:27ftYHLeunzcSzb33Wk1hf"
+                    }
+                    errorText={
+                      errors.spotifyUrl?.message || errors[""]?.message
+                    }
+                  />
+                );
+              }}
+            />
+          </View>
+          {user.user?.data.profile.apple_music_artist_id ? (
+            <View tw="mt-4">
+              <Controller
+                control={control}
+                name="appleMusicTrackUrl"
+                render={({ field: { onChange, onBlur, value, ref } }) => {
+                  return (
+                    <Fieldset
+                      ref={ref}
+                      label={
+                        <View tw="flex-row items-center gap-1">
+                          <AppleMusic
+                            height={20}
+                            width={20}
+                            color={isDark ? "white" : "black"}
+                          />
+                          <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                            Apple Music Song Link
+                          </Label>
+                        </View>
+                      }
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder={
+                        "https://music.apple.com/album/i-feel-it-coming-feat-daft-punk/1440870373?i=1440870397"
+                      }
+                      errorText={
+                        errors.appleMusicTrackUrl?.message ||
+                        errors[""]?.message
+                      }
+                    />
+                  );
+                }}
+              />
+            </View>
+          ) : null}
+
+          <View tw="mt-4 rounded-lg bg-gray-100 p-4">
             <Pressable
               tw="flex-row items-center justify-between"
               onPress={props.handleMoreOptions}
@@ -385,58 +617,62 @@ const CreateDropStepSongURI = (
             </View>
           </View>
         </View>
+        <Text tw="pt-4 text-sm text-gray-600 dark:text-gray-200">
+          This drop will be owned by you
+        </Text>
+        <View tw="mt-4 flex-1 flex-row">
+          <Controller
+            control={control}
+            name="hasAcceptedTerms"
+            render={({ field: { onChange, value } }) => (
+              <>
+                <Pressable
+                  onPress={() => onChange(!value)}
+                  tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
+                >
+                  <Checkbox
+                    onChange={(v) => onChange(v)}
+                    checked={value}
+                    aria-label="I agree to the terms and conditions"
+                  />
 
-        <View tw="mt-8 flex-row">
-          <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
-            This drop will be owned by you
-          </Text>
+                  <Text tw="px-4 text-gray-600 dark:text-gray-400">
+                    I have the rights to publish this content, and understand it
+                    will be minted on the Polygon network.
+                  </Text>
+                </Pressable>
+              </>
+            )}
+          />
         </View>
-
-        <View tw="mt-4 flex-1">
-          <View tw="flex-1 flex-row">
-            <Controller
-              control={control}
-              name="hasAcceptedTerms"
-              render={({ field: { onChange, value } }) => (
-                <>
-                  <Pressable
-                    onPress={() => onChange(!value)}
-                    tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
-                  >
-                    <Checkbox
-                      onChange={(v) => onChange(v)}
-                      checked={value}
-                      aria-label="I agree to the terms and conditions"
-                    />
-
-                    <Text tw="px-4 text-gray-600 dark:text-gray-400">
-                      I have the rights to publish this content, and understand
-                      it will be minted on the Polygon network.
-                    </Text>
-                  </Pressable>
-                </>
-              )}
-            />
-          </View>
-          {errors.hasAcceptedTerms?.message ? (
-            <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
-          ) : null}
-        </View>
-
-        <View tw="mt-4">
-          <Button
-            size="regular"
-            onPress={async () => {
-              const res = await trigger("hasAcceptedTerms");
-              if (res) {
-                handleNextStep();
-              }
-            }}
-          >
-            Create Drop
-          </Button>
-        </View>
+        {errors.hasAcceptedTerms?.message ? (
+          <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
+        ) : null}
       </ScrollView>
+
+      <View tw="mx-4 mt-4">
+        <Button
+          size="regular"
+          onPress={async () => {
+            const res = await trigger();
+            if (res) {
+              handleNextStep();
+            }
+          }}
+        >
+          Create Drop
+        </Button>
+      </View>
+
+      <ModalSheet
+        snapPoints={["100%"]}
+        title="Spotify Song Link"
+        visible={showCopySpotifyLinkTutorial}
+        close={() => setShowCopySpotifyLinkTutorial(false)}
+        onClose={() => setShowCopySpotifyLinkTutorial(false)}
+      >
+        <CopySpotifyLinkTutorial />
+      </ModalSheet>
     </Layout>
   );
 };
@@ -452,72 +688,127 @@ const CreateDropMoreOptions = (props: StepProps) => {
   ];
   return (
     <Layout onBackPress={props.handlePrevStep} title="More options">
-      <View tw="flex-1 flex-row">
-        <Fieldset
-          tw={isUnlimited ? "flex-1 opacity-40" : "flex-1 opacity-100"}
-          label="Edition size"
-          placeholder="Enter number"
-          helperText="How many editions will be available to collect"
-          disabled={isUnlimited}
-        />
-
-        <Pressable
-          onPress={() => setIsUnlimited((isUnlimited) => !isUnlimited)}
-          tw="absolute right-4 top-10 flex-row items-center"
-          style={{ opacity: 1 }}
-        >
-          <Text tw="mr-2 text-base font-medium text-gray-600 dark:text-gray-400">
-            Unlimited
-          </Text>
-          <Checkbox
-            onChange={() => setIsUnlimited((isUnlimited) => !isUnlimited)}
-            checked={isUnlimited}
-            aria-label="unlimited editions for drop"
+      <ScrollView tw="px-4">
+        <View tw="flex-1 flex-row">
+          <Controller
+            control={control}
+            name="editionSize"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  tw={isUnlimited ? "flex-1 opacity-40" : "flex-1 opacity-100"}
+                  label="Edition size"
+                  placeholder="Enter number"
+                  onBlur={onBlur}
+                  helperText="How many editions will be available to collect"
+                  errorText={errors.editionSize?.message}
+                  value={value?.toString()}
+                  disabled={isUnlimited}
+                  onChangeText={onChange}
+                />
+              );
+            }}
           />
-        </Pressable>
+          <Pressable
+            onPress={() => setIsUnlimited((isUnlimited) => !isUnlimited)}
+            tw="absolute right-4 top-10 flex-row items-center"
+            style={{ opacity: 1 }}
+          >
+            <Text tw="mr-2 text-base font-medium text-gray-600 dark:text-gray-400">
+              Unlimited
+            </Text>
+            <Checkbox
+              onChange={() => setIsUnlimited((isUnlimited) => !isUnlimited)}
+              checked={isUnlimited}
+              aria-label="unlimited editions for drop"
+            />
+          </Pressable>
+        </View>
+        <View tw="mt-4">
+          <Controller
+            control={control}
+            name="royalty"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  tw="flex-1"
+                  label="Your royalties (%)"
+                  onBlur={onBlur}
+                  placeholder="Enter number"
+                  helperText="Earn royalties each time an edition is sold."
+                  errorText={errors.royalty?.message}
+                  value={value?.toString()}
+                  onChangeText={onChange}
+                />
+              );
+            }}
+          />
+        </View>
+        <View tw="mt-4">
+          <Controller
+            control={control}
+            name="duration"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  tw="flex-1"
+                  label="Duration"
+                  onBlur={onBlur}
+                  helperText="How long the drop will be available to claim"
+                  errorText={errors.duration?.message}
+                  selectOnly
+                  select={{
+                    options: durationOptions,
+                    placeholder: "Duration",
+                    value: value,
+                    onChange,
+                    tw: "flex-1",
+                  }}
+                />
+              );
+            }}
+          />
+        </View>
+        <View tw="my-4">
+          <Controller
+            control={control}
+            name="notSafeForWork"
+            render={({ field: { onChange, value, ref } }) => (
+              <Fieldset
+                ref={ref}
+                tw="flex-1"
+                label={
+                  <View tw="mr-5 flex">
+                    <Text tw="font-semibold dark:text-white">
+                      Explicit visual (18+)
+                    </Text>
+                    <Text tw="max-w-[100%] pt-1 text-xs dark:text-white">
+                      Do not check if your song lyrics are explicit.
+                    </Text>
+                  </View>
+                }
+                switchOnly
+                switchProps={{
+                  checked: value,
+                  onChange,
+                }}
+              />
+            )}
+          />
+        </View>
+      </ScrollView>
+      <View tw="px-4">
+        <Button
+          size="regular"
+          tw="w-full self-center"
+          onPress={props.handlePrevStep}
+        >
+          Save
+        </Button>
       </View>
-      <Fieldset
-        tw="flex-1"
-        label="Your royalties (%)"
-        placeholder="Enter number"
-        helperText="Earn royalties each time an edition is sold."
-      />
-      <Fieldset
-        tw="w-full"
-        label="Duration"
-        helperText="How long the drop will be available to claim"
-        selectOnly
-        select={{
-          options: durationOptions,
-          placeholder: "Duration",
-          onChange: () => {},
-        }}
-      />
-      <Fieldset
-        tw="flex-1"
-        label={
-          <View tw="mr-5 flex">
-            <Text tw="font-semibold dark:text-white">
-              Explicit visual (18+)
-            </Text>
-            <Text tw="max-w-[100%] pt-1 text-xs dark:text-white">
-              Do not check if your song lyrics are explicit.
-            </Text>
-          </View>
-        }
-        switchOnly
-        switchProps={{
-          checked: false,
-          onChange: () => {},
-        }}
-      />
-      <Button
-        size="regular"
-        tw="w-full self-center"
-        onPress={props.handlePrevStep}
-      >
-        Save
-      </Button>
     </Layout>
   );
 };

@@ -129,6 +129,7 @@ export const useMusicDropForm = () => {
     resolver: yupResolver(dropValidationSchema as any),
     reValidateMode: "onChange",
     mode: "onBlur",
+    shouldFocusError: true,
   });
 
   console.log("form state ", errors);
