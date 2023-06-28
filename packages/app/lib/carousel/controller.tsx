@@ -19,7 +19,7 @@ export const Controller = ({
   return (
     <View
       tw={[
-        "absolute top-1/2 z-10 hidden w-full -translate-y-4 flex-row  justify-between md:flex",
+        "absolute top-1/2 z-10 hidden w-full -translate-y-2 flex-row  justify-between md:flex",
         tw,
       ]}
     >
