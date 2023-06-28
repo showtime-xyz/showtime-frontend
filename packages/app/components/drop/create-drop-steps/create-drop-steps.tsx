@@ -249,7 +249,7 @@ export const CreateDropSteps = () => {
             file={file}
             spotifyUrl={getValues("spotifyUrl")}
             appleMusicTrackUrl={getValues("appleMusicTrackUrl")}
-            releaseDate={getValues("releaseDate")}
+            releaseDate={isSaveDrop ? null : getValues("releaseDate")}
           />
           <View tw="p-4">
             <Button
@@ -777,7 +777,7 @@ const CreateDropStepSongURI = (
             }
           }}
         >
-          Create Drop
+          Preview
         </Button>
       </View>
 
