@@ -102,10 +102,9 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
                 >
                   <Image
                     source={{
-                      // uri: `${item.image}?optimizer=image&width=${
-                      //   pagerWidth * 2
-                      // }&quality=70&sharpen=true`,
-                      uri: "https://ik.imagekit.io/09q8fettkc8/development/tr:h-400,w-800:pr-true/shops/6-shop-bbty4.jpg",
+                      uri: `${item.image}?optimizer=image&width=${
+                        pagerWidth * 2
+                      }&quality=70&sharpen=true`,
                     }}
                     recyclingKey={item.image}
                     blurhash={item?.blurhash}
