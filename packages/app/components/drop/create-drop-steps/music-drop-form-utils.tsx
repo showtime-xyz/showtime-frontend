@@ -145,5 +145,6 @@ export const useMusicDropForm = () => {
     setValue,
     getValues,
     setIsSaveDrop,
+    defaultValues,
   };
 };

@@ -27,13 +27,15 @@ import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { Switch } from "@showtime-xyz/universal.switch";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Preview } from "app/components/preview";
-import { MAX_FILE_SIZE } from "app/hooks/use-drop-nft";
+import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
+import { usePersistForm } from "app/hooks/use-persist-form";
 import { useUser } from "app/hooks/use-user";
 import { FilePickerResolveValue } from "app/lib/file-picker";
 
@@ -41,6 +43,8 @@ import { DateTimePicker } from "design-system/date-time-picker";
 
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropPreview } from "../drop-preview";
+import { DropViewShare } from "../drop-view-share";
+import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
 import { MediaPicker } from "./media-picker";
 import { useMusicDropForm } from "./music-drop-form-utils";
 import { SelectDropType } from "./select-drop-type";
@@ -56,6 +60,8 @@ type CreateDropStep =
 
 export const CreateDropSteps = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
+  const [isSaveDrop, setIsSaveDrop] = useState(false);
+  const [isUnlimited, setIsUnlimited] = useState(false);
   const modalContext = useModalScreenContext();
   const {
     control,
@@ -63,18 +69,41 @@ export const CreateDropSteps = () => {
     formState,
     setError,
     getValues,
+    watch,
     clearErrors,
     trigger,
     handleSubmit,
+    defaultValues,
   } = useMusicDropForm();
 
   const Alert = useAlert();
   const title = getValues("title");
   const description = getValues("description");
   const file = getValues("file");
+  const { state, dropNFT } = useDropNFT();
 
-  const onSubmit = async () => {
+  const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
+    watch,
+    setValue,
+    defaultValues,
+  });
+
+  const onSubmit = async (values: UseDropNFT) => {
     console.log("submitting");
+    await dropNFT(
+      {
+        ...values,
+        gatingType: isSaveDrop
+          ? "multi_provider_music_save"
+          : "multi_provider_music_presave",
+        editionSize: isUnlimited ? 0 : values.editionSize,
+        releaseDate: isSaveDrop
+          ? undefined
+          : values.releaseDate ?? getDefaultDate().toISOString(),
+        appleMusicTrackUrl: values.appleMusicTrackUrl,
+      },
+      clearStorage
+    );
   };
 
   const handleFileChange = (fileObj: FilePickerResolveValue) => {
@@ -108,6 +137,18 @@ export const CreateDropSteps = () => {
     }
   };
 
+  if (state.status === "success") {
+    return (
+      <DropViewShare
+        title={title}
+        description={description}
+        file={file}
+        contractAddress={state.edition?.contract_address}
+        dropCreated
+      />
+    );
+  }
+
   switch (step) {
     case "select-drop":
       return (
@@ -134,9 +175,7 @@ export const CreateDropSteps = () => {
           trigger={trigger}
           control={control}
           errors={formState.errors}
-          handleNextStep={() => {
-            setStep("title");
-          }}
+          handleNextStep={() => setStep("title")}
           handleFileChange={handleFileChange}
           handlePrevStep={() => {
             modalContext?.snapToIndex(0);
@@ -164,6 +203,8 @@ export const CreateDropSteps = () => {
       return (
         <CreateDropStepSongURI
           control={control}
+          isSaveDrop={isSaveDrop}
+          setIsSaveDrop={setIsSaveDrop}
           errors={formState.errors}
           trigger={trigger}
           handleNextStep={() => setStep("preview")}
@@ -178,6 +219,8 @@ export const CreateDropSteps = () => {
       return (
         <CreateDropMoreOptions
           control={control}
+          isUnlimited={isUnlimited}
+          setIsUnlimited={setIsUnlimited}
           errors={formState.errors}
           trigger={trigger}
           handleNextStep={() => setStep("song-uri")}
@@ -206,9 +249,19 @@ export const CreateDropSteps = () => {
             <Button
               variant="primary"
               size="regular"
+              disabled={state.status === "loading"}
+              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
               onPress={handleSubmit(onSubmit)}
             >
-              Drop Now
+              {state.status === "loading" ? (
+                <View tw="items-center justify-center">
+                  <Spinner size="small" />
+                </View>
+              ) : state.status === "error" ? (
+                "Failed. Please retry!"
+              ) : (
+                "Drop now"
+              )}
             </Button>
           </View>
         </>
@@ -424,15 +477,25 @@ const getDefaultDate = () => {
 };
 
 const CreateDropStepSongURI = (
-  props: StepProps & { handleMoreOptions: () => void }
+  props: StepProps & {
+    handleMoreOptions: () => void;
+    setIsSaveDrop: (isSaveDrop: boolean) => void;
+    isSaveDrop: boolean;
+  }
 ) => {
-  const [isSaveDrop, setIsSaveDrop] = useState(false);
+  const {
+    errors,
+    control,
+    handleNextStep,
+    trigger,
+    setIsSaveDrop,
+    isSaveDrop,
+  } = props;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const user = useUser();
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
   const isDark = useIsDarkMode();
-  const { errors, control, handleNextStep, trigger } = props;
   const scrollViewRef = useRef<RNScrollView>(null);
 
   return (
@@ -730,9 +793,14 @@ const durationOptions = [
   { label: "1 week", value: SECONDS_IN_A_WEEK },
   { label: "1 month", value: SECONDS_IN_A_MONTH },
 ];
-const CreateDropMoreOptions = (props: StepProps) => {
-  const [isUnlimited, setIsUnlimited] = useState(false);
-  const { control, errors, handlePrevStep } = props;
+const CreateDropMoreOptions = (
+  props: StepProps & {
+    isUnlimited: boolean;
+    setIsUnlimited: (isUnlimited: boolean) => void;
+  }
+) => {
+  const { control, errors, handlePrevStep, isUnlimited, setIsUnlimited } =
+    props;
 
   return (
     <Layout onBackPress={handlePrevStep} title="More options">
@@ -759,7 +827,7 @@ const CreateDropMoreOptions = (props: StepProps) => {
             }}
           />
           <Pressable
-            onPress={() => setIsUnlimited((isUnlimited) => !isUnlimited)}
+            onPress={() => setIsUnlimited(!isUnlimited)}
             tw="absolute right-4 top-10 flex-row items-center"
             style={{ opacity: 1 }}
           >
@@ -767,7 +835,7 @@ const CreateDropMoreOptions = (props: StepProps) => {
               Unlimited
             </Text>
             <Checkbox
-              onChange={() => setIsUnlimited((isUnlimited) => !isUnlimited)}
+              onChange={() => setIsUnlimited(!isUnlimited)}
               checked={isUnlimited}
               aria-label="unlimited editions for drop"
             />
