@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   useWindowDimensions,
   Platform,
@@ -18,6 +18,7 @@ import {
   ArrowLeft,
   ChevronRight,
   InformationCircle,
+  Close,
   Raffle,
   Spotify,
 } from "@showtime-xyz/universal.icon";
@@ -26,6 +27,7 @@ import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Switch } from "@showtime-xyz/universal.switch";
@@ -61,7 +63,7 @@ type CreateDropStep =
 export const CreateDropSteps = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
   const [isSaveDrop, setIsSaveDrop] = useState(false);
-  const [isUnlimited, setIsUnlimited] = useState(false);
+  const [isUnlimited, setIsUnlimited] = useState(true);
   const modalContext = useModalScreenContext();
   const {
     control,
@@ -80,13 +82,18 @@ export const CreateDropSteps = () => {
   const title = getValues("title");
   const description = getValues("description");
   const file = getValues("file");
-  const { state, dropNFT } = useDropNFT();
+  const { state, dropNFT, reset: resetDropState } = useDropNFT();
+  const router = useRouter();
 
   const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
     watch,
     setValue,
     defaultValues,
   });
+
+  useEffect(() => {
+    resetDropState();
+  }, [resetDropState]);
 
   const onSubmit = async (values: UseDropNFT) => {
     console.log("submitting");
@@ -139,13 +146,15 @@ export const CreateDropSteps = () => {
 
   if (state.status === "success") {
     return (
-      <DropViewShare
-        title={title}
-        description={description}
-        file={file}
-        contractAddress={state.edition?.contract_address}
-        dropCreated
-      />
+      <Layout closeIcon onBackPress={() => router.pop()} title="Success">
+        <DropViewShare
+          title={title}
+          description={description}
+          file={file}
+          contractAddress={state.edition?.contract_address}
+          dropCreated
+        />
+      </Layout>
     );
   }
 
@@ -232,20 +241,17 @@ export const CreateDropSteps = () => {
       );
     case "preview":
       return (
-        <>
+        <Layout onBackPress={() => setStep("song-uri")} title="Preview">
           <DropPreview
             title={title}
             description={description}
-            onPressCTA={() => {
-              setStep("media");
-            }}
             ctaCopy="Edit Drop"
             file={file}
             spotifyUrl={getValues("spotifyUrl")}
             appleMusicTrackUrl={getValues("appleMusicTrackUrl")}
             releaseDate={getValues("releaseDate")}
           />
-          <View tw="px-4">
+          <View tw="p-4">
             <Button
               variant="primary"
               size="regular"
@@ -264,7 +270,7 @@ export const CreateDropSteps = () => {
               )}
             </Button>
           </View>
-        </>
+        </Layout>
       );
     default:
       return null;
@@ -513,9 +519,12 @@ const CreateDropStepSongURI = (
             {props.title}
           </Text>
         </View>
-        <View tw="mt-4">
+        <View tw="mt-6">
           <Text tw="text-sm font-semibold">Music Details</Text>
-          <Text tw="pt-1 text-gray-600">{props.description}</Text>
+          <Text tw="pt-1 text-gray-600">
+            Promote an unreleased or live song to Spotify and Apple Music by
+            pasting URLs below
+          </Text>
           <View tw="z-10 mt-4 flex-row">
             <Controller
               key="releaseDate"
@@ -929,12 +938,17 @@ const Layout = (props: {
   title: string;
   onBackPress: () => void;
   children: any;
+  closeIcon?: boolean;
 }) => {
   return (
     <View tw="flex-1">
       <View tw="mx-4 my-8 flex-row items-center">
         <Pressable tw="absolute" onPress={props.onBackPress}>
-          <ArrowLeft color="black" width={24} height={24} />
+          {props.closeIcon ? (
+            <Close color="black" width={24} height={24} />
+          ) : (
+            <ArrowLeft color="black" width={24} height={24} />
+          )}
         </Pressable>
         <View tw="mx-auto">
           <Text tw="text-lg">{props.title}</Text>
