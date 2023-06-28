@@ -4,4 +4,7 @@ export type StepProps = {
   file: File | string;
   title: string;
   description: string;
+  trigger: any;
+  control: any;
+  errors: any;
 };

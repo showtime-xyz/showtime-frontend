@@ -17,9 +17,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useUser } from "app/hooks/use-user";
 
-import { StepProps } from "./types";
-
-export const SelectDropType = (props: StepProps) => {
+export const SelectDropType = (props: { handleNextStep: any }) => {
   const user = useUser({
     redirectTo: "/login",
     redirectIfProfileIncomplete: true,

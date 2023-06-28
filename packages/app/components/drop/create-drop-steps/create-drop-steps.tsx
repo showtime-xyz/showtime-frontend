@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Controller } from "react-hook-form";
+
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
-import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { ArrowLeft, ChevronRight, Raffle } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -19,6 +21,7 @@ import { MAX_FILE_SIZE } from "app/hooks/use-drop-nft";
 import { FilePickerResolveValue } from "app/lib/file-picker";
 
 import { MediaPicker } from "./media-picker";
+import { useMusicDropForm } from "./music-drop-form-utils";
 import { SelectDropType } from "./select-drop-type";
 import { StepProps } from "./types";
 
@@ -37,6 +40,15 @@ type CreateDropStep =
 export const CreateDropSteps = () => {
   const [step, setStep] = useState<CreateDropStep>("select-drop");
   const modalContext = useModalScreenContext();
+  const {
+    control,
+    setValue,
+    formState,
+    setError,
+    getValues,
+    clearErrors,
+    trigger,
+  } = useMusicDropForm();
   const [formValues, setFormValues] = useState({
     title: "Tell me tell me Pre-Save",
     description:
@@ -47,6 +59,9 @@ export const CreateDropSteps = () => {
       | File,
   });
   const Alert = useAlert();
+  const title = getValues("title");
+  const description = getValues("description");
+  const file = getValues("file");
 
   const handleFileChange = (fileObj: FilePickerResolveValue) => {
     const { file, size } = fileObj;
@@ -59,18 +74,23 @@ export const CreateDropSteps = () => {
       Alert.alert(
         "Oops, this file is too large (>30MB). Please upload a smaller file."
       );
+      setError("file", {
+        type: "custom",
+        message: "Please retry!",
+      });
+      setValue("file", undefined);
+
       return;
     }
     if (
       extension === "mov" ||
       (typeof file === "object" && file.type === "video/quicktime")
     ) {
-      console.log("MOV file detected");
+      setError("file", { type: "custom", message: "File type not supported" });
+      setValue("file", undefined);
     } else {
-      setFormValues({
-        ...formValues,
-        file,
-      });
+      clearErrors("file");
+      setValue("file", file);
     }
   };
 
@@ -78,6 +98,9 @@ export const CreateDropSteps = () => {
     case "select-drop":
       return (
         <SelectDropTypeStep
+          errors={formState.errors}
+          trigger={trigger}
+          control={control}
           handleNextStep={() => {
             modalContext?.snapToIndex(1);
             setStep("media");
@@ -86,14 +109,17 @@ export const CreateDropSteps = () => {
             modalContext?.snapToIndex(0);
             modalContext?.pop();
           }}
-          title={formValues.title}
-          description={formValues.description}
-          file={formValues.file}
+          title={title}
+          description={description}
+          file={file}
         />
       );
     case "media":
       return (
         <CreateDropStepMedia
+          trigger={trigger}
+          control={control}
+          errors={formState.errors}
           handleNextStep={() => {
             setStep("title");
           }}
@@ -102,40 +128,49 @@ export const CreateDropSteps = () => {
             modalContext?.snapToIndex(0);
             setStep("select-drop");
           }}
-          description={formValues.description}
-          title={formValues.title}
-          file={formValues.file}
+          description={description}
+          file={file}
+          title={title}
         />
       );
     case "title":
       return (
         <CreateDropStepTitle
+          control={control}
+          errors={formState.errors}
+          trigger={trigger}
           handleNextStep={() => setStep("song-uri")}
           handlePrevStep={() => setStep("media")}
-          file={formValues.file}
-          title={formValues.title}
-          description={formValues.description}
+          file={file}
+          title={title}
+          description={description}
         />
       );
     case "song-uri":
       return (
         <CreateDropStepSongURI
+          control={control}
+          errors={formState.errors}
+          trigger={trigger}
           handleNextStep={() => setStep("preview")}
           handlePrevStep={() => setStep("title")}
-          file={formValues.file}
-          description={formValues.description}
-          title={formValues.title}
+          file={file}
+          description={description}
+          title={title}
           handleMoreOptions={() => setStep("more-options")}
         />
       );
     case "more-options":
       return (
         <CreateDropMoreOptions
+          control={control}
+          errors={formState.errors}
+          trigger={trigger}
           handleNextStep={() => setStep("song-uri")}
+          file={file}
           handlePrevStep={() => setStep("song-uri")}
-          title={formValues.title}
-          description={formValues.description}
-          file={formValues.file}
+          title={title}
+          description={description}
         />
       );
     default:
@@ -146,35 +181,44 @@ export const CreateDropSteps = () => {
 const SelectDropTypeStep = (props: StepProps) => {
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
-      <SelectDropType
-        handleNextStep={props.handleNextStep}
-        handlePrevStep={props.handlePrevStep}
-        title={props.title}
-        description={props.description}
-        file={props.file}
-      />
+      <SelectDropType handleNextStep={props.handleNextStep} />
     </Layout>
   );
 };
 
 const CreateDropStepMedia = (
   props: StepProps & {
-    file?: File | string;
     handleFileChange: (file: FilePickerResolveValue) => void;
   }
 ) => {
+  const {
+    control,
+    errors,
+    handleFileChange,
+    handlePrevStep,
+    trigger,
+    handleNextStep,
+  } = props;
   return (
-    <Layout
-      onBackPress={props.handlePrevStep}
-      title="Create"
-      handleNextPress={props.handleNextStep}
-    >
+    <Layout onBackPress={handlePrevStep} title="Create">
       <ScrollView tw="px-4">
         <Text tw="text-center text-xl">
           Upload an image or video for your paid unlockable.
         </Text>
         <View tw="mt-8 items-center">
-          <MediaPicker onChange={props.handleFileChange} value={props.file} />
+          <Controller
+            control={control}
+            name="file"
+            render={({ field: { value } }) => {
+              return (
+                <MediaPicker
+                  onChange={handleFileChange}
+                  value={value}
+                  errorMessage={errors?.file?.message}
+                />
+              );
+            }}
+          />
           <Text tw="py-4 text-sm text-gray-700">
             This could be an alternative album cover, unreleased content, or a
             short video snippet promoting your upcoming release.
@@ -185,7 +229,12 @@ const CreateDropStepMedia = (
         <Button
           size="regular"
           tw="w-full self-center"
-          onPress={props.handleNextStep}
+          onPress={async () => {
+            const res = await trigger("file");
+            if (res) {
+              handleNextStep();
+            }
+          }}
         >
           Next
         </Button>
@@ -194,13 +243,9 @@ const CreateDropStepMedia = (
   );
 };
 
-const CreateDropStepTitle = (
-  props: StepProps & {
-    file?: File | string;
-  }
-) => {
+const CreateDropStepTitle = (props: StepProps) => {
   const { width: windowWidth } = useWindowDimensions();
-
+  const { control, errors, handlePrevStep, handleNextStep, trigger } = props;
   const mediaDimension = Math.min(347, windowWidth - 32);
 
   return (
@@ -215,26 +260,65 @@ const CreateDropStepTitle = (
           />
         </View>
         <View tw="mt-4">
-          <Fieldset
-            label="Title"
-            placeholder="Give your drop a title"
-            numberOfLines={2}
-            multiline
+          <Controller
+            control={control}
+            name="title"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  label="Title"
+                  placeholder="Give your drop a title"
+                  onBlur={onBlur}
+                  errorText={errors.title?.message}
+                  value={value}
+                  onChangeText={onChange}
+                  numberOfLines={2}
+                  multiline
+                />
+              );
+            }}
           />
         </View>
         <View tw="mt-4">
-          <Fieldset
-            label="Description"
-            tw="flex-1"
-            placeholder="Why should people collect this drop? Raffle Automatically selects a winner once your song is live."
-            multiline
-            textAlignVertical="top"
-            numberOfLines={3}
+          <Controller
+            control={control}
+            name="description"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  label="Description"
+                  tw="flex-1"
+                  placeholder="Why should people collect this drop? Raffle Automatically selects a winner once your song is live."
+                  multiline
+                  textAlignVertical="top"
+                  numberOfLines={3}
+                  onBlur={onBlur}
+                  errorText={errors.description?.message}
+                  value={value}
+                  onChangeText={onChange}
+                />
+              );
+            }}
           />
           <View tw="absolute right-3 top-3 flex-row items-center">
-            <Raffle color="black" width={18} height={18} />
-            <Text tw="mx-1 text-xs font-bold text-gray-800">Raffle</Text>
-            <Switch checked size="small" />
+            <Controller
+              key="raffle"
+              control={control}
+              name="raffle"
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <>
+                    <Raffle color="black" width={18} height={18} />
+                    <Text tw="mx-1 text-xs font-bold text-gray-800">
+                      Raffle
+                    </Text>
+                    <Switch checked={value} onChange={onChange} size="small" />
+                  </>
+                );
+              }}
+            />
           </View>
         </View>
         <View>
@@ -248,7 +332,12 @@ const CreateDropStepTitle = (
         <Button
           size="regular"
           tw="mt-4 w-full self-center"
-          onPress={props.handleNextStep}
+          onPress={async () => {
+            const res = await trigger(["title", "description"]);
+            if (res) {
+              handleNextStep();
+            }
+          }}
         >
           Next
         </Button>
@@ -260,6 +349,7 @@ const CreateDropStepTitle = (
 const CreateDropStepSongURI = (
   props: StepProps & { handleMoreOptions: () => void }
 ) => {
+  const { errors, control, handleNextStep, trigger } = props;
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
       <ScrollView tw="px-4">
@@ -302,21 +392,49 @@ const CreateDropStepSongURI = (
           </Text>
         </View>
 
-        <Pressable tw="mt-4 flex-1 flex-row items-center rounded-xl bg-gray-100 dark:bg-gray-900">
-          <Checkbox
-            onChange={() => {}}
-            checked={false}
-            aria-label="I agree to the terms and conditions"
-          />
+        <View tw="mt-4 flex-1">
+          <View tw="flex-1 flex-row">
+            <Controller
+              control={control}
+              name="hasAcceptedTerms"
+              render={({ field: { onChange, value } }) => (
+                <>
+                  <Pressable
+                    onPress={() => onChange(!value)}
+                    tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
+                  >
+                    <Checkbox
+                      onChange={(v) => onChange(v)}
+                      checked={value}
+                      aria-label="I agree to the terms and conditions"
+                    />
 
-          <Text tw="px-4 text-gray-600 dark:text-gray-400">
-            I have the rights to publish this content, and understand it will be
-            minted on the Polygon network.
-          </Text>
-        </Pressable>
+                    <Text tw="px-4 text-gray-600 dark:text-gray-400">
+                      I have the rights to publish this content, and understand
+                      it will be minted on the Polygon network.
+                    </Text>
+                  </Pressable>
+                </>
+              )}
+            />
+          </View>
+          {errors.hasAcceptedTerms?.message ? (
+            <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
+          ) : null}
+        </View>
 
         <View tw="mt-4">
-          <Button size="regular">Create Drop</Button>
+          <Button
+            size="regular"
+            onPress={async () => {
+              const res = await trigger("hasAcceptedTerms");
+              if (res) {
+                handleNextStep();
+              }
+            }}
+          >
+            Create Drop
+          </Button>
         </View>
       </ScrollView>
     </Layout>
@@ -325,7 +443,8 @@ const CreateDropStepSongURI = (
 
 const CreateDropMoreOptions = (props: StepProps) => {
   const [isUnlimited, setIsUnlimited] = useState(false);
-
+  const { control, errors, handleFileChange, handlePrevStep, handleNextStep } =
+    props;
   const durationOptions = [
     { label: "1 day", value: SECONDS_IN_A_DAY },
     { label: "1 week", value: SECONDS_IN_A_WEEK },
