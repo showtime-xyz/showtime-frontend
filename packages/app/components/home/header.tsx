@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect } from "react";
 import {
   useWindowDimensions,
   Platform,
@@ -22,6 +22,7 @@ import {
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { Carousel } from "app/lib/carousel";
+import { getIsShowIntroBanner } from "app/lib/mmkv-keys";
 import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
@@ -50,45 +51,48 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
     ),
     [pagerWidth]
   );
+  useEffect(() => {}, []);
 
   return (
     <View tw="w-full">
-      <View tw="web:mt-12 web:md:mt-0 px-4 md:px-0">
-        <Carousel
-          loop
-          width={pagerWidth}
-          height={isMdWidth ? 164 : 104}
-          autoPlayInterval={3000}
-          data={new Array(1).fill(0)}
-          controller
-          tw="mb-2 w-full rounded-2xl"
-          pagination={{ variant: "rectangle" }}
-          renderItem={({ index }) => (
-            <LinearGradient
-              key={index}
-              colors={["#98C4FF", "#5EFEFE", "#FFE8B6"]}
-              start={{ x: -0.08, y: 0.36 }}
-              end={{ x: 1.08, y: 0.63 }}
-              style={{
-                width: pagerWidth,
-                height: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                paddingHorizontal: 60,
-              }}
-            >
-              <Text
+      <View tw="web:mt-12 web:md:mt-4 px-4 md:px-0">
+        {getIsShowIntroBanner() && (
+          <Carousel
+            loop
+            width={pagerWidth}
+            height={isMdWidth ? 164 : 104}
+            autoPlayInterval={3000}
+            data={new Array(1).fill(0)}
+            controller
+            tw="mb-2 mt-2 w-full rounded-2xl md:mt-4"
+            pagination={{ variant: "rectangle" }}
+            renderItem={({ index }) => (
+              <LinearGradient
+                key={index}
+                colors={["#98C4FF", "#5EFEFE", "#FFE8B6"]}
+                start={{ x: -0.08, y: 0.36 }}
+                end={{ x: 1.08, y: 0.63 }}
                 style={{
-                  fontSize: isMdWidth ? 40 : 23,
-                  lineHeight: isMdWidth ? 48 : 28,
+                  width: pagerWidth,
+                  height: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingHorizontal: 60,
                 }}
-                tw="text-center font-semibold"
               >
-                Create. Collect. Connect.
-              </Text>
-            </LinearGradient>
-          )}
-        />
+                <Text
+                  style={{
+                    fontSize: isMdWidth ? 40 : 23,
+                    lineHeight: isMdWidth ? 48 : 28,
+                  }}
+                  tw="text-center font-semibold"
+                >
+                  Create. Collect. Connect.
+                </Text>
+              </LinearGradient>
+            )}
+          />
+        )}
       </View>
       <View tw="w-full pl-4 md:pl-0">
         <View tw="w-full flex-row items-center justify-between py-4 pr-4">

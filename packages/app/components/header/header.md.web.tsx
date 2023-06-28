@@ -306,10 +306,10 @@ export const HeaderMd = withColorScheme(() => {
         <View tw="-ml-4 mt-5 w-48 justify-center">
           {HOME_ROUTES.map((item) => {
             if (item.key === "Notifications") {
-              return <NotificationsInHeader />;
+              return <NotificationsInHeader key={item.key} />;
             }
             if (item.key === "Search") {
-              return <SearchInHeader />;
+              return <SearchInHeader key={item.key} />;
             }
             return (
               <MenuItem
@@ -502,9 +502,7 @@ export const HeaderMd = withColorScheme(() => {
               >
                 <Image
                   source={{
-                    uri: !isDark
-                      ? "/assets/AppStoreDark1.png"
-                      : "/assets/AppStoreLight1.png",
+                    uri: "/assets/AppStoreDownload.png",
                   }}
                   width={120}
                   height={40}
@@ -519,9 +517,7 @@ export const HeaderMd = withColorScheme(() => {
               >
                 <Image
                   source={{
-                    uri: !isDark
-                      ? "/assets/GooglePlayDark1.png"
-                      : "/assets/GooglePlayLight1.png",
+                    uri: "/assets/GooglePlayDownload.png",
                   }}
                   width={120}
                   height={40}

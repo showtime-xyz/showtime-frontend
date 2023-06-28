@@ -371,8 +371,11 @@ export const CreatorChannels = memo(() => {
         </View>
       );
     }
-
-    return null;
+    return (
+      <View tw="w-full border-l border-neutral-300 bg-white pt-4 dark:border-neutral-700 dark:bg-black">
+        <CreatorChannelsListMobile />
+      </View>
+    );
   }
 
   if (!isLgWidth) {

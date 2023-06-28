@@ -75,7 +75,7 @@ export const Home = () => {
     );
   }, [height, isLoading]);
   return (
-    <View tw="w-full flex-1 items-center bg-white dark:bg-black md:pt-8">
+    <View tw="w-full flex-1 items-center bg-white dark:bg-black">
       <View tw="md:max-w-screen-content w-full">
         <InfiniteScrollList
           data={data}

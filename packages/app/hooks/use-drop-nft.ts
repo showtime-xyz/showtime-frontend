@@ -8,6 +8,7 @@ import { useUploadMediaToPinata } from "app/hooks/use-upload-media-to-pinata";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
+import { setHideShowIntroBanner } from "app/lib/mmkv-keys";
 import { captureException } from "app/lib/sentry";
 import { GatingType } from "app/types";
 import { delay, formatAPIErrorMessage, getFileMeta } from "app/utilities";
@@ -277,11 +278,12 @@ export const useDropNFT = () => {
         method: "POST",
         data: requestData,
       });
-
+      setHideShowIntroBanner();
       console.log("relayer response :: ", relayerResponse);
       await pollTransaction({
         transactionId: relayerResponse.relayed_transaction_id,
       });
+
       callback?.();
     } catch (e: any) {
       const errorMessage = formatAPIErrorMessage(e);
