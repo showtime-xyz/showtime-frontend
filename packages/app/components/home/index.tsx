@@ -29,7 +29,7 @@ export const Home = () => {
   const bottomBarHeight = usePlatformBottomHeight();
   const isMdWidth = width >= breakpoints["md"];
   const { data, isLoading } = useFeed();
-  const mediaSize = isMdWidth ? 300 : width - 48 - 56;
+  const mediaSize = isMdWidth ? 500 : width - 48 - 56;
   const keyExtractor = useCallback((item: any, index: any) => `${index}`, []);
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => {

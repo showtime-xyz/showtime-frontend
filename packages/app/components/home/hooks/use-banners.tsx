@@ -4,6 +4,7 @@ import { createClient } from "@vercel/kv";
 
 const kv = createClient({
   url: "https://patient-gar-40486.kv.vercel-storage.com",
+  // This is a read-only token.
   token:
     "Ap4mASQgZmRhZDFlNTYtOTViMi00ZDQzLTg3N2ItOWEzYWQwY2Y5NGJmXFJxyhlB-QtE3C_-WS3HwhtKmaDdlHR65OjUS1jFTok=",
 });

@@ -69,7 +69,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
 
   return (
     <View tw="w-full">
-      <View tw="web:mt-2 px-4 md:px-0">
+      <View tw="mt-2 px-4 md:px-0">
         {isLoadingBanner ? (
           <Skeleton
             height={bannerHeight}
@@ -102,9 +102,10 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
                 >
                   <Image
                     source={{
-                      uri: `${item.image}?optimizer=image&width=${
-                        pagerWidth * 2
-                      }&quality=70&sharpen=true`,
+                      // uri: `${item.image}?optimizer=image&width=${
+                      //   pagerWidth * 2
+                      // }&quality=70&sharpen=true`,
+                      uri: "https://ik.imagekit.io/09q8fettkc8/development/tr:h-400,w-800:pr-true/shops/6-shop-bbty4.jpg",
                     }}
                     recyclingKey={item.image}
                     blurhash={item?.blurhash}
@@ -139,7 +140,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         </View>
         <View tw="w-full rounded-2xl">
           {isLoading ? (
-            <View tw="flex-row overflow-hidden">
+            <View tw="ios:mb-px ios:pb-4 flex-row overflow-hidden">
               <TrendingSkeletonItem presetWidth={172} />
               <TrendingSkeletonItem presetWidth={172} />
               <TrendingSkeletonItem presetWidth={172} />

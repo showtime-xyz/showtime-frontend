@@ -39,7 +39,10 @@ export const TrendingItem = ({
   );
   const { width: windowWidth } = useWindowDimensions();
   const isMdWidth = windowWidth > breakpoints["md"];
-  const mediaWidth = isMdWidth ? presetWidth : (windowWidth - 32 - 10) / 2;
+  const mediaWidth =
+    isMdWidth || Platform.OS === "web"
+      ? presetWidth
+      : (windowWidth - 32 - 20) / 2;
 
   return (
     <View
@@ -125,18 +128,24 @@ export const TrendingItem = ({
 };
 
 export const TrendingSkeletonItem = ({ presetWidth = 182 }) => {
-  const { width } = useWindowDimensions();
-  const isMdWidth = width > breakpoints["md"];
-  const mediaWidth = isMdWidth ? presetWidth : (width - 32 - 10) / 2;
+  const { width: windowWidth } = useWindowDimensions();
+  const isMdWidth = windowWidth > breakpoints["md"];
+  const mediaWidth =
+    isMdWidth || Platform.OS === "web"
+      ? presetWidth
+      : (windowWidth - 32 - 20) / 2;
   return (
     <View tw="mr-2.5 pb-4">
       <Skeleton width={mediaWidth} height={mediaWidth} radius={16} />
       <View tw="my-1 flex-row items-center">
         <Skeleton width={30} height={30} radius={999} />
-        <Skeleton width={60} height={16} radius={4} tw="ml-2" />
+        <View tw="w-2" />
+        <Skeleton width={60} height={16} radius={4} />
       </View>
-      <Skeleton width={140} height={13} radius={4} tw="mt-2" />
-      <Skeleton width={80} height={24} radius={999} tw="mt-2" />
+      <View tw="h-2" />
+      <Skeleton width={140} height={13} radius={4} />
+      <View tw="h-2" />
+      <Skeleton width={80} height={24} radius={999} />
     </View>
   );
 };
