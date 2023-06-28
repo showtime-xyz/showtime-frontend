@@ -40,6 +40,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
             key={match + i}
             target="_blank"
             title={urlText}
+            // @ts-expect-error TODO: fix this
             tw={[
               "text-13 font-bold text-gray-900 dark:text-gray-100",
               tw ? (Array.isArray(tw) ? tw.join(" ") : tw) : "",
@@ -62,6 +63,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
       key={match + i}
       target="_blank"
       title="Open profile"
+      // @ts-expect-error TODO: fix this
       tw={[
         "text-13 font-bold text-gray-900 dark:text-gray-100",
         tw ? (Array.isArray(tw) ? tw.join(" ") : tw) : "",
@@ -74,7 +76,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
   replacedText = reactStringReplace(
     replacedText,
     /\/(<TextLink href={`\/@\w+`}.+?<\/TextLink>)/g,
-    (match, i) => {
+    (match) => {
       if (match) {
         const username = match.match(/`\/@(\w+)`/)?.[1];
         return `/@${username}`;

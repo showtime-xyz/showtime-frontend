@@ -13,7 +13,6 @@ import { growthbook } from "app/lib/growthbook";
 import { KeyboardProvider } from "app/lib/keyboard-controller";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
-import { BiconomyProvider } from "app/providers/biconomy-provider";
 import { ClaimProvider } from "app/providers/claim-provider";
 import { DropProvider } from "app/providers/drop-provider";
 import { FeedProvider } from "app/providers/feed-provider";
@@ -21,8 +20,9 @@ import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
-import { WalletProvider } from "app/providers/wallet-provider";
 import { Web3Provider } from "app/providers/web3-provider";
+
+import { WalletProvider } from "./wallet-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -32,8 +32,8 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           <KeyboardProvider statusBarTranslucent>
             <SafeAreaProvider style={{ backgroundColor: "black" }}>
               <WalletMobileSDKProvider>
-                <WalletProvider>
-                  <Web3Provider>
+                <Web3Provider>
+                  <WalletProvider>
                     <AlertProvider>
                       <LightBoxProvider>
                         <SnackbarProvider>
@@ -45,15 +45,13 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                     {/* @ts-ignore */}
                                     <GrowthBookProvider growthbook={growthbook}>
                                       <FeedProvider>
-                                        <BiconomyProvider>
-                                          <MuteProvider>
-                                            <ClaimProvider>
-                                              <DropProvider>
-                                                {children}
-                                              </DropProvider>
-                                            </ClaimProvider>
-                                          </MuteProvider>
-                                        </BiconomyProvider>
+                                        <MuteProvider>
+                                          <ClaimProvider>
+                                            <DropProvider>
+                                              {children}
+                                            </DropProvider>
+                                          </ClaimProvider>
+                                        </MuteProvider>
                                       </FeedProvider>
                                     </GrowthBookProvider>
                                   </BottomSheetModalProvider>
@@ -64,8 +62,8 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                         </SnackbarProvider>
                       </LightBoxProvider>
                     </AlertProvider>
-                  </Web3Provider>
-                </WalletProvider>
+                  </WalletProvider>
+                </Web3Provider>
               </WalletMobileSDKProvider>
             </SafeAreaProvider>
           </KeyboardProvider>

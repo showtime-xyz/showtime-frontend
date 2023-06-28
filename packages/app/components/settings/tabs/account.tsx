@@ -41,6 +41,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
       <SettingsTitle
         title="Connected Accounts"
         desc="Manage the accounts connected to your profile."
+        descTw="mt-1"
       />
       <View tw="mt-6 px-4 lg:px-0">
         <ConnectSpotify />
@@ -132,7 +133,7 @@ const ConnectAppleMusic = () => {
   );
 };
 
-const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
+export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
   const user = useUser();
   const isDark = useIsDarkMode();
 

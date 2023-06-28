@@ -23,7 +23,6 @@ export type CheckboxProps = Omit<PressableProps, "onChange"> & {
 export const Checkbox = ({
   checked,
   onChange,
-  id,
   hitSlop = 14,
   disabled,
   ...rest

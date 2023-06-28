@@ -121,6 +121,7 @@ export const SwipeList = ({
                 enabled: true,
                 addSlidesBefore: 1,
                 addSlidesAfter: 2,
+                cache: false,
               }}
               direction="vertical"
               onRealIndexChange={onRealIndexChange}
@@ -131,7 +132,7 @@ export const SwipeList = ({
               mousewheel={{
                 noMousewheelClass: "swiper-no-swiping",
                 sensitivity: 1.1,
-                thresholdTime: 600,
+                thresholdTime: 800,
               }}
             >
               {data.map((item, index) => (

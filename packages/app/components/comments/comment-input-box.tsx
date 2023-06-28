@@ -44,7 +44,9 @@ export const CommentInputBox = forwardRef<
   useEffectOnce(() => {
     setTimeout(() => {
       requestAnimationFrame(() => {
-        commentInputRef?.current?.focus();
+        if (Platform.OS !== "web") {
+          commentInputRef?.current?.focus();
+        }
       });
     }, 600);
   });

@@ -363,8 +363,6 @@ export const CreatorChannels = memo(() => {
     isLoadingSuggestedChannels,
     isLoadingMoreJoinedChannels,
   ]);
-  const mdHeight = windowHeight;
-
   if (!isLgWidth) {
     if (router.query["channelId"]) {
       return (
@@ -372,6 +370,14 @@ export const CreatorChannels = memo(() => {
           <Messages />
         </View>
       );
+    }
+
+    return null;
+  }
+
+  if (!isLgWidth) {
+    if (router.query["channelId"]) {
+      return <Messages />;
     }
 
     return (
@@ -400,7 +406,7 @@ export const CreatorChannels = memo(() => {
               : item.itemType ?? "row";
           }}
           style={{
-            height: mdHeight,
+            height: windowHeight,
           }}
           // for blur effect on Native
           contentContainerStyle={Platform.select({

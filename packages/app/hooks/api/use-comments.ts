@@ -1,7 +1,5 @@
 import { useMemo, useCallback, useState } from "react";
 
-import { useSWRConfig } from "swr";
-
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
@@ -53,7 +51,6 @@ export const useComments = (nftId?: number) => {
   //#endregion
 
   //#region hooks
-  const { mutate } = useSWRConfig();
   const fetchCommentsURL = useCallback(
     (index: number, previousPageData: any) => {
       if (previousPageData && !previousPageData?.comments.length) return null;

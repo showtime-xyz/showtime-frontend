@@ -185,7 +185,8 @@ export const DropMusic = () => {
                   if (!value) return true;
                   return !/(playlist)/i.test(value);
                 }
-              ),
+              )
+              .required("Spotify URI is required"),
             appleMusicTrackUrl: yup.string(),
           })
           .test({

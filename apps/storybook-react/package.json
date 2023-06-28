@@ -12,27 +12,27 @@
   },
   "dependencies": {
     "design-system": "*",
-    "next": "^13.4.1",
+    "next": "^13.4.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hot-toast": "^2.4.0",
-    "react-native-web": "~0.19.4"
+    "react-hot-toast": "^2.4.1",
+    "react-native-web": "~0.19.5"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@storybook/nextjs": "^7.0.12",
     "@storybook/react": "~7.0.12",
     "@types/node": "16.11.9",
-    "@types/react": "18.0.35",
+    "@types/react": "18.2.12",
     "autoprefixer": "^10.4.14",
     "babel-loader": "9.1.2",
     "chromatic": "^6.17.3",
-    "eslint": "8.38.0",
-    "eslint-config-next": "13.3.0",
+    "eslint": "8.42.0",
+    "eslint-config-next": "13.4.5",
     "path-browserify": "^1.0.1",
-    "postcss": "^8.4.23",
+    "postcss": "^8.4.24",
     "storybook": "^7.0.12",
-    "tailwindcss": "^3.3.1",
-    "typescript": "^5.0.4"
+    "tailwindcss": "^3.3.2",
+    "typescript": "^5.1.3"
   }
 }

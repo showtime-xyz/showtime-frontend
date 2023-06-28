@@ -1,3 +1,6 @@
+import { createWalletClient, custom } from "viem";
+import { mainnet } from "viem/chains";
+
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -30,11 +33,13 @@ export const LoginWithApple = () => {
             provider_access_token: result.oauth.accessToken,
             provider_scope: result.oauth.scope,
           });
-          const EthersWeb3Provider = (await import("@ethersproject/providers"))
-            .Web3Provider;
-          // @ts-ignore
-          const ethersProvider = new EthersWeb3Provider(magic.rpcProvider);
-          setWeb3(ethersProvider);
+
+          const client = createWalletClient({
+            chain: mainnet,
+            transport: custom(magic.rpcProvider),
+          });
+
+          setWeb3({ ...client, isMagic: true });
 
           // when profile is incomplete, login will automatically redirect user to /profile/edit. So we don't need to redirect user to decodedURI
           if (!isProfileIncomplete(user.data.profile)) {
