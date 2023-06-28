@@ -17,7 +17,7 @@
 
 .rectangle-pagination {
   top: 0;
-  height: 24px;
+  bottom: 2px !important;
 }
 
 .rectangle-pagination > .swiper-pagination-bullet {
@@ -30,4 +30,10 @@
 .rectangle-pagination > .swiper-pagination-bullet-active {
   background-color: #fff;
   width: 24px;
+}
+
+@media (min-width: 768px) {
+  .rectangle-pagination {
+    bottom: 4px;
+  }
 }

@@ -3,11 +3,13 @@ import {
   useWindowDimensions,
   Platform,
   ListRenderItemInfo,
+  Linking,
 } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
-
+import { Image } from "@showtime-xyz/universal.image";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -22,21 +24,22 @@ import {
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { Carousel } from "app/lib/carousel";
-import { getIsShowIntroBanner } from "app/lib/mmkv-keys";
 import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { HomeSlider } from "./home-slider";
+import { Banner, useBanners } from "./hooks/use-banners";
 
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const { data, isLoading } = useTrendingNFTS({});
   const { width: scrollbarWidth } = useScrollbarSize();
-  const router = useRouter();
+  const { data: banners, isLoading: isLoadingBanner } = useBanners();
 
+  const router = useRouter();
   const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
   const pagerWidth = isMdWidth
     ? Math.min(DESKTOP_CONTENT_WIDTH, width - DESKTOP_LEFT_MENU_WIDTH)
@@ -51,51 +54,75 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
     ),
     [pagerWidth]
   );
-  useEffect(() => {}, []);
+  const navigateToDetail = (banner: Banner) => {
+    if (banner.type === "drop") {
+      return router.push(`/@${banner.username}/${banner.slug}`);
+    }
+    if (banner.type === "link") {
+      return Linking.openURL(banner.link);
+    }
+    if (banner.type === "profile") {
+      return router.push(`/@${banner.username}`);
+    }
+  };
+  const bannerHeight = isMdWidth ? 164 : 104;
 
   return (
     <View tw="w-full">
-      <View tw="web:mt-12 web:md:mt-4 px-4 md:px-0">
-        {getIsShowIntroBanner() && (
-          <Carousel
-            loop
+      <View tw="web:mt-2 px-4 md:px-0">
+        {isLoadingBanner ? (
+          <Skeleton
+            height={bannerHeight}
             width={pagerWidth}
-            height={isMdWidth ? 164 : 104}
-            autoPlayInterval={3000}
-            data={new Array(1).fill(0)}
-            controller
-            tw="mb-2 mt-2 w-full rounded-2xl md:mt-4"
-            pagination={{ variant: "rectangle" }}
-            renderItem={({ index }) => (
-              <LinearGradient
-                key={index}
-                colors={["#98C4FF", "#5EFEFE", "#FFE8B6"]}
-                start={{ x: -0.08, y: 0.36 }}
-                end={{ x: 1.08, y: 0.63 }}
-                style={{
-                  width: pagerWidth,
-                  height: "100%",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingHorizontal: 60,
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: isMdWidth ? 40 : 23,
-                    lineHeight: isMdWidth ? 48 : 28,
-                  }}
-                  tw="text-center font-semibold"
-                >
-                  Create. Collect. Connect.
-                </Text>
-              </LinearGradient>
-            )}
+            radius={16}
+            tw="web:md:mt-4 web:mt-10"
           />
+        ) : (
+          banners?.length > 0 && (
+            <Carousel
+              loop
+              width={pagerWidth}
+              height={bannerHeight}
+              autoPlayInterval={3000}
+              data={banners}
+              controller
+              tw="web:md:mt-4 web:mt-10 w-full rounded-2xl"
+              pagination={{ variant: "rectangle" }}
+              renderItem={({ item, index }) => (
+                <Pressable
+                  key={index}
+                  style={{
+                    width: pagerWidth,
+                    height: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    paddingHorizontal: 60,
+                  }}
+                  onPress={() => navigateToDetail(item)}
+                >
+                  <Image
+                    source={{
+                      uri: `${item.image}?optimizer=image&width=${
+                        pagerWidth * 2
+                      }&quality=70&sharpen=true`,
+                    }}
+                    recyclingKey={item.image}
+                    blurhash={item?.blurhash}
+                    resizeMode="cover"
+                    alt={`${item?.username}-banner-${index}`}
+                    transition={200}
+                    {...(Platform.OS === "web"
+                      ? { style: { height: "100%", width: "100%" } }
+                      : { width: pagerWidth, height: bannerHeight })}
+                  />
+                </Pressable>
+              )}
+            />
+          )
         )}
       </View>
       <View tw="w-full pl-4 md:pl-0">
-        <View tw="w-full flex-row items-center justify-between py-4 pr-4">
+        <View tw="mt-2 w-full flex-row items-center justify-between py-4 pr-4">
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             Trending
           </Text>

@@ -5,7 +5,6 @@ import { useTrackPageViewed } from "app/lib/analytics";
 
 export const HomeScreenV2 = withColorScheme(() => {
   useTrackPageViewed({ name: "Home" });
-
   return (
     <ErrorBoundary>
       <Home />
