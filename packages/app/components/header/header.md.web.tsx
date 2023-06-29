@@ -278,7 +278,7 @@ export const HeaderMd = withColorScheme(() => {
             ) : (
               <User {...props} />
             ),
-          pathname: `@${user?.data?.profile.username}`,
+          pathname: `/@${user?.data?.profile.username}`,
           focused: router.asPath === `/@${user?.data?.profile.username}`,
           visible: isAuthenticated,
         },

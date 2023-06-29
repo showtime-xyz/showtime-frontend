@@ -46,7 +46,7 @@ const PopularCreatorItem = ({
   }, [item.id, joinChannel, router]);
 
   return (
-    <View
+    <Pressable
       tw="w-full"
       style={{
         width: Platform.select({
@@ -55,6 +55,7 @@ const PopularCreatorItem = ({
         }),
         height: INFO_HEIGTH,
       }}
+      onPress={() => router.push(`/@${item.owner.username}`)}
     >
       <View tw="h-[84px] w-[84px]">
         <Avatar url={item?.owner?.img_url} size={84} />
@@ -90,7 +91,7 @@ const PopularCreatorItem = ({
       >
         <Text tw="text-xs font-bold text-gray-900 dark:text-white">Join</Text>
       </Pressable>
-    </View>
+    </Pressable>
   );
 };
 const PopularCreatorSkeletonItem = ({ width = 174 }) => {
