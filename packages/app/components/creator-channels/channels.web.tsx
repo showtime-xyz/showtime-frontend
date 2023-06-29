@@ -372,7 +372,7 @@ export const CreatorChannels = memo(() => {
       );
     }
     return (
-      <View tw="w-full border-l border-neutral-300 bg-white pt-4 dark:border-neutral-700 dark:bg-black">
+      <View tw="w-full border-l border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-black">
         <CreatorChannelsListMobile />
       </View>
     );

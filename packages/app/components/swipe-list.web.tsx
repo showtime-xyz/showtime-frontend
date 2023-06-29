@@ -134,6 +134,7 @@ export const SwipeList = ({
                 sensitivity: 1.1,
                 thresholdTime: 800,
               }}
+              className="w-full"
             >
               {data.map((item, index) => (
                 <SwiperSlide key={item.nft_id} virtualIndex={index}>
