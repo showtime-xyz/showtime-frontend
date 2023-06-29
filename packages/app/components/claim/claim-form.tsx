@@ -47,6 +47,7 @@ import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import { createParam } from "app/navigation/use-param";
+import { ContractVersion } from "app/types";
 import {
   cleanUserTextInput,
   formatAddressShort,
@@ -221,6 +222,12 @@ export const ClaimForm = ({
     (edition.gating_type === "multi" && !location && !password) ||
     (edition.gating_type === "password" && !password) ||
     (edition.gating_type === "location" && !location?.coords);
+
+  const collectingMsg =
+    edition.creator_airdrop_edition?.contract_version ===
+    ContractVersion.BATCH_V1
+      ? "Collecting..."
+      : "Collecting... it should take about 10 seconds";
 
   if (isIncompletedProfile) {
     return null;
@@ -462,6 +469,8 @@ export const ClaimForm = ({
             >
               {isLoading ? (
                 "Loading..."
+              ) : state.status === "loading" ? (
+                collectingMsg
               ) : state.status === "error" ? (
                 "Failed. Retry!"
               ) : edition.gating_type === "spotify_save" ||

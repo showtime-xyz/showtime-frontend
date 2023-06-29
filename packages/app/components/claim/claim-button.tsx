@@ -124,6 +124,13 @@ export const ClaimButton = ({
   };
 
   const handleCollectPress = (type: "free" | "appleMusic" | "spotify") => {
+    if (
+      claimStates.status === "loading" &&
+      claimStates.signaturePrompt === false
+    ) {
+      toast("Please wait for the previous collect to complete.");
+      return;
+    }
     dispatch({ type: "initial" });
 
     if (
@@ -222,6 +229,15 @@ export const ClaimButton = ({
           <Hourglass color="white" width={16} height={16} />
           <Text tw="ml-1 text-sm font-semibold text-white">Time out</Text>
         </>
+      </Button>
+    );
+  } else if (isProgress) {
+    return (
+      <Button {...buttonProps} disabled>
+        <Text tw="text-sm font-bold">
+          Collecting
+          <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
+        </Text>
       </Button>
     );
   } else if (edition?.gating_type === "spotify_save") {
