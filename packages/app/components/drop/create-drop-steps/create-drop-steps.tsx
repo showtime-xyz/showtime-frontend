@@ -1,10 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import {
   useWindowDimensions,
   Platform,
   ScrollView as RNScrollView,
+  Linking,
 } from "react-native";
 
+import * as Clipboard from "expo-clipboard";
 import { Controller } from "react-hook-form";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -21,6 +23,9 @@ import {
   Close,
   Raffle,
   Spotify,
+  Success,
+  Twitter,
+  Link,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
@@ -36,16 +41,20 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Preview } from "app/components/preview";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePersistForm } from "app/hooks/use-persist-form";
+import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { FilePickerResolveValue } from "app/lib/file-picker";
+import { getTwitterIntent } from "app/utilities";
 
 import { DateTimePicker } from "design-system/date-time-picker";
+import { toast } from "design-system/toast";
 
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropPreview } from "../drop-preview";
-import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
 import { MediaPicker } from "./media-picker";
 import { useMusicDropForm } from "./music-drop-form-utils";
@@ -147,13 +156,7 @@ export const CreateDropSteps = () => {
   if (state.status === "success") {
     return (
       <Layout closeIcon onBackPress={() => router.pop()} title="Success">
-        <DropViewShare
-          title={title}
-          description={description}
-          file={file}
-          contractAddress={state.edition?.contract_address}
-          dropCreated
-        />
+        <DropSuccess contractAddress={state.edition?.contract_address} />
       </Layout>
     );
   }
@@ -968,6 +971,97 @@ const Layout = (props: {
         </View>
       </View>
       {props.children}
+    </View>
+  );
+};
+
+const DropSuccess = (props: { contractAddress?: string }) => {
+  const contractAddress = props.contractAddress;
+  const isDark = useIsDarkMode();
+  const { data: edition } = useCreatorCollectionDetail(contractAddress);
+  const router = useRouter();
+  const { data } = useNFTDetailByTokenId({
+    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    tokenId: "0",
+    contractAddress: edition?.creator_airdrop_edition.contract_address,
+  });
+  const nft = data?.data.item;
+  const qrCodeUrl = useMemo(() => {
+    if (!nft) return "";
+    const url = new URL(getNFTURL(nft));
+    if (edition && edition.password) {
+      url.searchParams.set("password", edition?.password);
+    }
+    return url;
+  }, [edition, nft]);
+
+  const shareWithTwitterIntent = useCallback(() => {
+    Linking.openURL(
+      getTwitterIntent({
+        url: qrCodeUrl.toString(),
+        message: `Just dropped "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
+      })
+    );
+  }, [nft?.token_name, qrCodeUrl]);
+
+  const onCopyLink = useCallback(async () => {
+    await Clipboard.setStringAsync(qrCodeUrl.toString());
+    toast.success("Copied!");
+  }, [qrCodeUrl]);
+
+  return (
+    <View tw="items-center p-4 px-8">
+      <View style={{ rowGap: 20 }} tw="mt-4 items-center">
+        <Success color={isDark ? "white" : "dark"} height={96} width={96} />
+        <Text tw="text-4xl text-black dark:text-white">Your drop is live!</Text>
+        <Text tw="text-gray-900 dark:text-gray-100">Now share it.</Text>
+      </View>
+      <View tw="mt-16 w-full items-center" style={{ rowGap: 24 }}>
+        <Button
+          tw="w-full bg-[#4A99E9]"
+          size="regular"
+          onPress={shareWithTwitterIntent}
+        >
+          <Twitter color="white" width={20} height={20} />
+          <Text
+            tw="ml-1 text-sm font-semibold"
+            style={{
+              color: "white",
+            }}
+          >
+            Tweet
+          </Text>
+        </Button>
+        <Button
+          variant="primary"
+          tw="w-full"
+          size="regular"
+          onPress={onCopyLink}
+        >
+          <View tw="mr-1">
+            <Link color="black" width={20} height={20} />
+          </View>
+          Copy Link
+        </Button>
+
+        <Button
+          variant="tertiary"
+          tw="w-full"
+          size="regular"
+          onPress={() => {
+            if (!nft) return;
+
+            if (Platform.OS !== "web") {
+              router.pop();
+              router.push(`${getNFTSlug(nft)}`);
+            } else {
+              router.replace(`${getNFTSlug(nft)}`);
+            }
+          }}
+        >
+          View Drop
+        </Button>
+      </View>
     </View>
   );
 };
