@@ -22,7 +22,7 @@ import { useConnectSpotify } from "app/hooks/use-connect-spotify";
 import { useDisconnectAppleMusic } from "app/hooks/use-disconnect-apple-music";
 import { useDisconnectInstagram } from "app/hooks/use-disconnect-instagram";
 import { useDisconnectSpotify } from "app/hooks/use-disconnect-spotify";
-import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
+// import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useUser } from "app/hooks/use-user";
 
@@ -37,15 +37,17 @@ export type AccountTabProps = {
 };
 
 export const AccountTab = ({ index = 0 }: AccountTabProps) => {
-  const accounts = useListSocialAccounts();
-  const instagramProviderId = accounts.data?.find(
+  //const accounts = useListSocialAccounts();
+  /*const instagramProviderId = accounts.data?.find(
     (v) => v.provider === "instagram"
   )?.provider_account_id;
+  */
   return (
     <SettingScrollComponent index={index}>
       <SettingsTitle
         title="Connected Accounts"
         desc="Manage the accounts connected to your profile."
+        descTw="mt-1"
       />
       <View tw="mt-6 px-4 md:px-0">
         <ConnectSpotify />
@@ -137,7 +139,7 @@ const ConnectAppleMusic = () => {
   );
 };
 
-const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
+export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
   const user = useUser();
   const isDark = useIsDarkMode();
 

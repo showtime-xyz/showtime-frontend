@@ -10,8 +10,10 @@ import {
 import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
@@ -86,6 +88,7 @@ function Card(props: Props) {
   const { data: edition } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
+  const isDark = useIsDarkMode();
 
   const cardMaxWidth = useMemo(() => {
     const availableSpace = contentWidth - (numColumns - 1) * GAP;
@@ -108,8 +111,22 @@ function Card(props: Props) {
       <RouteComponent
         href={href}
         as={as}
-        viewProps={{ style: [{ flex: 1 }, style] }}
-        style={[style as any, { marginBottom: GAP }]}
+        viewProps={{
+          style: [
+            {
+              flex: 1,
+              backgroundColor: isDark ? colors.gray[800] : colors.gray[300],
+            },
+            style,
+          ],
+        }}
+        style={[
+          style as any,
+          {
+            marginBottom: GAP,
+            backgroundColor: isDark ? colors.gray[800] : colors.gray[300],
+          },
+        ]}
         onPress={handleOnPress}
       >
         <GridMedia
@@ -156,6 +173,7 @@ const CardLargeScreen = ({
     tokenId: nft?.token_id,
     chainName: nft?.chain_name,
   });
+
   return (
     <LikeContextProvider nft={nft}>
       <View
@@ -211,6 +229,7 @@ const CardLargeScreen = ({
           </RouteComponent>
           <RouteComponent
             href={href}
+            as={as}
             onPress={handleOnPress}
             // @ts-ignore
             dataset={{ testId: "nft-card-title-link" }}

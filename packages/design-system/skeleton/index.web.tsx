@@ -1,4 +1,3 @@
-import { Transition } from "@headlessui/react";
 import { baseColors } from "moti/build/skeleton/shared";
 
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
@@ -20,7 +19,6 @@ function Skeleton({
   colorMode: colorModeProps,
   children,
   radius = 8,
-  backgroundColor,
   ...props
 }: Props) {
   const { colorScheme } = useColorScheme();

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useCallback } from "react";
+import { useContext, useCallback } from "react";
 import { Platform } from "react-native";
 
 import type { LocationObject } from "expo-location";
@@ -8,8 +8,6 @@ import { useRouter } from "@showtime-xyz/universal.router";
 
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
-import { useSignTypedData } from "app/hooks/use-sign-typed-data";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
@@ -18,39 +16,11 @@ import { IEdition } from "app/types";
 import {
   formatAPIErrorMessage,
   getFormatDistanceToNowStrict,
-  ledgerWalletHack,
 } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
 import { useSendFeedback } from "./use-send-feedback";
-import { useWallet } from "./use-wallet";
-
-const minterABI = ["function mintEdition(address _to)"];
-
-const getForwarderRequest = async ({
-  minterAddress,
-  userAddress,
-}: {
-  minterAddress: string;
-  userAddress: string;
-}) => {
-  const Interface = (await import("@ethersproject/abi")).Interface;
-  const targetInterface = new Interface(minterABI);
-  const callData = targetInterface.encodeFunctionData("mintEdition", [
-    userAddress,
-  ]);
-  const res = await axios({
-    url: `/v1/relayer/forward-request?call_data=${encodeURIComponent(
-      callData
-    )}&to_address=${encodeURIComponent(
-      minterAddress
-    )}&from_address=${encodeURIComponent(userAddress)}`,
-    method: "GET",
-  });
-
-  return res;
-};
 
 export type State = {
   status: "idle" | "loading" | "success" | "share" | "error" | "initial";
@@ -127,67 +97,9 @@ export const reducer = (state: State, action: Action): State => {
 export const useClaimNFT = (edition: IEdition) => {
   const router = useRouter();
   const { data: userProfile } = useMyInfo();
-  const signTypedData = useSignTypedData();
   const { state, dispatch, pollTransaction } = useContext(ClaimContext);
   const Alert = useAlert();
-  const { connect } = useWallet();
-  let { userAddress } = useCurrentUserAddress();
   const { onSendFeedback } = useSendFeedback();
-
-  // @ts-ignore
-  const signTransaction = async ({ forwardRequest }) => {
-    dispatch({ type: "signaturePrompt" });
-
-    const signature = await signTypedData(
-      forwardRequest.domain,
-      forwardRequest.types,
-      forwardRequest.value
-    );
-
-    dispatch({ type: "signatureSuccess" });
-
-    const newSignature = ledgerWalletHack(signature);
-    Logger.log("Signature", { signature, newSignature });
-    Logger.log("Submitting tx...");
-
-    const relayedTx = await axios({
-      url: `/v1/relayer/forward-request`,
-      method: "POST",
-      data: {
-        forward_request: forwardRequest,
-        signature: newSignature,
-        from_address: userAddress,
-      },
-    });
-
-    await pollTransaction(
-      relayedTx.relayed_transaction_id,
-      edition.contract_address
-    );
-  };
-
-  const forwarderRequestCached = useRef<any>();
-
-  useEffect(() => {
-    let timeout: any;
-    async function initialiseForwardRequest() {
-      if (edition?.minter_address && userAddress && !edition.is_gated) {
-        forwarderRequestCached.current = await getForwarderRequest({
-          userAddress,
-          minterAddress: edition?.minter_address,
-        });
-      }
-
-      // clear cached forwarderRequest because nonce might have changed!
-      timeout = setTimeout(() => {
-        forwarderRequestCached.current = null;
-      }, 20000);
-    }
-    initialiseForwardRequest();
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [edition?.minter_address, userAddress, edition?.is_gated]);
 
   type ClaimNFTParams = {
     password?: string;
@@ -206,14 +118,12 @@ export const useClaimNFT = (edition: IEdition) => {
           await gatedClaimFlow({ password, location, closeModal });
         } else {
           closeModal?.();
-          await oldSignatureClaimFlow();
         }
         return true;
       }
     } catch (e: any) {
       const errorMessage = formatAPIErrorMessage(e);
       dispatch({ type: "error", error: errorMessage });
-      forwarderRequestCached.current = null;
       Logger.error("nft drop claim failed", e);
 
       if (e?.response?.status === 420) {
@@ -318,30 +228,6 @@ export const useClaimNFT = (edition: IEdition) => {
           toast.success("Collected!");
           closeModal?.();
         });
-    }
-  };
-
-  const oldSignatureClaimFlow = async () => {
-    if (!userAddress) {
-      // user is probably not connected to wallet
-      const session = await connect?.();
-      userAddress = session?.address;
-    }
-
-    if (edition?.minter_address && userAddress) {
-      let forwardRequest: any;
-      if (forwarderRequestCached.current) {
-        forwardRequest = forwarderRequestCached.current;
-      } else {
-        forwardRequest = await getForwarderRequest({
-          minterAddress: edition?.minter_address,
-          userAddress,
-        });
-      }
-
-      Logger.log("Signing... ", forwardRequest);
-
-      await signTransaction({ forwardRequest });
     }
   };
 

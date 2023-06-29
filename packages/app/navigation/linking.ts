@@ -70,17 +70,26 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       spotifyAuth: "spotifyAuth",
       addEmail: "settings/add-email",
       verifyPhoneNumber: "settings/verify-phone-number",
+      dropExplanation: "dropExplanation",
       privacySecuritySettings: "settings/privacy-and-security",
       notificationSettings: "settings/notifications",
       blockedList: "settings/blocked-list",
       swipeList: "list",
       appleMusicAuthNativeWebView: "appleMusicAuthNativeWebView",
+      channelsMessage: "channels/:channelId",
+      channelsIntro: "channels/intro",
+      channelsCongrats: "channels/:channelId/congrats",
+      channelsMembers: "channels/:channelId/members",
+      channelsSettings: "channels/:channelId/settings",
+      channelsShare: "channels/:channelId/share",
+      channelsMessageReactions:
+        "channels/:channelId/messages/:messageId/reactions",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {
           // Bottom Tab Navigator
           homeTab: "",
-          trendingTab: "trending",
+          channelsTab: "channels",
           notificationsTab: "notifications",
           profileTab: "profile",
         },

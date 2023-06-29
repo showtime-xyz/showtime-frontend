@@ -422,7 +422,21 @@ export const ClaimForm = ({
           <View tw="mt-4 flex-row items-center">
             <CheckIcon />
             <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-              You will follow {getCreatorUsernameFromNFT(nft?.data.item)}
+              You will follow{" "}
+              <Text tw="font-semibold">
+                {getCreatorUsernameFromNFT(nft?.data.item)}
+              </Text>
+            </Text>
+          </View>
+
+          <View tw="mt-4 flex-row items-center">
+            <CheckIcon />
+            <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+              You will join{" "}
+              <Text tw="font-semibold">
+                {getCreatorUsernameFromNFT(nft?.data.item)}
+              </Text>
+              's channel
             </Text>
           </View>
 

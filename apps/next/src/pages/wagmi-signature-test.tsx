@@ -1,8 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
-import { useAccount, useDisconnect, useSignMessage, useSigner } from "wagmi";
-
-import { useSignTypedData } from "app/hooks/use-sign-typed-data";
+import { useAccount, useDisconnect, useSignMessage } from "wagmi";
 
 const signatureData = {
   domain: {
@@ -64,8 +62,6 @@ const Home: NextPage = () => {
     signMessageAsync({ message: "yo!" });
   };
 
-  const signTypedData = useSignTypedData();
-
   return (
     <div>
       <main>
@@ -82,18 +78,6 @@ const Home: NextPage = () => {
         </button>
         <button style={{ marginLeft: 10 }} onClick={signMessageAsyncTimeout}>
           Sign message async
-        </button>
-        <button
-          onClick={async () => {
-            const res = await signTypedData(
-              signatureData.domain,
-              signatureData.types,
-              signatureData.value
-            );
-            console.log("result ", res);
-          }}
-        >
-          Sign typed data
         </button>
       </main>
     </div>

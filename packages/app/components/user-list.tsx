@@ -23,7 +23,7 @@ import { EmptyPlaceholder } from "./empty-placeholder";
 import { FollowButton } from "./follow-button";
 
 const SEPARATOR_HEIGHT = 1;
-const ITEM_HEIGHT = 64;
+const ITEM_HEIGHT = 56;
 
 type FollowingListProp = {
   follow: (profileId: number) => void;
@@ -33,6 +33,7 @@ type UserListProps = Pick<InfiniteScrollListProps<any>, "style"> & {
   users?: UserItemType[];
   loading: boolean;
   emptyTitle?: string;
+  onEndReached?: () => void;
   ListHeaderComponent?: React.ComponentType<any>;
 };
 export const UserList = ({
@@ -115,6 +116,7 @@ const FollowingListUser = memo(
             <View tw="mr-2 h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
               {item?.img_url && (
                 <Image
+                  recyclingKey={item?.img_url}
                   source={{ uri: item.img_url }}
                   alt={item.username ?? item.wallet_address ?? ""}
                   width={32}
@@ -126,7 +128,7 @@ const FollowingListUser = memo(
               {item.name ? (
                 <>
                   <Text
-                    tw="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                    tw="text-sm font-semibold text-gray-500 dark:text-gray-300"
                     numberOfLines={1}
                   >
                     {item.name}

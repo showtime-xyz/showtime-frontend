@@ -1,7 +1,8 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState, useEffect, useMemo, memo } from "react";
 import { Keyboard, Platform, TextInput } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
@@ -35,10 +36,20 @@ export const Search = () => {
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
   const inputRef = useRef<TextInput>();
-  const Separator = useCallback(
-    () => <View tw="h-[1px] bg-gray-200 dark:bg-gray-800" />,
-    []
+
+  // since the search returns weird results with "undefined" in the list, we filter them out
+  const filteredData = useMemo(
+    () => data?.filter((item) => item.username || item.address),
+    [data]
   );
+
+  useEffect(() => {
+    AvoidSoftInput.setEnabled(false);
+
+    return () => {
+      AvoidSoftInput.setEnabled(true);
+    };
+  }, []);
 
   const renderItem = useCallback(
     ({ item }: ListRenderItemInfo<SearchResponseItem>) => {
@@ -119,82 +130,79 @@ export const Search = () => {
       </View>
       {data ? (
         <InfiniteScrollList
-          data={data}
+          data={filteredData}
           renderItem={renderItem}
-          ItemSeparatorComponent={Separator}
           keyboardShouldPersistTaps="handled"
-          estimatedItemSize={64}
+          estimatedItemSize={55}
           {...keyboardDismissProp}
         />
-      ) : loading && term ? (
+      ) : loading && term && term.length > 1 ? (
         <SearchItemSkeleton />
       ) : null}
     </>
   );
 };
 
-export const SearchItem = ({
-  item,
-  onPress,
-}: {
-  item: SearchResponseItem;
-  onPress?: () => void;
-}) => {
-  return (
-    <Link
-      href={`/@${item.username ?? item.address0}`}
-      onPress={onPress}
-      tw="p-4 duration-150 hover:bg-gray-100 dark:hover:bg-gray-800"
-    >
-      <View tw="flex-row items-center justify-between">
-        <View tw="flex-row">
-          <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
-            {item.img_url && (
-              <Image
-                source={{ uri: item.img_url }}
-                tw="rounded-full"
-                width={32}
-                height={32}
-                alt={item.username ?? item.address0}
-              />
-            )}
-          </View>
-          <View tw="mr-1 justify-center">
-            {item.name ? (
-              <>
+export const SearchItem = memo(
+  ({ item, onPress }: { item: SearchResponseItem; onPress?: () => void }) => {
+    return (
+      <Link
+        href={`/@${item.username ?? item.address}`}
+        onPress={onPress}
+        tw="px-4 py-3 duration-150 hover:bg-gray-100 dark:hover:bg-gray-800"
+      >
+        <View tw="flex-row items-center justify-between">
+          <View tw="flex-row">
+            <View tw="mr-2 h-8 w-8 rounded-full bg-gray-200">
+              {item.img_url && (
+                <Image
+                  source={{ uri: item.img_url }}
+                  tw="rounded-full"
+                  width={32}
+                  height={32}
+                  alt={item.username ?? item.address}
+                />
+              )}
+            </View>
+            <View tw="mr-1 justify-center">
+              {item.name ? (
+                <>
+                  <Text
+                    tw="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                    numberOfLines={1}
+                  >
+                    {item.name}
+                  </Text>
+                  <View tw="h-1" />
+                </>
+              ) : null}
+
+              <View tw="flex-row items-center">
                 <Text
-                  tw="text-sm font-semibold text-gray-600 dark:text-gray-300"
+                  tw="text-sm font-semibold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
-                  {item.name}
+                  {item.username ? (
+                    <>@{item.username}</>
+                  ) : (
+                    <>{formatAddressShort(item.address)}</>
+                  )}
                 </Text>
-                <View tw="h-1" />
-              </>
-            ) : null}
-
-            <View tw="flex-row items-center">
-              <Text
-                tw="text-sm font-semibold text-gray-900 dark:text-white"
-                numberOfLines={1}
-              >
-                {item.username ? (
-                  <>@{item.username}</>
-                ) : (
-                  <>{formatAddressShort(item.address0)}</>
+                {Boolean(item.verified) && (
+                  <View tw="ml-1">
+                    <VerificationBadge size={14} />
+                  </View>
                 )}
-              </Text>
-              {Boolean(item.verified) && (
-                <View tw="ml-1">
-                  <VerificationBadge size={14} />
-                </View>
-              )}
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </Link>
-  );
-};
+      </Link>
+    );
+  }
+);
+
+SearchItem.displayName = "SearchItem";
 
 export const SearchItemSkeleton = () => {
   return (

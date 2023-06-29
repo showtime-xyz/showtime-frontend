@@ -16,6 +16,7 @@ function ModalHeaderComponent({
   startContentComponent: StartContentComponent,
   tw = "",
   onClose,
+  closeButtonProps,
 }: ModalHeaderProps) {
   return (
     <View
@@ -31,6 +32,7 @@ function ModalHeaderComponent({
           iconOnly
           hitSlop={10}
           tw="mr-2"
+          {...closeButtonProps}
         >
           <CloseLarge />
         </Button>

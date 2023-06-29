@@ -3,7 +3,6 @@ import {
   useColorScheme as useDeviceColorScheme,
   Appearance,
   Platform,
-  StatusBar,
 } from "react-native";
 import type { ColorSchemeName } from "react-native";
 
@@ -26,13 +25,11 @@ export const toggleColorScheme = (isDark?: boolean) => {
       NavigationBar.setBackgroundColorAsync("#000");
       NavigationBar.setButtonStyleAsync("light");
     }
-    StatusBar.setBarStyle("light-content", true);
   } else {
     if (Platform.OS === "android") {
       NavigationBar.setBackgroundColorAsync("#FFF");
       NavigationBar.setButtonStyleAsync("dark");
     }
-    StatusBar.setBarStyle("dark-content", true);
   }
 };
 

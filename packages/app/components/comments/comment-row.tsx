@@ -19,6 +19,7 @@ interface CommentRowProps {
   deleteComment: (id: number) => Promise<void>;
   reply?: (comment: CommentType) => void;
   creatorId?: number;
+  isReply?: boolean;
 }
 
 const REPLIES_PER_BATCH = 2;
@@ -31,6 +32,7 @@ function CommentRowComponent({
   deleteComment,
   reply,
   creatorId,
+  isReply,
 }: CommentRowProps) {
   /**
    * we used memo, so needs to add this hooks to here,
@@ -38,8 +40,9 @@ function CommentRowComponent({
    */
   useIsDarkMode();
   //#region state
-  const lastItemId = useRef<number>(comment.comment_id);
+  const lastItemId = useRef<number>(comment.id);
   const [likeCount, setLikeCount] = useState(comment.like_count);
+  const [isLikedByMe, setIsLikedByMe] = useState(comment.self_liked);
   const [displayedRepliesCount, setDisplayedRepliesCount] =
     useState(REPLIES_PER_BATCH);
 
@@ -48,8 +51,8 @@ function CommentRowComponent({
   // I had to remove `key` from CommentRow (Parent) and here, on View,
   // because it was breaking recycling
   // https://shopify.github.io/flash-list/docs/recycling/
-  if (comment.comment_id !== lastItemId.current) {
-    lastItemId.current = comment.comment_id;
+  if (comment.id !== lastItemId.current) {
+    lastItemId.current = comment.id;
     setLikeCount(comment.like_count);
     setDisplayedRepliesCount(REPLIES_PER_BATCH);
   }
@@ -76,21 +79,15 @@ function CommentRowComponent({
   );
 
   const isMyComment = useMemo(
-    () => user?.data.profile.profile_id === comment.commenter_profile_id,
-    [user, comment.commenter_profile_id]
+    () => user?.data.profile.profile_id === comment.commenter_profile,
+    [user, comment.commenter_profile]
   );
 
   const isRepliedByMe = useMemo(
-    () => user?.data.comments.includes(comment.comment_id),
-    [user, comment.comment_id]
+    () => user?.data.comments.includes(comment.id),
+    [user, comment.id]
   );
 
-  const isLikedByMe = useMemo(
-    () => user?.data.likes_comment.includes(comment.comment_id),
-    [user, comment.comment_id]
-  );
-
-  const isReply = comment.parent_id !== null && comment.parent_id !== undefined;
   //#endregion
 
   //#region callbacks
@@ -100,28 +97,26 @@ function CommentRowComponent({
         navigateToLogin();
         return;
       }
-
-      if (isLikedByMe) {
-        await unlikeComment(comment.comment_id);
-        setLikeCount((state) => Math.max(state - 1, 0));
-      } else {
-        await likeComment(comment.comment_id);
-        setLikeCount((state) => state + 1);
+      const handler = isLikedByMe ? unlikeComment : likeComment;
+      const isSuccessed = await handler(comment.id);
+      if (isSuccessed) {
+        setLikeCount((state) => Math.max(state + (isLikedByMe ? -1 : 1), 0));
+        setIsLikedByMe(!isLikedByMe);
       }
     },
     [
-      navigateToLogin,
-      comment.comment_id,
+      comment.id,
       isAuthenticated,
       isLikedByMe,
       likeComment,
+      navigateToLogin,
       unlikeComment,
     ]
   );
 
   const handleOnDeletePress = useCallback(async () => {
-    return await deleteComment(comment.comment_id);
-  }, [comment.comment_id, deleteComment]);
+    return await deleteComment(comment.id);
+  }, [comment.id, deleteComment]);
 
   const handelOnLoadMoreRepliesPress = useCallback(() => {
     setDisplayedRepliesCount((state) => state + REPLIES_PER_BATCH);
@@ -191,6 +186,7 @@ function CommentRowComponent({
               deleteComment={deleteComment}
               reply={handleOnReplyOnAReply}
               creatorId={creatorId}
+              isReply
             />
           ))
         : null}

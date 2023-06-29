@@ -1,36 +1,32 @@
-import {
-  useCallback,
-  useMemo,
-  useRef,
-  Fragment,
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useRef, useEffect } from "react";
 import { Platform, StyleSheet, TextInput } from "react-native";
 
-import { ListRenderItemInfo } from "@shopify/flash-list";
+import type { ListRenderItemInfo } from "@shopify/flash-list";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CommentRow } from "app/components/comments/comment-row";
 import { CommentType, useComments } from "app/hooks/api/use-comments";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
 import { useUser } from "app/hooks/use-user";
+import {
+  useReanimatedKeyboardAnimation,
+  KeyboardController,
+  AndroidSoftInputModes,
+} from "app/lib/keyboard-controller";
 import type { NFT } from "app/types";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { InputAccessoryView } from "../input-accessory-view";
 import { CommentInputBox, CommentInputBoxMethods } from "./comment-input-box";
 import { CommentsStatus } from "./comments-status";
 
-const keyExtractor = (item: CommentType) => `comment-${item.comment_id}`;
-const PlatformInputAccessoryView =
-  Platform.OS === "ios" ? InputAccessoryView : Fragment;
+const keyExtractor = (item: CommentType) => `comment-${item.id}`;
 
 type CommentsProps = {
   nft: NFT;
@@ -47,25 +43,25 @@ export function Comments({
   const Alert = useAlert();
   const inputRef = useRef<CommentInputBoxMethods>(null);
   const commentInputRef = useRef<TextInput>(null);
-  const [mounted, setMounted] = useState(Platform.OS !== "ios");
-  const [handleInset, setHandleInset] = useState(false);
 
   useEffect(() => {
-    // we need to use this to prevent a flicker on ios due to InputAccessoryView
-    const handle = setTimeout(() => {
-      setMounted(true);
-      setTimeout(() => {
-        // we need to let RN handle the inset with a delay or it will shift the start offset
-        setHandleInset(true);
-      }, 300);
-    }, 600);
+    AvoidSoftInput?.setEnabled(false);
+    KeyboardController?.setInputMode(
+      AndroidSoftInputModes.SOFT_INPUT_ADJUST_NOTHING
+    );
 
     return () => {
-      // Clean up
-      clearTimeout(handle);
+      AvoidSoftInput?.setEnabled(true);
+      KeyboardController?.setDefaultMode();
     };
   }, []);
   //#endregion
+
+  const keyboard =
+    Platform.OS !== "web"
+      ? // eslint-disable-next-line react-hooks/rules-of-hooks
+        useReanimatedKeyboardAnimation()
+      : { height: { value: 0 }, state: {} };
 
   const { isAuthenticated } = useUser();
   const {
@@ -77,16 +73,13 @@ export function Comments({
     unlikeComment,
     deleteComment,
     newComment,
+    fetchMore,
+    isLoadingMore,
   } = useComments(nft.nft_id);
   const modalListProps = useModalListProps(webListHeight);
   const { bottom } = useSafeAreaInsets();
-  const isDark = useIsDarkMode();
   //#endregion
   //#region variables
-  const dataReversed = useMemo(
-    () => data?.comments.slice().reverse() || [],
-    [data]
-  );
 
   //#endregion
 
@@ -166,19 +159,25 @@ export function Comments({
 
   const listEmptyComponent = useCallback(
     () =>
-      !isLoading && !error && !dataReversed.length ? (
+      !isLoading && !error && !data.length ? (
         <EmptyPlaceholder
           text="Be the first to add a comment!"
           title="💬 No comments yet..."
           tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] -mt-5 h-full flex-1"
         />
       ) : null,
-    [isLoading, dataReversed.length, error]
+    [isLoading, data.length, error]
   );
-  const listFooterComponent = useCallback(
-    () => <View style={{ height: Math.max(bottom, 20) }} />,
-    [bottom]
-  );
+  const listFooterComponent = useCallback(() => {
+    if (isLoadingMore)
+      return (
+        <View tw="items-center pb-4">
+          <Spinner size="small" />
+        </View>
+      );
+    return <View style={{ height: Math.max(bottom, 20) }} />;
+  }, [bottom, isLoadingMore]);
+
   // run two recycling pools to optimize performance
   const getItemType = useCallback((item: CommentType) => {
     if (item.replies && item.replies?.length > 0) {
@@ -187,46 +186,62 @@ export function Comments({
     return "comment";
   }, []);
 
+  const fakeView = useAnimatedStyle(
+    () => ({
+      height: keyboard.height.value
+        ? Math.abs(keyboard.height.value)
+        : Math.abs(keyboard.height.value),
+    }),
+    [keyboard]
+  );
+
+  const animatedInputStyle = useAnimatedStyle(() => {
+    return {
+      bottom: bottom / 2,
+      transform: [
+        {
+          translateY: keyboard.height.value ? bottom / 2 : 0,
+        },
+      ],
+    };
+  }, [keyboard, bottom]);
+
   return (
     <View style={styles.container}>
-      {isLoading || (dataReversed.length == 0 && error) ? (
+      {isLoading || (data.length == 0 && error) ? (
         <CommentsStatus isLoading={isLoading} error={error} />
       ) : (
         <View tw="flex-grow">
           <InfiniteScrollList
-            data={dataReversed}
+            data={data}
             refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             estimatedItemSize={70}
-            keyboardDismissMode="interactive"
+            keyboardDismissMode={
+              Platform.OS === "ios" ? "interactive" : "on-drag"
+            }
+            contentInsetAdjustmentBehavior="always"
+            automaticallyAdjustContentInsets={true}
             ListFooterComponent={listFooterComponent}
-            automaticallyAdjustKeyboardInsets={handleInset}
-            automaticallyAdjustContentInsets={false}
-            contentInsetAdjustmentBehavior="never"
             ListHeaderComponent={ListHeaderComponent}
             contentContainerStyle={styles.contentContainer}
             getItemType={getItemType}
             ListEmptyComponent={listEmptyComponent}
+            onEndReached={fetchMore}
             {...modalListProps}
           />
-          {isAuthenticated && mounted && (
-            <PlatformInputAccessoryView
-              {...Platform.select({
-                ios: {
-                  backgroundColor: isDark ? colors.black : colors.white,
-                },
-                default: {},
-              })}
-            >
+          {isAuthenticated && (
+            <Animated.View style={animatedInputStyle}>
               <CommentInputBox
                 ref={inputRef}
                 commentInputRef={commentInputRef}
                 submitting={isSubmitting}
                 submit={newComment}
               />
-            </PlatformInputAccessoryView>
+            </Animated.View>
           )}
+          <Animated.View style={[fakeView]} />
         </View>
       )}
     </View>
@@ -240,6 +255,5 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 10,
-    paddingBottom: 80,
   },
 });

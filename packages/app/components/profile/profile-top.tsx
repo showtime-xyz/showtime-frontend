@@ -9,7 +9,6 @@ import Animated, {
 import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
-import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Gift as GiftIcon,
@@ -26,9 +25,10 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useJoinChannel } from "app/components/creator-channels/hooks/use-join-channel";
 import { NotificationsFollowButton } from "app/components/notifications-follow-button";
 import { ProfileDropdown } from "app/components/profile-dropdown";
-import { UserProfile } from "app/hooks/api-hooks";
+import { UserProfile, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import {
   useContentWidth,
@@ -77,13 +77,13 @@ export const ProfileTop = ({
   isError,
   isLoading,
 }: ProfileTopProps) => {
+  const { mutate: mutateUserProfile } = useUserProfile({ address });
   const isDark = useIsDarkMode();
   const router = useRouter();
   const userId = useCurrentUserId();
   const name = getProfileName(profileData?.profile);
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
-  const { colorScheme } = useColorScheme();
   const { user, isIncompletedProfile } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
   const coverWidth = useContentWidth(ContentLayoutOffset.PROFILE_COVER);
@@ -92,11 +92,15 @@ export const ProfileTop = ({
   const redirectToCreateDrop = useRedirectToCreateDrop();
   const isSelf = userId === profileId;
   const { unblock } = useBlock();
+  const joinChannel = useJoinChannel();
+  const userChannel = profileData?.profile.channels?.[0];
   const { onToggleFollow } = useFollow({
     username,
   });
 
   const { top } = useSafeAreaInsets();
+
+  const showChannelButton = typeof userChannel?.id !== "undefined";
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+
@@ -164,7 +168,7 @@ export const ProfileTop = ({
 
   return (
     <>
-      <View tw="overflow-hidden bg-gray-100 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]">
+      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]">
         <Skeleton
           height={coverHeight}
           width={coverWidth}
@@ -294,12 +298,60 @@ export const ProfileTop = ({
                         profileId={profileId}
                       />
                       <View tw="w-2" />
-                      <FollowButton
-                        size={width < 768 ? "small" : "regular"}
-                        name={username}
-                        profileId={profileId}
-                        onToggleFollow={onToggleFollow}
-                      />
+                      {showChannelButton ? (
+                        <Button
+                          size={width < 768 ? "small" : "regular"}
+                          style={{
+                            backgroundColor: colors.indigo[600],
+                          }}
+                          onPress={async () => {
+                            if (userChannel?.self_is_member) {
+                              router.push(
+                                `/channels/${userChannel.id}?fresh=profile`
+                              );
+                            } else {
+                              mutateUserProfile(
+                                (d) => {
+                                  if (d && d.data && d.data.profile) {
+                                    d.data.profile.channels[0].self_is_member =
+                                      true;
+                                    return {
+                                      ...d,
+                                    };
+                                  }
+                                  return d;
+                                },
+                                { revalidate: false }
+                              );
+                              await joinChannel.trigger({
+                                channelId: userChannel.id,
+                              });
+                              mutateUserProfile();
+                              router.push(
+                                `/channels/${userChannel.id}?fresh=profile`
+                              );
+                            }
+                          }}
+                          disabled={joinChannel.isMutating}
+                          tw={`opacity-${
+                            joinChannel.isMutating ? "50" : "100"
+                          }`}
+                        >
+                          <Text tw="font-semibold" style={{ color: "white" }}>
+                            {userChannel.self_is_member
+                              ? "View Channel"
+                              : "Join Channel"}
+                          </Text>
+                        </Button>
+                      ) : (
+                        <FollowButton
+                          size={width < 768 ? "small" : "regular"}
+                          name={username}
+                          profileId={profileId}
+                          onToggleFollow={onToggleFollow}
+                        />
+                      )}
+                      <View tw="w-2" />
                     </>
                   ) : null}
                   {isSelf && !isIncompletedProfile ? (

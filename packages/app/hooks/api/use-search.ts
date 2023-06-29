@@ -9,7 +9,7 @@ export type SearchResponseItem = {
   username: string;
   verified: boolean;
   img_url: string;
-  address0: string;
+  address: string;
 };
 
 type SearchResponse = {

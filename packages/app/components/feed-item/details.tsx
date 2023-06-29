@@ -34,7 +34,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
             limitLineBreaks(
               cleanUserTextInput(removeTags(nft?.token_description))
             ),
-            "text-13 font-bold text-gray-100"
+            "text-13 font-bold text-white"
           )
         : "",
     [nft?.token_description]

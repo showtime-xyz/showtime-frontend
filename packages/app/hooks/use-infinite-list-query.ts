@@ -27,7 +27,8 @@ type UseInfiniteListConfig = {
 };
 export const useInfiniteListQuerySWR = <T>(
   urlFunction: (pageIndex: number, previousPageData: []) => string | null,
-  config?: UseInfiniteListConfig
+  config?: UseInfiniteListConfig,
+  fetcher = (url: string) => axios({ url, method: "GET" })
 ): UseInfiniteListQueryReturn<T> => {
   const refreshInterval = config?.refreshInterval ?? 0;
   const PAGE_SIZE = config?.pageSize ?? 0;
@@ -49,6 +50,7 @@ export const useInfiniteListQuerySWR = <T>(
     (isLoadingInitialData ||
       (size > 0 && data && typeof data[size - 1] === "undefined")) ??
     false;
+
   const isEmpty = (data?.[0] as any)?.length === 0;
 
   const isReachingEnd = !PAGE_SIZE

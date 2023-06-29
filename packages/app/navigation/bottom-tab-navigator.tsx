@@ -3,18 +3,19 @@ import { useWindowDimensions } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import dynamic from "next/dynamic";
 
-import { useExpoUpdate } from "app/hooks/use-expo-update";
 import { useUser } from "app/hooks/use-user";
 
 import { BottomTabbar } from "./bottom-tab-bar";
 import {
+  CreatorChannelsTabBarIcon,
   HomeTabBarIcon,
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
-  TrendingTabBarIcon,
 } from "./tab-bar-icons";
 
-const HomeNavigator = dynamic(() => import("../pages/home"));
+const CreatorChannelsNavigator = dynamic(
+  () => import("../pages/creator-channels")
+);
 const TrendingNavigator = dynamic(() => import("../pages/trending"));
 const CreateNavigator = dynamic(() => import("../pages/create"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
@@ -25,8 +26,6 @@ const BottomTab = createBottomTabNavigator();
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const { user } = useUser();
-
-  useExpoUpdate();
 
   return (
     <BottomTab.Navigator
@@ -44,10 +43,10 @@ export function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="trendingTab"
-        component={HomeNavigator}
+        name="channelsTab"
+        component={CreatorChannelsNavigator}
         options={{
-          tabBarIcon: TrendingTabBarIcon,
+          tabBarIcon: CreatorChannelsTabBarIcon,
         }}
       />
       {width < 768 && (

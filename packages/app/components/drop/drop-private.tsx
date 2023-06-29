@@ -40,7 +40,6 @@ import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useShare } from "app/hooks/use-share";
 import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
@@ -588,10 +587,10 @@ export const DropPrivate = () => {
                             tw="flex-1"
                             label={
                               <View tw="mr-5 flex">
-                                <Text tw="font-semibold">
+                                <Text tw="font-semibold dark:text-white">
                                   Explicit visual (18+)
                                 </Text>
-                                <Text tw="max-w-[100%] pt-1 text-xs">
+                                <Text tw="max-w-[100%] pt-1 text-xs dark:text-white">
                                   Do not check if your song lyrics are explicit.
                                 </Text>
                               </View>

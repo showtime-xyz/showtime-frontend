@@ -28,6 +28,7 @@ export interface NotificationType {
   type_name: string;
   actors: Actor[];
   nfts: NotificationNFT[];
+  channel?: { id: number; name: string };
 }
 
 export const useNotifications = () => {
