@@ -1,6 +1,9 @@
 import React from "react";
 import { Linking, Platform } from "react-native";
 
+import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   AppleMusic,
@@ -50,7 +53,19 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
             }
           }}
         >
-          <View tw="flex-row items-center justify-center rounded-full bg-indigo-700 py-6 shadow-lg">
+          <LinearGradient
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 9999,
+              paddingVertical: 24,
+            }}
+            {...fromCSS(
+              `linear-gradient(161deg, #00D27A 0%, #5836FF 44.04%, #C0F 95.40%);`
+            )}
+          >
             <View tw="ml-auto">
               <View tw="mr-2 flex-row">
                 <View tw="mr-1 mt-[2px]">
@@ -63,30 +78,44 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
             <View tw="right-4 ml-auto">
               <ChevronRight color={"white"} width={24} height={24} />
             </View>
-          </View>
+          </LinearGradient>
         </Pressable>
-        <Pressable
-          onPress={() => {
-            if (Platform.OS !== "web") {
-              modalScreenContext?.pop?.({
-                callback: () => {
-                  router.push("/drop/free");
-                },
-              });
-            } else {
-              router.replace("/drop/free");
-            }
-          }}
-        >
-          <View tw="flex-row items-center justify-center rounded-full bg-blue-200 py-6 shadow-sm">
-            <View tw="ml-auto">
-              <Text tw="text-lg text-black">Digital art collectible</Text>
-            </View>
-            <View tw="right-4 ml-auto">
-              <ChevronRight color={"black"} width={24} height={24} />
-            </View>
-          </View>
-        </Pressable>
+        {Platform.OS !== "web" && !user.user?.data.profile.verified ? null : (
+          <Pressable
+            onPress={() => {
+              if (Platform.OS !== "web") {
+                modalScreenContext?.pop?.({
+                  callback: () => {
+                    router.push("/drop/free");
+                  },
+                });
+              } else {
+                router.replace("/drop/free");
+              }
+            }}
+          >
+            <LinearGradient
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 9999,
+                paddingVertical: 24,
+              }}
+              {...fromCSS(
+                `linear-gradient(147deg, rgba(97, 212, 164, 1) 0%, rgba(139, 116, 255, 1) 40.06%, rgba(219, 73, 255, 1) 100%);`
+              )}
+            >
+              <View tw="ml-auto">
+                <Text tw="text-lg text-black">Digital art collectible</Text>
+              </View>
+              <View tw="right-4 ml-auto">
+                <ChevronRight color={"black"} width={24} height={24} />
+              </View>
+            </LinearGradient>
+          </Pressable>
+        )}
 
         <View tw="mt-4 w-full items-center">
           <View style={{ rowGap: 16 }}>
