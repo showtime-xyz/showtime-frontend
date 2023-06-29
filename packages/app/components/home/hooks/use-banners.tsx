@@ -18,7 +18,7 @@ export type Banner = {
 };
 export const useBanners = () => {
   const [banners, setbanners] = useState<Banner[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function getBanners() {

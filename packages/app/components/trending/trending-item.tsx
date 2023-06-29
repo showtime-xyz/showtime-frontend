@@ -135,7 +135,7 @@ export const TrendingSkeletonItem = ({ presetWidth = 182 }) => {
       ? presetWidth
       : (windowWidth - 32 - 20) / 2;
   return (
-    <View tw="mr-2.5 pb-4">
+    <View tw="mr-2.5">
       <Skeleton width={mediaWidth} height={mediaWidth} radius={16} />
       <View tw="my-1 flex-row items-center">
         <Skeleton width={30} height={30} radius={999} />

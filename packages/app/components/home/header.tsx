@@ -122,7 +122,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      <View tw="mb-4 w-full pl-4 md:pl-0">
+      <View tw="mb-2 w-full pl-4 md:pl-0">
         <View tw="mt-2 w-full flex-row items-center justify-between py-4 pr-4">
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             Trending
