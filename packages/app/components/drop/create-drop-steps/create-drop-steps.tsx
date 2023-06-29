@@ -2,8 +2,8 @@ import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import {
   useWindowDimensions,
   Platform,
-  ScrollView as RNScrollView,
   Linking,
+  ScrollView as RNScrollView,
 } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
@@ -40,6 +40,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Preview } from "app/components/preview";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
@@ -254,7 +255,7 @@ export const CreateDropSteps = () => {
             appleMusicTrackUrl={getValues("appleMusicTrackUrl")}
             releaseDate={isSaveDrop ? null : getValues("releaseDate")}
           />
-          <View tw="p-4">
+          <View tw="my-4 px-4">
             <Button
               variant="primary"
               size="regular"
@@ -509,7 +510,10 @@ const CreateDropStepSongURI = (
 
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
-      <RNScrollView ref={scrollViewRef} style={{ paddingHorizontal: 16 }}>
+      <BottomSheetScrollView
+        ref={scrollViewRef}
+        style={{ paddingHorizontal: 16 }}
+      >
         <View tw="flex-row items-center">
           <Preview
             width={40}
@@ -766,7 +770,7 @@ const CreateDropStepSongURI = (
         {errors.hasAcceptedTerms?.message ? (
           <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
         ) : null}
-      </RNScrollView>
+      </BottomSheetScrollView>
 
       <View tw="mx-4 mt-4">
         <Button
@@ -824,7 +828,7 @@ const CreateDropMoreOptions = (
 
   return (
     <Layout onBackPress={handlePrevStep} title="More options">
-      <ScrollView tw="px-4">
+      <BottomSheetScrollView style={{ paddingHorizontal: 16 }}>
         <View tw="flex-1 flex-row">
           <Controller
             control={control}
@@ -935,7 +939,7 @@ const CreateDropMoreOptions = (
             )}
           />
         </View>
-      </ScrollView>
+      </BottomSheetScrollView>
       <View tw="px-4">
         <Button size="regular" tw="w-full self-center" onPress={handlePrevStep}>
           Save
