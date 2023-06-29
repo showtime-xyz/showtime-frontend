@@ -265,14 +265,13 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   return (
     <LikeContextProvider nft={nft}>
       <View
-        tw="h-full w-full flex-row overflow-hidden"
+        tw="h-full w-full flex-row overflow-hidden border-l border-gray-200 dark:border-gray-800"
         style={{
           height: itemHeight,
           paddingTop: headerHeight,
-          width: Math.min(windowWidth - 248, contentWidth),
         }}
       >
-        <View tw="flex-1 bg-gray-100 dark:bg-black" ref={container}>
+        <View tw="flex-1" ref={container}>
           <View tw="w-full flex-row items-center justify-between p-4">
             <Button
               variant="text"

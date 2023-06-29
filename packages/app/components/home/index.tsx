@@ -7,6 +7,7 @@ import {
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ErrorBoundary } from "app/components/error-boundary";
 import { useFeed } from "app/hooks/use-feed";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -69,28 +70,31 @@ export const Home = () => {
   return (
     <View tw="w-full flex-1 items-center bg-white dark:bg-black">
       <View tw="md:max-w-screen-content w-full">
-        <InfiniteScrollList
-          data={data}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          estimatedItemSize={600}
-          ListHeaderComponent={ListHeaderComponent}
-          ListFooterComponent={ListFooterComponent}
-          contentContainerStyle={{
-            paddingTop: Platform.select({
-              android: 0,
-              default: headerHeight,
-            }),
-          }}
-          ListEmptyComponent={ListEmptyComponent}
-          useWindowScroll={isMdWidth}
-          style={{
-            height: Platform.select({
-              default: windowHeight - bottomBarHeight,
-              ios: windowHeight,
-            }),
-          }}
-        />
+        <ErrorBoundary>
+          <InfiniteScrollList
+            data={data}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            estimatedItemSize={600}
+            preserveScrollPosition
+            ListHeaderComponent={ListHeaderComponent}
+            ListFooterComponent={ListFooterComponent}
+            contentContainerStyle={{
+              paddingTop: Platform.select({
+                android: 0,
+                default: headerHeight,
+              }),
+            }}
+            ListEmptyComponent={ListEmptyComponent}
+            useWindowScroll={isMdWidth}
+            style={{
+              height: Platform.select({
+                default: windowHeight - bottomBarHeight,
+                ios: windowHeight,
+              }),
+            }}
+          />
+        </ErrorBoundary>
       </View>
     </View>
   );
