@@ -382,7 +382,7 @@ const CreateDropStepTitle = (props: StepProps) => {
             }}
           />
         </View>
-        <View tw="mt-4">
+        <View tw="mt-4 flex-1">
           <Controller
             control={control}
             name="description"
@@ -1010,58 +1010,64 @@ const DropSuccess = (props: { contractAddress?: string }) => {
   }, [qrCodeUrl]);
 
   return (
-    <View tw="items-center p-4 px-8">
-      <View style={{ rowGap: 20 }} tw="mt-4 items-center">
-        <Success color={isDark ? "white" : "dark"} height={96} width={96} />
-        <Text tw="text-4xl text-black dark:text-white">Your drop is live!</Text>
-        <Text tw="text-gray-900 dark:text-gray-100">Now share it.</Text>
-      </View>
-      <View tw="mt-16 w-full items-center" style={{ rowGap: 24 }}>
-        <Button
-          tw="w-full bg-[#4A99E9]"
-          size="regular"
-          onPress={shareWithTwitterIntent}
-        >
-          <Twitter color="white" width={20} height={20} />
-          <Text
-            tw="ml-1 text-sm font-semibold"
+    <View tw="flex-1 items-center justify-center p-4 px-8">
+      <View tw="w-full flex-1 justify-center">
+        <View style={{ rowGap: 20 }} tw="mt-4 items-center">
+          <Success color={isDark ? "white" : "black"} height={96} width={96} />
+          <Text tw="text-4xl text-black dark:text-white">
+            Your drop is live!
+          </Text>
+          <Text tw="text-gray-900 dark:text-gray-100">Now share it.</Text>
+        </View>
+        <View tw="mt-16 w-full items-center" style={{ rowGap: 24 }}>
+          <Button
+            tw="w-full"
+            size="regular"
+            onPress={shareWithTwitterIntent}
             style={{
-              color: "white",
+              backgroundColor: "#4A99E9",
             }}
           >
-            Tweet
-          </Text>
-        </Button>
-        <Button
-          variant="primary"
-          tw="w-full"
-          size="regular"
-          onPress={onCopyLink}
-        >
-          <View tw="mr-1">
-            <Link color="black" width={20} height={20} />
-          </View>
-          Copy Link
-        </Button>
-
-        <Button
-          variant="tertiary"
-          tw="w-full"
-          size="regular"
-          onPress={() => {
-            if (!nft) return;
-
-            if (Platform.OS !== "web") {
-              router.pop();
-              router.push(`${getNFTSlug(nft)}`);
-            } else {
-              router.replace(`${getNFTSlug(nft)}`);
-            }
-          }}
-        >
-          View Drop
-        </Button>
+            <Twitter color="white" width={20} height={20} />
+            <Text
+              tw="ml-1 text-sm font-semibold"
+              style={{
+                color: "white",
+              }}
+            >
+              Tweet
+            </Text>
+          </Button>
+          <Button
+            variant="primary"
+            tw="w-full"
+            size="regular"
+            onPress={onCopyLink}
+          >
+            <View tw="mr-1">
+              <Link color="black" width={20} height={20} />
+            </View>
+            Copy Link
+          </Button>
+        </View>
       </View>
+      <Button
+        variant="tertiary"
+        tw="web:mt-16 ios:mb-16 ios:mt-auto android:mb-16 android:mt-auto w-full"
+        size="regular"
+        onPress={() => {
+          if (!nft) return;
+
+          if (Platform.OS !== "web") {
+            router.pop();
+            router.push(`${getNFTSlug(nft)}`);
+          } else {
+            router.replace(`${getNFTSlug(nft)}`);
+          }
+        }}
+      >
+        View Drop
+      </Button>
     </View>
   );
 };
