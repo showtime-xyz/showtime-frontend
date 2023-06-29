@@ -1,9 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { ResizeMode } from "expo-av";
-
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -26,6 +26,32 @@ import { ListMedia } from "../media";
 import { ContentType } from "./content-type";
 import { FeedEngagementIcons } from "./engagement-icons";
 
+const NativeRouteComponent = ({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) => {
+  const router = useRouter();
+  // const isDark = useIsDarkMode();
+  const onItemPress = useCallback(() => {
+    router.push(href);
+  }, [href, router]);
+  if (Platform.OS === "web") {
+    return <>{children}</>;
+  }
+
+  return (
+    <Pressable
+      onPress={onItemPress}
+      // underlayColor={isDark ? colors.gray[100] : colors.gray[800]}
+      // rippleColor={isDark ? colors.gray[100] : colors.gray[800]}
+    >
+      {children}
+    </Pressable>
+  );
+};
 export const HomeItem = ({
   nft,
   mediaSize,
@@ -50,97 +76,101 @@ export const HomeItem = ({
   );
 
   return (
-    <View tw="mb-2 mt-6 px-4 md:px-0">
-      <View tw="flex-row items-center">
-        <AvatarHoverCard
-          username={nft?.creator_username || nft?.creator_address_nonens}
-          url={nft.creator_img_url}
-          size={40}
-        />
-        <View tw="ml-2 justify-center">
-          <Link
-            href={`/@${nft.creator_username ?? nft.creator_address}`}
-            tw="flex-row items-center justify-center"
-          >
-            <Text tw="text-sm font-medium text-gray-900 dark:text-white">
-              {getCreatorUsernameFromNFT(nft)}
+    <NativeRouteComponent
+      href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
+    >
+      <View tw="mb-2 mt-6 px-4 md:px-0">
+        <View tw="flex-row items-center">
+          <AvatarHoverCard
+            username={nft?.creator_username || nft?.creator_address_nonens}
+            url={nft.creator_img_url}
+            size={40}
+          />
+          <View tw="ml-2 justify-center">
+            <Link
+              href={`/@${nft.creator_username ?? nft.creator_address}`}
+              tw="flex-row items-center justify-center"
+            >
+              <Text tw="text-sm font-medium text-gray-900 dark:text-white">
+                {getCreatorUsernameFromNFT(nft)}
+              </Text>
+              {nft.creator_verified ? (
+                <VerificationBadge
+                  style={{
+                    marginLeft: 4,
+                    marginBottom: Platform.select({ web: -1, default: 0 }),
+                  }}
+                  size={13}
+                />
+              ) : null}
+            </Link>
+            <View tw="h-2" />
+            <Text tw="text-xs text-gray-600 dark:text-gray-400">
+              {`${nft?.creator_followers_count} Followers`}
             </Text>
-            {nft.creator_verified ? (
-              <VerificationBadge
-                style={{
-                  marginLeft: 4,
-                  marginBottom: Platform.select({ web: -1, default: 0 }),
-                }}
-                size={13}
-              />
-            ) : null}
-          </Link>
-          <View tw="h-2" />
-          <Text tw="text-xs text-gray-600 dark:text-gray-400">
-            {`${nft?.creator_followers_count} Followers`}
-          </Text>
-        </View>
+          </View>
 
-        <FollowButtonSmall
-          profileId={nft.creator_id}
-          name={nft.creator_username}
-          tw="ml-auto"
-        />
-      </View>
-      <View tw="mt-3">
-        <RouteComponent
-          as={getNFTSlug(nft)}
-          href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
-        >
-          <Text tw="text-15 font-bold text-gray-900 dark:text-white">
-            {nft?.token_name}
-          </Text>
-
-          <View tw="h-3" />
-          <ClampText
-            tw="text-sm text-gray-600 dark:text-gray-400"
-            maxLines={4}
-            text={description}
-          />
-        </RouteComponent>
-        <View tw="mt-3 min-h-[20px]">
-          <ClaimedBy
-            claimersList={detailData?.data.item?.multiple_owners_list}
-            avatarSize={18}
-            nft={nft}
+          <FollowButtonSmall
+            profileId={nft.creator_id}
+            name={nft.creator_username}
+            tw="ml-auto"
           />
         </View>
-        <View tw="mt-3 flex-row items-center">
+        <View tw="mt-3">
           <RouteComponent
             as={getNFTSlug(nft)}
             href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
           >
-            <View
-              tw="overflow-hidden rounded-2xl"
-              style={{
-                width: mediaSize,
-                height: mediaSize,
-              }}
-            >
-              <ListMedia
-                item={nft}
-                optimizedWidth={mediaSize * 2}
-                loading={index > 0 ? "lazy" : "eager"}
-              />
-              <View tw="absolute right-1.5 top-1.5">
-                <ContentType edition={edition} />
-              </View>
-              <NSFWGate
-                show={nft.nsfw}
-                nftId={nft.nft_id}
-                variant="thumbnail"
-              />
-            </View>
+            <Text tw="text-15 font-bold text-gray-900 dark:text-white">
+              {nft?.token_name}
+            </Text>
+
+            <View tw="h-3" />
+            <ClampText
+              tw="text-sm text-gray-600 dark:text-gray-400"
+              maxLines={4}
+              text={description}
+            />
           </RouteComponent>
-          <FeedEngagementIcons nft={nft} edition={edition} />
+          <View tw="mt-3 min-h-[20px]">
+            <ClaimedBy
+              claimersList={detailData?.data.item?.multiple_owners_list}
+              avatarSize={18}
+              nft={nft}
+            />
+          </View>
+          <View tw="mt-3 flex-row items-center">
+            <RouteComponent
+              as={getNFTSlug(nft)}
+              href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
+            >
+              <View
+                tw="overflow-hidden rounded-2xl"
+                style={{
+                  width: mediaSize,
+                  height: mediaSize,
+                }}
+              >
+                <ListMedia
+                  item={nft}
+                  optimizedWidth={mediaSize * 2}
+                  loading={index > 0 ? "lazy" : "eager"}
+                />
+                <View tw="absolute right-1.5 top-1.5">
+                  <ContentType edition={edition} />
+                </View>
+                <NSFWGate
+                  show={nft.nsfw}
+                  nftId={nft.nft_id}
+                  variant="thumbnail"
+                />
+              </View>
+            </RouteComponent>
+            <FeedEngagementIcons nft={nft} edition={edition} />
+          </View>
         </View>
       </View>
-    </View>
+    </NativeRouteComponent>
   );
 };
 export const HomeItemSketelon = () => {

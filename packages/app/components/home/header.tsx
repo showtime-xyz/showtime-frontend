@@ -62,6 +62,9 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
       return Linking.openURL(banner.link);
     }
     if (banner.type === "profile") {
+      if (__DEV__) {
+        return Linking.openURL(`https://showtime.xyz/@${banner.username}`);
+      }
       return router.push(`/@${banner.username}`);
     }
   };
@@ -105,7 +108,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
                     source={{
                       uri: `${item.image}?optimizer=image&width=${
                         pagerWidth * 2
-                      }&quality=70&sharpen=true`,
+                      }`,
                     }}
                     recyclingKey={item.image}
                     blurhash={item?.blurhash}
