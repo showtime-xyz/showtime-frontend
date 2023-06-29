@@ -61,7 +61,7 @@ type CreateDropStep =
   | "select-drop";
 
 export const CreateDropSteps = () => {
-  const [step, setStep] = useState<CreateDropStep>("media");
+  const [step, setStep] = useState<CreateDropStep>("select-drop");
   const [isSaveDrop, setIsSaveDrop] = useState(false);
   const [isUnlimited, setIsUnlimited] = useState(true);
   const modalContext = useModalScreenContext();
@@ -279,7 +279,7 @@ export const CreateDropSteps = () => {
 
 const SelectDropTypeStep = (props: StepProps) => {
   return (
-    <Layout onBackPress={props.handlePrevStep} title="Create">
+    <Layout onBackPress={props.handlePrevStep} title="Create" closeIcon>
       <SelectDropType handleNextStep={props.handleNextStep} />
     </Layout>
   );
@@ -300,8 +300,8 @@ const CreateDropStepMedia = (
   } = props;
   return (
     <Layout onBackPress={handlePrevStep} title="Create">
-      <ScrollView tw="px-4">
-        <Text tw="text-center text-xl">
+      <View tw="px-4">
+        <Text tw="text-center text-xl text-gray-900 dark:text-gray-50">
           Upload an image or video for your paid unlockable.
         </Text>
         <View tw="mt-8 items-center">
@@ -318,12 +318,12 @@ const CreateDropStepMedia = (
               );
             }}
           />
-          <Text tw="py-4 text-sm text-gray-700">
+          <Text tw="py-4 text-sm text-gray-700 dark:text-gray-300">
             This could be an alternative album cover, unreleased content, or a
             short video snippet promoting your upcoming release.
           </Text>
         </View>
-      </ScrollView>
+      </View>
       <View tw="mt-4 px-4">
         <Button
           size="regular"
@@ -366,7 +366,7 @@ const CreateDropStepTitle = (props: StepProps) => {
               return (
                 <Fieldset
                   ref={ref}
-                  label="Title"
+                  label="Song Title"
                   placeholder="Give your drop a title"
                   onBlur={onBlur}
                   errorText={errors.title?.message}
@@ -410,7 +410,7 @@ const CreateDropStepTitle = (props: StepProps) => {
                 return (
                   <>
                     <Raffle color="black" width={18} height={18} />
-                    <Text tw="mx-1 text-xs font-bold text-gray-800">
+                    <Text tw="mx-1 text-xs font-bold text-gray-800 dark:text-gray-200">
                       Raffle
                     </Text>
                     <Switch checked={value} onChange={onChange} size="small" />
@@ -421,7 +421,7 @@ const CreateDropStepTitle = (props: StepProps) => {
           </View>
         </View>
         <View>
-          <Text tw="mt-4">
+          <Text tw="mt-4 text-gray-900 dark:text-gray-100">
             Promote a collectible, raffle or allow-list to attract more
             collectors. You can edit up to 30 minutes after creating.
           </Text>
@@ -515,13 +515,15 @@ const CreateDropStepSongURI = (
             style={{ borderRadius: 4 }}
             file={props.file}
           />
-          <Text tw="ml-2 text-base font-semibold text-gray-600">
+          <Text tw="ml-2 text-base font-semibold text-gray-600 dark:text-gray-200">
             {props.title}
           </Text>
         </View>
         <View tw="mt-6">
-          <Text tw="text-sm font-semibold">Music Details</Text>
-          <Text tw="pt-1 text-gray-600">
+          <Text tw="text-sm font-semibold text-gray-900 dark:text-gray-50">
+            Music Details
+          </Text>
+          <Text tw="pt-1 text-gray-600 dark:text-gray-400">
             Promote an unreleased or live song to Spotify and Apple Music by
             pasting URLs below
           </Text>
@@ -627,7 +629,7 @@ const CreateDropStepSongURI = (
                       )
                     }
                     label={
-                      <View tw="flex-row gap-1">
+                      <View tw="flex-row items-center gap-1">
                         <Spotify
                           height={22}
                           width={22}
@@ -707,13 +709,19 @@ const CreateDropStepSongURI = (
             </View>
           ) : null}
 
-          <View tw="mt-4 rounded-lg bg-gray-100 p-4">
+          <View tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
             <Pressable
               tw="flex-row items-center justify-between"
               onPress={props.handleMoreOptions}
             >
-              <Text tw="text-sm font-semibold">More options</Text>
-              <ChevronRight color="black" width={24} height={24} />
+              <Text tw="text-sm font-semibold text-black dark:text-white">
+                More options
+              </Text>
+              <ChevronRight
+                color={isDark ? "white" : "black"}
+                width={24}
+                height={24}
+              />
             </Pressable>
             <View tw="items-start">
               <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
@@ -940,18 +948,23 @@ const Layout = (props: {
   children: any;
   closeIcon?: boolean;
 }) => {
+  const isDark = useIsDarkMode();
   return (
     <View tw="flex-1">
       <View tw="mx-4 my-8 flex-row items-center">
         <Pressable tw="absolute" onPress={props.onBackPress}>
           {props.closeIcon ? (
-            <Close color="black" width={24} height={24} />
+            <Close color={isDark ? "white" : "black"} width={24} height={24} />
           ) : (
-            <ArrowLeft color="black" width={24} height={24} />
+            <ArrowLeft
+              color={isDark ? "white" : "black"}
+              width={24}
+              height={24}
+            />
           )}
         </Pressable>
         <View tw="mx-auto">
-          <Text tw="text-lg">{props.title}</Text>
+          <Text tw="text-lg text-black dark:text-white">{props.title}</Text>
         </View>
       </View>
       {props.children}

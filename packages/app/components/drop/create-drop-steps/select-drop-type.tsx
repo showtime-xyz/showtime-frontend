@@ -1,15 +1,19 @@
 import React from "react";
 import { Linking, Platform } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
+import {
+  AppleMusic,
+  ChevronRight,
+  Spotify,
+} from "@showtime-xyz/universal.icon";
 import {
   Raffle,
   CreatorChannel,
   CollectorList,
 } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -36,10 +40,8 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
 
   return (
     <BottomSheetScrollView useNativeModal={false}>
-      <View tw="justify-center px-4" style={{ rowGap: 8 }}>
-        <Button
-          size="regular"
-          tw="w-full"
+      <View tw="justify-center px-4" style={{ rowGap: 16 }}>
+        <Pressable
           onPress={() => {
             if (canCreateMusicDrop) {
               props.handleNextStep();
@@ -48,12 +50,22 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
             }
           }}
         >
-          <Text>Pre-Save Drop</Text>
-          <ChevronRight color={"white"} />
-        </Button>
-        <Button
-          size="regular"
-          tw="w-full"
+          <View tw="flex-row items-center justify-center rounded-full bg-indigo-700 py-6 shadow-lg">
+            <View tw="ml-auto">
+              <View tw="mr-2 flex-row">
+                <View tw="mr-1 mt-[2px]">
+                  <AppleMusic color={"white"} width={18} height={18} />
+                </View>
+                <Spotify color={"white"} width={22} height={22} />
+              </View>
+            </View>
+            <Text tw="text-lg text-white">Pre-Save Drop</Text>
+            <View tw="right-4 ml-auto">
+              <ChevronRight color={"white"} width={24} height={24} />
+            </View>
+          </View>
+        </Pressable>
+        <Pressable
           onPress={() => {
             if (Platform.OS !== "web") {
               modalScreenContext?.pop?.({
@@ -66,34 +78,59 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
             }
           }}
         >
-          <Text>Digital art collectible</Text>
-          <ChevronRight color={"white"} />
-        </Button>
-        <View tw="mt-4 w-[70%] self-center" style={{ rowGap: 8 }}>
-          <View>
-            <View tw="flex-row" style={{ columnGap: 12 }}>
-              <Raffle color={iconColor} width={20} height={20} />
-              <View style={{ gap: 2 }}>
-                <Text>Offer Raffles</Text>
-                <Text>Gift an NFT to attract collectors</Text>
-              </View>
+          <View tw="flex-row items-center justify-center rounded-full bg-blue-200 py-6 shadow-sm">
+            <View tw="ml-auto">
+              <Text tw="text-lg text-black">Digital art collectible</Text>
+            </View>
+            <View tw="right-4 ml-auto">
+              <ChevronRight color={"black"} width={24} height={24} />
             </View>
           </View>
-          <View>
+        </Pressable>
+
+        <View tw="mt-4 w-full items-center">
+          <View style={{ rowGap: 16 }}>
             <View tw="flex-row" style={{ columnGap: 12 }}>
-              <CreatorChannel color={iconColor} width={20} height={20} />
+              <Raffle
+                fill={iconColor}
+                color={iconColor}
+                width={20}
+                height={20}
+              />
               <View style={{ gap: 2 }}>
-                <Text>Build a fanbase</Text>
-                <Text>Collectors auto-join your channel</Text>
+                <Text tw="font-semibold text-gray-900 dark:text-gray-50">
+                  Offer Raffles
+                </Text>
+                <Text tw="text-gray-900 dark:text-gray-50">
+                  Gift an NFT to attract collectors
+                </Text>
               </View>
             </View>
-          </View>
-          <View>
+            <View tw="flex-row" style={{ columnGap: 12 }}>
+              <CreatorChannel
+                fill={iconColor}
+                color={iconColor}
+                width={20}
+                height={20}
+              />
+              <View style={{ gap: 2 }}>
+                <Text tw="font-semibold text-gray-900 dark:text-gray-50">
+                  Build a fanbase
+                </Text>
+                <Text tw="text-gray-900 dark:text-gray-50">
+                  Collectors auto-join your channel
+                </Text>
+              </View>
+            </View>
             <View tw="flex-row" style={{ columnGap: 12 }}>
               <CollectorList color={iconColor} width={20} height={20} />
               <View style={{ gap: 2 }}>
-                <Text>Collector lists</Text>
-                <Text>Share a link to instantly create</Text>
+                <Text tw="font-semibold text-gray-900 dark:text-gray-50">
+                  Collector lists
+                </Text>
+                <Text tw="text-gray-900 dark:text-gray-50">
+                  Share a link to instantly create
+                </Text>
               </View>
             </View>
           </View>

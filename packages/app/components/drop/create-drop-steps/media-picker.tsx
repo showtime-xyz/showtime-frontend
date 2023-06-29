@@ -23,7 +23,7 @@ export const MediaPicker = (props: MediaPickerProps) => {
   const isDark = useIsDarkMode();
   const { width: windowWidth } = useWindowDimensions();
 
-  const mediaDimension = Math.min(347, windowWidth - 32);
+  const mediaDimension = Math.min(320, windowWidth - 32);
 
   return (
     <DropFileZone onChange={onChange} disabled={disabled}>
