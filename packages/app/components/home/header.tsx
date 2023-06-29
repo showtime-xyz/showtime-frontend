@@ -83,10 +83,11 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               loop
               width={pagerWidth}
               height={bannerHeight}
-              autoPlayInterval={3000}
+              autoPlayInterval={4000}
               data={banners}
               controller
-              tw="web:md:mt-4 web:mt-10 w-full rounded-2xl"
+              autoPlay
+              tw="web:md:mt-4 web:mt-10 md:rounded-4xl w-full rounded-3xl"
               pagination={{ variant: "rectangle" }}
               renderItem={({ item, index }) => (
                 <Pressable
@@ -121,7 +122,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      <View tw="w-full pl-4 md:pl-0">
+      <View tw="mb-4 w-full pl-4 md:pl-0">
         <View tw="mt-2 w-full flex-row items-center justify-between py-4 pr-4">
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             Trending

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useLayoutEffect } from "react";
 import { useWindowDimensions } from "react-native";
 
 import "swiper/css";
@@ -20,7 +20,9 @@ export function HomeSlider({
   slidesPerView = 2.2,
 }: Props) {
   const swiperRef = useRef(null);
-  const [allowSlideNext, setAllowSlideNext] = useState(false);
+  const [allowSlideNext, setAllowSlideNext] = useState(
+    data.length > Math.floor(slidesPerView)
+  );
   const [allowSlidePrev, setAllowSlidePrev] = useState(false);
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];

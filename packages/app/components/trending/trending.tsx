@@ -4,7 +4,6 @@ import { useWindowDimensions, Platform } from "react-native";
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -16,7 +15,7 @@ import {
 } from "app/components/trending/trending-item";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { useFeed } from "app/hooks/use-feed";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { NFT } from "app/types";
@@ -46,7 +45,7 @@ const Header = () => {
 export const Trending = () => {
   const { height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
-  const { bottom } = useSafeAreaInsets();
+  const bottom = usePlatformBottomHeight();
   const { width } = useScrollbarSize();
   const isMdWidth = contentWidth + width > breakpoints["md"];
 
@@ -63,7 +62,7 @@ export const Trending = () => {
         <TrendingItem
           nft={item}
           index={index}
-          tw="px-2.5 md:px-0"
+          tw="mb-4 px-2.5 md:px-0"
           presetWidth={182}
         />
       );
@@ -109,7 +108,7 @@ export const Trending = () => {
         <ErrorBoundary>
           <InfiniteScrollList
             useWindowScroll={isMdWidth}
-            data={list}
+            data={list.slice(0, 9)}
             preserveScrollPosition
             keyExtractor={keyExtractor}
             numColumns={isMdWidth ? 3 : 2}

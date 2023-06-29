@@ -474,15 +474,10 @@ export const HeaderMd = withColorScheme(() => {
               </>
             </Button>
           )}
-          <Button
-            size="regular"
-            variant="text"
-            tw="mt-4 border border-gray-200 dark:border-gray-600"
-            onPress={redirectToCreateDrop}
-          >
+          <Button size="regular" tw="mt-4" onPress={redirectToCreateDrop}>
             <>
-              <Plus width={20} height={20} color={isDark ? "#fff" : "#000"} />
-              <Text tw="ml-2 text-base font-bold text-black dark:text-white">
+              <Plus width={20} height={20} color={isDark ? "#000" : "#fff"} />
+              <Text tw="ml-2 text-base font-bold text-white dark:text-gray-900">
                 Create
               </Text>
             </>

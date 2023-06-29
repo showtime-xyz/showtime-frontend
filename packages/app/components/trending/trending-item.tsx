@@ -46,7 +46,7 @@ export const TrendingItem = ({
 
   return (
     <View
-      tw={["h-full w-full pb-4", tw]}
+      tw={["h-full w-full", tw]}
       style={{
         width: Platform.select({
           web: undefined,

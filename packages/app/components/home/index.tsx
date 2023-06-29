@@ -5,7 +5,6 @@ import {
   InfiniteScrollList,
   ListRenderItemInfo,
 } from "@showtime-xyz/universal.infinite-scroll-list";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useFeed } from "app/hooks/use-feed";
@@ -47,14 +46,7 @@ export const Home = () => {
   );
 
   const ListFooterComponent = useCallback(() => {
-    return (
-      <View
-        style={{ height: Math.max(bottom, 30) }}
-        tw="items-center justify-center"
-      >
-        <Text tw="text-sm text-gray-600 dark:text-gray-400">No more data.</Text>
-      </View>
-    );
+    return <View style={{ height: Math.max(bottom, 30) }} />;
   }, [bottom]);
   const ListEmptyComponent = useCallback(() => {
     return (
@@ -82,7 +74,6 @@ export const Home = () => {
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           estimatedItemSize={600}
-          overscan={8}
           ListHeaderComponent={ListHeaderComponent}
           ListFooterComponent={ListFooterComponent}
           contentContainerStyle={{
@@ -96,7 +87,6 @@ export const Home = () => {
           style={{
             height: Platform.select({
               default: windowHeight - bottomBarHeight,
-              web: isMdWidth ? undefined : windowHeight - bottomBarHeight,
               ios: windowHeight,
             }),
           }}

@@ -11,6 +11,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CreatorChannel as CreatorChannelIcon } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -26,6 +27,7 @@ import { breakpoints } from "design-system/theme";
 import { useJoinChannel } from "../creator-channels/hooks/use-join-channel";
 import { HomeSlider } from "./home-slider";
 
+const INFO_HEIGTH = 230;
 const windowWidth = Dimensions.get("window").width;
 const PopularCreatorItem = ({
   item,
@@ -51,7 +53,7 @@ const PopularCreatorItem = ({
           web: undefined,
           default: width,
         }),
-        height: 230,
+        height: INFO_HEIGTH,
       }}
     >
       <View tw="h-[84px] w-[84px]">
@@ -91,26 +93,50 @@ const PopularCreatorItem = ({
     </View>
   );
 };
+const PopularCreatorSkeletonItem = ({ width = 174 }) => {
+  return (
+    <View
+      style={{
+        height: INFO_HEIGTH,
+        width: width,
+      }}
+    >
+      <Skeleton width={84} height={84} radius={999} />
+      <View tw="h-3" />
+      <Skeleton width={110} height={19} radius={999} />
+      <View tw="h-2" />
+      <Skeleton width={56} height={12} radius={999} />
+      <View tw="h-2.5" />
+      <Skeleton width={150} height={15} radius={999} />
+      <View tw="h-2" />
+      <Skeleton width={80} height={14} radius={999} />
+      <View tw="h-2" />
+      <View tw="absolute bottom-0">
+        <Skeleton width={54} height={18} radius={999} />
+      </View>
+    </View>
+  );
+};
 export const PopularCreators = memo(function PopularCreators() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { data } = useSuggestedChannelsList();
+  const { data, isLoading } = useSuggestedChannelsList();
   const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
   const router = useRouter();
   const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth - 32;
+  const itemWidth = Platform.select({
+    web: undefined,
+    default: pagerWidth / 2,
+  });
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<CreatorChannel>) => (
-      <PopularCreatorItem
-        item={item}
-        index={index}
-        width={Platform.select({ web: undefined, default: pagerWidth / 2 })}
-      />
+      <PopularCreatorItem item={item} index={index} width={itemWidth} />
     ),
-    [pagerWidth]
+    [itemWidth]
   );
   if (data.length === 0) return null;
   return (
-    <View tw="mt-2 w-full pl-4 md:pl-0">
+    <View tw="mt-4 w-full pl-4 md:pl-0">
       <View tw="w-full flex-row items-center justify-between py-4 pr-4">
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           Popular artists
@@ -127,11 +153,20 @@ export const PopularCreators = memo(function PopularCreators() {
         )}
       </View>
       <View tw="mb-2 w-full rounded-2xl">
-        <HomeSlider
-          data={data}
-          slidesPerView={isMdWidth ? 3.5 : 2.2}
-          renderItem={renderItem}
-        />
+        {isLoading ? (
+          <View style={{ height: INFO_HEIGTH }} tw="flex-row overflow-hidden">
+            <PopularCreatorSkeletonItem width={itemWidth} />
+            <PopularCreatorSkeletonItem width={itemWidth} />
+            <PopularCreatorSkeletonItem width={itemWidth} />
+            <PopularCreatorSkeletonItem width={itemWidth} />
+          </View>
+        ) : (
+          <HomeSlider
+            data={data}
+            slidesPerView={isMdWidth ? 3.5 : 2.2}
+            renderItem={renderItem}
+          />
+        )}
       </View>
     </View>
   );

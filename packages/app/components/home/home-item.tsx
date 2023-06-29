@@ -124,7 +124,6 @@ export const HomeItem = ({
             >
               <ListMedia
                 item={nft}
-                resizeMode={ResizeMode.COVER}
                 optimizedWidth={mediaSize * 2}
                 loading={index > 0 ? "lazy" : "eager"}
               />
