@@ -342,6 +342,7 @@ export const HeaderMd = withColorScheme(() => {
             <DropdownMenuContent
               align="center"
               tw="w-48"
+              disableBlurEffect
               side="bottom"
               sideOffset={0}
             >
@@ -414,7 +415,11 @@ export const HeaderMd = withColorScheme(() => {
                     />
                   </View>
                 </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent alignOffset={-8} sideOffset={4}>
+                <DropdownMenuSubContent
+                  disableBlurEffect
+                  alignOffset={-8}
+                  sideOffset={4}
+                >
                   <DropdownMenuItem
                     onSelect={() => setColorScheme("light")}
                     key="nested-group-1"

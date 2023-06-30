@@ -21,19 +21,52 @@ const DropdownMenuGroup = DropdownMenu.Group;
 const DropdownMenuTrigger = DropdownMenu.Trigger;
 
 const DropdownMenuSub = DropdownMenu.Sub;
-const DropdownMenuSubContent = DropdownMenu.SubContent;
+
+const StyledDropdownMenuSubContent = styled(DropdownMenu.SubContent);
+
+const DropdownMenuSubContent = DropdownMenu.create(
+  ({
+    tw,
+    disableBlurEffect,
+    ...props
+  }: { tw?: TW; disableBlurEffect?: boolean } & ComponentProps<
+    typeof DropdownMenu.Content
+  >) => (
+    <StyledDropdownMenuSubContent
+      align="end"
+      {...props}
+      tw={[
+        "animate-zoom-in rounded-2xl p-2 shadow",
+        disableBlurEffect
+          ? "bg-white dark:bg-gray-800"
+          : "dark:shadow-dark bg-white/80 shadow backdrop-blur-md backdrop-saturate-150 backdrop-filter dark:bg-black/80",
+        tw,
+      ].join(" ")}
+    />
+  ),
+  "SubContent"
+);
 
 const StyledDropdownMenuContent = styled(DropdownMenu.Content);
 
 const DropdownMenuContent = DropdownMenu.create(
   ({
     tw,
+    disableBlurEffect,
     ...props
-  }: { tw?: TW } & ComponentProps<typeof DropdownMenu.Content>) => (
+  }: { tw?: TW; disableBlurEffect?: boolean } & ComponentProps<
+    typeof DropdownMenu.Content
+  >) => (
     <StyledDropdownMenuContent
       align="end"
       {...props}
-      tw={["animate-zoom-in", tw].join(" ")}
+      tw={[
+        "animate-zoom-in rounded-2xl p-2 shadow",
+        disableBlurEffect
+          ? "bg-white dark:bg-gray-800"
+          : "dark:shadow-dark bg-white/80 shadow backdrop-blur-md backdrop-saturate-150 backdrop-filter dark:bg-black/80",
+        tw,
+      ].join(" ")}
     />
   ),
   "Content"
