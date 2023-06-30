@@ -2,8 +2,7 @@ appId: io.showtime.development
 ---
 - tapOn:
     point: "51%,92%"
-- tapOn: "Let's go"
-- tapOn: "Create drop"
+- tapOn: "Drops: Free digital collectibles"
 - tapOn: "Upload"
 - tapOn:
     text: "Select Photos…"
@@ -25,3 +24,5 @@ appId: io.showtime.development
     "I agree to the terms and conditions I have the rights to publish this content,\
     \ and understand it will be minted on the Polygon network."
 - tapOn: "Continue"
+- tapOn: "Drop now"
+- assertVisible: "Congrats! Now share it."
