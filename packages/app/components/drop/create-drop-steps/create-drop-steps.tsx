@@ -55,10 +55,9 @@ import { DateTimePicker } from "design-system/date-time-picker";
 import { toast } from "design-system/toast";
 
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
-import { DropPreview } from "../drop-preview";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
 import { MediaPicker } from "./media-picker";
-import { useMusicDropForm } from "./music-drop-form-utils";
+import { getDefaultDate, useMusicDropForm } from "./music-drop-form-utils";
 import { SelectDropType } from "./select-drop-type";
 import { StepProps } from "./types";
 
@@ -67,13 +66,10 @@ type CreateDropStep =
   | "title"
   | "song-uri"
   | "more-options"
-  | "preview"
   | "select-drop";
 
 export const CreateDropSteps = () => {
   const [step, setStep] = useState<CreateDropStep>("select-drop");
-  const [isSaveDrop, setIsSaveDrop] = useState(false);
-  const [isUnlimited, setIsUnlimited] = useState(true);
   const modalContext = useModalScreenContext();
   const {
     control,
@@ -86,6 +82,10 @@ export const CreateDropSteps = () => {
     trigger,
     handleSubmit,
     defaultValues,
+    setIsSaveDrop,
+    isSaveDrop,
+    isUnlimited,
+    setIsUnlimited,
   } = useMusicDropForm();
 
   const Alert = useAlert();
@@ -220,7 +220,7 @@ export const CreateDropSteps = () => {
           setIsSaveDrop={setIsSaveDrop}
           errors={formState.errors}
           trigger={trigger}
-          handleNextStep={() => setStep("preview")}
+          handleNextStep={handleSubmit(onSubmit)}
           handlePrevStep={() => setStep("title")}
           file={file}
           description={description}
@@ -242,39 +242,6 @@ export const CreateDropSteps = () => {
           title={title}
           description={description}
         />
-      );
-    case "preview":
-      return (
-        <Layout onBackPress={() => setStep("song-uri")} title="Preview">
-          <DropPreview
-            title={title}
-            description={description}
-            ctaCopy="Edit Drop"
-            file={file}
-            spotifyUrl={getValues("spotifyUrl")}
-            appleMusicTrackUrl={getValues("appleMusicTrackUrl")}
-            releaseDate={isSaveDrop ? null : getValues("releaseDate")}
-          />
-          <View tw="my-4 px-4">
-            <Button
-              variant="primary"
-              size="regular"
-              disabled={state.status === "loading"}
-              tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-              onPress={handleSubmit(onSubmit)}
-            >
-              {state.status === "loading" ? (
-                <View tw="items-center justify-center">
-                  <Spinner size="small" />
-                </View>
-              ) : state.status === "error" ? (
-                "Failed. Please retry!"
-              ) : (
-                "Drop now"
-              )}
-            </Button>
-          </View>
-        </Layout>
       );
     default:
       return null;
@@ -451,41 +418,6 @@ const CreateDropStepTitle = (props: StepProps) => {
   );
 };
 
-const getDefaultDate = () => {
-  const now = new Date();
-  const day = now.getDay();
-  // Local time 12:00AM the upcoming Friday is ideal.
-  const minus = 5 - day;
-
-  if (day <= 4) {
-    const thisWeek = new Date(
-      new Date(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate() + 1,
-        0,
-        0,
-        0
-      )
-    );
-    const thisWeekFriday = thisWeek.setDate(thisWeek.getDate() + minus);
-    return new Date(thisWeekFriday);
-  }
-  // If not, fallback to 12:00AM local time the next week
-  const nextweek = new Date(
-    new Date(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate() + 1,
-      0,
-      0,
-      0
-    )
-  );
-  const nextFriday = nextweek.setDate(nextweek.getDate() + minus + 7);
-  return new Date(nextFriday);
-};
-
 const CreateDropStepSongURI = (
   props: StepProps & {
     handleMoreOptions: () => void;
@@ -501,6 +433,8 @@ const CreateDropStepSongURI = (
     setIsSaveDrop,
     isSaveDrop,
   } = props;
+  const { state } = useDropNFT();
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const user = useUser();
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
@@ -538,7 +472,6 @@ const CreateDropStepSongURI = (
             <Controller
               key="releaseDate"
               control={control}
-              defaultValue={getDefaultDate()}
               name="releaseDate"
               render={({
                 field: { onChange, value },
@@ -774,7 +707,10 @@ const CreateDropStepSongURI = (
 
       <View tw="mx-4 mt-4">
         <Button
+          variant="primary"
           size="regular"
+          disabled={state.status === "loading"}
+          tw={state.status === "loading" ? "opacity-[0.45]" : ""}
           onPress={async () => {
             const res = await trigger(
               ["releaseDate", "spotifyUrl", "appleMusicTrackUrl"],
@@ -792,7 +728,15 @@ const CreateDropStepSongURI = (
             }
           }}
         >
-          Preview
+          {state.status === "loading" ? (
+            <View tw="items-center justify-center">
+              <Spinner size="small" />
+            </View>
+          ) : state.status === "error" ? (
+            "Failed. Please retry!"
+          ) : (
+            "Drop now"
+          )}
         </Button>
       </View>
 

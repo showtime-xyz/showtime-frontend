@@ -17,7 +17,7 @@ const defaultValues = {
   raffle: false,
 };
 
-const getDefaultDate = () => {
+export const getDefaultDate = () => {
   const now = new Date();
   const day = now.getDay();
   // Local time 12:00AM the upcoming Friday is ideal.
@@ -37,10 +37,24 @@ const getDefaultDate = () => {
     const thisWeekFriday = thisWeek.setDate(thisWeek.getDate() + minus);
     return new Date(thisWeekFriday);
   }
+  // If not, fallback to 12:00AM local time the next week
+  const nextweek = new Date(
+    new Date(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + 1,
+      0,
+      0,
+      0
+    )
+  );
+  const nextFriday = nextweek.setDate(nextweek.getDate() + minus + 7);
+  return new Date(nextFriday);
 };
 
 export const useMusicDropForm = () => {
   const [isSaveDrop, setIsSaveDrop] = useState(false);
+  const [isUnlimited, setIsUnlimited] = useState(true);
 
   const dropValidationSchema = useMemo(
     () =>
@@ -83,6 +97,7 @@ export const useMusicDropForm = () => {
               : {
                   releaseDate: yup
                     .date()
+                    .nullable()
                     .min(
                       getDefaultDate(),
                       "The date you entered is invalid. Please enter a date that is at least 24 hours from now and after the next occurrence of 12:00 AM (midnight)"
@@ -146,5 +161,8 @@ export const useMusicDropForm = () => {
     getValues,
     setIsSaveDrop,
     defaultValues,
+    isSaveDrop,
+    isUnlimited,
+    setIsUnlimited,
   };
 };
