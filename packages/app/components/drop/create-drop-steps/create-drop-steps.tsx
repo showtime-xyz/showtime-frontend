@@ -8,14 +8,21 @@ import {
 
 import * as Clipboard from "expo-clipboard";
 import { Controller } from "react-hook-form";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  enableLayoutAnimations,
+} from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  useIsDarkMode,
+  useIsomorphicLayoutEffect,
+} from "@showtime-xyz/universal.hooks";
 import {
   AppleMusic,
   ArrowLeft,
@@ -107,6 +114,14 @@ export const CreateDropSteps = () => {
   useEffect(() => {
     resetDropState();
   }, [resetDropState]);
+
+  useIsomorphicLayoutEffect(() => {
+    // TODO: remove this when we have new cell renderer in flashlist
+    enableLayoutAnimations(true);
+    return () => {
+      enableLayoutAnimations(false);
+    };
+  }, []);
 
   const onSubmit = async (values: UseDropNFT) => {
     console.log("submitting");
