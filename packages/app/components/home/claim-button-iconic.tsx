@@ -214,7 +214,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
           source={{
             uri: "https://media.showtime.xyz/assets/showtime-abstract.png",
           }}
-          tw="absolute z-0 h-full w-full"
+          style={{ height: "100%", width: "100%" }}
         />
       </View>
       <Showtime height={25} width={25} color={"#000"} />
