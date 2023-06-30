@@ -121,7 +121,7 @@ const PopularCreatorSkeletonItem = ({ width = 174 }) => {
 export const PopularCreators = memo(function PopularCreators() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { data, isLoading } = useSuggestedChannelsList();
+  const { data, isLoading } = useSuggestedChannelsList({ pageSize: 10 });
   const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
   const router = useRouter();
   const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth - 32;
@@ -138,7 +138,7 @@ export const PopularCreators = memo(function PopularCreators() {
   if (data.length === 0) return null;
   return (
     <View tw="mt-4 w-full pl-4 md:pl-0">
-      <View tw="w-full flex-row items-center justify-between py-4 pr-4">
+      <View tw="w-full flex-row items-center justify-between py-4 pr-4 md:pr-0">
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           Popular artists
         </Text>

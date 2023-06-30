@@ -71,19 +71,20 @@ export const useJoinedChannelsList = () => {
   };
 };
 
-const SUGGESTED_PAGE_SIZE = 15;
-export const useSuggestedChannelsList = () => {
-  const channelsFetcher = useCallback((index: number, previousPageData: []) => {
-    if (previousPageData && !previousPageData.length) return null;
-    return `/v1/channels/suggested?page=${
-      index + 1
-    }&limit=${SUGGESTED_PAGE_SIZE}`;
-  }, []);
+export const useSuggestedChannelsList = (params: { pageSize?: number }) => {
+  const pageSize = params?.pageSize || PAGE_SIZE;
+  const channelsFetcher = useCallback(
+    (index: number, previousPageData: []) => {
+      if (previousPageData && !previousPageData.length) return null;
+      return `/v1/channels/suggested?page=${index + 1}&limit=${pageSize}`;
+    },
+    [pageSize]
+  );
 
   const queryState = useInfiniteListQuerySWR<CreatorChannel[]>(
     channelsFetcher,
     {
-      pageSize: SUGGESTED_PAGE_SIZE,
+      pageSize,
     }
   );
   const newData = useMemo(() => {

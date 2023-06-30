@@ -4,6 +4,8 @@ import { useWindowDimensions } from "react-native";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import { clamp } from "@showtime-xyz/universal.utils";
+
 import { Controller } from "app/lib/carousel/controller";
 import { CarouselProps } from "app/lib/carousel/types";
 
@@ -68,8 +70,19 @@ export function HomeSlider({
       <Controller
         allowSlideNext={allowSlideNext}
         allowSlidePrev={allowSlidePrev}
-        prev={() => (swiperRef.current as any)?.swiper.slidePrev()}
-        next={() => (swiperRef.current as any)?.swiper.slideNext()}
+        prev={() => {
+          const prevIndex = (swiperRef.current as any)?.swiper.realIndex ?? 0;
+          (swiperRef.current as any)?.swiper.slideTo(
+            clamp(prevIndex - Math.floor(slidesPerView), 0, data.length - 1)
+          );
+        }}
+        next={() => {
+          const prevIndex = (swiperRef.current as any)?.swiper.realIndex ?? 0;
+
+          (swiperRef.current as any)?.swiper.slideTo(
+            clamp(prevIndex + Math.floor(slidesPerView), 0, data.length - 1)
+          );
+        }}
       />
     </>
   );

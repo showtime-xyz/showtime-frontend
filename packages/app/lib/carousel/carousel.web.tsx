@@ -65,6 +65,7 @@ export function Carousel({
         }}
         className={tw}
         effect={effect}
+        lazyPreloadPrevNext={2}
         // @ts-ignore
         ref={swiperRef}
       >

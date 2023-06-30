@@ -162,7 +162,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const bottomBarHeight = usePlatformBottomHeight();
   const isBlocked = getIsBlocked(profileId);
   const { user } = useUser();
-
+  const { width: scrollbarWidth } = useScrollbarSize();
   const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
     profileId: profileId,
   });
@@ -171,7 +171,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
 
   const contentWidth = useContentWidth();
   const isMdWidth = contentWidth >= breakpoints["md"];
-  const numColumns = width <= breakpoints["lg"] ? 2 : 3;
+  const numColumns =
+    width <= breakpoints["lg"] && width >= breakpoints["md"] ? 2 : 3;
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
@@ -311,10 +312,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <View
           tw="w-full"
           style={
-            {
-              // width: `calc(100% - ${scrollbarWidth}px)`,
-              // marginLeft: scrollbarWidth,
-            }
+            isMdWidth
+              ? {
+                  width: `calc(100% - ${scrollbarWidth}px)`,
+                  marginLeft: scrollbarWidth,
+                }
+              : {}
           }
         >
           <MutateProvider mutate={updateItem}>
@@ -324,7 +327,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               }
             >
               <InfiniteScrollList
-                useWindowScroll={false}
+                useWindowScroll={isMdWidth}
                 ListHeaderComponent={Header}
                 numColumns={1}
                 preserveScrollPosition

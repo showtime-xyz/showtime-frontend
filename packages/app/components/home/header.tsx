@@ -35,7 +35,7 @@ import { Banner, useBanners } from "./hooks/use-banners";
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { data, isLoading } = useTrendingNFTS({});
+  const { data, isLoading } = useTrendingNFTS({ pageSize: 20 });
   const { width: scrollbarWidth } = useScrollbarSize();
   const { data: banners, isLoading: isLoadingBanner } = useBanners();
 
@@ -126,7 +126,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         )}
       </View>
       <View tw="mb-2 w-full pl-4 md:pl-0">
-        <View tw="mt-2 w-full flex-row items-center justify-between py-4 pr-4">
+        <View tw="mt-2 w-full flex-row items-center justify-between py-4 pr-4 md:pr-0">
           <Text tw="text-sm font-bold text-gray-900 dark:text-white">
             Trending
           </Text>
@@ -144,10 +144,10 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         <View tw="w-full rounded-2xl">
           {isLoading ? (
             <View tw="ios:mb-px ios:pb-4 flex-row overflow-hidden">
-              <TrendingSkeletonItem presetWidth={172} />
-              <TrendingSkeletonItem presetWidth={172} />
-              <TrendingSkeletonItem presetWidth={172} />
-              <TrendingSkeletonItem presetWidth={172} />
+              <TrendingSkeletonItem presetWidth={172} tw="mr-2.5" />
+              <TrendingSkeletonItem presetWidth={172} tw="mr-2.5" />
+              <TrendingSkeletonItem presetWidth={172} tw="mr-2.5" />
+              <TrendingSkeletonItem presetWidth={172} tw="mr-2.5" />
             </View>
           ) : data.length > 0 ? (
             <HomeSlider

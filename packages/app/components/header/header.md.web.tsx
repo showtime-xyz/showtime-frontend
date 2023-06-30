@@ -101,7 +101,7 @@ const NotificationsInHeader = () => {
             tw="h-screen w-[332px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
             style={{
               // @ts-ignore
-              boxShadow: "16px 8px 20px rgba(0,0,0,.04)",
+              boxShadow: "rgb(0 0 0 / 10%) 5px 15px 15px",
             }}
           >
             <ErrorBoundary>
@@ -161,7 +161,7 @@ const SearchInHeader = () => {
             tw="h-screen w-[332px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
             style={{
               // @ts-ignore
-              boxShadow: "16px 8px 20px rgba(0,0,0,.04)",
+              boxShadow: "rgb(0 0 0 / 10%) 5px 15px 15px",
             }}
           >
             <ErrorBoundary>
@@ -352,7 +352,7 @@ export const HeaderMd = withColorScheme(() => {
                 >
                   <MenuItemIcon Icon={Settings} />
 
-                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
                     Settings
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
@@ -387,7 +387,7 @@ export const HeaderMd = withColorScheme(() => {
                     }}
                   />
 
-                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
                     Edit Profile
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
@@ -402,7 +402,7 @@ export const HeaderMd = withColorScheme(() => {
                     }}
                   />
 
-                  <DropdownMenuItemTitle tw="w-full font-semibold text-gray-700 dark:text-neutral-300">
+                  <DropdownMenuItemTitle tw="w-full font-semibold text-gray-700 dark:text-neutral-100">
                     Theme
                   </DropdownMenuItemTitle>
 
@@ -420,7 +420,7 @@ export const HeaderMd = withColorScheme(() => {
                     key="nested-group-1"
                   >
                     <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
-                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
                       Light
                     </DropdownMenuItemTitle>
                   </DropdownMenuItem>
@@ -429,7 +429,7 @@ export const HeaderMd = withColorScheme(() => {
                     key="nested-group-2"
                   >
                     <MenuItemIcon Icon={Moon} ios={{ name: "moon" }} />
-                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
                       Dark
                     </DropdownMenuItemTitle>
                   </DropdownMenuItem>
@@ -443,7 +443,7 @@ export const HeaderMd = withColorScheme(() => {
                         name: "circle.righthalf.filled",
                       }}
                     />
-                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
                       System
                     </DropdownMenuItemTitle>
                   </DropdownMenuItem>
@@ -456,7 +456,7 @@ export const HeaderMd = withColorScheme(() => {
                     Icon={LogOut}
                     ios={{ name: "rectangle.portrait.and.arrow.right" }}
                   />
-                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
                     Sign Out
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>

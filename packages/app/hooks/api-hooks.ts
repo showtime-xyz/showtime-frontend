@@ -96,13 +96,19 @@ export const useTrendingCreators = ({ days }: { days: number }) => {
   };
 };
 
-export const useTrendingNFTS = ({ filter }: { filter?: string }) => {
+export const useTrendingNFTS = ({
+  filter,
+  pageSize,
+}: {
+  filter?: string;
+  pageSize?: number;
+}) => {
   const trendingUrlFn = useCallback(() => {
     if (filter === "music") {
-      return "/v3/trending/nfts/music";
+      return `/v3/trending/nfts/music?limit=${pageSize}`;
     }
-    return "/v3/trending/nfts/all";
-  }, [filter]);
+    return `/v3/trending/nfts/all?limit=${pageSize}`;
+  }, [filter, pageSize]);
 
   const { data, isLoading, error, mutate } = useSWR<NFT[]>(
     trendingUrlFn,
@@ -112,8 +118,19 @@ export const useTrendingNFTS = ({ filter }: { filter?: string }) => {
       focusThrottleInterval: 200000,
     }
   );
+  const newData = useMemo(() => {
+    if (pageSize) {
+      return data?.slice(0, pageSize) ?? [];
+    }
+    return data ?? [];
+  }, [data, pageSize]);
 
-  return { data: data ?? [], isLoading, error, mutate };
+  return {
+    data: newData,
+    isLoading,
+    error,
+    mutate,
+  };
 };
 
 export const USER_PROFILE_KEY = "/v4/profile_server/";

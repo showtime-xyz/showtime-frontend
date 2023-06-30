@@ -14,9 +14,7 @@ import {
   TrendingSkeletonItem,
 } from "app/components/trending/trending-item";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
-import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { NFT } from "app/types";
 
@@ -43,11 +41,9 @@ const Header = () => {
   );
 };
 export const Trending = () => {
-  const { height: screenHeight } = useWindowDimensions();
-  const contentWidth = useContentWidth();
+  const { height: screenHeight, width } = useWindowDimensions();
   const bottom = usePlatformBottomHeight();
-  const { width } = useScrollbarSize();
-  const isMdWidth = contentWidth + width > breakpoints["md"];
+  const isMdWidth = width >= breakpoints["md"];
 
   const { data: list, isLoading } = useTrendingNFTS({});
 
@@ -55,45 +51,42 @@ export const Trending = () => {
     (_item: NFT, index: number) => `${index}`,
     []
   );
+  const numColumns = isMdWidth ? 3 : 2;
 
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
+      const marginLeft = isMdWidth ? 0 : index % numColumns === 0 ? 0 : 8;
       return (
         <TrendingItem
           nft={item}
           index={index}
-          tw="mb-4 px-2.5 md:px-0"
-          presetWidth={182}
+          tw="mb-6"
+          style={{ marginLeft: marginLeft }}
         />
       );
     },
-    []
+    [isMdWidth, numColumns]
   );
 
   const ListEmptyComponent = useCallback(() => {
     if (isLoading) {
       return (
-        <View tw="mx-auto w-full max-w-screen-xl justify-center px-4 md:px-0">
-          <View tw="flex-row">
-            <TrendingSkeletonItem />
-            <TrendingSkeletonItem />
-            {isMdWidth && <TrendingSkeletonItem />}
-          </View>
-          <View tw="flex-row">
-            <TrendingSkeletonItem />
-            <TrendingSkeletonItem />
-            {isMdWidth && <TrendingSkeletonItem />}
-          </View>
-          <View tw="flex-row">
-            <TrendingSkeletonItem />
-            <TrendingSkeletonItem />
-            {isMdWidth && <TrendingSkeletonItem />}
-          </View>
-          <View tw="flex-row">
-            <TrendingSkeletonItem />
-            <TrendingSkeletonItem />
-            {isMdWidth && <TrendingSkeletonItem />}
-          </View>
+        <View tw="mx-auto w-full max-w-screen-xl justify-center md:px-0">
+          {new Array(4).fill(0).map((_, index) => (
+            <View
+              tw="mb-6 w-full flex-row justify-between"
+              key={index.toString()}
+            >
+              <TrendingSkeletonItem tw="flex-1" presetWidth={172} />
+              <TrendingSkeletonItem
+                tw="ml-2 flex-1 md:ml-0"
+                presetWidth={172}
+              />
+              {isMdWidth && (
+                <TrendingSkeletonItem tw="flex-1" presetWidth={172} />
+              )}
+            </View>
+          ))}
         </View>
       );
     }
@@ -108,14 +101,18 @@ export const Trending = () => {
         <ErrorBoundary>
           <InfiniteScrollList
             useWindowScroll={isMdWidth}
-            data={list.slice(0, 9)}
+            data={list}
             preserveScrollPosition
             keyExtractor={keyExtractor}
-            numColumns={isMdWidth ? 3 : 2}
+            numColumns={numColumns}
             renderItem={renderItem}
             style={{
               height: screenHeight - Math.max(bottom, 8),
             }}
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+            }}
+            containerTw="px-4 md:px-0"
             ListEmptyComponent={ListEmptyComponent}
             ListHeaderComponent={Header}
             estimatedItemSize={275}
