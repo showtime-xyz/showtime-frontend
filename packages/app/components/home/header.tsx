@@ -88,7 +88,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               loop
               width={pagerWidth}
               height={bannerHeight}
-              autoPlayInterval={4000}
+              autoPlayInterval={5000}
               data={banners}
               controller
               autoPlay

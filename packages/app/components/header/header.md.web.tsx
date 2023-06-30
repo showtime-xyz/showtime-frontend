@@ -293,7 +293,7 @@ export const HeaderMd = withColorScheme(() => {
   );
 
   return (
-    <View tw="fixed top-0 h-full pl-2">
+    <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
       <View
         tw="h-full w-60 overflow-y-auto pl-4"
         style={{ maxHeight: "calc(100vh - 110px)" }}
@@ -353,7 +353,7 @@ export const HeaderMd = withColorScheme(() => {
                 >
                   <MenuItemIcon Icon={Settings} />
 
-                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
+                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
                     Settings
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
@@ -388,7 +388,7 @@ export const HeaderMd = withColorScheme(() => {
                     }}
                   />
 
-                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
+                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
                     Edit Profile
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
@@ -403,7 +403,7 @@ export const HeaderMd = withColorScheme(() => {
                     }}
                   />
 
-                  <DropdownMenuItemTitle tw="w-full font-semibold text-gray-700 dark:text-neutral-100">
+                  <DropdownMenuItemTitle tw="w-full text-gray-700 dark:text-neutral-100">
                     Theme
                   </DropdownMenuItemTitle>
 
@@ -425,7 +425,7 @@ export const HeaderMd = withColorScheme(() => {
                     key="nested-group-1"
                   >
                     <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
-                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
+                    <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
                       Light
                     </DropdownMenuItemTitle>
                   </DropdownMenuItem>
@@ -434,7 +434,7 @@ export const HeaderMd = withColorScheme(() => {
                     key="nested-group-2"
                   >
                     <MenuItemIcon Icon={Moon} ios={{ name: "moon" }} />
-                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
+                    <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
                       Dark
                     </DropdownMenuItemTitle>
                   </DropdownMenuItem>
@@ -448,7 +448,7 @@ export const HeaderMd = withColorScheme(() => {
                         name: "circle.righthalf.filled",
                       }}
                     />
-                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
+                    <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
                       System
                     </DropdownMenuItemTitle>
                   </DropdownMenuItem>
@@ -461,7 +461,7 @@ export const HeaderMd = withColorScheme(() => {
                     Icon={LogOut}
                     ios={{ name: "rectangle.portrait.and.arrow.right" }}
                   />
-                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-100">
+                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
                     Sign Out
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
