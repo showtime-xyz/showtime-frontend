@@ -126,7 +126,7 @@ const Header = memo(function Header() {
 
   return (
     <View tw="items-center bg-white dark:bg-black">
-      <View tw="w-full max-w-screen-lg">
+      <View tw="w-full max-w-screen-xl">
         <ProfileTop
           address={username}
           animationHeaderPosition={animationHeaderPosition}
@@ -225,7 +225,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       index: itemIndex,
     }: ListRenderItemInfo<NFT[] & { loading?: boolean }>) => {
       return (
-        <View tw="mx-auto mb-px max-w-screen-lg flex-row space-x-px px-0 md:space-x-6 md:px-4 ">
+        <View tw="mx-auto mb-px max-w-screen-xl flex-row space-x-px px-0 md:space-x-6 md:px-4 lg:space-x-8">
           {chuckItem.map((item, chuckItemIndex) => (
             <Card
               index={itemIndex}
