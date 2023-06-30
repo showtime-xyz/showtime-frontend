@@ -1,4 +1,4 @@
-import { useRef, useCallback, useMemo } from "react";
+import { useRef, useCallback, useMemo, memo } from "react";
 
 import Animated, {
   useSharedValue,
@@ -145,42 +145,40 @@ const PaginationDotItem: React.FC<PaginationItemProps> = ({
   );
 };
 
-const PaginationRectangleItem: React.FC<PaginationItemProps> = ({
-  animValue,
-  index,
-  length,
-}) => {
-  const width = 24;
-  const animStyle = useAnimatedStyle(() => {
-    let inputRange = [index - 1, index, index + 1];
-    let outputRange = [width / 2, width, width / 2];
+const PaginationRectangleItem = memo<PaginationItemProps>(
+  function PaginationRectangleItem({ animValue, index, length }) {
+    const width = 24;
+    const animStyle = useAnimatedStyle(() => {
+      let inputRange = [index - 1, index, index + 1];
+      let outputRange = [width / 2, width, width / 2];
 
-    if (index === 0 && animValue?.value > length - 1) {
-      inputRange = [length - 1, length, length + 1];
-      outputRange = [width / 2, width, width / 2];
-    }
+      if (index === 0 && animValue?.value > length - 1) {
+        inputRange = [length - 1, length, length + 1];
+        outputRange = [width / 2, width, width / 2];
+      }
 
-    return {
-      width: interpolate(
-        animValue?.value,
-        inputRange,
-        outputRange,
-        Extrapolate.CLAMP
-      ),
-    };
-  }, [animValue, index, length]);
-  return (
-    <View tw="ml-2 h-2 overflow-hidden rounded-full bg-white">
-      <Animated.View
-        style={[
-          {
-            borderRadius: 50,
-            backgroundColor: colors.white,
-            flex: 1,
-          },
-          animStyle,
-        ]}
-      />
-    </View>
-  );
-};
+      return {
+        width: interpolate(
+          animValue?.value,
+          inputRange,
+          outputRange,
+          Extrapolate.CLAMP
+        ),
+      };
+    }, [animValue, index, length]);
+    return (
+      <View tw="ml-2 h-2 overflow-hidden rounded-full bg-white">
+        <Animated.View
+          style={[
+            {
+              borderRadius: 50,
+              backgroundColor: colors.white,
+              flex: 1,
+            },
+            animStyle,
+          ]}
+        />
+      </View>
+    );
+  }
+);

@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, memo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
@@ -34,7 +34,6 @@ const NativeRouteComponent = ({
   children: React.ReactNode;
 }) => {
   const router = useRouter();
-  // const isDark = useIsDarkMode();
   const onItemPress = useCallback(() => {
     router.push(href);
   }, [href, router]);
@@ -42,25 +41,13 @@ const NativeRouteComponent = ({
     return <>{children}</>;
   }
 
-  return (
-    <Pressable
-      onPress={onItemPress}
-      // underlayColor={isDark ? colors.gray[100] : colors.gray[800]}
-      // rippleColor={isDark ? colors.gray[100] : colors.gray[800]}
-    >
-      {children}
-    </Pressable>
-  );
+  return <Pressable onPress={onItemPress}>{children}</Pressable>;
 };
-export const HomeItem = ({
-  nft,
-  mediaSize,
-  index,
-}: {
+export const HomeItem = memo<{
   nft: NFT;
   index: number;
   mediaSize: number;
-}) => {
+}>(function HomeItem({ nft, mediaSize, index }) {
   const description = useMemo(
     () => linkifyDescription(removeTags(nft?.token_description)),
     [nft?.token_description]
@@ -172,7 +159,7 @@ export const HomeItem = ({
       </View>
     </NativeRouteComponent>
   );
-};
+});
 export const HomeItemSketelon = () => {
   const { width } = useWindowDimensions();
 

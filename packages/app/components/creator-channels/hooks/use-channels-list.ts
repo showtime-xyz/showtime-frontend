@@ -71,7 +71,7 @@ export const useJoinedChannelsList = () => {
   };
 };
 
-export const useSuggestedChannelsList = (params: { pageSize?: number }) => {
+export const useSuggestedChannelsList = (params?: { pageSize?: number }) => {
   const pageSize = params?.pageSize || PAGE_SIZE;
   const channelsFetcher = useCallback(
     (index: number, previousPageData: []) => {

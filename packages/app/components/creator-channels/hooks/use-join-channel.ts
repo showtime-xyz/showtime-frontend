@@ -1,5 +1,6 @@
 import useSWRMutation from "swr/mutation";
 
+import { useOnboardingPromise } from "app/components/onboarding";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
@@ -29,10 +30,12 @@ export const useJoinChannel = () => {
   );
   const joinedChannels = useJoinedChannelsList();
   const suggestedChannels = useSuggestedChannelsList();
+  const { onboardingPromise } = useOnboardingPromise();
 
   const handleSubmit = async ({ channelId }: { channelId: number }) => {
     try {
       await loginPromise();
+      await onboardingPromise();
       await trigger({ channelId });
     } catch (e) {
       captureException(e);
