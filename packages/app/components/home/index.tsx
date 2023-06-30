@@ -67,6 +67,12 @@ export const Home = () => {
       </View>
     );
   }, [height, isLoading]);
+  const getItemType = useCallback((_: NFT, index: number) => {
+    if (index === 0) {
+      return "popularCreators";
+    }
+    return "homeItem";
+  }, []);
   return (
     <View tw="w-full flex-1 items-center bg-white dark:bg-black">
       <View tw="md:max-w-screen-content w-full">
@@ -85,6 +91,7 @@ export const Home = () => {
                 default: headerHeight,
               }),
             }}
+            getItemType={getItemType}
             ListEmptyComponent={ListEmptyComponent}
             useWindowScroll={isMdWidth}
             style={{

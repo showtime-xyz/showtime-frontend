@@ -8,7 +8,7 @@ export function HomeSlider<T>({ data, ...rest }: Props<T>) {
     <FlatList
       data={data}
       horizontal
-      decelerationRate={0.9}
+      decelerationRate={0.97}
       showsHorizontalScrollIndicator={false}
       {...rest}
     />
