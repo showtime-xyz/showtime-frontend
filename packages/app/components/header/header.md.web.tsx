@@ -293,7 +293,7 @@ export const HeaderMd = withColorScheme(() => {
   );
 
   return (
-    <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
+    <View tw="fixed top-0 h-full pl-2">
       <View
         tw="h-full w-60 overflow-y-auto pl-4"
         style={{ maxHeight: "calc(100vh - 110px)" }}

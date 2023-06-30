@@ -11,6 +11,8 @@ import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import { ListMedia } from "app/components/media";
 import { RouteComponent } from "app/components/route-component";
+import { DESKTOP_CONTENT_WIDTH } from "app/constants/layout";
+import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { NFT } from "app/types";
@@ -26,7 +28,7 @@ type TrendingItemProps = ViewProps & {
   index: number;
   nft: NFT;
   width?: number;
-  presetWidth?: number;
+  numColumns: number;
   tw?: string;
 };
 export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
@@ -34,7 +36,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   nft,
   width,
   tw = "",
-  presetWidth = 172,
+  numColumns = 3,
   style,
   ...rest
 }) {
@@ -43,7 +45,13 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   );
   const { width: windowWidth } = useWindowDimensions();
   const isMdWidth = windowWidth > breakpoints["md"];
-  const mediaWidth = isMdWidth ? presetWidth : (windowWidth - 32 - 16) / 2;
+  const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth;
+  const spacing = (isMdWidth ? 0 : 32) + 24 * (numColumns - 1);
+  const mediaWidth =
+    numColumns % 1 === 0
+      ? (pagerWidth - spacing) / numColumns
+      : pagerWidth / numColumns - 16;
+
   const router = useRouter();
   return (
     <View
@@ -133,11 +141,18 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   );
 });
 
-export const TrendingSkeletonItem = memo<{ presetWidth?: number } & ViewProps>(
-  function TrendingSkeletonItem({ presetWidth = 182, tw = "", ...rest }) {
+export const TrendingSkeletonItem = memo<{ numColumns: number } & ViewProps>(
+  function TrendingSkeletonItem({ tw = "", numColumns, ...rest }) {
     const { width: windowWidth } = useWindowDimensions();
     const isMdWidth = windowWidth > breakpoints["md"];
-    const mediaWidth = isMdWidth ? presetWidth : (windowWidth - 32 - 16) / 2;
+    const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth;
+
+    const spacing = (isMdWidth ? 0 : 32) + 24 * (numColumns - 1);
+    const mediaWidth =
+      numColumns % 1 === 0
+        ? (pagerWidth - spacing) / numColumns
+        : pagerWidth / numColumns - 16;
+
     return (
       <View tw={["", tw]} {...rest}>
         <Skeleton width={mediaWidth} height={mediaWidth} radius={16} />

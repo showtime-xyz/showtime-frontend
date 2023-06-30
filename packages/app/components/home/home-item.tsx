@@ -67,7 +67,7 @@ export const HomeItem = memo<{
       href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
     >
       <View tw="mb-2 mt-6 px-4 md:px-0">
-        <View tw="flex-row items-center">
+        <View tw="flex-row items-center" style={{ maxWidth: mediaSize }}>
           <AvatarHoverCard
             username={nft?.creator_username || nft?.creator_address_nonens}
             url={nft.creator_img_url}
@@ -76,7 +76,7 @@ export const HomeItem = memo<{
           <View tw="ml-2 justify-center">
             <Link
               href={`/@${nft.creator_username ?? nft.creator_address}`}
-              tw="flex-row items-center justify-center"
+              tw="flex-row items-center"
             >
               <Text tw="text-sm font-medium text-gray-900 dark:text-white">
                 {getCreatorUsernameFromNFT(nft)}

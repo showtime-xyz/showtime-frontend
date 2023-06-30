@@ -48,7 +48,7 @@ export function HomeSlider({
         height={height}
         slidesPerView={slidesPerView}
         className="h-full w-full"
-        spaceBetween={10}
+        spaceBetween={12}
         ref={swiperRef}
         onProgress={onProgress}
       >

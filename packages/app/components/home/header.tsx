@@ -38,7 +38,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { data, isLoading } = useTrendingNFTS({ pageSize: 20 });
   const { width: scrollbarWidth } = useScrollbarSize();
   const { data: banners, isLoading: isLoadingBanner } = useBanners();
-
+  const numColumns = isMdWidth ? 3.25 : 2.25;
   const router = useRouter();
   const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
   const pagerWidth = isMdWidth
@@ -51,9 +51,10 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         index={index}
         width={Platform.select({ web: undefined, default: pagerWidth / 2 })}
         tw={index === 0 && Platform.OS !== "web" ? "ml-4 md:ml-0" : ""}
+        numColumns={numColumns}
       />
     ),
-    [pagerWidth]
+    [pagerWidth, numColumns]
   );
   const navigateToDetail = (banner: Banner) => {
     if (banner.type === "drop") {
@@ -146,17 +147,17 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           {isLoading ? (
             <View tw="flex-row overflow-hidden">
               <TrendingSkeletonItem
-                presetWidth={172}
-                tw="ml-4 mr-2.5 md:ml-0"
+                numColumns={numColumns}
+                tw="ml-4 mr-5 md:ml-0"
               />
-              <TrendingSkeletonItem presetWidth={172} tw="mr-2.5" />
-              <TrendingSkeletonItem presetWidth={172} tw="mr-2.5" />
-              <TrendingSkeletonItem presetWidth={172} tw="mr-2.5" />
+              <TrendingSkeletonItem numColumns={numColumns} tw="mr-5" />
+              <TrendingSkeletonItem numColumns={numColumns} tw="mr-5" />
+              <TrendingSkeletonItem numColumns={numColumns} tw="mr-5" />
             </View>
           ) : data.length > 0 ? (
             <HomeSlider
               data={data}
-              slidesPerView={isMdWidth ? 3.24 : 2.2}
+              slidesPerView={numColumns}
               renderItem={renderItem}
             />
           ) : (

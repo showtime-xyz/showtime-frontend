@@ -62,6 +62,7 @@ export const Trending = () => {
           index={index}
           tw="mb-6"
           style={{ marginLeft: marginLeft }}
+          numColumns={numColumns}
         />
       );
     },
@@ -77,13 +78,13 @@ export const Trending = () => {
               tw="mb-6 w-full flex-row justify-between"
               key={index.toString()}
             >
-              <TrendingSkeletonItem tw="flex-1" presetWidth={172} />
+              <TrendingSkeletonItem numColumns={numColumns} tw="flex-1" />
               <TrendingSkeletonItem
-                tw="ml-2 flex-1 md:ml-0"
-                presetWidth={172}
+                numColumns={numColumns}
+                tw="ml-3 flex-1 md:ml-0"
               />
               {isMdWidth && (
-                <TrendingSkeletonItem tw="flex-1" presetWidth={172} />
+                <TrendingSkeletonItem numColumns={numColumns} tw="flex-1" />
               )}
             </View>
           ))}
@@ -93,7 +94,7 @@ export const Trending = () => {
     return (
       <EmptyPlaceholder title={"No drops, yet."} tw="h-[50vh]" hideLoginBtn />
     );
-  }, [isLoading, isMdWidth]);
+  }, [isLoading, isMdWidth, numColumns]);
 
   return (
     <View tw="min-h-screen w-full bg-white dark:bg-black">
