@@ -50,7 +50,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         nft={item}
         index={index}
         width={Platform.select({ web: undefined, default: pagerWidth / 2 })}
-        tw={index === 0 ? "ml-4 md:ml-0" : ""}
+        tw={index === 0 && Platform.OS !== "web" ? "ml-4 md:ml-0" : ""}
       />
     ),
     [pagerWidth]

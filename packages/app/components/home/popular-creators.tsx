@@ -150,7 +150,7 @@ export const PopularCreators = memo(function PopularCreators() {
         item={item}
         index={index}
         width={itemWidth}
-        tw={index === 0 ? "ml-4 md:ml-0" : ""}
+        tw={index === 0 && Platform.OS !== "web" ? "ml-4 md:ml-0" : ""}
       />
     ),
     [itemWidth]

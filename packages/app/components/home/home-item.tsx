@@ -132,7 +132,7 @@ export const HomeItem = memo<{
               href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
             >
               <View
-                tw="overflow-hidden rounded-2xl"
+                tw="overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-900"
                 style={{
                   width: mediaSize,
                   height: mediaSize,

@@ -54,7 +54,10 @@ export function HomeSlider({
       >
         {data.map((item, index) => (
           <SwiperSlide
-            className="flex items-center justify-center"
+            className={[
+              "flex items-center justify-center",
+              index === 0 ? "ml-4 md:ml-0" : "",
+            ].join(" ")}
             style={{ height }}
             key={index.toString()}
           >
