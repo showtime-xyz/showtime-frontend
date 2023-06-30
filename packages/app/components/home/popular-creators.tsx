@@ -14,7 +14,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import {
   useSuggestedChannelsList,
@@ -32,11 +32,14 @@ const windowWidth = Dimensions.get("window").width;
 const PopularCreatorItem = ({
   item,
   width,
+  style,
+  tw = "",
+  ...rest
 }: {
   item: CreatorChannel;
   width: number;
   index: number;
-}) => {
+} & ViewProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const joinChannel = useJoinChannel();
@@ -47,15 +50,19 @@ const PopularCreatorItem = ({
 
   return (
     <Pressable
-      tw="w-full"
-      style={{
-        width: Platform.select({
-          web: undefined,
-          default: width,
-        }),
-        height: INFO_HEIGTH,
-      }}
+      tw={["w-full", tw]}
+      style={[
+        {
+          width: Platform.select({
+            web: undefined,
+            default: width,
+          }),
+          height: INFO_HEIGTH,
+        },
+        style,
+      ]}
       onPress={() => router.push(`/@${item.owner.username}`)}
+      {...rest}
     >
       <View tw="h-[84px] w-[84px]">
         <Avatar url={item?.owner?.img_url} size={84} />
@@ -94,13 +101,21 @@ const PopularCreatorItem = ({
     </Pressable>
   );
 };
-const PopularCreatorSkeletonItem = ({ width = 174 }) => {
+const PopularCreatorSkeletonItem = ({
+  width = 174,
+  style,
+  ...rest
+}: { width?: number } & ViewProps) => {
   return (
     <View
-      style={{
-        height: INFO_HEIGTH,
-        width: width,
-      }}
+      style={[
+        {
+          height: INFO_HEIGTH,
+          width: width,
+        },
+        style,
+      ]}
+      {...rest}
     >
       <Skeleton width={84} height={84} radius={999} />
       <View tw="h-3" />
@@ -131,14 +146,19 @@ export const PopularCreators = memo(function PopularCreators() {
   });
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<CreatorChannel>) => (
-      <PopularCreatorItem item={item} index={index} width={itemWidth} />
+      <PopularCreatorItem
+        item={item}
+        index={index}
+        width={itemWidth}
+        tw={index === 0 ? "ml-4 md:ml-0" : ""}
+      />
     ),
     [itemWidth]
   );
   if (data.length === 0) return null;
   return (
-    <View tw="mt-4 w-full pl-4 md:pl-0">
-      <View tw="w-full flex-row items-center justify-between py-4 pr-4 md:pr-0">
+    <View tw="mt-2 w-full md:pl-0">
+      <View tw="w-full flex-row items-center justify-between px-4 py-4 md:px-0">
         <Text tw="text-sm font-bold text-gray-900 dark:text-white">
           Popular artists
         </Text>
@@ -156,7 +176,7 @@ export const PopularCreators = memo(function PopularCreators() {
       <View tw="mb-2 w-full rounded-2xl">
         {isLoading ? (
           <View style={{ height: INFO_HEIGTH }} tw="flex-row overflow-hidden">
-            <PopularCreatorSkeletonItem width={itemWidth} />
+            <PopularCreatorSkeletonItem width={itemWidth} tw="ml-4 md:ml-0" />
             <PopularCreatorSkeletonItem width={itemWidth} />
             <PopularCreatorSkeletonItem width={itemWidth} />
             <PopularCreatorSkeletonItem width={itemWidth} />
