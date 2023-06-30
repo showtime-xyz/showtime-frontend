@@ -8,6 +8,7 @@ import {
 
 import * as Clipboard from "expo-clipboard";
 import { Controller } from "react-hook-form";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
@@ -23,7 +24,6 @@ import {
   Close,
   Raffle,
   Spotify,
-  Success,
   Twitter,
   Link,
 } from "@showtime-xyz/universal.icon";
@@ -33,6 +33,7 @@ import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Switch } from "@showtime-xyz/universal.switch";
@@ -41,6 +42,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { Creator } from "app/components/card/rows/elements/creator";
+import { Media } from "app/components/media";
 import { Preview } from "app/components/preview";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
@@ -156,9 +159,20 @@ export const CreateDropSteps = () => {
 
   if (state.status === "success") {
     return (
-      <Layout closeIcon onBackPress={() => router.pop()} title="Success">
-        <DropSuccess contractAddress={state.edition?.contract_address} />
-      </Layout>
+      <Animated.View
+        style={{ flex: 1 }}
+        entering={FadeIn}
+        exiting={FadeOut}
+        key={step}
+      >
+        <Layout
+          closeIcon
+          onBackPress={() => modalContext?.pop()}
+          title="Success"
+        >
+          <DropSuccess contractAddress={state.edition?.contract_address} />
+        </Layout>
+      </Animated.View>
     );
   }
 
@@ -184,64 +198,87 @@ export const CreateDropSteps = () => {
       );
     case "media":
       return (
-        <CreateDropStepMedia
-          trigger={trigger}
-          control={control}
-          errors={formState.errors}
-          handleNextStep={() => setStep("title")}
-          handleFileChange={handleFileChange}
-          handlePrevStep={() => {
-            modalContext?.snapToIndex(0);
-            setStep("select-drop");
-          }}
-          description={description}
-          file={file}
-          title={title}
-        />
+        <Animated.View
+          key={step}
+          style={{ flex: 1 }}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          <CreateDropStepMedia
+            trigger={trigger}
+            control={control}
+            errors={formState.errors}
+            handleNextStep={() => setStep("title")}
+            handleFileChange={handleFileChange}
+            handlePrevStep={() => {
+              modalContext?.snapToIndex(0);
+              setStep("select-drop");
+            }}
+            description={description}
+            file={file}
+            title={title}
+          />
+        </Animated.View>
       );
     case "title":
       return (
-        <CreateDropStepTitle
-          control={control}
-          errors={formState.errors}
-          trigger={trigger}
-          handleNextStep={() => setStep("song-uri")}
-          handlePrevStep={() => setStep("media")}
-          file={file}
-          title={title}
-          description={description}
-        />
+        <Animated.View
+          key={step}
+          style={{ flex: 1 }}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          <CreateDropStepTitle
+            control={control}
+            errors={formState.errors}
+            trigger={trigger}
+            handleNextStep={() => setStep("song-uri")}
+            handlePrevStep={() => setStep("media")}
+            file={file}
+            title={title}
+            description={description}
+          />
+        </Animated.View>
       );
     case "song-uri":
       return (
-        <CreateDropStepSongURI
-          control={control}
-          isSaveDrop={isSaveDrop}
-          setIsSaveDrop={setIsSaveDrop}
-          errors={formState.errors}
-          trigger={trigger}
-          handleNextStep={handleSubmit(onSubmit)}
-          handlePrevStep={() => setStep("title")}
-          file={file}
-          description={description}
-          title={title}
-          handleMoreOptions={() => setStep("more-options")}
-        />
+        <Animated.View
+          key={step}
+          style={{ flex: 1 }}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          <CreateDropStepSongURI
+            control={control}
+            isSaveDrop={isSaveDrop}
+            setIsSaveDrop={setIsSaveDrop}
+            errors={formState.errors}
+            trigger={trigger}
+            handleNextStep={handleSubmit(onSubmit)}
+            handlePrevStep={() => setStep("title")}
+            file={file}
+            description={description}
+            title={title}
+            handleMoreOptions={() => setStep("more-options")}
+          />
+        </Animated.View>
       );
     case "more-options":
       return (
-        <CreateDropMoreOptions
-          control={control}
-          isUnlimited={isUnlimited}
-          setIsUnlimited={setIsUnlimited}
-          errors={formState.errors}
-          trigger={trigger}
-          handleNextStep={() => setStep("song-uri")}
-          file={file}
-          handlePrevStep={() => setStep("song-uri")}
-          title={title}
-          description={description}
-        />
+        <Animated.View style={{ flex: 1 }} entering={FadeIn} exiting={FadeOut}>
+          <CreateDropMoreOptions
+            control={control}
+            isUnlimited={isUnlimited}
+            setIsUnlimited={setIsUnlimited}
+            errors={formState.errors}
+            trigger={trigger}
+            handleNextStep={() => setStep("song-uri")}
+            file={file}
+            handlePrevStep={() => setStep("song-uri")}
+            title={title}
+            description={description}
+          />
+        </Animated.View>
       );
     default:
       return null;
@@ -900,8 +937,9 @@ const Layout = (props: {
   closeIcon?: boolean;
 }) => {
   const isDark = useIsDarkMode();
+  const insets = useSafeAreaInsets();
   return (
-    <View tw="flex-1">
+    <View tw="flex-1" style={{ paddingBottom: insets.bottom }}>
       <View tw="mx-4 my-8 flex-row items-center">
         <Pressable tw="absolute" onPress={props.onBackPress}>
           {props.closeIcon ? (
@@ -958,16 +996,34 @@ const DropSuccess = (props: { contractAddress?: string }) => {
   }, [qrCodeUrl]);
 
   return (
-    <View tw="flex-1 items-center justify-center p-4 px-8">
-      <View tw="w-full flex-1 justify-center">
-        <View style={{ rowGap: 20 }} tw="mt-4 items-center">
-          <Success color={isDark ? "white" : "black"} height={96} width={96} />
-          <Text tw="text-4xl text-black dark:text-white">
-            Your drop is live!
-          </Text>
-          <Text tw="text-gray-900 dark:text-gray-100">Now share it.</Text>
+    <BottomSheetScrollView>
+      <View tw="items-center justify-center p-4 px-8">
+        <View
+          style={{ borderWidth: 1 }}
+          tw="mt-4 w-full overflow-hidden rounded-xl border-gray-500"
+        >
+          <Media
+            item={nft}
+            resizeMode="cover"
+            numColumns={1}
+            sizeStyle={{
+              height: 220,
+            }}
+            theme="dark"
+          />
+          <View tw="px-4">
+            <Creator nft={nft} shouldShowDateCreated={false} />
+            <View tw="mt-[-4px] pb-4">
+              <Text tw="font-semibold text-gray-800 dark:text-gray-100">
+                {nft?.token_name}
+              </Text>
+              <Text tw="text-gray-800 dark:text-gray-100">
+                {nft?.token_description}
+              </Text>
+            </View>
+          </View>
         </View>
-        <View tw="mt-16 w-full items-center" style={{ rowGap: 24 }}>
+        <View tw="mt-4 w-full items-center" style={{ rowGap: 16 }}>
           <Button
             tw="w-full"
             size="regular"
@@ -986,36 +1042,123 @@ const DropSuccess = (props: { contractAddress?: string }) => {
               Tweet
             </Text>
           </Button>
-          <Button
+          {/* <Button
             variant="primary"
             tw="w-full"
             size="regular"
             onPress={onCopyLink}
           >
             <View tw="mr-1">
-              <Link color="black" width={20} height={20} />
+              <InstagramColorful width={20} height={20} />
+            </View>
+            Share Instagram
+          </Button> */}
+          <Button
+            variant="outlined"
+            tw="w-full"
+            size="regular"
+            onPress={onCopyLink}
+          >
+            <View tw="mr-1">
+              <Link color={isDark ? "white" : "black"} width={20} height={20} />
             </View>
             Copy Link
           </Button>
+          <Button
+            variant="outlined"
+            tw="mt-8 w-full"
+            size="regular"
+            onPress={() => {
+              if (!nft) return;
+
+              if (Platform.OS !== "web") {
+                router.pop();
+                router.push(`${getNFTSlug(nft)}`);
+              } else {
+                router.replace(`${getNFTSlug(nft)}`);
+              }
+            }}
+          >
+            View Drop
+          </Button>
         </View>
       </View>
-      <Button
-        variant="tertiary"
-        tw="web:mt-16 ios:mb-16 ios:mt-auto android:mb-16 android:mt-auto w-full"
-        size="regular"
-        onPress={() => {
-          if (!nft) return;
-
-          if (Platform.OS !== "web") {
-            router.pop();
-            router.push(`${getNFTSlug(nft)}`);
-          } else {
-            router.replace(`${getNFTSlug(nft)}`);
-          }
-        }}
-      >
-        View Drop
-      </Button>
-    </View>
+    </BottomSheetScrollView>
   );
 };
+
+// const dummyNFT = {
+//   multiple_owners_list: [
+//     {
+//       quantity: 1,
+//       profile_id: 3366447,
+//       name: "Nishan Bende",
+//       img_url:
+//         "https://lh3.googleusercontent.com/AEnH2_JXVpF55uZc0WWhws48yF2TXccF5HbCrz7BXfmPgQQFMr_gDBsQHY6Y5zXT7T_OLz6pQpdr9BML3oIGfUqzI989xPrr3AN4",
+//       username: "nishanbende",
+//       verified: true,
+//       address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
+//       wallet_address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
+//     },
+//   ],
+//   like_count: 0,
+//   comment_count: 0,
+//   nft_id: 283274803,
+//   contract_address: "0x7EF25B27D5168f52481e342E40570591fAD6CE71",
+//   token_id: "0",
+//   token_name: "Moon drop",
+//   token_description: "Moon drop",
+//   token_img_url: null,
+//   token_img_original_url: null,
+//   token_has_video: false,
+//   token_animation_url: null,
+//   animation_preview_url: null,
+//   blurhash: null,
+//   token_background_color: null,
+//   token_aspect_ratio: 1.966189856957087,
+//   token_hidden: false,
+//   creator_id: 3366447,
+//   creator_name: "Nishan Bende",
+//   creator_address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
+//   creator_address_nonens: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
+//   creator_img_url:
+//     "https://lh3.googleusercontent.com/AEnH2_JXVpF55uZc0WWhws48yF2TXccF5HbCrz7BXfmPgQQFMr_gDBsQHY6Y5zXT7T_OLz6pQpdr9BML3oIGfUqzI989xPrr3AN4",
+//   creator_followers_count: 651,
+//   multiple_owners: false,
+//   token_creator_followers_only: false,
+//   creator_username: "nishanbende",
+//   creator_verified: true,
+//   nsfw: false,
+//   owner_id: null,
+//   owner_name: null,
+//   owner_address: null,
+//   owner_address_nonens: null,
+//   owner_username: null,
+//   owner_verified: false,
+//   owner_count: null,
+//   owner_img_url: null,
+//   token_count: null,
+//   token_ko_edition: null,
+//   token_edition_identifier: null,
+//   source_url: "ipfs://QmYpX8J7vsaGYaFyVAsHveGZtRZ8hURfyEgSqCP1cx2KqE",
+//   still_preview_url: null,
+//   mime_type: "image/webp",
+//   chain_identifier: "80001",
+//   chain_name: "mumbai",
+//   token_listing_identifier: null,
+//   collection_name: null,
+//   collection_slug: null,
+//   collection_img_url: null,
+//   contract_is_creator: false,
+//   creator_airdrop_edition_address: "0x7EF25B27D5168f52481e342E40570591fAD6CE71",
+//   creator_airdrop_edition_contract_version: 2,
+//   token_created: "2023-06-30T09:15:36.676Z",
+//   is_user_owner: null,
+//   slug: "moon-drop-1688116536",
+//   video_urls: null,
+//   image_path: "46f0b6f0-6a40-4435-b0b9-b4aae9777d58.png",
+//   image_url:
+//     "https://media-stage.showtime.xyz/46f0b6f0-6a40-4435-b0b9-b4aae9777d58.png",
+//   cloudinary_video_url: null,
+//   cloudinary_thumbnail_url: null,
+// };
