@@ -368,12 +368,12 @@ const CreateDropStepMedia = (
 const CreateDropStepTitle = (props: StepProps) => {
   const { width: windowWidth } = useWindowDimensions();
   const { control, errors, handlePrevStep, handleNextStep, trigger } = props;
-  const mediaDimension = Math.min(347, windowWidth - 32);
+  const mediaDimension = Math.min(200, windowWidth - 32);
 
   return (
     <Layout onBackPress={handlePrevStep} title="Create">
       <ScrollView tw="px-4">
-        <View tw="mt-8 items-center">
+        <View tw="items-center">
           <Preview
             file={props.file}
             width={mediaDimension}
@@ -395,7 +395,7 @@ const CreateDropStepTitle = (props: StepProps) => {
                   errorText={errors.title?.message}
                   value={value}
                   onChangeText={onChange}
-                  numberOfLines={2}
+                  numberOfLines={1}
                   multiline
                 />
               );
