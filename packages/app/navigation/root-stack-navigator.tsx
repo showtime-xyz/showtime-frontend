@@ -41,7 +41,6 @@ import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 
 import { DropFreeScreen } from "../screens/drop-free";
-import { DropMusicScreen } from "../screens/drop-music";
 import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
@@ -190,12 +189,6 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="dropExplanation"
           component={DropExplanationScreen}
-        />
-
-        <Stack.Screen
-          name="dropMusic"
-          component={DropMusicScreen}
-          options={{ gestureEnabled: false }}
         />
 
         <Stack.Screen

@@ -37,7 +37,6 @@ import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropFreeScreen } from "app/screens/drop-free";
-import { DropMusicScreen } from "app/screens/drop-music";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
@@ -202,7 +201,6 @@ function App({ Component, pageProps, router }: AppProps) {
         <ClaimLimitExplanationScreen />
         <LikersScreen />
         <ReportScreen />
-        <DropMusicScreen />
         <DropFreeScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />
