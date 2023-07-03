@@ -31,15 +31,12 @@ import {
   Close,
   Raffle,
   Spotify,
-  Twitter,
-  Link,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import Spinner from "@showtime-xyz/universal.spinner";
@@ -65,6 +62,7 @@ import { DateTimePicker } from "design-system/date-time-picker";
 import { toast } from "design-system/toast";
 
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
+import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
 import { MediaPicker } from "./media-picker";
 import { getDefaultDate, useMusicDropForm } from "./music-drop-form-utils";
@@ -103,7 +101,7 @@ export const CreateDropSteps = () => {
   const description = getValues("description");
   const file = getValues("file");
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
-  const router = useRouter();
+  const isDark = useIsDarkMode();
 
   const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
     watch,
@@ -180,13 +178,19 @@ export const CreateDropSteps = () => {
         exiting={FadeOut}
         key={step}
       >
-        <Layout
-          closeIcon
-          onBackPress={() => modalContext?.pop()}
-          title="Success"
+        <Pressable
+          tw="absolute left-4 top-4"
+          onPress={() => modalContext?.pop()}
         >
-          <DropSuccess contractAddress={state.edition?.contract_address} />
-        </Layout>
+          <Close color={isDark ? "white" : "black"} width={24} height={24} />
+        </Pressable>
+        <DropViewShare
+          title={getValues("title")}
+          description={getValues("description")}
+          file={getValues("file")}
+          contractAddress={state.edition?.contract_address}
+          dropCreated
+        />
       </Animated.View>
     );
   }
@@ -976,131 +980,131 @@ const Layout = (props: {
   );
 };
 
-const DropSuccess = (props: { contractAddress?: string }) => {
-  const contractAddress = props.contractAddress;
-  const isDark = useIsDarkMode();
-  const { data: edition } = useCreatorCollectionDetail(contractAddress);
-  const router = useRouter();
-  const { data } = useNFTDetailByTokenId({
-    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
-    tokenId: "0",
-    contractAddress: edition?.creator_airdrop_edition.contract_address,
-  });
-  const nft = data?.data.item;
-  const qrCodeUrl = useMemo(() => {
-    if (!nft) return "";
-    const url = new URL(getNFTURL(nft));
-    if (edition && edition.password) {
-      url.searchParams.set("password", edition?.password);
-    }
-    return url;
-  }, [edition, nft]);
+// const DropSuccess = (props: { contractAddress?: string }) => {
+//   const contractAddress = props.contractAddress;
+//   const isDark = useIsDarkMode();
+//   const { data: edition } = useCreatorCollectionDetail(contractAddress);
+//   const router = useRouter();
+//   const { data } = useNFTDetailByTokenId({
+//     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+//     tokenId: "0",
+//     contractAddress: edition?.creator_airdrop_edition.contract_address,
+//   });
+//   const nft = dummyNFT ?? data?.data.item;
+//   const qrCodeUrl = useMemo(() => {
+//     if (!nft) return "";
+//     const url = new URL(getNFTURL(nft));
+//     if (edition && edition.password) {
+//       url.searchParams.set("password", edition?.password);
+//     }
+//     return url;
+//   }, [edition, nft]);
 
-  const shareWithTwitterIntent = useCallback(() => {
-    Linking.openURL(
-      getTwitterIntent({
-        url: qrCodeUrl.toString(),
-        message: `Just dropped "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
-      })
-    );
-  }, [nft?.token_name, qrCodeUrl]);
+//   const shareWithTwitterIntent = useCallback(() => {
+//     Linking.openURL(
+//       getTwitterIntent({
+//         url: qrCodeUrl.toString(),
+//         message: `Just dropped "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
+//       })
+//     );
+//   }, [nft?.token_name, qrCodeUrl]);
 
-  const onCopyLink = useCallback(async () => {
-    await Clipboard.setStringAsync(qrCodeUrl.toString());
-    toast.success("Copied!");
-  }, [qrCodeUrl]);
+//   const onCopyLink = useCallback(async () => {
+//     await Clipboard.setStringAsync(qrCodeUrl.toString());
+//     toast.success("Copied!");
+//   }, [qrCodeUrl]);
 
-  return (
-    <BottomSheetScrollView>
-      <View tw="items-center justify-center p-4 px-8">
-        <View
-          style={{ borderWidth: 1 }}
-          tw="mt-4 w-full overflow-hidden rounded-xl border-gray-500"
-        >
-          <Media
-            item={nft}
-            resizeMode="cover"
-            numColumns={1}
-            sizeStyle={{
-              height: 220,
-            }}
-            theme="dark"
-          />
-          <View tw="px-4">
-            <Creator nft={nft} shouldShowDateCreated={false} />
-            <View tw="mt-[-4px] pb-4">
-              <Text tw="font-semibold text-gray-800 dark:text-gray-100">
-                {nft?.token_name}
-              </Text>
-              <Text tw="text-gray-800 dark:text-gray-100">
-                {nft?.token_description}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View tw="mt-4 w-full items-center" style={{ rowGap: 16 }}>
-          <Button
-            tw="w-full"
-            size="regular"
-            onPress={shareWithTwitterIntent}
-            style={{
-              backgroundColor: "#4A99E9",
-            }}
-          >
-            <Twitter color="white" width={20} height={20} />
-            <Text
-              tw="ml-1 text-sm font-semibold"
-              style={{
-                color: "white",
-              }}
-            >
-              Tweet
-            </Text>
-          </Button>
-          {/* <Button
-            variant="primary"
-            tw="w-full"
-            size="regular"
-            onPress={onCopyLink}
-          >
-            <View tw="mr-1">
-              <InstagramColorful width={20} height={20} />
-            </View>
-            Share Instagram
-          </Button> */}
-          <Button
-            variant="outlined"
-            tw="w-full"
-            size="regular"
-            onPress={onCopyLink}
-          >
-            <View tw="mr-1">
-              <Link color={isDark ? "white" : "black"} width={20} height={20} />
-            </View>
-            Copy Link
-          </Button>
-          <Button
-            variant="outlined"
-            tw="mt-8 w-full"
-            size="regular"
-            onPress={() => {
-              if (!nft) return;
+//   return (
+//     <BottomSheetScrollView>
+//       <View tw="items-center justify-center p-4 px-8">
+//         <View
+//           style={{ borderWidth: 1 }}
+//           tw="mt-4 w-full overflow-hidden rounded-xl border-gray-500"
+//         >
+//           <Media
+//             item={nft}
+//             resizeMode="cover"
+//             numColumns={1}
+//             sizeStyle={{
+//               height: 220,
+//             }}
+//             theme="dark"
+//           />
+//           <View tw="px-4">
+//             <Creator nft={nft} shouldShowDateCreated={false} />
+//             <View tw="mt-[-4px] pb-4">
+//               <Text tw="font-semibold text-gray-800 dark:text-gray-100">
+//                 {nft?.token_name}
+//               </Text>
+//               <Text tw="text-gray-800 dark:text-gray-100">
+//                 {nft?.token_description}
+//               </Text>
+//             </View>
+//           </View>
+//         </View>
+//         <View tw="mt-4 w-full items-center" style={{ rowGap: 16 }}>
+//           <Button
+//             tw="w-full"
+//             size="regular"
+//             onPress={shareWithTwitterIntent}
+//             style={{
+//               backgroundColor: "#4A99E9",
+//             }}
+//           >
+//             <Twitter color="white" width={20} height={20} />
+//             <Text
+//               tw="ml-1 text-sm font-semibold"
+//               style={{
+//                 color: "white",
+//               }}
+//             >
+//               Tweet
+//             </Text>
+//           </Button>
+//           <Button
+//             variant="primary"
+//             tw="w-full"
+//             size="regular"
+//             onPress={onCopyLink}
+//           >
+//             <View tw="mr-1">
+//               <InstagramColorful width={20} height={20} />
+//             </View>
+//             Share Instagram
+//           </Button>
+//           <Button
+//             variant="outlined"
+//             tw="w-full"
+//             size="regular"
+//             onPress={onCopyLink}
+//           >
+//             <View tw="mr-1">
+//               <Link color={isDark ? "white" : "black"} width={20} height={20} />
+//             </View>
+//             Copy Link
+//           </Button>
+//           <Button
+//             variant="outlined"
+//             tw="mt-8 w-full"
+//             size="regular"
+//             onPress={() => {
+//               if (!nft) return;
 
-              if (Platform.OS !== "web") {
-                router.pop();
-                router.push(`${getNFTSlug(nft)}`);
-              } else {
-                router.replace(`${getNFTSlug(nft)}`);
-              }
-            }}
-          >
-            View Drop
-          </Button>
-        </View>
-      </View>
-    </BottomSheetScrollView>
-  );
-};
+//               if (Platform.OS !== "web") {
+//                 router.pop();
+//                 router.push(`${getNFTSlug(nft)}`);
+//               } else {
+//                 router.replace(`${getNFTSlug(nft)}`);
+//               }
+//             }}
+//           >
+//             View Drop
+//           </Button>
+//         </View>
+//       </View>
+//     </BottomSheetScrollView>
+//   );
+// };
 
 // const dummyNFT = {
 //   multiple_owners_list: [

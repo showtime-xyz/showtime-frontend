@@ -63,7 +63,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
               paddingVertical: 24,
             }}
             {...fromCSS(
-              `linear-gradient(161deg, #00D27A 0%, #5836FF 44.04%, #C0F 95.40%);`
+              `linear-gradient(147deg, #00D27A 0%, #5836FF 44.04%, #C0F 95.40%)`
             )}
           >
             <View tw="ml-auto">
@@ -104,7 +104,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                 paddingVertical: 24,
               }}
               {...fromCSS(
-                `linear-gradient(147deg, rgba(97, 212, 164, 1) 0%, rgba(139, 116, 255, 1) 40.06%, rgba(219, 73, 255, 1) 100%);`
+                `linear-gradient(147deg, #c5e1e7 0%, #d3c6ff 40.06%, #e5bdff 100%)`
               )}
             >
               <View tw="ml-auto">
