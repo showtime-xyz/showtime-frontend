@@ -55,8 +55,9 @@ import {
   removeTags,
 } from "app/utilities";
 
+export type ClaimType = "appleMusic" | "spotify" | "free";
 type Query = {
-  type: "appleMusic" | "spotify" | "free";
+  type: ClaimType;
 };
 
 const { useParam } = createParam<Query>();

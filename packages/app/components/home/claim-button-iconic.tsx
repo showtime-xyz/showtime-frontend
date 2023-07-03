@@ -10,6 +10,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-button";
 import { ClaimContext } from "app/context/claim-context";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { NFT } from "app/types";
@@ -17,9 +18,11 @@ import { formatClaimNumber } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
+import { ClaimType } from "../claim/claim-form";
 import { FeedSocialButton } from "../feed-social-button";
 
 export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
+  const { data: myInfoData } = useMyInfo();
   const router = useRouter();
   const redirectToClaimDrop = useRedirectToClaimDrop();
 
@@ -73,21 +76,37 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     [claimStates, dispatch, edition, redirectToClaimDrop]
   );
   const claimDrop = useCallback(() => {
-    let type: "free" | "appleMusic" | "spotify" = "free";
-    if (edition?.gating_type === "spotify_save") {
+    let type: ClaimType = "free";
+
+    if (
+      myInfoData?.data.profile.has_spotify_token &&
+      (edition?.gating_type === "spotify_save" ||
+        edition?.gating_type === "spotify_presave" ||
+        edition?.gating_type === "multi_provider_music_save" ||
+        edition?.gating_type === "multi_provider_music_presave")
+    ) {
       type = "spotify";
-    } else if (edition?.gating_type === "multi_provider_music_presave") {
-      type = edition?.creator_spotify_id ? "spotify" : "appleMusic";
-    } else if (edition?.gating_type === "multi_provider_music_save") {
-      type = edition?.spotify_track_url ? "spotify" : "appleMusic";
     } else if (
-      edition?.gating_type === "music_presave" ||
+      myInfoData?.data.profile.has_apple_music_token &&
+      (edition?.gating_type === "multi_provider_music_save" ||
+        edition?.gating_type === "multi_provider_music_presave")
+    ) {
+      type = "appleMusic";
+    } else if (
+      edition?.gating_type === "spotify_save" ||
       edition?.gating_type === "spotify_presave"
     ) {
       type = "spotify";
+    } else {
+      type =
+        edition?.creator_spotify_id || edition?.spotify_track_url
+          ? "spotify"
+          : "appleMusic";
     }
     handleCollectPress(type);
   }, [
+    myInfoData?.data.profile.has_spotify_token,
+    myInfoData?.data.profile.has_apple_music_token,
     edition?.gating_type,
     edition?.creator_spotify_id,
     edition?.spotify_track_url,
