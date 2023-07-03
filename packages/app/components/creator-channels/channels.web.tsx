@@ -366,13 +366,13 @@ export const CreatorChannels = memo(() => {
   if (!isLgWidth) {
     if (router.query["channelId"]) {
       return (
-        <View tw="w-full flex-1 border-l border-gray-200 dark:border-gray-800">
+        <View tw="w-full flex-1">
           <Messages />
         </View>
       );
     }
     return (
-      <View tw="w-full border-l border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-black">
+      <View tw="h-screen w-full border-l border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-black">
         <CreatorChannelsListMobile />
       </View>
     );

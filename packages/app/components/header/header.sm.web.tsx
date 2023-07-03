@@ -51,7 +51,7 @@ export const HeaderSm = withColorScheme(
       <>
         <View
           tw={[
-            "fixed top-0 z-10 flex w-full flex-row justify-between bg-white px-4 py-2 dark:bg-black md:hidden",
+            "fixed top-0 z-10 flex w-full flex-row justify-between bg-white/80 px-4 py-2 backdrop-blur-md dark:bg-black/70 md:hidden",
           ]}
         >
           <HeaderLeft canGoBack={canGoBack} />

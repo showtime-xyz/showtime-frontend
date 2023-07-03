@@ -18,8 +18,6 @@ import {
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
-import { WebFooter } from "./links-footer.web";
-
 const Footer = () => {
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -51,7 +49,7 @@ const Footer = () => {
       style={{
         height: MOBILE_WEB_TABS_HEIGHT,
       }}
-      tw="safe-bottom fixed bottom-0 left-0 right-0 z-50 h-12 flex-row items-center justify-between px-4 pt-1 backdrop-blur-md"
+      tw="safe-bottom fixed bottom-0 left-0 right-0 z-50 h-12 flex-row items-center justify-between bg-white/80 px-4 pt-1 backdrop-blur-md dark:bg-black/70"
     >
       <HomeTabBarIcon color={color} focused={router.pathname === "/"} />
       <CreatorChannelsTabBarIcon
