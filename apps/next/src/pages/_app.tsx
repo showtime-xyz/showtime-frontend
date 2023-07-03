@@ -171,22 +171,21 @@ function App({ Component, pageProps, router }: AppProps) {
       <AppProviders>
         <Container>
           <View tw="mx-auto flex-col md:flex-row">
-            <header>
-              <Header
-                canGoBack={
-                  router.pathname === "/search" ||
-                  router.pathname.split("/").length - 1 >= 2
-                }
-              />
-            </header>
-            <main
-              className="flex w-full items-center md:ml-auto md:w-[calc(100vw-248px)]"
+            <Header
+              canGoBack={
+                router.pathname === "/search" ||
+                router.pathname.split("/").length - 1 >= 2
+              }
+            />
+
+            <View
+              tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]"
               style={{
                 minHeight: "100svh",
               }}
             >
               <Component {...pageProps} />
-            </main>
+            </View>
           </View>
           <Footer />
         </Container>
