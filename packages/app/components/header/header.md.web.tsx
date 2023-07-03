@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, Suspense, useMemo } from "react";
-import { Platform } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
 import * as Popover from "@radix-ui/react-popover";
 import { SvgProps } from "react-native-svg";
@@ -222,7 +222,7 @@ export const HeaderMd = withColorScheme(() => {
   const iconColor = isDark ? "#fff" : "#000";
   const { setColorScheme } = useColorScheme();
   const { logout } = useAuth();
-
+  const { height } = useWindowDimensions();
   const HOME_ROUTES = useMemo(
     () =>
       [
@@ -294,10 +294,7 @@ export const HeaderMd = withColorScheme(() => {
 
   return (
     <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
-      <View
-        tw="h-full w-60 overflow-y-auto pl-4"
-        style={{ maxHeight: "calc(100vh - 110px)" }}
-      >
+      <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
         <Link href="/" tw="flex-row items-center pt-8">
           <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
         </Link>
@@ -525,42 +522,48 @@ export const HeaderMd = withColorScheme(() => {
             </View>
           </View>
         </View>
-      </View>
-      <View tw="absolute bottom-0 inline-block pl-3">
-        <View tw="inline-block">
-          {links.map((item) => (
-            <TextLink
-              href={item.link}
-              target="_blank"
-              tw="text-xs text-gray-500 dark:text-gray-300"
-              key={item.title}
-            >
-              {item.title}
-              {` · `}
-            </TextLink>
-          ))}
-        </View>
-        <Text tw="text-xs text-gray-500 dark:text-gray-300">
-          © 2023 Showtime Technologies, Inc.
-        </Text>
-        <View tw="mt-2 inline-block w-full">
-          {social.map((item) => (
-            <Link
-              href={item.link}
-              hrefAttrs={{
-                target: "_blank",
-                rel: "noreferrer",
-              }}
-              key={item.title}
-              tw="inline-block w-1/4"
-            >
-              {item?.icon({
-                color: colors.gray[400],
-                width: 20,
-                height: 20,
-              })}
-            </Link>
-          ))}
+        <View
+          tw={[
+            "absolute bottom-0 mt-6 inline-block",
+            !isAuthenticated || height > 880 ? "absolute" : "relative",
+          ]}
+          style={{}}
+        >
+          <View tw="inline-block">
+            {links.map((item) => (
+              <TextLink
+                href={item.link}
+                target="_blank"
+                tw="text-xs text-gray-500 dark:text-gray-300"
+                key={item.title}
+              >
+                {item.title}
+                {` · `}
+              </TextLink>
+            ))}
+          </View>
+          <Text tw="text-xs text-gray-500 dark:text-gray-300">
+            © 2023 Showtime Technologies, Inc.
+          </Text>
+          <View tw="mt-2 inline-block w-full">
+            {social.map((item) => (
+              <Link
+                href={item.link}
+                hrefAttrs={{
+                  target: "_blank",
+                  rel: "noreferrer",
+                }}
+                key={item.title}
+                tw="inline-block w-1/4"
+              >
+                {item?.icon({
+                  color: colors.gray[400],
+                  width: 20,
+                  height: 20,
+                })}
+              </Link>
+            ))}
+          </View>
         </View>
       </View>
     </View>
