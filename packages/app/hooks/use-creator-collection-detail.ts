@@ -36,6 +36,7 @@ export type CreatorEditionResponse = {
   spinamp_track_url: string | null; // this will be removed after the airdrop
   presave_release_date: string | null;
   raffles?: Raffle[];
+  is_editable?: boolean;
 };
 
 export function useCreatorCollectionDetail(editionAddress?: string) {
