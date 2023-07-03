@@ -37,7 +37,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
       <DropdownMenuContent loop sideOffset={8}>
         <DropdownMenuItem onSelect={props.onEditNickname} key="nickname">
           <MenuItemIcon Icon={Edit} ios={{ name: "highlighter" }} />
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Edit nickname
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -49,7 +49,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
             key="export_key"
           >
             <MenuItemIcon Icon={Wallet} ios={{ name: "person.badge.key" }} />
-            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
               Export Private Key
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -63,7 +63,7 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
           destructive
         >
           <MenuItemIcon Icon={Trash} ios={{ name: "trash" }} />
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Delete Wallet
           </DropdownMenuItemTitle>
         </DropdownMenuItem>

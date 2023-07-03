@@ -35,7 +35,7 @@ import { Banner, useBanners } from "./hooks/use-banners";
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { data, isLoading } = useTrendingNFTS({ pageSize: 20 });
+  const { data, isLoading } = useTrendingNFTS({ pageSize: 8 });
   const { width: scrollbarWidth } = useScrollbarSize();
   const { data: banners, isLoading: isLoadingBanner } = useBanners();
   const numColumns = isMdWidth ? 3.25 : 2.25;

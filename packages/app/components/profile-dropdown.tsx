@@ -16,9 +16,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
-import { useFollow } from "app/hooks/use-follow";
 import { useShare } from "app/hooks/use-share";
-import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import type { Profile } from "app/types";
 
@@ -92,7 +90,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
               name: "square.and.arrow.up",
             }}
           />
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Share
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -114,7 +112,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
               name: isBlocked ? "circle" : "circle.slash",
             }}
           />
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             {isBlocked ? "Unblock User" : "Block User"}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -136,7 +134,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
           key="report"
         >
           <MenuItemIcon Icon={Flag} ios={{ name: "flag" }} />
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Report
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -159,7 +157,7 @@ function ProfileDropdown({ user, tw = "" }: Props) {
                 name: isFollowing ? "person.badge.minus" : "person.badge.plus",
               }}
             />
-            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
               {isFollowing ? "Unfollow User" : "Follow User"}
             </DropdownMenuItemTitle>
           </DropdownMenuItem>

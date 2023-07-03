@@ -8,8 +8,6 @@ import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-
 import "./carousel.css";
 import { Controller } from "./controller";
 import { CarouselProps } from "./types";

@@ -18,11 +18,14 @@ import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
 import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
 
+import { breakpoints } from "design-system/theme";
+
 import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { ClaimedBy } from "../feed-item/claimed-by";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 import { FollowButtonSmall } from "../follow-button-small";
 import { ListMedia } from "../media";
+import { NFTDropdown } from "../nft-dropdown";
 import { ContentType } from "./content-type";
 import { FeedEngagementIcons } from "./engagement-icons";
 
@@ -48,6 +51,8 @@ export const HomeItem = memo<{
   index: number;
   mediaSize: number;
 }>(function HomeItem({ nft, mediaSize, index }) {
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
   const description = useMemo(
     () => linkifyDescription(removeTags(nft?.token_description)),
     [nft?.token_description]
@@ -66,8 +71,11 @@ export const HomeItem = memo<{
     <NativeRouteComponent
       href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
     >
-      <View tw="mb-2 mt-6 px-4 md:px-0">
-        <View tw="flex-row items-center" style={{ maxWidth: mediaSize }}>
+      <View
+        tw="mb-2 mt-6 px-4 md:px-0"
+        style={{ maxWidth: isMdWidth ? mediaSize : undefined }}
+      >
+        <View tw="flex-row items-center">
           <AvatarHoverCard
             username={nft?.creator_username || nft?.creator_address_nonens}
             url={nft.creator_img_url}
@@ -103,6 +111,7 @@ export const HomeItem = memo<{
             tw="ml-auto"
           />
         </View>
+
         <View tw="mt-3">
           <RouteComponent
             as={getNFTSlug(nft)}
@@ -160,9 +169,7 @@ export const HomeItem = memo<{
     </NativeRouteComponent>
   );
 });
-export const HomeItemSketelon = () => {
-  const { width } = useWindowDimensions();
-
+export const HomeItemSketelon = ({ mediaSize = 500 }) => {
   return (
     <View tw="mb-8">
       <View tw="mb-3 flex-row items-center">
@@ -175,18 +182,18 @@ export const HomeItemSketelon = () => {
         <Skeleton tw="ml-auto" width={74} height={22} radius={999} show />
       </View>
       <Skeleton width={200} height={20} radius={4} show />
-      <Skeleton
-        width={Math.min(width, 400)}
-        height={16}
-        radius={4}
-        show
-        tw="my-3"
-      />
+      <Skeleton width={mediaSize} height={16} radius={4} show tw="my-3" />
       <Skeleton width={300} height={16} radius={4} show />
       <Skeleton width={160} height={20} radius={4} show tw="my-3" />
       <View tw="flex-row items-center">
-        <Skeleton width={300} height={300} radius={16} show />
+        <Skeleton width={mediaSize} height={mediaSize} radius={16} show />
         <View tw="ml-4">
+          <View tw="mb-4">
+            <Skeleton height={56} width={56} radius={999} show={true} />
+            <View tw="mt-2 items-center">
+              <Skeleton height={16} width={32} radius={6} show={true} />
+            </View>
+          </View>
           <View tw="mb-4">
             <Skeleton height={56} width={56} radius={999} show={true} />
             <View tw="mt-2 items-center">

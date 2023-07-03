@@ -54,8 +54,8 @@ export const Home = () => {
       <View tw="mt-6 px-4 md:px-0" style={{ height: height - 200 }}>
         {isLoading ? (
           <>
-            <HomeItemSketelon />
-            <HomeItemSketelon />
+            <HomeItemSketelon mediaSize={mediaSize} />
+            <HomeItemSketelon mediaSize={mediaSize} />
           </>
         ) : (
           <EmptyPlaceholder
@@ -66,7 +66,7 @@ export const Home = () => {
         )}
       </View>
     );
-  }, [height, isLoading]);
+  }, [height, isLoading, mediaSize]);
   const getItemType = useCallback((_: NFT, index: number) => {
     if (index === 0) {
       return "popularCreators";

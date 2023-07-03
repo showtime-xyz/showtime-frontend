@@ -40,7 +40,7 @@ export const DropdownMenu = (props: AddressMenuProps) => {
           destructive
         >
           <MenuItemIcon Icon={Trash} ios={{ name: "trash" }} />
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             {ctaCopy}
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
