@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from "react";
+import { memo, useCallback } from "react";
 import {
   useWindowDimensions,
   Platform,

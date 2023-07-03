@@ -35,11 +35,6 @@ export const FeedEngagementIcons = memo<EngagementIconsProps>(
             <View tw="h-0.5" />
             <Sendv2 color="#000" />
           </FeedSocialButton>
-          <NFTDropdown nft={nft} edition={edition}>
-            <FeedSocialButton>
-              <MoreHorizontal color="#000" width={24} height={24} />
-            </FeedSocialButton>
-          </NFTDropdown>
         </View>
       </View>
     );

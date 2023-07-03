@@ -8644,7 +8644,7 @@ __metadata:
     resize-observer-polyfill: ^1.5.1
     screenfull: ^6.0.2
     setimmediate: ^1.0.5
-    swiper: 9.4.1
+    swiper: ^10.0.3
     swr: ^2.2.0
     tailwindcss: ^3.3.2
     viem: ^1.2.1
@@ -31403,13 +31403,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ssr-window@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "ssr-window@npm:4.0.2"
-  checksum: df182600927f4f3225224cf8c02338ea637c9750519505bbfb9a9236741a2a7ec088386fb948bca7b447b8303d9109e7dc7672e3de041c79ac2a0e03665af7d2
-  languageName: node
-  linkType: hard
-
 "ssri@npm:^8.0.1":
   version: 8.0.1
   resolution: "ssri@npm:8.0.1"
@@ -32143,12 +32136,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swiper@npm:9.4.1":
-  version: 9.4.1
-  resolution: "swiper@npm:9.4.1"
-  dependencies:
-    ssr-window: ^4.0.2
-  checksum: 1180b3b766f25cbe636fafbb56adbddf8a240077c504a335a62d1773f4452df1bd9ca09bccfe86478c3b9401879c4e8f7ed3824e74299f8b48953e8fc7f08bc3
+"swiper@npm:^10.0.3":
+  version: 10.0.3
+  resolution: "swiper@npm:10.0.3"
+  checksum: 895688762302bc403517074db9811b6c69ba91869c7f2871286f2ba63da50ce62042b5b45afb3dcad626a3ec84cdcec3f776de7977472ebffe4fec60cdffbef3
   languageName: node
   linkType: hard
 

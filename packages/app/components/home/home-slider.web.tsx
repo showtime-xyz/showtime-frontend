@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useLayoutEffect } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { useWindowDimensions } from "react-native";
 
 import "swiper/css";
@@ -48,16 +48,15 @@ export function HomeSlider({
         height={height}
         slidesPerView={slidesPerView}
         className="h-full w-full"
-        spaceBetween={12}
+        spaceBetween={16}
+        slidesOffsetBefore={isMdWidth ? 0 : 16}
+        slidesOffsetAfter={isMdWidth ? 0 : 16}
         ref={swiperRef}
         onProgress={onProgress}
       >
         {data.map((item, index) => (
           <SwiperSlide
-            className={[
-              "flex items-center justify-center",
-              index === 0 ? "ml-4 md:ml-0" : "",
-            ].join(" ")}
+            className="flex items-center justify-center"
             style={{ height }}
             key={index.toString()}
           >

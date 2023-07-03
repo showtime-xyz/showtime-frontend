@@ -12,7 +12,6 @@ import { View, ViewProps } from "@showtime-xyz/universal.view";
 import { ListMedia } from "app/components/media";
 import { RouteComponent } from "app/components/route-component";
 import { DESKTOP_CONTENT_WIDTH } from "app/constants/layout";
-import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { NFT } from "app/types";
@@ -51,7 +50,6 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
     numColumns % 1 === 0
       ? (pagerWidth - spacing) / numColumns
       : pagerWidth / numColumns - 16;
-
   const router = useRouter();
   return (
     <View
@@ -103,7 +101,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
             router.push(`/@${nft.creator_username ?? nft.creator_address}`)
           }
           numberOfLines={1}
-          tw="text-13 inline-block max-w-[128px] flex-nowrap overflow-hidden text-ellipsis whitespace-nowrap font-medium text-gray-900 dark:text-white"
+          tw="text-13 inline-block max-w-[114px] font-medium text-gray-900 dark:text-white"
         >
           {getCreatorUsernameFromNFT(nft)}
         </Text>

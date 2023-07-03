@@ -2,9 +2,11 @@ import { useMemo, useCallback, memo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -53,6 +55,7 @@ export const HomeItem = memo<{
 }>(function HomeItem({ nft, mediaSize, index }) {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+  const isDark = useIsDarkMode();
   const description = useMemo(
     () => linkifyDescription(removeTags(nft?.token_description)),
     [nft?.token_description]
@@ -71,22 +74,23 @@ export const HomeItem = memo<{
     <NativeRouteComponent
       href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
     >
-      <View
-        tw="mb-2 mt-6 px-4 md:px-0"
-        style={{ maxWidth: isMdWidth ? mediaSize : undefined }}
-      >
+      <View tw="mb-2 mt-6 px-4 md:px-0">
         <View tw="flex-row items-center">
           <AvatarHoverCard
             username={nft?.creator_username || nft?.creator_address_nonens}
             url={nft.creator_img_url}
             size={40}
           />
+
           <View tw="ml-2 justify-center">
             <Link
               href={`/@${nft.creator_username ?? nft.creator_address}`}
               tw="flex-row items-center"
             >
-              <Text tw="text-sm font-medium text-gray-900 dark:text-white">
+              <Text
+                numberOfLines={1}
+                tw="max-w-[150px] text-sm font-medium text-gray-900 dark:text-white md:max-w-none"
+              >
                 {getCreatorUsernameFromNFT(nft)}
               </Text>
               {nft.creator_verified ? (
@@ -104,15 +108,22 @@ export const HomeItem = memo<{
               {`${nft?.creator_followers_count} Followers`}
             </Text>
           </View>
-
-          <FollowButtonSmall
-            profileId={nft.creator_id}
-            name={nft.creator_username}
-            tw="ml-auto"
-          />
+          <View tw="ml-auto flex-row items-center">
+            <FollowButtonSmall
+              profileId={nft.creator_id}
+              name={nft.creator_username}
+              tw="mr-4"
+            />
+            <NFTDropdown
+              nft={nft}
+              edition={edition}
+              iconSize={20}
+              iconColor={isDark ? colors.gray[100] : colors.gray[900]}
+            />
+          </View>
         </View>
 
-        <View tw="mt-3">
+        <View tw="mt-3" style={{ maxWidth: isMdWidth ? mediaSize : undefined }}>
           <RouteComponent
             as={getNFTSlug(nft)}
             href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
@@ -200,14 +211,11 @@ export const HomeItemSketelon = ({ mediaSize = 500 }) => {
               <Skeleton height={16} width={32} radius={6} show={true} />
             </View>
           </View>
-          <View tw="mb-4">
+          <View>
             <Skeleton height={56} width={56} radius={999} show={true} />
             <View tw="mt-2 items-center">
               <Skeleton height={16} width={32} radius={6} show={true} />
             </View>
-          </View>
-          <View>
-            <Skeleton height={56} width={56} radius={999} show={true} />
           </View>
         </View>
       </View>

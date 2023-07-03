@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import { View } from "react-native";
 
-import { Pagination, EffectFade, Autoplay } from "swiper";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
+import { Pagination, EffectFade, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "./carousel.css";
