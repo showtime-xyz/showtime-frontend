@@ -74,7 +74,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                 <Spotify color={"white"} width={22} height={22} />
               </View>
             </View>
-            <Text tw="text-lg text-white">Pre-Save Drop</Text>
+            <Text tw="text-lg font-bold text-white">Pre-Save Drop</Text>
             <View tw="right-4 ml-auto">
               <ChevronRight color={"white"} width={24} height={24} />
             </View>
@@ -108,7 +108,9 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
               )}
             >
               <View tw="ml-auto">
-                <Text tw="text-lg text-black">Digital art collectible</Text>
+                <Text tw="text-lg font-bold text-black">
+                  Digital art collectible
+                </Text>
               </View>
               <View tw="right-4 ml-auto">
                 <ChevronRight color={"black"} width={24} height={24} />
