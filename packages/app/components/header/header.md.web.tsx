@@ -43,6 +43,7 @@ import { Notifications } from "app/components/notifications";
 import { Search } from "app/components/search";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useFooter } from "app/hooks/use-footer";
+import { useNotifications } from "app/hooks/use-notifications";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
@@ -63,6 +64,8 @@ import { withColorScheme } from "../memo-with-theme";
 
 const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { hasUnreadNotification } = useNotifications();
+
   const router = useRouter();
   const isDark = useIsDarkMode();
   const prevPath = useRef(router.pathname);
@@ -89,7 +92,13 @@ const NotificationsInHeader = () => {
             "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
           ].join(" ")}
         >
-          <Icon color={isDark ? "#fff" : "#000"} width={24} height={24} />
+          <View>
+            <Icon color={isDark ? "#fff" : "#000"} width={24} height={24} />
+            <View
+              tw="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-amber-500 "
+              style={{ opacity: hasUnreadNotification ? 1 : 0 }}
+            />
+          </View>
           <Text tw={["ml-4 text-lg text-black dark:text-white"]}>
             Notifications
           </Text>
