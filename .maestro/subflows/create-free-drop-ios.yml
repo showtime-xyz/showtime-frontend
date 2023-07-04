@@ -21,9 +21,11 @@ appId: io.showtime.development
 - tapOn: "Why should people collect this drop?"
 - inputText: "This is a test drop description. Keeping it longer to test some features. Hoping this long works or if I should add a few more words!"
 - tapOn: "Description"
+- swipe:
+    start: 50%, 40% # From (90% of width, 50% of height)
+    end: 50%, 10% # To (10% of width, 50% of height)
 - tapOn:
-    "I have the rights to publish this content, and understand it will be minted\
-    \ on the Polygon network."
+    id: "i-agree-checkbox"
 - tapOn: "Continue"
 - tapOn: "Drop now"
 - assertVisible: "Congrats! Now share it."
