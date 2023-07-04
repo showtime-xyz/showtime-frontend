@@ -142,6 +142,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
             </Text>
           </>
         }
+        buttonTw="bg-gray-100"
         {...rest}
       >
         <Text tw="w-[28px] text-center text-xs font-semibold text-[#E40000]">
@@ -168,6 +169,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
             </Text>
           </>
         }
+        buttonTw="bg-gray-100"
         {...rest}
       >
         <Text tw="text-xs font-semibold text-gray-600">Expired</Text>
@@ -229,14 +231,14 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       buttonTw="dark:bg-white bg-black"
       {...rest}
     >
-      <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full ">
-        {/* <Image
+      {/* <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full ">
+        <Image
           source={{
             uri: "https://media.showtime.xyz/assets/showtime-abstract.png",
           }}
           style={{ height: "100%", width: "100%" }}
-        /> */}
-      </View>
+        />
+      </View> */}
       <Showtime height={25} width={25} color={isDark ? "#000" : "#fff"} />
     </FeedSocialButton>
   );
