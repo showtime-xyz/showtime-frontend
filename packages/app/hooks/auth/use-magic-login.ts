@@ -80,7 +80,7 @@ export function useMagicLogin() {
         ? BYPASS_EMAIL_WITH_INSECURE_KEYS
         : email;
 
-      const did = await magicInstance.auth.loginWithMagicLink({
+      const did = await magicInstance.auth.loginWithEmailOTP({
         email: overrideEmail,
       });
 

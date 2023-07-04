@@ -33,7 +33,7 @@ export const AddEmailModal = () => {
       });
 
       try {
-        const did = await magic.auth.loginWithMagicLink({ email });
+        const did = await magic.auth.loginWithEmailOTP({ email });
 
         if (did) {
           await addEmail(email, did);
