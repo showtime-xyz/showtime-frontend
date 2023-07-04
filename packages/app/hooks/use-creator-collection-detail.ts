@@ -37,6 +37,7 @@ export type CreatorEditionResponse = {
   presave_release_date: string | null;
   raffles?: Raffle[];
   is_editable?: boolean;
+  is_onchain?: boolean;
 };
 
 export function useCreatorCollectionDetail(editionAddress?: string) {

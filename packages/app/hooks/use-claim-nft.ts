@@ -260,10 +260,11 @@ export const useClaimNFT = (edition: IEdition) => {
           dispatch({ type: "error", error: error.message });
         })
         .then((res) => {
-          console.log(res);
-          toast.success("Collected!");
-          dispatch({ type: "success", mint: res.mint });
-          closeModal?.();
+          if (res) {
+            toast.success("Collected!");
+            dispatch({ type: "success", mint: res.mint });
+            closeModal?.();
+          }
         });
     }
   };

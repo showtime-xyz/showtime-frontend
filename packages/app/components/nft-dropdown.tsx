@@ -244,7 +244,8 @@ function NFTDropdown({
 
           {nft.multiple_owners_list &&
             nft.multiple_owners_list.length > 0 &&
-            nft.contract_address && (
+            nft.contract_address &&
+            edition?.is_onchain && (
               <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
                 <MenuItemIcon
                   Icon={OpenSea}
