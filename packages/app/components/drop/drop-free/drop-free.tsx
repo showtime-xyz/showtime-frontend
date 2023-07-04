@@ -714,7 +714,6 @@ export const DropFree = () => {
                         <Checkbox
                           onChange={(v) => onChange(v)}
                           checked={value}
-                          aria-label="I agree to the terms and conditions"
                         />
 
                         <Text tw="px-4 text-gray-600 dark:text-gray-400">
