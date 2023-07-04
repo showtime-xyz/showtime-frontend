@@ -5685,60 +5685,60 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@magic-ext/oauth@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "@magic-ext/oauth@npm:10.1.0"
+"@magic-ext/oauth@npm:^12.2.1":
+  version: 12.2.1
+  resolution: "@magic-ext/oauth@npm:12.2.1"
   dependencies:
-    "@magic-sdk/types": ^14.1.0
-  checksum: 597e04aea5804e74c145413cfc6bec6556ea42327e3a63514d3288c6d549cd9748f56eea45d484d2370394032e4807bb80ab56929c84d3dc7a53ef14cac5a36c
+    "@magic-sdk/types": ^15.6.0
+  checksum: 6574a8282fb8d3c8035905264cbab2def0fe4cad4a0ed1cf40cdfaf810314d9ec2fa0ba24aa62cf3085f9338d5ccd5b4fae29c5e9edcc8aa0bb3adb12fd9356a
   languageName: node
   linkType: hard
 
-"@magic-ext/react-native-expo-oauth@npm:^8.1.0":
-  version: 8.1.0
-  resolution: "@magic-ext/react-native-expo-oauth@npm:8.1.0"
+"@magic-ext/react-native-expo-oauth@npm:^13.2.1":
+  version: 13.2.1
+  resolution: "@magic-ext/react-native-expo-oauth@npm:13.2.1"
   dependencies:
     "@magic-sdk/types": ^10.0.0
     crypto-js: ^3.3.0
     expo-application: ^5.0.1
-    expo-web-browser: ^11.0.0
+    expo-web-browser: ">=12.0.0"
   peerDependencies:
     "@magic-sdk/react-native-expo": ">=13.0.0"
-  checksum: 647152eb4c9678accbb0cafe749036ef9b6043e9a4ec5b546a4d65f0acef8998edfbb16e9dfa44e8627b30a3969cad419c0a41997e7da95802b66580e0ef7442
+  checksum: 1997f881ccef48fc4486e8be38bbc5d1194741de4fb7fba0fa8c2159a7c6c2f2a97e993e5c5c712b857e5b95d8b283edf0349cbe72a975b4754bca0ed7fae660
   languageName: node
   linkType: hard
 
-"@magic-sdk/commons@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "@magic-sdk/commons@npm:9.1.0"
+"@magic-sdk/commons@npm:^14.2.1":
+  version: 14.2.1
+  resolution: "@magic-sdk/commons@npm:14.2.1"
   peerDependencies:
     "@magic-sdk/provider": ">=4.3.0"
     "@magic-sdk/types": ">=3.1.1"
-  checksum: 716850a5a55a672cf749dba5653570b1557152043edac920c12b20a6e0d8047ad2c4841553e9e5732790913264303f6ce8619b3be81994854eb719177f173a93
+  checksum: c3becc94b241ef67e51358290f42f6421a2194261d4e70c009d976622a351d8a64bfa1c4a75ae46314e30200e38643b2e428dbdf6cdc5ce941679d0c820dfae0
   languageName: node
   linkType: hard
 
-"@magic-sdk/provider@npm:^13.1.0":
-  version: 13.1.0
-  resolution: "@magic-sdk/provider@npm:13.1.0"
+"@magic-sdk/provider@npm:^18.2.1":
+  version: 18.2.1
+  resolution: "@magic-sdk/provider@npm:18.2.1"
   dependencies:
-    "@magic-sdk/types": ^11.1.0
+    "@magic-sdk/types": ^15.6.0
     eventemitter3: ^4.0.4
     web3-core: 1.5.2
   peerDependencies:
     localforage: ^1.7.4
-  checksum: 58972036dd0bb9b4a3465dfccea9cb936a3cb5fa0d71b24d7335f0bd7860b49f8c34120876790311b16bd20c574b6e63a1a9c443e66b5226edc3dcdf1f8ad334
+  checksum: ba163a52076b8c2fbf23bb7148c4851fc59dc784faafb9185bca9eb6e067efb8e70781edf56345cc4ca931533298a385bba4aa0ff05d8bad025333692dd9d950
   languageName: node
   linkType: hard
 
-"@magic-sdk/react-native-expo@npm:^14.1.0":
-  version: 14.1.0
-  resolution: "@magic-sdk/react-native-expo@npm:14.1.0"
+"@magic-sdk/react-native-expo@npm:^19.2.1":
+  version: 19.2.1
+  resolution: "@magic-sdk/react-native-expo@npm:19.2.1"
   dependencies:
     "@aveq-research/localforage-asyncstorage-driver": ^3.0.1
-    "@magic-sdk/commons": ^9.1.0
-    "@magic-sdk/provider": ^13.1.0
-    "@magic-sdk/types": ^11.1.0
+    "@magic-sdk/commons": ^14.2.1
+    "@magic-sdk/provider": ^18.2.1
+    "@magic-sdk/types": ^15.6.0
     "@react-native-async-storage/async-storage": ^1.15.5
     "@types/lodash": ^4.14.158
     buffer: ~5.6.0
@@ -5754,8 +5754,8 @@ __metadata:
     react: ">=16"
     react-native: ">=0.60"
     react-native-safe-area-context: ">=4.4.1"
-    react-native-webview: ">=11.0.0"
-  checksum: a3392dc005dcbed061ed96327ae6352830591fb174217fb0d8a37c402be307416931f6fb9e732c277236ad253b8b6227ed825c567cc4765b8e76e461dca64c3f
+    react-native-webview: ">=11.26.0"
+  checksum: 80bd747dafa9951f36626eec9cf338b84d73f1cd55f97f1f64871b85bba38851083fcb591942eeb325577db27eeeecff9950e3e5d79fbff92c6b71fd42125a45
   languageName: node
   linkType: hard
 
@@ -5766,17 +5766,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@magic-sdk/types@npm:^11.1.0":
-  version: 11.1.0
-  resolution: "@magic-sdk/types@npm:11.1.0"
-  checksum: 9288f6716cd0a74d82af5e1b4d78e7d8759f19457403fe2520e464e7d87c8d33414bac1a04ffc293f17616286051416dda69d685753006471add2ec2e3156d58
-  languageName: node
-  linkType: hard
-
-"@magic-sdk/types@npm:^14.1.0":
-  version: 14.1.0
-  resolution: "@magic-sdk/types@npm:14.1.0"
-  checksum: 3625cbe3e30af92694bb1b85d261f636f117d77799b2725b7766dc2f455b9789087bcd75e19212ba65989a7a6845804fc6ed056827730a3b231f909e7467a7da
+"@magic-sdk/types@npm:^15.6.0":
+  version: 15.6.0
+  resolution: "@magic-sdk/types@npm:15.6.0"
+  checksum: 1944713264b549712869bdc805cd683d61691dc1bcf978c434ea448acb206e5a0d49d3cecdf9775eb3ab9cb4f2096dd05b8ca5d118f80d40d7cbb689442ae21f
   languageName: node
   linkType: hard
 
@@ -8418,8 +8411,8 @@ __metadata:
     "@gorhom/bottom-sheet": 4.4.7
     "@hcaptcha/react-native-hcaptcha": ^1.5.1
     "@hookform/resolvers": ^3.1.1
-    "@magic-ext/react-native-expo-oauth": ^8.1.0
-    "@magic-sdk/react-native-expo": ^14.1.0
+    "@magic-ext/react-native-expo-oauth": ^13.2.1
+    "@magic-sdk/react-native-expo": ^19.2.1
     "@react-native-async-storage/async-storage": ~1.18.2
     "@react-native-community/blur": ^4.3.2
     "@react-native-community/datetimepicker": 7.2.0
@@ -8583,7 +8576,7 @@ __metadata:
     "@growthbook/growthbook-react": ^0.17.0
     "@hcaptcha/react-hcaptcha": ^1.8.1
     "@headlessui/react": ^1.7.15
-    "@magic-ext/oauth": ^10.1.0
+    "@magic-ext/oauth": ^12.2.1
     "@next/bundle-analyzer": ^13.4.7
     "@nissy-dev/swc-plugin-react-native-web": ^0.3.1
     "@radix-ui/react-accordion": 1.1.2
@@ -8621,7 +8614,7 @@ __metadata:
     eslint-plugin-diff: ^2.0.1
     export-from-json: ^1.7.2
     fortmatic: ^2.4.0
-    magic-sdk: ^13.1.0
+    magic-sdk: ^18.2.1
     next: ^13.4.5
     next-compose-plugins: ^2.2.1
     next-images: ^1.8.5
@@ -19730,14 +19723,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-web-browser@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "expo-web-browser@npm:11.0.0"
+"expo-web-browser@npm:>=12.0.0":
+  version: 12.3.2
+  resolution: "expo-web-browser@npm:12.3.2"
   dependencies:
     compare-urls: ^2.0.0
+    url: ^0.11.0
   peerDependencies:
     expo: "*"
-  checksum: 93740703b138d4470786387772aafbe3f37e484f052ffeb7fed97d16077ce1fdbf3f1370c603ced6e134343bf5cc4e314eaedf22a6460a608e38a6a1af8deae4
+  checksum: 2ebf97510b33ca1fa4fc5062dc5ac927b36a6111a51168d732cf5790802d93fda159daf90fdc6fa6fadd9c3367c3e33e39ce9fa9a04421ea774d3f9aec901f4a
   languageName: node
   linkType: hard
 
@@ -24757,15 +24751,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-sdk@npm:^13.1.0":
-  version: 13.1.0
-  resolution: "magic-sdk@npm:13.1.0"
+"magic-sdk@npm:^18.2.1":
+  version: 18.2.1
+  resolution: "magic-sdk@npm:18.2.1"
   dependencies:
-    "@magic-sdk/commons": ^9.1.0
-    "@magic-sdk/provider": ^13.1.0
-    "@magic-sdk/types": ^11.1.0
+    "@magic-sdk/commons": ^14.2.1
+    "@magic-sdk/provider": ^18.2.1
+    "@magic-sdk/types": ^15.6.0
     localforage: ^1.7.4
-  checksum: f1eb5639c62132d029455d4e6da52ef9b7edf644cee76956ed61cd08d36c4f956c853be92f1b24f50f073cf4269470ef310d7c9092e47586efa0216b00dc14f9
+  checksum: f3c5363cdd2fad102fd80fa97d51cf3267bc2807fa0437d3cdddcffa826bb39b62289eb9d80aa97a23649b737aaf183e372c32967c7f0830351483665c338d46
   languageName: node
   linkType: hard
 
