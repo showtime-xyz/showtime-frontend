@@ -793,7 +793,8 @@ const MessageInput = ({
 
       return Promise.resolve();
     },
-    [channelId, listRef, sendMessage, sendMessageCallback]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [channelId, sendMessage, sendMessageCallback]
   );
 
   return (
