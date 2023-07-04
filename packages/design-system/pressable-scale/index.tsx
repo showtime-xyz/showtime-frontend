@@ -14,21 +14,26 @@ const StyledMotiPressable = styled(MotiPressable);
 export function PressableScale({
   scaleTo = 0.95,
   tw,
+  disabled,
   ...props
 }: PressableScaleProps) {
   return (
     <StyledMotiPressable
       {...props}
+      disabled={disabled}
       tw={Array.isArray(tw) ? tw.join(" ") : tw}
       animate={useMemo(
         () =>
           ({ pressed }) => {
             "worklet";
+            if (disabled) {
+              return {};
+            }
             return {
               scale: pressed ? scaleTo : 1,
             };
           },
-        [scaleTo]
+        [disabled, scaleTo]
       )}
     />
   );

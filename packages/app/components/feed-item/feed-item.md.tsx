@@ -41,7 +41,7 @@ import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
-import { LikedBy } from "app/components/liked-by";
+// import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { UserList } from "app/components/user-list";
@@ -206,9 +206,9 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             <Social nft={nft} />
             <RaffleTooltip edition={edition} tw="mr-1" />
           </View>
-          <View tw="mt-4 min-h-[12px]">
+          {/* <View tw="mt-4 min-h-[12px]">
             <LikedBy nft={nft} max={1} />
-          </View>
+          </View> */}
           <View tw="my-4 mr-4 flex-row items-center">
             <Text tw="text-xl font-bold text-black dark:text-white">
               {nft.token_name}

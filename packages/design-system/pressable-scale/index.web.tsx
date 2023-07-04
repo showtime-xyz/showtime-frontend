@@ -4,11 +4,16 @@ export type PressableScaleProps = PressableProps & {
   scaleTo?: number;
 };
 
-export function PressableScale({ tw, ...props }: PressableScaleProps) {
+export function PressableScale({
+  tw,
+  disabled,
+  ...props
+}: PressableScaleProps) {
   return (
     <Pressable
+      disabled={disabled}
       tw={[
-        "duration-150 active:scale-95",
+        disabled ? "" : "duration-150 active:scale-95",
         Array.isArray(tw) ? tw.join(" ") : tw,
       ].join(" ")}
       {...props}

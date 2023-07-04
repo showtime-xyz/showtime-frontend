@@ -68,17 +68,24 @@ export const ClaimButtonSimplified = ({
 
   const buttonBgColor = useMemo(() => {
     if (status === ClaimStatus.Expired) {
-      return colors.green[600];
+      return isDark ? colors.gray[600] : colors.gray[200];
+    }
+    if (status === ClaimStatus.Soldout) {
+      return isDark ? colors.gray[600] : colors.gray[200];
     }
     if (status === ClaimStatus.Claimed) {
       return colors.green[500];
     }
+
     return isDark ? colors.white : colors.gray[900];
   }, [isDark, status]);
 
   const buttonTextColor = useMemo(() => {
     if (status === ClaimStatus.Expired) {
-      return colors.white;
+      return colors.gray[400];
+    }
+    if (status === ClaimStatus.Soldout) {
+      return colors.orange[500];
     }
     if (status === ClaimStatus.Claimed) {
       return colors.white;
@@ -87,6 +94,9 @@ export const ClaimButtonSimplified = ({
   }, [isDark, status]);
   const buttonText = useMemo(() => {
     if (status === ClaimStatus.Expired) {
+      return "Expired";
+    }
+    if (status === ClaimStatus.Soldout) {
       return "Sold out";
     }
     if (status === ClaimStatus.Claimed) {
@@ -94,16 +104,20 @@ export const ClaimButtonSimplified = ({
     }
     return "Collect";
   }, [status]);
-
+  const disabled = useMemo(
+    () =>
+      status === ClaimStatus.Expired ||
+      status === ClaimStatus.Claimed ||
+      status === ClaimStatus.Soldout,
+    [status]
+  );
   if (loading) {
     return <Skeleton width={96} height={24} radius={999} show tw={tw} />;
   }
   return (
     <PressableScale
       tw={["h-6 w-24 items-center justify-center rounded-full", tw]}
-      disabled={
-        status === ClaimStatus.Expired || status === ClaimStatus.Claimed
-      }
+      disabled={disabled}
       onPress={() => {
         let type: "free" | "appleMusic" | "spotify" = "free";
         if (edition?.gating_type === "spotify_save") {
