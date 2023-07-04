@@ -31,6 +31,7 @@ export const FeedEngagementIcons = memo<EngagementIconsProps>(
             onPress={() => shareNFT(nft)}
             text="Share"
             tw="mb-4"
+            buttonTw="bg-gray-100"
           >
             <View tw="h-0.5" />
             <Sendv2 color="#000" />

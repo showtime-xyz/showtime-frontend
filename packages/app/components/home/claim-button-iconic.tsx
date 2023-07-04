@@ -1,8 +1,8 @@
 import { useCallback, useContext } from "react";
 import { Platform } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime, Check2 } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -25,7 +25,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
   const { data: myInfoData } = useMyInfo();
   const router = useRouter();
   const redirectToClaimDrop = useRedirectToClaimDrop();
-
+  const isDark = useIsDarkMode();
   const { state: claimStates, dispatch } = useContext(ClaimContext);
 
   const { data: edition, loading } = useCreatorCollectionDetail(
@@ -226,17 +226,18 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
           </Text>
         </>
       }
+      buttonTw="dark:bg-white bg-black"
       {...rest}
     >
-      <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
-        <Image
+      <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full ">
+        {/* <Image
           source={{
             uri: "https://media.showtime.xyz/assets/showtime-abstract.png",
           }}
           style={{ height: "100%", width: "100%" }}
-        />
+        /> */}
       </View>
-      <Showtime height={25} width={25} color={"#000"} />
+      <Showtime height={25} width={25} color={isDark ? "#000" : "#fff"} />
     </FeedSocialButton>
   );
 }
