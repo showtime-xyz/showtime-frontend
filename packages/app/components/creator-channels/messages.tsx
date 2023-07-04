@@ -725,11 +725,15 @@ const MessageInput = ({
   const inputRef = useRef<any>(null);
   const editMessages = useEditChannelMessage(channelId);
   const isDark = useIsDarkMode();
-  const bottom = Platform.select({
-    web: bottomHeight,
-    ios: insets.bottom / 2,
-    android: 0,
-  });
+  const bottom = useMemo(
+    () =>
+      Platform.select({
+        web: bottomHeight,
+        ios: insets.bottom / 2,
+        android: 0,
+      }),
+    [bottomHeight, insets.bottom]
+  );
 
   useEffect(() => {
     // autofocus with ref is more stable than autoFocus prop
@@ -765,6 +769,33 @@ const MessageInput = ({
     }
   }, [editMessage]);
 
+  const handleSubmit = useCallback(
+    async (text: string) => {
+      if (channelId) {
+        inputRef.current?.reset();
+        enableLayoutAnimations(false);
+        listRef.current?.prepareForLayoutAnimationRender();
+        await sendMessage.trigger({
+          channelId,
+          message: text,
+          callback: sendMessageCallback,
+        });
+        requestAnimationFrame(() => {
+          enableLayoutAnimations(true);
+
+          listRef.current?.scrollToIndex({
+            index: 0,
+            animated: true,
+            viewOffset: 1000,
+          });
+        });
+      }
+
+      return Promise.resolve();
+    },
+    [channelId, listRef, sendMessage, sendMessageCallback]
+  );
+
   return (
     <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
       {isUserAdmin ? (
@@ -774,29 +805,7 @@ const MessageInput = ({
           textInputProps={{
             maxLength: 2000,
           }}
-          onSubmit={async (text: string) => {
-            if (channelId) {
-              inputRef.current?.reset();
-              enableLayoutAnimations(false);
-              listRef.current?.prepareForLayoutAnimationRender();
-              await sendMessage.trigger({
-                channelId,
-                message: text,
-                callback: sendMessageCallback,
-              });
-              requestAnimationFrame(() => {
-                enableLayoutAnimations(true);
-
-                listRef.current?.scrollToIndex({
-                  index: 0,
-                  animated: true,
-                  viewOffset: 1000,
-                });
-              });
-            }
-
-            return Promise.resolve();
-          }}
+          onSubmit={handleSubmit}
           submitting={editMessages.isMutating || sendMessage.isMutating}
           tw="bg-white dark:bg-black"
           submitButton={
