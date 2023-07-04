@@ -137,7 +137,7 @@ const CreatorChannelsListItem = memo(
                 <Text
                   tw={[
                     "text-[13px] ",
-                    !item?.read
+                    !item?.read && item.itemType !== "owned"
                       ? "font-semibold text-black dark:text-white"
                       : "text-gray-500 dark:text-gray-300",
                   ]}
