@@ -162,7 +162,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             />
           ) : (
             <EmptyPlaceholder
-              title={"No trending drops, yet."}
+              title={"Congrats! You collected all the trending drops."}
               tw="h-[275px]"
             />
           )}
