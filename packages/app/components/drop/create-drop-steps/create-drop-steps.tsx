@@ -201,6 +201,7 @@ export const CreateDropSteps = () => {
         <SelectDropTypeStep
           errors={formState.errors}
           trigger={trigger}
+          getValues={getValues}
           control={control}
           handleNextStep={() => {
             modalContext?.snapToIndex(1);
@@ -227,6 +228,7 @@ export const CreateDropSteps = () => {
             trigger={trigger}
             control={control}
             errors={formState.errors}
+            getValues={getValues}
             handleNextStep={() => setStep("title")}
             handleFileChange={handleFileChange}
             handlePrevStep={() => {
@@ -249,6 +251,7 @@ export const CreateDropSteps = () => {
         >
           <CreateDropStepTitle
             control={control}
+            getValues={getValues}
             errors={formState.errors}
             trigger={trigger}
             handleNextStep={() => setStep("song-uri")}
@@ -271,6 +274,8 @@ export const CreateDropSteps = () => {
             control={control}
             isSaveDrop={isSaveDrop}
             setIsSaveDrop={setIsSaveDrop}
+            isUnlimited={isUnlimited}
+            getValues={getValues}
             errors={formState.errors}
             trigger={trigger}
             handleNextStep={handleSubmit(onSubmit)}
@@ -288,6 +293,7 @@ export const CreateDropSteps = () => {
           <CreateDropMoreOptions
             control={control}
             isUnlimited={isUnlimited}
+            getValues={getValues}
             setIsUnlimited={setIsUnlimited}
             errors={formState.errors}
             trigger={trigger}
@@ -448,7 +454,7 @@ const CreateDropStepTitle = (props: StepProps) => {
           </View>
         </View>
         <View>
-          <Text tw="mt-4 text-gray-900 dark:text-gray-100">
+          <Text tw="text-13 pt-4 text-gray-700 dark:text-gray-200">
             Promote a collectible, raffle or allow-list to attract more
             collectors. You can edit up to 30 minutes after creating.
           </Text>
@@ -479,6 +485,7 @@ const CreateDropStepSongURI = (
     handleMoreOptions: () => void;
     setIsSaveDrop: (isSaveDrop: boolean) => void;
     isSaveDrop: boolean;
+    isUnlimited: boolean;
   }
 ) => {
   const {
@@ -487,9 +494,16 @@ const CreateDropStepSongURI = (
     handleNextStep,
     trigger,
     setIsSaveDrop,
+    isUnlimited,
     isSaveDrop,
+    getValues,
   } = props;
   const { state } = useDropNFT();
+  const duration = getValues("duration");
+  const selectedDurationLabel = useMemo(
+    () => durationOptions.find((d) => d.value === duration)?.label,
+    [duration]
+  );
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const user = useUser();
@@ -721,9 +735,27 @@ const CreateDropStepSongURI = (
             </Pressable>
             <View tw="items-start">
               <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
-                <DataPill tw="bg-white" label="Open Edition" type="text" />
-                <DataPill tw="bg-white" label="10% Royalties" type="text" />
-                <DataPill tw="bg-white" label="Duration: 1 month" type="text" />
+                <DataPill
+                  tw="bg-white"
+                  label={
+                    isUnlimited
+                      ? `Open Edition`
+                      : `${getValues("editionSize")} ${
+                          getValues("editionSize") == 1 ? "Edition" : "Editions"
+                        }`
+                  }
+                  type="text"
+                />
+                <DataPill
+                  tw="bg-white"
+                  label={`${getValues("royalty")}% Royalties`}
+                  type="text"
+                />
+                <DataPill
+                  tw="bg-white"
+                  label={selectedDurationLabel}
+                  type="text"
+                />
               </View>
             </View>
           </View>

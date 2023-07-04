@@ -7,4 +7,5 @@ export type StepProps = {
   trigger: any;
   control: any;
   errors: any;
+  getValues: (v: string) => any;
 };
