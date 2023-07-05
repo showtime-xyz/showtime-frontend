@@ -142,7 +142,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
             </Text>
           </>
         }
-        buttonTw="bg-gray-100"
+        buttonTw="dark:bg-gray-900 bg-gray-100"
         {...rest}
       >
         <Text tw="w-[28px] text-center text-xs font-semibold text-[#E40000]">
@@ -169,7 +169,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
             </Text>
           </>
         }
-        buttonTw="bg-gray-100"
+        buttonTw="dark:bg-gray-900 bg-gray-100"
         {...rest}
       >
         <Text tw="text-xs font-semibold text-gray-600">Expired</Text>
