@@ -34,7 +34,12 @@ export const FollowButton = memo<ToggleFollowParams>(function FollowButton({
     () => isFollowingFn(profileId),
     [profileId, isFollowingFn]
   );
-  const text = isFollowing ? "Following" : "Follow";
+
+  const text = useMemo(
+    () => (isFollowing ? "Following" : "Follow"),
+    [isFollowing]
+  );
+
   const toggleFollow = useCallback(async () => {
     if (isFollowing) {
       Alert.alert(`Unfollow ${name ? `@${name}` : ""}?`, "", [
