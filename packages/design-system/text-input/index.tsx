@@ -1,5 +1,9 @@
 import { ComponentProps, forwardRef } from "react";
-import { TextInput as ReactNativeTextInput } from "react-native";
+import {
+  TextInput as ReactNativeTextInput,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+} from "react-native";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
 import type { TW } from "@showtime-xyz/universal.tailwind";
@@ -22,4 +26,4 @@ const TextInput = forwardRef<typeof ReactNativeTextInput, TextInputProps>(
 
 TextInput.displayName = "TextInput";
 
-export { TextInput };
+export { TextInput, NativeSyntheticEvent, TextInputKeyPressEventData };

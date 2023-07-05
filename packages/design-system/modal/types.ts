@@ -7,6 +7,7 @@ import type { TW } from "@showtime-xyz/universal.tailwind";
 
 export interface ModalMethods {
   close: () => void;
+  snapToIndex: (index: number) => void;
 }
 
 export type ModalProps = Pick<ModalHeaderProps, "closeButtonProps"> & {

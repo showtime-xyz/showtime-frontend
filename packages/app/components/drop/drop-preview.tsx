@@ -29,7 +29,7 @@ export type DropPreviewProps = {
   file: any;
   title: string;
   description: string;
-  onPressCTA: () => void;
+  onPressCTA?: () => void;
   spotifyUrl?: string | null;
   appleMusicTrackUrl?: string | null;
   releaseDate?: string;
@@ -79,7 +79,7 @@ export const DropPreview = memo(function DropPreview({
     if (state.status === "loading" && state.transactionHash) {
       return <PolygonScanButton transactionHash={state.transactionHash} />;
     }
-    return (
+    return onPressCTA ? (
       <Button
         variant="tertiary"
         size="regular"
@@ -90,7 +90,7 @@ export const DropPreview = memo(function DropPreview({
       >
         {ctaCopy}
       </Button>
-    );
+    ) : null;
   }, [state.status, state.transactionHash, onPressCTA, buttonProps, ctaCopy]);
   const size = isSmWidth ? 300 : width - 32;
 

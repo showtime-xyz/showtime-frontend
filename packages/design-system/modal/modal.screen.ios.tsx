@@ -43,6 +43,7 @@ const ModalScreenComponent = forwardRef<any, ModalProps>(
         title={title}
         onClose={onClose}
         closeButtonProps={closeButtonProps}
+        headerShown={headerShown}
         {...rest}
       >
         {children}

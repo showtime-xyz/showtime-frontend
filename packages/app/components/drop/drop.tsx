@@ -1,5 +1,5 @@
-import { DropSelect } from "./drop-select";
+import { CreateDropSteps } from "./create-drop-steps/create-drop-steps";
 
 export const Drop = () => {
-  return <DropSelect />;
+  return <CreateDropSteps />;
 };

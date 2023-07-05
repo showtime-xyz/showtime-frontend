@@ -3075,6 +3075,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bacons/css-to-expo-linear-gradient@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "@bacons/css-to-expo-linear-gradient@npm:1.3.0"
+  peerDependencies:
+    react-native: "*"
+  checksum: 949f921d7ba7c4c595ca547e027fbf076e7eea3af45e95b1d4f1516a44c2b942eb759b79e881887efe82b3d41270e39bd48b3a46e62e1a7917e084ec85544c2e
+  languageName: node
+  linkType: hard
+
 "@bacons/link-assets@npm:^1.1.0":
   version: 1.1.0
   resolution: "@bacons/link-assets@npm:1.1.0"
@@ -8410,6 +8419,7 @@ __metadata:
     "@amplitude/analytics-react-native": ^1.2.1
     "@babel/core": ^7.19.3
     "@babel/runtime": ^7.18.9
+    "@bacons/css-to-expo-linear-gradient": ^1.3.0
     "@bacons/link-assets": ^1.1.0
     "@capsizecss/core": ^3.1.1
     "@coinbase/wallet-mobile-sdk": 1.0.6
@@ -8565,7 +8575,9 @@ __metadata:
     util: ~0.12.5
     uuid: ^9.0.0
     valtio: 1.10.5
+    viem: ^1.1.7
     vm-browserify: 1.1.2
+    wagmi: ^1.3.0
     yup: ^1.2.0
     zeego: ^1.6.2
     zx: ^7.2.2
