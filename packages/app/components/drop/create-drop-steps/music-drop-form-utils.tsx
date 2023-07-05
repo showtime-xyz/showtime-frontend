@@ -147,8 +147,6 @@ export const useMusicDropForm = () => {
     shouldFocusError: true,
   });
 
-  console.log("form state ", errors);
-
   return {
     control,
     handleSubmit,

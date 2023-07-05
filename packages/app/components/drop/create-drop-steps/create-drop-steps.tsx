@@ -122,7 +122,6 @@ export const CreateDropSteps = () => {
   }, []);
 
   const onSubmit = async (values: UseDropNFT) => {
-    console.log("submitting");
     await dropNFT(
       {
         ...values,
