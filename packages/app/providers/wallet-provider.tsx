@@ -29,13 +29,7 @@ export const providerMetadata: IProviderMetadata = {
 export const sessionParams = {
   namespaces: {
     eip155: {
-      methods: [
-        "eth_sendTransaction",
-        "eth_signTransaction",
-        "eth_sign",
-        "personal_sign",
-        "eth_signTypedData",
-      ],
+      methods: ["personal_sign"],
       chains: ["eip155:1"],
       events: ["chainChanged", "accountsChanged"],
       rpcMap: {},
@@ -151,9 +145,20 @@ const wallets = {
   metamask: {
     id: "c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96",
     name: "MetaMask",
+    slug: "metamask",
+    description:
+      "Whether you are an experienced user or brand new to blockchain, MetaMask helps you connect to the decentralized web: a new internet.",
     homepage: "https://metamask.io/",
+    chains: ["eip155:1"],
+    versions: ["1", "2"],
+    sdks: ["sign_v1", "sign_v2"],
+    app_type: "wallet",
     image_id: "5195e9db-94d8-4579-6f11-ef553be95100",
-    order: 3,
+    image_url: {
+      sm: "https://explorer-api.walletconnect.com/v3/logo/sm/5195e9db-94d8-4579-6f11-ef553be95100?projectId=0417507b5ad9f15326f376c50fc4439a",
+      md: "https://explorer-api.walletconnect.com/v3/logo/md/5195e9db-94d8-4579-6f11-ef553be95100?projectId=0417507b5ad9f15326f376c50fc4439a",
+      lg: "https://explorer-api.walletconnect.com/v3/logo/lg/5195e9db-94d8-4579-6f11-ef553be95100?projectId=0417507b5ad9f15326f376c50fc4439a",
+    },
     app: {
       browser: null,
       ios: "https://apps.apple.com/us/app/metamask/id1438144202",
@@ -170,18 +175,27 @@ const wallets = {
     },
     injected: [
       {
-        injected_id: "isMetaMask",
         namespace: "eip155",
+        injected_id: "isMetaMask",
       },
     ],
     mobile: {
-      native: "",
+      native: "metamask://",
       universal: "https://metamask.app.link",
     },
     desktop: {
-      native: null,
-      universal: null,
+      native: "",
+      universal: "",
     },
+    supported_standards: [],
+    metadata: {
+      shortName: "MetaMask",
+      colors: {
+        primary: "#ffffff",
+        secondary: null,
+      },
+    },
+    updatedAt: "2021-07-30T17:48:12.565532+00:00",
   },
   ledgerLive: {
     id: "19177a98252e07ddfc9af2083ba8e07ef627cb6103467ffebb3f8f4205fd7927",

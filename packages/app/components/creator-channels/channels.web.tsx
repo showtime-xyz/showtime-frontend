@@ -93,6 +93,7 @@ const CreatorChannelsListItem = memo(
       <Pressable
         onPress={() => {
           router.push(`/channels/${item.id}`);
+          item.read = true;
         }}
         style={{ width: "100%" }}
       >
@@ -136,7 +137,7 @@ const CreatorChannelsListItem = memo(
                 <Text
                   tw={[
                     "text-[13px] ",
-                    item?.unread
+                    !item?.read && item.itemType !== "owned"
                       ? "font-semibold text-black dark:text-white"
                       : "text-gray-500 dark:text-gray-300",
                   ]}
