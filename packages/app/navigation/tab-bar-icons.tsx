@@ -317,7 +317,7 @@ const UnreadNotificationIndicator = () => {
 
   return (
     <View
-      tw="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-500 dark:bg-violet-500"
+      tw="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-500"
       style={{ opacity: hasUnreadNotification ? 1 : 0 }}
     />
   );

@@ -125,7 +125,7 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
   const isHiddenBottomTabbar = isTabBarHidden;
   const isDark = useIsDarkMode();
 
-  const overlayColor = isDark ? "rgba(0,0,0,.8)" : "rgba(255, 255, 255, 0.8)";
+  const overlayColor = isDark ? "rgba(0,0,0,.1)" : "rgba(255, 255, 255, 0.8)";
   const blurType = isDark ? "dark" : "light";
 
   return (
@@ -138,7 +138,9 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
           ? 0
           : BOTTOM_TABBAR_BASE_HEIGHT + safeAreaBottom,
         overflow: "hidden",
-        backgroundColor: "transparent",
+        backgroundColor: isDark
+          ? "rgba(0,0,0,0.1)"
+          : "rgba(255, 255, 255, 0.8)",
       }}
       onLayout={({
         nativeEvent: {
