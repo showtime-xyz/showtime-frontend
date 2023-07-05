@@ -1,4 +1,4 @@
-import { FlatList, FlatListProps } from "react-native";
+import { FlatList, FlatListProps, Dimensions } from "react-native";
 
 type Props<T> = Pick<FlatListProps<T>, "data" | "renderItem"> & {
   slidesPerView?: number;
@@ -8,8 +8,10 @@ export function HomeSlider<T>({ data, ...rest }: Props<T>) {
     <FlatList
       data={data}
       horizontal
-      decelerationRate={0.97}
       showsHorizontalScrollIndicator={false}
+      snapToAlignment="start"
+      decelerationRate={"fast"}
+      snapToInterval={Dimensions.get("window").width - 32}
       {...rest}
     />
   );
