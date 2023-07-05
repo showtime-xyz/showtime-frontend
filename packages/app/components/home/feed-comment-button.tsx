@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { Platform } from "react-native";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Messagev2 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -17,6 +18,7 @@ interface CommentButtonProps {
 
 export function FeedCommentButton({ nft, ...rest }: CommentButtonProps) {
   const router = useRouter();
+  const isDark = useIsDarkMode();
   const handleOnPress = useCallback(() => {
     const as = `/nft/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}/comments`;
 
@@ -50,10 +52,10 @@ export function FeedCommentButton({ nft, ...rest }: CommentButtonProps) {
     <FeedSocialButton
       onPress={handleOnPress}
       text={`${formatNumber(nft?.comment_count)}`}
-      buttonTw="bg-gray-100"
+      buttonTw="bg-gray-100 dark:bg-gray-900"
       {...rest}
     >
-      <Messagev2 color={colors.gray[900]} />
+      <Messagev2 color={isDark ? colors.white : colors.gray[900]} />
     </FeedSocialButton>
   );
 }
