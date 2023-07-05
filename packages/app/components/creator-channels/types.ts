@@ -62,7 +62,7 @@ export type CreatorChannelsListItemProps = {
   created_at: string;
   updated_at: string;
   latest_message: ChannelLatestMessage;
-  unread: boolean;
+  read: boolean;
   owner: ChannelProfile;
   member_count: number;
   itemType?: "creator" | "owned";

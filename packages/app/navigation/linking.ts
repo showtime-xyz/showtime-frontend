@@ -42,7 +42,6 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       nft: "nft/:chainName/:contractAddress/:tokenId",
       drop: "drop",
       trending: "trending",
-      dropMusic: "drop/music",
       dropFree: "drop/free",
       dropEvent: "drop/event",
       dropPrivate: "drop/private",

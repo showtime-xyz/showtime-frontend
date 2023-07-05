@@ -68,6 +68,8 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
     }, [isScreen]);
     useImperativeHandle(ref, () => ({
       close: () => bottomSheetRef.current?.close(),
+      snapToIndex: (index: number) =>
+        bottomSheetRef.current?.snapToIndex(index),
     }));
     //#endregion
 

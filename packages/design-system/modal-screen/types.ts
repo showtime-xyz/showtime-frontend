@@ -13,4 +13,5 @@ export type PopCallback = (() => void) | undefined | null;
 export type ModalScreenContextValue = {
   setTitle: (title: string) => void;
   pop: (params?: { callback?: PopCallback }) => void;
+  snapToIndex: (index: number) => void;
 } | null;
