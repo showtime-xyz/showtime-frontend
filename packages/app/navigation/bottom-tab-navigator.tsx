@@ -16,7 +16,7 @@ import {
 const CreatorChannelsNavigator = dynamic(
   () => import("../pages/creator-channels")
 );
-const TrendingNavigator = dynamic(() => import("../pages/trending"));
+const HomeNavigator = dynamic(() => import("../pages/home"));
 const CreateNavigator = dynamic(() => import("../pages/create"));
 const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
 const ProfileNavigator = dynamic(() => import("../pages/profile"));
@@ -37,7 +37,7 @@ export function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="homeTab"
-        component={TrendingNavigator}
+        component={HomeNavigator}
         options={{
           tabBarIcon: HomeTabBarIcon,
         }}

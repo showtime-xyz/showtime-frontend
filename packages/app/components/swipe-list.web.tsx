@@ -2,10 +2,10 @@ import { useCallback, useMemo, useRef, createContext, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { Virtual, Keyboard, Mousewheel } from "swiper";
 import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/virtual";
+import { Virtual, Keyboard, Mousewheel, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -106,7 +106,7 @@ export const SwipeList = ({
     <View
       testID="swipeList"
       id="slidelist"
-      tw="fixed inset-0 h-screen overflow-hidden bg-gray-100 dark:bg-black"
+      tw="h-screen overflow-hidden bg-gray-100 dark:bg-black"
     >
       <VideoConfigContext.Provider value={videoConfig}>
         <SwiperActiveIndexContext.Provider value={activeIndex}>
@@ -134,6 +134,7 @@ export const SwipeList = ({
                 sensitivity: 1.1,
                 thresholdTime: 800,
               }}
+              className="w-full"
             >
               {data.map((item, index) => (
                 <SwiperSlide key={item.nft_id} virtualIndex={index}>

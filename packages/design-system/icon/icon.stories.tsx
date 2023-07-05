@@ -77,6 +77,7 @@ export const Default = () => {
           <IconItem icon={Icon.Bookmark} title="Bookmark" />
           <IconItem icon={Icon.Boost} title="Boost" />
           <IconItem icon={Icon.Check1} title="Check1" />
+          <IconItem icon={Icon.Check2} title="Check2" />
           <IconItem icon={Icon.Check} title="Check" />
           <IconItem icon={Icon.CheckFilled} title="CheckFilled" />
           <IconItem icon={Icon.ChevronDown} title="ChevronDown" />
@@ -189,6 +190,10 @@ export const Default = () => {
           <IconItem icon={Icon.MusicDropType} title="MusicDropType" />
           <IconItem icon={Icon.Music} title="Music" />
           <IconItem icon={Icon.Shopping} title="Shopping" />
+          <IconItem icon={Icon.Sendv2} title="Sendv2" />
+          <IconItem icon={Icon.Messagev2} title="Messagev2" />
+          <IconItem icon={Icon.RaffleBadge} title="RaffleBadge" />
+          <IconItem icon={Icon.MusicBadge} title="MusicBadge" />
         </View>
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>

@@ -21,8 +21,8 @@ export const ClampText = ({
   maxLines = 2,
   ellipsis = "...",
   expandButtonWidth = 10,
-  foldText = "Less",
-  expandText = "More",
+  foldText = "less",
+  expandText = "more",
 }: ClampTextProps) => {
   const textRef = useRef<Element | Text>(null);
 

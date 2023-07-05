@@ -1,11 +1,17 @@
 import { useCallback, useRef, useState, useEffect, useMemo, memo } from "react";
-import { Keyboard, Platform, TextInput } from "react-native";
+import {
+  Keyboard,
+  Platform,
+  TextInput,
+  useWindowDimensions,
+} from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
+  ArrowLeft,
   Close as CloseIcon,
   Search as SearchIcon,
 } from "@showtime-xyz/universal.icon";
@@ -13,19 +19,20 @@ import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { HeaderLeft } from "app/components/header";
 import { SearchResponseItem, useSearch } from "app/hooks/api/use-search";
 import { Link } from "app/navigation/link";
 import { useHideHeader } from "app/navigation/use-navigation-elements";
 import { formatAddressShort } from "app/utilities";
 
 import { useSafeAreaInsets } from "design-system/safe-area";
+import { breakpoints } from "design-system/theme";
 
 const PT_2_UNIT = 8;
 
@@ -35,6 +42,9 @@ export const Search = () => {
   const { top } = useSafeAreaInsets();
   const [term, setTerm] = useState("");
   const { loading, data } = useSearch(term);
+  const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
   const inputRef = useRef<TextInput>();
 
   // since the search returns weird results with "undefined" in the list, we filter them out
@@ -77,8 +87,26 @@ export const Search = () => {
         }}
       >
         <View tw="flex-1 flex-row items-center">
-          <View tw="mr-4">
-            <HeaderLeft canGoBack />
+          <View tw="mr-4 flex md:hidden">
+            <PressableScale
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              style={[
+                {
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 999,
+                },
+              ]}
+              onPress={() => {
+                router.back();
+              }}
+            >
+              <ArrowLeft
+                color={isDark ? "#FFF" : "#000"}
+                width={24}
+                height={24}
+              />
+            </PressableScale>
           </View>
           <View tw="flex-1">
             <Input
@@ -91,12 +119,15 @@ export const Search = () => {
                 paddingTop: Platform.select({
                   default: 8,
                   android: 6,
+                  web: isMdWidth ? 12 : 8,
                 }),
                 paddingBottom: Platform.select({
                   default: 8,
                   android: 6,
+                  web: isMdWidth ? 12 : 8,
                 }),
               }}
+              borderRadius={isMdWidth ? 8 : 999}
               leftElement={
                 <View tw="px-2">
                   <SearchIcon

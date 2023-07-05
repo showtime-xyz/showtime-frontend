@@ -87,7 +87,6 @@ const QRCodeSkeleton = ({ size = 375 }) => {
     <View tw="items-center p-4">
       <View tw="w-full max-w-[420px] items-center justify-center rounded-3xl py-4">
         <Skeleton width={size} height={size} show radius={24} />
-
         <View tw="w-full flex-row justify-between p-4">
           <View tw="py-4">
             <View tw="flex-row pb-4">

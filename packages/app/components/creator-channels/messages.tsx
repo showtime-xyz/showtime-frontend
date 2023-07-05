@@ -153,7 +153,7 @@ const Header = (props: HeaderProps) => {
 
   return (
     <View
-      tw="web:pt-2 web:md:py-5 android:pt-4 flex-row items-center px-4 pb-2"
+      tw="web:pt-2 web:md:py-5 android:pt-4 flex-row items-center border-gray-200 px-4 pb-2 dark:border-gray-800 md:border-b"
       style={{ columnGap: 8 }}
     >
       <View tw="flex-row items-center" style={{ columnGap: 8 }}>
@@ -161,7 +161,7 @@ const Header = (props: HeaderProps) => {
           onPress={() => {
             router.replace("/channels");
           }}
-          tw="md:hidden"
+          tw="lg:hidden"
         >
           <ArrowLeft
             height={24}
@@ -566,7 +566,7 @@ export const Messages = memo(() => {
             color={isDark ? colors.gray[800] : colors.gray[100]}
           />
           <View tw="h-3" />
-          <Text tw="text-center text-2xl text-gray-900 dark:text-white">
+          <Text tw="text-center text-2xl font-bold text-gray-900 dark:text-white">
             Select a channel!
           </Text>
           <View tw="h-5" />

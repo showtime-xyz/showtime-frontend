@@ -14,12 +14,14 @@ type NFTDetailsProps = {
   claimersList: NFT["multiple_owners_list"] | undefined;
   tw?: string;
   avatarSize?: number;
+  textColor?: string;
 };
 export const ClaimedBy = ({
   nft,
   claimersList,
   avatarSize = 20,
   tw = "",
+  textColor,
 }: NFTDetailsProps) => {
   const router = useRouter();
   const slicedClaimersList = useMemo(
@@ -27,7 +29,13 @@ export const ClaimedBy = ({
     [claimersList]
   );
   if (!claimersList || claimersList?.length <= 1) {
-    return null;
+    return (
+      <View tw={tw}>
+        <Text tw="font-bold text-gray-400 dark:text-gray-500">
+          Not collected yet
+        </Text>
+      </View>
+    );
   }
 
   const firstClaimer = claimersList[1];
@@ -41,14 +49,24 @@ export const ClaimedBy = ({
               <AvatarHoverCard
                 username={item?.username || item?.wallet_address}
                 url={item?.img_url}
-                tw="rounded-full border border-gray-300"
                 size={avatarSize}
                 alt="Claimed by Avatar"
+              />
+              <View
+                tw="absolute rounded-full border border-white dark:border-black"
+                style={{
+                  width: avatarSize,
+                  height: avatarSize,
+                }}
+                pointerEvents="none"
               />
             </View>
           );
         })}
-        <Text tw="ml-1 flex-1 text-xs text-white dark:text-white md:text-sm md:text-gray-900">
+        <Text
+          tw="ml-1 flex-1 text-xs text-gray-900 dark:text-white md:text-sm"
+          style={textColor ? { color: textColor } : {}}
+        >
           <TextLink
             href={`/@${firstClaimer.username ?? firstClaimer.wallet_address}`}
             tw="font-bold"

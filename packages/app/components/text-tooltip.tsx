@@ -23,8 +23,10 @@ export const TextTooltip = ({
   theme,
 }: ShowtimeTooltipProps) => {
   const [open, setOpen] = useState(false);
+
   const isDarkMode = useIsDarkMode();
   const isDark = theme ? theme === "dark" : isDarkMode;
+
   return (
     <Tooltip.Root
       onDismiss={() => {

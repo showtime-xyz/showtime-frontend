@@ -393,72 +393,67 @@ export const CreatorChannelsList = memo(
       ]);
     }, [refresh, refreshOwnedChannels, refreshSuggestedChannels]);
     return (
-      <>
-        <View tw="web:pt-10 native:hidden" />
-        <AnimatedInfiniteScrollListWithRef
-          ref={listRef}
-          useWindowScroll={false}
-          data={
-            isLoadingOwnChannels ||
-            isLoadingJoinedChannels ||
-            isLoadingSuggestedChannels
-              ? []
-              : transformedData
-          }
-          getItemType={(item) => {
-            // To achieve better performance, specify the type based on the item
-            return item.type === "section"
-              ? "sectionHeader"
-              : item.itemType ?? "row";
-          }}
-          style={{
-            height: Platform.select({
-              default: windowHeight - bottomBarHeight,
-              web: web_height
-                ? web_height
-                : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
-              ios: windowHeight,
-            }),
-          }}
-          // for blur effect on Native
-          contentContainerStyle={Platform.select({
-            ios: {
-              paddingTop: headerHeight,
-              paddingBottom: bottomBarHeight,
-            },
-            android: {
-              paddingBottom: bottomBarHeight,
-            },
-            default: {},
-          })}
-          // Todo: unity refresh control same as tab view
-          refreshControl={
-            <RefreshControl
-              refreshing={
-                isRefreshing ||
-                isRefreshingOwnedChannels ||
-                isRefreshingSuggestedChannels
-              }
-              onRefresh={refreshPage}
-              progressViewOffset={headerHeight}
-              tintColor={isDark ? colors.gray[200] : colors.gray[700]}
-              colors={[colors.violet[500]]}
-              progressBackgroundColor={
-                isDark ? colors.gray[200] : colors.gray[100]
-              }
-            />
-          }
-          drawDistance={windowHeight * 2}
-          CellRendererComponent={CustomCellRenderer}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          onEndReached={fetchMore}
-          refreshing={isRefreshing}
-          onRefresh={refresh}
-          ListFooterComponent={ListFooterComponent}
-          estimatedItemSize={80}
-        />
-      </>
+      <AnimatedInfiniteScrollListWithRef
+        ref={listRef}
+        useWindowScroll={false}
+        data={
+          isLoadingOwnChannels ||
+          isLoadingJoinedChannels ||
+          isLoadingSuggestedChannels
+            ? []
+            : transformedData
+        }
+        getItemType={(item) => {
+          // To achieve better performance, specify the type based on the item
+          return item.type === "section"
+            ? "sectionHeader"
+            : item.itemType ?? "row";
+        }}
+        style={{
+          height: Platform.select({
+            default: windowHeight - bottomBarHeight,
+            web: web_height ? web_height : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
+            ios: windowHeight,
+          }),
+        }}
+        // for blur effect on Native
+        contentContainerStyle={Platform.select({
+          ios: {
+            paddingTop: headerHeight,
+            paddingBottom: bottomBarHeight,
+          },
+          android: {
+            paddingBottom: bottomBarHeight,
+          },
+          default: {},
+        })}
+        // Todo: unity refresh control same as tab view
+        refreshControl={
+          <RefreshControl
+            refreshing={
+              isRefreshing ||
+              isRefreshingOwnedChannels ||
+              isRefreshingSuggestedChannels
+            }
+            onRefresh={refreshPage}
+            progressViewOffset={headerHeight}
+            tintColor={isDark ? colors.gray[200] : colors.gray[700]}
+            colors={[colors.violet[500]]}
+            progressBackgroundColor={
+              isDark ? colors.gray[200] : colors.gray[100]
+            }
+          />
+        }
+        drawDistance={windowHeight * 2}
+        CellRendererComponent={CustomCellRenderer}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        onEndReached={fetchMore}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
+        ListFooterComponent={ListFooterComponent}
+        estimatedItemSize={80}
+      />
     );
   }
 );

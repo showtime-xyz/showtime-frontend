@@ -18,7 +18,6 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
-import { getIsShowCreatorChannelIntro } from "app/lib/mmkv-keys";
 import { getTwitterIntent } from "app/utilities";
 
 import { toast } from "design-system/toast";

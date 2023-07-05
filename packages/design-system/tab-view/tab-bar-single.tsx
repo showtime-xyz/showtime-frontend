@@ -1,4 +1,5 @@
-import { useState, memo, useMemo } from "react";
+import { useState, memo, useMemo, useLayoutEffect, useRef } from "react";
+import { Platform } from "react-native";
 
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Text } from "@showtime-xyz/universal.text";
@@ -28,7 +29,7 @@ export const TabBarSingle = memo<IndependentTabBarProps>(function TabBarSingle({
   const [tabsWidth, setTabsWidth] = useState<{
     [index: number]: number;
   }>({});
-
+  const tabsContainer = useRef(null);
   const outputRange = useMemo(
     () =>
       routes.reduce<number[]>((acc, _, i) => {
@@ -37,9 +38,19 @@ export const TabBarSingle = memo<IndependentTabBarProps>(function TabBarSingle({
       }, []),
     [routes, tabsWidth]
   );
-
+  useLayoutEffect(() => {
+    if (Platform.OS === "web" && propIndex > 0) {
+      const scrollToX = new Array(propIndex).fill(0).reduce((acc, _, i) => {
+        return acc + tabsWidth[i] + PADDING_X * 2;
+      }, 0);
+      (tabsContainer.current as any)?.scrollTo(scrollToX, 0);
+    }
+  }, [propIndex, tabsWidth]);
   return (
-    <View tw={["no-scrollbar flex-row overflow-x-auto overflow-y-hidden", tw]}>
+    <View
+      ref={tabsContainer}
+      tw={["no-scrollbar flex-row overflow-x-auto overflow-y-hidden", tw]}
+    >
       {routes.map((item, index) => (
         <PressableHover
           onPress={() => onPress?.(index)}

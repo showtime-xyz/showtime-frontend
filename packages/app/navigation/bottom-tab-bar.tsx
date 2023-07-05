@@ -1,4 +1,4 @@
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { MotiView } from "moti";
@@ -125,7 +125,7 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
   const isHiddenBottomTabbar = isTabBarHidden;
   const isDark = useIsDarkMode();
 
-  const overlayColor = isDark ? "rgba(0,0,0,.8)" : "rgba(255, 255, 255, 0.8)";
+  const overlayColor = isDark ? "rgba(0,0,0,.1)" : "rgba(255, 255, 255, 0.8)";
   const blurType = isDark ? "dark" : "light";
 
   return (
@@ -138,7 +138,10 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
           ? 0
           : BOTTOM_TABBAR_BASE_HEIGHT + safeAreaBottom,
         overflow: "hidden",
-        backgroundColor: "transparent",
+        backgroundColor: Platform.select({
+          ios: isDark ? "rgba(0,0,0,0.1)" : "rgba(255, 255, 255, 0.8)",
+          default: isDark ? "rgba(0,0,0,1)" : "rgba(255, 255, 255, 1)",
+        }),
       }}
       onLayout={({
         nativeEvent: {
@@ -148,13 +151,15 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
         nativeBottomTabBarHeightCallback(height);
       }}
     >
-      <BlurView
-        blurRadius={20}
-        overlayColor={overlayColor}
-        blurType={blurType}
-        blurAmount={100}
-        style={[StyleSheet.absoluteFillObject]}
-      />
+      {Platform.OS === "ios" ? (
+        <BlurView
+          blurRadius={20}
+          overlayColor={overlayColor}
+          blurType={blurType}
+          blurAmount={100}
+          style={[StyleSheet.absoluteFillObject]}
+        />
+      ) : null}
       <ThemeBottomTabbar state={state} {...rest} />
     </View>
   );

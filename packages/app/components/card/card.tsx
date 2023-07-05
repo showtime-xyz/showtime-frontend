@@ -19,8 +19,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
-import { ClaimButton } from "app/components/claim/claim-button";
-import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { GridMedia, Media } from "app/components/media";
@@ -33,6 +31,7 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { NFT } from "app/types";
 
+import { ClaimButtonSimplified } from "../claim/claim-button-simplified";
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 
@@ -165,7 +164,7 @@ const CardLargeScreen = ({
   cardMaxWidth,
   index,
 }: Props & { handleOnPress: any; cardMaxWidth: number }) => {
-  const { data: edition } = useCreatorCollectionDetail(
+  const { data: edition, loading } = useCreatorCollectionDetail(
     nft.creator_airdrop_edition_address
   );
   const { data: detailData } = useNFTDetailByTokenId({
@@ -238,14 +237,7 @@ const CardLargeScreen = ({
           </RouteComponent>
           <View tw="flex-row justify-between px-4 py-2">
             <Social nft={nft} />
-            {showClaimButton &&
-            !!nft.creator_airdrop_edition_address &&
-            edition ? (
-              <View tw="flex-row">
-                <ClaimButton edition={edition} />
-                <ClaimedShareButton tw="ml-3" edition={edition} nft={nft} />
-              </View>
-            ) : null}
+            <ClaimButtonSimplified edition={edition} loading={loading} />
           </View>
           <View tw="h-5">
             <ClaimedBy

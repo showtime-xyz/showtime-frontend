@@ -13,7 +13,7 @@ import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { CONTAINER_TW, IMAGE_TW, DEFAULT_AVATAR_PIC } from "./constants";
+import { CONTAINER_TW, DEFAULT_AVATAR_PIC } from "./constants";
 
 export type AvatarProps = {
   url?: string;
@@ -75,7 +75,6 @@ const AvatarComponent = forwardRef<typeof View, AvatarProps>(
             transition={300}
             borderRadius={borderRadius}
             resizeMode="cover"
-            tw={IMAGE_TW}
             style={{ height: size, width: size }}
             alt={alt}
             {...(enableSkeleton

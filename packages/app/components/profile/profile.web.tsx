@@ -35,6 +35,7 @@ import {
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { createParam } from "app/navigation/use-param";
@@ -125,7 +126,7 @@ const Header = memo(function Header() {
 
   return (
     <View tw="items-center bg-white dark:bg-black">
-      <View tw="w-full max-w-screen-xl md:pt-16">
+      <View tw="w-full max-w-screen-xl">
         <ProfileTop
           address={username}
           animationHeaderPosition={animationHeaderPosition}
@@ -136,7 +137,7 @@ const Header = memo(function Header() {
           isError={isError}
         />
         <View tw="bg-white dark:bg-black">
-          <View tw="mx-auto min-h-[43px] w-full max-w-screen-xl">
+          <View tw="mx-auto min-h-[43px] w-full max-w-screen-xl px-0 md:px-2 xl:px-0">
             <TabBarSingle
               onPress={onPress}
               routes={routes}
@@ -161,20 +162,17 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const bottomBarHeight = usePlatformBottomHeight();
   const isBlocked = getIsBlocked(profileId);
   const { user } = useUser();
-
+  const { width: scrollbarWidth } = useScrollbarSize();
   const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
     profileId: profileId,
   });
   const isDark = useIsDarkMode();
-  const { height: screenHeight } = useWindowDimensions();
+  const { height: screenHeight, width } = useWindowDimensions();
+
   const contentWidth = useContentWidth();
   const isMdWidth = contentWidth >= breakpoints["md"];
   const numColumns =
-    contentWidth <= breakpoints["md"]
-      ? 3
-      : contentWidth >= breakpoints["lg"]
-      ? 3
-      : 2;
+    width <= breakpoints["lg"] && width >= breakpoints["md"] ? 2 : 3;
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
@@ -297,7 +295,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     type,
     username,
   ]);
-
   return (
     <ProfileHeaderContext.Provider
       value={{
@@ -312,7 +309,17 @@ const Profile = ({ username }: ProfileScreenProps) => {
       }}
     >
       <FilterContext.Provider value={{ filter, dispatch }}>
-        <View tw="w-full">
+        <View
+          tw="w-full"
+          style={
+            isMdWidth
+              ? {
+                  width: `calc(100% - ${scrollbarWidth}px)`,
+                  marginLeft: scrollbarWidth,
+                }
+              : {}
+          }
+        >
           <MutateProvider mutate={updateItem}>
             <ProfileTabsNFTProvider
               tabType={

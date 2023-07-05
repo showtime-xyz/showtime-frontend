@@ -5,17 +5,32 @@ import { View } from "@showtime-xyz/universal.view";
 type ControllerProps = {
   prev: () => void;
   next: () => void;
-
-  tw: string;
+  tw?: string;
+  allowSlideNext?: boolean;
+  allowSlidePrev?: boolean;
 };
-export const Controller = ({ prev, next, tw }: ControllerProps) => {
+export const Controller = ({
+  prev,
+  next,
+  tw = "",
+  allowSlideNext = false,
+  allowSlidePrev = false,
+}: ControllerProps) => {
   return (
-    <View tw={["web:px-4 absolute w-full flex-row justify-between", tw]}>
+    <View
+      tw={[
+        "absolute top-1/2 z-10 hidden w-full -translate-y-2 flex-row  justify-between md:flex",
+        tw,
+      ]}
+    >
       <Button
-        variant="text"
-        size="regular"
+        variant="secondary"
+        size="small"
         iconOnly
-        tw="bg-white dark:bg-gray-900"
+        tw={[
+          "absolute -left-4 border border-gray-200 transition-all dark:border-gray-800",
+        ]}
+        style={{ opacity: allowSlidePrev ? 1 : 0 }}
         onPress={() => {
           prev?.();
         }}
@@ -23,10 +38,13 @@ export const Controller = ({ prev, next, tw }: ControllerProps) => {
         <ChevronLeft width={24} height={24} />
       </Button>
       <Button
-        variant="text"
-        size="regular"
+        variant="secondary"
+        size="small"
         iconOnly
-        tw="bg-white dark:bg-gray-900"
+        tw={[
+          "absolute -right-4 border border-gray-200 transition-all dark:border-gray-800",
+        ]}
+        style={{ opacity: allowSlideNext ? 1 : 0 }}
         onPress={() => {
           next?.();
         }}

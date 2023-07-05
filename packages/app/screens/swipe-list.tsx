@@ -45,7 +45,7 @@ export const SwipeListByType = () => {
 
 export const SwipeListScreen = withColorScheme(() => {
   return (
-    <View tw="flex-1">
+    <View tw="w-full flex-1">
       {Platform.OS !== "web" && <SwipeListHeader canGoBack withBackground />}
       <SwipeListByType />
     </View>

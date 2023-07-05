@@ -40,6 +40,7 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { TrendingScreen } from "app/screens/trending";
 
 import { DropFreeScreen } from "../screens/drop-free";
 import { OnboardingScreen } from "../screens/onboarding";
@@ -159,6 +160,11 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="channelsMessageReactions"
           component={CreatorChannelsMessageReactionsScreen}
+        />
+        <Stack.Screen
+          name="trending"
+          options={{ headerTitle: "Trending" }}
+          component={TrendingScreen}
         />
       </Stack.Group>
 

@@ -20,7 +20,7 @@ const links = [
   },
   {
     link: "https://showtime-xyz.notion.site/Frequently-Asked-Questions-Showtime-f57d533e7fb84c7c9728cd0248764c78",
-    title: "Frequently Asked Questions",
+    title: "FAQ",
   },
 ];
 

@@ -5,7 +5,7 @@ import * as Popover from "@radix-ui/react-popover";
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Close, Search } from "@showtime-xyz/universal.icon";
+import { Close, Search, ShowtimeBrand } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -132,8 +132,12 @@ const SearchInHeader = () => {
 const HeaderCenter = ({ isDark }: { isDark?: boolean }) => {
   return (
     <View tw="flex flex-row">
-      <ShowtimeTabBarIcon color={isDark ? "black" : "white"} tw="mr-4" />
-      <View tw="hidden md:flex">
+      <ShowtimeBrand
+        color={isDark ? "#fff" : "#000"}
+        width={20 * (84 / 16)}
+        height={20}
+      />
+      <View tw="ml-4 hidden md:flex">
         <SearchInHeader />
       </View>
     </View>

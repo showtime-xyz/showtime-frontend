@@ -12,8 +12,6 @@ import { captureException } from "app/lib/sentry";
 import { GatingType } from "app/types";
 import { delay, formatAPIErrorMessage, getFileMeta } from "app/utilities";
 
-import { toast } from "design-system/toast";
-
 import { DropContext } from "../context/drop-context";
 import { useSendFeedback } from "./use-send-feedback";
 

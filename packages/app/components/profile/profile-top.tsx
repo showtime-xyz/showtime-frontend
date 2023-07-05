@@ -168,7 +168,7 @@ export const ProfileTop = ({
 
   return (
     <>
-      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800 xl:-mx-20 xl:rounded-b-[32px]">
+      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800 xl:rounded-b-[32px] 2xl:-mx-20">
         <Skeleton
           height={coverHeight}
           width={coverWidth}
@@ -207,7 +207,7 @@ export const ProfileTop = ({
           </>
         </Skeleton>
       </View>
-      <View tw="mx-2">
+      <View tw="mx-2 md:mx-4 xl:mx-2">
         <View tw="flex-row justify-between">
           <View
             tw="flex-row items-end"

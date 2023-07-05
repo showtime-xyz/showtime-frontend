@@ -74,6 +74,7 @@ const nextConfig = {
     "react-native-tab-view",
     "universal-tooltip",
     "react-native-image-colors",
+    "react-native-reanimated-carousel",
   ],
   webpack: (config, options) => {
     // Mix in aliases

@@ -1,9 +1,10 @@
-import { Platform } from "react-native";
-
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Search } from "@showtime-xyz/universal.icon";
+import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { View } from "@showtime-xyz/universal.view";
+
+import { ShowtimeBrandLogo } from "../showtime-brand";
 
 type HeaderLeftProps = {
   canGoBack?: boolean;
@@ -20,15 +21,14 @@ export const HeaderLeft = ({
 
   const canGoHome = router.pathname.split("/").length - 1 >= 2;
 
-  const Icon = canGoBack || canGoHome ? ArrowLeft : Search;
+  const isHome = router.pathname === "/";
+  const Icon = canGoBack || canGoHome ? ArrowLeft : Showtime;
 
   return (
     <PressableScale
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       style={[
         {
-          height: 32,
-          width: 32,
           justifyContent: "center",
           alignItems: "center",
           borderRadius: 999,
@@ -36,26 +36,28 @@ export const HeaderLeft = ({
         withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
-        if (canGoBack) {
-          if (Platform.OS === "web" && history?.length <= 1) {
-            router.push("/");
-          } else {
-            router.pop();
-          }
-        } else if (canGoHome) {
+        if (canGoHome) {
           router.push("/");
         } else {
-          router.push("/search");
+          router.back();
         }
       }}
     >
-      <Icon
-        color={
-          color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
-        }
-        width={24}
-        height={24}
-      />
+      {isHome ? (
+        <ShowtimeBrandLogo
+          color={
+            color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
+          }
+        />
+      ) : (
+        <Icon
+          color={
+            color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
+          }
+          width={24}
+          height={24}
+        />
+      )}
     </PressableScale>
   );
 };

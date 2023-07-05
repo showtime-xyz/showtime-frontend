@@ -11,6 +11,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { NotificationsSettingIcon } from "app/components/header/notifications-setting-icon";
 import { NotificationItem } from "app/components/notifications/notification-item";
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -24,16 +25,21 @@ import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
+import { breakpoints } from "design-system/theme";
+
 import { EmptyPlaceholder } from "../empty-placeholder";
 
 const Header = () => {
   const headerHeight = useHeaderHeight();
 
   return Platform.OS === "web" ? (
-    <View tw="w-full flex-row justify-center px-4 py-4">
-      <Text tw="text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
+    <View tw="hidden w-full flex-row pb-4 pl-4 pt-8 md:flex">
+      <Text tw="text-lg font-bold text-gray-900 dark:text-white">
         Notifications
       </Text>
+      <View tw="absolute right-2 top-6">
+        <NotificationsSettingIcon size={24} />
+      </View>
     </View>
   ) : (
     <View style={{ height: headerHeight }} />
@@ -159,6 +165,7 @@ export const Notifications = memo(
               }
             />
           }
+          containerTw="pretty-scrollbar"
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           onEndReached={fetchMore}

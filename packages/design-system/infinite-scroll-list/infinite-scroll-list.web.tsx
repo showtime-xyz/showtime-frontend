@@ -34,6 +34,7 @@ function InfiniteScrollListImpl<Item>(
     useWindowScroll?: boolean;
     preserveScrollPosition?: boolean;
     overscan?: number;
+    containerTw?: string;
   },
   ref: any
 ) {
@@ -55,6 +56,7 @@ function InfiniteScrollListImpl<Item>(
     useWindowScroll = true,
     inverted,
     preserveScrollPosition = false,
+    containerTw = "",
   } = props;
   let count = data?.length ?? 0;
   if (numColumns) {
@@ -205,6 +207,7 @@ function InfiniteScrollListImpl<Item>(
               ref.current = v;
             }
           }}
+          className={containerTw}
           style={
             !useWindowScroll
               ? {
@@ -258,6 +261,10 @@ function InfiniteScrollListImpl<Item>(
               </div>
               {renderedItems.map((virtualItem) => {
                 const index = virtualItem.index;
+                const chuckItem = data?.slice(
+                  index * numColumns,
+                  index * numColumns + numColumns
+                );
                 return (
                   <div
                     key={virtualItem.key}
@@ -273,14 +280,11 @@ function InfiniteScrollListImpl<Item>(
                           justifyContent: "space-between",
                         }}
                       >
-                        {data
-                          .slice(
-                            index * numColumns,
-                            index * numColumns + numColumns
-                          )
-                          .map((item, i) => {
-                            const realIndex = index * numColumns + i;
-                            return (
+                        {chuckItem?.map((item, i) => {
+                          const realIndex = index * numColumns + i;
+
+                          return (
+                            <>
                               <ViewabilityTracker
                                 key={realIndex}
                                 index={realIndex}
@@ -301,8 +305,21 @@ function InfiniteScrollListImpl<Item>(
                                 {realIndex < data.length - 1 &&
                                   renderComponent(ItemSeparatorComponent)}
                               </ViewabilityTracker>
-                            );
-                          })}
+                            </>
+                          );
+                        })}
+                        {chuckItem &&
+                          chuckItem?.length < numColumns &&
+                          new Array(numColumns - chuckItem?.length)
+                            .fill(0)
+                            .map((_, itemIndex) => (
+                              <div
+                                key={itemIndex.toString()}
+                                style={{
+                                  width: "100%",
+                                }}
+                              />
+                            ))}
                       </div>
                     ) : null}
                   </div>
