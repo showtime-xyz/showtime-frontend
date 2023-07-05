@@ -301,7 +301,7 @@ export const useDropNFT = () => {
         );
       } else {
         Alert.alert(
-          "Oops. An error occurred.",
+          "An error occurred.",
           errorMessage +
             ". Please contact us at help@showtime.xyz if this persists. Thanks!",
           [
