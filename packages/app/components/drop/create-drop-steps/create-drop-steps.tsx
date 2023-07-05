@@ -172,24 +172,26 @@ export const CreateDropSteps = () => {
   if (state.status === "success") {
     return (
       <Animated.View
-        style={{ flex: 1 }}
+        style={{
+          flex: 1,
+        }}
         entering={FadeIn}
         exiting={FadeOut}
         key={step}
       >
-        <Pressable
-          tw="absolute left-4 top-4"
-          onPress={() => modalContext?.pop()}
+        <Layout
+          onBackPress={() => modalContext?.pop()}
+          closeIcon
+          title="Congrats! Now share it ✦"
         >
-          <Close color={isDark ? "white" : "black"} width={24} height={24} />
-        </Pressable>
-        <DropViewShare
-          title={getValues("title")}
-          description={getValues("description")}
-          file={getValues("file")}
-          contractAddress={state.edition?.contract_address}
-          dropCreated
-        />
+          <DropViewShare
+            title={getValues("title")}
+            description={getValues("description")}
+            file={getValues("file")}
+            contractAddress={state.edition?.contract_address}
+            dropCreated
+          />
+        </Layout>
       </Animated.View>
     );
   }
@@ -330,13 +332,17 @@ const CreateDropStepMedia = (
     trigger,
     handleNextStep,
   } = props;
+  const { width: windowWidth } = useWindowDimensions();
+
+  const mediaWidth = Math.min(400, windowWidth - 32);
+
   return (
     <Layout onBackPress={handlePrevStep} title="Create">
       <View tw="px-4">
-        <Text tw="text-center text-xl text-gray-900 dark:text-gray-50">
+        <Text tw="px-8 text-center text-xl font-medium text-gray-900 dark:text-gray-50">
           Upload an image or video for your paid unlockable.
         </Text>
-        <View tw="mt-8 items-center">
+        <View tw="mt-8 self-center" style={{ maxWidth: mediaWidth }}>
           <Controller
             control={control}
             name="file"
@@ -346,6 +352,7 @@ const CreateDropStepMedia = (
                   onChange={handleFileChange}
                   value={value}
                   errorMessage={errors?.file?.message}
+                  size={mediaWidth}
                 />
               );
             }}
@@ -459,7 +466,7 @@ const CreateDropStepTitle = (props: StepProps) => {
           </Text>
         </View>
       </ScrollView>
-      <View tw="p-4">
+      <View tw="px-4">
         <Button
           size="regular"
           tw="mt-4 w-full self-center"
@@ -989,7 +996,7 @@ const Layout = (props: {
   const isDark = useIsDarkMode();
   const insets = useSafeAreaInsets();
   return (
-    <View tw="flex-1" style={{ paddingBottom: insets.bottom }}>
+    <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
       <View tw="mx-4 my-8 flex-row items-center">
         <Pressable tw="absolute" onPress={props.onBackPress}>
           {props.closeIcon ? (
