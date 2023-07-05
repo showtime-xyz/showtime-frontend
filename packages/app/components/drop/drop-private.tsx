@@ -661,7 +661,7 @@ export const DropPrivate = () => {
           onPress={handleSubmit(onSubmit)}
         >
           {state.status === "loading"
-            ? "Creating... it should take about 10 seconds"
+            ? "Creating..."
             : state.status === "error"
             ? "Failed. Please retry!"
             : "Drop now"}
