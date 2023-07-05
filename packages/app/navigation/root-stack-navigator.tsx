@@ -20,6 +20,7 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropUpdateScreen } from "app/screens/drop-update";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
@@ -207,6 +208,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="dropViewShareModal"
           component={DropViewShareScreen}
+        />
+        <Stack.Screen
+          name="dropEditDetailsModal"
+          component={DropEditDetailsScreen}
         />
         <Stack.Screen name="raffle" component={RaffleScreen} />
         <Stack.Screen

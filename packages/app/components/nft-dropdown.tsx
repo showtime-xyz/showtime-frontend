@@ -182,7 +182,48 @@ function NFTDropdown({
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           ) : null}
+          {edition?.is_editable ? (
+            <DropdownMenuItem
+              onSelect={() => {
+                const contractAddress = nft?.contract_address;
+                const tokenId = nft?.token_id;
+                const chainName = nft?.chain_name;
 
+                const as = `/drop/edit-details/${chainName}/${contractAddress}/${tokenId}`;
+                router.push(
+                  Platform.select({
+                    native: as,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        contractAddress,
+                        tokenId,
+                        chainName,
+                        dropEditDetailsModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: as,
+                    web: router.asPath,
+                  }),
+                  { shallow: true }
+                );
+              }}
+              key="edit details"
+            >
+              <MenuItemIcon
+                Icon={Edit}
+                ios={{
+                  name: "square.and.pencil",
+                }}
+              />
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                Edit Drop Details
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          ) : null}
           {isMobileWeb() ? (
             <DropdownMenuItem
               onSelect={() => {
@@ -209,7 +250,8 @@ function NFTDropdown({
 
           {nft.multiple_owners_list &&
             nft.multiple_owners_list.length > 0 &&
-            nft.contract_address && (
+            nft.contract_address &&
+            edition?.is_onchain && (
               <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
                 <MenuItemIcon
                   Icon={OpenSea}

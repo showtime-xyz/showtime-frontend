@@ -57,6 +57,7 @@ export type NFT = {
   token_edition_identifier?: string;
   source_url: string;
   creator_airdrop_edition_address?: string;
+  creator_airdrop_edition_contract_version: ContractVersion;
   still_preview_url: string;
   mime_type: string;
   chain_identifier: string;
@@ -234,10 +235,15 @@ export interface AllSellers {
   sale_identifier: number;
   quantity: number;
 }
-
+export enum ContractVersion {
+  V1 = 1,
+  V2 = 2,
+  BATCH_V1 = 3,
+}
 export type IEdition = {
   id: number;
   contract_address: string;
+  contract_version: ContractVersion;
   minter_address: string;
   description: string;
   edition_size: number;

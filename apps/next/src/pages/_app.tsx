@@ -27,7 +27,6 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
-import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
 import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
@@ -35,6 +34,7 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropFreeScreen } from "app/screens/drop-free";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
@@ -205,13 +205,12 @@ function App({ Component, pageProps, router }: AppProps) {
         <CheckoutReturnScreen />
         <QRCodeShareScreen />
         <DropViewShareScreen />
-        <CreatorChannelsCongratsScreen />
         <CreatorChannelsIntroScreen />
         <CreatorChannelsMembersScreen />
         <CreatorChannelsSettingsScreen />
         <CreatorChannelsMessageReactionsScreen />
         <CreatorChannelsShareScreen />
-        {/* Settings that renders on top of other modals */}
+        <DropEditDetailsScreen />
         <EditProfileScreen />
         <OnboardingScreen />
         <AddEmailScreen />
