@@ -270,29 +270,25 @@ export const useDropNFT = () => {
       ) {
         requestData.release_date = params.releaseDate;
       }
+      callback?.();
+
       const relayerResponse = await axios({
         url: "/v1/creator-airdrops/edition/draft",
         method: "POST",
         data: requestData,
-      })
-        .then((res) => {
-          dispatch({
-            type: "success",
-            edition: res?.creator_airdrop_edition,
-          });
-          Analytics.track(EVENTS.DROP_CREATED);
-          mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
-        })
-        .catch((error) => {
-          dispatch({ type: "error", error: error.message });
-        });
-      console.log(relayerResponse);
+      });
+
+      dispatch({
+        type: "success",
+        edition: relayerResponse?.creator_airdrop_edition,
+      });
+      Analytics.track(EVENTS.DROP_CREATED);
+      mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
 
       // console.log("relayer response :: ", relayerResponse);
       // await pollTransaction({
       //   transactionId: relayerResponse.relayed_transaction_id,
       // });
-      callback?.();
     } catch (e: any) {
       const errorMessage = formatAPIErrorMessage(e);
       dispatch({ type: "error", error: errorMessage });
