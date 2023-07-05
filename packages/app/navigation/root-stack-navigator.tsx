@@ -40,10 +40,7 @@ import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 
-import { DropEventScreen } from "../screens/drop-event";
 import { DropFreeScreen } from "../screens/drop-free";
-import { DropMusicScreen } from "../screens/drop-music";
-import { DropPrivateScreen } from "../screens/drop-private";
 import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
@@ -195,24 +192,8 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen
-          name="dropMusic"
-          component={DropMusicScreen}
-          options={{ gestureEnabled: false }}
-        />
-
-        <Stack.Screen
           name="dropFree"
           component={DropFreeScreen}
-          options={{ gestureEnabled: false }}
-        />
-        <Stack.Screen
-          name="dropEvent"
-          component={DropEventScreen}
-          options={{ gestureEnabled: false }}
-        />
-        <Stack.Screen
-          name="dropPrivate"
-          component={DropPrivateScreen}
           options={{ gestureEnabled: false }}
         />
         <Stack.Screen name="claim" component={ClaimScreen} />

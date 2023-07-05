@@ -15,7 +15,7 @@ export const initialiseAppleMusic = async () => {
     const developerToken = res.developer_token;
 
     //@ts-ignore
-    appleMusicAuth.music = await window.MusicKit.configure({
+    appleMusicAuth.music = await window.MusicKit.configure?.({
       developerToken,
       app: {
         name: "Showtime",

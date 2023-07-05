@@ -83,7 +83,6 @@ type RootStackNavigatorParams = {
   privacySecuritySettings: undefined;
   notificationSettings: undefined;
   blockedList: undefined;
-  dropMusic: undefined;
   dropFree: undefined;
   dropSlug: SwipeListParams & {
     dropSlug?: string;

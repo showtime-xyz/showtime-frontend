@@ -55,6 +55,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       ref,
       () => ({
         close,
+        snapToIndex: () => {},
       }),
       [close]
     );
