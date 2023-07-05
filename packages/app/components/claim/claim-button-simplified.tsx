@@ -1,30 +1,15 @@
 import { useContext, useMemo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
-import { formatDistanceToNowStrict } from "date-fns";
-
-import { ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Spotify,
-  Check,
-  Hourglass,
-  PreAddAppleMusic,
-} from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimContext } from "app/context/claim-context";
-import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
-import { useRedirectToRaffleResult } from "app/hooks/use-redirect-to-raffle-result";
-import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
-import { useUser } from "app/hooks/use-user";
-import { Analytics, EVENTS } from "app/lib/analytics";
 
 import { toast } from "design-system/toast";
 
@@ -68,10 +53,10 @@ export const ClaimButtonSimplified = ({
 
   const buttonBgColor = useMemo(() => {
     if (status === ClaimStatus.Expired) {
-      return isDark ? colors.gray[600] : colors.gray[200];
+      return isDark ? colors.gray[800] : colors.gray[100];
     }
     if (status === ClaimStatus.Soldout) {
-      return isDark ? colors.gray[600] : colors.gray[200];
+      return isDark ? colors.gray[800] : colors.gray[100];
     }
     if (status === ClaimStatus.Claimed) {
       return colors.green[500];
@@ -85,7 +70,7 @@ export const ClaimButtonSimplified = ({
       return colors.gray[400];
     }
     if (status === ClaimStatus.Soldout) {
-      return colors.orange[500];
+      return "#E40000";
     }
     if (status === ClaimStatus.Claimed) {
       return colors.white;

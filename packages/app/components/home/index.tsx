@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { useWindowDimensions, Dimensions, Platform } from "react-native";
 
 import {
@@ -11,6 +11,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useFeed } from "app/hooks/use-feed";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
@@ -29,6 +30,9 @@ export const Home = () => {
   const bottomBarHeight = usePlatformBottomHeight();
   const isMdWidth = width >= breakpoints["md"];
   const { data, isLoading } = useFeed();
+  const listRef = useRef<any>();
+  useScrollToTop(listRef);
+
   const mediaSize = isMdWidth ? 500 : width - 48 - 56;
   const keyExtractor = useCallback((item: any, index: any) => `${index}`, []);
   const renderItem = useCallback(
@@ -91,6 +95,7 @@ export const Home = () => {
                 default: headerHeight,
               }),
             }}
+            ref={listRef}
             getItemType={getItemType}
             ListEmptyComponent={ListEmptyComponent}
             useWindowScroll={isMdWidth}
