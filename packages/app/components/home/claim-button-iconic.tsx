@@ -5,6 +5,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime, Check2 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -142,7 +143,6 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
             </Text>
           </>
         }
-        buttonTw="dark:bg-gray-900 bg-gray-100"
         {...rest}
       >
         <Text tw="w-[28px] text-center text-xs font-semibold text-[#E40000]">
@@ -169,7 +169,6 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
             </Text>
           </>
         }
-        buttonTw="dark:bg-gray-900 bg-gray-100"
         {...rest}
       >
         <Text tw="text-xs font-semibold text-gray-600">Expired</Text>
@@ -228,10 +227,10 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
           </Text>
         </>
       }
-      buttonTw="dark:bg-white bg-black"
+      buttonColor={isDark ? "#fff" : colors.gray[900]}
       {...rest}
     >
-      {/* <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full ">
+      {/* <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
         <Image
           source={{
             uri: "https://media.showtime.xyz/assets/showtime-abstract.png",

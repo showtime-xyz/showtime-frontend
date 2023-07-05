@@ -119,6 +119,7 @@ export const HomeItem = memo<{
               edition={edition}
               iconSize={20}
               iconColor={isDark ? colors.gray[100] : colors.gray[900]}
+              shouldEnableSharing={false}
             />
           </View>
         </View>
@@ -164,7 +165,7 @@ export const HomeItem = memo<{
                   loading={index > 0 ? "lazy" : "eager"}
                 />
                 <View tw="absolute right-1.5 top-1.5">
-                  <ContentType edition={edition} />
+                  <ContentType edition={edition} theme="light" />
                 </View>
                 <NSFWGate
                   show={nft.nsfw}
@@ -190,31 +191,40 @@ export const HomeItemSketelon = ({ mediaSize = 500 }) => {
           <View tw="h-2" />
           <Skeleton width={60} height={12} radius={4} show />
         </View>
-        <Skeleton tw="ml-auto" width={74} height={22} radius={999} show />
+        <View tw="ml-auto flex-row items-center justify-center">
+          <Skeleton width={80} height={22} radius={999} show />
+          <View tw="w-2" />
+          <Skeleton width={22} height={22} radius={999} show />
+        </View>
       </View>
       <Skeleton width={200} height={20} radius={4} show />
-      <Skeleton width={mediaSize} height={16} radius={4} show tw="my-3" />
+      <View tw="h-3" />
+      <Skeleton width={mediaSize} height={16} radius={4} show />
+      <View tw="h-3" />
       <Skeleton width={300} height={16} radius={4} show />
-      <Skeleton width={160} height={20} radius={4} show tw="my-3" />
+      <View tw="h-3" />
+      <Skeleton width={160} height={20} radius={4} show />
+      <View tw="h-3" />
+
       <View tw="flex-row items-center">
         <Skeleton width={mediaSize} height={mediaSize} radius={16} show />
         <View tw="ml-4">
           <View tw="mb-4">
-            <Skeleton height={56} width={56} radius={999} show={true} />
+            <Skeleton height={56} width={56} radius={999} show />
             <View tw="mt-2 items-center">
-              <Skeleton height={16} width={32} radius={6} show={true} />
+              <Skeleton height={16} width={32} radius={6} show />
             </View>
           </View>
           <View tw="mb-4">
-            <Skeleton height={56} width={56} radius={999} show={true} />
+            <Skeleton height={56} width={56} radius={999} show />
             <View tw="mt-2 items-center">
-              <Skeleton height={16} width={32} radius={6} show={true} />
+              <Skeleton height={16} width={32} radius={6} show />
             </View>
           </View>
           <View>
-            <Skeleton height={56} width={56} radius={999} show={true} />
+            <Skeleton height={56} width={56} radius={999} show />
             <View tw="mt-2 items-center">
-              <Skeleton height={16} width={32} radius={6} show={true} />
+              <Skeleton height={16} width={32} radius={6} show />
             </View>
           </View>
         </View>

@@ -248,43 +248,42 @@ function NFTDropdown({
                   {isShareAPIAvailable ? "Share" : "Copy Link"}
                 </DropdownMenuItemTitle>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => {
+                  const as = `/qr-code-share/${nft?.contract_address}`;
+                  router.push(
+                    Platform.select({
+                      native: as,
+                      web: {
+                        pathname: router.pathname,
+                        query: {
+                          ...router.query,
+                          contractAddress: nft?.contract_address,
+                          qrCodeShareModal: true,
+                        },
+                      } as any,
+                    }),
+                    Platform.select({
+                      native: as,
+                      web: router.asPath,
+                    }),
+                    { shallow: true }
+                  );
+                }}
+                key="qr-code"
+              >
+                <MenuItemIcon
+                  Icon={QrCode}
+                  ios={{
+                    name: "qrcode",
+                  }}
+                />
+                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                  QR Code
+                </DropdownMenuItemTitle>
+              </DropdownMenuItem>
             </>
           )}
-
-          <DropdownMenuItem
-            onSelect={() => {
-              const as = `/qr-code-share/${nft?.contract_address}`;
-              router.push(
-                Platform.select({
-                  native: as,
-                  web: {
-                    pathname: router.pathname,
-                    query: {
-                      ...router.query,
-                      contractAddress: nft?.contract_address,
-                      qrCodeShareModal: true,
-                    },
-                  } as any,
-                }),
-                Platform.select({
-                  native: as,
-                  web: router.asPath,
-                }),
-                { shallow: true }
-              );
-            }}
-            key="qr-code"
-          >
-            <MenuItemIcon
-              Icon={QrCode}
-              ios={{
-                name: "qrcode",
-              }}
-            />
-            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-              QR Code
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
 
           {!isCreatorDrop && (
             <DropdownMenuItem

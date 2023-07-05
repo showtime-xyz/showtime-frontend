@@ -52,7 +52,6 @@ export function FeedCommentButton({ nft, ...rest }: CommentButtonProps) {
     <FeedSocialButton
       onPress={handleOnPress}
       text={`${formatNumber(nft?.comment_count)}`}
-      buttonTw="bg-gray-100 dark:bg-gray-900"
       {...rest}
     >
       <Messagev2 color={isDark ? colors.white : colors.gray[900]} />

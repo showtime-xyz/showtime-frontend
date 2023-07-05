@@ -87,6 +87,7 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
               <ClaimedBy
                 claimersList={detail?.multiple_owners_list}
                 nft={nft}
+                textColor="#fff"
               />
             </View>
           </View>

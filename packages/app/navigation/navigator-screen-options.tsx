@@ -40,12 +40,10 @@ export const screenOptions = ({
       // Similar to `headerShadowVisible` but for web
       // @ts-ignore
       borderBottomWidth: 0,
-      backgroundColor:
-        Platform.OS === "android" && isDark
-          ? "black"
-          : Platform.OS === "android" && !isDark
-          ? "white"
-          : "transparent",
+      backgroundColor: Platform.select({
+        android: isDark ? "black" : "white",
+        default: isDark ? "rgba(0,0,0,.2)" : "rgba(255,255,255,.8)",
+      }),
     },
     cardStyle: { flex: 1, backgroundColor: "transparent" },
     cardOverlayEnabled: false,

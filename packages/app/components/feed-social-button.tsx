@@ -1,22 +1,30 @@
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 type SocialButtonProps = PressableProps & {
   text?: string | JSX.Element;
   children?: React.ReactNode;
-  buttonTw?: string;
+  buttonColor?: string;
 };
 export function FeedSocialButton({
   children,
   text,
-  buttonTw = "",
+  buttonColor,
   ...rest
 }: SocialButtonProps) {
+  const isDark = useIsDarkMode();
+
   return (
     <Pressable {...rest}>
       <View
-        tw={["h-14 w-14 items-center justify-center rounded-full", buttonTw]}
+        tw={"h-14 w-14 items-center justify-center rounded-full"}
+        style={{
+          backgroundColor:
+            buttonColor ?? (isDark ? colors.gray[900] : colors.gray[100]),
+        }}
       >
         {children}
       </View>

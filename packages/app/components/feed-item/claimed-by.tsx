@@ -14,12 +14,14 @@ type NFTDetailsProps = {
   claimersList: NFT["multiple_owners_list"] | undefined;
   tw?: string;
   avatarSize?: number;
+  textColor?: string;
 };
 export const ClaimedBy = ({
   nft,
   claimersList,
   avatarSize = 20,
   tw = "",
+  textColor,
 }: NFTDetailsProps) => {
   const router = useRouter();
   const slicedClaimersList = useMemo(
@@ -61,7 +63,10 @@ export const ClaimedBy = ({
             </View>
           );
         })}
-        <Text tw="ml-1 flex-1 text-xs text-white dark:text-white md:text-sm md:text-gray-900">
+        <Text
+          tw="ml-1 flex-1 text-xs text-gray-900 dark:text-white md:text-sm"
+          style={textColor ? { color: textColor } : {}}
+        >
           <TextLink
             href={`/@${firstClaimer.username ?? firstClaimer.wallet_address}`}
             tw="font-bold"
