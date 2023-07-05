@@ -23,7 +23,7 @@ export function FeedSocialButton({
         tw={"h-14 w-14 items-center justify-center rounded-full"}
         style={{
           backgroundColor:
-            buttonColor ?? (isDark ? colors.gray[900] : colors.gray[100]),
+            buttonColor ?? (isDark ? colors.gray[800] : colors.gray[100]),
         }}
       >
         {children}

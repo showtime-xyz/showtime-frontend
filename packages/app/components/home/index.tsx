@@ -96,6 +96,7 @@ export const Home = () => {
             useWindowScroll={isMdWidth}
             style={{
               height: Platform.select({
+                android: windowHeight - headerHeight,
                 default: windowHeight - bottomBarHeight,
                 ios: windowHeight,
               }),

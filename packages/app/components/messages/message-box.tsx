@@ -135,7 +135,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             }}
           >
             <View
-              tw="absolute bottom-0 h-5 w-2.5 bg-white dark:bg-black"
+              tw="absolute bottom-0 h-5 w-2.5 bg-white dark:bg-black md:dark:bg-gray-900"
               style={{
                 borderBottomRightRadius: 10,
               }}
