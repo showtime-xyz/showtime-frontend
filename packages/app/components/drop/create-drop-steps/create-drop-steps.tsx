@@ -2,11 +2,9 @@ import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import {
   useWindowDimensions,
   Platform,
-  Linking,
   ScrollView as RNScrollView,
 } from "react-native";
 
-import * as Clipboard from "expo-clipboard";
 import { Controller } from "react-hook-form";
 import Animated, {
   FadeIn,
@@ -101,7 +99,6 @@ export const CreateDropSteps = () => {
   const description = getValues("description");
   const file = getValues("file");
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
-  const isDark = useIsDarkMode();
 
   const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
     watch,
@@ -725,11 +722,11 @@ const CreateDropStepSongURI = (
             </View>
           ) : null}
 
-          <View tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-            <Pressable
-              tw="flex-row items-center justify-between"
-              onPress={props.handleMoreOptions}
-            >
+          <Pressable
+            tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800"
+            onPress={props.handleMoreOptions}
+          >
+            <View tw="flex-row items-center justify-between">
               <Text tw="text-sm font-semibold text-black dark:text-white">
                 More options
               </Text>
@@ -738,11 +735,11 @@ const CreateDropStepSongURI = (
                 width={24}
                 height={24}
               />
-            </Pressable>
+            </View>
             <View tw="items-start">
               <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
                 <DataPill
-                  tw="bg-white"
+                  tw={isDark ? "bg-black" : "bg-white"}
                   label={
                     isUnlimited
                       ? `Open Edition`
@@ -753,18 +750,18 @@ const CreateDropStepSongURI = (
                   type="text"
                 />
                 <DataPill
-                  tw="bg-white"
+                  tw={isDark ? "bg-black" : "bg-white"}
                   label={`${getValues("royalty")}% Royalties`}
                   type="text"
                 />
                 <DataPill
-                  tw="bg-white"
+                  tw={isDark ? "bg-black" : "bg-white"}
                   label={selectedDurationLabel}
                   type="text"
                 />
               </View>
             </View>
-          </View>
+          </Pressable>
         </View>
         <Text tw="pt-4 text-sm text-gray-600 dark:text-gray-200">
           This drop will be owned by you
@@ -903,7 +900,7 @@ const CreateDropMoreOptions = (
             />
           </Pressable>
         </View>
-        <View tw="mt-4">
+        <View tw="mt-4 flex-1">
           <Controller
             control={control}
             name="royalty"
@@ -950,7 +947,7 @@ const CreateDropMoreOptions = (
             }}
           />
         </View>
-        <View tw="my-4">
+        <View tw="my-4 flex-1">
           <Controller
             control={control}
             name="notSafeForWork"
@@ -1010,7 +1007,9 @@ const Layout = (props: {
           )}
         </Pressable>
         <View tw="mx-auto">
-          <Text tw="text-lg text-black dark:text-white">{props.title}</Text>
+          <Text tw="text-base font-bold text-black dark:text-white">
+            {props.title}
+          </Text>
         </View>
       </View>
       {props.children}

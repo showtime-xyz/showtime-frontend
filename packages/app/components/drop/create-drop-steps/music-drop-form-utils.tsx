@@ -142,9 +142,9 @@ export const useMusicDropForm = () => {
     trigger,
   } = useForm<any>({
     resolver: yupResolver(dropValidationSchema as any),
-    reValidateMode: "onChange",
-    mode: "onBlur",
+    mode: "onChange",
     shouldFocusError: true,
+    reValidateMode: "onChange",
   });
 
   return {
