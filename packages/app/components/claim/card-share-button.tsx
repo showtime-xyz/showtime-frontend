@@ -10,7 +10,7 @@ type CommentButtonProps = SocialButtonProps & {
   vertical?: boolean;
 };
 
-export function CradShareButton({ nft, ...rest }: CommentButtonProps) {
+export function CardShareButton({ nft, ...rest }: CommentButtonProps) {
   const { iconColor } = useSocialColor();
   const { shareNFT } = useShareNFT();
 

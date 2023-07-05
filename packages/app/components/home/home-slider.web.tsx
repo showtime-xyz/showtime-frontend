@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, memo } from "react";
 import { useWindowDimensions } from "react-native";
 
 import "swiper/css";
@@ -15,7 +15,7 @@ type Props = Pick<CarouselProps, "data" | "height" | "renderItem"> & {
   slidesPerView?: number;
 };
 
-export function HomeSlider({
+export const HomeSlider = memo(function HomeSlider({
   data,
   renderItem,
   height,
@@ -88,4 +88,4 @@ export function HomeSlider({
       />
     </>
   );
-}
+});

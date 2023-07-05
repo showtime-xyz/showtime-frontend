@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, memo } from "react";
 import { View } from "react-native";
 
 import "swiper/css";
@@ -16,7 +16,7 @@ const paginationClassName = {
   dot: "dot-pagination",
   rectangle: "rectangle-pagination",
 };
-export function Carousel({
+export const Carousel = memo(function Carousel({
   renderItem,
   width,
   height,
@@ -91,4 +91,4 @@ export function Carousel({
       )}
     </>
   );
-}
+});

@@ -29,7 +29,7 @@ import { HomeSlider } from "./home-slider";
 
 const INFO_HEIGTH = 230;
 const windowWidth = Dimensions.get("window").width;
-const PopularCreatorItem = ({
+const PopularCreatorItem = memo(function PopularCreatorItem({
   item,
   width,
   style,
@@ -39,7 +39,7 @@ const PopularCreatorItem = ({
   item: CreatorChannel;
   width: number;
   index: number;
-} & ViewProps) => {
+} & ViewProps) {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const joinChannel = useJoinChannel();
@@ -100,7 +100,7 @@ const PopularCreatorItem = ({
       </Pressable>
     </Pressable>
   );
-};
+});
 const PopularCreatorSkeletonItem = ({
   width = 174,
   style,

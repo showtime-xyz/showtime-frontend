@@ -16,7 +16,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { CarouselProps } from "./types";
 
 const StyledRNRCarousel = styled(RNRCarousel);
-export function Carousel({
+export const Carousel = memo(function Carousel({
   pagination,
   controller = false,
   data,
@@ -90,18 +90,18 @@ export function Carousel({
       )} */}
     </View>
   );
-}
+});
 type PaginationItemProps = {
   index: number;
   length: number;
   animValue: Animated.SharedValue<number>;
   isRotate?: boolean;
 };
-const PaginationDotItem: React.FC<PaginationItemProps> = ({
+const PaginationDotItem = memo(function PaginationDotItem({
   animValue,
   index,
   length,
-}) => {
+}: PaginationItemProps) {
   const width = 8;
   const isDark = useIsDarkMode();
   const animStyle = useAnimatedStyle(() => {
@@ -143,7 +143,7 @@ const PaginationDotItem: React.FC<PaginationItemProps> = ({
       />
     </View>
   );
-};
+});
 
 const PaginationRectangleItem = memo<PaginationItemProps>(
   function PaginationRectangleItem({ animValue, index, length }) {

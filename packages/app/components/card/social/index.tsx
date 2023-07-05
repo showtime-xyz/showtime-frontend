@@ -1,6 +1,6 @@
 import { View } from "@showtime-xyz/universal.view";
 
-import { CradShareButton } from "app/components/claim/crad-share-button";
+import { CardShareButton } from "app/components/claim/card-share-button";
 import { GiftButton } from "app/components/claim/gift-button";
 import { CommentButton } from "app/components/feed/comment-button";
 // import { Like } from "app/components/feed/like";
@@ -19,7 +19,7 @@ function Social({ nft, tw = "" }: SocialProps) {
         {/* <Like nft={nft} /> */}
         <CommentButton nft={nft} />
         <GiftButton nft={nft} />
-        <CradShareButton nft={nft} />
+        <CardShareButton nft={nft} />
       </View>
     </View>
   );
