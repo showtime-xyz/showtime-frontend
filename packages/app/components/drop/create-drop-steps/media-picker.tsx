@@ -15,7 +15,7 @@ type MediaPickerProps = {
   onChange: (fileObj: FilePickerResolveValue) => void;
   disabled?: boolean;
   errorMessage?: string;
-  size?: number;
+  size: number;
 };
 
 export const MediaPicker = (props: MediaPickerProps) => {
