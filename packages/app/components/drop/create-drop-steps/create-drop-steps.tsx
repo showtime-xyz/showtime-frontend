@@ -334,7 +334,7 @@ const CreateDropStepMedia = (
   } = props;
   const { width: windowWidth } = useWindowDimensions();
 
-  const mediaWidth = Math.min(400, windowWidth - 32);
+  const mediaWidth = Math.min(340, windowWidth - 32);
 
   return (
     <Layout onBackPress={handlePrevStep} title="Create">
