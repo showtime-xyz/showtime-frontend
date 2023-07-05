@@ -28,6 +28,9 @@ function NotificationsNavigator() {
         headerLeft: HeaderLeft,
         headerRight: NotificationsSettingIcon,
       })}
+      // screenOptions={{
+      //   headerTitleStyle: {  },
+      // }}
     >
       <NotificationsStack.Screen
         name="notifications"

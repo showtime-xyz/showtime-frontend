@@ -20,6 +20,7 @@ export const HeaderLeft = ({
   const router = useRouter();
 
   const canGoHome = router.pathname.split("/").length - 1 >= 2;
+
   const isHome = router.pathname === "/";
   const Icon = canGoBack || canGoHome ? ArrowLeft : Showtime;
 
@@ -35,7 +36,11 @@ export const HeaderLeft = ({
         withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
-        router.push("/");
+        if (canGoHome) {
+          router.push("/");
+        } else {
+          router.back();
+        }
       }}
     >
       {isHome ? (
