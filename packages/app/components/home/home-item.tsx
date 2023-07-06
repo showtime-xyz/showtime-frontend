@@ -161,7 +161,7 @@ export const HomeItem = memo<{
               >
                 <ListMedia
                   item={nft}
-                  optimizedWidth={1000}
+                  optimizedWidth={mediaSize * 2.4}
                   loading={index > 0 ? "lazy" : "eager"}
                 />
                 <View tw="absolute right-1.5 top-1.5">
