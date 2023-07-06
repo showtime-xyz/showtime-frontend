@@ -2,7 +2,8 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { View } from "@showtime-xyz/universal.view";
+
+import { useUser } from "app/hooks/use-user";
 
 import { ShowtimeBrandLogo } from "../showtime-brand";
 
@@ -16,6 +17,7 @@ export const HeaderLeft = ({
   withBackground = false,
   color,
 }: HeaderLeftProps) => {
+  const { isAuthenticated } = useUser();
   const isDark = useIsDarkMode();
   const router = useRouter();
 
@@ -43,7 +45,7 @@ export const HeaderLeft = ({
         }
       }}
     >
-      {isHome ? (
+      {isHome || !isAuthenticated ? (
         <ShowtimeBrandLogo
           color={
             color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"

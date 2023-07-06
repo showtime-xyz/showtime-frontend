@@ -13,10 +13,14 @@ export type CreatorChannel = Omit<
 const PAGE_SIZE = 15;
 
 export const useOwnedChannelsList = () => {
-  const channelsFetcher = useCallback((index: number, previousPageData: []) => {
-    if (previousPageData && !previousPageData.length) return null;
-    return `/v1/channels/owned?page=1&limit=1`; // hardcode for now
-  }, []);
+  const { isAuthenticated } = useUser();
+  const channelsFetcher = useCallback(
+    (index: number, previousPageData: []) => {
+      if (previousPageData && !previousPageData.length) return null;
+      return isAuthenticated ? `/v1/channels/owned?page=1&limit=1` : ""; // hardcode for now
+    },
+    [isAuthenticated]
+  );
 
   const queryState = useInfiniteListQuerySWR<CreatorChannel[]>(
     channelsFetcher,
