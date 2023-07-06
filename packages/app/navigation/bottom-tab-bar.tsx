@@ -56,11 +56,7 @@ export const ThemeBottomTabbar = ({
           }
 
           if (!focused && !event.defaultPrevented) {
-            if (
-              (route.name === "notificationsTab" ||
-                route.name === "profileTab") &&
-              !isAuthenticated
-            ) {
+            if (route.name !== "homeTab" && !isAuthenticated) {
               redirectToScreen({
                 redirectedCallback: () => {
                   navigation.navigate({

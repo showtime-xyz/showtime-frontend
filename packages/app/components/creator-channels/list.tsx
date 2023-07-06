@@ -17,6 +17,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { formatDateRelativeWithIntl } from "app/utilities";
@@ -258,7 +259,7 @@ export const CreatorChannelsList = memo(
     const listRef = useRef<FlashList<any>>(null);
     //@ts-expect-error still no support for FlashList as type
     useScrollToTop(listRef);
-
+    const { isAuthenticated } = useUser();
     const isDark = useIsDarkMode();
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
@@ -359,6 +360,7 @@ export const CreatorChannelsList = memo(
     }, []);
 
     const ListFooterComponent = useCallback(() => {
+      if (!isAuthenticated) return null;
       if (
         isLoadingOwnChannels ||
         isLoadingJoinedChannels ||
@@ -383,6 +385,7 @@ export const CreatorChannelsList = memo(
       isLoadingJoinedChannels,
       isLoadingMoreJoinedChannels,
       isLoadingSuggestedChannels,
+      isAuthenticated,
     ]);
 
     const refreshPage = useCallback(async () => {

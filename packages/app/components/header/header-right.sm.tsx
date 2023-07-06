@@ -48,14 +48,7 @@ export const HeaderRightSm = ({ withBackground }: HeaderRightProps) => {
                 Sign In
               </Button>
             ) : (
-              <Button
-                onPress={navigateToLogin}
-                variant="primary"
-                size="regular"
-                labelTW="font-semibold"
-              >
-                Sign In
-              </Button>
+              <Button onPress={navigateToLogin}>Sign In</Button>
             )}
           </View>
         </View>
