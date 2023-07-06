@@ -155,13 +155,13 @@ export const HomeItem = memo<{
               <View
                 tw="overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-900"
                 style={{
-                  width: mediaSize,
-                  height: mediaSize,
+                  width: mediaSize - 1,
+                  height: mediaSize - 1,
                 }}
               >
                 <ListMedia
                   item={nft}
-                  optimizedWidth={mediaSize * 2.4}
+                  optimizedWidth={1000}
                   loading={index > 0 ? "lazy" : "eager"}
                 />
                 <View tw="absolute right-1.5 top-1.5">
