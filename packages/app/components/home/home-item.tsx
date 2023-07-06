@@ -159,19 +159,26 @@ export const HomeItem = memo<{
                   height: mediaSize - 1,
                 }}
               >
-                <ListMedia
-                  item={nft}
-                  optimizedWidth={mediaSize * 2.4}
-                  loading={index > 0 ? "lazy" : "eager"}
-                />
-                <View tw="absolute right-1.5 top-1.5">
-                  <ContentType edition={edition} theme="light" />
+                <View
+                  style={{
+                    width: mediaSize,
+                    height: mediaSize,
+                  }}
+                >
+                  <ListMedia
+                    item={nft}
+                    optimizedWidth={1000}
+                    loading={index > 0 ? "lazy" : "eager"}
+                  />
+                  <View tw="absolute right-1.5 top-1.5">
+                    <ContentType edition={edition} theme="light" />
+                  </View>
+                  <NSFWGate
+                    show={nft.nsfw}
+                    nftId={nft.nft_id}
+                    variant="thumbnail"
+                  />
                 </View>
-                <NSFWGate
-                  show={nft.nsfw}
-                  nftId={nft.nft_id}
-                  variant="thumbnail"
-                />
               </View>
             </RouteComponent>
             <FeedEngagementIcons nft={nft} edition={edition} />

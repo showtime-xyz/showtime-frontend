@@ -73,19 +73,21 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
       >
         <View
           tw="overflow-hidden rounded-2xl"
-          style={{ width: mediaWidth, height: mediaWidth }}
+          style={{ width: mediaWidth - 1, height: mediaWidth - 1 }}
         >
-          <ListMedia
-            item={nft}
-            resizeMode={ResizeMode.COVER}
-            optimizedWidth={500}
-            loading={index > 0 ? "lazy" : "eager"}
-          />
-          <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
-          <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black/50">
-            <Text tw="font-bold text-white" style={{ fontSize: 15 }}>
-              {index + 1}
-            </Text>
+          <View style={{ width: mediaWidth, height: mediaWidth }}>
+            <ListMedia
+              item={nft}
+              resizeMode={ResizeMode.COVER}
+              optimizedWidth={500}
+              loading={index > 0 ? "lazy" : "eager"}
+            />
+            <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
+            <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black/50">
+              <Text tw="font-bold text-white" style={{ fontSize: 15 }}>
+                {index + 1}
+              </Text>
+            </View>
           </View>
         </View>
       </RouteComponent>
