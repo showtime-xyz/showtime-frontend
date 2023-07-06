@@ -5,9 +5,10 @@ import { useSharedValue } from "react-native-reanimated";
 import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/virtual";
-import { Virtual, Keyboard, Mousewheel, Navigation } from "swiper/modules";
+import { Virtual, Keyboard, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
+import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { clamp } from "@showtime-xyz/universal.utils";
 import { View } from "@showtime-xyz/universal.view";
@@ -23,6 +24,8 @@ import { useScrollToTop } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 import { isMobileWeb, isSafari } from "app/utilities";
+
+import { EmptyPlaceholder } from "./empty-placeholder";
 
 type Props = {
   data: NFT[];
@@ -99,7 +102,23 @@ export const SwipeList = ({
     },
     [visibleItems, data, router, isSwipeListScreen]
   );
-
+  const renderItem = useCallback(
+    ({ item, index }: any) => {
+      return (
+        <ItemKeyContext.Provider value={index}>
+          <FeedItem nft={item} itemHeight={windowHeight} />
+        </ItemKeyContext.Provider>
+      );
+    },
+    [windowHeight]
+  );
+  const ListHeaderComponent = useCallback(() => {
+    return (
+      <View>
+        <EmptyPlaceholder />
+      </View>
+    );
+  }, []);
   if (data.length === 0) return null;
 
   return (
@@ -111,39 +130,17 @@ export const SwipeList = ({
       <VideoConfigContext.Provider value={videoConfig}>
         <SwiperActiveIndexContext.Provider value={activeIndex}>
           <ViewabilityItemsContext.Provider value={visibleItems}>
-            <Swiper
-              modules={[Virtual, Keyboard, Mousewheel]}
-              height={windowHeight}
-              width={windowWidth}
-              keyboard
-              initialSlide={clamp(initialScrollIndex, 0, data.length - 1)}
-              virtual={{
-                enabled: true,
-                addSlidesBefore: 1,
-                addSlidesAfter: 2,
-                cache: false,
-              }}
-              direction="vertical"
-              onRealIndexChange={onRealIndexChange}
-              onReachEnd={fetchMore}
-              threshold={isMobileWeb() ? 0 : 25}
-              noSwiping
-              noSwipingClass="swiper-no-swiping"
-              mousewheel={{
-                noMousewheelClass: "swiper-no-swiping",
-                sensitivity: 1.1,
-                thresholdTime: 800,
-              }}
-              className="w-full"
-            >
-              {data.map((item, index) => (
-                <SwiperSlide key={item.nft_id} virtualIndex={index}>
-                  <ItemKeyContext.Provider value={index}>
-                    <FeedItem nft={item} itemHeight={windowHeight} />
-                  </ItemKeyContext.Provider>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            <InfiniteScrollList
+              data={data}
+              renderItem={renderItem}
+              estimatedItemSize={64}
+              overscan={8}
+              ListHeaderComponent={ListHeaderComponent}
+              contentContainerStyle={{ paddingBottom: bottom }}
+            />
+            {/* {data.map((item, index) => (
+         
+              ))} */}
           </ViewabilityItemsContext.Provider>
         </SwiperActiveIndexContext.Provider>
       </VideoConfigContext.Provider>
