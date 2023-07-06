@@ -32,12 +32,14 @@ type CommentsProps = {
   nft: NFT;
   webListHeight?: number | string;
   ListHeaderComponent?: React.ComponentType<any>;
+  inputBackgroundColor?: string | null;
 };
 
 export function Comments({
   nft,
   webListHeight,
   ListHeaderComponent,
+  inputBackgroundColor,
 }: CommentsProps) {
   //#region refs
   const Alert = useAlert();
@@ -238,6 +240,7 @@ export function Comments({
                 commentInputRef={commentInputRef}
                 submitting={isSubmitting}
                 submit={newComment}
+                backgroundColor={inputBackgroundColor}
               />
             </Animated.View>
           )}

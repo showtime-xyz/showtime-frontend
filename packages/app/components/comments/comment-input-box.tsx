@@ -20,6 +20,7 @@ interface CommentInputBoxProps {
   style?: ViewStyle;
   commentInputRef?: any;
   submit: (message: string, parentId?: number | null) => Promise<void>;
+  backgroundColor?: string | null;
 }
 
 export interface CommentInputBoxMethods {
@@ -32,7 +33,10 @@ const getUsername = (comment?: CommentType) =>
 export const CommentInputBox = forwardRef<
   CommentInputBoxMethods,
   CommentInputBoxProps
->(function CommentInputBox({ submitting, submit, commentInputRef }, ref) {
+>(function CommentInputBox(
+  { submitting, submit, commentInputRef, backgroundColor },
+  ref
+) {
   //#region variables
   const Alert = useAlert();
   const [selectedComment, setSelectedComment] = useState<CommentType | null>(
@@ -121,6 +125,7 @@ export const CommentInputBox = forwardRef<
             ? { keyboardType: "twitter" }
             : { inputMode: "text" }),
         }}
+        backgroundColor={backgroundColor}
         tw="web:pb-0"
       />
     </>
