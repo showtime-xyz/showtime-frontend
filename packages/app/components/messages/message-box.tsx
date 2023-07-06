@@ -37,12 +37,12 @@ interface MessageBoxProps {
   textInputProps?: TextInputProps;
   tw?: string;
   submitButton?: React.ReactNode;
+  backgroundColor?: string | null;
 }
 
 export interface MessageBoxMethods {
   focus: () => void;
   reset: () => void;
-
   setValue: (value: string) => void;
 }
 
@@ -60,6 +60,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       submitButton,
       handleShiftEnter = true,
       tw = "",
+      backgroundColor,
     } = props;
     //#region variables
     const isDark = useIsDarkMode();
@@ -135,9 +136,11 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             }}
           >
             <View
-              tw="absolute bottom-0 h-5 w-2.5 bg-white dark:bg-black md:dark:bg-gray-900"
+              tw="absolute bottom-0 h-5 w-2.5"
               style={{
                 borderBottomRightRadius: 10,
+                backgroundColor:
+                  backgroundColor ?? (isDark ? colors.black : colors.white),
               }}
             >
               <View

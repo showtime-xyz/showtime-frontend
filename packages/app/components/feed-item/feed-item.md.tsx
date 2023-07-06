@@ -417,6 +417,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   nft={detailData?.data.item ?? nft}
                   key={index}
                   ListHeaderComponent={ListHeaderComponent}
+                  inputBackgroundColor={isDark ? colors.gray[900] : null}
                 />
               )}
             </Suspense>
