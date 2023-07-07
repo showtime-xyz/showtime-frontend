@@ -15,8 +15,6 @@ import Animated, {
 import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-import { useLike } from "app/context/like-context";
-
 const ICON_SIZE = 90;
 const heartContainerStyle: ViewStyle = {
   position: "absolute",
@@ -57,8 +55,6 @@ export const FeedItemTapGesture = ({
   mediaOffset,
   isVideo,
 }: FeedItemTapGestureProps) => {
-  const { like } = useLike();
-
   const heartAnimation = useSharedValue(0);
   const playAnimation = useSharedValue(0);
 
@@ -77,9 +73,8 @@ export const FeedItemTapGesture = ({
   });
 
   const doubleTapHandleOnJS = useCallback(() => {
-    like();
     showHeader?.();
-  }, [like, showHeader]);
+  }, [showHeader]);
 
   const toggleVideoPlayback = useCallback(async () => {
     if (!isVideo) return;
@@ -147,8 +142,8 @@ export const FeedItemTapGesture = ({
   );
 
   const gesture = useMemo(
-    () => Gesture.Exclusive(doubleTapHandle, longPressGesture, singleTapHandle),
-    [doubleTapHandle, longPressGesture, singleTapHandle]
+    () => Gesture.Exclusive(longPressGesture, singleTapHandle),
+    [longPressGesture, singleTapHandle]
   );
 
   const topOffset = useMemo(

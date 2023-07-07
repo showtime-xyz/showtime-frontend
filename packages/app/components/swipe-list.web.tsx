@@ -1,14 +1,27 @@
-import { useCallback, useMemo, useRef, createContext, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  createContext,
+  useState,
+  useLayoutEffect,
+} from "react";
 import { useWindowDimensions } from "react-native";
 
+import throttle from "lodash/throttle";
 import { useSharedValue } from "react-native-reanimated";
-import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/virtual";
 import { Virtual, Keyboard, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { useWebScroll } from "@showtime-xyz/universal.hooks";
+import {
+  InfiniteScrollList,
+  ListRenderItem,
+  ListRenderItemInfo,
+} from "@showtime-xyz/universal.infinite-scroll-list";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { clamp } from "@showtime-xyz/universal.utils";
 import { View } from "@showtime-xyz/universal.view";
@@ -19,14 +32,15 @@ import {
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 import { isMobileWeb, isSafari } from "app/utilities";
 
-import { EmptyPlaceholder } from "./empty-placeholder";
-
+const ViewabilityInfiniteScrollList =
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
 type Props = {
   data: NFT[];
   fetchMore?: () => void;
@@ -65,81 +79,81 @@ export const SwipeList = ({
     }),
     []
   );
+  useLayoutEffect(() => {
+    listRef.current?.scrollTo(0, initialScrollIndex * windowHeight);
+  }, [initialScrollIndex, windowHeight]);
+  // const onRealIndexChange = useCallback(() => {
+  //   const offsetY = listRef.current?.getBoundingClientRect()?.y;
+  //   const previousIndex = 0;
+  //   const activeIndex = 0;
 
-  const onRealIndexChange = useCallback(
-    (e: SwiperClass) => {
-      if (
-        e.activeIndex !== 0 &&
-        !isSwiped.current &&
-        router.pathname === "/" &&
-        isSafari()
-      ) {
-        // change URL is for hide smart app banner on Safari when swipe once
-        window.history.replaceState(null, "", "foryou");
-        isSwiped.current = true;
-      }
-      visibleItems.value = [
-        e.previousIndex,
-        e.activeIndex,
-        e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
-      ];
-      if (isSwipeListScreen) {
-        router.replace(
-          {
-            pathname: "/profile/[username]/[dropSlug]",
-            query: {
-              ...router.query,
-              initialScrollIndex: e.activeIndex,
-              username: data[e.activeIndex].creator_username,
-              dropSlug: data[e.activeIndex].slug,
-            },
-          },
-          getNFTSlug(data[e.activeIndex]),
-          { shallow: true }
-        );
-      }
-      setActiveIndex(e.activeIndex);
-    },
-    [visibleItems, data, router, isSwipeListScreen]
-  );
+  //   if (
+  //     activeIndex !== 0 &&
+  //     !isSwiped.current &&
+  //     router.pathname === "/" &&
+  //     isSafari()
+  //   ) {
+  //     // change URL is for hide smart app banner on Safari when swipe once
+  //     window.history.replaceState(null, "", "foryou");
+  //     isSwiped.current = true;
+  //   }
+  //   visibleItems.value = [
+  //     previousIndex,
+  //     activeIndex,
+  //     activeIndex + 1 < data.length ? activeIndex + 1 : undefined,
+  //   ];
+  //   if (isSwipeListScreen) {
+  //     router.replace(
+  //       {
+  //         pathname: "/profile/[username]/[dropSlug]",
+  //         query: {
+  //           ...router.query,
+  //           initialScrollIndex: activeIndex,
+  //           username: data[activeIndex].creator_username,
+  //           dropSlug: data[activeIndex].slug,
+  //         },
+  //       },
+  //       getNFTSlug(data[activeIndex]),
+  //       { shallow: true }
+  //     );
+  //   }
+  //   setActiveIndex(activeIndex);
+  // }, [visibleItems, data, router, isSwipeListScreen]);
+
+  // useWebScroll(listRef, onRealIndexChange);
   const renderItem = useCallback(
-    ({ item, index }: any) => {
+    ({ item, index }: ListRenderItemInfo<NFT>) => {
       return (
-        <ItemKeyContext.Provider value={index}>
-          <FeedItem nft={item} itemHeight={windowHeight} />
-        </ItemKeyContext.Provider>
+        <View key={item.nft_id} tw="snap-start snap-always">
+          <ItemKeyContext.Provider value={index}>
+            <FeedItem nft={item} itemHeight={windowHeight} />
+          </ItemKeyContext.Provider>
+        </View>
       );
     },
     [windowHeight]
   );
-  const ListHeaderComponent = useCallback(() => {
-    return (
-      <View>
-        <EmptyPlaceholder />
-      </View>
-    );
-  }, []);
+  const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
   if (data.length === 0) return null;
 
   return (
     <View
       testID="swipeList"
       id="slidelist"
-      tw="h-screen overflow-hidden bg-gray-100 dark:bg-black"
+      tw="max-h-[100svh] min-h-[100dvh] snap-y snap-mandatory overflow-y-auto bg-gray-100 dark:bg-black"
+      ref={listRef}
     >
       <VideoConfigContext.Provider value={videoConfig}>
         <SwiperActiveIndexContext.Provider value={activeIndex}>
           <ViewabilityItemsContext.Provider value={visibleItems}>
-            <InfiniteScrollList
+            <ViewabilityInfiniteScrollList
               data={data}
+              useWindowScroll
               renderItem={renderItem}
               estimatedItemSize={64}
+              keyExtractor={keyExtractor}
               overscan={8}
-              ListHeaderComponent={ListHeaderComponent}
             />
-            {/* {data.map((item, index) => (
-         
-              ))} */}
           </ViewabilityItemsContext.Provider>
         </SwiperActiveIndexContext.Provider>
       </VideoConfigContext.Provider>

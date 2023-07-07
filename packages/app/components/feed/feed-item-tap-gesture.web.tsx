@@ -14,7 +14,6 @@ import Animated, {
 import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
-import { useLike } from "app/context/like-context";
 import { useMuted } from "app/providers/mute-provider";
 
 const heartContainerStyle: ViewStyle = {
@@ -42,7 +41,6 @@ export const FeedItemTapGesture = ({
   sizeStyle,
   isVideo,
 }: FeedItemTapGestureProps) => {
-  const { like } = useLike();
   const [muted, setMuted] = useMuted();
 
   const heartAnimation = useSharedValue(0);
@@ -102,9 +100,7 @@ export const FeedItemTapGesture = ({
     [toggleVideoPlayback]
   );
 
-  const doubleTapHandleOnJS = useCallback(() => {
-    like();
-  }, [like]);
+  const doubleTapHandleOnJS = useCallback(() => {}, []);
 
   const doubleTapHandle = useMemo(
     () =>
@@ -122,8 +118,8 @@ export const FeedItemTapGesture = ({
   );
 
   const gesture = useMemo(
-    () => Gesture.Exclusive(doubleTapHandle, singleTapHandle),
-    [doubleTapHandle, singleTapHandle]
+    () => Gesture.Exclusive(singleTapHandle),
+    [singleTapHandle]
   );
 
   return (

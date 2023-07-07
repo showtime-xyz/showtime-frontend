@@ -233,15 +233,15 @@ const Container = withColorScheme(
   ({ children }: { children: React.ReactNode }) => {
     const fonts = [inter.variable].join(" ");
 
-    const onResize = useCallback(() => {
-      if (isMobileWeb()) {
-        document.body.classList.add("overflow-hidden", "overscroll-y-contain");
-      } else {
-        document.body.classList.remove("overflow-hidden", "overscroll-y-none");
-      }
-    }, []);
+    // const onResize = useCallback(() => {
+    //   if (isMobileWeb()) {
+    //     document.body.classList.add("overflow-hidden", "overscroll-y-contain");
+    //   } else {
+    //     document.body.classList.remove("overflow-hidden", "overscroll-y-none");
+    //   }
+    // }, []);
 
-    usePlatformResize(onResize, true);
+    // usePlatformResize(onResize, true);
 
     return (
       <View tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900">
