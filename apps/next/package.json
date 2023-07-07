@@ -28,7 +28,7 @@
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.0.6",
     "@radix-ui/react-use-escape-keydown": "^1.0.3",
-    "@rainbow-me/rainbowkit": "^1.0.4",
+    "@rainbow-me/rainbowkit": "^1.0.5",
     "@react-native-menu/menu": "^0.8.0",
     "@sentry/integrations": "7.56.0",
     "@sentry/nextjs": "^7.56.0",
