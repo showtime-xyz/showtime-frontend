@@ -136,7 +136,6 @@ export const SwipeList = ({
               estimatedItemSize={64}
               overscan={8}
               ListHeaderComponent={ListHeaderComponent}
-              contentContainerStyle={{ paddingBottom: bottom }}
             />
             {/* {data.map((item, index) => (
          
