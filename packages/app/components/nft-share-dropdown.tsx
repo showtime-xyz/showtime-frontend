@@ -1,20 +1,11 @@
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  MoreHorizontal,
-  Copy,
-  Twitter,
-  QrCode,
-  Sendv2,
-} from "@showtime-xyz/universal.icon";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { TW, colors } from "@showtime-xyz/universal.tailwind";
+import { Copy, Twitter, Sendv2 } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useShareNFT } from "app/hooks/use-share-nft";
-import { useSocialColor } from "app/hooks/use-social-color";
 import type { NFT } from "app/types";
 
 import {
@@ -36,7 +27,6 @@ type Props = {
 
 export function NFTShareDropdown({ nft, children, tw = "" }: Props) {
   const isDark = useIsDarkMode();
-  const router = useRouter();
   const { shareNFT, shareNFTOnTwitter } = useShareNFT();
   const isShareAPIAvailable = Platform.select({
     default: true,
@@ -57,18 +47,6 @@ export function NFTShareDropdown({ nft, children, tw = "" }: Props) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop sideOffset={8}>
-        {!isShareAPIAvailable && (
-          <DropdownMenuItem
-            onSelect={() => shareNFTOnTwitter(nft)}
-            key="share-twitter"
-          >
-            <MenuItemIcon Icon={Twitter} />
-
-            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-              Share on Twitter
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-        )}
         <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
           <MenuItemIcon
             Icon={Copy}
@@ -81,37 +59,18 @@ export function NFTShareDropdown({ nft, children, tw = "" }: Props) {
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
         <DropdownMenuItem
-          onSelect={() => {
-            const as = `/qr-code-share/${nft?.contract_address}`;
-            router.push(
-              Platform.select({
-                native: as,
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    contractAddress: nft?.contract_address,
-                    qrCodeShareModal: true,
-                  },
-                } as any,
-              }),
-              Platform.select({
-                native: as,
-                web: router.asPath,
-              }),
-              { shallow: true }
-            );
-          }}
-          key="qr-code"
+          onSelect={() => shareNFTOnTwitter(nft)}
+          key="share-twitter"
         >
           <MenuItemIcon
-            Icon={QrCode}
+            Icon={Twitter}
             ios={{
-              name: "qrcode",
+              name: "link",
             }}
           />
+
           <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-            QR Code
+            Share on Twitter
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
