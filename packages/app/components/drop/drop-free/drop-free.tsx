@@ -42,8 +42,8 @@ import { FilePickerResolveValue } from "app/lib/file-picker";
 import { MediaPicker } from "../common/media-picker";
 import {
   getDefaultDate,
-  useMusicDropForm,
-} from "../common/music-drop-form-utils";
+  useStarDropForm,
+} from "../common/star-drop-form-utils";
 import { StepProps } from "../common/types";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
@@ -72,7 +72,7 @@ export const DropFree = () => {
     handleSubmit,
     isSaveDrop,
     setIsSaveDrop,
-  } = useMusicDropForm();
+  } = useStarDropForm();
 
   const Alert = useAlert();
   const title = getValues("title");
@@ -206,13 +206,16 @@ export const DropFree = () => {
           entering={FadeIn}
           exiting={FadeOut}
         >
-          <CreateDropStepSongURI
+          <SetPriceAndDuration
             control={control}
             isSaveDrop={isSaveDrop}
             setIsSaveDrop={setIsSaveDrop}
             getValues={getValues}
             errors={formState.errors}
             trigger={trigger}
+            watch={watch}
+            setPrice={(p: number) => setValue("price", p)}
+            setDays={(days: number) => setValue("days", days)}
             handleNextStep={handleSubmit(onSubmit)}
             handlePrevStep={() => setStep("title")}
             file={file}
@@ -433,16 +436,31 @@ const CreateDropStepTitle = (props: StepProps) => {
 const prices = [3, 8, 19];
 const dropDurations = [3, 7, 30];
 
-const CreateDropStepSongURI = (
+const SetPriceAndDuration = (
   props: StepProps & {
     handleMoreOptions: () => void;
     setIsSaveDrop: (isSaveDrop: boolean) => void;
     isSaveDrop: boolean;
+    setPrice: (price: number) => void;
+    setDays: (days: number) => void;
+    watch: any;
   }
 ) => {
-  const { errors, control, handleNextStep, trigger, getValues } = props;
+  const {
+    errors,
+    control,
+    handleNextStep,
+    trigger,
+    getValues,
+    setDays,
+    setPrice,
+    watch,
+  } = props;
   const { state } = useDropNFT();
-  const duration = getValues("duration");
+  const duration = watch("duration");
+  const selectedDays = watch("days");
+  const selectedPrice = watch("price");
+
   const selectedDurationLabel = useMemo(
     () => durationOptions.find((d) => d.value === duration)?.label,
     [duration]
@@ -452,8 +470,6 @@ const CreateDropStepSongURI = (
     useState(false);
   const isDark = useIsDarkMode();
   const scrollViewRef = useRef<RNScrollView>(null);
-  const [selectedPrice, setSelectedPrice] = useState(prices[1]);
-  const [selectedDay, setSelectedDay] = useState(dropDurations[1]);
 
   return (
     <Layout onBackPress={props.handlePrevStep} title="Create">
@@ -474,7 +490,7 @@ const CreateDropStepSongURI = (
           </Text>
         </View>
         <View tw="mt-4">
-          <View tw="rounded-lg bg-gray-100 p-4">
+          <View tw="rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
             <Text tw="font-bold text-gray-900 dark:text-gray-50">
               Price of drop
             </Text>
@@ -483,19 +499,24 @@ const CreateDropStepSongURI = (
               with 1,000 followers
             </Text>
             <View
-              tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2"
+              tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black"
               style={{ columnGap: 64 }}
             >
               {prices.map((price) => (
                 <Pressable
                   key={price}
-                  onPress={() => setSelectedPrice(price)}
+                  onPress={() => setPrice(price)}
                   tw={`items-center rounded-2xl p-4 ${
-                    selectedPrice === price ? "bg-orange-100" : ""
+                    selectedPrice === price
+                      ? "bg-orange-100 dark:bg-yellow-800"
+                      : ""
                   }`}
                   style={{ rowGap: 16 }}
                 >
-                  <Text tw="text-4xl text-gray-700 dark:text-gray-100">
+                  <Text
+                    tw={`text-4xl text-gray-700
+                    dark:text-gray-100`}
+                  >
                     ${price}
                   </Text>
                   <Text tw="text-xs text-gray-700 dark:text-gray-100">USD</Text>
@@ -505,7 +526,7 @@ const CreateDropStepSongURI = (
           </View>
         </View>
         <View tw="mt-4">
-          <View tw="rounded-lg bg-gray-100 p-4">
+          <View tw="rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
             <Text tw="font-bold text-gray-900 dark:text-gray-50">
               How long will drop be available?
             </Text>
@@ -514,19 +535,21 @@ const CreateDropStepSongURI = (
               but will continue to trade on OpenSea
             </Text>
             <View
-              tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2"
+              tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black"
               style={{ columnGap: 64 }}
             >
               {dropDurations.map((day) => (
                 <Pressable
                   key={day}
-                  onPress={() => setSelectedDay(day)}
+                  onPress={() => setDays(day)}
                   tw={`items-center rounded-2xl p-4 ${
-                    selectedDay === day ? "bg-orange-100" : ""
+                    selectedDays === day
+                      ? "bg-orange-100 dark:bg-yellow-800"
+                      : ""
                   }`}
                   style={{ rowGap: 16 }}
                 >
-                  <Text tw="text-4xl text-gray-700 dark:text-gray-100">
+                  <Text tw={`text-4xl text-gray-700 dark:text-gray-100`}>
                     {day}
                   </Text>
                   <Text tw="text-xs text-gray-700 dark:text-gray-100">
