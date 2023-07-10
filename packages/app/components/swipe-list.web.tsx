@@ -93,7 +93,7 @@ export const SwipeList = ({
     getScrollElement: () => listRef.current,
     estimateSize: () => windowHeight,
     initialOffset: initialScrollIndex * windowHeight,
-    overscan: 10,
+    overscan: 4,
     onChange: onScrollChange,
   });
 
