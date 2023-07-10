@@ -30,7 +30,16 @@ export const ClaimButtonSimplified = ({
 }: ClaimButtonProps) => {
   const isDark = useIsDarkMode();
   const redirectToClaimDrop = useRedirectToClaimDrop();
-  const { state: claimStates, dispatch } = useContext(ClaimContext);
+  const {
+    state: claimStates,
+    dispatch,
+    contractAddress,
+  } = useContext(ClaimContext);
+
+  const isProgress =
+    claimStates.status === "loading" &&
+    claimStates.signaturePrompt === false &&
+    contractAddress === edition?.creator_airdrop_edition.contract_address;
 
   const handleCollectPress = (type: "free" | "appleMusic" | "spotify") => {
     if (
@@ -52,6 +61,9 @@ export const ClaimButtonSimplified = ({
   const status = getClaimStatus(edition);
 
   const buttonBgColor = useMemo(() => {
+    if (isProgress) {
+      return isDark ? "rgba(255,255,255,.8)" : "rgba(0,0,0,.5)";
+    }
     if (status === ClaimStatus.Expired) {
       return isDark ? colors.gray[800] : colors.gray[100];
     }
@@ -63,9 +75,12 @@ export const ClaimButtonSimplified = ({
     }
 
     return isDark ? colors.white : colors.gray[900];
-  }, [isDark, status]);
+  }, [isDark, status, isProgress]);
 
   const buttonTextColor = useMemo(() => {
+    if (isProgress) {
+      return isDark ? colors.gray[900] : colors.white;
+    }
     if (status === ClaimStatus.Expired) {
       return colors.gray[400];
     }
@@ -76,8 +91,12 @@ export const ClaimButtonSimplified = ({
       return colors.white;
     }
     return isDark ? colors.gray[900] : colors.white;
-  }, [isDark, status]);
+  }, [isDark, isProgress, status]);
+
   const buttonText = useMemo(() => {
+    if (isProgress) {
+      return "Collecting...";
+    }
     if (status === ClaimStatus.Expired) {
       return "Expired";
     }
@@ -88,13 +107,15 @@ export const ClaimButtonSimplified = ({
       return "Collected";
     }
     return "Collect";
-  }, [status]);
+  }, [isProgress, status]);
+
   const disabled = useMemo(
     () =>
+      isProgress ||
       status === ClaimStatus.Expired ||
       status === ClaimStatus.Claimed ||
       status === ClaimStatus.Soldout,
-    [status]
+    [status, isProgress]
   );
   if (loading) {
     return <Skeleton width={96} height={24} radius={999} show tw={tw} />;
