@@ -48,6 +48,15 @@ const Footer = () => {
     <View
       style={{
         height: MOBILE_WEB_TABS_HEIGHT,
+        backgroundColor: SWIPE_LIST_SCREENS.includes(router.pathname)
+          ? "rgba(0,0,0,.7)"
+          : undefined,
+        // @ts-ignore
+        boxShadow: SWIPE_LIST_SCREENS.includes(router.pathname)
+          ? "rgba(255, 255, 255, 0.5) 0px 6px 10px"
+          : isDark
+          ? "rgba(255, 255, 255, 0.5) 0px 6px 10px"
+          : "rgba(0, 0, 0, 0.2) 0px 6px 10px",
       }}
       tw="safe-bottom fixed bottom-0 left-0 right-0 z-50 h-12 flex-row items-center justify-between bg-white/80 px-4 pt-1 backdrop-blur-md dark:bg-black/70"
     >
