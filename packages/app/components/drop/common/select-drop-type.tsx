@@ -9,6 +9,7 @@ import {
   AppleMusic,
   ChevronRight,
   Spotify,
+  Showtime,
 } from "@showtime-xyz/universal.icon";
 import {
   Raffle,
@@ -44,42 +45,6 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
   return (
     <BottomSheetScrollView useNativeModal={false}>
       <View tw="justify-center px-4" style={{ rowGap: 16 }}>
-        <Pressable
-          onPress={() => {
-            if (canCreateMusicDrop) {
-              props.handleNextStep();
-            } else {
-              Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
-            }
-          }}
-        >
-          <LinearGradient
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 9999,
-              paddingVertical: 24,
-            }}
-            {...fromCSS(
-              `linear-gradient(147deg, #00D27A 0%, #5836FF 44.04%, #C0F 95.40%)`
-            )}
-          >
-            <View tw="ml-auto">
-              <View tw="mr-2 flex-row">
-                <View tw="mr-1 mt-[2px]">
-                  <AppleMusic color={"white"} width={18} height={18} />
-                </View>
-                <Spotify color={"white"} width={22} height={22} />
-              </View>
-            </View>
-            <Text tw="text-lg font-bold text-white">Pre-Save Drop</Text>
-            <View tw="right-4 ml-auto">
-              <ChevronRight color={"white"} width={24} height={24} />
-            </View>
-          </LinearGradient>
-        </Pressable>
         {Platform.OS !== "web" && !user.user?.data.profile.verified ? null : (
           <Pressable
             onPress={() => {
@@ -104,13 +69,16 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                 paddingVertical: 24,
               }}
               {...fromCSS(
-                `linear-gradient(147deg, #c5e1e7 0%, #d3c6ff 40.06%, #e5bdff 100%)`
+                `linear-gradient(340deg, #FF9E2C 0%, #FFC93F 47.62%, #FFEA7C 100%);`
               )}
             >
               <View tw="ml-auto">
-                <Text tw="text-lg font-bold text-black">
-                  Digital art collectible
-                </Text>
+                <View tw="flex-row items-center">
+                  <View tw="mr-2">
+                    <Showtime color="black" width={18} height={18} />
+                  </View>
+                  <Text tw="text-lg font-bold text-black">Star Drop</Text>
+                </View>
               </View>
               <View tw="right-4 ml-auto">
                 <ChevronRight color={"black"} width={24} height={24} />
@@ -118,6 +86,42 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
             </LinearGradient>
           </Pressable>
         )}
+        <Pressable
+          onPress={() => {
+            if (canCreateMusicDrop) {
+              props.handleNextStep();
+            } else {
+              Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
+            }
+          }}
+        >
+          <LinearGradient
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 9999,
+              paddingVertical: 24,
+            }}
+            {...fromCSS(
+              `linear-gradient(154deg, #00E786 0%, #4B27FE 36.26%, #B013D8 100%);`
+            )}
+          >
+            <View tw="ml-auto">
+              <View tw="mr-2 flex-row">
+                <View tw="mr-1 mt-[2px]">
+                  <AppleMusic color={"white"} width={18} height={18} />
+                </View>
+                <Spotify color={"white"} width={22} height={22} />
+              </View>
+            </View>
+            <Text tw="text-lg font-bold text-white">Pre-Save Drop</Text>
+            <View tw="right-4 ml-auto">
+              <ChevronRight color={"white"} width={24} height={24} />
+            </View>
+          </LinearGradient>
+        </Pressable>
 
         <View tw="mt-4 w-full items-center">
           <View style={{ rowGap: 16 }}>

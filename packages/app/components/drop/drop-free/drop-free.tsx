@@ -1,282 +1,119 @@
-import React, {
-  useRef,
-  useState,
-  useMemo,
-  useEffect,
-  useCallback,
-} from "react";
-import { ScrollView as RNScrollView, useWindowDimensions } from "react-native";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { useWindowDimensions, ScrollView as RNScrollView } from "react-native";
 
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  enableLayoutAnimations,
+} from "react-native-reanimated";
 
-import { Accordion, AnimateHeight } from "@showtime-xyz/universal.accordion";
-import { Alert } from "@showtime-xyz/universal.alert";
-import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
+import { useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
+import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import {
-  ErrorText,
-  Fieldset,
-  FieldsetCheckbox,
-} from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+  useIsDarkMode,
+  useIsomorphicLayoutEffect,
+} from "@showtime-xyz/universal.hooks";
 import {
-  FlipIcon,
-  Image as ImageIcon,
+  ArrowLeft,
+  ChevronRight,
+  Close,
   Raffle,
 } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
-import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import Spinner from "@showtime-xyz/universal.spinner";
+import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary";
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useUser } from "app/hooks/use-user";
-import { DropFileZone } from "app/lib/drop-file-zone";
-import { FilePickerResolveValue, useFilePicker } from "app/lib/file-picker";
-import { yup } from "app/lib/yup";
-import { createParam } from "app/navigation/use-param";
-import { formatAddressShort } from "app/utilities";
+import { FilePickerResolveValue } from "app/lib/file-picker";
 
-import { Hidden } from "design-system/hidden";
-
-import { DropPreview } from "../drop-preview";
+import { MediaPicker } from "../common/media-picker";
+import {
+  getDefaultDate,
+  useMusicDropForm,
+} from "../common/music-drop-form-utils";
+import { StepProps } from "../common/types";
+import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
-import { DROP_FORM_DATA_KEY } from "../utils";
+import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
 
-const SECONDS_IN_A_DAY = 24 * 60 * 60;
-const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
-const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
+type CreateDropStep =
+  | "media"
+  | "title"
+  | "song-uri"
+  | "more-options"
+  | "select-drop";
 
-const durationOptions = [
-  { label: "1 day", value: SECONDS_IN_A_DAY },
-  { label: "1 week", value: SECONDS_IN_A_WEEK },
-  { label: "1 month", value: SECONDS_IN_A_MONTH },
-];
-
-const defaultValues = {
-  royalty: 10,
-  editionSize: 15,
-  duration: SECONDS_IN_A_MONTH,
-  radius: 1, // In kilometers
-  hasAcceptedTerms: false,
-  notSafeForWork: false,
-  raffle: false,
-};
-
-const { useParam } = createParam<{
-  checkoutSuccess?: boolean;
-}>();
-
-const excludedPersistFields = ["editionSize"];
 export const DropFree = () => {
-  const isDark = useIsDarkMode();
-  const { user: userProfile } = useUser();
-  const [checkoutSuccess] = useParam("checkoutSuccess", {
-    parse: (value) => value === "true",
-    initial: false,
-  });
-  // we initialize form's edition size to user's available edition size credits or 0 if user has no credits
-  const editionSizeCredit =
-    userProfile?.data.paid_drop_credits?.[0]?.edition_size ?? 0;
-
-  const maxEditionSize = userProfile?.data?.profile.verified
-    ? 350
-    : editionSizeCredit;
-
-  const dropValidationSchema = useMemo(() => {
-    const validationObject = {
-      file: yup.mixed().required("Media is required"),
-      title: yup
-        .string()
-        .label("Title")
-        .required("Title is a required field")
-        .max(55),
-      description: yup
-        .string()
-        .max(280)
-        .required("Description is a required field"),
-      editionSize: yup.number(),
-      royalty: yup
-        .number()
-        .required()
-        .typeError("Please enter a valid number")
-        .max(69)
-        .default(defaultValues.royalty),
-      hasAcceptedTerms: yup
-        .boolean()
-        .default(defaultValues.hasAcceptedTerms)
-        .required()
-        .isTrue("You must accept the terms and conditions."),
-      notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
-      googleMapsUrl: yup.string().url(),
-      radius: yup.number().min(0.01).max(10),
-    };
-
-    // for non verified users we don't let users edit editionSize, so it doesn't make much sense to put validation for them
-    if (userProfile?.data.profile.verified) {
-      validationObject.editionSize = yup
-        .number()
-        .required()
-        .typeError("Please enter a valid number")
-        .min(1)
-        .max(maxEditionSize, `You can drop ${maxEditionSize} editions at most`);
-    }
-
-    return yup.object(validationObject);
-  }, [userProfile?.data.profile.verified, maxEditionSize]);
-
+  const [step, setStep] = useState<CreateDropStep>("song-uri");
+  const modalContext = useModalScreenContext();
   const {
     control,
-    handleSubmit,
-    setError,
-    clearErrors,
-    formState: { errors },
-    watch,
     setValue,
+    formState,
+    setError,
     getValues,
-  } = useForm<any>({
-    resolver: yupResolver(dropValidationSchema),
-    mode: "onBlur",
-    shouldFocusError: true,
-    reValidateMode: "onChange",
-  });
+    watch,
+    clearErrors,
+    trigger,
+    defaultValues,
+    handleSubmit,
+    isSaveDrop,
+    setIsSaveDrop,
+  } = useMusicDropForm();
 
-  const shouldProceedToCheckout = watch("editionSize") === 0;
-
-  const bottomBarHeight = usePlatformBottomHeight();
-  // const [transactionId, setTransactionId] = useParam('transactionId')
-
+  const Alert = useAlert();
+  const title = getValues("title");
+  const description = getValues("description");
+  const file = getValues("file");
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
-  const insets = useSafeAreaInsets();
-  // const [transactionId, setTransactionId] = useParam('transactionId')
 
-  const user = useUser({
-    redirectTo: "/login",
-    redirectIfProfileIncomplete: true,
-  });
-  const modalScreenContext = useModalScreenContext();
-
-  const redirectToCreateDrop = useRedirectToCreateDrop();
-  const scrollViewRef = useRef<RNScrollView>(null);
-  const windowWidth = useWindowDimensions().width;
-  const router = useRouter();
-
-  const [accordionValue, setAccordionValue] = useState("");
-  const [showPreview, setShowPreview] = useState(false);
-
-  const onSubmit = (values: UseDropNFT) => {
-    if (shouldProceedToCheckout) {
-      router.push(
-        {
-          pathname: router.pathname,
-          query: {
-            ...router.query,
-            checkoutModal: true,
-          },
-        },
-        router.asPath
-      );
-    } else if (!showPreview) {
-      setShowPreview(!showPreview);
-    } else {
-      dropNFT(values, clearStorage);
-    }
-  };
-  const { clearStorage, restoringFiles } = usePersistForm(DROP_FORM_DATA_KEY, {
+  const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
     watch,
     setValue,
     defaultValues,
-    exclude: excludedPersistFields,
   });
-  const descPlaceholder = "Why should people collect this drop?";
+
   useEffect(() => {
     resetDropState();
   }, [resetDropState]);
 
-  // We change the title when user returns from checkout flow and they have credits
-  useEffect(() => {
-    if (checkoutSuccess) {
-      setShowPreview(true);
-    }
-  }, [checkoutSuccess]);
-
-  useEffect(() => {
-    if (showPreview) {
-      modalScreenContext?.setTitle("Congrats! Now share it.");
-    }
+  useIsomorphicLayoutEffect(() => {
+    // TODO: remove this when we have new cell renderer in flashlist
+    enableLayoutAnimations(true);
     return () => {
-      modalScreenContext?.setTitle("Create drop");
+      enableLayoutAnimations(false);
     };
-  }, [modalScreenContext, showPreview]);
+  }, []);
 
-  useEffect(() => {
-    if (state.status === "idle") {
-      if (!userProfile?.data.profile.verified) {
-        setValue("editionSize", editionSizeCredit);
-      } else {
-        setValue("editionSize", defaultValues.editionSize);
-      }
-    }
-  }, [
-    userProfile?.data.profile.verified,
-    editionSizeCredit,
-    setValue,
-    state.status,
-  ]);
-  const scrollToErrorField = useCallback(() => {
-    if (errors.file) {
-      scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
-      return;
-    }
-    if (errors.hasAcceptedTerms) {
-      // just some high number, it will scroll to the bottom and we dont need to measure the offset
-      scrollViewRef.current?.scrollTo({ x: 0, y: 10000, animated: true });
-      return;
-    }
-  }, [errors]);
+  const onSubmit = async (values: UseDropNFT) => {
+    await dropNFT(
+      {
+        ...values,
+        gatingType: isSaveDrop
+          ? "multi_provider_music_save"
+          : "multi_provider_music_presave",
+        releaseDate: isSaveDrop
+          ? undefined
+          : values.releaseDate ?? getDefaultDate().toISOString(),
+        appleMusicTrackUrl: values.appleMusicTrackUrl,
+      },
+      clearStorage
+    );
+  };
 
-  // this scrolls to the first error field when the form is submitted
-  useEffect(() => {
-    if (errors) {
-      scrollToErrorField();
-
-      if (
-        (errors.editionSize?.message ||
-          errors.royalty?.message ||
-          errors.duration?.message) &&
-        accordionValue !== "open"
-      ) {
-        setAccordionValue("open");
-        requestAnimationFrame(() => {
-          scrollToErrorField();
-        });
-      }
-    }
-  }, [errors, scrollToErrorField, accordionValue]);
-
-  const pickFile = useFilePicker();
-
-  const selectedDuration = watch("duration");
-
-  const selectedDurationLabel = useMemo(
-    () => durationOptions.find((d) => d.value === selectedDuration)?.label,
-    [selectedDuration]
-  );
   const handleFileChange = (fileObj: FilePickerResolveValue) => {
     const { file, size } = fileObj;
     let extension;
@@ -293,6 +130,7 @@ export const DropFree = () => {
         message: "Please retry!",
       });
       setValue("file", undefined);
+
       return;
     }
     if (
@@ -307,481 +145,838 @@ export const DropFree = () => {
     }
   };
 
-  if (user.isIncompletedProfile) {
-    return null;
-  }
-
   if (state.status === "success") {
     return (
-      <DropViewShare
-        title={getValues("title")}
-        description={getValues("description")}
-        file={getValues("file")}
-        contractAddress={state.edition?.contract_address}
-        dropCreated
-      />
-    );
-  }
-
-  const primaryWallet = user.user?.data.profile.primary_wallet;
-
-  if (!primaryWallet) {
-    return (
-      <AddWalletOrSetPrimary
-        onPrimaryWalletSetCallback={redirectToCreateDrop}
-        title="Choose a primary wallet to create your drop"
-        description="Please choose which wallet will receive your drop. You only have to do this once!"
-      />
-    );
-  }
-
-  return (
-    <BottomSheetModalProvider>
-      <BottomSheetScrollView
-        ref={scrollViewRef}
-        style={{ paddingHorizontal: 16 }}
-        contentContainerStyle={{
-          paddingBottom: Math.max(bottomBarHeight, 16),
+      <Animated.View
+        style={{
+          flex: 1,
         }}
+        entering={FadeIn}
+        exiting={FadeOut}
+        key={step}
       >
-        {!showPreview ? (
-          <View>
-            <View tw="flex-row">
-              <Controller
-                control={control}
-                name="file"
-                render={({ field: { value } }) => {
-                  return (
-                    <DropFileZone
-                      onChange={handleFileChange}
-                      disabled={restoringFiles["file"]}
-                    >
-                      <View tw="z-1">
-                        <Pressable
-                          tw={`h-[120px] w-[120px] items-center justify-center overflow-hidden rounded-lg md:h-64 md:w-64 ${
-                            restoringFiles["file"] ? "opacity-40" : ""
-                          }`}
-                          disabled={restoringFiles["file"]}
-                          onPress={async () => {
-                            const file = await pickFile({
-                              mediaTypes: "all",
-                            });
-
-                            handleFileChange(file);
-                          }}
-                        >
-                          {value ? (
-                            <View>
-                              <Preview
-                                file={value}
-                                width={windowWidth >= 768 ? 256 : 120}
-                                height={windowWidth >= 768 ? 256 : 120}
-                                style={previewBorderStyle}
-                              />
-                              <View tw="absolute h-full w-full items-center justify-center">
-                                <View tw="flex-row items-center shadow-lg">
-                                  <FlipIcon
-                                    width={20}
-                                    height={20}
-                                    color="white"
-                                  />
-                                  <Text tw="ml-2 text-sm text-white">
-                                    Replace
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                          ) : (
-                            <View tw="w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-gray-800 dark:border-gray-200">
-                              <ImageIcon
-                                color={isDark ? "#FFF" : "#000"}
-                                width={40}
-                                height={40}
-                              />
-                              <View tw="mt-2">
-                                <Text tw="font-bold text-gray-600 dark:text-gray-200">
-                                  Upload
-                                </Text>
-                              </View>
-                              {errors.file?.message ? (
-                                <View tw="mt-2">
-                                  <Text tw="text-center text-sm text-red-500">
-                                    {errors?.file?.message as string}
-                                  </Text>
-                                </View>
-                              ) : null}
-
-                              <View tw="mt-2 hidden md:flex">
-                                <Text tw="px-4 text-center text-gray-600 dark:text-gray-200">
-                                  {`Tap to upload a JPG, PNG, GIF, WebM or MP4 file.\nMax file size: 30MB`}
-                                </Text>
-                              </View>
-                            </View>
-                          )}
-                        </Pressable>
-                      </View>
-                    </DropFileZone>
-                  );
-                }}
-              />
-
-              <View tw="ml-4 flex-1">
-                <Controller
-                  control={control}
-                  name="title"
-                  render={({ field: { onChange, onBlur, value, ref } }) => {
-                    return (
-                      <Fieldset
-                        ref={ref}
-                        label="Title"
-                        placeholder="Sweet"
-                        onBlur={onBlur}
-                        errorText={errors.title?.message}
-                        value={value}
-                        onChangeText={onChange}
-                        numberOfLines={2}
-                        multiline
-                      />
-                    );
-                  }}
-                />
-                <Hidden until="md">
-                  <View tw="mt-4 flex-1 flex-row">
-                    <Controller
-                      control={control}
-                      name="description"
-                      render={({ field: { onChange, onBlur, value, ref } }) => {
-                        return (
-                          <Fieldset
-                            ref={ref}
-                            label="Description"
-                            tw="flex-1"
-                            helperText="Tell your fans what they get for collecting. You can edit this 30 minutes after the drop is created."
-                            multiline
-                            textAlignVertical="top"
-                            placeholder={descPlaceholder}
-                            onBlur={onBlur}
-                            errorText={errors.description?.message}
-                            value={value}
-                            numberOfLines={3}
-                            onChangeText={onChange}
-                          />
-                        );
-                      }}
-                    />
-                  </View>
-                </Hidden>
-              </View>
-            </View>
-
-            <Text tw="mt-4 text-gray-600 dark:text-gray-200 md:hidden">
-              JPG, PNG, GIF, WebM or MP4 file
-            </Text>
-            <Hidden from="md">
-              <Controller
-                control={control}
-                name="description"
-                render={({ field: { onChange, onBlur, value, ref } }) => {
-                  return (
-                    <Fieldset
-                      ref={ref}
-                      tw="mt-4"
-                      label="Description"
-                      multiline
-                      textAlignVertical="top"
-                      helperText="You can edit this 30 minutes after the drop is created."
-                      placeholder={descPlaceholder}
-                      onBlur={onBlur}
-                      errorText={errors.description?.message}
-                      value={value}
-                      numberOfLines={3}
-                      onChangeText={onChange}
-                    />
-                  );
-                }}
-              />
-            </Hidden>
-            <View tw="mt-4">
-              <Controller
-                key="raffle"
-                control={control}
-                name="raffle"
-                render={({ field: { onChange, value } }) => {
-                  return (
-                    <FieldsetCheckbox
-                      onChange={onChange}
-                      value={value}
-                      Icon={
-                        <Raffle
-                          color={isDark ? colors.white : colors.gray[900]}
-                        />
-                      }
-                      helperText="Automatically selects a winner once your drop is over."
-                      title="Make it a Raffle"
-                    />
-                  );
-                }}
-              />
-            </View>
-            <View>
-              <Accordion.Root
-                value={accordionValue}
-                onValueChange={setAccordionValue}
-              >
-                <Accordion.Item tw="-mx-4" value="open">
-                  <Accordion.Trigger>
-                    <View tw="flex-1">
-                      <View tw="mb-4 flex-1 flex-row justify-between">
-                        <Accordion.Label
-                          tw={
-                            errors.editionSize?.message ||
-                            errors.royalty?.message ||
-                            errors.duration?.message
-                              ? "text-red-500"
-                              : ""
-                          }
-                        >
-                          Drop Details
-                        </Accordion.Label>
-                        <Accordion.Chevron />
-                      </View>
-                      <ScrollView tw="flex-row" horizontal={true}>
-                        {!shouldProceedToCheckout ? (
-                          <DataPill
-                            label={`${watch("editionSize")} ${
-                              watch("editionSize") == 1 ? "Edition" : "Editions"
-                            }`}
-                            type="text"
-                          />
-                        ) : null}
-
-                        <DataPill
-                          tw="mx-1 md:mx-4"
-                          label={`${watch("royalty")}% Royalties`}
-                          type="text"
-                        />
-                        <DataPill
-                          tw="mx-1 md:mx-4"
-                          label={`Duration: ${selectedDurationLabel}`}
-                          type="text"
-                        />
-                      </ScrollView>
-                    </View>
-                  </Accordion.Trigger>
-                  <Accordion.Content tw="pt-0">
-                    <>
-                      <View tw="justify-between lg:flex-row">
-                        <View
-                          tw="flex-1 flex-row"
-                          style={{
-                            display: shouldProceedToCheckout ? "none" : "flex",
-                          }}
-                        >
-                          <Controller
-                            control={control}
-                            name="editionSize"
-                            render={({
-                              field: { onChange, onBlur, value, ref },
-                            }) => {
-                              return (
-                                <Fieldset
-                                  ref={ref}
-                                  tw="flex-1"
-                                  label="Edition size"
-                                  placeholder="Enter a number"
-                                  onBlur={onBlur}
-                                  disabled={!user?.user?.data.profile.verified}
-                                  helperText="How many editions will be available to collect"
-                                  errorText={errors.editionSize?.message}
-                                  value={value?.toString()}
-                                  onChangeText={onChange}
-                                />
-                              );
-                            }}
-                          />
-                        </View>
-
-                        <View
-                          tw={`mt-4 flex-1 flex-row md:mt-0 ${
-                            shouldProceedToCheckout ? "" : "lg:ml-4"
-                          }`}
-                        >
-                          <Controller
-                            control={control}
-                            name="royalty"
-                            render={({
-                              field: { onChange, onBlur, value, ref },
-                            }) => {
-                              return (
-                                <Fieldset
-                                  ref={ref}
-                                  tw="flex-1"
-                                  label="Your royalties (%)"
-                                  placeholder="Enter a number"
-                                  onBlur={onBlur}
-                                  helperText="Earn royalties each time an edition is sold."
-                                  errorText={errors.royalty?.message}
-                                  value={value?.toString()}
-                                  onChangeText={onChange}
-                                />
-                              );
-                            }}
-                          />
-                        </View>
-                      </View>
-
-                      <View tw="z-10 mt-4 flex-row">
-                        <Controller
-                          control={control}
-                          name="duration"
-                          render={({
-                            field: { onChange, onBlur, value, ref },
-                          }) => {
-                            return (
-                              <Fieldset
-                                ref={ref}
-                                tw="flex-1"
-                                label="Duration"
-                                onBlur={onBlur}
-                                helperText="How long the drop will be available to claim"
-                                errorText={errors.duration?.message}
-                                selectOnly
-                                select={{
-                                  options: durationOptions,
-                                  placeholder: "Duration",
-                                  value: value,
-                                  onChange,
-                                  tw: "flex-1",
-                                }}
-                              />
-                            );
-                          }}
-                        />
-                      </View>
-                      <View tw="mt-4 flex-row justify-between">
-                        <Controller
-                          control={control}
-                          name="notSafeForWork"
-                          render={({ field: { onChange, value, ref } }) => (
-                            <Fieldset
-                              ref={ref}
-                              tw="flex-1"
-                              label={
-                                <View tw="mr-5 flex">
-                                  <Text tw="font-semibold dark:text-white">
-                                    Explicit visual (18+)
-                                  </Text>
-                                  <Text tw="max-w-[100%] pt-1 text-xs dark:text-white">
-                                    Do not check if your song lyrics are
-                                    explicit.
-                                  </Text>
-                                </View>
-                              }
-                              switchOnly
-                              switchProps={{
-                                checked: value,
-                                onChange,
-                              }}
-                            />
-                          )}
-                        />
-                      </View>
-                    </>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion.Root>
-            </View>
-
-            <View tw="mb-4 flex-row">
-              <Text tw="pb-2 text-sm text-gray-600 dark:text-gray-200">
-                This drop will be owned by you{" "}
-                {primaryWallet.nickname ? (
-                  <Text tw="font-bold">{primaryWallet.nickname + " "}</Text>
-                ) : null}
-                {"(" + formatAddressShort(primaryWallet.address) + ")"}
-              </Text>
-            </View>
-
-            <View tw="mt-4 flex-1">
-              <View tw="flex-1 flex-row">
-                <Controller
-                  control={control}
-                  name="hasAcceptedTerms"
-                  render={({ field: { onChange, value } }) => (
-                    <>
-                      <Pressable
-                        onPress={() => onChange(!value)}
-                        tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
-                      >
-                        <Checkbox
-                          onChange={(v) => onChange(v)}
-                          checked={value}
-                          aria-label="I agree to the terms and conditions"
-                        />
-
-                        <Text tw="px-4 text-gray-600 dark:text-gray-400">
-                          I have the rights to publish this content, and
-                          understand it will be minted on the Polygon network.
-                        </Text>
-                      </Pressable>
-                    </>
-                  )}
-                />
-              </View>
-              {errors.hasAcceptedTerms?.message ? (
-                <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
-              ) : null}
-            </View>
-          </View>
-        ) : (
-          <DropPreview
+        <Layout
+          onBackPress={() => modalContext?.pop()}
+          closeIcon
+          title="Congrats! Now share it ✦"
+        >
+          <DropViewShare
             title={getValues("title")}
             description={getValues("description")}
-            onPressCTA={() => setShowPreview(false)}
-            ctaCopy="Edit Drop"
             file={getValues("file")}
+            contractAddress={state.edition?.contract_address}
+            dropCreated
           />
-        )}
-      </BottomSheetScrollView>
-      <AnimateHeight>
-        <View tw="px-4">
-          <Button
-            variant="primary"
-            size="regular"
-            tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-            disabled={state.status === "loading"}
-            onPress={handleSubmit(onSubmit)}
-          >
-            {state.status === "loading" ? (
-              <View tw="items-center justify-center">
-                <Spinner size="small" />
-              </View>
-            ) : state.status === "error" ? (
-              "Failed. Please retry!"
-            ) : !showPreview ? (
-              "Continue"
-            ) : (
-              "Drop now"
-            )}
-          </Button>
+        </Layout>
+      </Animated.View>
+    );
+  }
 
-          {state.transactionHash && !showPreview ? (
-            <View tw="mt-4">
-              <PolygonScanButton transactionHash={state.transactionHash} />
-            </View>
-          ) : null}
+  switch (step) {
+    case "media":
+      return (
+        <Animated.View
+          key={step}
+          style={{ flex: 1 }}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          <CreateDropStepMedia
+            trigger={trigger}
+            control={control}
+            errors={formState.errors}
+            getValues={getValues}
+            handleNextStep={() => setStep("title")}
+            handleFileChange={handleFileChange}
+            handlePrevStep={() => {
+              modalContext?.snapToIndex(0);
+              modalContext?.pop();
+            }}
+            description={description}
+            file={file}
+            title={title}
+          />
+        </Animated.View>
+      );
+    case "song-uri":
+      return (
+        <Animated.View
+          key={step}
+          style={{ flex: 1 }}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          <CreateDropStepSongURI
+            control={control}
+            isSaveDrop={isSaveDrop}
+            setIsSaveDrop={setIsSaveDrop}
+            getValues={getValues}
+            errors={formState.errors}
+            trigger={trigger}
+            handleNextStep={handleSubmit(onSubmit)}
+            handlePrevStep={() => setStep("title")}
+            file={file}
+            description={description}
+            title={title}
+            handleMoreOptions={() => setStep("more-options")}
+          />
+        </Animated.View>
+      );
+    case "title":
+      return (
+        <Animated.View
+          key={step}
+          style={{ flex: 1 }}
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
+          <CreateDropStepTitle
+            control={control}
+            getValues={getValues}
+            errors={formState.errors}
+            trigger={trigger}
+            handleNextStep={() => setStep("song-uri")}
+            handlePrevStep={() => setStep("media")}
+            file={file}
+            title={title}
+            description={description}
+          />
+        </Animated.View>
+      );
+    case "more-options":
+      return (
+        <Animated.View style={{ flex: 1 }} entering={FadeIn} exiting={FadeOut}>
+          <CreateDropMoreOptions
+            control={control}
+            getValues={getValues}
+            errors={formState.errors}
+            trigger={trigger}
+            handleNextStep={() => setStep("song-uri")}
+            file={file}
+            handlePrevStep={() => setStep("song-uri")}
+            title={title}
+            description={description}
+          />
+        </Animated.View>
+      );
+    default:
+      return null;
+  }
+};
 
-          {state.error ? (
-            <View tw="mb-1 mt-4 items-center justify-center">
-              <Text tw="text-red-500">{state.error}</Text>
-            </View>
-          ) : null}
+const CreateDropStepMedia = (
+  props: StepProps & {
+    handleFileChange: (file: FilePickerResolveValue) => void;
+  }
+) => {
+  const {
+    control,
+    errors,
+    handleFileChange,
+    handlePrevStep,
+    trigger,
+    handleNextStep,
+  } = props;
+  const { width: windowWidth } = useWindowDimensions();
+
+  const mediaWidth = Math.min(340, windowWidth - 32);
+
+  return (
+    <Layout onBackPress={handlePrevStep} title="Create">
+      <View tw="px-4">
+        <Text tw="px-8 text-center text-xl font-medium text-gray-900 dark:text-gray-50">
+          Upload an image or video for your paid unlockable.
+        </Text>
+        <View tw="mt-8 self-center" style={{ maxWidth: mediaWidth }}>
+          <Controller
+            control={control}
+            name="file"
+            render={({ field: { value } }) => {
+              return (
+                <MediaPicker
+                  onChange={handleFileChange}
+                  value={value}
+                  errorMessage={errors?.file?.message}
+                  size={mediaWidth}
+                />
+              );
+            }}
+          />
+          <Text tw="py-4 text-sm text-gray-700 dark:text-gray-300">
+            This could be an alternative album cover, unreleased content, or a
+            short video snippet promoting your upcoming release.
+          </Text>
         </View>
-      </AnimateHeight>
-
-      <View style={{ height: insets.bottom }} />
-    </BottomSheetModalProvider>
+      </View>
+      <View tw="mt-4 px-4">
+        <Button
+          size="regular"
+          tw="w-full self-center"
+          onPress={async () => {
+            const res = await trigger("file");
+            if (res) {
+              handleNextStep();
+            }
+          }}
+        >
+          Next
+        </Button>
+      </View>
+    </Layout>
   );
 };
 
-const previewBorderStyle = { borderRadius: 16 };
+const CreateDropStepTitle = (props: StepProps) => {
+  const { width: windowWidth } = useWindowDimensions();
+  const { control, errors, handlePrevStep, handleNextStep, trigger } = props;
+  const mediaDimension = Math.min(200, windowWidth - 32);
+
+  return (
+    <Layout onBackPress={handlePrevStep} title="Create">
+      <ScrollView tw="px-4">
+        <View tw="items-center">
+          <Preview
+            file={props.file}
+            width={mediaDimension}
+            height={mediaDimension}
+            style={{ borderRadius: 16 }}
+          />
+        </View>
+        <View tw="mt-4">
+          <Controller
+            control={control}
+            name="title"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  label="Song Title"
+                  placeholder="Give your drop a title"
+                  onBlur={onBlur}
+                  errorText={errors.title?.message}
+                  value={value}
+                  onChangeText={onChange}
+                  numberOfLines={1}
+                  multiline
+                />
+              );
+            }}
+          />
+        </View>
+        <View tw="mt-4 flex-1">
+          <Controller
+            control={control}
+            name="description"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  label="Description"
+                  tw="flex-1"
+                  placeholder="Why should people collect this drop? Raffle Automatically selects a winner once your song is live."
+                  multiline
+                  textAlignVertical="top"
+                  numberOfLines={3}
+                  onBlur={onBlur}
+                  errorText={errors.description?.message}
+                  value={value}
+                  onChangeText={onChange}
+                />
+              );
+            }}
+          />
+          <View tw="absolute right-3 top-3 flex-row items-center">
+            <Controller
+              key="raffle"
+              control={control}
+              name="raffle"
+              render={({ field: { onChange, value } }) => {
+                return (
+                  <>
+                    <Raffle color="black" width={18} height={18} />
+                    <Text tw="mx-1 text-xs font-bold text-gray-800 dark:text-gray-200">
+                      Raffle
+                    </Text>
+                    <Switch checked={value} onChange={onChange} size="small" />
+                  </>
+                );
+              }}
+            />
+          </View>
+        </View>
+        <View>
+          <Text tw="text-13 pt-4 text-gray-700 dark:text-gray-200">
+            Promote a collectible, raffle or allow-list to attract more
+            collectors. You can edit up to 30 minutes after creating.
+          </Text>
+        </View>
+      </ScrollView>
+      <View tw="px-4">
+        <Button
+          size="regular"
+          tw="mt-4 w-full self-center"
+          onPress={async () => {
+            const res = await trigger(["title", "description"], {
+              shouldFocus: true,
+            });
+            if (res) {
+              handleNextStep();
+            }
+          }}
+        >
+          Next
+        </Button>
+      </View>
+    </Layout>
+  );
+};
+const prices = [3, 8, 19];
+const dropDurations = [3, 7, 30];
+
+const CreateDropStepSongURI = (
+  props: StepProps & {
+    handleMoreOptions: () => void;
+    setIsSaveDrop: (isSaveDrop: boolean) => void;
+    isSaveDrop: boolean;
+  }
+) => {
+  const { errors, control, handleNextStep, trigger, getValues } = props;
+  const { state } = useDropNFT();
+  const duration = getValues("duration");
+  const selectedDurationLabel = useMemo(
+    () => durationOptions.find((d) => d.value === duration)?.label,
+    [duration]
+  );
+
+  const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
+    useState(false);
+  const isDark = useIsDarkMode();
+  const scrollViewRef = useRef<RNScrollView>(null);
+  const [selectedPrice, setSelectedPrice] = useState(prices[1]);
+  const [selectedDay, setSelectedDay] = useState(dropDurations[1]);
+
+  return (
+    <Layout onBackPress={props.handlePrevStep} title="Create">
+      <BottomSheetScrollView
+        ref={scrollViewRef}
+        style={{ paddingHorizontal: 16 }}
+      >
+        <View tw="flex-row items-center">
+          <Preview
+            width={40}
+            height={40}
+            resizeMode="cover"
+            style={{ borderRadius: 4 }}
+            file={props.file}
+          />
+          <Text tw="ml-2 text-base font-semibold text-gray-600 dark:text-gray-200">
+            {props.title}
+          </Text>
+        </View>
+        <View tw="mt-4">
+          <View tw="rounded-lg bg-gray-100 p-4">
+            <Text tw="font-bold text-gray-900 dark:text-gray-50">
+              Price of drop
+            </Text>
+            <Text tw="pt-1 text-gray-700 dark:text-gray-200">
+              We suggest lower price starting out and higher price for creators
+              with 1,000 followers
+            </Text>
+            <View
+              tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2"
+              style={{ columnGap: 64 }}
+            >
+              {prices.map((price) => (
+                <Pressable
+                  key={price}
+                  onPress={() => setSelectedPrice(price)}
+                  tw={`items-center rounded-2xl p-4 ${
+                    selectedPrice === price ? "bg-orange-100" : ""
+                  }`}
+                  style={{ rowGap: 16 }}
+                >
+                  <Text tw="text-4xl text-gray-700 dark:text-gray-100">
+                    ${price}
+                  </Text>
+                  <Text tw="text-xs text-gray-700 dark:text-gray-100">USD</Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+        </View>
+        <View tw="mt-4">
+          <View tw="rounded-lg bg-gray-100 p-4">
+            <Text tw="font-bold text-gray-900 dark:text-gray-50">
+              How long will drop be available?
+            </Text>
+            <Text tw="pt-1 text-gray-700 dark:text-gray-200">
+              After duration expires, drop will not be purchasable on Showtime,
+              but will continue to trade on OpenSea
+            </Text>
+            <View
+              tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2"
+              style={{ columnGap: 64 }}
+            >
+              {dropDurations.map((day) => (
+                <Pressable
+                  key={day}
+                  onPress={() => setSelectedDay(day)}
+                  tw={`items-center rounded-2xl p-4 ${
+                    selectedDay === day ? "bg-orange-100" : ""
+                  }`}
+                  style={{ rowGap: 16 }}
+                >
+                  <Text tw="text-4xl text-gray-700 dark:text-gray-100">
+                    {day}
+                  </Text>
+                  <Text tw="text-xs text-gray-700 dark:text-gray-100">
+                    Days
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+
+          <Pressable
+            tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800"
+            onPress={props.handleMoreOptions}
+          >
+            <View tw="flex-row items-center justify-between">
+              <Text tw="text-sm font-semibold text-black dark:text-white">
+                More options
+              </Text>
+              <ChevronRight
+                color={isDark ? "white" : "black"}
+                width={24}
+                height={24}
+              />
+            </View>
+            <View tw="items-start">
+              <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
+                <DataPill
+                  tw={isDark ? "bg-black" : "bg-white"}
+                  label={`${getValues("royalty")}% Royalties`}
+                  type="text"
+                />
+                <DataPill
+                  tw={isDark ? "bg-black" : "bg-white"}
+                  label={selectedDurationLabel}
+                  type="text"
+                />
+              </View>
+            </View>
+          </Pressable>
+        </View>
+        <Text tw="pt-4 text-sm text-gray-600 dark:text-gray-200">
+          This drop will be owned by you
+        </Text>
+        <View tw="mt-4 flex-1 flex-row">
+          <Controller
+            control={control}
+            name="hasAcceptedTerms"
+            render={({ field: { onChange, value } }) => (
+              <>
+                <Pressable
+                  onPress={() => onChange(!value)}
+                  tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
+                >
+                  <Checkbox
+                    onChange={(v) => onChange(v)}
+                    checked={value}
+                    aria-label="I agree to the terms and conditions"
+                  />
+
+                  <Text tw="px-4 text-gray-600 dark:text-gray-400">
+                    I have the rights to publish this content, and understand it
+                    will be minted on the Polygon network.
+                  </Text>
+                </Pressable>
+              </>
+            )}
+          />
+        </View>
+        {errors.hasAcceptedTerms?.message ? (
+          <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
+        ) : null}
+      </BottomSheetScrollView>
+
+      <View tw="mx-4 mt-4">
+        <Button
+          variant="primary"
+          size="regular"
+          disabled={state.status === "loading"}
+          tw={state.status === "loading" ? "opacity-[0.45]" : ""}
+          onPress={async () => {
+            const res = await trigger(
+              ["releaseDate", "spotifyUrl", "appleMusicTrackUrl"],
+              {
+                shouldFocus: true,
+              }
+            );
+            if (res) {
+              const hasAcceptedTerms = await trigger("hasAcceptedTerms");
+              if (hasAcceptedTerms) {
+                handleNextStep();
+              } else {
+                scrollViewRef.current?.scrollTo({ y: 10000, animated: true });
+              }
+            }
+          }}
+        >
+          {state.status === "loading" ? (
+            <View tw="items-center justify-center">
+              <Spinner size="small" />
+            </View>
+          ) : state.status === "error" ? (
+            "Failed. Please retry!"
+          ) : (
+            "Drop now"
+          )}
+        </Button>
+      </View>
+
+      <ModalSheet
+        snapPoints={["100%"]}
+        title="Spotify Song Link"
+        visible={showCopySpotifyLinkTutorial}
+        close={() => setShowCopySpotifyLinkTutorial(false)}
+        onClose={() => setShowCopySpotifyLinkTutorial(false)}
+      >
+        <CopySpotifyLinkTutorial />
+      </ModalSheet>
+    </Layout>
+  );
+};
+
+const SECONDS_IN_A_DAY = 24 * 60 * 60;
+const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
+const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
+const durationOptions = [
+  { label: "1 day", value: SECONDS_IN_A_DAY },
+  { label: "1 week", value: SECONDS_IN_A_WEEK },
+  { label: "1 month", value: SECONDS_IN_A_MONTH },
+];
+const CreateDropMoreOptions = (props: StepProps) => {
+  const { control, errors, handlePrevStep } = props;
+
+  return (
+    <Layout onBackPress={handlePrevStep} title="More options">
+      <BottomSheetScrollView style={{ paddingHorizontal: 16 }}>
+        <View tw="mt-4 flex-1">
+          <Controller
+            control={control}
+            name="royalty"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  tw="flex-1"
+                  label="Your royalties (%)"
+                  onBlur={onBlur}
+                  placeholder="Enter number"
+                  helperText="Earn royalties each time an edition is sold."
+                  errorText={errors.royalty?.message}
+                  value={value?.toString()}
+                  onChangeText={onChange}
+                />
+              );
+            }}
+          />
+        </View>
+        <View tw="mt-4">
+          <Controller
+            control={control}
+            name="duration"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  tw="flex-1"
+                  label="Duration"
+                  onBlur={onBlur}
+                  helperText="How long the drop will be available to claim"
+                  errorText={errors.duration?.message}
+                  selectOnly
+                  select={{
+                    options: durationOptions,
+                    placeholder: "Duration",
+                    value: value,
+                    onChange,
+                    tw: "flex-1",
+                  }}
+                />
+              );
+            }}
+          />
+        </View>
+        <View tw="my-4 flex-1">
+          <Controller
+            control={control}
+            name="notSafeForWork"
+            render={({ field: { onChange, value, ref } }) => (
+              <Fieldset
+                ref={ref}
+                tw="flex-1"
+                label={
+                  <View tw="mr-5 flex">
+                    <Text tw="font-semibold dark:text-white">
+                      Explicit visual (18+)
+                    </Text>
+                    <Text tw="max-w-[100%] pt-1 text-xs dark:text-white">
+                      Do not check if your song lyrics are explicit.
+                    </Text>
+                  </View>
+                }
+                switchOnly
+                switchProps={{
+                  checked: value,
+                  onChange,
+                }}
+              />
+            )}
+          />
+        </View>
+      </BottomSheetScrollView>
+      <View tw="px-4">
+        <Button size="regular" tw="w-full self-center" onPress={handlePrevStep}>
+          Save
+        </Button>
+      </View>
+    </Layout>
+  );
+};
+
+const Layout = (props: {
+  title: string;
+  onBackPress: () => void;
+  children: any;
+  closeIcon?: boolean;
+}) => {
+  const isDark = useIsDarkMode();
+  const insets = useSafeAreaInsets();
+  return (
+    <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
+      <View tw="mx-4 my-8 flex-row items-center">
+        <Pressable tw="absolute" onPress={props.onBackPress}>
+          {props.closeIcon ? (
+            <Close color={isDark ? "white" : "black"} width={24} height={24} />
+          ) : (
+            <ArrowLeft
+              color={isDark ? "white" : "black"}
+              width={24}
+              height={24}
+            />
+          )}
+        </Pressable>
+        <View tw="mx-auto">
+          <Text tw="text-base font-bold text-black dark:text-white">
+            {props.title}
+          </Text>
+        </View>
+      </View>
+      {props.children}
+    </View>
+  );
+};
+
+// const DropSuccess = (props: { contractAddress?: string }) => {
+//   const contractAddress = props.contractAddress;
+//   const isDark = useIsDarkMode();
+//   const { data: edition } = useCreatorCollectionDetail(contractAddress);
+//   const router = useRouter();
+//   const { data } = useNFTDetailByTokenId({
+//     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+//     tokenId: "0",
+//     contractAddress: edition?.creator_airdrop_edition.contract_address,
+//   });
+//   const nft = dummyNFT ?? data?.data.item;
+//   const qrCodeUrl = useMemo(() => {
+//     if (!nft) return "";
+//     const url = new URL(getNFTURL(nft));
+//     if (edition && edition.password) {
+//       url.searchParams.set("password", edition?.password);
+//     }
+//     return url;
+//   }, [edition, nft]);
+
+//   const shareWithTwitterIntent = useCallback(() => {
+//     Linking.openURL(
+//       getTwitterIntent({
+//         url: qrCodeUrl.toString(),
+//         message: `Just dropped "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
+//       })
+//     );
+//   }, [nft?.token_name, qrCodeUrl]);
+
+//   const onCopyLink = useCallback(async () => {
+//     await Clipboard.setStringAsync(qrCodeUrl.toString());
+//     toast.success("Copied!");
+//   }, [qrCodeUrl]);
+
+//   return (
+//     <BottomSheetScrollView>
+//       <View tw="items-center justify-center p-4 px-8">
+//         <View
+//           style={{ borderWidth: 1 }}
+//           tw="mt-4 w-full overflow-hidden rounded-xl border-gray-500"
+//         >
+//           <Media
+//             item={nft}
+//             resizeMode="cover"
+//             numColumns={1}
+//             sizeStyle={{
+//               height: 220,
+//             }}
+//             theme="dark"
+//           />
+//           <View tw="px-4">
+//             <Creator nft={nft} shouldShowDateCreated={false} />
+//             <View tw="mt-[-4px] pb-4">
+//               <Text tw="font-semibold text-gray-800 dark:text-gray-100">
+//                 {nft?.token_name}
+//               </Text>
+//               <Text tw="text-gray-800 dark:text-gray-100">
+//                 {nft?.token_description}
+//               </Text>
+//             </View>
+//           </View>
+//         </View>
+//         <View tw="mt-4 w-full items-center" style={{ rowGap: 16 }}>
+//           <Button
+//             tw="w-full"
+//             size="regular"
+//             onPress={shareWithTwitterIntent}
+//             style={{
+//               backgroundColor: "#4A99E9",
+//             }}
+//           >
+//             <Twitter color="white" width={20} height={20} />
+//             <Text
+//               tw="ml-1 text-sm font-semibold"
+//               style={{
+//                 color: "white",
+//               }}
+//             >
+//               Tweet
+//             </Text>
+//           </Button>
+//           <Button
+//             variant="primary"
+//             tw="w-full"
+//             size="regular"
+//             onPress={onCopyLink}
+//           >
+//             <View tw="mr-1">
+//               <InstagramColorful width={20} height={20} />
+//             </View>
+//             Share Instagram
+//           </Button>
+//           <Button
+//             variant="outlined"
+//             tw="w-full"
+//             size="regular"
+//             onPress={onCopyLink}
+//           >
+//             <View tw="mr-1">
+//               <Link color={isDark ? "white" : "black"} width={20} height={20} />
+//             </View>
+//             Copy Link
+//           </Button>
+//           <Button
+//             variant="outlined"
+//             tw="mt-8 w-full"
+//             size="regular"
+//             onPress={() => {
+//               if (!nft) return;
+
+//               if (Platform.OS !== "web") {
+//                 router.pop();
+//                 router.push(`${getNFTSlug(nft)}`);
+//               } else {
+//                 router.replace(`${getNFTSlug(nft)}`);
+//               }
+//             }}
+//           >
+//             View Drop
+//           </Button>
+//         </View>
+//       </View>
+//     </BottomSheetScrollView>
+//   );
+// };
+
+// const dummyNFT = {
+//   multiple_owners_list: [
+//     {
+//       quantity: 1,
+//       profile_id: 3366447,
+//       name: "Nishan Bende",
+//       img_url:
+//         "https://lh3.googleusercontent.com/AEnH2_JXVpF55uZc0WWhws48yF2TXccF5HbCrz7BXfmPgQQFMr_gDBsQHY6Y5zXT7T_OLz6pQpdr9BML3oIGfUqzI989xPrr3AN4",
+//       username: "nishanbende",
+//       verified: true,
+//       address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
+//       wallet_address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
+//     },
+//   ],
+//   like_count: 0,
+//   comment_count: 0,
+//   nft_id: 283274803,
+//   contract_address: "0x7EF25B27D5168f52481e342E40570591fAD6CE71",
+//   token_id: "0",
+//   token_name: "Moon drop",
+//   token_description: "Moon drop",
+//   token_img_url: null,
+//   token_img_original_url: null,
+//   token_has_video: false,
+//   token_animation_url: null,
+//   animation_preview_url: null,
+//   blurhash: null,
+//   token_background_color: null,
+//   token_aspect_ratio: 1.966189856957087,
+//   token_hidden: false,
+//   creator_id: 3366447,
+//   creator_name: "Nishan Bende",
+//   creator_address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
+//   creator_address_nonens: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
+//   creator_img_url:
+//     "https://lh3.googleusercontent.com/AEnH2_JXVpF55uZc0WWhws48yF2TXccF5HbCrz7BXfmPgQQFMr_gDBsQHY6Y5zXT7T_OLz6pQpdr9BML3oIGfUqzI989xPrr3AN4",
+//   creator_followers_count: 651,
+//   multiple_owners: false,
+//   token_creator_followers_only: false,
+//   creator_username: "nishanbende",
+//   creator_verified: true,
+//   nsfw: false,
+//   owner_id: null,
+//   owner_name: null,
+//   owner_address: null,
+//   owner_address_nonens: null,
+//   owner_username: null,
+//   owner_verified: false,
+//   owner_count: null,
+//   owner_img_url: null,
+//   token_count: null,
+//   token_ko_edition: null,
+//   token_edition_identifier: null,
+//   source_url: "ipfs://QmYpX8J7vsaGYaFyVAsHveGZtRZ8hURfyEgSqCP1cx2KqE",
+//   still_preview_url: null,
+//   mime_type: "image/webp",
+//   chain_identifier: "80001",
+//   chain_name: "mumbai",
+//   token_listing_identifier: null,
+//   collection_name: null,
+//   collection_slug: null,
+//   collection_img_url: null,
+//   contract_is_creator: false,
+//   creator_airdrop_edition_address: "0x7EF25B27D5168f52481e342E40570591fAD6CE71",
+//   creator_airdrop_edition_contract_version: 2,
+//   token_created: "2023-06-30T09:15:36.676Z",
+//   is_user_owner: null,
+//   slug: "moon-drop-1688116536",
+//   video_urls: null,
+//   image_path: "46f0b6f0-6a40-4435-b0b9-b4aae9777d58.png",
+//   image_url:
+//     "https://media-stage.showtime.xyz/46f0b6f0-6a40-4435-b0b9-b4aae9777d58.png",
+//   cloudinary_video_url: null,
+//   cloudinary_thumbnail_url: null,
+// };
