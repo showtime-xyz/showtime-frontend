@@ -178,11 +178,7 @@ export const CreatorChannelsTabBarIcon = ({
       onDismiss();
     }
   }, [focused, isAuthenticated, router]);
-  useEffect(() => {
-    if (isAuthenticated && showTip) {
-      onDismiss();
-    }
-  }, [isAuthenticated, showTip]);
+
   if (!showTip) {
     return (
       <TabBarIcon tab="/channels">
@@ -253,7 +249,7 @@ export const CreatorChannelsTabBarIcon = ({
           <Tooltip.Text
             textSize={14}
             textColor="#fff"
-            text={"Collect to unlock creator channels"}
+            text={"Collect drops to unlock creator channels."}
           />
         </Tooltip.Content>
       </Tooltip.Root>
