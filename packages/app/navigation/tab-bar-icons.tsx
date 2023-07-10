@@ -146,6 +146,7 @@ export const CreatorChannelsTabBarIcon = ({
 }: TabBarIconProps & {
   tooltipSide?: ContentProps["side"];
 }) => {
+  const { isAuthenticated } = useUser();
   const router = useRouter();
   const [showTip, setShowTip] = useState(false);
   const [open, setOpen] = useState(true);
@@ -162,7 +163,12 @@ export const CreatorChannelsTabBarIcon = ({
     setShowTip(false);
   };
   useEffect(() => {
-    if (!store.getBoolean(STORE_KEY) && !isSet.current && !focused) {
+    if (
+      !store.getBoolean(STORE_KEY) &&
+      !isSet.current &&
+      !focused &&
+      !isAuthenticated
+    ) {
       setTimeout(() => {
         setShowTip(true);
         isSet.current = true;
@@ -171,8 +177,12 @@ export const CreatorChannelsTabBarIcon = ({
     if (focused) {
       onDismiss();
     }
-  }, [focused, router]);
-
+  }, [focused, isAuthenticated, router]);
+  useEffect(() => {
+    if (isAuthenticated && showTip) {
+      onDismiss();
+    }
+  }, [isAuthenticated, showTip]);
   if (!showTip) {
     return (
       <TabBarIcon tab="/channels">
@@ -243,7 +253,7 @@ export const CreatorChannelsTabBarIcon = ({
           <Tooltip.Text
             textSize={14}
             textColor="#fff"
-            text={"Check out new broadcasts from your creators"}
+            text={"Collect to unlock creator channels"}
           />
         </Tooltip.Content>
       </Tooltip.Root>
