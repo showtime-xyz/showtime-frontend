@@ -1,27 +1,11 @@
-import {
-  useCallback,
-  useMemo,
-  useRef,
-  createContext,
-  useState,
-  useLayoutEffect,
-} from "react";
+import { useCallback, useMemo, useRef, createContext, useState } from "react";
 import { useWindowDimensions } from "react-native";
 
-import throttle from "lodash/throttle";
+import { useVirtualizer, Virtualizer } from "@tanstack/react-virtual";
 import { useSharedValue } from "react-native-reanimated";
 import "swiper/css";
 import "swiper/css/virtual";
-import { Virtual, Keyboard, Mousewheel } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 
-import { useWebScroll } from "@showtime-xyz/universal.hooks";
-import {
-  InfiniteScrollList,
-  ListRenderItem,
-  ListRenderItemInfo,
-} from "@showtime-xyz/universal.infinite-scroll-list";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { clamp } from "@showtime-xyz/universal.utils";
 import { View } from "@showtime-xyz/universal.view";
@@ -32,15 +16,10 @@ import {
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
 import { VideoConfigContext } from "app/context/video-config-context";
-import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { getNFTSlug } from "app/hooks/use-share-nft";
-import { useScrollToTop } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
-import { isMobileWeb, isSafari } from "app/utilities";
 
-const ViewabilityInfiniteScrollList =
-  withViewabilityInfiniteScrollList(InfiniteScrollList);
 type Props = {
   data: NFT[];
   fetchMore?: () => void;
@@ -58,19 +37,16 @@ export const SwipeList = ({
   initialScrollIndex = 0,
 }: Props) => {
   const router = useRouter();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const listRef = useRef<any>(null);
-  useScrollToTop(listRef);
+  const listRef = useRef<HTMLDivElement>(null);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
-  const isSwiped = useRef(false);
 
   const visibleItems = useSharedValue<any[]>([
     undefined,
     initialScrollIndex,
     initialScrollIndex + 1 < data.length ? initialScrollIndex + 1 : undefined,
   ]);
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const { height: windowHeight } = useWindowDimensions();
   const videoConfig = useMemo(
     () => ({
       isMuted: true,
@@ -79,83 +55,84 @@ export const SwipeList = ({
     }),
     []
   );
-  useLayoutEffect(() => {
-    listRef.current?.scrollTo(0, initialScrollIndex * windowHeight);
-  }, [initialScrollIndex, windowHeight]);
-  // const onRealIndexChange = useCallback(() => {
-  //   const offsetY = listRef.current?.getBoundingClientRect()?.y;
-  //   const previousIndex = 0;
-  //   const activeIndex = 0;
 
-  //   if (
-  //     activeIndex !== 0 &&
-  //     !isSwiped.current &&
-  //     router.pathname === "/" &&
-  //     isSafari()
-  //   ) {
-  //     // change URL is for hide smart app banner on Safari when swipe once
-  //     window.history.replaceState(null, "", "foryou");
-  //     isSwiped.current = true;
-  //   }
-  //   visibleItems.value = [
-  //     previousIndex,
-  //     activeIndex,
-  //     activeIndex + 1 < data.length ? activeIndex + 1 : undefined,
-  //   ];
-  //   if (isSwipeListScreen) {
-  //     router.replace(
-  //       {
-  //         pathname: "/profile/[username]/[dropSlug]",
-  //         query: {
-  //           ...router.query,
-  //           initialScrollIndex: activeIndex,
-  //           username: data[activeIndex].creator_username,
-  //           dropSlug: data[activeIndex].slug,
-  //         },
-  //       },
-  //       getNFTSlug(data[activeIndex]),
-  //       { shallow: true }
-  //     );
-  //   }
-  //   setActiveIndex(activeIndex);
-  // }, [visibleItems, data, router, isSwipeListScreen]);
-
-  // useWebScroll(listRef, onRealIndexChange);
-  const renderItem = useCallback(
-    ({ item, index }: ListRenderItemInfo<NFT>) => {
-      return (
-        <View key={item.nft_id} tw="snap-start snap-always">
-          <ItemKeyContext.Provider value={index}>
-            <FeedItem nft={item} itemHeight={windowHeight} />
-          </ItemKeyContext.Provider>
-        </View>
+  const onScrollChange = useCallback(
+    (e: Virtualizer<HTMLDivElement, Element>) => {
+      const previousIndex = clamp(
+        Math.floor(e.scrollOffset / windowHeight) - 1,
+        0,
+        data.length - 1
       );
+      const activeIndex = Math.floor(e.scrollOffset / windowHeight);
+      if (isSwipeListScreen) {
+        router.replace(
+          {
+            pathname: "/profile/[username]/[dropSlug]",
+            query: {
+              ...router.query,
+              initialScrollIndex: activeIndex,
+              username: data[activeIndex].creator_username,
+              dropSlug: data[activeIndex].slug,
+            },
+          },
+          getNFTSlug(data[activeIndex]),
+          { shallow: true }
+        );
+      }
+      visibleItems.value = [
+        previousIndex,
+        activeIndex,
+        activeIndex + 1 < data.length ? activeIndex + 1 : undefined,
+      ];
     },
-    [windowHeight]
+    [windowHeight, data, isSwipeListScreen, visibleItems, router]
   );
-  const keyExtractor = useCallback((item: NFT) => `${item.nft_id}`, []);
+
+  const rowVirtualizer = useVirtualizer({
+    count: data.length,
+    getScrollElement: () => listRef.current,
+    estimateSize: () => windowHeight,
+    initialOffset: initialScrollIndex * windowHeight,
+    overscan: 10,
+    onChange: onScrollChange,
+  });
+
   if (data.length === 0) return null;
 
   return (
-    <View
-      testID="swipeList"
-      id="slidelist"
-      tw="max-h-[100svh] min-h-[100dvh] snap-y snap-mandatory overflow-y-auto bg-gray-100 dark:bg-black"
-      ref={listRef}
-    >
+    <View testID="swipeList" id="slidelist" tw="bg-gray-100 dark:bg-black">
       <VideoConfigContext.Provider value={videoConfig}>
-        <SwiperActiveIndexContext.Provider value={activeIndex}>
-          <ViewabilityItemsContext.Provider value={visibleItems}>
-            <ViewabilityInfiniteScrollList
-              data={data}
-              useWindowScroll
-              renderItem={renderItem}
-              estimatedItemSize={64}
-              keyExtractor={keyExtractor}
-              overscan={8}
-            />
-          </ViewabilityItemsContext.Provider>
-        </SwiperActiveIndexContext.Provider>
+        <ViewabilityItemsContext.Provider value={visibleItems}>
+          <div
+            ref={listRef}
+            className="max-h-[100svh] min-h-[100dvh] snap-y snap-mandatory overflow-y-scroll"
+          >
+            <div
+              style={{
+                height: `${rowVirtualizer.getTotalSize()}px`,
+              }}
+              className="relative w-full"
+            >
+              {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+                <div
+                  key={virtualItem.key}
+                  style={{
+                    transform: `translateY(${virtualItem.start}px)`,
+                    height: `${virtualItem.size}px`,
+                  }}
+                  className="absolute left-0 top-0 w-full snap-start snap-always"
+                >
+                  <ItemKeyContext.Provider value={virtualItem.index}>
+                    <FeedItem
+                      nft={data[virtualItem.index]}
+                      itemHeight={windowHeight}
+                    />
+                  </ItemKeyContext.Provider>
+                </div>
+              ))}
+            </div>
+          </div>
+        </ViewabilityItemsContext.Provider>
       </VideoConfigContext.Provider>
     </View>
   );

@@ -12,7 +12,6 @@ import { useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
 import { Video as ExpoVideo } from "expo-av";
-import { useSwiper } from "swiper/react";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -44,7 +43,6 @@ import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { UserList } from "app/components/user-list";
-import { LikeContextProvider } from "app/context/like-context";
 import { useComments } from "app/hooks/api/use-comments";
 import {
   ContentLayoutOffset,
@@ -62,7 +60,6 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 import { breakpoints } from "design-system/theme";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
-import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
