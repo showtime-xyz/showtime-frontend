@@ -1,4 +1,11 @@
-import { useCallback, memo, useRef, useMemo, RefObject } from "react";
+import {
+  useCallback,
+  memo,
+  useRef,
+  useMemo,
+  RefObject,
+  useReducer,
+} from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { RectButton } from "react-native-gesture-handler";
@@ -92,11 +99,18 @@ const CreatorChannelsListItem = memo(
     );
     const router = useRouter();
     const isDark = useIsDarkMode();
+    // yes, react can be annoying sometimes
+    const forceUpdate = useReducer((x) => x + 1, 0)[1];
+
     return (
       <PlatformPressable
         onPress={() => {
           router.push(`/channels/${item.id}`);
           item.read = true;
+          requestAnimationFrame(() => {
+            // doing this because I don't want to mutate the whole object for a simple read status
+            forceUpdate();
+          });
         }}
         underlayColor={isDark ? "white" : "black"}
         style={{ width: "100%" }}
