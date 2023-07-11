@@ -20,9 +20,6 @@ export const HeaderSm = withColorScheme(
     if (isHeaderHidden) {
       return null;
     }
-    if (HIDE_MOBILE_WEB_HEADER_SCREENS.includes(router.pathname)) {
-      return null;
-    }
     if (SWIPE_LIST_SCREENS.includes(router.pathname)) {
       return (
         <>
@@ -31,6 +28,9 @@ export const HeaderSm = withColorScheme(
           </View>
         </>
       );
+    }
+    if (HIDE_MOBILE_WEB_HEADER_SCREENS.includes(router.pathname)) {
+      return null;
     }
 
     return (

@@ -233,11 +233,13 @@ const Container = withColorScheme(
     const fonts = [inter.variable].join(" ");
     const headerHeight = useHeaderHeight();
     const bottomBarHeight = usePlatformBottomHeight();
-
     return (
       <View
         tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900"
-        style={{ paddingTop: headerHeight, paddingBottom: bottomBarHeight }}
+        style={{
+          paddingTop: headerHeight,
+          paddingBottom: `calc(${bottomBarHeight}px + env(safe-area-inset-bottom))`,
+        }}
       >
         <div className={fonts}>{children}</div>
       </View>
