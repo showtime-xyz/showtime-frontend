@@ -160,7 +160,7 @@
     "react-native-svg": "13.10.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-view-shot": "3.7.0",
-    "react-native-volume-manager": "^1.8.1",
+    "react-native-volume-manager": "^1.10.0",
     "react-native-web": "~0.19.6",
     "react-native-webview": "13.2.2",
     "react-string-replace": "1.1.1",

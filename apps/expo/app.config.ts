@@ -213,7 +213,7 @@ const expoConfig: ExpoConfig = {
           targetSdkVersion: 33,
           minSdkVersion: 23,
           buildToolsVersion: "33.0.0",
-          kotlinVersion: "1.6.20",
+          kotlinVersion: "1.8.0",
           unstable_networkInspector: true,
         },
         ios: {
@@ -222,7 +222,6 @@ const expoConfig: ExpoConfig = {
         },
       },
     ],
-    "./plugins/with-android-codegen-path.js",
   ],
   hooks: {
     postPublish: [
