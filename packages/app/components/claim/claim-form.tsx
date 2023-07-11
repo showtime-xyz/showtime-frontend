@@ -45,6 +45,7 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { linkifyDescription } from "app/lib/linkify";
 import { createParam } from "app/navigation/use-param";
 import { ContractVersion } from "app/types";
@@ -172,8 +173,10 @@ export const ClaimForm = ({
       edition.gating_type === "multi_provider_music_presave"
     ) {
       if (claimType === "spotify") {
+        Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
         success = await claimSpotifyGatedDrop({ closeModal });
       } else if (claimType === "appleMusic") {
+        Analytics.track(EVENTS.APPLE_MUSIC_SAVE_PRESSED_BEFORE_LOGIN);
         success = await claimAppleMusicGatedDrop({ closeModal });
       } else {
         success = await claimNFT({ closeModal });
@@ -183,6 +186,7 @@ export const ClaimForm = ({
       edition.gating_type === "spotify_presave" ||
       edition?.gating_type === "music_presave"
     ) {
+      Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
       success = await claimSpotifyGatedDrop({ closeModal });
     } else if (edition.gating_type === "password") {
       success = await claimNFT({ password: password.trim(), closeModal });

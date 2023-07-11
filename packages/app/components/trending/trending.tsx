@@ -113,6 +113,7 @@ export const Trending = () => {
             contentContainerStyle={{
               paddingHorizontal: 16,
             }}
+            overscan={12}
             containerTw="px-4 md:px-0"
             ListEmptyComponent={ListEmptyComponent}
             ListHeaderComponent={Header}
