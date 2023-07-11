@@ -13,6 +13,7 @@ import {
   StyleProp,
   useWindowDimensions,
   ViewStyle,
+  Dimensions,
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
@@ -50,17 +51,18 @@ export type FeedItemProps = {
   detailStyle?: StyleProp<ViewStyle>;
   bottomPadding?: number;
   bottomMargin?: number;
-  itemHeight: number;
+  itemHeight?: number;
   setMomentumScrollCallback?: (callback: any) => void;
+  index?: number;
 };
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
-export const SwiperActiveIndexContext = createContext<number>(0);
-
+export const SwiperActiveIndexContext = createContext<number | null>(null);
+const { height: screenHeight } = Dimensions.get("window");
 export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
   bottomPadding = 0,
   bottomMargin = 0,
-  itemHeight,
+  itemHeight = screenHeight,
   setMomentumScrollCallback,
 }) {
   const lastItemId = useRef(nft.nft_id);

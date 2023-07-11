@@ -60,6 +60,7 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 import { breakpoints } from "design-system/theme";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
+import { SwiperActiveIndexContext } from "../swipe-list.web";
 import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
@@ -86,10 +87,7 @@ const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Collectors],
 ]);
-export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
-  nft,
-  itemHeight,
-}) {
+export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({ nft }) {
   const router = useRouter();
   const isDark = useIsDarkMode();
   const { data: detailData } = useNFTDetailByTokenId({
@@ -134,7 +132,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
 
   const [index, setIndex] = useState(0);
 
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const contentWidth = useContentWidth(ContentLayoutOffset.HEADER);
 
   const { data: edition } = useCreatorCollectionDetail(
@@ -149,7 +147,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
   const feedItemStyle = {
-    height: itemHeight,
+    height: windowHeight,
     width: windowWidth,
   };
   // Media padding is the padding between the media and the content
@@ -162,6 +160,8 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     media_padding -
     MEDIA_HEADER_HEIGHT;
   const maxContentWidth = contentWidth - NFT_DETAIL_WIDTH - media_padding;
+  const activeIndex = useContext(SwiperActiveIndexContext);
+
   const disablePrevButton = false;
   const disableNextButton = false;
   const mediaWidth = useMemo(() => {
@@ -256,7 +256,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     <View
       tw="h-full w-full flex-row overflow-hidden border-l border-gray-200 dark:border-gray-800"
       style={{
-        height: itemHeight,
+        height: "100svh",
         paddingTop: headerHeight,
       }}
     >

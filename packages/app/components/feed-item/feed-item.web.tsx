@@ -9,7 +9,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
-import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
@@ -27,14 +26,10 @@ export type FeedItemProps = {
   detailStyle?: StyleProp<ViewStyle>;
   bottomPadding?: number;
   bottomMargin?: number;
-  itemHeight: number;
   setMomentumScrollCallback?: (callback: any) => void;
 };
 
-export const FeedItem = memo<FeedItemProps>(function FeedItem({
-  nft,
-  itemHeight,
-}) {
+export const FeedItem = memo<FeedItemProps>(function FeedItem({ nft }) {
   const [detailHeight, setDetailHeight] = useState(0);
   const { isAuthenticated } = useUser();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
@@ -48,7 +43,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     nft.creator_airdrop_edition_address
   );
   const videoRef = useRef<ExpoVideo | null>(null);
-
   const maxContentHeight = windowHeight - bottomHeight;
 
   const mediaHeight = useMemo(() => {
@@ -84,11 +78,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }, [detailHeight, maxContentHeight, mediaHeight, windowHeight]);
 
   if (windowWidth >= 768) {
-    return <FeedItemMD nft={nft} itemHeight={itemHeight} />;
+    return <FeedItemMD nft={nft} />;
   }
 
   return (
-    <View tw="bg-black">
+    <View tw="bg-black" style={{ marginBottom: -bottomHeight }}>
       {nft?.mime_type?.startsWith("video") ? (
         <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
           <MuteButton variant="mobile-web" />

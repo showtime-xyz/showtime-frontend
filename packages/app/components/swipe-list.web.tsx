@@ -1,4 +1,11 @@
-import { useCallback, useMemo, useRef, createContext, useEffect } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  createContext,
+  useEffect,
+  useState,
+} from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useVirtualizer, Virtualizer } from "@tanstack/react-virtual";
@@ -29,7 +36,6 @@ type Props = {
   bottomPadding?: number;
 };
 const { useParam } = createParam();
-
 export const SwiperActiveIndexContext = createContext<number>(0);
 export const SwipeList = ({
   data,
@@ -94,9 +100,10 @@ export const SwipeList = ({
     getScrollElement: () => listRef.current,
     estimateSize: () => windowHeight,
     initialOffset: initialOffset,
-    overscan: 8,
+    overscan: 2,
     onChange: onScrollChange,
   });
+
   useEffectOnce(() => {
     document.body.classList.add("overflow-hidden", "overscroll-y-contain");
     return () => {
@@ -120,30 +127,24 @@ export const SwipeList = ({
       <ViewabilityItemsContext.Provider value={visibleItems}>
         <div
           ref={listRef}
-          className="h-[100dvh] max-h-[100svh] min-h-[100dvh] snap-y snap-mandatory overflow-y-auto"
+          className="h-[100svh] snap-y snap-mandatory overflow-y-auto dark:bg-black"
           id="slidelist"
         >
           <div
             style={{
-              height: `${rowVirtualizer.getTotalSize()}px`,
+              height: `${100 * data.length}svh`,
             }}
             className="relative w-full"
           >
             {rowVirtualizer?.getVirtualItems().map((virtualItem) => (
               <div
-                key={virtualItem.key}
+                key={virtualItem.index}
                 style={{
-                  transform: `translateY(${virtualItem.start}px)`,
-                  height: `${virtualItem.size}px`,
+                  transform: `translateY(${100 * virtualItem.index}svh)`,
                 }}
-                className="absolute left-0 top-0 w-full snap-start snap-always"
+                className="absolute left-0 top-0 h-[100svh] w-full snap-start snap-always will-change-transform"
               >
-                <ItemKeyContext.Provider value={virtualItem.index}>
-                  <FeedItem
-                    nft={data[virtualItem.index]}
-                    itemHeight={windowHeight}
-                  />
-                </ItemKeyContext.Provider>
+                <FeedItem nft={data[virtualItem.index]} />
               </div>
             ))}
           </div>
