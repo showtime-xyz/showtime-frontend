@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "119.0.13",
+  "version": "119.0.12",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -77,7 +77,7 @@
     "@ethersproject/bignumber": "5.7.0",
     "@ethersproject/signing-key": "5.7.0",
     "eth-block-tracker": "4.4.3",
-    "next": "^13.4.1",
+    "next": "^13.4.9",
     "react-native-mmkv": "2.10.0",
     "react-native-screens": "3.22.0",
     "react-native-svg": "13.9.0"
