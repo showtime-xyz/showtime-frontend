@@ -92,7 +92,7 @@ function MediaImplementation({
         >
           <Image
             source={{
-              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=${quality}&sharpen=true`,
+              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=${quality}`,
             }}
             recyclingKey={mediaUri}
             blurhash={item?.blurhash}
@@ -125,7 +125,7 @@ function MediaImplementation({
               uri: mediaUri,
             }}
             posterSource={{
-              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=${quality}&sharpen=true`,
+              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=${quality}`,
             }}
             width={width}
             height={height}

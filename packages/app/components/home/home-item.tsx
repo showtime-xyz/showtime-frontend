@@ -105,7 +105,7 @@ export const HomeItem = memo<{
             </Link>
             <View tw="h-2" />
             <Text tw="text-xs text-gray-600 dark:text-gray-400">
-              {`${nft?.creator_followers_count} Followers`}
+              {`${nft?.creator_followers_count?.toLocaleString()} Followers`}
             </Text>
           </View>
           <View tw="ml-auto flex-row items-center">

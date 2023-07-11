@@ -7252,9 +7252,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rainbow-me/rainbowkit@npm:^1.0.4":
-  version: 1.0.4
-  resolution: "@rainbow-me/rainbowkit@npm:1.0.4"
+"@rainbow-me/rainbowkit@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@rainbow-me/rainbowkit@npm:1.0.5"
   dependencies:
     "@vanilla-extract/css": 1.9.1
     "@vanilla-extract/dynamic": 2.0.2
@@ -7267,7 +7267,7 @@ __metadata:
     react-dom: ">=17"
     viem: ~0.3.19 || ^1.0.0
     wagmi: ~1.0.1 || ~1.1.0 || ~1.2.0 || ~1.3.0
-  checksum: bb0985ae8a7aa9e15b7c64a669762ce7adc332f009849b4546965c366946462903a75e4fe593565c2430e5a3385fbc7f4ea128c49a96a7f8816b1ccd54a450c4
+  checksum: fdf9d4f96a95d0045ee94fc879154056214cd2e610340c4476d0bd653988d46be9ad46338ea83d37dad031a304ca53e181dedf81efa7acb5f7213d75ae318e4f
   languageName: node
   linkType: hard
 
@@ -8604,7 +8604,7 @@ __metadata:
     "@radix-ui/react-slider": ^1.1.2
     "@radix-ui/react-tooltip": ^1.0.6
     "@radix-ui/react-use-escape-keydown": ^1.0.3
-    "@rainbow-me/rainbowkit": ^1.0.4
+    "@rainbow-me/rainbowkit": ^1.0.5
     "@react-native-menu/menu": ^0.8.0
     "@sentry/integrations": 7.56.0
     "@sentry/nextjs": ^7.56.0

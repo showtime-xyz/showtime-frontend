@@ -29,6 +29,7 @@ type TrendingItemProps = ViewProps & {
   width?: number;
   numColumns: number;
   tw?: string;
+  filter?: "all" | "music";
 };
 export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   index,
@@ -37,6 +38,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   tw = "",
   numColumns = 3,
   style,
+  filter = "all",
   ...rest
 }) {
   const { data: edition, loading } = useCreatorCollectionDetail(
@@ -69,7 +71,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
         as={getNFTSlug(nft)}
         href={`${getNFTSlug(
           nft
-        )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
+        )}?initialScrollIndex=${index}&filter=${filter}&type=trendingNFTs`}
       >
         <View
           tw="overflow-hidden rounded-2xl"
