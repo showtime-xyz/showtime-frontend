@@ -96,6 +96,7 @@ const CreatorChannelsListItem = memo(
       <PlatformPressable
         onPress={() => {
           router.push(`/channels/${item.id}`);
+          item.read = true;
         }}
         underlayColor={isDark ? "white" : "black"}
         style={{ width: "100%" }}
@@ -136,7 +137,12 @@ const CreatorChannelsListItem = memo(
               </View>
               <View tw="mt-2">
                 <Text
-                  tw="leading-5 text-gray-500 dark:text-gray-300"
+                  tw={[
+                    "leading-5",
+                    !item?.read && item.itemType !== "owned"
+                      ? "font-semibold text-black dark:text-white"
+                      : "text-gray-500 dark:text-gray-200",
+                  ]}
                   numberOfLines={2}
                 >
                   {item?.latest_message?.body ? (
