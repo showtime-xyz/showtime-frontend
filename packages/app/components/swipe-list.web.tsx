@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, createContext, useState } from "react";
+import { useCallback, useMemo, useRef, createContext, useEffect } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useVirtualizer, Virtualizer } from "@tanstack/react-virtual";
@@ -8,7 +8,6 @@ import "swiper/css/virtual";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 import { clamp } from "@showtime-xyz/universal.utils";
-import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItem } from "app/components/feed-item";
 import {
@@ -55,85 +54,95 @@ export const SwipeList = ({
     }),
     []
   );
-
+  const initialOffset = initialScrollIndex * windowHeight;
+  const scrollTimer = useRef<any>(null);
   const onScrollChange = useCallback(
     (e: Virtualizer<HTMLDivElement, Element>) => {
-      const previousIndex = clamp(
-        Math.floor(e.scrollOffset / windowHeight) - 1,
-        0,
-        data.length - 1
-      );
-      const activeIndex = Math.floor(e.scrollOffset / windowHeight);
-      if (isSwipeListScreen) {
-        router.replace(
-          {
-            pathname: "/profile/[username]/[dropSlug]",
-            query: {
-              ...router.query,
-              initialScrollIndex: activeIndex,
-              username: data[activeIndex].creator_username,
-              dropSlug: data[activeIndex].slug,
-            },
-          },
-          getNFTSlug(data[activeIndex]),
-          { shallow: true }
-        );
-      }
+      clearTimeout(scrollTimer.current);
+      const activeIndex = Math.round(e.scrollOffset / windowHeight);
+      const previousIndex = clamp(activeIndex - 1, 0, data.length - 1);
+
       visibleItems.value = [
         previousIndex,
         activeIndex,
         activeIndex + 1 < data.length ? activeIndex + 1 : undefined,
       ];
+      if (isSwipeListScreen) {
+        scrollTimer.current = setTimeout(() => {
+          router.replace(
+            {
+              pathname: "/profile/[username]/[dropSlug]",
+              query: {
+                ...router.query,
+                initialScrollIndex: activeIndex,
+                username: data[activeIndex].creator_username,
+                dropSlug: data[activeIndex].slug,
+              },
+            },
+            getNFTSlug(data[activeIndex]),
+            { shallow: true }
+          );
+        }, 700);
+      }
     },
-    [windowHeight, data, isSwipeListScreen, visibleItems, router]
+    [windowHeight, data, visibleItems, isSwipeListScreen, router]
   );
 
   const rowVirtualizer = useVirtualizer({
     count: data.length,
     getScrollElement: () => listRef.current,
     estimateSize: () => windowHeight,
-    initialOffset: initialScrollIndex * windowHeight,
-    overscan: 4,
+    initialOffset: initialOffset,
+    overscan: 8,
     onChange: onScrollChange,
   });
+
+  useEffect(() => {
+    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
+    if (!lastItem) {
+      return;
+    }
+    if (data && data?.length > 0 && lastItem.index >= data.length - 1) {
+      fetchMore?.();
+    }
+  }, [data, fetchMore, rowVirtualizer]);
 
   if (data.length === 0) return null;
 
   return (
-    <View testID="swipeList" id="slidelist" tw="bg-gray-100 dark:bg-black">
-      <VideoConfigContext.Provider value={videoConfig}>
-        <ViewabilityItemsContext.Provider value={visibleItems}>
+    <VideoConfigContext.Provider value={videoConfig}>
+      <ViewabilityItemsContext.Provider value={visibleItems}>
+        <div
+          ref={listRef}
+          className="max-h-[100svh] min-h-[100dvh] snap-y snap-mandatory overflow-y-scroll"
+          id="slidelist"
+        >
           <div
-            ref={listRef}
-            className="max-h-[100svh] min-h-[100dvh] snap-y snap-mandatory overflow-y-scroll"
+            style={{
+              height: `${rowVirtualizer.getTotalSize()}px`,
+            }}
+            className="relative w-full"
           >
-            <div
-              style={{
-                height: `${rowVirtualizer.getTotalSize()}px`,
-              }}
-              className="relative w-full"
-            >
-              {rowVirtualizer.getVirtualItems().map((virtualItem) => (
-                <div
-                  key={virtualItem.key}
-                  style={{
-                    transform: `translateY(${virtualItem.start}px)`,
-                    height: `${virtualItem.size}px`,
-                  }}
-                  className="absolute left-0 top-0 w-full snap-start snap-always"
-                >
-                  <ItemKeyContext.Provider value={virtualItem.index}>
-                    <FeedItem
-                      nft={data[virtualItem.index]}
-                      itemHeight={windowHeight}
-                    />
-                  </ItemKeyContext.Provider>
-                </div>
-              ))}
-            </div>
+            {rowVirtualizer?.getVirtualItems().map((virtualItem) => (
+              <div
+                key={virtualItem.key}
+                style={{
+                  transform: `translateY(${virtualItem.start}px)`,
+                  height: `${virtualItem.size}px`,
+                }}
+                className="absolute left-0 top-0 w-full snap-start snap-always"
+              >
+                <ItemKeyContext.Provider value={virtualItem.index}>
+                  <FeedItem
+                    nft={data[virtualItem.index]}
+                    itemHeight={windowHeight}
+                  />
+                </ItemKeyContext.Provider>
+              </div>
+            ))}
           </div>
-        </ViewabilityItemsContext.Provider>
-      </VideoConfigContext.Provider>
-    </View>
+        </div>
+      </ViewabilityItemsContext.Provider>
+    </VideoConfigContext.Provider>
   );
 };
