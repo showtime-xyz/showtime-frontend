@@ -47,6 +47,8 @@ import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
+import { HeaderLeft } from "../header";
+import { HeaderRightSm } from "../header/header-right.sm";
 import { FilterContext } from "./fillter-context";
 import { ProfileError } from "./profile-error";
 import { ProfileTop } from "./profile-top";
@@ -168,11 +170,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
   const isDark = useIsDarkMode();
   const { height: screenHeight, width } = useWindowDimensions();
-
   const contentWidth = useContentWidth();
   const isMdWidth = contentWidth >= breakpoints["md"];
   const numColumns =
     width <= breakpoints["lg"] && width >= breakpoints["md"] ? 2 : 3;
+  const isSelf = user?.data?.profile?.profile_id === profileId;
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
@@ -256,15 +258,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
     if ((isLoadingMore || profileIsLoading) && !error) {
       return (
         <View
-          tw="mx-auto h-20 flex-row items-center justify-center"
+          tw="mx-auto flex-row items-center justify-center py-4"
           style={{ maxWidth: contentWidth }}
         >
-          <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
+          <Spinner />
         </View>
       );
     }
     return null;
-  }, [contentWidth, isDark, isLoadingMore, profileIsLoading, error]);
+  }, [contentWidth, isLoadingMore, profileIsLoading, error]);
 
   const ListEmptyComponent = useCallback(() => {
     if (error || isBlocked) {
@@ -296,56 +298,65 @@ const Profile = ({ username }: ProfileScreenProps) => {
     username,
   ]);
   return (
-    <ProfileHeaderContext.Provider
-      value={{
-        profileData: profileData?.data,
-        username,
-        isError,
-        isLoading: profileIsLoading && profileTabIsLoading,
-        routes,
-        type,
-        setType: setType,
-        isBlocked,
-      }}
-    >
-      <FilterContext.Provider value={{ filter, dispatch }}>
-        <View
-          tw="w-full"
-          style={
-            isMdWidth
-              ? {
-                  width: `calc(100% - ${scrollbarWidth}px)`,
-                  marginLeft: scrollbarWidth,
-                }
-              : {}
-          }
-        >
-          <MutateProvider mutate={updateItem}>
-            <ProfileTabsNFTProvider
-              tabType={
-                user?.data?.profile?.profile_id === profileId ? type : undefined
-              }
-            >
-              <InfiniteScrollList
-                useWindowScroll={isMdWidth}
-                ListHeaderComponent={Header}
-                numColumns={1}
-                preserveScrollPosition
-                data={isBlocked ? [] : chuckList}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
-                style={{
-                  height: screenHeight - bottomBarHeight,
-                }}
-                ListEmptyComponent={ListEmptyComponent}
-                ListFooterComponent={ListFooterComponent}
-                onEndReached={fetchMore}
-              />
-            </ProfileTabsNFTProvider>
-          </MutateProvider>
-        </View>
-      </FilterContext.Provider>
-    </ProfileHeaderContext.Provider>
+    <>
+      <ProfileHeaderContext.Provider
+        value={{
+          profileData: profileData?.data,
+          username,
+          isError,
+          isLoading: profileIsLoading && profileTabIsLoading,
+          routes,
+          type,
+          setType: setType,
+          isBlocked,
+        }}
+      >
+        <FilterContext.Provider value={{ filter, dispatch }}>
+          <View
+            tw="w-full"
+            style={
+              isMdWidth
+                ? {
+                    width: `calc(100% - ${scrollbarWidth}px)`,
+                    marginLeft: scrollbarWidth,
+                  }
+                : {}
+            }
+          >
+            <MutateProvider mutate={updateItem}>
+              <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
+                <InfiniteScrollList
+                  useWindowScroll
+                  ListHeaderComponent={Header}
+                  numColumns={1}
+                  preserveScrollPosition
+                  data={isBlocked ? [] : chuckList}
+                  keyExtractor={keyExtractor}
+                  renderItem={renderItem}
+                  style={{
+                    height: screenHeight - bottomBarHeight,
+                  }}
+                  ListEmptyComponent={ListEmptyComponent}
+                  ListFooterComponent={ListFooterComponent}
+                  onEndReached={fetchMore}
+                />
+              </ProfileTabsNFTProvider>
+            </MutateProvider>
+          </View>
+        </FilterContext.Provider>
+      </ProfileHeaderContext.Provider>
+      <>
+        {isSelf ? (
+          <View tw={["fixed right-4 top-2 z-50 flex md:hidden"]}>
+            <HeaderRightSm withBackground />
+          </View>
+        ) : (
+          <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
+            <HeaderLeft withBackground canGoBack={true} />
+          </View>
+        )}
+      </>
+    </>
   );
 };
 

@@ -86,45 +86,45 @@ export const FeedItemTapGesture = ({
     }
   }, [isVideo, videoRef, muted, setMuted, playAnimation]);
 
-  const singleTapHandle = useMemo(
-    () =>
-      Gesture.Tap()
-        .numberOfTaps(1)
-        // needed for mouse drag on web
-        .maxDistance(10)
-        .shouldCancelWhenOutside(true)
-        .onEnd(() => {
-          runOnJS(toggleVideoPlayback)();
-        }),
+  // const singleTapHandle = useMemo(
+  //   () =>
+  //     Gesture.Tap()
+  //       .numberOfTaps(1)
+  //       // needed for mouse drag on web
+  //       .maxDistance(10)
+  //       .shouldCancelWhenOutside(true)
+  //       .onEnd(() => {
+  //         runOnJS(toggleVideoPlayback)();
+  //       }),
 
-    [toggleVideoPlayback]
-  );
+  //   [toggleVideoPlayback]
+  // );
 
-  const doubleTapHandleOnJS = useCallback(() => {}, []);
+  // const doubleTapHandleOnJS = useCallback(() => {}, []);
 
-  const doubleTapHandle = useMemo(
-    () =>
-      Gesture.Tap()
-        .numberOfTaps(2)
-        .onEnd(() => {
-          playAnimation.value = withSequence(withSpring(0));
-          heartAnimation.value = withSequence(
-            withSpring(1),
-            withDelay(300, withSpring(0))
-          );
-          runOnJS(doubleTapHandleOnJS)();
-        }),
-    [heartAnimation, doubleTapHandleOnJS, playAnimation]
-  );
+  // const doubleTapHandle = useMemo(
+  //   () =>
+  //     Gesture.Tap()
+  //       .numberOfTaps(2)
+  //       .onEnd(() => {
+  //         playAnimation.value = withSequence(withSpring(0));
+  //         heartAnimation.value = withSequence(
+  //           withSpring(1),
+  //           withDelay(300, withSpring(0))
+  //         );
+  //         runOnJS(doubleTapHandleOnJS)();
+  //       }),
+  //   [heartAnimation, doubleTapHandleOnJS, playAnimation]
+  // );
 
-  const gesture = useMemo(
-    () => Gesture.Exclusive(singleTapHandle),
-    [singleTapHandle]
-  );
+  // const gesture = useMemo(
+  //   () => Gesture.Exclusive(singleTapHandle),
+  //   [singleTapHandle]
+  // );
 
   return (
     <>
-      <GestureDetector gesture={gesture}>{children}</GestureDetector>
+      <div onClick={toggleVideoPlayback}>{children}</div>
       <Animated.View
         style={[heartContainerStyle, heartStyle, sizeStyle]}
         pointerEvents="none"

@@ -2,6 +2,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ShowtimeBrandLogo } from "../showtime-brand";
 
@@ -30,9 +31,7 @@ export const HeaderLeft = ({
         {
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: 999,
         },
-        withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
         if (canGoHome) {
@@ -43,19 +42,20 @@ export const HeaderLeft = ({
       }}
     >
       {isHome ? (
-        <ShowtimeBrandLogo
-          color={
-            color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
-          }
-        />
+        <ShowtimeBrandLogo color={isDark ? "#FFF" : "#000"} />
       ) : (
-        <Icon
-          color={
-            color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
-          }
-          width={24}
-          height={24}
-        />
+        <View
+          tw="h-7 w-7 items-center justify-center rounded-full"
+          style={withBackground && { backgroundColor: "rgba(0,0,0,.6)" }}
+        >
+          <Icon
+            color={
+              color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
+            }
+            width={24}
+            height={24}
+          />
+        </View>
       )}
     </PressableScale>
   );

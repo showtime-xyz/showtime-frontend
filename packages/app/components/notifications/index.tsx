@@ -25,8 +25,6 @@ import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
-import { breakpoints } from "design-system/theme";
-
 import { EmptyPlaceholder } from "../empty-placeholder";
 
 const Header = () => {
@@ -47,11 +45,7 @@ const Header = () => {
 };
 type NotificationsProps = {
   hideHeader?: boolean;
-  /**
-   * **WEB ONLY**: Defines the list height.
-   * @default undefined
-   */
-  web_height?: string | number;
+  useWindowScroll?: boolean;
 };
 
 const keyExtractor = (item: NotificationType) => {
@@ -65,7 +59,7 @@ const getItemType = (item: NotificationType) => {
 */
 
 export const Notifications = memo(
-  ({ hideHeader = false, web_height = undefined }: NotificationsProps) => {
+  ({ hideHeader = false, useWindowScroll = true }: NotificationsProps) => {
     const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
       useNotifications();
     const { refetchMyInfo } = useMyInfo();
@@ -127,7 +121,7 @@ export const Notifications = memo(
     return (
       <>
         <InfiniteScrollList
-          useWindowScroll={false}
+          useWindowScroll={useWindowScroll}
           data={data}
           ListHeaderComponent={Platform.select({
             web: hideHeader ? undefined : Header,
@@ -137,7 +131,7 @@ export const Notifications = memo(
           style={{
             height: Platform.select({
               default: windowHeight - bottomBarHeight,
-              web: web_height ? web_height : windowHeight - bottomBarHeight,
+              web: useWindowScroll ? windowHeight - bottomBarHeight : undefined,
               ios: windowHeight,
             }),
           }}

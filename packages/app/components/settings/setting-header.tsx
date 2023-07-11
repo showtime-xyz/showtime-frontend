@@ -35,7 +35,7 @@ export const SettingsHeader = ({
   const isWeb = Platform.OS === "web";
   return (
     <>
-      {Platform.OS !== "android" && <View style={{ height: headerHeight }} />}
+      {Platform.OS === "ios" && <View style={{ height: headerHeight }} />}
       <View tw="items-center bg-white dark:bg-black">
         <View tw="w-full max-w-screen-2xl">
           <View tw="w-full flex-row justify-between self-center px-4 py-4">

@@ -255,7 +255,7 @@ const suggestedChannelsSection = {
 };
 
 export const CreatorChannelsList = memo(
-  ({ web_height = undefined }: { web_height?: number }) => {
+  ({ useWindowScroll = true }: { useWindowScroll?: boolean }) => {
     const listRef = useRef<FlashList<any>>(null);
     //@ts-expect-error still no support for FlashList as type
     useScrollToTop(listRef);
@@ -362,13 +362,6 @@ export const CreatorChannelsList = memo(
     const ListFooterComponent = useCallback(() => {
       if (!isAuthenticated) return null;
       if (
-        isLoadingOwnChannels ||
-        isLoadingJoinedChannels ||
-        isLoadingSuggestedChannels
-      ) {
-        return <CCSkeleton />;
-      }
-      if (
         !isLoadingOwnChannels &&
         !isLoadingJoinedChannels &&
         isLoadingMoreJoinedChannels
@@ -379,13 +372,17 @@ export const CreatorChannelsList = memo(
           </View>
         );
       }
+      if (Platform.OS === "web" && useWindowScroll) {
+        return <View style={{ height: bottomBarHeight }} />;
+      }
       return null;
     }, [
+      isAuthenticated,
       isLoadingOwnChannels,
       isLoadingJoinedChannels,
       isLoadingMoreJoinedChannels,
-      isLoadingSuggestedChannels,
-      isAuthenticated,
+      bottomBarHeight,
+      useWindowScroll,
     ]);
 
     const refreshPage = useCallback(async () => {
@@ -395,17 +392,18 @@ export const CreatorChannelsList = memo(
         refreshSuggestedChannels(),
       ]);
     }, [refresh, refreshOwnedChannels, refreshSuggestedChannels]);
+    if (
+      isLoadingOwnChannels ||
+      isLoadingJoinedChannels ||
+      isLoadingSuggestedChannels
+    ) {
+      return <CCSkeleton />;
+    }
     return (
       <AnimatedInfiniteScrollListWithRef
         ref={listRef}
-        useWindowScroll={false}
-        data={
-          isLoadingOwnChannels ||
-          isLoadingJoinedChannels ||
-          isLoadingSuggestedChannels
-            ? []
-            : transformedData
-        }
+        useWindowScroll={useWindowScroll}
+        data={transformedData}
         getItemType={(item) => {
           // To achieve better performance, specify the type based on the item
           return item.type === "section"
@@ -415,7 +413,9 @@ export const CreatorChannelsList = memo(
         style={{
           height: Platform.select({
             default: windowHeight - bottomBarHeight,
-            web: web_height ? web_height : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
+            web: useWindowScroll
+              ? undefined
+              : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
             ios: windowHeight,
           }),
         }}
@@ -465,7 +465,7 @@ CreatorChannelsList.displayName = "CreatorChannelsList";
 
 const CCSkeleton = () => {
   return (
-    <View tw="web:mt-8 px-4">
+    <View tw="px-4">
       {new Array(8).fill(0).map((_, i) => {
         return (
           <View tw="flex-row pt-4" key={`${i}`}>

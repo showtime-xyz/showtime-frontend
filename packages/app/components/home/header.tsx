@@ -81,7 +81,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             height={bannerHeight}
             width={pagerWidth}
             radius={16}
-            tw="web:md:mt-4 web:mt-10"
+            tw="web:md:mt-4 web:mt-0"
           />
         ) : (
           banners?.length > 0 && (
@@ -93,7 +93,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               data={banners}
               controller
               autoPlay
-              tw="web:md:mt-4 web:mt-10 md:rounded-4xl w-full rounded-3xl"
+              tw="web:md:mt-4 web:mt-0 md:rounded-4xl w-full rounded-3xl"
               pagination={{ variant: "rectangle" }}
               renderItem={({ item, index }) => (
                 <Pressable

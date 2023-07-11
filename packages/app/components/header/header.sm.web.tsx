@@ -33,18 +33,6 @@ export const HeaderSm = withColorScheme(
       );
     }
 
-    if (router.pathname === "/profile/[username]") {
-      return (
-        <>
-          <View tw={["fixed left-4 top-2 z-10 flex md:hidden"]}>
-            <HeaderLeft withBackground canGoBack={canGoBack} />
-          </View>
-          <View tw={["fixed right-4 top-2 z-10 flex md:hidden"]}>
-            <HeaderRightSm withBackground />
-          </View>
-        </>
-      );
-    }
     return (
       <>
         <View

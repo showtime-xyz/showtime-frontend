@@ -6,6 +6,7 @@ import { useSharedValue } from "react-native-reanimated";
 import "swiper/css";
 import "swiper/css/virtual";
 
+import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { clamp } from "@showtime-xyz/universal.utils";
 
@@ -96,7 +97,12 @@ export const SwipeList = ({
     overscan: 8,
     onChange: onScrollChange,
   });
-
+  useEffectOnce(() => {
+    document.body.classList.add("overflow-hidden", "overscroll-y-contain");
+    return () => {
+      document.body.classList.remove("overflow-hidden", "overscroll-y-none");
+    };
+  });
   useEffect(() => {
     const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
     if (!lastItem) {
@@ -114,7 +120,7 @@ export const SwipeList = ({
       <ViewabilityItemsContext.Provider value={visibleItems}>
         <div
           ref={listRef}
-          className="max-h-[100svh] min-h-[100dvh] snap-y snap-mandatory overflow-y-scroll"
+          className="h-[100dvh] max-h-[100svh] min-h-[100dvh] snap-y snap-mandatory overflow-y-auto"
           id="slidelist"
         >
           <div

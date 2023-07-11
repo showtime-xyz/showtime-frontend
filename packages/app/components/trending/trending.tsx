@@ -101,7 +101,7 @@ export const Trending = () => {
       <View tw="md:max-w-screen-content mx-auto w-full">
         <ErrorBoundary>
           <InfiniteScrollList
-            useWindowScroll={isMdWidth}
+            useWindowScroll
             data={list}
             preserveScrollPosition
             keyExtractor={keyExtractor}
