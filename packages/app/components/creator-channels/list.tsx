@@ -464,8 +464,12 @@ export const CreatorChannelsList = memo(
 CreatorChannelsList.displayName = "CreatorChannelsList";
 
 const CCSkeleton = () => {
+  const headerHeight = useHeaderHeight();
   return (
-    <View tw="px-4">
+    <View
+      tw="mt-4 px-4"
+      style={{ marginTop: Platform.select({ web: 0, default: headerHeight }) }}
+    >
       {new Array(8).fill(0).map((_, i) => {
         return (
           <View tw="flex-row pt-4" key={`${i}`}>
