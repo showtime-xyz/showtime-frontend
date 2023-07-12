@@ -145,7 +145,7 @@
     "react-native-keyboard-controller": "^1.5.6",
     "react-native-level-fs": "^3.0.1",
     "react-native-localhost": "^1.0.0",
-    "react-native-mmkv": "2.10.0",
+    "react-native-mmkv": "2.10.1",
     "react-native-modal": "^13.0.1",
     "react-native-os": "^1.2.6",
     "react-native-pager-view": "6.2.0",

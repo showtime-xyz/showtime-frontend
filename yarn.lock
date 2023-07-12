@@ -8527,7 +8527,7 @@ __metadata:
     react-native-keyboard-controller: ^1.5.6
     react-native-level-fs: ^3.0.1
     react-native-localhost: ^1.0.0
-    react-native-mmkv: 2.10.0
+    react-native-mmkv: 2.10.1
     react-native-modal: ^13.0.1
     react-native-os: ^1.2.6
     react-native-pager-view: 6.2.0
@@ -8700,7 +8700,7 @@ __metadata:
     react-native-gesture-handler: 2.12.0
     react-native-get-random-values: ^1.9.0
     react-native-ios-context-menu: ^1.15.3
-    react-native-mmkv: 2.10.0
+    react-native-mmkv: 2.10.1
     react-native-pager-view: 6.2.0
     react-native-quick-base64: ^2.0.6
     react-native-reanimated: 3.3.0
@@ -28410,13 +28410,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-mmkv@npm:2.10.0":
-  version: 2.10.0
-  resolution: "react-native-mmkv@npm:2.10.0"
+"react-native-mmkv@npm:2.10.1":
+  version: 2.10.1
+  resolution: "react-native-mmkv@npm:2.10.1"
   peerDependencies:
     react: "*"
     react-native: ">=0.71.0"
-  checksum: a59b43a802a25d92bde54d33d3b67464e31abc64f19a22945d8852a354b1b000a61109a71fdd3af1aea8c4ab060eba98ea7a620bf85896d2c13462b5b7f6c1ea
+  checksum: 2db42a667acd104047ddf307e852ffd9d9c6302454364fcc4cd35d8510d6f500bcd3562e14d95ae7fd520eac1cd3cc8a239c539a7339b70a4e6fd2d3f70daee7
   languageName: node
   linkType: hard
 
