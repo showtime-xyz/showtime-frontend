@@ -279,6 +279,10 @@ export type MyInfo = {
     can_create_drop: boolean;
     daily_claim_limit: number;
     paid_drop_credits?: DropPlan[];
+    stripe_connect_details: null | {
+      details_submitted: boolean;
+      charges_enabled: boolean;
+    };
     claim_tank: {
       available_claims: number;
       next_refill_at: string;

@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import { useWindowDimensions, ScrollView as RNScrollView } from "react-native";
+import {
+  useWindowDimensions,
+  ScrollView as RNScrollView,
+  Platform,
+  Linking,
+} from "react-native";
 
 import { Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -45,6 +51,8 @@ import {
   useStarDropForm,
 } from "../common/star-drop-form-utils";
 import { StepProps } from "../common/types";
+import { useOnBoardCreator } from "../common/use-onboard-creator";
+import { useOnboardingStatus } from "../common/use-onboarding-status";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
@@ -57,8 +65,9 @@ type CreateDropStep =
   | "select-drop";
 
 export const DropFree = () => {
-  const [step, setStep] = useState<CreateDropStep>("song-uri");
+  const [step, setStep] = useState<CreateDropStep>("media");
   const modalContext = useModalScreenContext();
+  const onboardinStatus = useOnboardingStatus();
   const {
     control,
     setValue,
@@ -144,6 +153,40 @@ export const DropFree = () => {
       setValue("file", file);
     }
   };
+
+  if (onboardinStatus.status === "loading") {
+    return (
+      <Layout
+        onBackPress={() => modalContext?.pop()}
+        closeIcon
+        title="Complete payout info"
+      >
+        <View tw="items-center p-4">
+          <Spinner />
+        </View>
+      </Layout>
+    );
+  }
+
+  if (onboardinStatus.status === "processing") {
+    return (
+      <View>
+        <Text>Doing KYC. Please check back later!</Text>
+      </View>
+    );
+  }
+
+  if (onboardinStatus.status === "not_onboarded") {
+    return (
+      <Layout
+        onBackPress={() => modalContext?.pop()}
+        closeIcon
+        title="Complete payout info"
+      >
+        <CompleteStripeFlow />
+      </Layout>
+    );
+  }
 
   if (state.status === "success") {
     return (
@@ -1003,3 +1046,104 @@ const Layout = (props: {
 //   cloudinary_video_url: null,
 //   cloudinary_thumbnail_url: null,
 // };
+
+const countries = [
+  {
+    label: "India",
+    value: "IN",
+  },
+  {
+    label: "United States",
+    value: "US",
+  },
+];
+const CompleteStripeFlow = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    register,
+  } = useForm();
+  const onboardingCreator = useOnBoardCreator();
+  const onSubmit = async (data: any) => {
+    const res = await onboardingCreator.trigger({
+      email: data.email,
+      country_code: data.countryCode,
+      refresh_url: "http://localhost:3000/drop/free?refresh=true",
+      return_url: "http://localhost:3000/drop/free?return=true",
+      business_type: "individual",
+    });
+    if (Platform.OS === "web") {
+      window.location.href = res.url;
+    } else {
+      Linking.openURL(res.url);
+    }
+  };
+
+  return (
+    <View tw="p-4" style={{ rowGap: 16 }}>
+      <Controller
+        control={control}
+        {...register("email", {
+          required: "Please enter an email",
+          pattern: {
+            value: /\S+@\S+\.\S+/,
+            message: "Please enter a valid email",
+          },
+        })}
+        render={({ field: { onChange, onBlur, value, ref } }) => {
+          return (
+            <Fieldset
+              tw="flex-1"
+              ref={ref}
+              label="Email"
+              placeholder="doe@gmail.com"
+              onBlur={onBlur}
+              errorText={errors.email?.message}
+              value={value}
+              onChangeText={onChange}
+            />
+          );
+        }}
+      />
+
+      <Controller
+        control={control}
+        name="countryCode"
+        rules={{
+          required: {
+            value: true,
+            message: "Please select a country",
+          },
+        }}
+        render={({ field: { onChange, onBlur, value, ref } }) => {
+          return (
+            <Fieldset
+              ref={ref}
+              tw="flex-1"
+              label="Country"
+              onBlur={onBlur}
+              errorText={errors.countryCode?.message}
+              selectOnly
+              select={{
+                options: countries,
+                placeholder: "Country",
+                value: value,
+                onChange,
+                tw: "flex-1",
+              }}
+            />
+          );
+        }}
+      />
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        tw={onboardingCreator.isMutating ? `opacity-30` : ""}
+      >
+        {onboardingCreator.isMutating
+          ? "Please wait..."
+          : "Add account information"}
+      </Button>
+    </View>
+  );
+};
