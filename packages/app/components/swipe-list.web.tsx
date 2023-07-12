@@ -18,10 +18,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { clamp } from "@showtime-xyz/universal.utils";
 
 import { FeedItem } from "app/components/feed-item";
-import {
-  ItemKeyContext,
-  ViewabilityItemsContext,
-} from "app/components/viewability-tracker-flatlist";
+import { ViewabilityItemsContext } from "app/components/viewability-tracker-flatlist";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
@@ -36,7 +33,8 @@ type Props = {
   bottomPadding?: number;
 };
 const { useParam } = createParam();
-export const SwiperActiveIndexContext = createContext<number>(0);
+
+export const SwiperActiveIndexContext = createContext<number | null>(null);
 export const SwipeList = ({
   data,
   fetchMore,
@@ -69,12 +67,12 @@ export const SwipeList = ({
       clearTimeout(scrollTimer.current);
       const activeIndex = Math.round(e.scrollOffset / windowHeight);
       const previousIndex = clamp(activeIndex - 1, 0, data.length - 1);
-
       visibleItems.value = [
         previousIndex,
         activeIndex,
         activeIndex + 1 < data.length ? activeIndex + 1 : undefined,
       ];
+      setActiveIndex(activeIndex);
       if (isSwipeListScreen) {
         scrollTimer.current = setTimeout(() => {
           router.replace(
@@ -90,7 +88,6 @@ export const SwipeList = ({
             getNFTSlug(data[activeIndex]),
             { shallow: true }
           );
-          setActiveIndex(activeIndex);
         }, 700);
       }
     },
@@ -105,6 +102,20 @@ export const SwipeList = ({
     overscan: 12,
     onChange: onScrollChange,
   });
+
+  const slideToPrev = useCallback(() => {
+    rowVirtualizer.scrollToIndex(activeIndex - 1, {
+      behavior: "auto",
+      align: "end",
+    });
+  }, [activeIndex, rowVirtualizer]);
+
+  const slideToNext = useCallback(() => {
+    rowVirtualizer.scrollToIndex(activeIndex + 1, {
+      behavior: "auto",
+      align: "start",
+    });
+  }, [activeIndex, rowVirtualizer]);
 
   useEffectOnce(() => {
     document.body.classList.add("overflow-hidden", "overscroll-y-contain");
@@ -150,6 +161,9 @@ export const SwipeList = ({
                   <FeedItem
                     nft={data[virtualItem.index]}
                     index={virtualItem.index}
+                    listLength={data.length}
+                    slideToNext={slideToNext}
+                    slideToPrev={slideToPrev}
                   />
                 </div>
               ))}

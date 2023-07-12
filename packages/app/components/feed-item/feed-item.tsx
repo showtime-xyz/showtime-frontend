@@ -10,7 +10,6 @@ import {
 import {
   Platform,
   StatusBar,
-  StyleProp,
   useWindowDimensions,
   ViewStyle,
   Dimensions,
@@ -39,22 +38,13 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
-import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 import { NFTDetails } from "./details";
 import { EngagementIcons } from "./engagement-icons";
 import { NSFWGate } from "./nsfw-gate";
+import { FeedItemProps } from "./type";
 
-export type FeedItemProps = {
-  nft: NFT;
-  detailStyle?: StyleProp<ViewStyle>;
-  bottomPadding?: number;
-  bottomMargin?: number;
-  itemHeight?: number;
-  setMomentumScrollCallback?: (callback: any) => void;
-  index?: number;
-};
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
 export const SwiperActiveIndexContext = createContext<number | null>(null);
 const { height: screenHeight } = Dimensions.get("window");

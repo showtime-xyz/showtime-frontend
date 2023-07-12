@@ -1,5 +1,5 @@
 import { memo, useState, useMemo, useRef } from "react";
-import { StyleProp, useWindowDimensions, ViewStyle } from "react-native";
+import { useWindowDimensions } from "react-native";
 
 import { Video as ExpoVideo } from "expo-av";
 import { ResizeMode } from "expo-av";
@@ -13,23 +13,18 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
-import type { NFT } from "app/types";
 
 import { NFTDropdown } from "../nft-dropdown";
 import { NFTDetails } from "./details";
 import { EngagementIcons } from "./engagement-icons";
 import { FeedItemMD } from "./feed-item.md";
 import { NSFWGate } from "./nsfw-gate";
+import { FeedItemProps } from "./type";
 
-export type FeedItemProps = {
-  nft: NFT;
-  detailStyle?: StyleProp<ViewStyle>;
-  bottomPadding?: number;
-  bottomMargin?: number;
-  setMomentumScrollCallback?: (callback: any) => void;
-};
-
-export const FeedItem = memo<FeedItemProps>(function FeedItem({ nft }) {
+export const FeedItem = memo<FeedItemProps>(function FeedItem({
+  nft,
+  ...rest
+}) {
   const [detailHeight, setDetailHeight] = useState(0);
   const { isAuthenticated } = useUser();
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
@@ -78,7 +73,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({ nft }) {
   }, [detailHeight, maxContentHeight, mediaHeight, windowHeight]);
 
   if (windowWidth >= 768) {
-    return <FeedItemMD nft={nft} />;
+    return <FeedItemMD nft={nft} {...rest} />;
   }
 
   return (

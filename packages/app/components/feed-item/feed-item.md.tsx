@@ -61,14 +61,10 @@ import { breakpoints } from "design-system/theme";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
-import { ViewabilityItemsContext } from "../viewability-tracker-flatlist";
-import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
+import { FeedItemProps } from "./type";
 
-// Media header height is the height of the header of the media
-
-const MEDIA_HEADER_HEIGHT = 80;
 type TabProps = {
   nft: NFT;
   ListHeaderComponent?: React.ComponentType<any>;
@@ -88,7 +84,12 @@ const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Collectors],
 ]);
-export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({ nft }) {
+export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
+  nft,
+  listLength,
+  slideToNext,
+  slideToPrev,
+}) {
   const router = useRouter();
   const isDark = useIsDarkMode();
   const { data: detailData } = useNFTDetailByTokenId({
@@ -97,7 +98,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({ nft }) {
     chainName: nft?.chain_name,
   });
   const videoRef = useRef<ExpoVideo | null>(null);
-
   const [muted, setMuted] = useMuted();
   const { commentsCount } = useComments(nft.nft_id);
   const headerHeight = useHeaderHeight();
@@ -152,7 +152,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({ nft }) {
     width: windowWidth,
   };
   // Media padding is the padding between the media and the content
-  const mediaPadding = windowWidth > breakpoints["lg"] ? 160 : 80;
+  const mediaPadding =
+    windowWidth > breakpoints["2xl"]
+      ? 220
+      : windowWidth > breakpoints["xl"]
+      ? 180
+      : 80;
   const maxMediaHeight = feedItemStyle.height - mediaPadding;
   const mediaHeight =
     windowWidth > breakpoints["lg"]
@@ -165,7 +170,9 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({ nft }) {
     }
     return contentWidth - NFT_DETAIL_WIDTH - mediaPadding;
   }, [contentWidth, mediaPadding, windowWidth]);
-
+  const activeIndex = useContext(SwiperActiveIndexContext);
+  const disablePrevButton = activeIndex === 0;
+  const disableNextButton = activeIndex === (listLength ? listLength - 1 : 0);
   const onFullScreen = () => {
     setShowFullScreen(!showFullScreen);
   };
@@ -337,41 +344,45 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({ nft }) {
           </View>
         </View>
         {/* Control Swiper */}
-        {/* <View
-          tw={[
-            "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",
-            showFullScreen ? "hidden" : "flex",
-          ]}
-        >
-          <View tw={disablePrevButton ? "cursor-not-allowed" : ""}>
-            <Button
-              variant="text"
-              size="regular"
-              iconOnly
-              tw="disabled mb-4 bg-white px-3 dark:bg-gray-900"
-              disabled={disablePrevButton}
-              style={{ opacity: disablePrevButton ? 0.4 : 1 }}
-              onPress={() => {
-                swiper.slideTo(Math.max(activeIndex - 1, 0));
-              }}
-            >
-              <ChevronUp width={24} height={24} />
-            </Button>
+        {activeIndex !== null ? (
+          <View
+            tw={[
+              "absolute right-2 top-1/2 -mt-8 -translate-y-1/2 transform 2xl:right-4",
+              showFullScreen ? "hidden" : "flex",
+            ]}
+          >
+            <View tw={disablePrevButton ? "cursor-not-allowed" : ""}>
+              <Button
+                variant="text"
+                size="regular"
+                iconOnly
+                tw="disabled mb-4 bg-white px-3 dark:bg-gray-900"
+                disabled={disablePrevButton}
+                style={{ opacity: disablePrevButton ? 0.4 : 1 }}
+                onPress={() => {
+                  slideToPrev?.();
+                }}
+              >
+                <ChevronUp width={24} height={24} />
+              </Button>
+            </View>
+            <View tw={disableNextButton ? "cursor-not-allowed" : ""}>
+              <Button
+                variant="text"
+                size="regular"
+                iconOnly
+                tw="bg-white px-3 dark:bg-gray-900"
+                disabled={disableNextButton}
+                style={{ opacity: disableNextButton ? 0.4 : 1 }}
+                onPress={() => {
+                  slideToNext?.();
+                }}
+              >
+                <ChevronDown width={24} height={24} />
+              </Button>
+            </View>
           </View>
-          <View tw={disableNextButton ? "cursor-not-allowed" : ""}>
-            <Button
-              variant="text"
-              size="regular"
-              iconOnly
-              tw="bg-white px-3 dark:bg-gray-900"
-              disabled={disableNextButton}
-              style={{ opacity: disableNextButton ? 0.4 : 1 }}
-              onPress={() => {}}
-            >
-              <ChevronDown width={24} height={24} />
-            </Button>
-          </View>
-        </View> */}
+        ) : null}
 
         <View tw="absolute bottom-10 left-4">
           <ContentTypeTooltip edition={edition} />
