@@ -88,10 +88,7 @@ const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Collectors],
 ]);
-export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
-  nft,
-  index: listIndex = 0,
-}) {
+export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({ nft }) {
   const router = useRouter();
   const isDark = useIsDarkMode();
   const { data: detailData } = useNFTDetailByTokenId({
@@ -155,26 +152,19 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     width: windowWidth,
   };
   // Media padding is the padding between the media and the content
-  const media_padding = windowWidth > breakpoints["xl"] ? 160 : 20;
-
+  const mediaPadding = windowWidth > breakpoints["lg"] ? 160 : 80;
+  const maxMediaHeight = feedItemStyle.height - mediaPadding;
   const mediaHeight =
-    Math.min(windowWidth, feedItemStyle.height) -
-    media_padding -
-    MEDIA_HEADER_HEIGHT;
-  const maxContentWidth = contentWidth - NFT_DETAIL_WIDTH - media_padding;
-  const activeIndex = useContext(SwiperActiveIndexContext);
+    windowWidth > breakpoints["lg"]
+      ? maxMediaHeight
+      : maxMediaHeight - 248 - mediaPadding;
 
-  const disablePrevButton = false;
-  const disableNextButton = false;
   const mediaWidth = useMemo(() => {
-    return Math.min(
-      mediaHeight *
-        (isNaN(Number(nft.token_aspect_ratio))
-          ? 1
-          : Number(nft.token_aspect_ratio)),
-      maxContentWidth
-    );
-  }, [maxContentWidth, mediaHeight, nft.token_aspect_ratio]);
+    if (windowWidth < breakpoints["lg"]) {
+      return contentWidth - mediaPadding;
+    }
+    return contentWidth - NFT_DETAIL_WIDTH - mediaPadding;
+  }, [contentWidth, mediaPadding, windowWidth]);
 
   const onFullScreen = () => {
     setShowFullScreen(!showFullScreen);
@@ -192,71 +182,76 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   };
   const TabScene = TAB_SCENES_MAP.get(index);
 
-  const ListHeaderComponent = useCallback(() => {
-    return (
-      <>
-        <View tw="px-4">
-          <View tw="flex-row items-center justify-between pt-4">
-            <Social nft={nft} />
-            <RaffleTooltip edition={edition} tw="mr-1" />
-          </View>
+  const ListHeaderComponent = useCallback(
+    (props: { hideTabs?: boolean }) => {
+      return (
+        <>
+          <View tw="px-4">
+            <View tw="flex-row items-center justify-between pt-4">
+              <Social nft={nft} />
+              <RaffleTooltip edition={edition} tw="mr-1" />
+            </View>
 
-          <View tw="my-4 mr-4 flex-row items-center">
-            <Text tw="text-xl font-bold text-black dark:text-white">
-              {nft.token_name}
+            <View tw="my-4 mr-4 flex-row items-center">
+              <Text tw="text-lg font-bold text-black dark:text-white">
+                {nft.token_name}
+              </Text>
+            </View>
+            <Text tw="text-sm text-gray-600 dark:text-gray-200">
+              {description}
             </Text>
-          </View>
-          <Text tw="text-sm text-gray-600 dark:text-gray-200">
-            {description}
-          </Text>
 
-          <View tw="mt-6 flex-row items-center justify-between">
-            <Creator nft={nft} />
-            <Owner nft={nft} price={false} />
-          </View>
+            <View tw="mt-6 flex-row items-center justify-between">
+              <Creator nft={nft} />
+              <Owner nft={nft} price={false} />
+            </View>
 
-          <View tw="mt mb-4 h-5">
-            <ClaimedBy
-              claimersList={detailData?.data.item?.multiple_owners_list}
-              nft={nft}
+            <View tw="mt mb-4 h-5">
+              <ClaimedBy
+                claimersList={detailData?.data.item?.multiple_owners_list}
+                nft={nft}
+              />
+            </View>
+            <View tw="h-8 flex-row">
+              {isCreatorDrop && edition ? (
+                <>
+                  <ClaimButton tw="flex-1" edition={edition} />
+                  <ClaimedShareButton
+                    tw="ml-3 w-1/4"
+                    edition={edition}
+                    nft={nft}
+                  />
+                </>
+              ) : null}
+            </View>
+          </View>
+          {props.hideTabs ? null : (
+            <TabBarSingle
+              onPress={(i) => {
+                setIndex(i);
+              }}
+              routes={routes as any}
+              index={index}
             />
-          </View>
-          <View tw="h-8 flex-row">
-            {isCreatorDrop && edition ? (
-              <>
-                <ClaimButton tw="flex-1" edition={edition} />
-                <ClaimedShareButton
-                  tw="ml-3 w-1/4"
-                  edition={edition}
-                  nft={nft}
-                />
-              </>
-            ) : null}
-          </View>
-        </View>
-        <TabBarSingle
-          onPress={(i) => {
-            setIndex(i);
-          }}
-          routes={routes as any}
-          index={index}
-        />
-        <View tw="h-4" />
-      </>
-    );
-  }, [
-    description,
-    detailData?.data.item?.multiple_owners_list,
-    edition,
-    index,
-    isCreatorDrop,
-    nft,
-    routes,
-  ]);
+          )}
+          <View tw="h-4" />
+        </>
+      );
+    },
+    [
+      description,
+      detailData?.data.item?.multiple_owners_list,
+      edition,
+      index,
+      isCreatorDrop,
+      nft,
+      routes,
+    ]
+  );
 
   return (
     <View
-      tw="h-full w-full flex-row overflow-hidden border-l border-gray-200 dark:border-gray-800"
+      tw="h-full w-full overflow-hidden border-l border-gray-200 dark:border-gray-800 lg:flex-row"
       style={{
         height: "100svh",
         paddingTop: headerHeight,
@@ -314,7 +309,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </Suspense>
           </View>
         </View>
-        <View tw="items-center justify-center px-4 xl:px-20 xl:pb-20">
+        <View tw="items-center justify-center px-4 lg:px-20 lg:pb-20">
           <View
             style={{
               height: mediaHeight,
@@ -382,9 +377,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           <ContentTypeTooltip edition={edition} />
         </View>
       </View>
+      <View tw="bg-white dark:bg-black lg:hidden">
+        {ListHeaderComponent({ hideTabs: true })}
+      </View>
 
       <View
-        tw="swiper-no-swiping bg-white dark:bg-gray-900"
+        tw="swiper-no-swiping hidden bg-white dark:bg-gray-900 lg:flex"
         style={{
           width: NFT_DETAIL_WIDTH,
         }}
