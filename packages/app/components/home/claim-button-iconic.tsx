@@ -119,12 +119,13 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       <View tw="mb-4">
         <Skeleton height={56} width={56} radius={999} show={true} />
         <View tw="mt-2 items-center">
-          <Skeleton height={16} width={32} radius={6} show={true} />
+          <Skeleton height={8} width={24} radius={6} show={true} />
         </View>
       </View>
     );
   }
   if (!edition) return null;
+
   if (status === ClaimStatus.Soldout) {
     return (
       <FeedSocialButton
