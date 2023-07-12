@@ -46,7 +46,6 @@ export const SwipeList = ({
   const listRef = useRef<HTMLDivElement>(null);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
-
   const visibleItems = useSharedValue<any[]>([
     undefined,
     initialScrollIndex,
@@ -62,6 +61,8 @@ export const SwipeList = ({
     []
   );
   const initialOffset = initialScrollIndex * windowHeight;
+  const [activeIndex, setActiveIndex] = useState(initialScrollIndex);
+
   const scrollTimer = useRef<any>(null);
   const onScrollChange = useCallback(
     (e: Virtualizer<HTMLDivElement, Element>) => {
@@ -89,6 +90,7 @@ export const SwipeList = ({
             getNFTSlug(data[activeIndex]),
             { shallow: true }
           );
+          setActiveIndex(activeIndex);
         }, 700);
       }
     },
@@ -100,7 +102,7 @@ export const SwipeList = ({
     getScrollElement: () => listRef.current,
     estimateSize: () => windowHeight,
     initialOffset: initialOffset,
-    overscan: 2,
+    overscan: 12,
     onChange: onScrollChange,
   });
 
@@ -124,32 +126,37 @@ export const SwipeList = ({
 
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      <ViewabilityItemsContext.Provider value={visibleItems}>
-        <div
-          ref={listRef}
-          className="h-[100svh] snap-y snap-mandatory overflow-y-auto dark:bg-black"
-          id="slidelist"
-        >
+      <SwiperActiveIndexContext.Provider value={activeIndex}>
+        <ViewabilityItemsContext.Provider value={visibleItems}>
           <div
-            style={{
-              height: `${100 * data.length}svh`,
-            }}
-            className="relative w-full"
+            ref={listRef}
+            className="h-[100svh] snap-y snap-mandatory overflow-y-auto dark:bg-black"
+            id="slidelist"
           >
-            {rowVirtualizer?.getVirtualItems().map((virtualItem) => (
-              <div
-                key={virtualItem.index}
-                style={{
-                  transform: `translateY(${100 * virtualItem.index}svh)`,
-                }}
-                className="absolute left-0 top-0 h-[100svh] w-full snap-start snap-always will-change-transform"
-              >
-                <FeedItem nft={data[virtualItem.index]} />
-              </div>
-            ))}
+            <div
+              style={{
+                height: `${100 * data.length}svh`,
+              }}
+              className="relative w-full"
+            >
+              {rowVirtualizer?.getVirtualItems().map((virtualItem) => (
+                <div
+                  key={virtualItem.index}
+                  style={{
+                    transform: `translateY(${100 * virtualItem.index}svh)`,
+                  }}
+                  className="absolute left-0 top-0 h-[100svh] w-full snap-start snap-always will-change-transform"
+                >
+                  <FeedItem
+                    nft={data[virtualItem.index]}
+                    index={virtualItem.index}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </ViewabilityItemsContext.Provider>
+        </ViewabilityItemsContext.Provider>
+      </SwiperActiveIndexContext.Provider>
     </VideoConfigContext.Provider>
   );
 };

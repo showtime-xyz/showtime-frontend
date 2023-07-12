@@ -61,6 +61,7 @@ import { breakpoints } from "design-system/theme";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
+import { ViewabilityItemsContext } from "../viewability-tracker-flatlist";
 import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
@@ -87,7 +88,10 @@ const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Collectors],
 ]);
-export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({ nft }) {
+export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
+  nft,
+  index: listIndex = 0,
+}) {
   const router = useRouter();
   const isDark = useIsDarkMode();
   const { data: detailData } = useNFTDetailByTokenId({
