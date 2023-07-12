@@ -284,28 +284,26 @@ function InfiniteScrollListImpl<Item>(
                           const realIndex = index * numColumns + i;
 
                           return (
-                            <>
-                              <ViewabilityTracker
-                                key={realIndex}
-                                index={realIndex}
-                                itemVisiblePercentThreshold={
-                                  viewabilityConfig?.itemVisiblePercentThreshold ??
-                                  DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
-                                }
-                                item={data[realIndex]}
-                                viewableItems={viewableItems}
-                                onViewableItemsChanged={onViewableItemsChanged}
-                              >
-                                {renderItem?.({
-                                  index: realIndex,
-                                  item,
-                                  extraData,
-                                  target: "Cell",
-                                }) ?? null}
-                                {realIndex < data.length - 1 &&
-                                  renderComponent(ItemSeparatorComponent)}
-                              </ViewabilityTracker>
-                            </>
+                            <ViewabilityTracker
+                              key={realIndex}
+                              index={realIndex}
+                              itemVisiblePercentThreshold={
+                                viewabilityConfig?.itemVisiblePercentThreshold ??
+                                DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
+                              }
+                              item={data[realIndex]}
+                              viewableItems={viewableItems}
+                              onViewableItemsChanged={onViewableItemsChanged}
+                            >
+                              {renderItem?.({
+                                index: realIndex,
+                                item,
+                                extraData,
+                                target: "Cell",
+                              }) ?? null}
+                              {realIndex < data.length - 1 &&
+                                renderComponent(ItemSeparatorComponent)}
+                            </ViewabilityTracker>
                           );
                         })}
                         {chuckItem &&

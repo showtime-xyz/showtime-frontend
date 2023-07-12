@@ -78,7 +78,7 @@
     "@ethersproject/signing-key": "5.7.0",
     "eth-block-tracker": "4.4.3",
     "next": "^13.4.1",
-    "react-native-mmkv": "2.10.0",
+    "react-native-mmkv": "2.10.1",
     "react-native-screens": "3.22.0",
     "react-native-svg": "13.9.0"
   },
