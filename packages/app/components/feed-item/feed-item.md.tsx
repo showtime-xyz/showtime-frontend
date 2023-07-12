@@ -83,7 +83,7 @@ const Collectors = ({ nft, ListHeaderComponent }: TabProps) => {
     />
   );
 };
-
+const NFT_DETAIL_WIDTH = 380;
 const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Collectors],
@@ -157,8 +157,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   // Media padding is the padding between the media and the content
   const media_padding = windowWidth > breakpoints["xl"] ? 160 : 20;
 
-  // NFT detail width is the width of the NFT detail on the right side of the feed item
-  const NFT_DETAIL_WIDTH = windowWidth > breakpoints["xl"] ? 380 : 280;
   const mediaHeight =
     Math.min(windowWidth, feedItemStyle.height) -
     media_padding -
