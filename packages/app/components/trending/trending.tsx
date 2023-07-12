@@ -27,8 +27,8 @@ const Header = () => {
       <View
         style={{
           height: Platform.select({
-            android: 8,
-            default: headerHeight + 8,
+            ios: headerHeight + 8,
+            default: 8,
           }),
         }}
       />
