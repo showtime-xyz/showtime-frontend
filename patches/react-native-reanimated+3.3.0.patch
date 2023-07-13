@@ -1,0 +1,15 @@
+diff --git a/node_modules/react-native-reanimated/src/reanimated2/shareables.ts b/node_modules/react-native-reanimated/src/reanimated2/shareables.ts
+index 4f358f4..909d076 100644
+--- a/node_modules/react-native-reanimated/src/reanimated2/shareables.ts
++++ b/node_modules/react-native-reanimated/src/reanimated2/shareables.ts
+@@ -146,8 +146,9 @@ export function makeShareableCloneRecursive<T>(
+               value.__workletHash,
+               value.__stackDetails
+             );
+-            delete value.__stackDetails;
+           }
++          // TODO: This is the fixes Maximum call stack size exceeded error
++          delete value.__stackDetails;
+           // to save on transferring static __initData field of worklet structure
+           // we request shareable value to persist its UI counterpart. This means
+           // that the __initData field that contains long strings represeting the
