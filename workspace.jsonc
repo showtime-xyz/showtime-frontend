@@ -95,9 +95,7 @@
      **/
     "*": {
       "teambit.pkg/pkg": {
-        "packageManagerPublishArgs": [
-          "--access public"
-        ],
+        "packageManagerPublishArgs": ["--access public"],
         "packageJson": {
           "private": false,
           "name": "@showtime-xyz/{scope}.{name}"

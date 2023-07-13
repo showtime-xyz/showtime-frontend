@@ -219,19 +219,19 @@ export const HomeItemSketelon = ({ mediaSize = 500 }) => {
           <View tw="mb-4">
             <Skeleton height={56} width={56} radius={999} show />
             <View tw="mt-2 items-center">
-              <Skeleton height={16} width={32} radius={6} show />
+              <Skeleton height={8} width={24} radius={6} show />
             </View>
           </View>
           <View tw="mb-4">
             <Skeleton height={56} width={56} radius={999} show />
             <View tw="mt-2 items-center">
-              <Skeleton height={16} width={32} radius={6} show />
+              <Skeleton height={8} width={24} radius={6} show />
             </View>
           </View>
           <View>
             <Skeleton height={56} width={56} radius={999} show />
             <View tw="mt-2 items-center">
-              <Skeleton height={16} width={32} radius={6} show />
+              <Skeleton height={8} width={24} radius={6} show />
             </View>
           </View>
         </View>

@@ -262,6 +262,7 @@ export const useClaimNFT = (edition: IEdition) => {
         .then((res) => {
           if (res) {
             toast.success("Collected!");
+            Analytics.track(EVENTS.DROP_COLLECTED);
             dispatch({ type: "success", mint: res.mint });
             closeModal?.();
           }
