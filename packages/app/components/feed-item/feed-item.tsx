@@ -41,6 +41,7 @@ import { useUser } from "app/hooks/use-user";
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
+import { ClaimedBy } from "./claimed-by";
 import { NFTDetails } from "./details";
 import { EngagementIcons } from "./engagement-icons";
 import { NSFWGate } from "./nsfw-gate";
@@ -180,7 +181,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
     <>
       <LikeContextProvider nft={nft}>
         <View
-          tw="w-full bg-black"
+          tw="w-full bg-gray-900"
           style={{ height: itemHeight, overflow: "hidden" }}
         >
           <Image
@@ -250,7 +251,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             <View
               pointerEvents="box-none"
               style={{
-                paddingBottom: bottomPadding,
                 overflow: "hidden",
                 zIndex: 1,
               }}
@@ -259,14 +259,11 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
                 edition={edition}
                 nft={nft}
                 detail={detailData?.data?.item}
+                bottomPadding={bottomPadding}
               />
             </View>
-            <EngagementIcons
-              nft={nft}
-              bottomPadding={bottomPadding}
-              edition={edition}
-            />
           </Reanimated.View>
+
           {isAuthenticated && (
             <View
               tw="absolute right-4 z-50"

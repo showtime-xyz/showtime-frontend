@@ -1,4 +1,7 @@
 import { useMemo } from "react";
+import { useWindowDimensions, StyleSheet } from "react-native";
+
+import { LinearGradient } from "expo-linear-gradient";
 
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -18,15 +21,25 @@ import {
 } from "app/utilities";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
+import { CreatorOnFeed } from "../creator-on-feed";
+import { EngagementIcons } from "./engagement-icons";
 import { RaffleTooltip } from "./raffle-tooltip";
 
 type NFTDetailsProps = {
   nft: NFT;
   edition?: CreatorEditionResponse;
   detail?: NFT | undefined;
+  bottomPadding?: number;
+  tw?: string;
 };
 
-export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
+export const NFTDetails = ({
+  nft,
+  edition,
+  detail,
+  bottomPadding,
+  tw = "",
+}: NFTDetailsProps) => {
   const description = useMemo(
     () =>
       nft?.token_description
@@ -41,16 +54,20 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
   );
 
   return (
-    <View tw="px-4 pb-4 pr-20 pt-6" pointerEvents="box-none">
-      <View tw="flex flex-row justify-between">
-        <View tw="flex-1 flex-col justify-end">
-          <View>
-            <View tw="-ml-1 -mt-5 mb-3 h-6 flex-row justify-start">
-              <RaffleTooltip edition={edition} theme="dark" tw="mr-1" />
-              <ContentTypeTooltip edition={edition} theme="dark" />
-            </View>
-
-            <View tw="mb-2.5 flex flex-row items-center justify-between">
+    <View tw={tw} pointerEvents="box-none">
+      <LinearGradient
+        pointerEvents="none"
+        style={StyleSheet.absoluteFill}
+        start={[1, 0]}
+        end={[1, 1]}
+        locations={[0.05, 0.8]}
+        colors={["rgba(12,12,12,0)", "rgba(12,12,12,.8)"]}
+      />
+      <View tw="px-4 pb-4 pt-6" style={{ paddingBottom: bottomPadding }}>
+        <View tw="flex-row justify-between">
+          <View tw="flex-1">
+            <CreatorOnFeed nft={nft} dark />
+            <View tw="mb-2.5 mt-3 flex flex-row items-center justify-between">
               <Text
                 tw="flex-1 text-base font-bold leading-6 text-white dark:text-white md:text-gray-900"
                 numberOfLines={2}
@@ -58,8 +75,8 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 {nft.token_name}
               </Text>
             </View>
+            {/* Even though `key` is usually not allowed with FlashList, it is ok in this case, since we have single item lists */}
             <Text key={nft.nft_id}>
-              {/* Even though `key` is usually not allowed with FlashList, it is ok in this case, since we have single item lists */}
               <TextLink
                 href={`/@${nft.creator_username ?? nft.creator_address}`}
                 tw="web:inline flex text-sm font-semibold leading-5 text-white dark:text-white md:text-gray-900"
@@ -83,25 +100,29 @@ export const NFTDetails = ({ nft, edition, detail }: NFTDetailsProps) => {
                 {description}
               </Text>
             </Text>
-            <View tw="mt-3 h-5">
-              <ClaimedBy
-                claimersList={detail?.multiple_owners_list}
-                nft={nft}
-                textColor="#fff"
-              />
+            <View tw="absolute bottom-0 -ml-1 mt-3 h-6 flex-row justify-start">
+              <ContentTypeTooltip edition={edition} theme="dark" />
+              <RaffleTooltip edition={edition} theme="dark" tw="mr-1" />
             </View>
           </View>
-
-          <View tw="mt-4 h-12 flex-row">
-            {edition ? (
-              <ClaimButton
-                tw="flex-1"
-                edition={edition}
-                size="regular"
-                theme="dark"
-              />
-            ) : null}
-          </View>
+          <EngagementIcons nft={nft} edition={edition} />
+        </View>
+        <View tw="mt-4 h-12 flex-row">
+          {edition ? (
+            <ClaimButton
+              tw="flex-1"
+              edition={edition}
+              size="regular"
+              theme="dark"
+            />
+          ) : null}
+        </View>
+        <View tw="mt-3 h-5 items-center">
+          <ClaimedBy
+            claimersList={detail?.multiple_owners_list}
+            nft={nft}
+            textColor="#fff"
+          />
         </View>
       </View>
     </View>

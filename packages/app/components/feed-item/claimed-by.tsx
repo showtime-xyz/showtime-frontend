@@ -64,7 +64,7 @@ export const ClaimedBy = ({
           );
         })}
         <Text
-          tw="ml-1 flex-1 text-xs text-gray-900 dark:text-white md:text-sm"
+          tw="ml-1 text-xs text-gray-900 dark:text-white md:text-sm"
           style={textColor ? { color: textColor } : {}}
         >
           <TextLink
