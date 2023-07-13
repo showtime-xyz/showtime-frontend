@@ -92,8 +92,6 @@ export const DropFree = () => {
     trigger,
     defaultValues,
     handleSubmit,
-    isSaveDrop,
-    setIsSaveDrop,
   } = useStarDropForm();
 
   const Alert = useAlert();
@@ -130,13 +128,9 @@ export const DropFree = () => {
     await dropNFT(
       {
         ...values,
-        gatingType: isSaveDrop
-          ? "multi_provider_music_save"
-          : "multi_provider_music_presave",
-        releaseDate: isSaveDrop
-          ? undefined
-          : values.releaseDate ?? getDefaultDate().toISOString(),
-        appleMusicTrackUrl: values.appleMusicTrackUrl,
+        gatingType: "paid_nft",
+        editionSize: values.editionSize,
+        paid_nft_price: values.paid_nft_price,
       },
       clearStorage
     );
@@ -236,6 +230,9 @@ export const DropFree = () => {
     );
   }
 
+  if (onboardinStatus.status !== "onboarded") return null;
+
+  console.log("errrors ", formState);
   switch (step) {
     case "media":
       return (
@@ -272,14 +269,14 @@ export const DropFree = () => {
         >
           <SetPriceAndDuration
             control={control}
-            isSaveDrop={isSaveDrop}
-            setIsSaveDrop={setIsSaveDrop}
             getValues={getValues}
             errors={formState.errors}
             trigger={trigger}
             watch={watch}
-            setPrice={(p: number) => setValue("price", p)}
-            setDays={(days: number) => setValue("days", days)}
+            setPrice={(p: number) => setValue("paid_nft_price", p)}
+            setDays={(days: number) =>
+              setValue("duration", Number(days) * 86400)
+            }
             handleNextStep={handleSubmit(onSubmit)}
             handlePrevStep={() => setStep("title")}
             file={file}
@@ -503,8 +500,6 @@ const dropDurations = [3, 7, 30];
 const SetPriceAndDuration = (
   props: StepProps & {
     handleMoreOptions: () => void;
-    setIsSaveDrop: (isSaveDrop: boolean) => void;
-    isSaveDrop: boolean;
     setPrice: (price: number) => void;
     setDays: (days: number) => void;
     watch: any;
@@ -521,14 +516,8 @@ const SetPriceAndDuration = (
     watch,
   } = props;
   const { state } = useDropNFT();
-  const duration = watch("duration");
-  const selectedDays = watch("days");
-  const selectedPrice = watch("price");
-
-  const selectedDurationLabel = useMemo(
-    () => durationOptions.find((d) => d.value === duration)?.label,
-    [duration]
-  );
+  const duration = watch("duration") / 86400;
+  const selectedPrice = watch("paid_nft_price");
 
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
@@ -607,9 +596,7 @@ const SetPriceAndDuration = (
                   key={day}
                   onPress={() => setDays(day)}
                   tw={`items-center rounded-2xl p-4 ${
-                    selectedDays === day
-                      ? "bg-orange-100 dark:bg-yellow-800"
-                      : ""
+                    duration === day ? "bg-orange-100 dark:bg-yellow-800" : ""
                   }`}
                   style={{ rowGap: 16 }}
                 >
@@ -643,11 +630,6 @@ const SetPriceAndDuration = (
                 <DataPill
                   tw={isDark ? "bg-black" : "bg-white"}
                   label={`${getValues("royalty")}% Royalties`}
-                  type="text"
-                />
-                <DataPill
-                  tw={isDark ? "bg-black" : "bg-white"}
-                  label={selectedDurationLabel}
                   type="text"
                 />
               </View>
@@ -770,7 +752,7 @@ const CreateDropMoreOptions = (props: StepProps) => {
             }}
           />
         </View>
-        <View tw="mt-4">
+        {/* <View tw="mt-4">
           <Controller
             control={control}
             name="duration"
@@ -795,7 +777,7 @@ const CreateDropMoreOptions = (props: StepProps) => {
               );
             }}
           />
-        </View>
+        </View> */}
         <View tw="my-4 flex-1">
           <Controller
             control={control}

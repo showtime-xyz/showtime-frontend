@@ -70,6 +70,7 @@ type DropRequestData = {
   };
   multi_gating_types?: ["password", "location"];
   raffle?: boolean;
+  paid_nft_price?: number;
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -133,6 +134,7 @@ export type UseDropNFT = {
   radius?: number;
   releaseDate?: string;
   raffle?: boolean;
+  paid_nft_price: number;
 };
 
 export const useDropNFT = () => {
@@ -260,6 +262,10 @@ export const useDropNFT = () => {
       // TODO: deprecate spotify_presave at some point
       if (params.releaseDate && params.gatingType === "spotify_presave") {
         requestData.release_date = params.releaseDate;
+      }
+
+      if (params.paid_nft_price) {
+        requestData.paid_nft_price = params.paid_nft_price;
       }
 
       if (
