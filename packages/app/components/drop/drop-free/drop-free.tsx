@@ -44,6 +44,9 @@ import { Preview } from "app/components/preview";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { FilePickerResolveValue } from "app/lib/file-picker";
+import { createParam } from "app/navigation/use-param";
+
+import { toast } from "design-system/toast";
 
 import { MediaPicker } from "../common/media-picker";
 import {
@@ -64,10 +67,20 @@ type CreateDropStep =
   | "more-options"
   | "select-drop";
 
+type Query = {
+  stripeReturn?: boolean;
+  stripeRefresh?: string;
+};
+
+const { useParam } = createParam<Query>();
+
 export const DropFree = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
   const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
+  const [stripeReturn] = useParam("stripeReturn", (g) => {
+    return g === "true";
+  });
   const {
     control,
     setValue,
@@ -106,6 +119,12 @@ export const DropFree = () => {
       enableLayoutAnimations(false);
     };
   }, []);
+
+  useEffect(() => {
+    if (stripeReturn) {
+      toast.success("Your payout account has been successfully connected!");
+    }
+  }, [stripeReturn]);
 
   const onSubmit = async (values: UseDropNFT) => {
     await dropNFT(
@@ -171,7 +190,9 @@ export const DropFree = () => {
   if (onboardinStatus.status === "processing") {
     return (
       <View>
-        <Text>Doing KYC. Please check back later!</Text>
+        <Text tw="text-gray-900 dark:text-gray-100">
+          KYC in progress. Please check again!
+        </Text>
       </View>
     );
   }
@@ -181,7 +202,7 @@ export const DropFree = () => {
       <Layout
         onBackPress={() => modalContext?.pop()}
         closeIcon
-        title="Complete payout info"
+        title="First. Complete Payout Information"
       >
         <CompleteStripeFlow />
       </Layout>
@@ -1049,10 +1070,6 @@ const Layout = (props: {
 
 const countries = [
   {
-    label: "India",
-    value: "IN",
-  },
-  {
     label: "United States",
     value: "US",
   },
@@ -1069,8 +1086,8 @@ const CompleteStripeFlow = () => {
     const res = await onboardingCreator.trigger({
       email: data.email,
       country_code: data.countryCode,
-      refresh_url: "http://localhost:3000/drop/free?refresh=true",
-      return_url: "http://localhost:3000/drop/free?return=true",
+      refresh_url: "http://localhost:3000/drop/free?stripeRefresh=true",
+      return_url: "http://localhost:3000/drop/free?stripeReturn=true",
       business_type: "individual",
     });
     if (Platform.OS === "web") {
