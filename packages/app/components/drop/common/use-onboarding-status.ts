@@ -21,7 +21,9 @@ export const useOnboardingStatus = () => {
     status = "loading";
   } else if (queryState.data?.can_charge) {
     status = "onboarded";
-  } else if (user.user?.data.stripe_connect_details?.details_submitted) {
+  } else if (
+    user.user?.data.profile.stripe_connect_details?.details_submitted
+  ) {
     status = "processing";
   }
 

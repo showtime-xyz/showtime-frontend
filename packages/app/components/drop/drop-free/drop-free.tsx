@@ -116,24 +116,6 @@ export const DropFree = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (stripeReturn) {
-      Alert.alert(
-        "Success",
-        "Your cash payout has been approved for creating Star Drops!",
-        [
-          {
-            text: "Create Star Drop",
-            onPress: () => {
-              setStripeReturn(undefined);
-              setStep("media");
-            },
-          },
-        ]
-      );
-    }
-  }, [Alert, setStripeReturn, stripeReturn]);
-
   const onSubmit = async (values: UseDropNFT) => {
     await dropNFT(
       {
@@ -174,6 +156,32 @@ export const DropFree = () => {
       setValue("file", file);
     }
   };
+
+  if (stripeReturn) {
+    return (
+      <Layout
+        onBackPress={() => modalContext?.pop()}
+        closeIcon
+        title="You're approved"
+      >
+        <View tw="items-center p-4" style={{ rowGap: 24 }}>
+          <Text tw="text-base text-gray-900 dark:text-gray-100">
+            Your cash payout has been approved for creating Star Drops!
+          </Text>
+          <Button
+            tw="w-full"
+            size="regular"
+            onPress={() => {
+              setStripeReturn(undefined);
+              setStep("media");
+            }}
+          >
+            Create Star Drop
+          </Button>
+        </View>
+      </Layout>
+    );
+  }
 
   if (onboardinStatus.status === "loading") {
     return (
