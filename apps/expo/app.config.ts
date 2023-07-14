@@ -171,7 +171,6 @@ const expoConfig: ExpoConfig = {
     "./plugins/with-spotify-sdk.js",
     "./plugins/with-android-splash-screen.js",
     "./plugins/with-disabled-force-dark-mode.js",
-    "./plugins/with-react-native-reanimated-crash-android-fix.js",
     [
       withInfoPlist,
       (config: ExportedConfigWithProps) => {
