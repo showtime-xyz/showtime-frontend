@@ -53,8 +53,6 @@ __generated__/
 # Native
 apps/expo/ios/
 apps/expo/android/
-apps/storybook-react-native/ios/
-apps/storybook-react-native/android/
 
 # OSX
 .DS_Store

@@ -3,8 +3,6 @@ import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { useUser } from "app/hooks/use-user";
-
 import { ShowtimeBrandLogo } from "../showtime-brand";
 
 type HeaderLeftProps = {
@@ -17,14 +15,10 @@ export const HeaderLeft = ({
   withBackground = false,
   color,
 }: HeaderLeftProps) => {
-  const { isAuthenticated } = useUser();
   const isDark = useIsDarkMode();
   const router = useRouter();
-
-  const canGoHome = router.pathname.split("/").length - 1 >= 2;
-
   const isHome = router.pathname === "/";
-  const Icon = canGoBack || canGoHome ? ArrowLeft : Showtime;
+  const Icon = canGoBack || !isHome ? ArrowLeft : Showtime;
 
   return (
     <PressableScale
@@ -38,14 +32,14 @@ export const HeaderLeft = ({
         withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
-        if (canGoHome) {
+        if (isHome) {
           router.push("/");
         } else {
           router.back();
         }
       }}
     >
-      {isHome || !isAuthenticated ? (
+      {isHome ? (
         <ShowtimeBrandLogo
           color={
             color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"

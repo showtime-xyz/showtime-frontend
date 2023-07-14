@@ -1,4 +1,11 @@
-import { useCallback, memo, useRef, useMemo, RefObject } from "react";
+import {
+  useCallback,
+  memo,
+  useRef,
+  useMemo,
+  RefObject,
+  useReducer,
+} from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { RectButton } from "react-native-gesture-handler";
@@ -9,6 +16,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -92,10 +100,18 @@ const CreatorChannelsListItem = memo(
     );
     const router = useRouter();
     const isDark = useIsDarkMode();
+    // yes, react can be annoying sometimes
+    const forceUpdate = useReducer((x) => x + 1, 0)[1];
+
     return (
       <PlatformPressable
         onPress={() => {
           router.push(`/channels/${item.id}`);
+          item.read = true;
+          requestAnimationFrame(() => {
+            // doing this because I don't want to mutate the whole object for a simple read status
+            forceUpdate();
+          });
         }}
         underlayColor={isDark ? "white" : "black"}
         style={{ width: "100%" }}
@@ -136,7 +152,12 @@ const CreatorChannelsListItem = memo(
               </View>
               <View tw="mt-2">
                 <Text
-                  tw="leading-5 text-gray-500 dark:text-gray-300"
+                  tw={[
+                    "leading-5",
+                    !item?.read && item.itemType !== "owned"
+                      ? "font-semibold text-black dark:text-white"
+                      : "text-gray-500 dark:text-gray-200",
+                  ]}
                   numberOfLines={2}
                 >
                   {item?.latest_message?.body ? (
@@ -264,6 +285,7 @@ export const CreatorChannelsList = memo(
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
     const { height: windowHeight } = useWindowDimensions();
+    const insets = useSafeAreaInsets();
 
     // my own channels
     const {
@@ -418,6 +440,7 @@ export const CreatorChannelsList = memo(
             web: web_height ? web_height : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
             ios: windowHeight,
           }),
+          paddingTop: insets.top,
         }}
         // for blur effect on Native
         contentContainerStyle={Platform.select({

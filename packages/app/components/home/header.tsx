@@ -129,10 +129,17 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         )}
       </View>
       <View tw="mb-2 w-full md:pl-0">
-        <View tw="mt-2 w-full flex-row items-center justify-between px-4 py-4 md:px-0">
-          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-            Trending
-          </Text>
+        <View
+          tw={[
+            "mt-2 w-full flex-row items-center justify-between px-4  md:px-0",
+            data.length > 0 || isLoading ? "py-4" : "py-0",
+          ]}
+        >
+          {data.length > 0 || isLoading ? (
+            <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+              Trending
+            </Text>
+          ) : null}
           {isShowSeeAll && (
             <Text
               tw="text-sm font-semibold text-indigo-600"
@@ -161,12 +168,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               slidesPerView={numColumns}
               renderItem={renderItem}
             />
-          ) : (
-            <EmptyPlaceholder
-              title={"Congrats! You collected all the trending drops."}
-              tw="h-[275px]"
-            />
-          )}
+          ) : null}
         </View>
       </View>
     </View>
