@@ -19,7 +19,7 @@
     "react-native-web": "~0.19.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.19.3",
+    "@babel/core": "^7.22.9",
     "@storybook/nextjs": "^7.0.26",
     "@storybook/react": "~7.0.26",
     "@types/node": "16.11.9",
