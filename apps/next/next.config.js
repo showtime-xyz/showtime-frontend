@@ -88,6 +88,8 @@ const nextConfig = {
       "react-native$": "react-native-web",
       "react-native-web/dist/cjs/exports/DrawerLayoutAndroid":
         "react-native-web/dist/cjs/modules/UnimplementedView",
+      "react-native/Libraries/Image/AssetRegistry":
+        "react-native-web/dist/cjs/modules/AssetRegistry",
     };
 
     config.resolve.extensions = [

@@ -9,7 +9,3 @@ apps/expo/ios
 apps/expo/android
 apps/storybook-react/node_modules
 apps/storybook-react/.next
-apps/storybook-react-native/node_modules
-apps/storybook-react-native/.expo
-apps/storybook-react-native/ios
-apps/storybook-react-native/android

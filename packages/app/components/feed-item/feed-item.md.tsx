@@ -78,6 +78,7 @@ type TabProps = {
 const Collectors = ({ nft, ListHeaderComponent }: TabProps) => {
   return (
     <UserList
+      // @ts-expect-error Component only loaded on web
       style={{ minHeight: "50vh" }}
       loading={false}
       users={nft?.multiple_owners_list || []}

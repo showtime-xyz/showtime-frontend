@@ -17,11 +17,8 @@ export const HeaderLeft = ({
 }: HeaderLeftProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
-
-  const canGoHome = router.pathname.split("/").length - 1 >= 2;
-
   const isHome = router.pathname === "/";
-  const Icon = canGoBack || canGoHome ? ArrowLeft : Showtime;
+  const Icon = canGoBack || !isHome ? ArrowLeft : Showtime;
 
   return (
     <PressableScale
@@ -35,7 +32,7 @@ export const HeaderLeft = ({
         withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
-        if (canGoHome) {
+        if (isHome) {
           router.push("/");
         } else {
           router.back();
