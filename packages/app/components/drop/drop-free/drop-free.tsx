@@ -157,7 +157,21 @@ export const DropFree = () => {
     }
   };
 
-  if (stripeReturn) {
+  if (onboardinStatus.status === "loading") {
+    return (
+      <Layout
+        onBackPress={() => modalContext?.pop()}
+        closeIcon
+        title="Complete payout info"
+      >
+        <View tw="items-center p-4">
+          <Spinner />
+        </View>
+      </Layout>
+    );
+  }
+
+  if (stripeReturn && onboardinStatus.status === "onboarded") {
     return (
       <Layout
         onBackPress={() => modalContext?.pop()}
@@ -178,20 +192,6 @@ export const DropFree = () => {
           >
             Create Star Drop
           </Button>
-        </View>
-      </Layout>
-    );
-  }
-
-  if (onboardinStatus.status === "loading") {
-    return (
-      <Layout
-        onBackPress={() => modalContext?.pop()}
-        closeIcon
-        title="Complete payout info"
-      >
-        <View tw="items-center p-4">
-          <Spinner />
         </View>
       </Layout>
     );
