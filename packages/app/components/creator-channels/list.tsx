@@ -16,6 +16,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -284,6 +285,7 @@ export const CreatorChannelsList = memo(
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
     const { height: windowHeight } = useWindowDimensions();
+    const insets = useSafeAreaInsets();
 
     // my own channels
     const {
@@ -438,6 +440,7 @@ export const CreatorChannelsList = memo(
             web: web_height ? web_height : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
             ios: windowHeight,
           }),
+          paddingTop: insets.top,
         }}
         // for blur effect on Native
         contentContainerStyle={Platform.select({
