@@ -12,8 +12,9 @@ const defaultValues = {
   duration: 7 * SECONDS_IN_A_DAY,
   hasAcceptedTerms: false,
   notSafeForWork: false,
+  editionSize: 15,
   raffle: false,
-  paid_nft_price: 8,
+  paidNFTPrice: 8,
 };
 
 export const getDefaultDate = () => {

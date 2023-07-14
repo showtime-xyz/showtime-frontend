@@ -129,8 +129,6 @@ export const DropFree = () => {
       {
         ...values,
         gatingType: "paid_nft",
-        editionSize: values.editionSize,
-        paid_nft_price: values.paid_nft_price,
       },
       clearStorage
     );
@@ -273,7 +271,7 @@ export const DropFree = () => {
             errors={formState.errors}
             trigger={trigger}
             watch={watch}
-            setPrice={(p: number) => setValue("paid_nft_price", p)}
+            setPrice={(p: number) => setValue("paidNFTPrice", p)}
             setDays={(days: number) =>
               setValue("duration", Number(days) * 86400)
             }
@@ -517,7 +515,7 @@ const SetPriceAndDuration = (
   } = props;
   const { state } = useDropNFT();
   const duration = watch("duration") / 86400;
-  const selectedPrice = watch("paid_nft_price");
+  const selectedPrice = watch("paidNFTPrice");
 
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
@@ -630,6 +628,12 @@ const SetPriceAndDuration = (
                 <DataPill
                   tw={isDark ? "bg-black" : "bg-white"}
                   label={`${getValues("royalty")}% Royalties`}
+                  type="text"
+                />
+                <DataPill
+                  label={`${watch("editionSize")} ${
+                    watch("editionSize") == 1 ? "Edition" : "Editions"
+                  }`}
                   type="text"
                 />
               </View>
@@ -745,6 +749,27 @@ const CreateDropMoreOptions = (props: StepProps) => {
                   placeholder="Enter number"
                   helperText="Earn royalties each time an edition is sold."
                   errorText={errors.royalty?.message}
+                  value={value?.toString()}
+                  onChangeText={onChange}
+                />
+              );
+            }}
+          />
+        </View>
+        <View tw="mt-4 flex-1">
+          <Controller
+            control={control}
+            name="editionSize"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  tw="flex-1"
+                  label="Edition size"
+                  placeholder="Enter a number"
+                  onBlur={onBlur}
+                  helperText="How many editions will be available to collect"
+                  errorText={errors.editionSize?.message}
                   value={value?.toString()}
                   onChangeText={onChange}
                 />

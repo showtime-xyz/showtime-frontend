@@ -134,7 +134,7 @@ export type UseDropNFT = {
   radius?: number;
   releaseDate?: string;
   raffle?: boolean;
-  paid_nft_price: number;
+  paidNFTPrice: number;
 };
 
 export const useDropNFT = () => {
@@ -264,8 +264,8 @@ export const useDropNFT = () => {
         requestData.release_date = params.releaseDate;
       }
 
-      if (params.paid_nft_price) {
-        requestData.paid_nft_price = params.paid_nft_price;
+      if (params.paidNFTPrice) {
+        requestData.paid_nft_price = params.paidNFTPrice;
       }
 
       if (
