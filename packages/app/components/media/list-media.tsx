@@ -56,7 +56,7 @@ function ListMediaImpl({
       item?.mime_type !== "image/gif" ? (
         <Image
           source={{
-            uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=70`,
+            uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=80`,
           }}
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}
@@ -73,7 +73,7 @@ function ListMediaImpl({
       item?.mime_type === "image/gif" ? (
         <Image
           source={{
-            uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=70`,
+            uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=80`,
           }}
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}

@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "120.0.0",
+  "version": "121.0.0",
   "private": true,
   "license": "MIT",
   "devDependencies": {
@@ -29,7 +29,6 @@
     "apps/expo",
     "apps/next",
     "apps/storybook-react",
-    "apps/storybook-react-native",
     "packages/*"
   ],
   "scripts": {
@@ -37,14 +36,12 @@
     "dev": "yarn turbo run dev --parallel --no-cache",
     "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
     "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next",
-    "dev:expo-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react-native",
     "dev:next-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react",
     "dev:web": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next --scope=@showtime/storybook-react",
-    "dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo --scope=@showtime/storybook-react-native",
+    "dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo",
     "build": "yarn turbo run build",
     "build:expo": "yarn turbo run build --scope=@showtime/expo",
     "build:next": "yarn turbo run build --scope=@showtime/next",
-    "build:expo-storybook": "yarn turbo run build --scope=@showtime/storybook-react-native",
     "build:next-storybook": "yarn turbo run build --scope=@showtime/storybook-react",
     "start:next": "yarn turbo run start --scope=@showtime/next",
     "lint": "yarn turbo run lint",
@@ -58,14 +55,14 @@
     "clean:build": "rm -rf apps/.next",
     "clean:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
     "postinstall": "patch-package && husky install",
-    "clean:native": "yarn clean && rm -rf apps/storybook-react-native/android && rm -rf apps/storybook-react-native/ios && rm -rf apps/expo/android && rm -rf apps/expo/ios && rm -rf apps/expo/.expo",
+    "clean:native": "yarn clean && rm -rf apps/expo/android && rm -rf apps/expo/ios && rm -rf apps/expo/.expo",
     "test:expo": "cd apps/expo && yarn test",
     "upgrade:design-system": "yarn up '@showtime-xyz/universal.*'"
   },
   "resolutions": {
     "@babel/core": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
-    "babel-loader": "^9.1.2",
+    "babel-loader": "^9.1.3",
     "babel-preset-expo": "9.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -76,7 +73,7 @@
     "@ethersproject/bignumber": "5.7.0",
     "@ethersproject/signing-key": "5.7.0",
     "eth-block-tracker": "4.4.3",
-    "next": "^13.4.1",
+    "next": "13.4.1",
     "react-native-mmkv": "2.10.1",
     "react-native-screens": "3.22.1",
     "react-native-svg": "13.10.0"
