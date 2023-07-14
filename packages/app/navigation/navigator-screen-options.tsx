@@ -30,7 +30,7 @@ export const screenOptions = ({
     headerBackTitleVisible: false,
     headerShadowVisible: false,
     fullScreenGestureEnabled: true,
-    animationDuration: 400,
+    animationDuration: Platform.OS === "ios" ? 400 : undefined,
     statusBarStyle: isDark ? "light" : "dark",
     statusBarAnimation: "fade",
 
