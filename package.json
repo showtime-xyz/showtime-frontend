@@ -29,7 +29,6 @@
     "apps/expo",
     "apps/next",
     "apps/storybook-react",
-    "apps/storybook-react-native",
     "packages/*"
   ],
   "scripts": {
@@ -37,14 +36,12 @@
     "dev": "yarn turbo run dev --parallel --no-cache",
     "dev:expo": "yarn turbo run dev --parallel --no-cache  --scope=@showtime/expo",
     "dev:next": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next",
-    "dev:expo-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react-native",
     "dev:next-storybook": "yarn turbo run dev --parallel --no-cache --scope=@showtime/storybook-react",
     "dev:web": "yarn turbo run dev --parallel --no-cache --scope=@showtime/next --scope=@showtime/storybook-react",
-    "dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo --scope=@showtime/storybook-react-native",
+    "dev:mobile": "yarn turbo run dev --parallel --no-cache --scope=@showtime/expo",
     "build": "yarn turbo run build",
     "build:expo": "yarn turbo run build --scope=@showtime/expo",
     "build:next": "yarn turbo run build --scope=@showtime/next",
-    "build:expo-storybook": "yarn turbo run build --scope=@showtime/storybook-react-native",
     "build:next-storybook": "yarn turbo run build --scope=@showtime/storybook-react",
     "start:next": "yarn turbo run start --scope=@showtime/next",
     "lint": "yarn turbo run lint",
@@ -58,7 +55,7 @@
     "clean:build": "rm -rf apps/.next",
     "clean:node-modules": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
     "postinstall": "patch-package && husky install",
-    "clean:native": "yarn clean && rm -rf apps/storybook-react-native/android && rm -rf apps/storybook-react-native/ios && rm -rf apps/expo/android && rm -rf apps/expo/ios && rm -rf apps/expo/.expo",
+    "clean:native": "yarn clean && rm -rf apps/expo/android && rm -rf apps/expo/ios && rm -rf apps/expo/.expo",
     "test:expo": "cd apps/expo && yarn test",
     "upgrade:design-system": "yarn up '@showtime-xyz/universal.*'"
   },

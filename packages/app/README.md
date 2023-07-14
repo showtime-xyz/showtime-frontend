@@ -77,15 +77,6 @@ Storybook config: `apps/storybook-react/.storybook/*`
 
 `yarn dev` to start Storybook
 
-### Storybook (React Native)
-
-> Storybook for React Native
-
-Storybook config: `apps/storybook-react-native/.storybook/*`
-
-`cd apps/storybook-react-native`
-
-`yarn dev` to start Storybook
 
 ## Mobile Development Client
 
@@ -269,17 +260,15 @@ Turbo pipelines are configured within the root directory [package.json](./packag
 - `yarn dev` runs the dev script for every [application](/apps)
 - `yarn dev:expo` runs the dev script for [@showtime/expo](/apps/expo)
 - `yarn dev:next` runs the dev script for [@showtime/next](/apps/next)
-- `yarn dev:expo-storybook` runs the dev script for [@showtime/storybook-react-native](/apps/storybook-react-native)
 - `yarn dev:next-storybook` runs the dev script for [@showtime/next-storybook](/apps/next-storybook)
 - `yarn dev:web` runs both dev scripts for [@showtime/next](/apps/next) and [@showtime/next-storybook](/apps/next-storybook)
-- `yarn dev:mobile` runs both dev scripts for [@showtime/expo](/apps/expo) and [@showtime/storybook-react-native](/apps/storybook-react-native)
+- `yarn dev:mobile` runs both dev scripts for [@showtime/expo](/apps/expo)
 
 #### Build
 
 - `yarn build` runs the build script for every [application](/apps)
 - `yarn build:expo` runs the build script for [@showtime/expo](/apps/expo)
 - `yarn build:next` runs the build script for [@showtime/next](/apps/next)
-- `yarn build:expo-storybook` runs the build script for [@showtime/storybook-react-native](/apps/storybook-react-native)
 - `yarn build:next-storybook` runs the build script for [@showtime/next-storybook](/apps/next-storybook)
 
 #### Start
@@ -291,7 +280,6 @@ Turbo pipelines are configured within the root directory [package.json](./packag
 - `yarn lint` runs the lint script for every [application](/apps)
 - `yarn lint:expo` runs the lint script for [@showtime/expo](/apps/expo)
 - `yarn lint:next` runs the lint script for [@showtime/next](/apps/next)
-- `yarn lint:expo-storybook` runs the lint script for [@showtime/storybook-react-native](/apps/storybook-react-native)
 - `yarn lint:next-storybook` runs the lint script for [@showtime/next-storybook](/apps/next-storybook)
 - `yarn lint:next` runs the lint script for [@showtime/next](/apps/next)
 
@@ -317,7 +305,7 @@ To get formatting on save in VS Code, install the `eslint` extension and add the
 - `clean` removes all monorepo node_modules and clears the turbo cache
 - `clean:turbo` clears the turbo cache
 - `clean:node-modules` removes all node_modules
-- `clean:native` runs yarn clean and removes android, iOS folders from expo and storybook-react-native apps.
+- `clean:native` runs yarn clean and removes android, iOS folders from expo.
 
 ### Enable Remote Cache
 
