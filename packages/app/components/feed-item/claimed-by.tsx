@@ -31,8 +31,8 @@ export const ClaimedBy = ({
   if (!claimersList || claimersList?.length <= 1) {
     return (
       <View tw={tw}>
-        <Text tw="font-bold text-gray-400 dark:text-gray-500">
-          Not collected yet
+        <Text tw="text-[12px] font-bold text-gray-400 dark:text-gray-500">
+          Collected by {nft?.creator_username || "the creator"}
         </Text>
       </View>
     );
