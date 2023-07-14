@@ -49,7 +49,7 @@ function MediaImplementation({
   isMuted,
   edition,
   videoRef,
-  optimizedWidth = 800,
+  optimizedWidth = 1000,
   quality = 70,
   loading = "lazy",
   withVideoBackdrop = false,
@@ -72,6 +72,7 @@ function MediaImplementation({
 
   return (
     <View
+      // @ts-expect-error no inherit on native
       style={{
         opacity: item?.loading ? 0.5 : 1,
         height: Platform.OS === "web" ? "inherit" : height,
