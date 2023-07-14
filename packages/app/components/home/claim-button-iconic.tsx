@@ -231,6 +231,9 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       buttonColor={isDark ? "#fff" : colors.gray[900]}
       {...rest}
     >
+      <View tw="absolute -right-1 -top-1 h-[22px] min-w-[24px] items-center justify-center rounded-full bg-white dark:bg-black">
+        <Text tw="text-xs font-semibold text-black dark:text-white">$0</Text>
+      </View>
       {/* <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
         <Image
           source={{
