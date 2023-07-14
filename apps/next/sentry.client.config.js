@@ -16,6 +16,6 @@ Sentry.init({
     new CaptureConsole({
       levels: ["warn", "error"],
     }),
-    new Offline(),
   ],
+  transport: Sentry.makeBrowserOfflineTransport(Sentry.makeFetchTransport),
 });
