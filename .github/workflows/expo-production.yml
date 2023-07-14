@@ -86,4 +86,4 @@ jobs:
 
       - name: Build iOS on EAS
         if: steps.version.outputs.type == 'major'
-        run: EXPO_NO_DOTENV=1 STAGE=production eas build --platform ios --non-interactive --no-wait --auto-submit --resource-class=large
+        run: EXPO_NO_DOTENV=1 STAGE=production eas build --platform ios --non-interactive --no-wait --auto-submit --resource-class=m1-experimental
