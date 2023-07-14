@@ -32,7 +32,9 @@ export const ClaimedBy = ({
     return (
       <View tw={tw}>
         <Text tw="text-[12px] font-bold text-gray-400 dark:text-gray-500">
-          Collected by {nft?.creator_username || "the creator"}
+          {nft?.creator_username
+            ? `@${nft.creator_username} collected`
+            : "The creator collected"}
         </Text>
       </View>
     );
