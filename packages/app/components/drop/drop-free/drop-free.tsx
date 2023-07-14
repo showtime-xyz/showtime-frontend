@@ -214,7 +214,13 @@ export const DropFree = () => {
             </Text>
             Usually 1-2 hours.
           </Text>
-          <Button tw="w-full" onPress={() => modalContext?.pop()}>
+          <Button
+            tw="w-full"
+            onPress={() => {
+              setStripeReturn(undefined);
+              modalContext?.pop();
+            }}
+          >
             Okay
           </Button>
         </View>
