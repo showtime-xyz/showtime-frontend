@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   useWindowDimensions,
   ScrollView as RNScrollView,
@@ -26,6 +26,7 @@ import {
 import {
   ArrowLeft,
   ChevronRight,
+  Clock,
   Close,
   Raffle,
 } from "@showtime-xyz/universal.icon";
@@ -46,13 +47,8 @@ import { usePersistForm } from "app/hooks/use-persist-form";
 import { FilePickerResolveValue } from "app/lib/file-picker";
 import { createParam } from "app/navigation/use-param";
 
-import { toast } from "design-system/toast";
-
 import { MediaPicker } from "../common/media-picker";
-import {
-  getDefaultDate,
-  useStarDropForm,
-} from "../common/star-drop-form-utils";
+import { useStarDropForm } from "../common/star-drop-form-utils";
 import { StepProps } from "../common/types";
 import { useOnBoardCreator } from "../common/use-onboard-creator";
 import { useOnboardingStatus } from "../common/use-onboarding-status";
@@ -78,7 +74,7 @@ export const DropFree = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
   const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
-  const [stripeReturn] = useParam("stripeReturn", (g) => {
+  const [stripeReturn, setStripeReturn] = useParam("stripeReturn", (g) => {
     return g === "true";
   });
   const {
@@ -97,6 +93,8 @@ export const DropFree = () => {
   const Alert = useAlert();
   const title = getValues("title");
   const description = getValues("description");
+
+  const isDark = useIsDarkMode();
   const file = getValues("file");
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
 
@@ -120,9 +118,21 @@ export const DropFree = () => {
 
   useEffect(() => {
     if (stripeReturn) {
-      toast.success("Your payout account has been successfully connected!");
+      Alert.alert(
+        "Success",
+        "Your cash payout has been approved for creating Star Drops!",
+        [
+          {
+            text: "Create Star Drop",
+            onPress: () => {
+              setStripeReturn(undefined);
+              setStep("media");
+            },
+          },
+        ]
+      );
     }
-  }, [stripeReturn]);
+  }, [Alert, setStripeReturn, stripeReturn]);
 
   const onSubmit = async (values: UseDropNFT) => {
     await dropNFT(
@@ -181,11 +191,26 @@ export const DropFree = () => {
 
   if (onboardinStatus.status === "processing") {
     return (
-      <View>
-        <Text tw="text-gray-900 dark:text-gray-100">
-          KYC in progress. Please check again!
-        </Text>
-      </View>
+      <Layout
+        onBackPress={() => modalContext?.pop()}
+        closeIcon
+        title="Come back later"
+      >
+        <View tw="items-center p-4" style={{ rowGap: 24 }}>
+          <Clock color={isDark ? "white" : "black"} width={54} height={54} />
+          <Text tw="text-gray-900 dark:text-gray-100">
+            Unable to purchase Star Drop at this time. We need more time to
+            approve your payment.{" "}
+            <Text tw="font-bold">
+              You will be notified when you’re approved.{" "}
+            </Text>
+            Usually 1-2 hours.
+          </Text>
+          <Button tw="w-full" onPress={() => modalContext?.pop()}>
+            Okay
+          </Button>
+        </View>
+      </Layout>
     );
   }
 
@@ -194,7 +219,7 @@ export const DropFree = () => {
       <Layout
         onBackPress={() => modalContext?.pop()}
         closeIcon
-        title="First. Complete Payout Information"
+        title="Payment processing details"
       >
         <CompleteStripeFlow />
       </Layout>
@@ -1106,6 +1131,11 @@ const CompleteStripeFlow = () => {
 
   return (
     <View tw="p-4" style={{ rowGap: 16 }}>
+      <Text tw="text-gray-700 dark:text-gray-200">
+        The following is required in order to take payments. You’ll be
+        redirected to create an account with Stripe who will hold and payout
+        your drop sales.
+      </Text>
       <Controller
         control={control}
         {...register("email", {
@@ -1121,7 +1151,7 @@ const CompleteStripeFlow = () => {
               tw="flex-1"
               ref={ref}
               label="Email"
-              placeholder="doe@gmail.com"
+              placeholder="Enter an email"
               onBlur={onBlur}
               errorText={errors.email?.message}
               value={value}
@@ -1163,10 +1193,9 @@ const CompleteStripeFlow = () => {
       <Button
         onPress={handleSubmit(onSubmit)}
         tw={onboardingCreator.isMutating ? `opacity-30` : ""}
+        size="regular"
       >
-        {onboardingCreator.isMutating
-          ? "Please wait..."
-          : "Add account information"}
+        {onboardingCreator.isMutating ? "Please wait..." : "Set up cash payout"}
       </Button>
     </View>
   );
