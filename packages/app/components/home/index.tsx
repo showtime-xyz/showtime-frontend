@@ -34,7 +34,6 @@ export const Home = () => {
   useScrollToTop(listRef);
 
   const mediaSize = isMdWidth ? 500 : width - 48 - 56;
-  const keyExtractor = useCallback((item: any, index: any) => `${index}`, []);
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => {
       if (index === 0) {
@@ -83,9 +82,9 @@ export const Home = () => {
         <ErrorBoundary>
           <InfiniteScrollList
             data={data}
-            keyExtractor={keyExtractor}
             renderItem={renderItem}
             estimatedItemSize={600}
+            drawDistance={Platform.OS === "android" ? height * 2 : undefined}
             preserveScrollPosition
             ListHeaderComponent={ListHeaderComponent}
             ListFooterComponent={ListFooterComponent}

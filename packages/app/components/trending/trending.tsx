@@ -14,7 +14,6 @@ import {
   TrendingSkeletonItem,
 } from "app/components/trending/trending-item";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { NFT } from "app/types";
 
@@ -40,17 +39,14 @@ const Header = () => {
     </>
   );
 };
+
+const keyExtractor = (item: NFT) => `${item.nft_id}`;
 export const Trending = () => {
   const { height: screenHeight, width } = useWindowDimensions();
-  const bottom = usePlatformBottomHeight();
   const isMdWidth = width >= breakpoints["md"];
 
   const { data: list, isLoading } = useTrendingNFTS({});
 
-  const keyExtractor = useCallback(
-    (_item: NFT, index: number) => `${index}`,
-    []
-  );
   const numColumns = isMdWidth ? 3 : 2;
 
   const renderItem = useCallback(
@@ -65,6 +61,17 @@ export const Trending = () => {
           numColumns={numColumns}
         />
       );
+    },
+    [isMdWidth, numColumns]
+  );
+
+  const getItemType = useCallback(
+    (_: NFT, index: number) => {
+      const marginLeft = isMdWidth ? 0 : index % numColumns === 0 ? 0 : 8;
+      if (marginLeft) {
+        return "right";
+      }
+      return "left";
     },
     [isMdWidth, numColumns]
   );
@@ -107,8 +114,10 @@ export const Trending = () => {
             keyExtractor={keyExtractor}
             numColumns={numColumns}
             renderItem={renderItem}
+            drawDistance={500}
+            getItemType={getItemType}
             style={{
-              height: screenHeight - Math.max(bottom, 8),
+              height: screenHeight,
             }}
             contentContainerStyle={{
               paddingHorizontal: 16,

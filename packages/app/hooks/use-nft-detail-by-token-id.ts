@@ -7,8 +7,6 @@ import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
 import type { NFT } from "app/types";
 
-import { useMatchMutate } from "./use-match-mutate";
-
 type UseNFTDetailByTokenIdParams = {
   contractAddress?: string;
   tokenId?: string;
@@ -24,7 +22,6 @@ export type NFTDetailPayload = {
 };
 
 export const useNFTDetailByTokenId = (params: UseNFTDetailByTokenIdParams) => {
-  const matchMutate = useMatchMutate();
   const { mutate } = useSWRConfig();
 
   const endpoint = useMemo(

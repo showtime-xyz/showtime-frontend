@@ -14,7 +14,8 @@
       },
       "env": {
         "STAGE": "production",
-        "FLIPPER_DISABLE": "1"
+        "FLIPPER_DISABLE": "1",
+        "EXPO_NO_DOTENV": "1"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
@@ -35,7 +36,8 @@
       },
       "env": {
         "STAGE": "staging",
-        "FLIPPER_DISABLE": "1"
+        "FLIPPER_DISABLE": "1",
+        "EXPO_NO_DOTENV": "1"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
@@ -54,7 +56,8 @@
         "resourceClass": "large"
       },
       "env": {
-        "STAGE": "development"
+        "STAGE": "development",
+        "EXPO_NO_DOTENV": "1"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
@@ -72,7 +75,8 @@
         "resourceClass": "large"
       },
       "env": {
-        "STAGE": "staging"
+        "STAGE": "staging",
+        "EXPO_NO_DOTENV": "1"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {

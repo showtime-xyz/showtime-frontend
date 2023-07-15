@@ -16,13 +16,13 @@ export type EngagementIconsProps = {
 };
 
 export const FeedEngagementIcons = memo<EngagementIconsProps>(
-  function EngagementIcons({ nft, tw = "", edition }) {
+  function EngagementIcons({ nft, tw = "" }) {
     return (
       <View tw={["ml-4", tw]}>
         <View tw="z-10">
           <ClaimButtonIconic nft={nft} tw="mb-4" />
           <FeedCommentButton nft={nft} tw="mb-4" />
-          <NFTShareDropdown nft={nft} tw="mb-4" />
+          <NFTShareDropdown nft={nft} />
         </View>
       </View>
     );

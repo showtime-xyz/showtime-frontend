@@ -104,6 +104,10 @@ export function RootStackNavigator() {
           getId={({ params }) => Object.values(params).join("-")}
           options={{
             statusBarStyle: "light",
+            contentStyle: {
+              backgroundColor: "black",
+            },
+            navigationBarColor: "black",
           }}
         />
         <Stack.Screen name="channelsMessage" component={Messages} />
