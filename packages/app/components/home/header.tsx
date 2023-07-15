@@ -28,7 +28,6 @@ import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
 
-import { EmptyPlaceholder } from "../empty-placeholder";
 import { HomeSlider } from "./home-slider";
 import { Banner, useBanners } from "./hooks/use-banners";
 
