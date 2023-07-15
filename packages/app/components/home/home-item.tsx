@@ -1,7 +1,6 @@
 import { useMemo, useCallback, memo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
