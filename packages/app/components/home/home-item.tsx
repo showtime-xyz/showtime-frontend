@@ -1,7 +1,6 @@
 import { useMemo, useCallback, memo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
-import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -134,11 +133,12 @@ export const HomeItem = memo<{
             </Text>
 
             <View tw="h-3" />
-            <ClampText
+            <Text
               tw="text-sm text-gray-600 dark:text-gray-400"
-              maxLines={4}
-              text={description}
-            />
+              numberOfLines={5}
+            >
+              {description}
+            </Text>
           </RouteComponent>
           <View tw="mt-3 min-h-[20px]">
             <ClaimedBy

@@ -23,7 +23,6 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -198,8 +197,7 @@ const CreatorChannelsListCreator = memo(
     return (
       <View tw="flex-1 px-4 py-2.5">
         <View tw="flex-row items-center">
-          <AvatarHoverCard
-            username={item.owner.username ?? item.owner.wallet_address}
+          <Avatar
             url={item.owner.img_url}
             size={52}
             alt="CreatorPreview Avatar"
