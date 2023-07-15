@@ -32,7 +32,7 @@ export const ClaimedBy = ({
     return (
       <View tw={["h-4 flex-row items-center", tw]}>
         <Text
-          tw="text-[12px] font-bold"
+          tw="text-[12px] font-bold dark:text-white"
           style={textColor ? { color: textColor } : {}}
         >
           {nft?.creator_username
