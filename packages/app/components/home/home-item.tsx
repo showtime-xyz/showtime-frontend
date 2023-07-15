@@ -134,11 +134,12 @@ export const HomeItem = memo<{
             </Text>
 
             <View tw="h-3" />
-            <ClampText
+            <Text
               tw="text-sm text-gray-600 dark:text-gray-400"
-              maxLines={4}
-              text={description}
-            />
+              numberOfLines={5}
+            >
+              {description}
+            </Text>
           </RouteComponent>
           <View tw="mt-3 min-h-[20px]">
             <ClaimedBy
