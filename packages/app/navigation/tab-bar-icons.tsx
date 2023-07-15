@@ -142,117 +142,28 @@ export const CreateTabBarIcon = ({
 export const CreatorChannelsTabBarIcon = ({
   color,
   focused,
-  tooltipSide = "top",
 }: TabBarIconProps & {
   tooltipSide?: ContentProps["side"];
 }) => {
-  const { isAuthenticated } = useUser();
-  const router = useRouter();
-  const [showTip, setShowTip] = useState(false);
-  const [open, setOpen] = useState(true);
   // TODO: use real badge number once API is ready
   // @ts-ignore
   // eslint-disable-next-line unused-imports/no-unused-vars
   const [badgeNumber, setBadgeNumber] = useState(0);
-  const isSet = useRef(false);
 
-  const onDismiss = () => {
-    setOpen(false);
-    store.set(STORE_KEY, true);
-    isSet.current = true;
-    setShowTip(false);
-  };
-  useEffect(() => {
-    if (
-      !store.getBoolean(STORE_KEY) &&
-      !isSet.current &&
-      !focused &&
-      !isAuthenticated
-    ) {
-      setTimeout(() => {
-        setShowTip(true);
-        isSet.current = true;
-      }, 2000);
-    }
-    if (focused) {
-      onDismiss();
-    }
-  }, [focused, isAuthenticated, router]);
-
-  if (!showTip) {
-    return (
-      <TabBarIcon tab="/channels">
-        {focused ? (
-          <CreatorChannelFilled width={24} height={24} color={color} />
-        ) : (
-          <CreatorChannel width={24} height={24} color={color} />
-        )}
-        {badgeNumber > 0 && (
-          <View tw="web:-top-0.5 absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
-            <Text tw="text-xs font-medium text-white">
-              {badgeNumber > 99 ? "99" : badgeNumber}
-            </Text>
-          </View>
-        )}
-      </TabBarIcon>
-    );
-  }
   return (
-    <TabBarIcon
-      onPress={() => {
-        router.push("/channels");
-        if (Platform.OS === "web") {
-          onDismiss();
-        }
-      }}
-    >
-      <Tooltip.Root
-        onDismiss={onDismiss}
-        open={open}
-        disableDismissWhenTouchOutside
-        usePopover
-      >
-        <Tooltip.Trigger>
-          <View tw="items-center justify-center">
-            <View tw="h-[35px] w-[75px] flex-row items-center justify-center rounded-full bg-indigo-700 md:h-12 md:w-12">
-              <CreatorChannel width={24} height={24} color="#fff" />
-              {badgeNumber > 0 && (
-                <Text tw="ml-1 text-sm font-medium text-white md:hidden">
-                  {badgeNumber > 99 ? "99+" : badgeNumber}
-                </Text>
-              )}
-            </View>
-          </View>
-        </Tooltip.Trigger>
-        <Tooltip.Content
-          sideOffset={5}
-          containerStyle={{
-            paddingLeft: 10,
-            paddingRight: 10,
-            paddingTop: 6,
-            paddingBottom: 6,
-          }}
-          className="web:outline-none"
-          side={tooltipSide}
-          presetAnimation="fadeIn"
-          backgroundColor={colors.indigo[700]}
-          borderRadius={12}
-          onTap={() => {
-            router.push("/channels");
-            if (Platform.OS === "web") {
-              onDismiss();
-            }
-          }}
-          dismissDuration={500}
-          maxWidth={200}
-        >
-          <Tooltip.Text
-            textSize={14}
-            textColor="#fff"
-            text={"Collect drops to unlock creator channels."}
-          />
-        </Tooltip.Content>
-      </Tooltip.Root>
+    <TabBarIcon tab="/channels">
+      {focused ? (
+        <CreatorChannelFilled width={24} height={24} color={color} />
+      ) : (
+        <CreatorChannel width={24} height={24} color={color} />
+      )}
+      {badgeNumber > 0 && (
+        <View tw="web:-top-0.5 absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
+          <Text tw="text-xs font-medium text-white">
+            {badgeNumber > 99 ? "99" : badgeNumber}
+          </Text>
+        </View>
+      )}
     </TabBarIcon>
   );
 };
