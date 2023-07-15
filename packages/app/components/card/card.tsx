@@ -158,7 +158,6 @@ const CardLargeScreen = ({
   sizeStyle,
   href = "",
   as,
-  showClaimButton,
   handleOnPress,
   cardMaxWidth,
   index,
