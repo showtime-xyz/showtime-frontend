@@ -13,6 +13,7 @@ export type ChannelLatestMessage = {
   created_at: string;
   updated_at: string;
   profile: ChannelProfile;
+  is_payment_gated?: boolean;
   sent_by: {
     id: number;
     admin: boolean;
