@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import {
   useWindowDimensions,
   Platform,
@@ -44,28 +44,24 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { Creator } from "app/components/card/rows/elements/creator";
-import { Media } from "app/components/media";
 import { Preview } from "app/components/preview";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePersistForm } from "app/hooks/use-persist-form";
-import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { FilePickerResolveValue } from "app/lib/file-picker";
-import { getTwitterIntent } from "app/utilities";
 
 import { DateTimePicker } from "design-system/date-time-picker";
-import { toast } from "design-system/toast";
 
+import { MediaPicker } from "../common/media-picker";
+import {
+  getDefaultDate,
+  useMusicDropForm,
+} from "../common/music-drop-form-utils";
+import { SelectDropType } from "../common/select-drop-type";
+import { StepProps } from "../common/types";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
-import { MediaPicker } from "./media-picker";
-import { getDefaultDate, useMusicDropForm } from "./music-drop-form-utils";
-import { SelectDropType } from "./select-drop-type";
-import { StepProps } from "./types";
 
 type CreateDropStep =
   | "media"
