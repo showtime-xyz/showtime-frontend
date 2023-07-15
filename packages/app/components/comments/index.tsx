@@ -214,6 +214,8 @@ export function Comments({
         <CommentsStatus isLoading={true} error={error} />
       ) : (
         <View tw="flex-grow">
+          {/*TODO: @Alan, please fix TS */}
+          {/* @ts-expect-error Types wrong becuase of modalListProps */}
           <InfiniteScrollList
             data={data}
             renderItem={renderItem}
