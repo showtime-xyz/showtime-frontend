@@ -1,8 +1,6 @@
-import { Suspense, useState, useEffect, useRef } from "react";
+import { Suspense, useState } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
-import { MMKV } from "react-native-mmkv";
-import * as Tooltip from "universal-tooltip";
 import type { ContentProps } from "universal-tooltip";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -21,8 +19,7 @@ import {
   User,
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { useRouter } from "@showtime-xyz/universal.router";
-import { TW, colors } from "@showtime-xyz/universal.tailwind";
+import { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -33,9 +30,6 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
-
-const store = new MMKV();
-const STORE_KEY = "showCreatorChannelTip";
 
 type TabBarIconProps = {
   color?: string;
