@@ -9,7 +9,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
-import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
@@ -89,86 +88,84 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   return (
     <View tw="bg-black">
-      <LikeContextProvider nft={nft}>
-        {nft?.mime_type?.startsWith("video") ? (
-          <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
-            <MuteButton variant="mobile-web" />
-          </View>
-        ) : null}
+      {nft?.mime_type?.startsWith("video") ? (
+        <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
+          <MuteButton variant="mobile-web" />
+        </View>
+      ) : null}
+      <View
+        tw="max-h-[100svh] min-h-[100dvh] w-full"
+        style={{
+          height: itemHeight,
+          overflow: "hidden",
+        }}
+      >
         <View
-          tw="max-h-[100svh] min-h-[100dvh] w-full"
+          tw="animate-fade-in-500"
           style={{
-            height: itemHeight,
-            overflow: "hidden",
+            paddingTop,
           }}
         >
-          <View
-            tw="animate-fade-in-500"
-            style={{
-              paddingTop,
+          <FeedItemTapGesture
+            videoRef={videoRef}
+            sizeStyle={{
+              height: mediaHeight,
+              width: windowWidth,
             }}
+            isVideo={nft?.mime_type?.startsWith("video")}
           >
-            <FeedItemTapGesture
+            <Media
               videoRef={videoRef}
+              item={nft}
+              numColumns={1}
               sizeStyle={{
                 height: mediaHeight,
                 width: windowWidth,
               }}
-              isVideo={nft?.mime_type?.startsWith("video")}
-            >
-              <Media
-                videoRef={videoRef}
-                item={nft}
-                numColumns={1}
-                sizeStyle={{
-                  height: mediaHeight,
-                  width: windowWidth,
-                }}
-                resizeMode={ResizeMode.COVER}
-              />
-            </FeedItemTapGesture>
-          </View>
+              resizeMode={ResizeMode.COVER}
+            />
+          </FeedItemTapGesture>
+        </View>
+        <View
+          tw="z-1 pointer-events-none absolute bottom-0 w-full"
+          style={{
+            paddingBottom: bottomHeight,
+          }}
+          onLayout={({
+            nativeEvent: {
+              layout: { height },
+            },
+          }) => {
+            setDetailHeight(height);
+          }}
+        >
+          <NFTDetails
+            edition={edition}
+            nft={nft}
+            detail={detailData?.data?.item}
+          />
+        </View>
+        <EngagementIcons
+          nft={nft}
+          bottomPadding={bottomHeight}
+          edition={edition}
+        />
+
+        {isAuthenticated && (
           <View
-            tw="z-1 pointer-events-none absolute bottom-0 w-full"
+            tw="swiper-no-swiping absolute right-4 z-50"
             style={{
-              paddingBottom: bottomHeight,
-            }}
-            onLayout={({
-              nativeEvent: {
-                layout: { height },
-              },
-            }) => {
-              setDetailHeight(height);
+              top: 8,
             }}
           >
-            <NFTDetails
+            <NFTDropdown
+              nft={detailData?.data?.item ?? nft}
               edition={edition}
-              nft={nft}
-              detail={detailData?.data?.item}
+              tw="rounded-full bg-black/60 px-1 py-1"
             />
           </View>
-          <EngagementIcons
-            nft={nft}
-            bottomPadding={bottomHeight}
-            edition={edition}
-          />
-
-          {isAuthenticated && (
-            <View
-              tw="swiper-no-swiping absolute right-4 z-50"
-              style={{
-                top: 8,
-              }}
-            >
-              <NFTDropdown
-                nft={detailData?.data?.item ?? nft}
-                edition={edition}
-                tw="rounded-full bg-black/60 px-1 py-1"
-              />
-            </View>
-          )}
-        </View>
-      </LikeContextProvider>
+        )}
+      </View>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
     </View>
   );
