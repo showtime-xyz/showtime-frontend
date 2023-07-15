@@ -29,6 +29,8 @@ import { breakpoints } from "design-system/theme";
 import { useJoinChannel } from "../creator-channels/hooks/use-join-channel";
 import { HomeSlider } from "./home-slider";
 
+const PlatformPressable = Platform.OS === "web" ? Pressable : BorderlessButton;
+
 const INFO_HEIGTH = 230;
 const windowWidth = Dimensions.get("window").width;
 const PopularCreatorItem = memo(function PopularCreatorItem({
@@ -165,7 +167,7 @@ export const PopularCreators = memo(function PopularCreators() {
           Popular artists
         </Text>
         {isShowSeeAll && (
-          <BorderlessButton
+          <PlatformPressable
             onPress={() => {
               router.push("/channels");
             }}
@@ -178,7 +180,7 @@ export const PopularCreators = memo(function PopularCreators() {
             >
               <Text tw="text-sm font-semibold text-indigo-600">see all</Text>
             </View>
-          </BorderlessButton>
+          </PlatformPressable>
         )}
       </View>
       <View tw="mb-2 w-full rounded-2xl">

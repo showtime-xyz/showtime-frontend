@@ -33,6 +33,8 @@ import { breakpoints } from "design-system/theme";
 import { HomeSlider } from "./home-slider";
 import { Banner, useBanners } from "./hooks/use-banners";
 
+const PlatformPressable = Platform.OS === "web" ? Pressable : BorderlessButton;
+
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
@@ -142,7 +144,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             </Text>
           ) : null}
           {(isShowSeeAll || __DEV__) && (
-            <BorderlessButton
+            <PlatformPressable
               onPress={() => {
                 router.push("/trending");
               }}
@@ -155,7 +157,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               >
                 <Text tw="text-sm font-semibold text-indigo-600">see all</Text>
               </View>
-            </BorderlessButton>
+            </PlatformPressable>
           )}
         </View>
         <View tw="w-full rounded-2xl">
