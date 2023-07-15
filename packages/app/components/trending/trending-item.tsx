@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
@@ -48,27 +48,30 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   const isMdWidth = windowWidth > breakpoints["md"];
   const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth;
   const spacing = (isMdWidth ? 0 : 32) + 24 * (numColumns - 1);
-  const mediaWidth = Math.ceil(
-    numColumns % 1 === 0
-      ? (pagerWidth - spacing) / numColumns
-      : pagerWidth / numColumns - 16
-  );
+  const mediaWidth = useMemo(() => {
+    return Math.ceil(
+      numColumns % 1 === 0
+        ? (pagerWidth - spacing) / numColumns
+        : pagerWidth / numColumns - 16
+    );
+  }, [numColumns, pagerWidth, spacing]);
 
   const router = useRouter();
+
+  const viewStyle = useMemo(() => {
+    return [
+      {
+        width: Platform.select({
+          web: undefined,
+          default: width,
+        }),
+      },
+      style,
+    ];
+  }, [width, style]);
+
   return (
-    <View
-      tw={["h-full w-full", tw]}
-      style={[
-        {
-          width: Platform.select({
-            web: undefined,
-            default: width,
-          }),
-        },
-        style,
-      ]}
-      {...rest}
-    >
+    <View tw={["h-full w-full", tw]} style={viewStyle} {...rest}>
       <RouteComponent
         as={getNFTSlug(nft)}
         href={`${getNFTSlug(

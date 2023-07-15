@@ -139,7 +139,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               Trending
             </Text>
           ) : null}
-          {isShowSeeAll && (
+          {(isShowSeeAll || __DEV__) && (
             <Text
               tw="text-sm font-semibold text-indigo-600"
               onPress={() => {
