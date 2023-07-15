@@ -6,6 +6,8 @@ import {
   Linking,
 } from "react-native";
 
+import { BorderlessButton } from "react-native-gesture-handler";
+
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -140,14 +142,20 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
             </Text>
           ) : null}
           {(isShowSeeAll || __DEV__) && (
-            <Text
-              tw="text-sm font-semibold text-indigo-600"
+            <BorderlessButton
               onPress={() => {
                 router.push("/trending");
               }}
+              shouldActivateOnStart
+              hitSlop={10}
             >
-              see all
-            </Text>
+              <View
+                tw="-mt-1 p-1"
+                hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+              >
+                <Text tw="text-sm font-semibold text-indigo-600">see all</Text>
+              </View>
+            </BorderlessButton>
           )}
         </View>
         <View tw="w-full rounded-2xl">
