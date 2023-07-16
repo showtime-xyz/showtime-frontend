@@ -182,7 +182,11 @@ function App({ Component, pageProps, router }: AppProps) {
                 minHeight: "100svh",
               }}
             >
-              <NextNProgress color="#4F46E5" options={{ showSpinner: false }} />
+              <NextNProgress
+                color="#4F46E5"
+                options={{ showSpinner: false }}
+                showOnShallow={false}
+              />
               <Component {...pageProps} />
             </View>
           </View>
