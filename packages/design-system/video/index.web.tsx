@@ -73,11 +73,12 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
           loading={loading}
         />
       ) : (
+        // @ts-expect-error no inherit available in RNW types
         <View style={{ height: "inherit", width: "inherit" }}>
           {withVideoBackdrop ? (
             <>
               <Image
-                //tw={"blur-lg"}
+                tw={"blur-lg"}
                 style={style as ImageStyle}
                 resizeMode={resizeMode}
                 blurhash={blurhash}

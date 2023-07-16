@@ -330,6 +330,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 useWindowScroll={isMdWidth}
                 ListHeaderComponent={Header}
                 numColumns={1}
+                overscan={6}
                 preserveScrollPosition
                 data={isBlocked ? [] : chuckList}
                 keyExtractor={keyExtractor}

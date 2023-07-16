@@ -30,6 +30,7 @@ type Props = {
   edition?: CreatorEditionResponse;
   videoRef?: RefObject<ExpoVideo>;
   theme?: "light" | "dark";
+  optimizedWidth?: number;
 };
 
 function GridMediaImpl({
@@ -38,6 +39,7 @@ function GridMediaImpl({
   sizeStyle = {},
   resizeMode: propResizeMode,
   edition,
+  optimizedWidth = 300,
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
@@ -79,7 +81,7 @@ function GridMediaImpl({
       item?.mime_type !== "image/gif" ? (
         <Image
           source={{
-            uri: `${mediaUri}?optimizer=image&width=300&quality=80`,
+            uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=80`,
           }}
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}
@@ -103,7 +105,7 @@ function GridMediaImpl({
           )}
           <Image
             source={{
-              uri: `${mediaStillPreviewUri}?&optimizer=image&width=300&quality=80`,
+              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=80`,
             }}
             recyclingKey={mediaUri}
             data-test-id={Platform.select({ web: "nft-card-media" })}
