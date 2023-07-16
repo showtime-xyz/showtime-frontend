@@ -14,10 +14,10 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
-import { Title } from "app/components/card/rows/title";
 import { Social } from "app/components/card/social";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
@@ -230,7 +230,14 @@ const CardLargeScreen = ({
           // @ts-ignore
           dataset={{ testId: "nft-card-title-link" }}
         >
-          <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
+          <View tw={"px-4 pb-1 pt-4"}>
+            <Text
+              tw="inline-block overflow-ellipsis whitespace-nowrap text-lg font-bold !leading-8 text-black dark:text-white"
+              numberOfLines={1}
+            >
+              {nft.token_name}
+            </Text>
+          </View>
         </RouteComponent>
         <View tw="flex-row justify-between px-4 py-2">
           <Social nft={nft} />
