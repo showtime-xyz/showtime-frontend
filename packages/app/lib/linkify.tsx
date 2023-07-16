@@ -16,7 +16,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
   // First, match URLs
   let replacedText = reactStringReplace(
     text,
-    /\b(https?:\/\/[^\s)]+|www\.[^\s)]+|\b[A-Za-z0-9-]+\.[A-Za-z0-9-.]+(?:\/[^\s)]*)?\b)/gi,
+    /\b(https?:\/\/[^\s)"]+(?<!\.)|www\.[^\s)"]+(?<!\.)|\b[A-Za-z0-9-]+\.[A-Za-z0-9-.]+(?<!\.)(?:\/[^\s)"]*)?\b)/gi,
     (match, i) => {
       const parsed = parse(match);
       if (parsed.isIcann || match.startsWith("http:")) {
