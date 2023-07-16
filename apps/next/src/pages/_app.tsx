@@ -9,6 +9,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import NextNProgress from "nextjs-progressbar";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { usePlatformResize } from "@showtime-xyz/universal.hooks";
@@ -181,6 +182,7 @@ function App({ Component, pageProps, router }: AppProps) {
                 minHeight: "100svh",
               }}
             >
+              <NextNProgress color="#4F46E5" />
               <Component {...pageProps} />
             </View>
           </View>
