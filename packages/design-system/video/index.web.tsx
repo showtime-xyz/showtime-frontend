@@ -77,7 +77,7 @@ export const Video = forwardRef<ExpoVideo, VideoProps>(function Video(
           {withVideoBackdrop ? (
             <>
               <Image
-                tw={"blur-lg"}
+                //tw={"blur-lg"}
                 style={style as ImageStyle}
                 resizeMode={resizeMode}
                 blurhash={blurhash}
