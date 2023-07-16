@@ -337,7 +337,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 style={{
                   height: screenHeight - bottomBarHeight,
                 }}
-                overscan={9}
                 ListEmptyComponent={ListEmptyComponent}
                 ListFooterComponent={ListFooterComponent}
                 onEndReached={fetchMore}
