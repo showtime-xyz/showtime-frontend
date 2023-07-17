@@ -367,7 +367,7 @@ export const CreatorChannels = memo(() => {
   if (!isLgWidth) {
     if (router.query["channelId"]) {
       return (
-        <View tw="w-full flex-1">
+        <View tw="h-[100svh] w-full">
           <Messages />
         </View>
       );

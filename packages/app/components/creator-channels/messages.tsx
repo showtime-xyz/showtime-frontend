@@ -93,7 +93,6 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
-import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../dropdown/menu-item-icon";
 import { MessageReactions } from "../reaction/message-reactions";
@@ -281,8 +280,6 @@ export const Messages = memo(() => {
   const isDark = useIsDarkMode();
   const user = useUser();
   const windowDimension = useWindowDimensions();
-  const isMdWidth = windowDimension.width >= breakpoints["md"];
-
   const redirectToChannelCongrats = useRedirectToChannelCongrats();
   const isUserAdmin =
     user.user?.data.channels &&
@@ -651,12 +648,6 @@ export const Messages = memo(() => {
                 keyboardDismissMode={
                   Platform.OS === "ios" ? "interactive" : "on-drag"
                 }
-                style={{
-                  height: Platform.select({
-                    web: isMdWidth ? undefined : windowDimension.height - 100,
-                    default: undefined,
-                  }),
-                }}
                 renderItem={renderItem}
                 contentContainerStyle={{ paddingTop: insets.bottom }}
                 extraData={extraData}
