@@ -307,7 +307,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         }}
       >
         <FilterContext.Provider value={{ filter, dispatch }}>
-          <View tw="w-full">
+          <View tw="min-h-screen w-full">
             <MutateProvider mutate={updateItem}>
               <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
                 <InfiniteScrollList
