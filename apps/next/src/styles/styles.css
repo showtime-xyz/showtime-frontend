@@ -120,6 +120,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -ms-overflow-style: scrollbar;
   width: unset !important;
+  height: 100%;
   padding-right: 0 !important;
 }
 
