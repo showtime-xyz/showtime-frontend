@@ -20,7 +20,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
@@ -164,14 +163,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const bottomBarHeight = usePlatformBottomHeight();
   const isBlocked = getIsBlocked(profileId);
   const { user } = useUser();
-  const { width: scrollbarWidth } = useScrollbarSize();
   const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
     profileId: profileId,
   });
-  const isDark = useIsDarkMode();
   const { height: screenHeight, width } = useWindowDimensions();
   const contentWidth = useContentWidth();
-  const isMdWidth = contentWidth >= breakpoints["md"];
   const numColumns =
     width <= breakpoints["lg"] && width >= breakpoints["md"] ? 2 : 3;
   const isSelf = user?.data?.profile?.profile_id === profileId;
@@ -312,17 +308,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         }}
       >
         <FilterContext.Provider value={{ filter, dispatch }}>
-          <View
-            tw="w-full"
-            style={
-              isMdWidth
-                ? {
-                    width: `calc(100% - ${scrollbarWidth}px)`,
-                    marginLeft: scrollbarWidth,
-                  }
-                : {}
-            }
-          >
+          <View tw="w-full">
             <MutateProvider mutate={updateItem}>
               <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
                 <InfiniteScrollList

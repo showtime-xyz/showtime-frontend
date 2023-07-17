@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
@@ -48,25 +48,30 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   const isMdWidth = windowWidth > breakpoints["md"];
   const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth;
   const spacing = (isMdWidth ? 0 : 32) + 24 * (numColumns - 1);
-  const mediaWidth =
-    numColumns % 1 === 0
-      ? (pagerWidth - spacing) / numColumns
-      : pagerWidth / numColumns - 16;
+  const mediaWidth = useMemo(() => {
+    return Math.ceil(
+      numColumns % 1 === 0
+        ? (pagerWidth - spacing) / numColumns
+        : pagerWidth / numColumns - 16
+    );
+  }, [numColumns, pagerWidth, spacing]);
+
   const router = useRouter();
+
+  const viewStyle = useMemo(() => {
+    return [
+      {
+        width: Platform.select({
+          web: undefined,
+          default: width,
+        }),
+      },
+      style,
+    ];
+  }, [width, style]);
+
   return (
-    <View
-      tw={["h-full w-full", tw]}
-      style={[
-        {
-          width: Platform.select({
-            web: undefined,
-            default: width,
-          }),
-        },
-        style,
-      ]}
-      {...rest}
-    >
+    <View tw={["h-full w-full", tw]} style={viewStyle} {...rest}>
       <RouteComponent
         as={getNFTSlug(nft)}
         href={`${getNFTSlug(
@@ -77,7 +82,10 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
           tw="overflow-hidden rounded-2xl"
           style={{ width: mediaWidth - 1, height: mediaWidth - 1 }}
         >
-          <View style={{ width: mediaWidth, height: mediaWidth }}>
+          <View
+            style={{ width: mediaWidth, height: mediaWidth }}
+            tw="bg-gray-100 dark:bg-gray-800"
+          >
             <ListMedia
               item={nft}
               resizeMode={ResizeMode.COVER}
@@ -150,10 +158,11 @@ export const TrendingSkeletonItem = memo<{ numColumns: number } & ViewProps>(
     const pagerWidth = isMdWidth ? DESKTOP_CONTENT_WIDTH : windowWidth;
 
     const spacing = (isMdWidth ? 0 : 32) + 24 * (numColumns - 1);
-    const mediaWidth =
+    const mediaWidth = Math.ceil(
       numColumns % 1 === 0
         ? (pagerWidth - spacing) / numColumns
-        : pagerWidth / numColumns - 16;
+        : pagerWidth / numColumns - 16
+    );
 
     return (
       <View tw={["", tw]} {...rest}>
@@ -166,7 +175,7 @@ export const TrendingSkeletonItem = memo<{ numColumns: number } & ViewProps>(
         <View tw="h-2" />
         <Skeleton width={140} height={13} radius={4} />
         <View tw="h-2" />
-        <Skeleton width={80} height={24} radius={999} />
+        <Skeleton width={96} height={24} radius={999} />
       </View>
     );
   }

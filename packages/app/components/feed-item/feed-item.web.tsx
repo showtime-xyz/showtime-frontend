@@ -83,13 +83,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
           <MuteButton variant="mobile-web" />
         </View>
       ) : null}
-      <View
-        tw="w-full"
-        style={{
-          height: "100svh",
-          overflow: "hidden",
-        }}
-      >
+      <View tw="h-[100svh] w-full overflow-hidden">
         <View
           tw="animate-fade-in-500"
           style={{

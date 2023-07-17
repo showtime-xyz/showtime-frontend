@@ -6,6 +6,8 @@ import {
   Linking,
 } from "react-native";
 
+import { BorderlessButton } from "react-native-gesture-handler";
+
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -28,9 +30,10 @@ import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
 
-import { EmptyPlaceholder } from "../empty-placeholder";
 import { HomeSlider } from "./home-slider";
 import { Banner, useBanners } from "./hooks/use-banners";
+
+const PlatformPressable = Platform.OS === "web" ? Pressable : BorderlessButton;
 
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
@@ -129,19 +132,32 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         )}
       </View>
       <View tw="mb-2 w-full md:pl-0">
-        <View tw="mt-2 w-full flex-row items-center justify-between px-4 py-4 md:px-0">
-          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-            Trending
-          </Text>
-          {isShowSeeAll && (
-            <Text
-              tw="text-sm font-semibold text-indigo-600"
+        <View
+          tw={[
+            "mt-2 w-full flex-row items-center justify-between px-4  md:px-0",
+            data.length > 0 || isLoading ? "py-4" : "py-0",
+          ]}
+        >
+          {data.length > 0 || isLoading ? (
+            <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+              Trending
+            </Text>
+          ) : null}
+          {(isShowSeeAll || __DEV__) && (
+            <PlatformPressable
               onPress={() => {
                 router.push("/trending");
               }}
+              shouldActivateOnStart
+              hitSlop={10}
             >
-              see all
-            </Text>
+              <View
+                tw="-mt-1 p-1"
+                hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+              >
+                <Text tw="text-sm font-semibold text-indigo-600">see all</Text>
+              </View>
+            </PlatformPressable>
           )}
         </View>
         <View tw="w-full rounded-2xl">
@@ -161,12 +177,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               slidesPerView={numColumns}
               renderItem={renderItem}
             />
-          ) : (
-            <EmptyPlaceholder
-              title={"Congrats! You collected all the trending drops."}
-              tw="h-[275px]"
-            />
-          )}
+          ) : null}
         </View>
       </View>
     </View>

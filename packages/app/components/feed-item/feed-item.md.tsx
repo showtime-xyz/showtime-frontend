@@ -72,6 +72,7 @@ type TabProps = {
 const Collectors = ({ nft, ListHeaderComponent }: TabProps) => {
   return (
     <UserList
+      // @ts-expect-error Component only loaded on web
       style={{ minHeight: "50vh" }}
       loading={false}
       users={nft?.multiple_owners_list || []}
@@ -258,9 +259,8 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
 
   return (
     <View
-      tw="h-full w-full overflow-hidden border-l border-gray-200 dark:border-gray-800 lg:flex-row"
+      tw="h-[100svh] w-full overflow-hidden border-l border-gray-200 dark:border-gray-800 lg:flex-row"
       style={{
-        height: "100svh",
         paddingTop: headerHeight,
       }}
     >

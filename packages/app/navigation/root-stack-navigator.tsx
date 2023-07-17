@@ -108,6 +108,10 @@ export function RootStackNavigator() {
           getId={({ params }) => Object.values(params).join("-")}
           options={{
             statusBarStyle: "light",
+            contentStyle: {
+              backgroundColor: "black",
+            },
+            navigationBarColor: "black",
           }}
         />
         <Stack.Screen name="channelsMessage" component={Messages} />
@@ -158,7 +162,11 @@ export function RootStackNavigator() {
         />
         <Stack.Screen
           name="comments"
-          options={{ headerTitle: "Comments" }}
+          options={{
+            headerTitle: "Comments",
+            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
+            animationDuration: Platform.OS === "android" ? undefined : 200,
+          }}
           component={CommentsScreen}
         />
 

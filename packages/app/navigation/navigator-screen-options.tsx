@@ -30,7 +30,8 @@ export const screenOptions = ({
     headerBackTitleVisible: false,
     headerShadowVisible: false,
     fullScreenGestureEnabled: true,
-    animationDuration: 400,
+    animation: Platform.OS === "android" ? "fade_from_bottom" : "simple_push",
+    animationDuration: Platform.OS === "ios" ? 400 : undefined,
     statusBarStyle: isDark ? "light" : "dark",
     statusBarAnimation: "fade",
 

@@ -18,9 +18,7 @@ import { CarouselProps } from "./types";
 const StyledRNRCarousel = styled(RNRCarousel);
 export const Carousel = memo(function Carousel({
   pagination,
-  controller = false,
   data,
-  controllerTw = "",
   effect,
   onProgressChange,
   ...rest

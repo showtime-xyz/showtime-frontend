@@ -30,9 +30,14 @@ export const ClaimedBy = ({
   );
   if (!claimersList || claimersList?.length <= 1) {
     return (
-      <View tw={tw}>
-        <Text tw="font-bold text-gray-400 dark:text-gray-500">
-          Not collected yet
+      <View tw={["h-4 flex-row items-center", tw]}>
+        <Text
+          tw="text-[12px] font-bold dark:text-white"
+          style={textColor ? { color: textColor } : {}}
+        >
+          {nft?.creator_username
+            ? `@${nft.creator_username} collected`
+            : "The creator collected"}
         </Text>
       </View>
     );
@@ -41,7 +46,7 @@ export const ClaimedBy = ({
   const firstClaimer = claimersList[1];
 
   return (
-    <View tw={["ml-2 flex-row items-center", tw]}>
+    <View tw={["ml-2 h-4 flex-row items-center", tw]}>
       <>
         {slicedClaimersList?.map((item, index) => {
           return (

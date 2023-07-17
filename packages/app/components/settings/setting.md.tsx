@@ -4,10 +4,8 @@ import { Platform } from "react-native";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useTabState } from "app/hooks/use-tab-state";
-import { Sticky } from "app/lib/stickynode";
 import { WalletAddressesV2 } from "app/types";
 
 import { TabBarVertical } from "design-system/tab-view";
@@ -15,10 +13,9 @@ import { TabBarVertical } from "design-system/tab-view";
 import { EditNicknameModal } from "./setting-edit-nickname-moda";
 import { SettingTabsScene, SETTINGS_ROUTES } from "./tabs";
 
-const LEFT_SLIDE_WIDTH = 264;
+//const LEFT_SLIDE_WIDTH = 264;
 export const SettingsMd = () => {
   const bottomHeight = usePlatformBottomHeight();
-  const contentWidth = useContentWidth();
   const [editingWallet, setEditingWallet] = useState<
     WalletAddressesV2 | undefined
   >(undefined);

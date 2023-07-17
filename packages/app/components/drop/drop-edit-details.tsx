@@ -7,7 +7,6 @@ import { Controller, useForm } from "react-hook-form";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -30,7 +29,6 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 export const DropEditDetails = () => {
-  const isDark = useIsDarkMode();
   const [contractAddress] = useParam("contractAddress");
   const [tokenId] = useParam("tokenId");
   const [chainName] = useParam("chainName");

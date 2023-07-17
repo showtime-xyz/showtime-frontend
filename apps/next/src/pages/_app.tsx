@@ -8,6 +8,7 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import NextNProgress from "nextjs-progressbar";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { View } from "@showtime-xyz/universal.view";
@@ -175,6 +176,11 @@ function App({ Component, pageProps, router }: AppProps) {
             />
 
             <View tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]">
+              <NextNProgress
+                color="#4F46E5"
+                options={{ showSpinner: false }}
+                showOnShallow={false}
+              />
               <Component {...pageProps} />
             </View>
           </View>
@@ -231,6 +237,7 @@ const Container = withColorScheme(
     return (
       <View
         tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900"
+        // @ts-ignore
         style={{
           paddingTop: headerHeight,
           paddingBottom: `calc(${bottomBarHeight}px + env(safe-area-inset-bottom))`,
