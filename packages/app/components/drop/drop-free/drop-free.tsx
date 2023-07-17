@@ -1128,12 +1128,18 @@ const CompleteStripeFlow = () => {
     register,
   } = useForm();
   const onboardingCreator = useOnBoardCreator();
+  const websiteUrl = `${
+    __DEV__
+      ? "http://localhost:3000"
+      : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
+  }`;
+
   const onSubmit = async (data: any) => {
     const res = await onboardingCreator.trigger({
       email: data.email,
       country_code: data.countryCode,
-      refresh_url: "http://localhost:3000/drop/free?stripeRefresh=true",
-      return_url: "http://localhost:3000/drop/free?stripeReturn=true",
+      refresh_url: `${websiteUrl}/drop/free?stripeRefresh=true`,
+      return_url: `${websiteUrl}/drop/free?stripeReturn=true`,
       business_type: "individual",
     });
     if (Platform.OS === "web") {
