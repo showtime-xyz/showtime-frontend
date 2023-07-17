@@ -25,6 +25,7 @@ import {
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
@@ -52,7 +53,7 @@ export const SwipeList = ({
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
   const isSwiped = useRef(false);
   const swiper = useRef<any>(null);
-
+  const bottom = usePlatformBottomHeight();
   const visibleItems = useSharedValue<any[]>([
     undefined,
     initialScrollIndex,
@@ -115,7 +116,8 @@ export const SwipeList = ({
     <View
       testID="swipeList"
       id="slidelist"
-      tw="h-screen overflow-hidden bg-gray-100 dark:bg-black"
+      tw="h-[100svh] overflow-hidden bg-gray-100 dark:bg-black"
+      style={{ marginBottom: -bottom }}
     >
       <VideoConfigContext.Provider value={videoConfig}>
         <SwiperActiveIndexContext.Provider value={activeIndex}>
