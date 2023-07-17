@@ -101,7 +101,7 @@ function App() {
     // Handle notifications that are received while the app is open.
     const notificationListener = Notifications.addNotificationReceivedListener(
       (notification) => {
-        console.log("notification received", notification);
+        console.log("notification received", JSON.stringify(notification));
         setNotification(notification);
       }
     );
@@ -130,10 +130,10 @@ function App() {
   useEffect(() => {
     const responseListener =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("response that was clicked", response);
+        console.log("response that was clicked", JSON.stringify(response));
         // const content =
         //   Platform.OS === "ios"
-        //     ? response?.notification?.request?.content?.data?.body?.path
+        //     ? https://github.com/showtime-xyz/showtime-frontend/tree/feat/notification-log.body?.path
         //     : response?.notification?.request?.content?.data?.path;
         // Notifications.dismissNotificationAsync(
         //   response?.notification?.request?.identifier
