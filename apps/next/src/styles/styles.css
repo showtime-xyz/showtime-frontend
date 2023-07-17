@@ -108,12 +108,12 @@ html {
   /* Prevent text size change on orientation change https://gist.github.com/tfausak/2222823#file-ios-8-web-app-html-L138 */
   -webkit-text-size-adjust: 100%;
   height: 100%;
+  overflow-y: scroll !important;
 }
 
 body {
   display: flex;
-  /* Allows you to scroll below the viewport; default value is visible */
-  overflow-y: scroll;
+  overflow-y: visible;
   overscroll-behavior-y: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
