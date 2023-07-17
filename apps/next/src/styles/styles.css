@@ -119,7 +119,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -ms-overflow-style: scrollbar;
-  /* */
   width: unset !important;
   padding-right: 0 !important;
 }
