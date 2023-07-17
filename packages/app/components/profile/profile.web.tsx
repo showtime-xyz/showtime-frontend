@@ -34,7 +34,6 @@ import {
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { createParam } from "app/navigation/use-param";

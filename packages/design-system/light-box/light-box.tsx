@@ -20,12 +20,10 @@ export type ImageBoundingClientRect = {
   imageOpacity: Animated.SharedValue<number>;
 };
 export type TargetImageInfo = {
-  width: number;
-  height: number;
+  width: number | string;
+  height: number | string;
 };
-export type LightBoxProps = {
-  width: number;
-  height: number;
+export type LightBoxProps = TargetImageInfo & {
   containerStyle?: StyleProp<ViewStyle>;
   imgLayout?: TargetImageInfo;
   alt?: string;
@@ -64,8 +62,8 @@ export const LightBox: React.FC<LightBoxProps> = ({
 
   const styles = useAnimatedStyle(() => {
     return {
-      width: imgWidth,
-      height: imgHeight,
+      width: typeof imgWidth === "number" ? imgWidth : "100%",
+      height: typeof imgHeight === "number" ? imgHeight : "100%",
       opacity: opacity.value,
     };
   });

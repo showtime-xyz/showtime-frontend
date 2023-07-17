@@ -3,26 +3,32 @@ import {
   useMemo,
   useRef,
   createContext,
-  useEffect,
   useState,
+  Ref,
 } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { useVirtualizer, Virtualizer } from "@tanstack/react-virtual";
 import { useSharedValue } from "react-native-reanimated";
+import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/virtual";
+import { Virtual, Keyboard, Mousewheel } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { clamp } from "@showtime-xyz/universal.utils";
+import { View } from "@showtime-xyz/universal.view";
 
 import { FeedItem } from "app/components/feed-item";
-import { ViewabilityItemsContext } from "app/components/viewability-tracker-flatlist";
+import {
+  ItemKeyContext,
+  ViewabilityItemsContext,
+} from "app/components/viewability-tracker-flatlist";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
+import { isMobileWeb, isSafari } from "app/utilities";
 
 type Props = {
   data: NFT[];
@@ -34,22 +40,25 @@ type Props = {
 };
 const { useParam } = createParam();
 
-export const SwiperActiveIndexContext = createContext<number | null>(null);
+export const SwiperActiveIndexContext = createContext<number>(0);
 export const SwipeList = ({
   data,
   fetchMore,
   initialScrollIndex = 0,
 }: Props) => {
   const router = useRouter();
-  const listRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
+  const isSwiped = useRef(false);
+  const swiper = useRef<any>(null);
+
   const visibleItems = useSharedValue<any[]>([
     undefined,
     initialScrollIndex,
     initialScrollIndex + 1 < data.length ? initialScrollIndex + 1 : undefined,
   ]);
-  const { height: windowHeight } = useWindowDimensions();
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const videoConfig = useMemo(
     () => ({
       isMuted: true,
@@ -58,21 +67,26 @@ export const SwipeList = ({
     }),
     []
   );
-  const initialOffset = initialScrollIndex * windowHeight;
-  const [activeIndex, setActiveIndex] = useState(initialScrollIndex);
 
   const scrollTimer = useRef<any>(null);
-  const onScrollChange = useCallback(
-    (e: Virtualizer<HTMLDivElement, Element>) => {
+  const onRealIndexChange = useCallback(
+    (e: SwiperClass) => {
       clearTimeout(scrollTimer.current);
-      const activeIndex = Math.round(e.scrollOffset / windowHeight);
-      const previousIndex = clamp(activeIndex - 1, 0, data.length - 1);
+      if (
+        e.activeIndex !== 0 &&
+        !isSwiped.current &&
+        router.pathname === "/" &&
+        isSafari()
+      ) {
+        // change URL is for hide smart app banner on Safari when swipe once
+        window.history.replaceState(null, "", "foryou");
+        isSwiped.current = true;
+      }
       visibleItems.value = [
-        previousIndex,
-        activeIndex,
-        activeIndex + 1 < data.length ? activeIndex + 1 : undefined,
+        e.previousIndex,
+        e.activeIndex,
+        e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
-      setActiveIndex(activeIndex);
       if (isSwipeListScreen) {
         scrollTimer.current = setTimeout(() => {
           router.replace(
@@ -90,87 +104,73 @@ export const SwipeList = ({
           );
         }, 700);
       }
+      setActiveIndex(e.activeIndex);
     },
-    [windowHeight, data, visibleItems, isSwipeListScreen, router]
+    [router, visibleItems, data, isSwipeListScreen, activeIndex]
   );
-
-  const rowVirtualizer = useVirtualizer({
-    count: data.length,
-    getScrollElement: () => listRef.current,
-    estimateSize: () => windowHeight,
-    initialOffset: initialOffset,
-    overscan: 12,
-    onChange: onScrollChange,
-  });
-
-  const slideToPrev = useCallback(() => {
-    rowVirtualizer.scrollToIndex(activeIndex - 1, {
-      behavior: "auto",
-      align: "end",
-    });
-  }, [activeIndex, rowVirtualizer]);
-
-  const slideToNext = useCallback(() => {
-    rowVirtualizer.scrollToIndex(activeIndex + 1, {
-      behavior: "auto",
-      align: "start",
-    });
-  }, [activeIndex, rowVirtualizer]);
-
-  useEffectOnce(() => {
-    document.body.classList.add("overflow-hidden", "overscroll-y-contain");
-    return () => {
-      document.body.classList.remove("overflow-hidden", "overscroll-y-none");
-    };
-  });
-  useEffect(() => {
-    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
-    if (!lastItem) {
-      return;
-    }
-    if (data && data?.length > 0 && lastItem.index >= data.length - 1) {
-      fetchMore?.();
-    }
-  }, [data, fetchMore, rowVirtualizer]);
 
   if (data.length === 0) return null;
 
   return (
-    <VideoConfigContext.Provider value={videoConfig}>
-      <SwiperActiveIndexContext.Provider value={activeIndex}>
-        <ViewabilityItemsContext.Provider value={visibleItems}>
-          <div
-            ref={listRef}
-            className="h-[100svh] snap-y snap-mandatory overflow-y-auto dark:bg-black"
-            id="slidelist"
-          >
-            <div
-              style={{
-                height: `${100 * data.length}svh`,
+    <View
+      testID="swipeList"
+      id="slidelist"
+      tw="h-screen overflow-hidden bg-gray-100 dark:bg-black"
+    >
+      <VideoConfigContext.Provider value={videoConfig}>
+        <SwiperActiveIndexContext.Provider value={activeIndex}>
+          <ViewabilityItemsContext.Provider value={visibleItems}>
+            <Swiper
+              modules={[Virtual, Keyboard, Mousewheel]}
+              height={windowHeight}
+              width={windowWidth}
+              keyboard
+              initialSlide={clamp(initialScrollIndex, 0, data.length - 1)}
+              virtual={{
+                enabled: true,
+                addSlidesBefore: 1,
+                addSlidesAfter: 2,
+                cache: false,
               }}
-              className="relative w-full"
+              direction="vertical"
+              onRealIndexChange={onRealIndexChange}
+              onReachEnd={fetchMore}
+              threshold={isMobileWeb() ? 0 : 25}
+              noSwiping
+              noSwipingClass="swiper-no-swiping"
+              mousewheel={{
+                noMousewheelClass: "swiper-no-swiping",
+                sensitivity: 1.1,
+                thresholdTime: 800,
+              }}
+              className="w-full"
+              ref={swiper}
             >
-              {rowVirtualizer?.getVirtualItems().map((virtualItem) => (
-                <div
-                  key={virtualItem.index}
-                  style={{
-                    transform: `translateY(${100 * virtualItem.index}svh)`,
-                  }}
-                  className="absolute left-0 top-0 h-[100svh] w-full snap-start snap-always will-change-transform"
-                >
-                  <FeedItem
-                    nft={data[virtualItem.index]}
-                    index={virtualItem.index}
-                    listLength={data.length}
-                    slideToNext={slideToNext}
-                    slideToPrev={slideToPrev}
-                  />
-                </div>
+              {data.map((item, index) => (
+                <SwiperSlide key={item.nft_id} virtualIndex={index}>
+                  <ItemKeyContext.Provider value={index}>
+                    <FeedItem
+                      nft={item}
+                      itemHeight={windowHeight}
+                      slideToNext={() => {
+                        swiper.current?.swiper.slideTo(
+                          Math.min(activeIndex + 1, data.length)
+                        );
+                      }}
+                      slideToPrev={() => {
+                        swiper.current?.swiper?.slideTo(
+                          Math.max(activeIndex - 1, 0)
+                        );
+                      }}
+                      listLength={data.length}
+                    />
+                  </ItemKeyContext.Provider>
+                </SwiperSlide>
               ))}
-            </div>
-          </div>
-        </ViewabilityItemsContext.Provider>
-      </SwiperActiveIndexContext.Provider>
-    </VideoConfigContext.Provider>
+            </Swiper>
+          </ViewabilityItemsContext.Provider>
+        </SwiperActiveIndexContext.Provider>
+      </VideoConfigContext.Provider>
+    </View>
   );
 };

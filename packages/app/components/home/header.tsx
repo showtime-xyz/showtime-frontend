@@ -24,7 +24,6 @@ import {
   DESKTOP_LEFT_MENU_WIDTH,
 } from "app/constants/layout";
 import { useTrendingNFTS } from "app/hooks/api-hooks";
-import { useScrollbarSize } from "app/hooks/use-scrollbar-size";
 import { Carousel } from "app/lib/carousel";
 import { NFT } from "app/types";
 
@@ -39,14 +38,13 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const { data, isLoading } = useTrendingNFTS({ pageSize: 8, filter: "music" });
-  const { width: scrollbarWidth } = useScrollbarSize();
   const { data: banners, isLoading: isLoadingBanner } = useBanners();
   const numColumns = isMdWidth ? 3.25 : 2.25;
   const router = useRouter();
   const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
   const pagerWidth = isMdWidth
     ? Math.min(DESKTOP_CONTENT_WIDTH, width - DESKTOP_LEFT_MENU_WIDTH)
-    : width - 32 - scrollbarWidth;
+    : width - 32;
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => (
       <TrendingItem

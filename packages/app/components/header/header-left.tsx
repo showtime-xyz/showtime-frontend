@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -19,7 +21,15 @@ export const HeaderLeft = ({
   const isDark = useIsDarkMode();
   const router = useRouter();
   const isHome = router.pathname === "/";
-  const Icon = canGoBack || !isHome ? ArrowLeft : Showtime;
+  const isShowShowtimeIcon =
+    Platform.OS === "web" &&
+    (router.pathname === "/" ||
+      router.pathname === "/channels" ||
+      router.pathname === "/notifications");
+  const Icon = Platform.select({
+    default: canGoBack || !isHome ? ArrowLeft : Showtime,
+    web: canGoBack ? ArrowLeft : isShowShowtimeIcon ? Showtime : ArrowLeft,
+  });
 
   return (
     <PressableScale

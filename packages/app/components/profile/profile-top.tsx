@@ -86,7 +86,7 @@ export const ProfileTop = ({
   const bio = profileData?.profile.bio;
   const { user, isIncompletedProfile } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
-  const coverWidth = useContentWidth(ContentLayoutOffset.PROFILE_COVER);
+  const coverWidth = useContentWidth();
   const isMdWidth = width >= breakpoints["md"];
   const profileId = profileData?.profile.profile_id;
   const redirectToCreateDrop = useRedirectToCreateDrop();
@@ -168,20 +168,16 @@ export const ProfileTop = ({
 
   return (
     <>
-      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800 xl:rounded-b-[32px] 2xl:-mx-20">
-        <Skeleton
-          height={coverHeight}
-          width={coverWidth}
-          show={isLoading}
-          radius={0}
-        >
+      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
+        <Skeleton height={coverHeight} width="100%" show={isLoading} radius={0}>
           <>
             {profileData?.profile.cover_url && (
               <LightBox
-                width={coverWidth}
+                width={"100%"}
                 height={coverHeight}
-                imgLayout={{ width: coverWidth, height: coverHeight }}
+                imgLayout={{ width: "100%", height: coverHeight }}
                 tapToClose
+                containerStyle={{ width: coverWidth, height: coverHeight }}
               >
                 <Image
                   source={{
@@ -189,14 +185,7 @@ export const ProfileTop = ({
                   }}
                   alt="Cover image"
                   resizeMode="cover"
-                  width={coverWidth}
-                  height={coverHeight}
-                  style={Platform.select({
-                    web: {
-                      height: "100%",
-                    },
-                    default: { ...StyleSheet.absoluteFillObject },
-                  })}
+                  style={{ ...StyleSheet.absoluteFillObject }}
                 />
               </LightBox>
             )}
@@ -207,7 +196,7 @@ export const ProfileTop = ({
           </>
         </Skeleton>
       </View>
-      <View tw="mx-2 md:mx-4 xl:mx-2">
+      <View tw="mx-2 md:mx-4">
         <View tw="flex-row justify-between">
           <View
             tw="flex-row items-end"
