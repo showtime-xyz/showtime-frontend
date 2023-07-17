@@ -168,7 +168,7 @@ export const ProfileTop = ({
 
   return (
     <>
-      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
+      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800 xl:rounded-b-[32px] 2xl:-mx-20">
         <Skeleton height={coverHeight} width="100%" show={isLoading} radius={0}>
           <>
             {profileData?.profile.cover_url && (
