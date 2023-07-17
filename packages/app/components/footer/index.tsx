@@ -47,7 +47,7 @@ const Footer = () => {
   return (
     <View
       style={{
-        height: MOBILE_WEB_TABS_HEIGHT,
+        height: `calc(${MOBILE_WEB_TABS_HEIGHT}px + env(safe-area-inset-bottom))`,
         backgroundColor: SWIPE_LIST_SCREENS.includes(router.pathname)
           ? "rgba(0,0,0,.7)"
           : undefined,

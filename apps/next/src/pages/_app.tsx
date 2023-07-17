@@ -3,7 +3,6 @@ import "raf/polyfill";
 import "setimmediate";
 
 import { useEffect } from "react";
-import { useCallback } from "react";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
@@ -12,14 +11,15 @@ import Head from "next/head";
 import NextNProgress from "nextjs-progressbar";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import Footer from "app/components/footer";
 import Header from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useScript } from "app/hooks/use-script";
 import { initialiseAppleMusic } from "app/lib/apple-music-auth/apple-music-auth";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { CheckoutScreen } from "app/screens/checkout";
@@ -50,7 +50,6 @@ import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
-import { isMobileWeb } from "app/utilities";
 
 import { Toaster } from "design-system/toast";
 
@@ -176,12 +175,7 @@ function App({ Component, pageProps, router }: AppProps) {
               }
             />
 
-            <View
-              tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]"
-              style={{
-                minHeight: "100svh",
-              }}
-            >
+            <View tw="w-full items-center md:ml-auto md:w-[calc(100vw-263px)]">
               <NextNProgress
                 color="#4F46E5"
                 options={{ showSpinner: false }}
@@ -238,19 +232,17 @@ const inter = Inter({
 const Container = withColorScheme(
   ({ children }: { children: React.ReactNode }) => {
     const fonts = [inter.variable].join(" ");
-
-    const onResize = useCallback(() => {
-      if (isMobileWeb()) {
-        document.body.classList.add("overflow-hidden", "overscroll-y-contain");
-      } else {
-        document.body.classList.remove("overflow-hidden", "overscroll-y-none");
-      }
-    }, []);
-
-    usePlatformResize(onResize, true);
-
+    const headerHeight = useHeaderHeight();
+    const bottomBarHeight = usePlatformBottomHeight();
     return (
-      <View tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900">
+      <View
+        tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900"
+        // @ts-ignore
+        style={{
+          paddingTop: headerHeight,
+          paddingBottom: `calc(${bottomBarHeight}px + env(safe-area-inset-bottom))`,
+        }}
+      >
         <div className={fonts}>{children}</div>
       </View>
     );

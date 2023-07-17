@@ -249,16 +249,18 @@ function InfiniteScrollListImpl<Item>(
                 }px)`,
               }}
             >
-              <div
-                style={{
-                  height: "100%",
-                  position: "absolute",
-                  inset: 0,
-                  ...transformStyle,
-                }}
-              >
-                {data?.length === 0 && EmptyComponent}
-              </div>
+              {data?.length === 0 && EmptyComponent ? (
+                <div
+                  style={{
+                    height: "100%",
+                    position: "absolute",
+                    inset: 0,
+                    ...transformStyle,
+                  }}
+                >
+                  {EmptyComponent}
+                </div>
+              ) : null}
               {renderedItems.map((virtualItem) => {
                 const index = virtualItem.index;
                 const chuckItem = data?.slice(
@@ -312,7 +314,11 @@ function InfiniteScrollListImpl<Item>(
                             .fill(0)
                             .map((_, itemIndex) => (
                               <div
-                                key={itemIndex.toString()}
+                                key={`${
+                                  index * numColumns +
+                                  itemIndex +
+                                  (numColumns - chuckItem?.length)
+                                }`}
                                 style={{
                                   width: "100%",
                                 }}
@@ -323,9 +329,9 @@ function InfiniteScrollListImpl<Item>(
                   </div>
                 );
               })}
-              <div style={transformStyle}>
-                {!useWindowScroll && FooterComponent}
-              </div>
+              {!useWindowScroll && FooterComponent ? (
+                <div style={transformStyle}>{FooterComponent}</div>
+              ) : null}
             </div>
           </div>
 
@@ -343,6 +349,7 @@ const ViewabilityTracker = ({
   onViewableItemsChanged,
   viewableItems,
   itemVisiblePercentThreshold,
+  ...rest
 }: {
   index: number;
   item: any;
@@ -413,7 +420,7 @@ const ViewabilityTracker = ({
   ]);
 
   return (
-    <div style={{ width: "100%" }} ref={ref}>
+    <div style={{ width: "100%" }} ref={ref} {...rest}>
       {children}
     </div>
   );

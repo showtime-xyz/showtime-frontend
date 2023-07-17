@@ -24,10 +24,9 @@ import { PopularCreators } from "./popular-creators";
 const windowHeight = Dimensions.get("window").height;
 
 export const Home = () => {
-  const bottom = usePlatformBottomHeight();
+  const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { width, height } = useWindowDimensions();
-  const bottomBarHeight = usePlatformBottomHeight();
   const isMdWidth = width >= breakpoints["md"];
   const { data, isLoading } = useFeed();
   const listRef = useRef<any>();
@@ -49,9 +48,6 @@ export const Home = () => {
     [mediaSize]
   );
 
-  const ListFooterComponent = useCallback(() => {
-    return <View style={{ height: Math.max(bottom, 30) }} />;
-  }, [bottom]);
   const ListEmptyComponent = useCallback(() => {
     return (
       <View tw="mt-6 px-4 md:px-0" style={{ height: height - 200 }}>
@@ -87,7 +83,6 @@ export const Home = () => {
             drawDistance={Platform.OS === "android" ? height * 2 : undefined}
             preserveScrollPosition
             ListHeaderComponent={ListHeaderComponent}
-            ListFooterComponent={ListFooterComponent}
             contentContainerStyle={{
               paddingTop: Platform.select({
                 android: 0,
@@ -97,12 +92,12 @@ export const Home = () => {
             ref={listRef}
             getItemType={getItemType}
             ListEmptyComponent={ListEmptyComponent}
-            useWindowScroll={isMdWidth}
+            useWindowScroll
             style={{
               height: Platform.select({
-                android: windowHeight - headerHeight,
-                default: windowHeight - bottomBarHeight,
-                ios: windowHeight,
+                android: windowHeight - headerHeight - bottomBarHeight,
+                default: undefined,
+                ios: windowHeight - bottomBarHeight,
               }),
             }}
           />

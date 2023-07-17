@@ -1,7 +1,10 @@
+import { Platform } from "react-native";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ShowtimeBrandLogo } from "../showtime-brand";
 
@@ -18,7 +21,15 @@ export const HeaderLeft = ({
   const isDark = useIsDarkMode();
   const router = useRouter();
   const isHome = router.pathname === "/";
-  const Icon = canGoBack || !isHome ? ArrowLeft : Showtime;
+  const isShowShowtimeIcon =
+    Platform.OS === "web" &&
+    (router.pathname === "/" ||
+      router.pathname === "/channels" ||
+      router.pathname === "/notifications");
+  const Icon = Platform.select({
+    default: canGoBack || !isHome ? ArrowLeft : Showtime,
+    web: canGoBack ? ArrowLeft : isShowShowtimeIcon ? Showtime : ArrowLeft,
+  });
 
   return (
     <PressableScale
@@ -27,9 +38,7 @@ export const HeaderLeft = ({
         {
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: 999,
         },
-        withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
         if (isHome) {
@@ -40,19 +49,20 @@ export const HeaderLeft = ({
       }}
     >
       {isHome ? (
-        <ShowtimeBrandLogo
-          color={
-            color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
-          }
-        />
+        <ShowtimeBrandLogo color={isDark ? "#FFF" : "#000"} />
       ) : (
-        <Icon
-          color={
-            color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
-          }
-          width={24}
-          height={24}
-        />
+        <View
+          tw="h-7 w-7 items-center justify-center rounded-full"
+          style={withBackground && { backgroundColor: "rgba(0,0,0,.6)" }}
+        >
+          <Icon
+            color={
+              color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
+            }
+            width={24}
+            height={24}
+          />
+        </View>
       )}
     </PressableScale>
   );

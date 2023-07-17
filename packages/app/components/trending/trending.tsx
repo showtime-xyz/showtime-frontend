@@ -26,8 +26,8 @@ const Header = () => {
       <View
         style={{
           height: Platform.select({
-            android: 8,
-            default: headerHeight + 8,
+            ios: headerHeight + 8,
+            default: 8,
           }),
         }}
       />
@@ -108,7 +108,7 @@ export const Trending = () => {
       <View tw="md:max-w-screen-content mx-auto w-full">
         <ErrorBoundary>
           <InfiniteScrollList
-            useWindowScroll={isMdWidth}
+            useWindowScroll
             data={list}
             preserveScrollPosition
             keyExtractor={keyExtractor}
