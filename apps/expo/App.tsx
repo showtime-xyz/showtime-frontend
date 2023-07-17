@@ -101,6 +101,7 @@ function App() {
     // Handle notifications that are received while the app is open.
     const notificationListener = Notifications.addNotificationReceivedListener(
       (notification) => {
+        console.log("notification received", notification);
         setNotification(notification);
       }
     );
@@ -129,6 +130,7 @@ function App() {
   useEffect(() => {
     const responseListener =
       Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("response that was clicked", response);
         // const content =
         //   Platform.OS === "ios"
         //     ? response?.notification?.request?.content?.data?.body?.path
