@@ -175,7 +175,7 @@ function App({ Component, pageProps, router }: AppProps) {
               }
             />
 
-            <View tw="w-full items-center md:ml-auto md:w-[calc(100vw-263px)]">
+            <View tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]">
               <NextNProgress
                 color="#4F46E5"
                 options={{ showSpinner: false }}
