@@ -1,0 +1,65 @@
+diff --git a/node_modules/react-native/Libraries/Blob/BlobManager.js b/node_modules/react-native/Libraries/Blob/BlobManager.js
+index 98e6911..bf0e019 100644
+--- a/node_modules/react-native/Libraries/Blob/BlobManager.js
++++ b/node_modules/react-native/Libraries/Blob/BlobManager.js
+@@ -12,6 +12,7 @@ import type {BlobCollector, BlobData, BlobOptions} from './BlobTypes';
+ 
+ import NativeBlobModule from './NativeBlobModule';
+ import invariant from 'invariant';
++import { getBlobForArrayBuffer } from 'react-native-blob-jsi-helper';
+ 
+ const Blob = require('./Blob');
+ const BlobRegistry = require('./BlobRegistry');
+@@ -70,9 +71,7 @@ class BlobManager {
+         part instanceof ArrayBuffer ||
+         (global.ArrayBufferView && part instanceof global.ArrayBufferView)
+       ) {
+-        throw new Error(
+-          "Creating blobs from 'ArrayBuffer' and 'ArrayBufferView' are not supported",
+-        );
++        return getBlobForArrayBuffer(part);
+       }
+       if (part instanceof Blob) {
+         return {
+diff --git a/node_modules/react-native/Libraries/Blob/FileReader.js b/node_modules/react-native/Libraries/Blob/FileReader.js
+index 3e20afe..6026409 100644
+--- a/node_modules/react-native/Libraries/Blob/FileReader.js
++++ b/node_modules/react-native/Libraries/Blob/FileReader.js
+@@ -11,7 +11,7 @@
+ import type Blob from './Blob';
+ 
+ import NativeFileReaderModule from './NativeFileReaderModule';
+-import {toByteArray} from 'base64-js';
++import {toByteArray} from 'react-native-quick-base64';
+ 
+ const EventTarget = require('event-target-shim');
+ 
+@@ -85,15 +85,13 @@ class FileReader extends (EventTarget(...READER_EVENTS): any) {
+     }
+ 
+     NativeFileReaderModule.readAsDataURL(blob.data).then(
+-      (text: string) => {
++      (dataUrl: string) => {
+         if (this._aborted) {
+           return;
+         }
+-
+-        const base64 = text.split(',')[1];
+-        const typedArray = toByteArray(base64);
+-
+-        this._result = typedArray.buffer;
++        const base64 = dataUrl.split(',')[1];
++        const buffer = toByteArray(base64);
++        this._result = buffer;
+         this._setReadyState(DONE);
+       },
+       error => {
+@@ -102,7 +100,7 @@ class FileReader extends (EventTarget(...READER_EVENTS): any) {
+         }
+         this._error = error;
+         this._setReadyState(DONE);
+-      },
++      }
+     );
+   }
+ 

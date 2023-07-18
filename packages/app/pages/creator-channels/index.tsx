@@ -46,6 +46,7 @@ function CreatorChannelsNavigator() {
       <CreatorChannelsStack.Screen
         name="channels"
         component={CreatorChannelsScreen}
+        options={{ headerShown: false }}
       />
     </CreatorChannelsStack.Navigator>
   );

@@ -34,6 +34,7 @@ function withModalScreen<P extends object>(
       {
         setTitle,
         pop: () => {},
+        snapToIndex: () => {},
       }
     );
     const closeModal = useCallback(() => {
@@ -65,6 +66,9 @@ function withModalScreen<P extends object>(
           pop: (params) => {
             closeCallback.current = params?.callback;
             modalRef.current?.close();
+          },
+          snapToIndex: (position: number) => {
+            modalRef.current?.snapToIndex(position);
           },
         });
       }

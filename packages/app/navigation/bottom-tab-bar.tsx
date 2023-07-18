@@ -1,10 +1,10 @@
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { MotiView } from "moti";
+import { BorderlessButton as Pressable } from "react-native-gesture-handler";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -56,11 +56,7 @@ export const ThemeBottomTabbar = ({
           }
 
           if (!focused && !event.defaultPrevented) {
-            if (
-              (route.name === "notificationsTab" ||
-                route.name === "profileTab") &&
-              !isAuthenticated
-            ) {
+            if (route.name !== "homeTab" && !isAuthenticated) {
               redirectToScreen({
                 redirectedCallback: () => {
                   navigation.navigate({
@@ -88,7 +84,16 @@ export const ThemeBottomTabbar = ({
 
         return (
           <View key={route.key} tw="flex flex-1 items-center justify-center">
-            <Pressable tw="flex-1" onLongPress={onLongPress} onPress={onPress}>
+            <Pressable
+              onLongPress={onLongPress}
+              onPress={onPress}
+              shouldActivateOnStart
+              rippleColor={isDark ? colors.gray[700] : colors.gray[300]}
+              rippleRadius={30}
+              activeOpacity={0.7}
+              hitSlop={10}
+              exclusive
+            >
               {options.tabBarButton && (
                 <CreateTabBarIcon
                   color={isDark ? "#000" : "#fff"}
@@ -125,7 +130,7 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
   const isHiddenBottomTabbar = isTabBarHidden;
   const isDark = useIsDarkMode();
 
-  const overlayColor = isDark ? "rgba(0,0,0,.8)" : "rgba(255, 255, 255, 0.8)";
+  const overlayColor = isDark ? "rgba(0,0,0,.1)" : "rgba(255, 255, 255, 0.8)";
   const blurType = isDark ? "dark" : "light";
 
   return (
@@ -138,7 +143,10 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
           ? 0
           : BOTTOM_TABBAR_BASE_HEIGHT + safeAreaBottom,
         overflow: "hidden",
-        backgroundColor: "transparent",
+        backgroundColor: Platform.select({
+          ios: isDark ? "rgba(0,0,0,0.1)" : "rgba(255, 255, 255, 0.8)",
+          default: isDark ? "rgba(0,0,0,1)" : "rgba(255, 255, 255, 1)",
+        }),
       }}
       onLayout={({
         nativeEvent: {
@@ -148,13 +156,15 @@ export const BottomTabbar = ({ state, ...rest }: BottomTabBarProps) => {
         nativeBottomTabBarHeightCallback(height);
       }}
     >
-      <BlurView
-        blurRadius={20}
-        overlayColor={overlayColor}
-        blurType={blurType}
-        blurAmount={100}
-        style={[StyleSheet.absoluteFillObject]}
-      />
+      {Platform.OS === "ios" ? (
+        <BlurView
+          blurRadius={20}
+          overlayColor={overlayColor}
+          blurType={blurType}
+          blurAmount={100}
+          style={[StyleSheet.absoluteFillObject]}
+        />
+      ) : null}
       <ThemeBottomTabbar state={state} {...rest} />
     </View>
   );

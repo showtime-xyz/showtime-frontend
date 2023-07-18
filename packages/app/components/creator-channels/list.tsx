@@ -1,4 +1,11 @@
-import { useCallback, memo, useRef, useMemo, RefObject } from "react";
+import {
+  useCallback,
+  memo,
+  useRef,
+  useMemo,
+  RefObject,
+  useReducer,
+} from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { RectButton } from "react-native-gesture-handler";
@@ -9,14 +16,15 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { formatDateRelativeWithIntl } from "app/utilities";
@@ -91,10 +99,18 @@ const CreatorChannelsListItem = memo(
     );
     const router = useRouter();
     const isDark = useIsDarkMode();
+    // yes, react can be annoying sometimes
+    const forceUpdate = useReducer((x) => x + 1, 0)[1];
+
     return (
       <PlatformPressable
         onPress={() => {
           router.push(`/channels/${item.id}`);
+          item.read = true;
+          requestAnimationFrame(() => {
+            // doing this because I don't want to mutate the whole object for a simple read status
+            forceUpdate();
+          });
         }}
         underlayColor={isDark ? "white" : "black"}
         style={{ width: "100%" }}
@@ -135,7 +151,12 @@ const CreatorChannelsListItem = memo(
               </View>
               <View tw="mt-2">
                 <Text
-                  tw="leading-5 text-gray-500 dark:text-gray-300"
+                  tw={[
+                    "leading-5",
+                    !item?.read && item.itemType !== "owned"
+                      ? "font-semibold text-black dark:text-white"
+                      : "text-gray-500 dark:text-gray-200",
+                  ]}
                   numberOfLines={2}
                 >
                   {item?.latest_message?.body ? (
@@ -176,8 +197,7 @@ const CreatorChannelsListCreator = memo(
     return (
       <View tw="flex-1 px-4 py-2.5">
         <View tw="flex-row items-center">
-          <AvatarHoverCard
-            username={item.owner.username ?? item.owner.wallet_address}
+          <Avatar
             url={item.owner.img_url}
             size={52}
             alt="CreatorPreview Avatar"
@@ -254,15 +274,16 @@ const suggestedChannelsSection = {
 };
 
 export const CreatorChannelsList = memo(
-  ({ web_height = undefined }: { web_height?: number }) => {
+  ({ useWindowScroll = true }: { useWindowScroll?: boolean }) => {
     const listRef = useRef<FlashList<any>>(null);
     //@ts-expect-error still no support for FlashList as type
     useScrollToTop(listRef);
-
+    const { isAuthenticated } = useUser();
     const isDark = useIsDarkMode();
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
     const { height: windowHeight } = useWindowDimensions();
+    const insets = useSafeAreaInsets();
 
     // my own channels
     const {
@@ -359,13 +380,7 @@ export const CreatorChannelsList = memo(
     }, []);
 
     const ListFooterComponent = useCallback(() => {
-      if (
-        isLoadingOwnChannels ||
-        isLoadingJoinedChannels ||
-        isLoadingSuggestedChannels
-      ) {
-        return <CCSkeleton />;
-      }
+      if (!isAuthenticated) return null;
       if (
         !isLoadingOwnChannels &&
         !isLoadingJoinedChannels &&
@@ -377,12 +392,17 @@ export const CreatorChannelsList = memo(
           </View>
         );
       }
+      if (Platform.OS === "web" && useWindowScroll) {
+        return <View style={{ height: bottomBarHeight }} />;
+      }
       return null;
     }, [
+      isAuthenticated,
       isLoadingOwnChannels,
       isLoadingJoinedChannels,
       isLoadingMoreJoinedChannels,
-      isLoadingSuggestedChannels,
+      bottomBarHeight,
+      useWindowScroll,
     ]);
 
     const refreshPage = useCallback(async () => {
@@ -392,73 +412,72 @@ export const CreatorChannelsList = memo(
         refreshSuggestedChannels(),
       ]);
     }, [refresh, refreshOwnedChannels, refreshSuggestedChannels]);
+    if (
+      isLoadingOwnChannels ||
+      isLoadingJoinedChannels ||
+      isLoadingSuggestedChannels
+    ) {
+      return <CCSkeleton />;
+    }
     return (
-      <>
-        <View tw="web:pt-10 native:hidden" />
-        <AnimatedInfiniteScrollListWithRef
-          ref={listRef}
-          useWindowScroll={false}
-          data={
-            isLoadingOwnChannels ||
-            isLoadingJoinedChannels ||
-            isLoadingSuggestedChannels
-              ? []
-              : transformedData
-          }
-          getItemType={(item) => {
-            // To achieve better performance, specify the type based on the item
-            return item.type === "section"
-              ? "sectionHeader"
-              : item.itemType ?? "row";
-          }}
-          style={{
-            height: Platform.select({
-              default: windowHeight - bottomBarHeight,
-              web: web_height
-                ? web_height
-                : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
-              ios: windowHeight,
-            }),
-          }}
-          // for blur effect on Native
-          contentContainerStyle={Platform.select({
-            ios: {
-              paddingTop: headerHeight,
-              paddingBottom: bottomBarHeight,
-            },
-            android: {
-              paddingBottom: bottomBarHeight,
-            },
-            default: {},
-          })}
-          // Todo: unity refresh control same as tab view
-          refreshControl={
-            <RefreshControl
-              refreshing={
-                isRefreshing ||
-                isRefreshingOwnedChannels ||
-                isRefreshingSuggestedChannels
-              }
-              onRefresh={refreshPage}
-              progressViewOffset={headerHeight}
-              tintColor={isDark ? colors.gray[200] : colors.gray[700]}
-              colors={[colors.violet[500]]}
-              progressBackgroundColor={
-                isDark ? colors.gray[200] : colors.gray[100]
-              }
-            />
-          }
-          drawDistance={windowHeight * 2}
-          CellRendererComponent={CustomCellRenderer}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          onEndReached={fetchMore}
-          refreshing={isRefreshing}
-          onRefresh={refresh}
-          ListFooterComponent={ListFooterComponent}
-          estimatedItemSize={80}
-        />
-      </>
+      <AnimatedInfiniteScrollListWithRef
+        ref={listRef}
+        useWindowScroll={useWindowScroll}
+        data={transformedData}
+        getItemType={(item) => {
+          // To achieve better performance, specify the type based on the item
+          return item.type === "section"
+            ? "sectionHeader"
+            : item.itemType ?? "row";
+        }}
+        style={{
+          height: Platform.select({
+            default: windowHeight - bottomBarHeight,
+            web: useWindowScroll
+              ? undefined
+              : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
+            ios: windowHeight,
+          }),
+          paddingTop: insets.top,
+        }}
+        // for blur effect on Native
+        contentContainerStyle={Platform.select({
+          ios: {
+            paddingTop: headerHeight,
+            paddingBottom: bottomBarHeight,
+          },
+          android: {
+            paddingBottom: bottomBarHeight,
+          },
+          default: {},
+        })}
+        // Todo: unity refresh control same as tab view
+        refreshControl={
+          <RefreshControl
+            refreshing={
+              isRefreshing ||
+              isRefreshingOwnedChannels ||
+              isRefreshingSuggestedChannels
+            }
+            onRefresh={refreshPage}
+            progressViewOffset={headerHeight}
+            tintColor={isDark ? colors.gray[200] : colors.gray[700]}
+            colors={[colors.violet[500]]}
+            progressBackgroundColor={
+              isDark ? colors.gray[200] : colors.gray[100]
+            }
+          />
+        }
+        drawDistance={windowHeight * 2}
+        CellRendererComponent={CustomCellRenderer}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        onEndReached={fetchMore}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
+        ListFooterComponent={ListFooterComponent}
+        estimatedItemSize={80}
+      />
     );
   }
 );
@@ -466,8 +485,12 @@ export const CreatorChannelsList = memo(
 CreatorChannelsList.displayName = "CreatorChannelsList";
 
 const CCSkeleton = () => {
+  const headerHeight = useHeaderHeight();
   return (
-    <View tw="web:mt-8 px-4">
+    <View
+      tw="mt-4 px-4"
+      style={{ marginTop: Platform.select({ web: 0, default: headerHeight }) }}
+    >
       {new Array(8).fill(0).map((_, i) => {
         return (
           <View tw="flex-row pt-4" key={`${i}`}>

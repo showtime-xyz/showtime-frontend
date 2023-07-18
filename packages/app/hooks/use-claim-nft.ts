@@ -12,11 +12,13 @@ import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
-import { IEdition } from "app/types";
+import { ContractVersion, IEdition } from "app/types";
 import {
   formatAPIErrorMessage,
   getFormatDistanceToNowStrict,
 } from "app/utilities";
+
+import { toast } from "design-system/toast";
 
 import { useSendFeedback } from "./use-send-feedback";
 
@@ -113,7 +115,12 @@ export const useClaimNFT = (edition: IEdition) => {
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
         if (edition?.is_gated) {
-          await gatedClaimFlow({ password, location, closeModal });
+          const handler =
+            edition?.contract_version === ContractVersion.BATCH_V1
+              ? gatedClaimFlow
+              : gatedClaimFlowOnchain;
+
+          await handler({ password, location, closeModal });
         } else {
           closeModal?.();
         }
@@ -200,7 +207,8 @@ export const useClaimNFT = (edition: IEdition) => {
       captureException(e);
     }
   };
-  const gatedClaimFlow = async ({
+  // NOTE: This is for the old mint flow; we will remove it after all the old drops have expired.
+  const gatedClaimFlowOnchain = async ({
     password,
     location,
     closeModal,
@@ -225,6 +233,40 @@ export const useClaimNFT = (edition: IEdition) => {
         relayerResponse.relayed_transaction_id,
         edition.contract_address
       );
+    }
+  };
+
+  const gatedClaimFlow = async ({
+    password,
+    location,
+    closeModal,
+  }: ClaimNFTParams) => {
+    if (edition?.minter_address) {
+      await axios({
+        url: `/v1/creator-airdrops/edition/${edition.contract_address}/claim`,
+        method: "POST",
+        data: {
+          password: password !== "" ? password : undefined,
+          location: location?.coords
+            ? {
+                latitude: location?.coords?.latitude,
+                longitude: location?.coords?.longitude,
+              }
+            : undefined,
+        },
+      })
+        .catch((error) => {
+          Alert.alert("Oops. An error occurred.", error.message);
+          dispatch({ type: "error", error: error.message });
+        })
+        .then((res) => {
+          if (res) {
+            toast.success("Collected!");
+            Analytics.track(EVENTS.DROP_COLLECTED);
+            dispatch({ type: "success", mint: res.mint });
+            closeModal?.();
+          }
+        });
     }
   };
 

@@ -31,7 +31,7 @@ export const AdvancedTab = ({ index = 0 }: AdvancedTabProps) => {
         desc="Manage your account and additional options."
         descTw="mt-1"
       />
-      <View tw="mt-6 px-4 md:px-0">
+      <View tw="mt-6 px-4 lg:px-0">
         <AccountSettingItem
           title="Privacy & Security"
           onPress={() => router.push(`/settings/privacy-and-security`)}

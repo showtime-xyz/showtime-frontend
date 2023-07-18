@@ -1,9 +1,13 @@
 import { useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import dynamic from "next/dynamic";
 
 import { useUser } from "app/hooks/use-user";
+import CreateNavigator from "app/pages/create";
+import CreatorChannelsNavigator from "app/pages/creator-channels";
+import HomeNavigator from "app/pages/home";
+import NotificationsNavigator from "app/pages/notifications";
+import ProfileNavigator from "app/pages/profile";
 
 import { BottomTabbar } from "./bottom-tab-bar";
 import {
@@ -12,14 +16,6 @@ import {
   NotificationsTabBarIcon,
   ProfileTabBarIcon,
 } from "./tab-bar-icons";
-
-const CreatorChannelsNavigator = dynamic(
-  () => import("../pages/creator-channels")
-);
-const TrendingNavigator = dynamic(() => import("../pages/trending"));
-const CreateNavigator = dynamic(() => import("../pages/create"));
-const NotificationsNavigator = dynamic(() => import("../pages/notifications"));
-const ProfileNavigator = dynamic(() => import("../pages/profile"));
 
 const BottomTab = createBottomTabNavigator();
 
@@ -37,7 +33,7 @@ export function BottomTabNavigator() {
     >
       <BottomTab.Screen
         name="homeTab"
-        component={TrendingNavigator}
+        component={HomeNavigator}
         options={{
           tabBarIcon: HomeTabBarIcon,
         }}

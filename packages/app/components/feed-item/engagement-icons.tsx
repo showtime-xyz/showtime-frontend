@@ -60,8 +60,8 @@ export const EngagementIcons = memo<EngagementIconsProps>(
             tw="border"
             size={36}
           />
-          <View tw="h-5" />
-          <Like vertical nft={nft} />
+          {/* <View tw="h-5" /> */}
+          {/* <Like vertical nft={nft} /> */}
           <View tw="h-4" />
           <CommentButton vertical nft={nft} />
           <View tw="h-5" />

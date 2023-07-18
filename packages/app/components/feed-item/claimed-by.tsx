@@ -14,12 +14,14 @@ type NFTDetailsProps = {
   claimersList: NFT["multiple_owners_list"] | undefined;
   tw?: string;
   avatarSize?: number;
+  textColor?: string;
 };
 export const ClaimedBy = ({
   nft,
   claimersList,
   avatarSize = 20,
   tw = "",
+  textColor,
 }: NFTDetailsProps) => {
   const router = useRouter();
   const slicedClaimersList = useMemo(
@@ -27,13 +29,24 @@ export const ClaimedBy = ({
     [claimersList]
   );
   if (!claimersList || claimersList?.length <= 1) {
-    return null;
+    return (
+      <View tw={["h-4 flex-row items-center", tw]}>
+        <Text
+          tw="text-[12px] font-bold dark:text-white"
+          style={textColor ? { color: textColor } : {}}
+        >
+          {nft?.creator_username
+            ? `@${nft.creator_username} collected`
+            : "The creator collected"}
+        </Text>
+      </View>
+    );
   }
 
   const firstClaimer = claimersList[1];
 
   return (
-    <View tw={["ml-2 flex-row items-center", tw]}>
+    <View tw={["ml-2 h-4 flex-row items-center", tw]}>
       <>
         {slicedClaimersList?.map((item, index) => {
           return (
@@ -41,14 +54,24 @@ export const ClaimedBy = ({
               <AvatarHoverCard
                 username={item?.username || item?.wallet_address}
                 url={item?.img_url}
-                tw="rounded-full border border-gray-300"
                 size={avatarSize}
                 alt="Claimed by Avatar"
+              />
+              <View
+                tw="absolute rounded-full border border-white dark:border-black"
+                style={{
+                  width: avatarSize,
+                  height: avatarSize,
+                }}
+                pointerEvents="none"
               />
             </View>
           );
         })}
-        <Text tw="ml-1 flex-1 text-xs text-white dark:text-white md:text-sm md:text-gray-900">
+        <Text
+          tw="ml-1 flex-1 text-xs text-gray-900 dark:text-white md:text-sm"
+          style={textColor ? { color: textColor } : {}}
+        >
           <TextLink
             href={`/@${firstClaimer.username ?? firstClaimer.wallet_address}`}
             tw="font-bold"

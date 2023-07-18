@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   useMemo,
+  KeyboardEvent,
 } from "react";
 import { Platform, ViewStyle } from "react-native";
 
@@ -14,7 +15,12 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Send } from "@showtime-xyz/universal.icon";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { TextInput, TextInputProps } from "@showtime-xyz/universal.text-input";
+import {
+  TextInput,
+  TextInputProps,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+} from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAutoSizeInput } from "app/hooks/use-auto-size-input";
@@ -26,16 +32,17 @@ interface MessageBoxProps {
   onSubmit?: (text: string) => Promise<void>;
   onFocus?: () => void;
   onBlur?: () => void;
+  handleShiftEnter?: boolean;
   placeholder: string;
   textInputProps?: TextInputProps;
   tw?: string;
   submitButton?: React.ReactNode;
+  backgroundColor?: string | null;
 }
 
 export interface MessageBoxMethods {
   focus: () => void;
   reset: () => void;
-
   setValue: (value: string) => void;
 }
 
@@ -51,7 +58,9 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       placeholder,
       textInputProps,
       submitButton,
+      handleShiftEnter = true,
       tw = "",
+      backgroundColor,
     } = props;
     //#region variables
     const isDark = useIsDarkMode();
@@ -71,15 +80,32 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
       // @ts-ignore
       inputRef.current.focus();
     }, []);
-    const handleTextChange = (text: string) => {
+    const handleTextChange = useCallback((text: string) => {
       setValue(text);
-    };
-    const handleSubmit = async function handleSubmit() {
-      await onSubmit?.(value);
-      if (Platform.OS === "web") {
-        (inputRef.current as HTMLElement).style.height = "auto";
+    }, []);
+    const handleSubmit = useCallback(async () => {
+      if (value && value.trim().length > 0) {
+        await onSubmit?.(value);
+        if (Platform.OS === "web") {
+          (inputRef.current as HTMLElement).style.height = "auto";
+        }
       }
-    };
+    }, [onSubmit, value]);
+
+    const handleKeyDown = useCallback(
+      (event: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        if (handleShiftEnter && Platform.OS === "web") {
+          if (
+            event.nativeEvent.key === "Enter" &&
+            !(event as unknown as KeyboardEvent<HTMLInputElement>).shiftKey
+          ) {
+            event.preventDefault();
+            handleSubmit();
+          }
+        }
+      },
+      [handleShiftEnter, handleSubmit]
+    );
     //#endregion
 
     useImperativeHandle(
@@ -110,9 +136,11 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             }}
           >
             <View
-              tw="absolute bottom-0 h-5 w-2.5 bg-white dark:bg-black"
+              tw="absolute bottom-0 h-5 w-2.5"
               style={{
                 borderBottomRightRadius: 10,
+                backgroundColor:
+                  backgroundColor ?? (isDark ? colors.black : colors.white),
               }}
             >
               <View
@@ -138,6 +166,7 @@ export const MessageBox = forwardRef<MessageBoxMethods, MessageBoxProps>(
             onFocus={onFocus}
             onBlur={onBlur}
             maxLength={500}
+            onKeyPress={handleKeyDown}
             autoCapitalize="none"
             // @ts-ignore RNW >= v19 & RN >= 0.71 supports these props
             readOnly={submitting}

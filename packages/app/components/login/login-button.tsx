@@ -10,7 +10,7 @@ import {
   Mail,
   Ethereum,
 } from "@showtime-xyz/universal.icon";
-import { Props as PressableProps } from "@showtime-xyz/universal.pressable";
+import { PressableProps } from "@showtime-xyz/universal.pressable";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -61,6 +61,8 @@ export const LoginButton = ({ type, ...rest }: LoginButtonProps) => {
         return { color: colors.twitter };
       case "facebook":
         return { color: colors.facebook };
+      case "wallet":
+        return { color: isDark ? colors.black : colors.white };
       default:
         return { color: isDark ? colors.white : colors.black };
     }
@@ -68,6 +70,8 @@ export const LoginButton = ({ type, ...rest }: LoginButtonProps) => {
 
   const variant = useMemo(() => {
     switch (type) {
+      case "wallet":
+        return "primary";
       case "social":
         return "text";
       default:

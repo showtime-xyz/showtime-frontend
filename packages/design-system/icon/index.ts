@@ -11,6 +11,7 @@ export { default as BellFilled } from "./BellFilled";
 export { default as Bookmark } from "./Bookmark";
 export { default as Boost } from "./Boost";
 export { default as Check1 } from "./Check1";
+export { default as Check2 } from "./Check2";
 export { default as Check } from "./Check";
 export { default as CheckFilled } from "./CheckFilled";
 export { default as CheckFilled1 } from "./CheckFilled1";
@@ -141,6 +142,10 @@ export { default as Shopping } from "./Shopping";
 export { default as FreeDropType } from "./FreeDropType";
 export { default as Congrats } from "./Congrats";
 export { default as EyeOffV2 } from "./EyeOffV2";
+export { default as Sendv2 } from "./Sendv2";
+export { default as Messagev2 } from "./Messagev2";
+export { default as MusicBadge } from "./MusicBadge";
+export { default as RaffleBadge } from "./RaffleBadge";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";
@@ -158,5 +163,8 @@ export { default as AppleMusic } from "./AppleMusic";
 export { default as PreAddAppleMusic } from "./PreAddAppleMusic";
 export { default as ListenOnAppleMusic } from "./ListenOnAppleMusic";
 export { default as Reaction } from "./Reaction";
+export { default as CollectorList } from "./CollectorList";
+
+export { default as Success } from "./Success";
 
 //#endregion

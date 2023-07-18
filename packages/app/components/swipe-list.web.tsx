@@ -1,11 +1,18 @@
-import { useCallback, useMemo, useRef, createContext, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  createContext,
+  useState,
+  Ref,
+} from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
-import { Virtual, Keyboard, Mousewheel } from "swiper";
 import type { Swiper as SwiperClass } from "swiper";
 import "swiper/css";
 import "swiper/css/virtual";
+import { Virtual, Keyboard, Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -18,8 +25,8 @@ import {
   ViewabilityItemsContext,
 } from "app/components/viewability-tracker-flatlist";
 import { VideoConfigContext } from "app/context/video-config-context";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { getNFTSlug } from "app/hooks/use-share-nft";
-import { useScrollToTop } from "app/lib/react-navigation/native";
 import { createParam } from "app/navigation/use-param";
 import type { NFT } from "app/types";
 import { isMobileWeb, isSafari } from "app/utilities";
@@ -42,12 +49,11 @@ export const SwipeList = ({
 }: Props) => {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
-  const listRef = useRef<any>(null);
-  useScrollToTop(listRef);
   const [initialParamProp] = useParam("initialScrollIndex");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
   const isSwiped = useRef(false);
-
+  const swiper = useRef<any>(null);
+  const bottom = usePlatformBottomHeight();
   const visibleItems = useSharedValue<any[]>([
     undefined,
     initialScrollIndex,
@@ -63,8 +69,10 @@ export const SwipeList = ({
     []
   );
 
+  const scrollTimer = useRef<any>(null);
   const onRealIndexChange = useCallback(
     (e: SwiperClass) => {
+      clearTimeout(scrollTimer.current);
       if (
         e.activeIndex !== 0 &&
         !isSwiped.current &&
@@ -81,23 +89,25 @@ export const SwipeList = ({
         e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
       if (isSwipeListScreen) {
-        router.replace(
-          {
-            pathname: "/profile/[username]/[dropSlug]",
-            query: {
-              ...router.query,
-              initialScrollIndex: e.activeIndex,
-              username: data[e.activeIndex].creator_username,
-              dropSlug: data[e.activeIndex].slug,
+        scrollTimer.current = setTimeout(() => {
+          router.replace(
+            {
+              pathname: "/profile/[username]/[dropSlug]",
+              query: {
+                ...router.query,
+                initialScrollIndex: activeIndex,
+                username: data[activeIndex].creator_username,
+                dropSlug: data[activeIndex].slug,
+              },
             },
-          },
-          getNFTSlug(data[e.activeIndex]),
-          { shallow: true }
-        );
+            getNFTSlug(data[activeIndex]),
+            { shallow: true }
+          );
+        }, 700);
       }
       setActiveIndex(e.activeIndex);
     },
-    [visibleItems, data, router, isSwipeListScreen]
+    [router, visibleItems, data, isSwipeListScreen, activeIndex]
   );
 
   if (data.length === 0) return null;
@@ -106,7 +116,8 @@ export const SwipeList = ({
     <View
       testID="swipeList"
       id="slidelist"
-      tw="fixed inset-0 h-screen overflow-hidden bg-gray-100 dark:bg-black"
+      tw="h-[100svh] overflow-hidden bg-gray-100 dark:bg-black"
+      style={{ marginBottom: -bottom }}
     >
       <VideoConfigContext.Provider value={videoConfig}>
         <SwiperActiveIndexContext.Provider value={activeIndex}>
@@ -134,11 +145,27 @@ export const SwipeList = ({
                 sensitivity: 1.1,
                 thresholdTime: 800,
               }}
+              className="w-full"
+              ref={swiper}
             >
               {data.map((item, index) => (
                 <SwiperSlide key={item.nft_id} virtualIndex={index}>
                   <ItemKeyContext.Provider value={index}>
-                    <FeedItem nft={item} itemHeight={windowHeight} />
+                    <FeedItem
+                      nft={item}
+                      itemHeight={windowHeight}
+                      slideToNext={() => {
+                        swiper.current?.swiper.slideTo(
+                          Math.min(activeIndex + 1, data.length)
+                        );
+                      }}
+                      slideToPrev={() => {
+                        swiper.current?.swiper?.slideTo(
+                          Math.max(activeIndex - 1, 0)
+                        );
+                      }}
+                      listLength={data.length}
+                    />
                   </ItemKeyContext.Provider>
                 </SwiperSlide>
               ))}

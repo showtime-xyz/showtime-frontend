@@ -847,7 +847,7 @@ export const formatAPIErrorMessage = (error: AxiosError | Error) => {
     messages.push(error.message);
   }
 
-  return messages.join("\n");
+  return messages.join(".\n");
 };
 
 function getRandomDateWithinThreeMonths(): string {

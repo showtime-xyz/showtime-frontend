@@ -34,6 +34,7 @@ function InfiniteScrollListImpl<Item>(
     useWindowScroll?: boolean;
     preserveScrollPosition?: boolean;
     overscan?: number;
+    containerTw?: string;
   },
   ref: any
 ) {
@@ -55,6 +56,7 @@ function InfiniteScrollListImpl<Item>(
     useWindowScroll = true,
     inverted,
     preserveScrollPosition = false,
+    containerTw = "",
   } = props;
   let count = data?.length ?? 0;
   if (numColumns) {
@@ -205,6 +207,7 @@ function InfiniteScrollListImpl<Item>(
               ref.current = v;
             }
           }}
+          className={containerTw}
           style={
             !useWindowScroll
               ? {
@@ -246,18 +249,24 @@ function InfiniteScrollListImpl<Item>(
                 }px)`,
               }}
             >
-              <div
-                style={{
-                  height: "100%",
-                  position: "absolute",
-                  inset: 0,
-                  ...transformStyle,
-                }}
-              >
-                {data?.length === 0 && EmptyComponent}
-              </div>
+              {data?.length === 0 && EmptyComponent ? (
+                <div
+                  style={{
+                    height: "100%",
+                    position: "absolute",
+                    inset: 0,
+                    ...transformStyle,
+                  }}
+                >
+                  {EmptyComponent}
+                </div>
+              ) : null}
               {renderedItems.map((virtualItem) => {
                 const index = virtualItem.index;
+                const chuckItem = data?.slice(
+                  index * numColumns,
+                  index * numColumns + numColumns
+                );
                 return (
                   <div
                     key={virtualItem.key}
@@ -273,44 +282,56 @@ function InfiniteScrollListImpl<Item>(
                           justifyContent: "space-between",
                         }}
                       >
-                        {data
-                          .slice(
-                            index * numColumns,
-                            index * numColumns + numColumns
-                          )
-                          .map((item, i) => {
-                            const realIndex = index * numColumns + i;
-                            return (
-                              <ViewabilityTracker
-                                key={realIndex}
-                                index={realIndex}
-                                itemVisiblePercentThreshold={
-                                  viewabilityConfig?.itemVisiblePercentThreshold ??
-                                  DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
-                                }
-                                item={data[realIndex]}
-                                viewableItems={viewableItems}
-                                onViewableItemsChanged={onViewableItemsChanged}
-                              >
-                                {renderItem?.({
-                                  index: realIndex,
-                                  item,
-                                  extraData,
-                                  target: "Cell",
-                                }) ?? null}
-                                {realIndex < data.length - 1 &&
-                                  renderComponent(ItemSeparatorComponent)}
-                              </ViewabilityTracker>
-                            );
-                          })}
+                        {chuckItem?.map((item, i) => {
+                          const realIndex = index * numColumns + i;
+
+                          return (
+                            <ViewabilityTracker
+                              key={realIndex}
+                              index={realIndex}
+                              itemVisiblePercentThreshold={
+                                viewabilityConfig?.itemVisiblePercentThreshold ??
+                                DEFAULT_VIEWABILITY_THRESHOLD_PERCENTAGE
+                              }
+                              item={data[realIndex]}
+                              viewableItems={viewableItems}
+                              onViewableItemsChanged={onViewableItemsChanged}
+                            >
+                              {renderItem?.({
+                                index: realIndex,
+                                item,
+                                extraData,
+                                target: "Cell",
+                              }) ?? null}
+                              {realIndex < data.length - 1 &&
+                                renderComponent(ItemSeparatorComponent)}
+                            </ViewabilityTracker>
+                          );
+                        })}
+                        {chuckItem &&
+                          chuckItem?.length < numColumns &&
+                          new Array(numColumns - chuckItem?.length)
+                            .fill(0)
+                            .map((_, itemIndex) => (
+                              <div
+                                key={`${
+                                  index * numColumns +
+                                  itemIndex +
+                                  (numColumns - chuckItem?.length)
+                                }`}
+                                style={{
+                                  width: "100%",
+                                }}
+                              />
+                            ))}
                       </div>
                     ) : null}
                   </div>
                 );
               })}
-              <div style={transformStyle}>
-                {!useWindowScroll && FooterComponent}
-              </div>
+              {!useWindowScroll && FooterComponent ? (
+                <div style={transformStyle}>{FooterComponent}</div>
+              ) : null}
             </div>
           </div>
 
@@ -328,6 +349,7 @@ const ViewabilityTracker = ({
   onViewableItemsChanged,
   viewableItems,
   itemVisiblePercentThreshold,
+  ...rest
 }: {
   index: number;
   item: any;
@@ -398,7 +420,7 @@ const ViewabilityTracker = ({
   ]);
 
   return (
-    <div style={{ width: "100%" }} ref={ref}>
+    <div style={{ width: "100%" }} ref={ref} {...rest}>
       {children}
     </div>
   );

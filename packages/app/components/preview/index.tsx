@@ -20,8 +20,8 @@ type PreviewProps = {
   tw?: string;
   style?: any;
   resizeMode?: ResizeMode;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   isMuted?: boolean;
   showMuteButton?: boolean;
   isLooping?: boolean;

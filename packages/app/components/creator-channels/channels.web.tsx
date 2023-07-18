@@ -1,9 +1,8 @@
 import { useCallback, memo, useRef, useMemo } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronLeft } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -63,7 +62,7 @@ const CreatorChannelsHeader = memo(
     tw?: string;
   }) => {
     return (
-      <View tw="px-4 py-4">
+      <View tw="px-4 pb-4 pt-8">
         <Text tw={["text-xl font-bold text-gray-900 dark:text-white", tw]}>
           {title}
         </Text>
@@ -93,20 +92,20 @@ const CreatorChannelsListItem = memo(
       <Pressable
         onPress={() => {
           router.push(`/channels/${item.id}`);
+          item.read = true;
         }}
         style={{ width: "100%" }}
       >
         <View
           tw={[
-            "mx-3 my-1 flex-1 cursor-pointer rounded-lg px-2 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-900",
+            "mx-3 my-1 flex-1 cursor-pointer rounded-2xl px-2 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-900",
             currentChannel === item.id.toFixed()
               ? "bg-gray-100 dark:bg-gray-900"
               : "", // TODO: toFixed might to be changed with slugs
           ]}
         >
           <View tw="flex-row items-start justify-start">
-            <AvatarHoverCard
-              username={item.owner.username}
+            <Avatar
               url={item.owner.img_url}
               size={40}
               alt="CreatorPreview Avatar"
@@ -136,9 +135,9 @@ const CreatorChannelsListItem = memo(
                 <Text
                   tw={[
                     "text-[13px] ",
-                    item?.unread
+                    !item?.read && item.itemType !== "owned"
                       ? "font-semibold text-black dark:text-white"
-                      : "text-gray-500 dark:text-gray-300",
+                      : "text-gray-500 dark:text-gray-200",
                   ]}
                   numberOfLines={2}
                 >
@@ -226,7 +225,7 @@ const CreatorChannelsListCreator = memo(
         </View>
         <View tw="ml-[40px] mt-1 pl-3">
           <Text
-            tw="text-[13px] text-gray-500 dark:text-gray-300"
+            tw="text-[13px] text-gray-500 dark:text-gray-200"
             numberOfLines={2}
           >
             {item?.owner?.bio ?? "No bio"}
@@ -246,7 +245,7 @@ export const CreatorChannels = memo(() => {
   const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { height: windowHeight, width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
+  const isLgWidth = width >= breakpoints["lg"];
   const router = useRouter();
   const listRef = useRef<any>();
   useScrollToTop(listRef);
@@ -365,35 +364,36 @@ export const CreatorChannels = memo(() => {
     isLoadingSuggestedChannels,
     isLoadingMoreJoinedChannels,
   ]);
-  const mdHeight = windowHeight - 140;
+  if (!isLgWidth) {
+    if (router.query["channelId"]) {
+      return (
+        <View tw="h-[100svh] w-full">
+          <Messages />
+        </View>
+      );
+    }
+    return (
+      <View tw="h-screen w-full bg-white dark:bg-black">
+        <CreatorChannelsListMobile />
+      </View>
+    );
+  }
 
-  if (!isMdWidth) {
+  if (!isLgWidth) {
     if (router.query["channelId"]) {
       return <Messages />;
     }
 
     return (
-      <View tw="w-full">
+      <View tw="w-full bg-white dark:bg-black">
         <CreatorChannelsListMobile />
       </View>
     );
   }
 
   return (
-    <View
-      tw="mt-24 w-full max-w-screen-lg flex-row px-4"
-      style={{ height: mdHeight }}
-    >
-      <Button
-        iconOnly
-        size="regular"
-        variant="secondary"
-        tw="absolute md:hidden lg:-left-12 lg:flex"
-        onPress={() => router.push("/")}
-      >
-        <ChevronLeft width={24} height={24} />
-      </Button>
-      <View tw="h-full w-80 overflow-hidden rounded-2xl bg-white dark:bg-black">
+    <View tw="h-screen w-full flex-row bg-white dark:bg-black">
+      <View tw="h-full w-80 overflow-hidden border-l border-r border-gray-200 dark:border-gray-800">
         <InfiniteScrollList
           useWindowScroll={false}
           data={
@@ -410,7 +410,7 @@ export const CreatorChannels = memo(() => {
               : item.itemType ?? "row";
           }}
           style={{
-            height: mdHeight,
+            height: windowHeight,
           }}
           // for blur effect on Native
           contentContainerStyle={Platform.select({
@@ -446,7 +446,7 @@ export const CreatorChannels = memo(() => {
           estimatedItemSize={110}
         />
       </View>
-      <View tw="ml-3 h-full flex-1 overflow-hidden rounded-2xl bg-white dark:bg-black">
+      <View tw="h-full flex-1 overflow-hidden">
         <Messages />
       </View>
     </View>

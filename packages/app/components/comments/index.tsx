@@ -32,12 +32,14 @@ type CommentsProps = {
   nft: NFT;
   webListHeight?: number | string;
   ListHeaderComponent?: React.ComponentType<any>;
+  inputBackgroundColor?: string | null;
 };
 
 export function Comments({
   nft,
   webListHeight,
   ListHeaderComponent,
+  inputBackgroundColor,
 }: CommentsProps) {
   //#region refs
   const Alert = useAlert();
@@ -163,7 +165,7 @@ export function Comments({
         <EmptyPlaceholder
           text="Be the first to add a comment!"
           title="💬 No comments yet..."
-          tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] -mt-5 h-full flex-1"
+          tw="ios:min-h-[60vh] android:min-h-[70vh] web:min-h-[350px] h-full flex-1"
         />
       ) : null,
     [isLoading, data.length, error]
@@ -209,12 +211,13 @@ export function Comments({
   return (
     <View style={styles.container}>
       {isLoading || (data.length == 0 && error) ? (
-        <CommentsStatus isLoading={isLoading} error={error} />
+        <CommentsStatus isLoading={true} error={error} />
       ) : (
         <View tw="flex-grow">
+          {/*TODO: @Alan, please fix TS */}
+          {/* @ts-expect-error Types wrong becuase of modalListProps */}
           <InfiniteScrollList
             data={data}
-            refreshing={isLoading}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
             estimatedItemSize={70}
@@ -238,6 +241,7 @@ export function Comments({
                 commentInputRef={commentInputRef}
                 submitting={isSubmitting}
                 submit={newComment}
+                backgroundColor={inputBackgroundColor}
               />
             </Animated.View>
           )}

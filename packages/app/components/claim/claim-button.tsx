@@ -40,11 +40,11 @@ export enum ClaimStatus {
   Expired,
   Normal,
 }
-export const getClaimStatus = (edition: CreatorEditionResponse) => {
+export const getClaimStatus = (edition?: CreatorEditionResponse) => {
   if (!edition) return undefined;
   if (
-    edition.total_claimed_count ===
-    edition.creator_airdrop_edition?.edition_size
+    edition.creator_airdrop_edition?.edition_size !== 0 &&
+    edition.total_claimed_count >= edition.creator_airdrop_edition?.edition_size
   )
     return ClaimStatus.Soldout;
 

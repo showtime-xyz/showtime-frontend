@@ -1,11 +1,8 @@
-import {
-  Pressable,
-  Props as PressableProps,
-} from "@showtime-xyz/universal.pressable";
+import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-type SocialButtonProps = PressableProps & {
+export type SocialButtonProps = PressableProps & {
   text?: string | JSX.Element;
   vertical?: boolean;
 };

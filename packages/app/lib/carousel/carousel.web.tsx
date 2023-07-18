@@ -1,20 +1,22 @@
-import React, { useRef } from "react";
+import React, { useRef, memo } from "react";
 import { View } from "react-native";
 
-import { Pagination, EffectFade, Autoplay } from "swiper";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/effect-fade";
 import "swiper/css/pagination";
+import { Pagination, EffectFade, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
 import "./carousel.css";
 import { Controller } from "./controller";
 import { CarouselProps } from "./types";
 
-function Carousel({
+const paginationClassName = {
+  dot: "dot-pagination",
+  rectangle: "rectangle-pagination",
+};
+export const Carousel = memo(function Carousel({
   renderItem,
   width,
   height,
@@ -25,9 +27,12 @@ function Carousel({
   controller = false,
   controllerTw = "",
   data,
+  effect,
+  tw,
+  pagination,
 }: CarouselProps) {
   const swiperRef = useRef(null);
-  const isDark = useIsDarkMode();
+
   return (
     <>
       <Swiper
@@ -43,18 +48,22 @@ function Carousel({
               }
             : undefined
         }
-        pagination={{
-          horizontalClass: isDark
-            ? "showtime-pagination"
-            : "showtime-pagination",
-          clickable: true,
-        }}
+        pagination={
+          pagination
+            ? {
+                horizontalClass:
+                  paginationClassName[pagination?.variant || "dot"],
+                clickable: true,
+              }
+            : false
+        }
         modules={[Pagination, EffectFade, Autoplay]}
         style={{
           width,
-          marginTop: controller ? 30 : 0,
         }}
-        effect={"fade"}
+        className={tw}
+        effect={effect}
+        lazyPreloadPrevNext={2}
         // @ts-ignore
         ref={swiperRef}
       >
@@ -71,15 +80,15 @@ function Carousel({
         ))}
       </Swiper>
 
-      {controller && data.length > 0 && (
+      {controller && data.length > 1 && (
         <Controller
           prev={() => (swiperRef.current as any)?.swiper.slidePrev()}
+          allowSlideNext
+          allowSlidePrev
           next={() => (swiperRef.current as any)?.swiper.slideNext()}
           tw={controllerTw}
         />
       )}
     </>
   );
-}
-
-export { Carousel };
+});

@@ -51,6 +51,7 @@ type Props = {
   iconColor?: string;
   iconSize?: number;
   edition?: CreatorEditionResponse;
+  children?: JSX.Element;
 };
 
 function NFTDropdown({
@@ -60,6 +61,7 @@ function NFTDropdown({
   iconColor: iconColorProp,
   iconSize = 24,
   edition,
+  children,
 }: Props) {
   //#region hooks
   const { iconColor } = useSocialColor();
@@ -107,13 +109,17 @@ function NFTDropdown({
     <>
       <DropdownMenuRoot>
         <DropdownMenuTrigger>
-          <Pressable tw={tw} aria-label="nft card item menu">
-            <MoreHorizontal
-              width={iconSize}
-              height={iconSize}
-              color={iconColorProp ?? iconColor}
-            />
-          </Pressable>
+          {children ? (
+            children
+          ) : (
+            <Pressable tw={tw} aria-label="nft card item menu">
+              <MoreHorizontal
+                width={iconSize}
+                height={iconSize}
+                color={iconColorProp ?? iconColor}
+              />
+            </Pressable>
+          )}
         </DropdownMenuTrigger>
 
         <DropdownMenuContent loop sideOffset={8}>
@@ -131,7 +137,7 @@ function NFTDropdown({
                 }}
               />
 
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 Hide
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -145,7 +151,7 @@ function NFTDropdown({
               key="unhide"
             >
               <MenuItemIcon Icon={EyeOff} ios={{ name: "eye" }} />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 Unhide
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -171,12 +177,53 @@ function NFTDropdown({
                   name: "square.and.pencil",
                 }}
               />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 Update Song Link
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           ) : null}
+          {edition?.is_editable ? (
+            <DropdownMenuItem
+              onSelect={() => {
+                const contractAddress = nft?.contract_address;
+                const tokenId = nft?.token_id;
+                const chainName = nft?.chain_name;
 
+                const as = `/drop/edit-details/${chainName}/${contractAddress}/${tokenId}`;
+                router.push(
+                  Platform.select({
+                    native: as,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        contractAddress,
+                        tokenId,
+                        chainName,
+                        dropEditDetailsModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: as,
+                    web: router.asPath,
+                  }),
+                  { shallow: true }
+                );
+              }}
+              key="edit details"
+            >
+              <MenuItemIcon
+                Icon={Edit}
+                ios={{
+                  name: "square.and.pencil",
+                }}
+              />
+              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                Edit Drop Details
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+          ) : null}
           {isMobileWeb() ? (
             <DropdownMenuItem
               onSelect={() => {
@@ -195,7 +242,7 @@ function NFTDropdown({
             >
               <MenuItemIcon Icon={Showtime} />
 
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 Open in app
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -203,7 +250,8 @@ function NFTDropdown({
 
           {nft.multiple_owners_list &&
             nft.multiple_owners_list.length > 0 &&
-            nft.contract_address && (
+            nft.contract_address &&
+            edition?.is_onchain && (
               <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
                 <MenuItemIcon
                   Icon={OpenSea}
@@ -211,40 +259,11 @@ function NFTDropdown({
                     name: "arrow.right",
                   }}
                 />
-                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                   View on OpenSea
                 </DropdownMenuItemTitle>
               </DropdownMenuItem>
             )}
-
-          {shouldEnableSharing && (
-            <>
-              {!isShareAPIAvailable && (
-                <DropdownMenuItem
-                  onSelect={() => shareNFTOnTwitter(nft)}
-                  key="share-twitter"
-                >
-                  <MenuItemIcon Icon={Twitter} />
-
-                  <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                    Share on Twitter
-                  </DropdownMenuItemTitle>
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
-                <MenuItemIcon
-                  Icon={Copy}
-                  ios={{
-                    name: "square.and.arrow.up",
-                  }}
-                />
-                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                  {isShareAPIAvailable ? "Share" : "Copy Link"}
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-            </>
-          )}
-
           <DropdownMenuItem
             onSelect={() => {
               const as = `/qr-code-share/${nft?.contract_address}`;
@@ -275,10 +294,37 @@ function NFTDropdown({
                 name: "qrcode",
               }}
             />
-            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
               QR Code
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
+          {shouldEnableSharing && (
+            <>
+              {!isShareAPIAvailable && (
+                <DropdownMenuItem
+                  onSelect={() => shareNFTOnTwitter(nft)}
+                  key="share-twitter"
+                >
+                  <MenuItemIcon Icon={Twitter} />
+
+                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                    Share on Twitter
+                  </DropdownMenuItemTitle>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
+                <MenuItemIcon
+                  Icon={Copy}
+                  ios={{
+                    name: "square.and.arrow.up",
+                  }}
+                />
+                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                  {isShareAPIAvailable ? "Share" : "Copy Link"}
+                </DropdownMenuItemTitle>
+              </DropdownMenuItem>
+            </>
+          )}
 
           {!isCreatorDrop && (
             <DropdownMenuItem
@@ -292,7 +338,7 @@ function NFTDropdown({
                 }}
               />
 
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 Refresh Metadata
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -317,7 +363,7 @@ function NFTDropdown({
                 }}
               />
 
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 Unfollow User
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -342,7 +388,7 @@ function NFTDropdown({
                     name: isBlocked ? "circle" : ("circle.slash" as any),
                   }}
                 />
-                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                   {isBlocked ? "Unblock User" : "Block User"}
                 </DropdownMenuItemTitle>
               </DropdownMenuItem>
@@ -370,7 +416,7 @@ function NFTDropdown({
                     name: "flag",
                   }}
                 />
-                <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                   Report
                 </DropdownMenuItemTitle>
               </DropdownMenuItem>

@@ -109,7 +109,7 @@ function HeaderDropdown({
             key="your-profile"
           >
             <MenuItemIcon Icon={User} />
-            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
               Profile
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
@@ -126,7 +126,7 @@ function HeaderDropdown({
             }}
           />
 
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Settings
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -159,7 +159,7 @@ function HeaderDropdown({
             }}
           />
 
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Edit Profile
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
@@ -173,7 +173,7 @@ function HeaderDropdown({
               }}
             />
 
-            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
               Theme
             </DropdownMenuItemTitle>
           </DropdownMenuSubTrigger>
@@ -183,7 +183,7 @@ function HeaderDropdown({
               key="nested-group-1"
             >
               <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 Light
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -192,7 +192,7 @@ function HeaderDropdown({
               key="nested-group-2"
             >
               <MenuItemIcon Icon={Moon} ios={{ name: "moon" }} />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 Dark
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -206,7 +206,7 @@ function HeaderDropdown({
                   name: "circle.righthalf.filled",
                 }}
               />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                 System
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
@@ -218,7 +218,7 @@ function HeaderDropdown({
             Icon={LogOut}
             ios={{ name: "rectangle.portrait.and.arrow.right" }}
           />
-          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Sign Out
           </DropdownMenuItemTitle>
         </DropdownMenuItem>

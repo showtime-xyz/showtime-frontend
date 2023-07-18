@@ -20,7 +20,6 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
@@ -46,6 +45,8 @@ import { Spinner } from "design-system/spinner";
 import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
+import { HeaderLeft } from "../header";
+import { HeaderRightSm } from "../header/header-right.sm";
 import { FilterContext } from "./fillter-context";
 import { ProfileError } from "./profile-error";
 import { ProfileTop } from "./profile-top";
@@ -125,7 +126,7 @@ const Header = memo(function Header() {
 
   return (
     <View tw="items-center bg-white dark:bg-black">
-      <View tw="w-full max-w-screen-xl md:pt-16">
+      <View tw="w-full max-w-screen-xl">
         <ProfileTop
           address={username}
           animationHeaderPosition={animationHeaderPosition}
@@ -136,7 +137,7 @@ const Header = memo(function Header() {
           isError={isError}
         />
         <View tw="bg-white dark:bg-black">
-          <View tw="mx-auto min-h-[43px] w-full max-w-screen-xl">
+          <View tw="mx-auto min-h-[43px] w-full max-w-screen-xl px-0 md:px-2 xl:px-0">
             <TabBarSingle
               onPress={onPress}
               routes={routes}
@@ -161,20 +162,14 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const bottomBarHeight = usePlatformBottomHeight();
   const isBlocked = getIsBlocked(profileId);
   const { user } = useUser();
-
   const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
     profileId: profileId,
   });
-  const isDark = useIsDarkMode();
-  const { height: screenHeight } = useWindowDimensions();
+  const { height: screenHeight, width } = useWindowDimensions();
   const contentWidth = useContentWidth();
-  const isMdWidth = contentWidth >= breakpoints["md"];
   const numColumns =
-    contentWidth <= breakpoints["md"]
-      ? 3
-      : contentWidth >= breakpoints["lg"]
-      ? 3
-      : 2;
+    width <= breakpoints["lg"] && width >= breakpoints["md"] ? 2 : 3;
+  const isSelf = user?.data?.profile?.profile_id === profileId;
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
@@ -258,15 +253,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
     if ((isLoadingMore || profileIsLoading) && !error) {
       return (
         <View
-          tw="mx-auto h-20 flex-row items-center justify-center"
+          tw="mx-auto flex-row items-center justify-center py-4"
           style={{ maxWidth: contentWidth }}
         >
-          <Spinner secondaryColor={isDark ? colors.gray[700] : "#fff"} />
+          <Spinner />
         </View>
       );
     }
     return null;
-  }, [contentWidth, isDark, isLoadingMore, profileIsLoading, error]);
+  }, [contentWidth, isLoadingMore, profileIsLoading, error]);
 
   const ListEmptyComponent = useCallback(() => {
     if (error || isBlocked) {
@@ -297,48 +292,56 @@ const Profile = ({ username }: ProfileScreenProps) => {
     type,
     username,
   ]);
-
   return (
-    <ProfileHeaderContext.Provider
-      value={{
-        profileData: profileData?.data,
-        username,
-        isError,
-        isLoading: profileIsLoading && profileTabIsLoading,
-        routes,
-        type,
-        setType: setType,
-        isBlocked,
-      }}
-    >
-      <FilterContext.Provider value={{ filter, dispatch }}>
-        <View tw="w-full">
-          <MutateProvider mutate={updateItem}>
-            <ProfileTabsNFTProvider
-              tabType={
-                user?.data?.profile?.profile_id === profileId ? type : undefined
-              }
-            >
-              <InfiniteScrollList
-                useWindowScroll={isMdWidth}
-                ListHeaderComponent={Header}
-                numColumns={1}
-                preserveScrollPosition
-                data={isBlocked ? [] : chuckList}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
-                style={{
-                  height: screenHeight - bottomBarHeight,
-                }}
-                ListEmptyComponent={ListEmptyComponent}
-                ListFooterComponent={ListFooterComponent}
-                onEndReached={fetchMore}
-              />
-            </ProfileTabsNFTProvider>
-          </MutateProvider>
-        </View>
-      </FilterContext.Provider>
-    </ProfileHeaderContext.Provider>
+    <>
+      <ProfileHeaderContext.Provider
+        value={{
+          profileData: profileData?.data,
+          username,
+          isError,
+          isLoading: profileIsLoading && profileTabIsLoading,
+          routes,
+          type,
+          setType: setType,
+          isBlocked,
+        }}
+      >
+        <FilterContext.Provider value={{ filter, dispatch }}>
+          <View tw="min-h-screen w-full">
+            <MutateProvider mutate={updateItem}>
+              <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
+                <InfiniteScrollList
+                  useWindowScroll
+                  ListHeaderComponent={Header}
+                  numColumns={1}
+                  preserveScrollPosition
+                  data={isBlocked ? [] : chuckList}
+                  keyExtractor={keyExtractor}
+                  renderItem={renderItem}
+                  style={{
+                    height: screenHeight - bottomBarHeight,
+                  }}
+                  ListEmptyComponent={ListEmptyComponent}
+                  ListFooterComponent={ListFooterComponent}
+                  onEndReached={fetchMore}
+                />
+              </ProfileTabsNFTProvider>
+            </MutateProvider>
+          </View>
+        </FilterContext.Provider>
+      </ProfileHeaderContext.Provider>
+      <>
+        {isSelf ? (
+          <View tw={["fixed right-4 top-2 z-50 flex md:hidden"]}>
+            <HeaderRightSm withBackground />
+          </View>
+        ) : (
+          <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
+            <HeaderLeft withBackground canGoBack={true} />
+          </View>
+        )}
+      </>
+    </>
   );
 };
 

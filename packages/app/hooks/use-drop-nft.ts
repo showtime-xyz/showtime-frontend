@@ -12,8 +12,6 @@ import { captureException } from "app/lib/sentry";
 import { GatingType } from "app/types";
 import { delay, formatAPIErrorMessage, getFileMeta } from "app/utilities";
 
-import { toast } from "design-system/toast";
-
 import { DropContext } from "../context/drop-context";
 import { useSendFeedback } from "./use-send-feedback";
 
@@ -192,7 +190,6 @@ export const useDropNFT = () => {
         );
         return;
       }
-      toast("Creating... it should take about 10 seconds");
       dispatch({ type: "loading" });
 
       const ipfsHash = await uploadMedia({
@@ -271,18 +268,25 @@ export const useDropNFT = () => {
       ) {
         requestData.release_date = params.releaseDate;
       }
+      callback?.();
 
       const relayerResponse = await axios({
-        url: "/v1/creator-airdrops/create-gated-edition",
+        url: "/v1/creator-airdrops/edition/draft",
         method: "POST",
         data: requestData,
       });
 
-      console.log("relayer response :: ", relayerResponse);
-      await pollTransaction({
-        transactionId: relayerResponse.relayed_transaction_id,
+      dispatch({
+        type: "success",
+        edition: relayerResponse?.creator_airdrop_edition,
       });
-      callback?.();
+      Analytics.track(EVENTS.DROP_CREATED);
+      mutate((key) => key.includes(PROFILE_NFTS_QUERY_KEY));
+
+      // console.log("relayer response :: ", relayerResponse);
+      // await pollTransaction({
+      //   transactionId: relayerResponse.relayed_transaction_id,
+      // });
     } catch (e: any) {
       const errorMessage = formatAPIErrorMessage(e);
       dispatch({ type: "error", error: errorMessage });
@@ -295,7 +299,7 @@ export const useDropNFT = () => {
         );
       } else {
         Alert.alert(
-          "Oops. An error occurred.",
+          "An error occurred.",
           errorMessage +
             ". Please contact us at help@showtime.xyz if this persists. Thanks!",
           [

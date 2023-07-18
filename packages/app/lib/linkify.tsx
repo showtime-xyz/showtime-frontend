@@ -8,6 +8,7 @@ import { shortenLongWords } from "app/utilities";
 
 // This function replaces mention tags (@showtime) and URL (http://) with Link components
 
+// This function replaces mention tags (@showtime) and URL (http://) with Link components
 export const linkifyDescription = (text?: string, tw?: TW) => {
   if (!text) {
     return "";
@@ -16,7 +17,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
   // First, match URLs
   let replacedText = reactStringReplace(
     text,
-    /\b(https?:\/\/\S+|www\.\S+|\b[A-Za-z0-9-]+\.[A-Za-z0-9-.]+(?:\/\S*)?\b)/gi,
+    /\b(https?:\/\/[^\s]+|www\.[^\s]+|[A-Za-z0-9-]+\.[A-Za-z0-9-]+(?:\/[^\s]+)?(?:\?[^\s]*)?)\b/gi,
     (match, i) => {
       const parsed = parse(match);
       if (parsed.isIcann || match.startsWith("http:")) {
@@ -36,7 +37,7 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
         }
         return (
           <TextLink
-            href={match.toLowerCase()}
+            href={match}
             key={match + i}
             target="_blank"
             title={urlText}
@@ -72,17 +73,6 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
       @{match}
     </TextLink>
   ));
-
-  replacedText = reactStringReplace(
-    replacedText,
-    /\/(<TextLink href={`\/@\w+`}.+?<\/TextLink>)/g,
-    (match) => {
-      if (match) {
-        const username = match.match(/`\/@(\w+)`/)?.[1];
-        return `/@${username}`;
-      }
-    }
-  );
 
   return replacedText;
 };

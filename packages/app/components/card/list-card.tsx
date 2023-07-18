@@ -10,10 +10,7 @@ import { ResizeMode } from "expo-av";
 import { Link, LinkProps } from "solito/link";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Pressable,
-  Props as PressableScaleProps,
-} from "@showtime-xyz/universal.pressable";
+import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -43,7 +40,7 @@ const RouteComponent = ({
   children,
   onPress,
   ...rest
-}: (LinkProps | PressableScaleProps) & {
+}: (LinkProps | PressableProps) & {
   onPress: () => void;
   children: ReactNode;
 }) => {
@@ -51,7 +48,7 @@ const RouteComponent = ({
     return <Link {...(rest as LinkProps)}>{children}</Link>;
   }
   return (
-    <Pressable onPress={onPress} {...(rest as PressableScaleProps)}>
+    <Pressable onPress={onPress} {...(rest as PressableProps)}>
       {children}
     </Pressable>
   );
@@ -61,7 +58,7 @@ const RouteComponentNative = ({
   children,
   onPress,
   ...rest
-}: (LinkProps | PressableScaleProps) & {
+}: (LinkProps | PressableProps) & {
   onPress: () => void;
   children: ReactNode;
 }) => {
@@ -69,7 +66,7 @@ const RouteComponentNative = ({
     return <View tw="flex-1">{children}</View>;
   }
   return (
-    <Pressable onPress={onPress} {...(rest as PressableScaleProps)}>
+    <Pressable onPress={onPress} {...(rest as PressableProps)}>
       {children}
     </Pressable>
   );

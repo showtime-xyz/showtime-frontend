@@ -11,6 +11,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { NotificationsSettingIcon } from "app/components/header/notifications-setting-icon";
 import { NotificationItem } from "app/components/notifications/notification-item";
 import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
@@ -30,10 +31,13 @@ const Header = () => {
   const headerHeight = useHeaderHeight();
 
   return Platform.OS === "web" ? (
-    <View tw="w-full flex-row justify-center px-4 py-4">
-      <Text tw="text-lg font-extrabold text-gray-900 dark:text-white md:text-2xl">
+    <View tw="hidden w-full flex-row pb-4 pl-4 pt-8 md:flex">
+      <Text tw="text-lg font-bold text-gray-900 dark:text-white">
         Notifications
       </Text>
+      <View tw="absolute right-2 top-6">
+        <NotificationsSettingIcon size={24} />
+      </View>
     </View>
   ) : (
     <View style={{ height: headerHeight }} />
@@ -41,11 +45,7 @@ const Header = () => {
 };
 type NotificationsProps = {
   hideHeader?: boolean;
-  /**
-   * **WEB ONLY**: Defines the list height.
-   * @default undefined
-   */
-  web_height?: string | number;
+  useWindowScroll?: boolean;
 };
 
 const keyExtractor = (item: NotificationType) => {
@@ -59,7 +59,7 @@ const getItemType = (item: NotificationType) => {
 */
 
 export const Notifications = memo(
-  ({ hideHeader = false, web_height = undefined }: NotificationsProps) => {
+  ({ hideHeader = false, useWindowScroll = true }: NotificationsProps) => {
     const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
       useNotifications();
     const { refetchMyInfo } = useMyInfo();
@@ -121,7 +121,7 @@ export const Notifications = memo(
     return (
       <>
         <InfiniteScrollList
-          useWindowScroll={false}
+          useWindowScroll={useWindowScroll}
           data={data}
           ListHeaderComponent={Platform.select({
             web: hideHeader ? undefined : Header,
@@ -131,7 +131,7 @@ export const Notifications = memo(
           style={{
             height: Platform.select({
               default: windowHeight - bottomBarHeight,
-              web: web_height ? web_height : windowHeight - bottomBarHeight,
+              web: useWindowScroll ? windowHeight - bottomBarHeight : undefined,
               ios: windowHeight,
             }),
           }}
@@ -159,6 +159,7 @@ export const Notifications = memo(
               }
             />
           }
+          containerTw="pretty-scrollbar"
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           onEndReached={fetchMore}

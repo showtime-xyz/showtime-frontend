@@ -1,4 +1,7 @@
+import { useMemo } from "react";
+
 import useSWR from "swr";
+import { useSWRConfig } from "swr";
 
 import { axios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS } from "app/lib/constants";
@@ -19,15 +22,23 @@ export type NFTDetailPayload = {
 };
 
 export const useNFTDetailByTokenId = (params: UseNFTDetailByTokenIdParams) => {
+  const { mutate } = useSWRConfig();
+
+  const endpoint = useMemo(
+    () =>
+      params.tokenId && params.contractAddress
+        ? `/v2/token/${params.contractAddress}/${params.tokenId}${
+            params.chainName
+              ? //@ts-ignore
+                `?chain_identifier=${CHAIN_IDENTIFIERS[params.chainName]}`
+              : ""
+          }`
+        : "",
+    [params.chainName, params.contractAddress, params.tokenId]
+  );
+
   const queryState = useSWR<NFTDetailPayload>(
-    params.tokenId && params.contractAddress
-      ? `/v2/token/${params.contractAddress}/${params.tokenId}${
-          params.chainName
-            ? //@ts-ignore
-              `?chain_identifier=${CHAIN_IDENTIFIERS[params.chainName]}`
-            : ""
-        }`
-      : null,
+    endpoint,
     (url) => axios({ url, method: "GET" }),
     {
       revalidateIfStale: false,
@@ -35,6 +46,22 @@ export const useNFTDetailByTokenId = (params: UseNFTDetailByTokenIdParams) => {
     }
     // { suspense: true }
   );
-
-  return queryState;
+  const mutateNFT = () => {
+    mutate(
+      endpoint,
+      (data: any) => {
+        if (data) {
+          return {
+            data: {
+              item: {
+                ...data.data.item,
+              },
+            },
+          };
+        }
+      },
+      { optimisticData: true, revalidate: true, populateCache: true }
+    );
+  };
+  return { ...queryState, mutateNFT };
 };

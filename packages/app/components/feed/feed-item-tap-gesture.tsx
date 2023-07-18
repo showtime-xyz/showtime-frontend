@@ -12,10 +12,7 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 
-import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
-import { colors } from "@showtime-xyz/universal.tailwind";
-
-import { useLike } from "app/context/like-context";
+import { Play } from "@showtime-xyz/universal.icon";
 
 const ICON_SIZE = 90;
 const heartContainerStyle: ViewStyle = {
@@ -24,17 +21,6 @@ const heartContainerStyle: ViewStyle = {
   justifyContent: "center",
   height: "100%",
   width: "100%",
-};
-const shadowStyle: ViewStyle = {
-  backgroundColor: "rgba(0,0,0,0)",
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 2,
-  },
-  shadowOpacity: 0.3,
-  shadowRadius: 4,
-  elevation: 13,
 };
 
 type FeedItemTapGestureProps = {
@@ -52,22 +38,11 @@ type FeedItemTapGestureProps = {
 export const FeedItemTapGesture = ({
   children,
   toggleHeader,
-  showHeader,
   videoRef,
   mediaOffset,
   isVideo,
 }: FeedItemTapGestureProps) => {
-  const { like } = useLike();
-
-  const heartAnimation = useSharedValue(0);
   const playAnimation = useSharedValue(0);
-
-  const heartStyle = useAnimatedStyle(() => {
-    return {
-      opacity: heartAnimation.value,
-      transform: [{ scale: heartAnimation.value }],
-    };
-  });
 
   const playStyle = useAnimatedStyle(() => {
     return {
@@ -75,11 +50,6 @@ export const FeedItemTapGesture = ({
       transform: [{ scale: playAnimation.value }],
     };
   });
-
-  const doubleTapHandleOnJS = useCallback(() => {
-    like();
-    showHeader?.();
-  }, [like, showHeader]);
 
   const toggleVideoPlayback = useCallback(async () => {
     if (!isVideo) return;
@@ -110,22 +80,6 @@ export const FeedItemTapGesture = ({
     [toggleVideoPlayback]
   );
 
-  const doubleTapHandle = useMemo(
-    () =>
-      Gesture.Tap()
-        .numberOfTaps(2)
-        .onEnd(() => {
-          playAnimation.value = withSequence(withSpring(0));
-          heartAnimation.value = withSequence(
-            withSpring(1),
-            withDelay(200, withSpring(0))
-          );
-          runOnJS(doubleTapHandleOnJS)();
-        }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [doubleTapHandleOnJS]
-  );
-
   const longPressGesture = useMemo(
     () =>
       Gesture.LongPress()
@@ -147,8 +101,8 @@ export const FeedItemTapGesture = ({
   );
 
   const gesture = useMemo(
-    () => Gesture.Exclusive(doubleTapHandle, longPressGesture, singleTapHandle),
-    [doubleTapHandle, longPressGesture, singleTapHandle]
+    () => Gesture.Exclusive(longPressGesture, singleTapHandle),
+    [longPressGesture, singleTapHandle]
   );
 
   const topOffset = useMemo(
@@ -161,17 +115,6 @@ export const FeedItemTapGesture = ({
   return (
     <>
       <GestureDetector gesture={gesture}>{children}</GestureDetector>
-      <Animated.View
-        style={[heartContainerStyle, heartStyle, topOffset]}
-        pointerEvents="none"
-      >
-        <HeartFilled
-          style={shadowStyle}
-          width={ICON_SIZE}
-          height={ICON_SIZE}
-          color={colors.rose[500]}
-        />
-      </Animated.View>
       {isVideo ? (
         <>
           <Animated.View

@@ -83,14 +83,15 @@ type RootStackNavigatorParams = {
   privacySecuritySettings: undefined;
   notificationSettings: undefined;
   blockedList: undefined;
-  dropMusic: undefined;
   dropFree: undefined;
   dropSlug: SwipeListParams & {
     dropSlug?: string;
   };
+  trending: undefined;
   dropEvent: undefined;
   dropPrivate: undefined;
   dropUpdate: undefined;
+  dropEditDetailsModal: undefined;
   channelsMessageReactions: undefined;
   search: undefined;
   swipeList: SwipeListParams;

@@ -45,8 +45,10 @@ import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
+import { Analytics, EVENTS } from "app/lib/analytics";
 import { linkifyDescription } from "app/lib/linkify";
 import { createParam } from "app/navigation/use-param";
+import { ContractVersion } from "app/types";
 import {
   cleanUserTextInput,
   formatAddressShort,
@@ -55,8 +57,9 @@ import {
   removeTags,
 } from "app/utilities";
 
+export type ClaimType = "appleMusic" | "spotify" | "free";
 type Query = {
-  type: "appleMusic" | "spotify" | "free";
+  type: ClaimType;
 };
 
 const { useParam } = createParam<Query>();
@@ -170,8 +173,10 @@ export const ClaimForm = ({
       edition.gating_type === "multi_provider_music_presave"
     ) {
       if (claimType === "spotify") {
+        Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
         success = await claimSpotifyGatedDrop({ closeModal });
       } else if (claimType === "appleMusic") {
+        Analytics.track(EVENTS.APPLE_MUSIC_SAVE_PRESSED_BEFORE_LOGIN);
         success = await claimAppleMusicGatedDrop({ closeModal });
       } else {
         success = await claimNFT({ closeModal });
@@ -181,6 +186,7 @@ export const ClaimForm = ({
       edition.gating_type === "spotify_presave" ||
       edition?.gating_type === "music_presave"
     ) {
+      Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
       success = await claimSpotifyGatedDrop({ closeModal });
     } else if (edition.gating_type === "password") {
       success = await claimNFT({ password: password.trim(), closeModal });
@@ -221,6 +227,12 @@ export const ClaimForm = ({
     (edition.gating_type === "multi" && !location && !password) ||
     (edition.gating_type === "password" && !password) ||
     (edition.gating_type === "location" && !location?.coords);
+
+  const collectingMsg =
+    edition.creator_airdrop_edition?.contract_version ===
+    ContractVersion.BATCH_V1
+      ? "Collecting..."
+      : "Collecting... it should take about 10 seconds";
 
   if (isIncompletedProfile) {
     return null;
@@ -463,7 +475,7 @@ export const ClaimForm = ({
               {isLoading ? (
                 "Loading..."
               ) : state.status === "loading" ? (
-                "Collecting... it should take about 10 seconds"
+                collectingMsg
               ) : state.status === "error" ? (
                 "Failed. Retry!"
               ) : edition.gating_type === "spotify_save" ||

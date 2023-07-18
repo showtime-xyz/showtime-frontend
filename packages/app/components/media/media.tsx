@@ -49,7 +49,7 @@ function MediaImplementation({
   isMuted,
   edition,
   videoRef,
-  optimizedWidth = 800,
+  optimizedWidth = 1000,
   quality = 70,
   loading = "lazy",
   withVideoBackdrop = false,
@@ -72,6 +72,7 @@ function MediaImplementation({
 
   return (
     <View
+      // @ts-expect-error no inherit on native
       style={{
         opacity: item?.loading ? 0.5 : 1,
         height: Platform.OS === "web" ? "inherit" : height,
@@ -92,7 +93,7 @@ function MediaImplementation({
         >
           <Image
             source={{
-              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=${quality}&sharpen=true`,
+              uri: `${mediaUri}?optimizer=image&width=${optimizedWidth}&quality=${quality}`,
             }}
             recyclingKey={mediaUri}
             blurhash={item?.blurhash}
@@ -125,7 +126,7 @@ function MediaImplementation({
               uri: mediaUri,
             }}
             posterSource={{
-              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=${quality}&sharpen=true`,
+              uri: `${mediaStillPreviewUri}?&optimizer=image&width=${optimizedWidth}&quality=${quality}`,
             }}
             width={width}
             height={height}

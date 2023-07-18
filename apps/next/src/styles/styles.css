@@ -20,18 +20,6 @@
     @apply outline-none;
   }
 
-  [data-radix-popper-content-wrapper] {
-    @apply rounded-2xl backdrop-blur-md backdrop-saturate-150 backdrop-filter;
-  }
-
-  [role="menu"] > div:nth-child(1) {
-    @apply rounded-2xl bg-white bg-opacity-80 p-2 shadow;
-  }
-
-  [data-color-scheme="dark"] [role="menu"] > div:nth-child(1) {
-    @apply shadow-black45 bg-black bg-opacity-100 shadow-md;
-  }
-
   [role="menuitem"] {
     @apply mb-1 flex-1 overflow-hidden rounded-sm;
   }
@@ -120,29 +108,22 @@ html {
   /* Prevent text size change on orientation change https://gist.github.com/tfausak/2222823#file-ios-8-web-app-html-L138 */
   -webkit-text-size-adjust: 100%;
   height: 100%;
+  overflow-y: scroll !important;
 }
 
 body {
   display: flex;
-  /* Allows you to scroll below the viewport; default value is visible */
-  overflow-y: auto;
+  overflow-y: visible;
   overscroll-behavior-y: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -ms-overflow-style: scrollbar;
-  /* */
   width: unset !important;
+  height: 100%;
   padding-right: 0 !important;
 }
 
-/* For Next.js <Image /> https://nextjs.org/docs/api-reference/next/image#known-browser-bugs */
-/* For Safari v15+ */
-@supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  img[loading="lazy"] {
-    clip-path: inset(0.6px);
-  }
-}
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -153,7 +134,25 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
-
+.pretty-scrollbar::-webkit-scrollbar-thumb {
+  height: 56px;
+  border-radius: 8px;
+  border: 4px solid transparent;
+  background-clip: content-box;
+  /* background-color: transparent; */
+  transition: background-color 2s;
+  transition-duration: 200ms;
+}
+.pretty-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+}
+[data-color-scheme="dark"] .pretty-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #6b6b6b;
+}
+.pretty-scrollbar::-webkit-scrollbar {
+  width: 16px;
+  background: transparent;
+}
 .react-datepicker__input-container {
   display: flex;
 }

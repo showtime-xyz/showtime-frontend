@@ -11,10 +11,8 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 
-import { HeartFilled, Play } from "@showtime-xyz/universal.icon";
-import { colors } from "@showtime-xyz/universal.tailwind";
+import { Play } from "@showtime-xyz/universal.icon";
 
-import { useLike } from "app/context/like-context";
 import { useMuted } from "app/providers/mute-provider";
 
 const heartContainerStyle: ViewStyle = {
@@ -42,18 +40,9 @@ export const FeedItemTapGesture = ({
   sizeStyle,
   isVideo,
 }: FeedItemTapGestureProps) => {
-  const { like } = useLike();
   const [muted, setMuted] = useMuted();
 
-  const heartAnimation = useSharedValue(0);
   const playAnimation = useSharedValue(0);
-
-  const heartStyle = useAnimatedStyle(() => {
-    return {
-      opacity: heartAnimation.value,
-      transform: [{ scale: heartAnimation.value }],
-    };
-  }, [heartAnimation]);
 
   const playStyle = useAnimatedStyle(() => {
     return {
@@ -102,39 +91,14 @@ export const FeedItemTapGesture = ({
     [toggleVideoPlayback]
   );
 
-  const doubleTapHandleOnJS = useCallback(() => {
-    like();
-  }, [like]);
-
-  const doubleTapHandle = useMemo(
-    () =>
-      Gesture.Tap()
-        .numberOfTaps(2)
-        .onEnd(() => {
-          playAnimation.value = withSequence(withSpring(0));
-          heartAnimation.value = withSequence(
-            withSpring(1),
-            withDelay(300, withSpring(0))
-          );
-          runOnJS(doubleTapHandleOnJS)();
-        }),
-    [heartAnimation, doubleTapHandleOnJS, playAnimation]
-  );
-
   const gesture = useMemo(
-    () => Gesture.Exclusive(doubleTapHandle, singleTapHandle),
-    [doubleTapHandle, singleTapHandle]
+    () => Gesture.Exclusive(singleTapHandle),
+    [singleTapHandle]
   );
 
   return (
     <>
       <GestureDetector gesture={gesture}>{children}</GestureDetector>
-      <Animated.View
-        style={[heartContainerStyle, heartStyle, sizeStyle]}
-        pointerEvents="none"
-      >
-        <HeartFilled width={90} height={90} color={colors.rose[500]} />
-      </Animated.View>
       {isVideo ? (
         <>
           <Animated.View

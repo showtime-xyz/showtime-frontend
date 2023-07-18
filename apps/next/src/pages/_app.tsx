@@ -3,22 +3,23 @@ import "raf/polyfill";
 import "setimmediate";
 
 import { useEffect } from "react";
-import { useCallback } from "react";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+import NextNProgress from "nextjs-progressbar";
 import "react-datepicker/dist/react-datepicker.css";
 
-import { usePlatformResize } from "@showtime-xyz/universal.hooks";
 import { View } from "@showtime-xyz/universal.view";
 
 import Footer from "app/components/footer";
 import Header from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useScript } from "app/hooks/use-script";
 import { initialiseAppleMusic } from "app/lib/apple-music-auth/apple-music-auth";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { CheckoutScreen } from "app/screens/checkout";
@@ -27,7 +28,6 @@ import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
-import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
 import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
@@ -35,11 +35,9 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
-import { DropEventScreen } from "app/screens/drop-event";
+import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropFreeScreen } from "app/screens/drop-free";
-import { DropMusicScreen } from "app/screens/drop-music";
-import { DropPrivateScreen } from "app/screens/drop-private";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
@@ -52,7 +50,6 @@ import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
-import { isMobileWeb } from "app/utilities";
 
 import { Toaster } from "design-system/toast";
 
@@ -170,23 +167,22 @@ function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <AppProviders>
         <Container>
-          {/* @ts-ignore */}
-          {!Component.hideHeader && (
+          <View tw="mx-auto flex-col md:flex-row">
             <Header
               canGoBack={
                 router.pathname === "/search" ||
                 router.pathname.split("/").length - 1 >= 2
               }
             />
-          )}
 
-          <View
-            tw="items-center"
-            style={{
-              minHeight: "100svh",
-            }}
-          >
-            <Component {...pageProps} />
+            <View tw="w-full items-center md:ml-auto md:w-[calc(100%-248px)]">
+              <NextNProgress
+                color="#4F46E5"
+                options={{ showSpinner: false }}
+                showOnShallow={false}
+              />
+              <Component {...pageProps} />
+            </View>
           </View>
           <Footer />
         </Container>
@@ -204,21 +200,17 @@ function App({ Component, pageProps, router }: AppProps) {
         <ClaimLimitExplanationScreen />
         <LikersScreen />
         <ReportScreen />
-        <DropPrivateScreen />
-        <DropEventScreen />
-        <DropMusicScreen />
         <DropFreeScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />
         <QRCodeShareScreen />
         <DropViewShareScreen />
-        <CreatorChannelsCongratsScreen />
         <CreatorChannelsIntroScreen />
         <CreatorChannelsMembersScreen />
         <CreatorChannelsSettingsScreen />
         <CreatorChannelsMessageReactionsScreen />
         <CreatorChannelsShareScreen />
-        {/* Settings that renders on top of other modals */}
+        <DropEditDetailsScreen />
         <EditProfileScreen />
         <OnboardingScreen />
         <AddEmailScreen />
@@ -240,19 +232,17 @@ const inter = Inter({
 const Container = withColorScheme(
   ({ children }: { children: React.ReactNode }) => {
     const fonts = [inter.variable].join(" ");
-
-    const onResize = useCallback(() => {
-      if (isMobileWeb()) {
-        document.body.classList.add("overflow-hidden", "overscroll-y-contain");
-      } else {
-        document.body.classList.remove("overflow-hidden", "overscroll-y-none");
-      }
-    }, []);
-
-    usePlatformResize(onResize, true);
-
+    const headerHeight = useHeaderHeight();
+    const bottomBarHeight = usePlatformBottomHeight();
     return (
-      <View tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900">
+      <View
+        tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900"
+        // @ts-ignore
+        style={{
+          paddingTop: headerHeight,
+          paddingBottom: `calc(${bottomBarHeight}px + env(safe-area-inset-bottom))`,
+        }}
+      >
         <div className={fonts}>{children}</div>
       </View>
     );

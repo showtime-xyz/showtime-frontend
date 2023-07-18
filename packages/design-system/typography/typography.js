@@ -100,6 +100,15 @@ const textSizes = {
     },
     fontMetrics: fontMetricsInter,
   }),
+  "text-15": createTextSize({
+    fontSize: 15,
+    lineHeight: 18,
+    marginCorrection: {
+      android: -0.1,
+      ios: -0.4,
+    },
+    fontMetrics: fontMetricsInter,
+  }),
   "text-base": createTextSize({
     fontSize: 16,
     lineHeight: 19,

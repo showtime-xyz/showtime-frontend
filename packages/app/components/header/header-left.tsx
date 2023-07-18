@@ -1,9 +1,12 @@
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Search } from "@showtime-xyz/universal.icon";
+import { ArrowLeft, Showtime } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { View } from "@showtime-xyz/universal.view";
+
+import { ShowtimeBrandLogo } from "../showtime-brand";
 
 type HeaderLeftProps = {
   canGoBack?: boolean;
@@ -17,45 +20,56 @@ export const HeaderLeft = ({
 }: HeaderLeftProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
-
-  const canGoHome = router.pathname.split("/").length - 1 >= 2;
-
-  const Icon = canGoBack || canGoHome ? ArrowLeft : Search;
+  const isHome = router.pathname === "/";
+  const isShowShowtimeIcon =
+    Platform.OS === "web" &&
+    (router.pathname === "/" ||
+      router.pathname === "/channels" ||
+      router.pathname === "/notifications");
+  const Icon = Platform.select({
+    default: canGoBack || !isHome ? ArrowLeft : Showtime,
+    web: canGoBack ? ArrowLeft : isShowShowtimeIcon ? Showtime : ArrowLeft,
+  });
 
   return (
     <PressableScale
       hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       style={[
         {
-          height: 32,
-          width: 32,
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: 999,
         },
-        withBackground && { backgroundColor: "rgba(0,0,0,.6)" },
       ]}
       onPress={() => {
-        if (canGoBack) {
-          if (Platform.OS === "web" && history?.length <= 1) {
-            router.push("/");
-          } else {
-            router.pop();
-          }
-        } else if (canGoHome) {
+        if (isHome) {
           router.push("/");
+        } else if (Platform.OS === "web") {
+          if (history?.length > 1) {
+            router.back();
+          } else {
+            router.push("/");
+          }
         } else {
-          router.push("/search");
+          router.back();
         }
       }}
     >
-      <Icon
-        color={
-          color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
-        }
-        width={24}
-        height={24}
-      />
+      {isHome ? (
+        <ShowtimeBrandLogo color={isDark ? "#FFF" : "#000"} />
+      ) : (
+        <View
+          tw="h-7 w-7 items-center justify-center rounded-full"
+          style={withBackground && { backgroundColor: "rgba(0,0,0,.6)" }}
+        >
+          <Icon
+            color={
+              color ? color : withBackground ? "#FFF" : isDark ? "#FFF" : "#000"
+            }
+            width={24}
+            height={24}
+          />
+        </View>
+      )}
     </PressableScale>
   );
 };

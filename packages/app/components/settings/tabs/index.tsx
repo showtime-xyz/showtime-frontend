@@ -53,7 +53,6 @@ export const SettingTabsScene = ({
   switch (key) {
     case "Wallets":
       return <WalletsTab index={index} setEditingWallet={setEditingWallet} />;
-
     case "Sign In":
       return <SignInTab index={index} />;
     case "Account":

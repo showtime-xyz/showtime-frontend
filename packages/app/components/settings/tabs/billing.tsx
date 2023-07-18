@@ -115,7 +115,7 @@ const HistoryItem = memo(function HistoryItem({
   item: PaymentsHistory;
 }) {
   return (
-    <View tw="flex-row justify-between px-4 py-3.5 md:px-0">
+    <View tw="flex-row justify-between px-4 py-3.5 lg:px-0">
       <View tw="flex-col items-start justify-center md:flex-row md:items-center">
         <Text tw="text-sm font-medium text-gray-900 dark:text-white md:text-base">
           {item.amount}
@@ -146,7 +146,7 @@ const HistoryItem = memo(function HistoryItem({
                     key={link}
                   >
                     <MenuItemIcon Icon={Receipt} />
-                    <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
+                    <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                       {`View Receipt ${
                         item.receipts.length > 1 ? `#${index + 1}` : ``
                       }`}
@@ -204,7 +204,7 @@ const Header = memo(function Header() {
           title="No payment connected to your profile."
         />
       ) : (
-        <View tw="animate-fade-in-250 mt-4 px-4 md:mt-8 md:px-0">
+        <View tw="animate-fade-in-250 mt-4 px-4 md:mt-8 lg:px-0">
           {data?.map((item) => (
             <CreditCardItem
               key={item.id}
@@ -281,12 +281,11 @@ export const BillingTab = ({ index = 0 }: BillingTabProps) => {
         <ListComponent
           data={listData}
           keyExtractor={keyExtractor}
-          useWindowScroll={isMdWidth}
+          useWindowScroll
           estimatedItemSize={60}
           ListHeaderComponent={Header}
           style={{
-            height: isMdWidth ? undefined : screenHeight - 200,
-            minHeight: isMdWidth ? 400 : undefined,
+            minHeight: 400,
           }}
           ListFooterComponent={ListFooterComponent}
           ListEmptyComponent={ListEmptyComponent}

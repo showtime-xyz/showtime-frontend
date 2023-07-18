@@ -11,18 +11,20 @@ import { useTrackPageViewed } from "app/lib/analytics";
 const NotificationsScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Notifications" });
   return (
-    <View tw="w-full max-w-screen-2xl flex-1 bg-white dark:bg-black md:px-6">
-      <ErrorBoundary>
-        <Suspense
-          fallback={
-            <View tw="mt-10 items-center justify-center">
-              <Spinner size="small" />
-            </View>
-          }
-        >
-          <Notifications />
-        </Suspense>
-      </ErrorBoundary>
+    <View tw="w-full flex-1 bg-white dark:bg-black">
+      <View tw="md:max-w-screen-content mx-auto w-full flex-1 bg-white dark:bg-black md:px-6">
+        <ErrorBoundary>
+          <Suspense
+            fallback={
+              <View tw="mt-10 items-center justify-center">
+                <Spinner size="small" />
+              </View>
+            }
+          >
+            <Notifications />
+          </Suspense>
+        </ErrorBoundary>
+      </View>
     </View>
   );
 });

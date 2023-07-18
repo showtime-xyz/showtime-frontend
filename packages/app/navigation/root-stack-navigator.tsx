@@ -1,9 +1,13 @@
 import { Platform } from "react-native";
 
+import Constants from "expo-constants";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { Text } from "@showtime-xyz/universal.text";
 
 import { Messages } from "app/components/creator-channels/messages";
+import { useHandleNotification } from "app/hooks/use-handle-notification";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
@@ -20,6 +24,7 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
+import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropUpdateScreen } from "app/screens/drop-update";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
@@ -39,11 +44,10 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { TrendingScreen } from "app/screens/trending";
 
-import { DropEventScreen } from "../screens/drop-event";
+import packageJson from "../../../package.json";
 import { DropFreeScreen } from "../screens/drop-free";
-import { DropMusicScreen } from "../screens/drop-music";
-import { DropPrivateScreen } from "../screens/drop-private";
 import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
@@ -54,7 +58,7 @@ const Stack = createStackNavigator<RootStackNavigatorParams>();
 export function RootStackNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
   useNetWorkConnection();
-
+  useHandleNotification();
   const isDark = useIsDarkMode();
 
   return (
@@ -105,6 +109,10 @@ export function RootStackNavigator() {
           getId={({ params }) => Object.values(params).join("-")}
           options={{
             statusBarStyle: "light",
+            contentStyle: {
+              backgroundColor: "black",
+            },
+            navigationBarColor: "black",
           }}
         />
         <Stack.Screen name="channelsMessage" component={Messages} />
@@ -112,7 +120,18 @@ export function RootStackNavigator() {
 
       {/* Screens accessible in most of the navigators */}
       <Stack.Group screenOptions={screenOptions({ safeAreaTop, isDark })}>
-        <Stack.Screen name="settings" component={SettingsScreen} />
+        <Stack.Screen
+          name="settings"
+          options={{
+            headerTitle: "Settings",
+            headerRight: () => (
+              <Text tw="text-xl font-extrabold text-gray-100 dark:text-gray-900">
+                v{Constants?.manifest?.version ?? packageJson?.version}
+              </Text>
+            ),
+          }}
+          component={SettingsScreen}
+        />
         <Stack.Screen
           name="privacySecuritySettings"
           component={PrivacySecuritySettingsScreen}
@@ -144,7 +163,11 @@ export function RootStackNavigator() {
         />
         <Stack.Screen
           name="comments"
-          options={{ headerTitle: "Comments" }}
+          options={{
+            headerTitle: "Comments",
+            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
+            animationDuration: Platform.OS === "android" ? undefined : 200,
+          }}
           component={CommentsScreen}
         />
 
@@ -161,6 +184,11 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="channelsMessageReactions"
           component={CreatorChannelsMessageReactionsScreen}
+        />
+        <Stack.Screen
+          name="trending"
+          options={{ headerTitle: "Trending" }}
+          component={TrendingScreen}
         />
       </Stack.Group>
 
@@ -195,24 +223,8 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen
-          name="dropMusic"
-          component={DropMusicScreen}
-          options={{ gestureEnabled: false }}
-        />
-
-        <Stack.Screen
           name="dropFree"
           component={DropFreeScreen}
-          options={{ gestureEnabled: false }}
-        />
-        <Stack.Screen
-          name="dropEvent"
-          component={DropEventScreen}
-          options={{ gestureEnabled: false }}
-        />
-        <Stack.Screen
-          name="dropPrivate"
-          component={DropPrivateScreen}
           options={{ gestureEnabled: false }}
         />
         <Stack.Screen name="claim" component={ClaimScreen} />
@@ -220,6 +232,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="dropViewShareModal"
           component={DropViewShareScreen}
+        />
+        <Stack.Screen
+          name="dropEditDetailsModal"
+          component={DropEditDetailsScreen}
         />
         <Stack.Screen name="raffle" component={RaffleScreen} />
         <Stack.Screen

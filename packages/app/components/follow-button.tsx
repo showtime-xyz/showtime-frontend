@@ -10,49 +10,78 @@ type ToggleFollowParams = ButtonProps & {
   name?: string;
   profileId: number;
   onToggleFollow?: () => void;
+  renderButton?: ({
+    isFollowing,
+    onPress,
+    text,
+  }: {
+    isFollowing: boolean;
+    onPress: () => void;
+    text: string;
+  }) => React.ReactNode;
 };
 
-export const FollowButton = memo<ToggleFollowParams>(
-  ({ profileId, name, onToggleFollow, ...rest }) => {
-    const { unfollow, follow, data, isFollowing: isFollowingFn } = useMyInfo();
+export const FollowButton = memo<ToggleFollowParams>(function FollowButton({
+  profileId,
+  name,
+  onToggleFollow,
+  renderButton,
+  ...rest
+}) {
+  const { unfollow, follow, data, isFollowing: isFollowingFn } = useMyInfo();
 
-    const isFollowing = useMemo(
-      () => isFollowingFn(profileId),
-      [profileId, isFollowingFn]
-    );
+  const isFollowing = useMemo(
+    () => isFollowingFn(profileId),
+    [profileId, isFollowingFn]
+  );
 
-    const toggleFollow = useCallback(async () => {
-      if (isFollowing) {
-        Alert.alert(`Unfollow ${name ? `@${name}` : ""}?`, "", [
-          {
-            text: "Cancel",
-            style: "cancel",
+  const text = useMemo(
+    () => (isFollowing ? "Following" : "Follow"),
+    [isFollowing]
+  );
+
+  const toggleFollow = useCallback(async () => {
+    if (isFollowing) {
+      Alert.alert(`Unfollow ${name ? `@${name}` : ""}?`, "", [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Unfollow",
+          style: "destructive",
+          onPress: async () => {
+            await unfollow(profileId);
+            onToggleFollow?.();
           },
-          {
-            text: "Unfollow",
-            style: "destructive",
-            onPress: async () => {
-              await unfollow(profileId);
-              onToggleFollow?.();
-            },
-          },
-        ]);
-      } else {
-        await follow(profileId);
-        onToggleFollow?.();
-      }
-    }, [follow, unfollow, isFollowing, profileId, name, onToggleFollow]);
-    if (data?.data?.profile?.profile_id === profileId) return null;
+        },
+      ]);
+    } else {
+      await follow(profileId);
+      onToggleFollow?.();
+    }
+  }, [follow, unfollow, isFollowing, profileId, name, onToggleFollow]);
+  if (data?.data?.profile?.profile_id === profileId) return null;
+  if (renderButton) {
     return (
-      <Button
-        variant={isFollowing ? "tertiary" : "primary"}
-        onPress={toggleFollow}
-        {...rest}
-      >
-        {isFollowing ? "Following" : "Follow"}
-      </Button>
+      <>
+        {renderButton({
+          isFollowing,
+          onPress: toggleFollow,
+          text,
+        })}
+      </>
     );
   }
-);
+  return (
+    <Button
+      variant={isFollowing ? "tertiary" : "primary"}
+      onPress={toggleFollow}
+      {...rest}
+    >
+      {text}
+    </Button>
+  );
+});
 
 FollowButton.displayName = "FollowButton";

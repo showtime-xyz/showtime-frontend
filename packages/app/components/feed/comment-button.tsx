@@ -4,15 +4,15 @@ import { Platform } from "react-native";
 import { Message } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { SocialButton } from "app/components/social-button";
+import { SocialButton, SocialButtonProps } from "app/components/social-button";
 import { useSocialColor } from "app/hooks/use-social-color";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
 
-interface CommentButtonProps {
+type CommentButtonProps = SocialButtonProps & {
   nft?: NFT;
   vertical?: boolean;
-}
+};
 
 export function CommentButton({ nft, vertical, ...rest }: CommentButtonProps) {
   const router = useRouter();

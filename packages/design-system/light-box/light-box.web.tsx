@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { View } from "react-native";
 
 import { LightBoxProps } from "./light-box";
@@ -12,22 +12,21 @@ export const LightBox: React.FC<LightBoxProps> = ({
 }) => {
   const lightBox = useLightBox();
 
-  const onPress = () => {
+  const onPress = useCallback(() => {
     lightBox?.show({
-      imageElement: children,
+      imageElement: <View style={containerStyle}>{children}</View>,
     });
-  };
+  }, [children, containerStyle, lightBox]);
+
   return (
-    <View style={containerStyle}>
-      <div
-        onClick={onPress}
-        style={{
-          width: imgWidth,
-          height: imgHeight,
-        }}
-      >
-        {children}
-      </div>
-    </View>
+    <div
+      onClick={onPress}
+      style={{
+        width: imgWidth,
+        height: imgHeight,
+      }}
+    >
+      {children}
+    </div>
   );
 };
