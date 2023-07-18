@@ -56,7 +56,9 @@ async function registerForPushNotificationsAsync() {
 
   // Get the device token. Can be used with another push notification service
   const devicePushToken = await Notifications.getDevicePushTokenAsync();
-  console.log(devicePushToken);
+  if (__DEV__) {
+    console.log(devicePushToken);
+  }
 
   // Save the device token to the database
   await axios({
@@ -80,7 +82,10 @@ async function registerForPushNotificationsAsync() {
     projectId: "45cbf5d5-24fe-4aa6-9580-acf540651abd",
     devicePushToken,
   });
-  console.log(expoPushToken);
+
+  if (__DEV__) {
+    console.log(expoPushToken);
+  }
 
   // Save the expo token to the database
   await axios({
