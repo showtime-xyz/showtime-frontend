@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Messages } from "app/components/creator-channels/messages";
+import { useHandleNotification } from "app/hooks/use-handle-notification";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
@@ -57,7 +58,7 @@ const Stack = createStackNavigator<RootStackNavigatorParams>();
 export function RootStackNavigator() {
   const { top: safeAreaTop } = useSafeAreaInsets();
   useNetWorkConnection();
-
+  useHandleNotification();
   const isDark = useIsDarkMode();
 
   return (
