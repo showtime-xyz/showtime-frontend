@@ -712,11 +712,13 @@ export const DropFree = () => {
                       <Pressable
                         onPress={() => onChange(!value)}
                         tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
+                        accessible
+                        accessibilityRole="checkbox"
                       >
                         <Checkbox
                           onChange={(v) => onChange(v)}
+                          testID="i-agree-checkbox"
                           checked={value}
-                          aria-label="I agree to the terms and conditions"
                         />
 
                         <Text tw="px-4 text-gray-600 dark:text-gray-400">
