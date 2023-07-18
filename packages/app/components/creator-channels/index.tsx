@@ -6,3 +6,4 @@ export { CreatorChannels } from "./channels";
 export { ChannelsSettings } from "./settings";
 export { MessageReactionUserListModal } from "./message-reaction-user-list";
 export { ChannelsPromote } from "./promote";
+export { GatedMessage } from "./gated-message";

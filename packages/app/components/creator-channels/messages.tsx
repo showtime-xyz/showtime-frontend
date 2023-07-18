@@ -104,6 +104,7 @@ import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
 } from "./animated-cell-container";
+import { GatedMessage } from "./gated-message";
 import { useChannelById } from "./hooks/use-channel-detail";
 import {
   ChannelMessageItem,
@@ -376,7 +377,7 @@ export const Messages = memo(() => {
       { shallow: true }
     );
   };
-  const { data, isLoading, fetchMore, isLoadingMore, error } =
+  const { data, isLoading, fetchMore, isLoadingMore, error, mutate } =
     useChannelMessages(channelId);
   const isCurrentUserOwner =
     channelDetail.data?.owner.profile_id === user.user?.data.profile.profile_id;
@@ -954,69 +955,9 @@ const MessageItem = memo(
     }, [channel_message.created_at]);
 
     //if (channel_message.is_payment_gated && !channel_message.body) {
-    // eslint-disable-next-line no-constant-condition
     if (true) {
-      return (
-        <Animated.View style={style} ref={animatedViewRef}>
-          <View tw="mx-2 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
-            <LinearGradient
-              style={{
-                position: "absolute",
-                width: "200%",
-                height: "100%",
-                borderRadius: 16,
-                overflow: "hidden",
-                transform: [{ scaleX: 1 }],
-              }}
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1, y: -0.6 }}
-              // Adding the color stops manually
-              colors={[
-                "#F5E794",
-                "#F5E794",
-                "#F5E794",
-                "#FFD24D",
-                "#E6A130",
-                "#FFE956",
-                "#FFEC92",
-                "#FED749",
-                "#FDC93F",
-                "#F5E794",
-                "#F6C33D",
-                "#ED9F26",
-                "#E88A3F",
-                "#F4CE5E",
-                "#E4973C",
-                "#FFD480",
-                "#F5E794",
-                "#F5E794",
-                "#F5E794",
-              ]}
-            />
-            <View tw="absolute left-3 top-3 rounded-md bg-[#CE8903] px-1 py-1">
-              <View tw="flex-row items-center justify-center">
-                <View tw="mr-1">
-                  <Showtime
-                    width={10}
-                    height={10}
-                    color={"white"}
-                    stroke={"white"}
-                    fill={"white"}
-                  />
-                </View>
-
-                <Text tw="text-xs font-medium text-white">Star drop</Text>
-              </View>
-            </View>
-            <View tw="flex-row items-center justify-center">
-              <View tw="mr-2">
-                <Showtime width={16} height={16} fill={"black"} />
-              </View>
-              <Text tw="text-sm font-semibold">Collect to unlock</Text>
-            </View>
-          </View>
-        </Animated.View>
-      );
+      // TODO: determine which props to pass
+      return <GatedMessage />;
     }
 
     return (
