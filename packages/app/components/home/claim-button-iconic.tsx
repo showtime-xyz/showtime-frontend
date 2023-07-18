@@ -1,8 +1,12 @@
 import { useCallback, useContext } from "react";
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
+
+import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime, Check2 } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -113,7 +117,8 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     edition?.spotify_track_url,
     handleCollectPress,
   ]);
-
+  const isGold = true;
+  const prices = 100;
   if (loading) {
     return (
       <View tw="mb-4">
@@ -228,21 +233,39 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
           </Text>
         </>
       }
-      buttonColor={isDark ? "#fff" : colors.gray[900]}
+      buttonColor={isGold ? undefined : isDark ? "#fff" : colors.gray[900]}
       {...rest}
     >
-      <View tw="absolute -right-1 -top-1 h-[22px] min-w-[24px] items-center justify-center rounded-full bg-white dark:bg-black">
-        <Text tw="text-xs font-semibold text-black dark:text-white">$0</Text>
-      </View>
-      {/* <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
-        <Image
-          source={{
-            uri: "https://media.showtime.xyz/assets/showtime-abstract.png",
-          }}
-          style={{ height: "100%", width: "100%" }}
-        />
-      </View> */}
-      <Showtime height={25} width={25} color={isDark ? "#000" : "#fff"} />
+      {isGold ? (
+        <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
+          <Image
+            source={require("./gold-button-bg.svg")}
+            style={{ height: "100%", width: "100%" }}
+          />
+        </View>
+      ) : null}
+      <Showtime
+        height={25}
+        width={25}
+        color={isGold ? "#000" : isDark ? "#000" : "#fff"}
+      />
+      {prices > 0 ? (
+        <View tw="absolute -right-2.5 -top-2 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full px-1">
+          <View tw="-z-1 absolute h-10 w-20">
+            <Image
+              source={require("./gold-button-bg.svg")}
+              style={{ height: "100%", width: "100%" }}
+            />
+          </View>
+          <Text tw="text-xs font-semibold text-black">${prices}</Text>
+        </View>
+      ) : (
+        <View tw="absolute -right-1 -top-1 h-[22px] min-w-[24px] items-center justify-center rounded-full bg-white dark:bg-black">
+          <Text tw="text-xs font-semibold text-black dark:text-white">
+            ${prices}
+          </Text>
+        </View>
+      )}
     </FeedSocialButton>
   );
 }
