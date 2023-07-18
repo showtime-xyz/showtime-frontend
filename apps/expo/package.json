@@ -105,6 +105,7 @@
     "expo-haptics": "~12.4.0",
     "expo-image": "~1.3.2",
     "expo-image-picker": "~14.3.1",
+    "expo-insights": "~0.2.0",
     "expo-linear-gradient": "~12.3.0",
     "expo-linking": "~5.0.2",
     "expo-localization": "~14.3.0",

@@ -5,6 +5,7 @@ import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-s
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
 import { Image } from "expo-image";
 import * as Notifications from "expo-notifications";
+import * as SplashScreen from "expo-splash-screen";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
@@ -17,6 +18,8 @@ import { AppProviders } from "app/providers/app-providers";
 
 enableScreens(true);
 enableFreeze(true);
+
+SplashScreen.preventAutoHideAsync();
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
