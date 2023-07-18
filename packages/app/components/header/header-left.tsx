@@ -43,6 +43,12 @@ export const HeaderLeft = ({
       onPress={() => {
         if (isHome) {
           router.push("/");
+        } else if (Platform.OS === "web") {
+          if (history?.length > 1) {
+            router.back();
+          } else {
+            router.push("/");
+          }
         } else {
           router.back();
         }
