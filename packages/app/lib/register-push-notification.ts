@@ -77,6 +77,7 @@ async function registerForPushNotificationsAsync() {
 
   // Get the expo token
   const expoPushToken = await Notifications.getExpoPushTokenAsync({
+    projectId: "45cbf5d5-24fe-4aa6-9580-acf540651abd",
     devicePushToken,
   });
   console.log(expoPushToken);
