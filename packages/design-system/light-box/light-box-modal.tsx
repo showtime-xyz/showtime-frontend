@@ -43,9 +43,13 @@ export const LightImageModal = ({
   const { x, y, width, height, imageOpacity } = position;
   const { width: targetWidth, height: dimensionHeight } = useWindowDimensions();
 
-  const scaleFactor = layout.width / targetWidth;
+  const scaleFactor =
+    (typeof layout.width === "number" ? layout.width : targetWidth) /
+    targetWidth;
 
-  const targetHeight = layout.height / scaleFactor;
+  const targetHeight =
+    (typeof layout.height === "number" ? layout.height : dimensionHeight) /
+    scaleFactor;
 
   const headerHeight = 0;
 

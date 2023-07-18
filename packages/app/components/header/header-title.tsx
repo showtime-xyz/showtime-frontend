@@ -5,6 +5,7 @@ import { View } from "@showtime-xyz/universal.view";
 const titleMap = new Map([
   ["/notifications", "Notifications"],
   ["/trending", "Trending"],
+  ["/settings", "Settings"],
 ]);
 
 export const HeaderTitle = () => {

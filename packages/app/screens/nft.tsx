@@ -101,7 +101,7 @@ const NFTDetail = () => {
         text={
           <View tw="flex-1 items-center justify-center">
             <View tw="mb-6">
-              <Text tw="text-center text-2xl">
+              <Text tw="text-center text-2xl text-gray-900 dark:text-white">
                 {nftError.response?.status === 404
                   ? "Drop not found"
                   : "No drops, yet!"}

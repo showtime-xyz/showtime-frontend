@@ -127,6 +127,7 @@ const CreateCard = ({
     <PressableScale
       onPress={onPress}
       tw="flex-row justify-between rounded-xl bg-gray-100 py-4 pl-4 pr-2 dark:bg-gray-900"
+      accessibilityLabel={title}
     >
       {icon}
       <View tw="ml-2 mt-1 flex-1 flex-row items-center justify-between">

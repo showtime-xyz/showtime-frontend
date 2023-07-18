@@ -281,12 +281,11 @@ export const BillingTab = ({ index = 0 }: BillingTabProps) => {
         <ListComponent
           data={listData}
           keyExtractor={keyExtractor}
-          useWindowScroll={isMdWidth}
+          useWindowScroll
           estimatedItemSize={60}
           ListHeaderComponent={Header}
           style={{
-            height: isMdWidth ? undefined : screenHeight - 200,
-            minHeight: isMdWidth ? 400 : undefined,
+            minHeight: 400,
           }}
           ListFooterComponent={ListFooterComponent}
           ListEmptyComponent={ListEmptyComponent}

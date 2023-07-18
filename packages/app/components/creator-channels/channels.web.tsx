@@ -1,6 +1,7 @@
 import { useCallback, memo, useRef, useMemo } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -104,8 +105,7 @@ const CreatorChannelsListItem = memo(
           ]}
         >
           <View tw="flex-row items-start justify-start">
-            <AvatarHoverCard
-              username={item.owner.username}
+            <Avatar
               url={item.owner.img_url}
               size={40}
               alt="CreatorPreview Avatar"
@@ -367,13 +367,13 @@ export const CreatorChannels = memo(() => {
   if (!isLgWidth) {
     if (router.query["channelId"]) {
       return (
-        <View tw="w-full flex-1">
+        <View tw="h-[100svh] w-full">
           <Messages />
         </View>
       );
     }
     return (
-      <View tw="h-screen w-full border-l border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-black">
+      <View tw="h-screen w-full bg-white dark:bg-black">
         <CreatorChannelsListMobile />
       </View>
     );
@@ -385,7 +385,7 @@ export const CreatorChannels = memo(() => {
     }
 
     return (
-      <View tw="w-full border-l border-gray-200 bg-white pt-4 dark:border-gray-800 dark:bg-black">
+      <View tw="w-full bg-white dark:bg-black">
         <CreatorChannelsListMobile />
       </View>
     );

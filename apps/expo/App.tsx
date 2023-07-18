@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AppState, LogBox } from "react-native";
 
 import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
 import { Image } from "expo-image";
-import * as Notifications from "expo-notifications";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
@@ -49,61 +48,15 @@ LogBox.ignoreLogs([
   "Sending `onAnimatedValueUpdate` with no listeners registered.", // `react-native-tab-view` waring issue.
   "Did not receive response to shouldStartLoad in time", // warning from @magic-sdk/react-native's react-native-webview dependency. https://github.com/react-native-webview/react-native-webview/issues/124,
   "Looks like you're trying",
+  "The default export has been moved to a named export and it will be removed in version 1, change to import { kv }",
 ]);
 
 function App() {
   // check for updates as early as possible
   useExpoUpdate();
 
-  const [notification, setNotification] =
-    useState<Notifications.Notification | null>(null);
-
-  useEffect(() => {
-    AvoidSoftInput.setEnabled(true);
-
-    return () => {
-      AvoidSoftInput.setEnabled(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Load feature definitions from API
-    fetch(process.env.GROWTHBOOK_FEATURES_ENDPOINT)
-      .then((res) => res.json())
-      .then((json) => {
-        growthbook.setFeatures(json.features);
-      });
-  }, []);
-
-  useEffect(() => {
-    let shouldShowNotification = true;
-    if (notification) {
-      // TODO:
-      // const content = notification?.request?.content?.data?.body?.path;
-      // const currentScreen = '';
-      // const destinationScreen = '';
-      // Don't show if already on the same screen as the destination screen
-      // shouldShowNotification = currentScreen !== destinationScreen;
-    }
-
-    // priority: AndroidNotificationPriority.HIGH,
-    Notifications.setNotificationHandler({
-      handleNotification: async () => ({
-        shouldShowAlert: shouldShowNotification,
-        shouldPlaySound: shouldShowNotification,
-        shouldSetBadge: false, // shouldShowNotification
-      }),
-    });
-  }, [notification]);
-
   // Handle push notifications
   useEffect(() => {
-    // Handle notifications that are received while the app is open.
-    const notificationListener = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        setNotification(notification);
-      }
-    );
     // a memory warning listener for free up FastImage Cache
     const memoryWarningSubscription = AppState.addEventListener(
       "memoryWarning",
@@ -120,26 +73,25 @@ function App() {
       }
     );
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
       memoryWarningSubscription.remove();
     };
   }, []);
 
-  // Listeners registered by this method will be called whenever a user interacts with a notification (eg. taps on it).
   useEffect(() => {
-    const responseListener =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        // const content =
-        //   Platform.OS === "ios"
-        //     ? response?.notification?.request?.content?.data?.body?.path
-        //     : response?.notification?.request?.content?.data?.path;
-        // Notifications.dismissNotificationAsync(
-        //   response?.notification?.request?.identifier
-        // );
-        // Notifications.setBadgeCountAsync(0);
-      });
+    AvoidSoftInput.setEnabled(true);
 
-    return () => Notifications.removeNotificationSubscription(responseListener);
+    return () => {
+      AvoidSoftInput.setEnabled(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Load feature definitions from API
+    fetch(process.env.GROWTHBOOK_FEATURES_ENDPOINT)
+      .then((res) => res.json())
+      .then((json) => {
+        growthbook.setFeatures(json.features);
+      });
   }, []);
 
   return (

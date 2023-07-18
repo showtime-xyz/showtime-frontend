@@ -54,6 +54,7 @@
     "next": "^13.4.9",
     "next-images": "^1.8.5",
     "next-pwa": "^5.6.0",
+    "nextjs-progressbar": "^0.0.16",
     "patch-package": "^7.0.0",
     "postinstall-postinstall": "^2.1.0",
     "raf": "^3.4.1",

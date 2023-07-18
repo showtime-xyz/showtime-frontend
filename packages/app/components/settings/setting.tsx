@@ -68,7 +68,7 @@ const SettingsTabs = () => {
         onIndexChange={setIndex}
         renderScrollHeader={renderHeader}
         minHeaderHeight={Platform.select({
-          default: headerHeight,
+          default: headerHeight - 8,
           android: 0,
         })}
         sceneContainerStyle={{

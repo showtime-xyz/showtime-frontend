@@ -530,7 +530,7 @@ export const EditProfile = () => {
                       }
                     />
                   </View>
-                  {/* <View tw="mt-4 flex-row items-center justify-between">
+                  <View tw="mt-4 flex-row items-center justify-between">
                     <View tw="flex-row items-center">
                       <InstagramColorful width={20} height={20} />
                       <Text tw="ml-2 text-sm font-bold text-gray-700 dark:text-white">
@@ -546,7 +546,7 @@ export const EditProfile = () => {
                         user?.data?.profile?.social_login_handles?.instagram
                       }
                     />
-                  </View> */}
+                  </View>
                 </View>
               </View>
               {/* End Social */}

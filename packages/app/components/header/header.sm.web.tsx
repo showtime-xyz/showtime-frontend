@@ -20,9 +20,6 @@ export const HeaderSm = withColorScheme(
     if (isHeaderHidden) {
       return null;
     }
-    if (HIDE_MOBILE_WEB_HEADER_SCREENS.includes(router.pathname)) {
-      return null;
-    }
     if (SWIPE_LIST_SCREENS.includes(router.pathname)) {
       return (
         <>
@@ -32,19 +29,10 @@ export const HeaderSm = withColorScheme(
         </>
       );
     }
-
-    if (router.pathname === "/profile/[username]") {
-      return (
-        <>
-          <View tw={["fixed left-4 top-2 z-10 flex md:hidden"]}>
-            <HeaderLeft withBackground canGoBack={canGoBack} />
-          </View>
-          <View tw={["fixed right-4 top-2 z-10 flex md:hidden"]}>
-            <HeaderRightSm withBackground />
-          </View>
-        </>
-      );
+    if (HIDE_MOBILE_WEB_HEADER_SCREENS.includes(router.pathname)) {
+      return null;
     }
+
     return (
       <>
         <View
