@@ -33,14 +33,16 @@ export const HomeSlider = memo(function HomeSlider({
       if (!isMdWidth) return;
       if (progress <= 0) {
         setAllowSlidePrev(false);
+        setAllowSlideNext(data.length > Math.floor(slidesPerView));
       } else if (progress >= 1) {
         setAllowSlideNext(false);
+        setAllowSlidePrev(true);
       } else {
         setAllowSlideNext(true);
         setAllowSlidePrev(true);
       }
     },
-    [isMdWidth]
+    [isMdWidth, data.length, slidesPerView]
   );
   return (
     <>
