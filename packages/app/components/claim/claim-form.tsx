@@ -10,8 +10,10 @@ import {
   Linking,
   Platform,
   ScrollView as ReactNativeScrollView,
+  StyleSheet,
 } from "react-native";
 
+import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
@@ -22,6 +24,7 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CheckFilled } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -473,6 +476,21 @@ export const ClaimForm = ({
               tw={isDisableButton ? "opacity-[0.45]" : ""}
               onPress={handleClaimNFT}
             >
+              {isGold ? (
+                <LinearGradient
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: 999,
+                    overflow: "hidden",
+                    transform: [{ scaleX: 1 }],
+                  }}
+                  {...fromCSS(
+                    "linear-gradient(207deg, #FFCB6C 2.11%, #FDD764 4.95%, #FFD24D 12.42%, #E6A130 15.46%, #EDAF38 17.19%, #FFE956 19.13%, #FFEC92 22.17%, #FED749 25.98%, #FDC93F 31.31%, #F6C33D 36.22%, #ED9F26 40.36%, #E88A3F 46.36%, #F4CE5E 54.12%, #E4973C 60.91%, #F1A819 69.63%, #FFD480 82.36%, #FBC73F 91.83%, #F5E794 99.79%)"
+                  )}
+                />
+              ) : null}
               {isLoading ? (
                 "Loading..."
               ) : state.status === "loading" ? (
@@ -490,8 +508,19 @@ export const ClaimForm = ({
                 </View>
               ) : isGold ? (
                 <View tw="w-full flex-row items-center justify-center">
-                  <Text tw="ml-2 font-semibold text-white dark:text-black">
-                    Collect
+                  <View>
+                    <Image
+                      source={{
+                        uri: "https://showtime-media.b-cdn.net/assets/gold-button-icon.png",
+                      }}
+                      width={24}
+                      height={24}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  </View>
+
+                  <Text tw="ml-2 text-base font-semibold text-white dark:text-black">
+                    Collect Star Drop - ${3}
                   </Text>
                 </View>
               ) : (
