@@ -486,10 +486,16 @@ CreatorChannelsList.displayName = "CreatorChannelsList";
 
 const CCSkeleton = () => {
   const headerHeight = useHeaderHeight();
+  const insets = useSafeAreaInsets();
   return (
     <View
       tw="mt-4 px-4"
-      style={{ marginTop: Platform.select({ web: 0, default: headerHeight }) }}
+      style={{
+        marginTop: Platform.select({
+          web: 0,
+          default: headerHeight + insets.top,
+        }),
+      }}
     >
       {new Array(8).fill(0).map((_, i) => {
         return (
