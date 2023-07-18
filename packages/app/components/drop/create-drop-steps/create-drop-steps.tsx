@@ -5,6 +5,7 @@ import {
   ScrollView as RNScrollView,
 } from "react-native";
 
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Controller } from "react-hook-form";
 import Animated, {
   FadeIn,
@@ -993,27 +994,33 @@ const Layout = (props: {
   const isDark = useIsDarkMode();
   const insets = useSafeAreaInsets();
   return (
-    <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
-      <View tw="mx-4 my-8 flex-row items-center">
-        <Pressable tw="absolute" onPress={props.onBackPress}>
-          {props.closeIcon ? (
-            <Close color={isDark ? "white" : "black"} width={24} height={24} />
-          ) : (
-            <ArrowLeft
-              color={isDark ? "white" : "black"}
-              width={24}
-              height={24}
-            />
-          )}
-        </Pressable>
-        <View tw="mx-auto">
-          <Text tw="text-base font-bold text-black dark:text-white">
-            {props.title}
-          </Text>
+    <BottomSheetModalProvider>
+      <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
+        <View tw="mx-4 my-8 flex-row items-center">
+          <Pressable tw="absolute" onPress={props.onBackPress}>
+            {props.closeIcon ? (
+              <Close
+                color={isDark ? "white" : "black"}
+                width={24}
+                height={24}
+              />
+            ) : (
+              <ArrowLeft
+                color={isDark ? "white" : "black"}
+                width={24}
+                height={24}
+              />
+            )}
+          </Pressable>
+          <View tw="mx-auto">
+            <Text tw="text-base font-bold text-black dark:text-white">
+              {props.title}
+            </Text>
+          </View>
         </View>
+        {props.children}
       </View>
-      {props.children}
-    </View>
+    </BottomSheetModalProvider>
   );
 };
 
