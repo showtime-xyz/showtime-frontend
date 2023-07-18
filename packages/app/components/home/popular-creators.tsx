@@ -6,6 +6,8 @@ import {
   ListRenderItemInfo,
 } from "react-native";
 
+import { BorderlessButton } from "react-native-gesture-handler";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CreatorChannel as CreatorChannelIcon } from "@showtime-xyz/universal.icon";
@@ -26,6 +28,8 @@ import { breakpoints } from "design-system/theme";
 
 import { useJoinChannel } from "../creator-channels/hooks/use-join-channel";
 import { HomeSlider } from "./home-slider";
+
+const PlatformPressable = Platform.OS === "web" ? Pressable : BorderlessButton;
 
 const INFO_HEIGTH = 230;
 const windowWidth = Dimensions.get("window").width;
@@ -163,14 +167,20 @@ export const PopularCreators = memo(function PopularCreators() {
           Popular artists
         </Text>
         {isShowSeeAll && (
-          <Text
-            tw="text-sm font-semibold text-indigo-600"
+          <PlatformPressable
             onPress={() => {
               router.push("/channels");
             }}
+            shouldActivateOnStart
+            hitSlop={10}
           >
-            see all
-          </Text>
+            <View
+              tw="-mt-1 p-1"
+              hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+            >
+              <Text tw="text-sm font-semibold text-indigo-600">see all</Text>
+            </View>
+          </PlatformPressable>
         )}
       </View>
       <View tw="mb-2 w-full rounded-2xl">

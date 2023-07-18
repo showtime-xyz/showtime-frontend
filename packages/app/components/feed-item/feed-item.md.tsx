@@ -45,7 +45,6 @@ import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { UserList } from "app/components/user-list";
-import { LikeContextProvider } from "app/context/like-context";
 import { useComments } from "app/hooks/api/use-comments";
 import {
   ContentLayoutOffset,
@@ -264,169 +263,167 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   ]);
 
   return (
-    <LikeContextProvider nft={nft}>
-      <View
-        tw="h-full w-full flex-row overflow-hidden border-l border-gray-200 dark:border-gray-800"
-        style={{
-          height: itemHeight,
-          paddingTop: headerHeight,
-        }}
-      >
-        <View tw="flex-1" ref={container}>
-          <View tw="w-full flex-row items-center justify-between p-4">
-            <Button
-              variant="text"
-              size="regular"
-              onPress={onClose}
-              iconOnly
-              tw="bg-white px-3 dark:bg-gray-900"
-            >
-              <ChevronLeft width={24} height={24} />
-            </Button>
-            <View tw="swiper-no-swiping flex-row items-center">
-              {nft?.mime_type?.includes("video") ? (
-                <Button
-                  variant="text"
-                  size="regular"
-                  onPress={(e) => {
-                    e.preventDefault();
-                    setMuted(!muted);
-                  }}
-                  iconOnly
-                  tw="mr-4 bg-white px-3 dark:bg-gray-900"
-                >
-                  {muted ? (
-                    <Muted width={24} height={24} />
-                  ) : (
-                    <Unmuted width={24} height={24} />
-                  )}
-                </Button>
-              ) : null}
+    <View
+      tw="h-full w-full flex-row overflow-hidden border-l border-gray-200 dark:border-gray-800"
+      style={{
+        height: itemHeight,
+        paddingTop: headerHeight,
+      }}
+    >
+      <View tw="flex-1" ref={container}>
+        <View tw="w-full flex-row items-center justify-between p-4">
+          <Button
+            variant="text"
+            size="regular"
+            onPress={onClose}
+            iconOnly
+            tw="bg-white px-3 dark:bg-gray-900"
+          >
+            <ChevronLeft width={24} height={24} />
+          </Button>
+          <View tw="swiper-no-swiping flex-row items-center">
+            {nft?.mime_type?.includes("video") ? (
               <Button
                 variant="text"
                 size="regular"
-                onPress={onFullScreen}
+                onPress={(e) => {
+                  e.preventDefault();
+                  setMuted(!muted);
+                }}
                 iconOnly
                 tw="mr-4 bg-white px-3 dark:bg-gray-900"
               >
-                <Maximize width={24} height={24} />
+                {muted ? (
+                  <Muted width={24} height={24} />
+                ) : (
+                  <Unmuted width={24} height={24} />
+                )}
               </Button>
-              <Suspense fallback={<Skeleton width={24} height={24} />}>
-                <NFTDropdown
-                  tw={[
-                    "rounded-full bg-white p-3 dark:bg-gray-900",
-                    showFullScreen ? "hidden" : "flex",
-                  ]}
-                  iconColor={isDark ? colors.white : colors.gray[900]}
-                  nft={detailData?.data.item ?? nft}
-                  edition={edition}
-                />
-              </Suspense>
-            </View>
-          </View>
-          <View tw="items-center justify-center px-4 xl:px-20 xl:pb-20">
-            <View
-              style={{
-                height: mediaHeight,
-                width: mediaWidth,
-              }}
+            ) : null}
+            <Button
+              variant="text"
+              size="regular"
+              onPress={onFullScreen}
+              iconOnly
+              tw="mr-4 bg-white px-3 dark:bg-gray-900"
             >
-              <FeedItemTapGesture
-                videoRef={videoRef}
-                isVideo={nft?.mime_type?.startsWith("video")}
-              >
-                <Media
-                  videoRef={videoRef}
-                  item={nft}
-                  numColumns={1}
-                  sizeStyle={{
-                    height: mediaHeight,
-                    width: mediaWidth,
-                  }}
-                  resizeMode={ResizeMode.CONTAIN}
-                  optimizedWidth={1200}
-                  quality={80}
-                />
-              </FeedItemTapGesture>
-              <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
-            </View>
-          </View>
-          {/* Control Swiper */}
-          {swiper && (
-            <View
-              tw={[
-                "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",
-                showFullScreen ? "hidden" : "flex",
-              ]}
-            >
-              <View tw={disablePrevButton ? "cursor-not-allowed" : ""}>
-                <Button
-                  variant="text"
-                  size="regular"
-                  iconOnly
-                  tw="disabled mb-4 bg-white px-3 dark:bg-gray-900"
-                  disabled={disablePrevButton}
-                  style={{ opacity: disablePrevButton ? 0.4 : 1 }}
-                  onPress={() => {
-                    swiper.slideTo(Math.max(activeIndex - 1, 0));
-                  }}
-                >
-                  <ChevronUp width={24} height={24} />
-                </Button>
-              </View>
-              <View tw={disableNextButton ? "cursor-not-allowed" : ""}>
-                <Button
-                  variant="text"
-                  size="regular"
-                  iconOnly
-                  tw="bg-white px-3 dark:bg-gray-900"
-                  disabled={disableNextButton}
-                  style={{ opacity: disableNextButton ? 0.4 : 1 }}
-                  onPress={() => {
-                    swiper.slideTo(
-                      Math.min(activeIndex + 1, swiper.snapGrid.length)
-                    );
-                  }}
-                >
-                  <ChevronDown width={24} height={24} />
-                </Button>
-              </View>
-            </View>
-          )}
-
-          <View tw="absolute bottom-10 left-4">
-            <ContentTypeTooltip edition={edition} />
+              <Maximize width={24} height={24} />
+            </Button>
+            <Suspense fallback={<Skeleton width={24} height={24} />}>
+              <NFTDropdown
+                tw={[
+                  "rounded-full bg-white p-3 dark:bg-gray-900",
+                  showFullScreen ? "hidden" : "flex",
+                ]}
+                iconColor={isDark ? colors.white : colors.gray[900]}
+                nft={detailData?.data.item ?? nft}
+                edition={edition}
+              />
+            </Suspense>
           </View>
         </View>
-
-        <View
-          tw="swiper-no-swiping bg-white dark:bg-gray-900"
-          style={{
-            width: NFT_DETAIL_WIDTH,
-          }}
-        >
-          <ErrorBoundary>
-            <Suspense
-              fallback={
-                <View tw="mt-10 items-center justify-center">
-                  <Spinner size="small" />
-                </View>
-              }
+        <View tw="items-center justify-center px-4 xl:px-20 xl:pb-20">
+          <View
+            style={{
+              height: mediaHeight,
+              width: mediaWidth,
+            }}
+          >
+            <FeedItemTapGesture
+              videoRef={videoRef}
+              isVideo={nft?.mime_type?.startsWith("video")}
             >
-              {TabScene && nft && (
-                <TabScene
-                  nft={detailData?.data.item ?? nft}
-                  key={index}
-                  ListHeaderComponent={ListHeaderComponent}
-                  inputBackgroundColor={isDark ? colors.gray[900] : null}
-                />
-              )}
-            </Suspense>
-          </ErrorBoundary>
-          <View tw="h-2" />
+              <Media
+                videoRef={videoRef}
+                item={nft}
+                numColumns={1}
+                sizeStyle={{
+                  height: mediaHeight,
+                  width: mediaWidth,
+                }}
+                resizeMode={ResizeMode.CONTAIN}
+                optimizedWidth={1200}
+                quality={80}
+              />
+            </FeedItemTapGesture>
+            <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
+          </View>
+        </View>
+        {/* Control Swiper */}
+        {swiper && (
+          <View
+            tw={[
+              "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",
+              showFullScreen ? "hidden" : "flex",
+            ]}
+          >
+            <View tw={disablePrevButton ? "cursor-not-allowed" : ""}>
+              <Button
+                variant="text"
+                size="regular"
+                iconOnly
+                tw="disabled mb-4 bg-white px-3 dark:bg-gray-900"
+                disabled={disablePrevButton}
+                style={{ opacity: disablePrevButton ? 0.4 : 1 }}
+                onPress={() => {
+                  swiper.slideTo(Math.max(activeIndex - 1, 0));
+                }}
+              >
+                <ChevronUp width={24} height={24} />
+              </Button>
+            </View>
+            <View tw={disableNextButton ? "cursor-not-allowed" : ""}>
+              <Button
+                variant="text"
+                size="regular"
+                iconOnly
+                tw="bg-white px-3 dark:bg-gray-900"
+                disabled={disableNextButton}
+                style={{ opacity: disableNextButton ? 0.4 : 1 }}
+                onPress={() => {
+                  swiper.slideTo(
+                    Math.min(activeIndex + 1, swiper.snapGrid.length)
+                  );
+                }}
+              >
+                <ChevronDown width={24} height={24} />
+              </Button>
+            </View>
+          </View>
+        )}
+
+        <View tw="absolute bottom-10 left-4">
+          <ContentTypeTooltip edition={edition} />
         </View>
       </View>
-    </LikeContextProvider>
+
+      <View
+        tw="swiper-no-swiping bg-white dark:bg-gray-900"
+        style={{
+          width: NFT_DETAIL_WIDTH,
+        }}
+      >
+        <ErrorBoundary>
+          <Suspense
+            fallback={
+              <View tw="mt-10 items-center justify-center">
+                <Spinner size="small" />
+              </View>
+            }
+          >
+            {TabScene && nft && (
+              <TabScene
+                nft={detailData?.data.item ?? nft}
+                key={index}
+                ListHeaderComponent={ListHeaderComponent}
+                inputBackgroundColor={isDark ? colors.gray[900] : null}
+              />
+            )}
+          </Suspense>
+        </ErrorBoundary>
+        <View tw="h-2" />
+      </View>
+    </View>
   );
 });
 FeedItemMD.displayName = "FeedItemMD";

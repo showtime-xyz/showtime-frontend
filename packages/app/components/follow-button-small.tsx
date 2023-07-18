@@ -19,7 +19,7 @@ export const FollowButtonSmall = memo<ToggleFollowParams>(
       <FollowButton
         profileId={profileId}
         name={name}
-        renderButton={({ isFollowing, text, ...rest }) => {
+        renderButton={({ text, ...rest }) => {
           return (
             <Pressable
               tw={[

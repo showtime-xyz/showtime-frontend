@@ -25,7 +25,6 @@ import { GridMedia, Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
-import { LikeContextProvider } from "app/context/like-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -159,7 +158,6 @@ const CardLargeScreen = ({
   sizeStyle,
   href = "",
   as,
-  showClaimButton,
   handleOnPress,
   cardMaxWidth,
   index,
@@ -174,81 +172,79 @@ const CardLargeScreen = ({
   });
 
   return (
-    <LikeContextProvider nft={nft}>
-      <View
-        role="article"
-        // @ts-ignore
-        dataset={Platform.select({ web: { testId: "nft-card" } })}
-        style={[sizeStyle]}
-        tw={[
-          numColumns > 1 ? "my-4" : "",
-          nft?.loading ? "opacity-50" : "opacity-100",
-          "overflow-hidden rounded-2xl",
-          "flex-1",
-          "bg-white dark:bg-black",
-          tw,
-        ]}
-      >
-        <View tw="pb-4">
-          <View tw="flex-row items-center justify-between px-4">
-            <Creator nft={nft} shouldShowDateCreated={false} />
-            <ErrorBoundary renderFallback={() => null}>
-              <Suspense fallback={<Skeleton width={24} height={24} />}>
-                <NFTDropdown
-                  tw="rounded-full bg-gray-100 p-1 dark:bg-gray-900"
-                  nft={detailData?.data.item ?? nft}
-                  edition={edition}
-                />
-              </Suspense>
-            </ErrorBoundary>
-          </View>
+    <View
+      role="article"
+      // @ts-ignore
+      dataset={Platform.select({ web: { testId: "nft-card" } })}
+      style={[sizeStyle]}
+      tw={[
+        numColumns > 1 ? "my-4" : "",
+        nft?.loading ? "opacity-50" : "opacity-100",
+        "overflow-hidden rounded-2xl",
+        "flex-1",
+        "bg-white dark:bg-black",
+        tw,
+      ]}
+    >
+      <View tw="pb-4">
+        <View tw="flex-row items-center justify-between px-4">
+          <Creator nft={nft} shouldShowDateCreated={false} />
+          <ErrorBoundary renderFallback={() => null}>
+            <Suspense fallback={<Skeleton width={24} height={24} />}>
+              <NFTDropdown
+                tw="rounded-full bg-gray-100 p-1 dark:bg-gray-900"
+                nft={detailData?.data.item ?? nft}
+                edition={edition}
+              />
+            </Suspense>
+          </ErrorBoundary>
+        </View>
 
-          <RouteComponent href={href!} as={as} onPress={handleOnPress}>
-            <Media
-              item={nft}
-              numColumns={numColumns}
-              sizeStyle={{
-                width: sizeStyle?.width ?? cardMaxWidth,
-                height: sizeStyle?.height ?? cardMaxWidth,
-              }}
-              resizeMode={ResizeMode.COVER}
-              optimizedWidth={600}
-              loading={index > 0 ? "lazy" : "eager"}
-              withVideoBackdrop
-            />
-            <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
-            {numColumns === 1 && nft?.mime_type?.includes("video") ? (
-              <View tw="z-9 absolute left-4 top-5">
-                <MuteButton />
-              </View>
-            ) : null}
-            <View tw="z-9 absolute bottom-2.5 left-2.5">
-              <ContentTypeTooltip edition={edition} />
+        <RouteComponent href={href!} as={as} onPress={handleOnPress}>
+          <Media
+            item={nft}
+            numColumns={numColumns}
+            sizeStyle={{
+              width: sizeStyle?.width ?? cardMaxWidth,
+              height: sizeStyle?.height ?? cardMaxWidth,
+            }}
+            resizeMode={ResizeMode.COVER}
+            optimizedWidth={600}
+            loading={index > 0 ? "lazy" : "eager"}
+            withVideoBackdrop
+          />
+          <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
+          {numColumns === 1 && nft?.mime_type?.includes("video") ? (
+            <View tw="z-9 absolute left-4 top-5">
+              <MuteButton />
             </View>
-          </RouteComponent>
-          <RouteComponent
-            href={href}
-            as={as}
-            onPress={handleOnPress}
-            // @ts-ignore
-            dataset={{ testId: "nft-card-title-link" }}
-          >
-            <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
-          </RouteComponent>
-          <View tw="flex-row justify-between px-4 py-2">
-            <Social nft={nft} />
-            <ClaimButtonSimplified edition={edition} loading={loading} />
+          ) : null}
+          <View tw="z-9 absolute bottom-2.5 left-2.5">
+            <ContentTypeTooltip edition={edition} />
           </View>
-          <View tw="h-5">
-            <ClaimedBy
-              claimersList={detailData?.data.item?.multiple_owners_list}
-              nft={nft}
-              tw="px-4"
-            />
-          </View>
+        </RouteComponent>
+        <RouteComponent
+          href={href}
+          as={as}
+          onPress={handleOnPress}
+          // @ts-ignore
+          dataset={{ testId: "nft-card-title-link" }}
+        >
+          <Title title={nft.token_name} cardMaxWidth={cardMaxWidth} />
+        </RouteComponent>
+        <View tw="flex-row justify-between px-4 py-2">
+          <Social nft={nft} />
+          <ClaimButtonSimplified edition={edition} loading={loading} />
+        </View>
+        <View tw="h-5">
+          <ClaimedBy
+            claimersList={detailData?.data.item?.multiple_owners_list}
+            nft={nft}
+            tw="px-4"
+          />
         </View>
       </View>
-    </LikeContextProvider>
+    </View>
   );
 };
 

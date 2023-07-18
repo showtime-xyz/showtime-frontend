@@ -2,9 +2,9 @@ import { StyleSheet, useWindowDimensions, Platform } from "react-native";
 
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { MotiView } from "moti";
+import { BorderlessButton as Pressable } from "react-native-gesture-handler";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -84,7 +84,16 @@ export const ThemeBottomTabbar = ({
 
         return (
           <View key={route.key} tw="flex flex-1 items-center justify-center">
-            <Pressable tw="flex-1" onLongPress={onLongPress} onPress={onPress}>
+            <Pressable
+              onLongPress={onLongPress}
+              onPress={onPress}
+              shouldActivateOnStart
+              rippleColor={isDark ? colors.gray[700] : colors.gray[300]}
+              rippleRadius={30}
+              activeOpacity={0.7}
+              hitSlop={10}
+              exclusive
+            >
               {options.tabBarButton && (
                 <CreateTabBarIcon
                   color={isDark ? "#000" : "#fff"}

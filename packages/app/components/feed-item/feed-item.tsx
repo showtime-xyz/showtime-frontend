@@ -33,7 +33,6 @@ import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
 import { Media } from "app/components/media";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
-import { LikeContextProvider } from "app/context/like-context";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
@@ -179,110 +178,112 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
 
   return (
     <>
-      <LikeContextProvider nft={nft}>
-        <View
-          tw="w-full bg-gray-900"
-          style={{ height: itemHeight, overflow: "hidden" }}
-        >
-          <Image
-            tw="h-full w-full"
-            blurhash={nft.blurhash}
-            source={mediaUrl}
-            recyclingKey={mediaUrl.uri}
-            alt={nft.token_name}
-          />
+      <View
+        tw="w-full bg-black"
+        style={{ height: itemHeight, overflow: "hidden" }}
+      >
+        <Image
+          tw="h-full w-full"
+          blurhash={nft.blurhash}
+          source={mediaUrl}
+          recyclingKey={mediaUrl.uri}
+          alt={nft.token_name}
+        />
 
-          <FeedItemTapGesture
-            videoRef={videoRef}
-            toggleHeader={toggleHeader}
-            showHeader={showHeader}
-            isVideo={nft?.mime_type?.startsWith("video")}
-          >
-            <Animated.View
-              style={[
-                {
-                  height: itemHeight - bottomPadding,
-                  position: "absolute",
-                },
-                contentStyle,
-              ]}
-            >
-              <Media
-                videoRef={videoRef}
-                item={nft}
-                numColumns={1}
-                sizeStyle={{
-                  height: mediaHeight,
-                  width: windowWidth,
-                }}
-                resizeMode={ResizeMode.COVER}
-                onPinchStart={hideHeader}
-                onPinchEnd={showHeader}
-                theme="dark"
-              />
-            </Animated.View>
-          </FeedItemTapGesture>
-          <Reanimated.View
-            ref={detailViewRef}
+        <FeedItemTapGesture
+          videoRef={videoRef}
+          toggleHeader={toggleHeader}
+          showHeader={showHeader}
+          isVideo={nft?.mime_type?.startsWith("video")}
+        >
+          <Animated.View
             style={[
-              detailStyle,
               {
-                bottom: bottomMargin,
+                height: itemHeight - bottomPadding,
                 position: "absolute",
-                right: 0,
-                left: 0,
               },
+              contentStyle,
             ]}
-            onLayout={({
-              nativeEvent: {
-                layout: { height },
-              },
-            }) => {
-              isLayouted.value = 1;
-              setDetailHeight(height);
+          >
+            <Media
+              videoRef={videoRef}
+              item={nft}
+              numColumns={1}
+              sizeStyle={{
+                height: mediaHeight,
+                width: windowWidth,
+              }}
+              resizeMode={ResizeMode.COVER}
+              onPinchStart={hideHeader}
+              onPinchEnd={showHeader}
+              theme="dark"
+            />
+          </Animated.View>
+        </FeedItemTapGesture>
+        <Reanimated.View
+          ref={detailViewRef}
+          style={[
+            detailStyle,
+            {
+              bottom: bottomMargin,
+              position: "absolute",
+              right: 0,
+              left: 0,
+            },
+          ]}
+          onLayout={({
+            nativeEvent: {
+              layout: { height },
+            },
+          }) => {
+            isLayouted.value = 1;
+            setDetailHeight(height);
+          }}
+        >
+          {nft?.mime_type?.startsWith("video") ? (
+            <View tw="z-9 absolute right-4 top-[-30px]">
+              <MuteButton />
+            </View>
+          ) : null}
+
+          <View
+            pointerEvents="box-none"
+            style={{
+              paddingBottom: bottomPadding,
+              overflow: "hidden",
+              zIndex: 1,
             }}
           >
-            {nft?.mime_type?.startsWith("video") ? (
-              <View tw="z-9 absolute right-4 top-[-30px]">
-                <MuteButton />
-              </View>
-            ) : null}
-
-            <View
-              pointerEvents="box-none"
-              style={{
-                overflow: "hidden",
-                zIndex: 1,
-              }}
-            >
-              <NFTDetails
-                edition={edition}
-                nft={nft}
-                detail={detailData?.data?.item}
-                bottomPadding={bottomPadding}
-              />
-            </View>
-          </Reanimated.View>
-
-          {isAuthenticated && (
-            <View
-              tw="absolute right-4 z-50"
-              style={{
-                top: Platform.select({
-                  android: top + 10,
-                  default: top + 6,
-                }),
-              }}
-            >
-              <NFTDropdown
-                nft={detailData?.data?.item ?? nft}
-                edition={edition}
-                tw="rounded-full bg-black/60 px-1 py-1"
-              />
-            </View>
-          )}
-        </View>
-      </LikeContextProvider>
+            <NFTDetails
+              edition={edition}
+              nft={nft}
+              detail={detailData?.data?.item}
+            />
+          </View>
+          <EngagementIcons
+            nft={nft}
+            bottomPadding={bottomPadding}
+            edition={edition}
+          />
+        </Reanimated.View>
+        {isAuthenticated && (
+          <View
+            tw="absolute right-4 z-50"
+            style={{
+              top: Platform.select({
+                android: top + 10,
+                default: top + 6,
+              }),
+            }}
+          >
+            <NFTDropdown
+              nft={detailData?.data?.item ?? nft}
+              edition={edition}
+              tw="rounded-full bg-black/60 px-1 py-1"
+            />
+          </View>
+        )}
+      </View>
       <NSFWGate nftId={nft.nft_id} show={nft.nsfw} />
     </>
   );

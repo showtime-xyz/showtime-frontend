@@ -11,6 +11,7 @@ import {
 import { Platform, useWindowDimensions } from "react-native";
 
 import axios from "axios";
+import { LinearGradient } from "expo-linear-gradient";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedScrollHandler,
@@ -49,6 +50,9 @@ import {
   ChevronDown,
   Flag,
   CreatorChannelFilled,
+  ShowtimeGradient,
+  ShowtimeBrand,
+  Showtime,
 } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import {
@@ -100,6 +104,7 @@ import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
 } from "./animated-cell-container";
+import { GatedMessage } from "./gated-message";
 import { useChannelById } from "./hooks/use-channel-detail";
 import {
   ChannelMessageItem,
@@ -372,7 +377,7 @@ export const Messages = memo(() => {
       { shallow: true }
     );
   };
-  const { data, isLoading, fetchMore, isLoadingMore, error } =
+  const { data, isLoading, fetchMore, isLoadingMore, error, mutate } =
     useChannelMessages(channelId);
   const isCurrentUserOwner =
     channelDetail.data?.owner.profile_id === user.user?.data.profile.profile_id;
@@ -948,6 +953,12 @@ const MessageItem = memo(
 
       return false;
     }, [channel_message.created_at]);
+
+    //if (channel_message.is_payment_gated && !channel_message.body) {
+    if (true) {
+      // TODO: determine which props to pass
+      return <GatedMessage />;
+    }
 
     return (
       <Animated.View style={style} ref={animatedViewRef}>
