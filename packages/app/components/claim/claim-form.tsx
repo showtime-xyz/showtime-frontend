@@ -12,6 +12,7 @@ import {
   ScrollView as ReactNativeScrollView,
 } from "react-native";
 
+import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
 
@@ -233,7 +234,7 @@ export const ClaimForm = ({
     ContractVersion.BATCH_V1
       ? "Collecting..."
       : "Collecting... it should take about 10 seconds";
-
+  const isGold = true;
   if (isIncompletedProfile) {
     return null;
   }
@@ -485,6 +486,12 @@ export const ClaimForm = ({
                   <Spotify color={isDark ? "#000" : "#fff"} />
                   <Text tw="ml-2 font-semibold text-white dark:text-black">
                     Save to Collect
+                  </Text>
+                </View>
+              ) : isGold ? (
+                <View tw="w-full flex-row items-center justify-center">
+                  <Text tw="ml-2 font-semibold text-white dark:text-black">
+                    Collect
                   </Text>
                 </View>
               ) : (
