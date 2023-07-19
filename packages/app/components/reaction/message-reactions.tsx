@@ -20,11 +20,13 @@ export const MessageReactions = ({
   messageId,
   reactionGroup,
   channelReactions,
+  isStarDrop,
 }: {
   channelId: string;
   reactionGroup: ReactionGroup[];
   messageId: number;
   channelReactions: ChannelReactionResponse;
+  isStarDrop?: boolean;
 }) => {
   const router = useRouter();
 
@@ -57,7 +59,7 @@ export const MessageReactions = ({
   );
 
   return (
-    <View tw="w-full flex-1 flex-row items-center">
+    <View tw="-ml-0.5 w-full flex-1 flex-row items-center">
       {channelReactions.map((item, index) => {
         const userReaction = reactionGroup.find(
           (r) => r.reaction_id === item.id
@@ -66,7 +68,7 @@ export const MessageReactions = ({
           return (
             <AnimatedView
               key={index}
-              tw="mr-3"
+              tw="mr-1"
               layout={Layout.springify().damping(500).stiffness(100)}
               entering={FadeIn}
               exiting={FadeOut}
@@ -74,20 +76,26 @@ export const MessageReactions = ({
               <Pressable
                 onPress={() => handleReactionPress(item.id)}
                 tw={[
-                  "min-h-[30px] min-w-[30px] items-center justify-center px-2 py-1",
+                  "min-h-[25px] items-center justify-center px-2",
                   userReaction.self_reacted
-                    ? "rounded-lg bg-gray-100 dark:bg-gray-900"
+                    ? isStarDrop
+                      ? "rounded-lg bg-gray-50 dark:bg-gray-50"
+                      : "rounded-lg bg-gray-100 dark:bg-gray-900"
                     : "",
                 ]}
               >
                 <Text
-                  tw="text-gray-700 dark:text-gray-200"
+                  tw={[
+                    isStarDrop
+                      ? "text-black"
+                      : "text-gray-700 dark:text-gray-200",
+                  ]}
                   style={{
-                    fontSize: 13,
+                    fontSize: 12,
                     lineHeight: Platform.select({
-                      web: 13,
+                      web: 12,
                       ios: undefined,
-                      android: 18,
+                      android: 14,
                     }),
                   }}
                 >
