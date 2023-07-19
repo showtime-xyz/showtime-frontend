@@ -52,7 +52,7 @@ export const GatedMessage = memo(() => {
   }, [loading]);
 
   return (
-    <View tw="mx-2 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
+    <View tw="mx-3 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
       <BorderlessButton
         onPress={unlockMessage}
         activeOpacity={0.7}

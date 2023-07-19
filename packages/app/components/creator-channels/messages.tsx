@@ -7,10 +7,12 @@ import {
   useMemo,
   RefObject,
   useLayoutEffect,
+  PropsWithChildren,
 } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import axios from "axios";
+import { LinearGradient } from "expo-linear-gradient";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedScrollHandler,
@@ -868,6 +870,24 @@ const MessageInput = ({
   );
 };
 
+const MaybeStarDropMessage = (
+  props: PropsWithChildren<{ gradient?: boolean }>
+) => {
+  if (props.gradient) {
+    return (
+      <LinearGradient
+        style={{ borderRadius: 16, padding: 8 }}
+        // Adding the color stops manually
+        colors={["#FFE49E", "#FFF1E4"]}
+      >
+        {props.children}
+      </LinearGradient>
+    );
+  }
+
+  return <View tw="rounded-2xl p-2">{props.children}</View>;
+};
+
 const MessageBoxUnavailable = () => {
   return (
     <MessageBox
@@ -966,9 +986,11 @@ const MessageItem = memo(
       return <GatedMessage />;
     }
 
+    // const isStarDrop = channel_message.is_payment_gated;
+    const isStarDrop = true;
     return (
-      <Animated.View style={style} ref={animatedViewRef}>
-        <View tw="my-2 px-4">
+      <AnimatedView tw="my-2 px-3" style={style} ref={animatedViewRef}>
+        <MaybeStarDropMessage gradient={isStarDrop}>
           <View tw="flex-row" style={{ columnGap: 8 }}>
             <Link
               href={`/@${
@@ -992,16 +1014,26 @@ const MessageItem = memo(
                     item.channel_message.sent_by.profile.wallet_addresses
                   }`}
                 >
-                  <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
+                  <Text
+                    tw={[
+                      "text-sm font-bold text-gray-900 dark:text-gray-100",
+                      isStarDrop ? "text-black dark:text-black" : "",
+                    ]}
+                  >
                     {channel_message.sent_by.profile.name}
                   </Text>
                 </Link>
 
                 <View tw="flex-row items-center">
-                  <Text tw="text-xs text-gray-700 dark:text-gray-200">
+                  <Text
+                    tw={[
+                      "text-xs text-gray-700 dark:text-gray-200",
+                      isStarDrop ? "text-gray-600 dark:text-gray-600" : "",
+                    ]}
+                  >
                     {formatDateRelativeWithIntl(channel_message.created_at)}
                   </Text>
-                  {channel_message.is_payment_gated ? (
+                  {isStarDrop ? (
                     <View tw="ml-2">
                       <StarDropBadge />
                     </View>
@@ -1010,7 +1042,7 @@ const MessageItem = memo(
 
                 <View
                   tw="mr-2 flex-1 flex-row items-center justify-end"
-                  style={{ gap: 16 }}
+                  style={{ gap: 8 }}
                 >
                   <Reaction
                     reactions={reactions}
@@ -1170,7 +1202,10 @@ const MessageItem = memo(
               <Text>
                 <Text
                   selectable
-                  tw="text-sm text-gray-900 dark:text-gray-100"
+                  tw={[
+                    "text-sm text-gray-900 dark:text-gray-100",
+                    isStarDrop ? "text-black dark:text-black" : "",
+                  ]}
                   style={
                     Platform.OS === "web"
                       ? {
@@ -1202,14 +1237,15 @@ const MessageItem = memo(
                       channelId={channelId}
                       channelReactions={reactions}
                       messageId={channel_message.id}
+                      isStarDrop={isStarDrop}
                     />
                   </AnimatedView>
                 ) : null}
               </PlatformAnimateHeight>
             </View>
           </View>
-        </View>
-      </Animated.View>
+        </MaybeStarDropMessage>
+      </AnimatedView>
     );
   }
 );
