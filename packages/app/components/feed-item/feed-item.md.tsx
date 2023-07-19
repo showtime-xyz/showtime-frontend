@@ -229,7 +229,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               nft={nft}
             />
           </View>
-          <View tw="h-8 flex-row">
+          <View tw="flex-row">
             {isCreatorDrop && edition ? (
               <>
                 <ClaimButton tw="flex-1" edition={edition} />

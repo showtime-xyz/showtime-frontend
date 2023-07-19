@@ -61,6 +61,8 @@ import {
   removeTags,
 } from "app/utilities";
 
+import { GoldLinearGradient } from "./gold-linear-gradient";
+
 export type ClaimType = "appleMusic" | "spotify" | "free";
 type Query = {
   type: ClaimType;
@@ -521,39 +523,7 @@ export const ClaimForm = ({
               tw={isDisableButton ? "opacity-[0.45]" : ""}
               onPress={handleClaimNFT}
             >
-              {isGold ? (
-                <LinearGradient
-                  style={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: 999,
-                    overflow: "hidden",
-                    transform: [{ scaleX: 1 }],
-                  }}
-                  start={{ x: 1.75, y: -1.79 }}
-                  end={{ x: 0.25, y: 1.1 }}
-                  colors={[
-                    "#FFCB6C",
-                    "#FDD764",
-                    "#FFD24D",
-                    "#EDAF00",
-                    "#EDAF38",
-                    "#FDC93F",
-                    "#FFD480",
-                    "#FED749",
-                    "#FDC93F",
-                    "#F6C33D",
-                    "#F6C33D",
-                    "#F4CE5E",
-                    "#FBC73F",
-                    "#FFD480",
-                    "#F5E794",
-                    "#F5E794",
-                    "#F5E794",
-                  ]}
-                />
-              ) : null}
+              {isGold ? <GoldLinearGradient /> : null}
               {isLoading ? (
                 "Loading..."
               ) : state.status === "loading" ? (

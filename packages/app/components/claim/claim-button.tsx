@@ -12,6 +12,7 @@ import {
   Hourglass,
   PreAddAppleMusic,
 } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -27,6 +28,8 @@ import { Analytics, EVENTS } from "app/lib/analytics";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
+
+import { GoldLinearGradient } from "./gold-linear-gradient";
 
 type ClaimButtonProps = ButtonProps & {
   edition: CreatorEditionResponse;
@@ -86,7 +89,7 @@ export const ClaimButton = ({
     user?.data?.profile.profile_id ===
     edition.creator_airdrop_edition?.owner_profile_id;
   const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
-
+  const isGold = true;
   const raffleConcludedAt = useMemo(() => {
     if (!isSelf || !isRaffleDrop) return null;
     if (
@@ -380,11 +383,43 @@ export const ClaimButton = ({
   return (
     <Button
       {...buttonProps}
+      style={{
+        backgroundColor: isGold ? "transparent" : undefined,
+      }}
       onPress={() => {
         handleCollectPress("free");
       }}
     >
-      Collect
+      {isGold ? (
+        <>
+          <GoldLinearGradient />
+          <View tw="w-full flex-row items-center justify-center">
+            <View>
+              <Image
+                source={{
+                  uri: "https://showtime-media.b-cdn.net/assets/gold-button-icon.png",
+                }}
+                width={buttonProps.size === "regular" ? 24 : 20}
+                height={buttonProps.size === "regular" ? 24 : 20}
+                style={{
+                  width: buttonProps.size === "regular" ? 24 : 20,
+                  height: buttonProps.size === "regular" ? 24 : 20,
+                }}
+              />
+            </View>
+            <Text
+              tw={[
+                "ml-2 font-semibold text-black",
+                buttonProps.size === "regular" ? "text-base" : "text-sm",
+              ]}
+            >
+              Collect Star Drop - ${3}
+            </Text>
+          </View>
+        </>
+      ) : (
+        "Collect"
+      )}
     </Button>
   );
 };
