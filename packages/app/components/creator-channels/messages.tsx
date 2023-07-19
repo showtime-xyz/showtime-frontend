@@ -11,7 +11,6 @@ import {
 import { Platform, useWindowDimensions } from "react-native";
 
 import axios from "axios";
-import { LinearGradient } from "expo-linear-gradient";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedScrollHandler,
@@ -50,9 +49,6 @@ import {
   ChevronDown,
   Flag,
   CreatorChannelFilled,
-  ShowtimeGradient,
-  ShowtimeBrand,
-  Showtime,
 } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import {
@@ -104,7 +100,7 @@ import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
 } from "./animated-cell-container";
-import { GatedMessage } from "./gated-message";
+import { GatedMessage, StarDropBadge } from "./gated-message";
 import { useChannelById } from "./hooks/use-channel-detail";
 import {
   ChannelMessageItem,
@@ -269,7 +265,17 @@ const benefits = [
 const keyExtractor = (item: ChannelMessageItem) =>
   item.channel_message.id.toString();
 
-//const getItemType = (item: ChannelMessageItem) => item.reaction_group.length > 0 ? "reaction" : "message";
+const getItemType = (item: ChannelMessageItem) => {
+  if (item.channel_message.is_payment_gated && !item.channel_message.body) {
+    return "payment-gate";
+  }
+
+  if (item.channel_message.is_payment_gated && item.channel_message.body) {
+    return "message-unlocked";
+  }
+
+  return "message";
+};
 
 export const Messages = memo(() => {
   const listRef = useRef<FlashList<any>>(null);
@@ -643,11 +649,12 @@ export const Messages = memo(() => {
                 data={data}
                 onEndReached={onLoadMore}
                 inverted
+                getItemType={getItemType}
                 scrollEnabled={data.length > 0}
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
-                estimatedItemSize={120}
+                estimatedItemSize={200}
                 // android > 12 flips the scrollbar to the left, FlashList bug
                 showsVerticalScrollIndicator={Platform.OS !== "android"}
                 keyboardDismissMode={
@@ -954,8 +961,7 @@ const MessageItem = memo(
       return false;
     }, [channel_message.created_at]);
 
-    //if (channel_message.is_payment_gated && !channel_message.body) {
-    if (true) {
+    if (channel_message.is_payment_gated && !channel_message.body) {
       // TODO: determine which props to pass
       return <GatedMessage />;
     }
@@ -991,9 +997,16 @@ const MessageItem = memo(
                   </Text>
                 </Link>
 
-                <Text tw="text-xs text-gray-700 dark:text-gray-200">
-                  {formatDateRelativeWithIntl(channel_message.created_at)}
-                </Text>
+                <View tw="flex-row items-center">
+                  <Text tw="text-xs text-gray-700 dark:text-gray-200">
+                    {formatDateRelativeWithIntl(channel_message.created_at)}
+                  </Text>
+                  {channel_message.is_payment_gated ? (
+                    <View tw="ml-2">
+                      <StarDropBadge />
+                    </View>
+                  ) : null}
+                </View>
 
                 <View
                   tw="mr-2 flex-1 flex-row items-center justify-end"
