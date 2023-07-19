@@ -61,11 +61,6 @@ const expoConfig: ExpoConfig = {
   icon: config.icon,
   version: version.toString(),
   userInterfaceStyle: "automatic",
-  splash: {
-    image: "./assets/splash.png",
-    resizeMode: "contain",
-    backgroundColor: "#000000",
-  },
   ios: {
     bundleIdentifier: config.scheme,
     buildNumber: majorVersion.toString(),
@@ -77,13 +72,22 @@ const expoConfig: ExpoConfig = {
     },
     bitcode: false, // or "Debug",
     associatedDomains: [`applinks:${url}`],
+    splash: {
+      image: "./assets/splash-ios.png",
+      resizeMode: "cover",
+    },
   },
   android: {
     package: config.scheme,
     versionCode: majorVersion,
+    splash: {
+      image: "./assets/splash-android.png",
+      resizeMode: "cover",
+    },
     adaptiveIcon: {
       foregroundImage: config.foregroundImage,
       backgroundImage: config.backgroundImage,
+      monochromeImage: "./assets/mono-icon.png",
     },
     jsEngine: "hermes",
     softwareKeyboardLayoutMode: "resize",

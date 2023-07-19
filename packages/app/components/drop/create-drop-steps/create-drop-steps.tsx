@@ -5,7 +5,6 @@ import {
   ScrollView as RNScrollView,
 } from "react-native";
 
-import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Controller } from "react-hook-form";
 import Animated, {
   FadeIn,
@@ -14,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";

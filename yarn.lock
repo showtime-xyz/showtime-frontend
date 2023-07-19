@@ -9060,6 +9060,7 @@ __metadata:
     expo-haptics: ~12.4.0
     expo-image: ~1.3.2
     expo-image-picker: ~14.3.1
+    expo-insights: ~0.2.0
     expo-linear-gradient: ~12.3.0
     expo-linking: ~5.0.2
     expo-localization: ~14.3.0
@@ -18985,6 +18986,17 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 848cfe17b7d2051c87064c1fb0b646af1d91bf906299e0c8fc3772111cf81d0b2756a27877ef9350aee31a11adf3bf17aa37d71363409eb70e2e8831e255ed7f
+  languageName: node
+  linkType: hard
+
+"expo-insights@npm:~0.2.0":
+  version: 0.2.0
+  resolution: "expo-insights@npm:0.2.0"
+  dependencies:
+    expo-eas-client: ~0.6.0
+  peerDependencies:
+    expo: "*"
+  checksum: af5ba0e3fe7869d0ec6437b36b943fea564b5ed30d9b69cd0ede9fd9d8bf5b0a7139718cf36b80dacc1887ba236871197ce3990f56858e3ba0ac1e610d47e42b
   languageName: node
   linkType: hard
 
