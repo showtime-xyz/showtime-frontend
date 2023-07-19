@@ -1117,7 +1117,12 @@ const CompleteStripeFlow = () => {
     handleSubmit,
     formState: { errors },
     register,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      businessType: "individual",
+    },
+  });
+
   const onboardingCreator = useOnBoardCreator();
   const websiteUrl = `${
     __DEV__
@@ -1213,6 +1218,7 @@ const CompleteStripeFlow = () => {
             },
           }}
           render={({ field: { onChange, onBlur, value, ref } }) => {
+            console.log("valuee ", value);
             return (
               <Fieldset
                 ref={ref}
@@ -1238,7 +1244,7 @@ const CompleteStripeFlow = () => {
         tw={onboardingCreator.isMutating ? `opacity-30` : ""}
         size="regular"
       >
-        {onboardingCreator.isMutating ? "Please wait..." : "Set up cash payout"}
+        {onboardingCreator.isMutating ? "Please wait..." : "Setup cash payout"}
       </Button>
     </View>
   );
