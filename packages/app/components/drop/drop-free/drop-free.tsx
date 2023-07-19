@@ -86,6 +86,8 @@ export const DropFree = () => {
     trigger,
     defaultValues,
     handleSubmit,
+    setIsUnlimited,
+    isUnlimited,
   } = useStarDropForm();
 
   const Alert = useAlert();
@@ -119,6 +121,7 @@ export const DropFree = () => {
       {
         ...values,
         gatingType: "paid_nft",
+        editionSize: isUnlimited ? 0 : values.editionSize,
       },
       clearStorage
     );
@@ -305,6 +308,7 @@ export const DropFree = () => {
           <SetPriceAndDuration
             control={control}
             getValues={getValues}
+            isUnlimited={isUnlimited}
             errors={formState.errors}
             trigger={trigger}
             watch={watch}
@@ -352,6 +356,8 @@ export const DropFree = () => {
             trigger={trigger}
             handleNextStep={() => setStep("song-uri")}
             file={file}
+            isUnlimited={isUnlimited}
+            setIsUnlimited={setIsUnlimited}
             handlePrevStep={() => setStep("song-uri")}
             title={title}
             description={description}
@@ -535,6 +541,7 @@ const SetPriceAndDuration = (
     setPrice: (price: number) => void;
     setDays: (days: number) => void;
     watch: any;
+    isUnlimited: boolean;
   }
 ) => {
   const {
@@ -546,6 +553,7 @@ const SetPriceAndDuration = (
     setDays,
     setPrice,
     watch,
+    isUnlimited,
   } = props;
   const { state } = useDropNFT();
   const duration = watch("duration") / 86400;
@@ -702,9 +710,14 @@ const SetPriceAndDuration = (
                   type="text"
                 />
                 <DataPill
-                  label={`${watch("editionSize")} ${
-                    watch("editionSize") == 1 ? "Edition" : "Editions"
-                  }`}
+                  tw={isDark ? "bg-black" : "bg-white"}
+                  label={
+                    isUnlimited
+                      ? `Open Edition`
+                      : `${watch("editionSize")} ${
+                          watch("editionSize") == 1 ? "Edition" : "Editions"
+                        }`
+                  }
                   type="text"
                 />
               </View>
@@ -779,8 +792,14 @@ const SetPriceAndDuration = (
   );
 };
 
-const CreateDropMoreOptions = (props: StepProps) => {
-  const { control, errors, handlePrevStep } = props;
+const CreateDropMoreOptions = (
+  props: StepProps & {
+    isUnlimited: boolean;
+    setIsUnlimited: (isUnlimited: boolean) => void;
+  }
+) => {
+  const { control, errors, handlePrevStep, setIsUnlimited, isUnlimited } =
+    props;
 
   return (
     <Layout
@@ -822,18 +841,33 @@ const CreateDropMoreOptions = (props: StepProps) => {
               return (
                 <Fieldset
                   ref={ref}
-                  tw="flex-1"
+                  tw={isUnlimited ? "flex-1 opacity-40" : "flex-1 opacity-100"}
                   label="Edition size"
                   placeholder="Enter a number"
                   onBlur={onBlur}
                   helperText="How many editions will be available to collect"
                   errorText={errors.editionSize?.message}
+                  disabled={isUnlimited}
                   value={value?.toString()}
                   onChangeText={onChange}
                 />
               );
             }}
           />
+          <Pressable
+            onPress={() => setIsUnlimited(!isUnlimited)}
+            tw="absolute right-4 top-10 flex-row items-center"
+            style={{ opacity: 1 }}
+          >
+            <Text tw="mr-2 text-base font-medium text-gray-600 dark:text-gray-400">
+              Unlimited
+            </Text>
+            <Checkbox
+              onChange={() => setIsUnlimited(!isUnlimited)}
+              checked={isUnlimited}
+              aria-label="unlimited editions for drop"
+            />
+          </Pressable>
         </View>
         {/* <View tw="mt-4">
           <Controller
@@ -1168,7 +1202,7 @@ const CompleteStripeFlow = () => {
   } = useForm({
     defaultValues: {
       businessType: "individual",
-    },
+    } as any,
   });
 
   const onboardingCreator = useOnBoardCreator();
