@@ -454,8 +454,50 @@ export const ClaimForm = ({
               </Text>
               's channel
             </Text>
+            <View tw="ml-2 overflow-hidden rounded-full bg-indigo-700 px-1.5 py-1">
+              <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
+                NEW
+              </Text>
+            </View>
           </View>
-
+          {isGold ? (
+            <>
+              <View tw="mt-4 flex-row items-center">
+                <CheckIcon />
+                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                  You will unlock exclusive channel content
+                </Text>
+                <View tw="ml-2 overflow-hidden rounded-full px-1.5 py-1">
+                  <LinearGradient
+                    style={StyleSheet.absoluteFill}
+                    start={{ x: 0.81, y: 1.28 }}
+                    end={{ x: 0.21, y: -0.31 }}
+                    colors={["#FF9E2C", "#FFC93F"]}
+                  />
+                  <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
+                    NEW
+                  </Text>
+                </View>
+              </View>
+              <View tw="mt-4 flex-row items-center">
+                <CheckIcon />
+                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                  Your handle will display a star badge
+                </Text>
+                <View tw="ml-2 overflow-hidden rounded-full px-1.5 py-1">
+                  <LinearGradient
+                    style={StyleSheet.absoluteFill}
+                    start={{ x: 0.81, y: 1.28 }}
+                    end={{ x: 0.21, y: -0.31 }}
+                    colors={["#FF9E2C", "#FFC93F"]}
+                  />
+                  <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
+                    NEW
+                  </Text>
+                </View>
+              </View>
+            </>
+          ) : null}
           {state.status === "idle" ? (
             <Fieldset
               tw="mt-4 flex-1"
@@ -472,6 +514,9 @@ export const ClaimForm = ({
             <Button
               size="regular"
               variant="primary"
+              style={{
+                backgroundColor: isGold ? "transparent" : undefined,
+              }}
               disabled={isDisableButton}
               tw={isDisableButton ? "opacity-[0.45]" : ""}
               onPress={handleClaimNFT}
@@ -486,9 +531,27 @@ export const ClaimForm = ({
                     overflow: "hidden",
                     transform: [{ scaleX: 1 }],
                   }}
-                  {...fromCSS(
-                    "linear-gradient(207deg, #FFCB6C 2.11%, #FDD764 4.95%, #FFD24D 12.42%, #E6A130 15.46%, #EDAF38 17.19%, #FFE956 19.13%, #FFEC92 22.17%, #FED749 25.98%, #FDC93F 31.31%, #F6C33D 36.22%, #ED9F26 40.36%, #E88A3F 46.36%, #F4CE5E 54.12%, #E4973C 60.91%, #F1A819 69.63%, #FFD480 82.36%, #FBC73F 91.83%, #F5E794 99.79%)"
-                  )}
+                  start={{ x: 1.75, y: -1.79 }}
+                  end={{ x: 0.25, y: 1.1 }}
+                  colors={[
+                    "#FFCB6C",
+                    "#FDD764",
+                    "#FFD24D",
+                    "#EDAF00",
+                    "#EDAF38",
+                    "#FDC93F",
+                    "#FFD480",
+                    "#FED749",
+                    "#FDC93F",
+                    "#F6C33D",
+                    "#F6C33D",
+                    "#F4CE5E",
+                    "#FBC73F",
+                    "#FFD480",
+                    "#F5E794",
+                    "#F5E794",
+                    "#F5E794",
+                  ]}
                 />
               ) : null}
               {isLoading ? (
@@ -519,7 +582,7 @@ export const ClaimForm = ({
                     />
                   </View>
 
-                  <Text tw="ml-2 text-base font-semibold text-white dark:text-black">
+                  <Text tw="ml-2 text-base font-semibold text-black">
                     Collect Star Drop - ${3}
                   </Text>
                 </View>

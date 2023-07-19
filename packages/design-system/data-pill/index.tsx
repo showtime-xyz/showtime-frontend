@@ -2,8 +2,8 @@ import { useMemo } from "react";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import type { TW } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { Text, Props as TextProps } from "@showtime-xyz/universal.text";
+import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 type Type = "primary" | "secondary" | "text";
 type DataPillProps = {
@@ -11,6 +11,8 @@ type DataPillProps = {
   label?: string;
   tw?: string;
   textTw?: string;
+  style?: ViewProps;
+  textStyle?: TextProps["style"];
 };
 // TODO: tw `dark:text-xxx-xxx` prop not working on native, not sure why. so use an array to hack make it works first and dig it later.
 const textTwColorMap = new Map<Type, TW>([
@@ -28,7 +30,14 @@ const bgColorMap = new Map<Type, TW>([
 const DEFAULT_TYPE = "primary";
 
 export const DataPill = (props: DataPillProps) => {
-  const { type = DEFAULT_TYPE, label, tw = "", textTw = "" } = props;
+  const {
+    type = DEFAULT_TYPE,
+    label,
+    tw = "",
+    textTw = "",
+    style,
+    textStyle,
+  } = props;
   const isDark = useIsDarkMode();
 
   const textColorTw = useMemo(() => {
