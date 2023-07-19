@@ -812,7 +812,7 @@ const CreateDropMoreOptions = (
       }
     >
       <BottomSheetScrollView style={{ paddingHorizontal: 16 }}>
-        <View tw="mt-4 flex-1">
+        <View tw="mt-4">
           <Controller
             control={control}
             name="royalty"
@@ -820,7 +820,6 @@ const CreateDropMoreOptions = (
               return (
                 <Fieldset
                   ref={ref}
-                  tw="flex-1"
                   label="Your royalties (%)"
                   onBlur={onBlur}
                   placeholder="Enter number"
@@ -833,7 +832,7 @@ const CreateDropMoreOptions = (
             }}
           />
         </View>
-        <View tw="mt-4 flex-1">
+        <View tw="mt-4">
           <Controller
             control={control}
             name="editionSize"
