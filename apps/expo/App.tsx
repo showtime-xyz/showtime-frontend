@@ -18,7 +18,9 @@ import { AppProviders } from "app/providers/app-providers";
 enableScreens(true);
 enableFreeze(true);
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync().catch(() => {
+  // in very rare cases, preventAutoHideAsync can reject, this is a best effort
+});
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
