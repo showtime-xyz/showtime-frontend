@@ -2,8 +2,7 @@ appId: io.showtime.development
 ---
 - tapOn:
     point: "51%,92%"
-- tapOn: "Let's go"
-- tapOn: "Create drop"
+- tapOn: "Drops: Free digital collectibles"
 - tapOn: "Upload"
 - tapOn:
     text: "Select Photos…"
@@ -21,7 +20,12 @@ appId: io.showtime.development
 - inputText: "This is a test drop"
 - tapOn: "Why should people collect this drop?"
 - inputText: "This is a test drop description. Keeping it longer to test some features. Hoping this long works or if I should add a few more words!"
+- tapOn: "Description"
+- swipe:
+    start: 50%, 40% # From (90% of width, 50% of height)
+    end: 50%, 10% # To (10% of width, 50% of height)
 - tapOn:
-    "I agree to the terms and conditions I have the rights to publish this content,\
-    \ and understand it will be minted on the Polygon network."
+    id: "i-agree-checkbox"
 - tapOn: "Continue"
+- tapOn: "Drop now"
+- assertVisible: "Congrats! Now share it."

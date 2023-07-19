@@ -85,7 +85,7 @@ const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Collectors],
 ]);
-export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
+export const CssFeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   nft,
   listLength,
   slideToNext,
@@ -421,4 +421,4 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     </View>
   );
 });
-FeedItemMD.displayName = "FeedItemMD";
+CssFeedItemMD.displayName = "CssFeedItemMD";

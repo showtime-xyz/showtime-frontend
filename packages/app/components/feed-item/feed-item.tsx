@@ -10,9 +10,9 @@ import {
 import {
   Platform,
   StatusBar,
-  StyleProp,
   useWindowDimensions,
   ViewStyle,
+  Dimensions,
 } from "react-native";
 
 import { ResizeMode } from "expo-av";
@@ -37,29 +37,21 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
-import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
 import { NFTDetails } from "./details";
 import { EngagementIcons } from "./engagement-icons";
 import { NSFWGate } from "./nsfw-gate";
+import { FeedItemProps } from "./type";
 
-export type FeedItemProps = {
-  nft: NFT;
-  detailStyle?: StyleProp<ViewStyle>;
-  bottomPadding?: number;
-  bottomMargin?: number;
-  itemHeight: number;
-  setMomentumScrollCallback?: (callback: any) => void;
-};
 const StatusBarHeight = StatusBar.currentHeight ?? 0;
-export const SwiperActiveIndexContext = createContext<number>(0);
-
+export const SwiperActiveIndexContext = createContext<number | null>(null);
+const { height: screenHeight } = Dimensions.get("window");
 export const FeedItem = memo<FeedItemProps>(function FeedItem({
   nft,
   bottomPadding = 0,
   bottomMargin = 0,
-  itemHeight,
+  itemHeight = screenHeight,
   setMomentumScrollCallback,
 }) {
   const lastItemId = useRef(nft.nft_id);

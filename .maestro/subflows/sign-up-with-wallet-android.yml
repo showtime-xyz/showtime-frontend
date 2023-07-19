@@ -7,8 +7,7 @@ appId: io.showtime.development
 - tapOn: "Connect Wallet"
 - assertNotVisible: "Sign In"
 - tapOn:
-    point: "91%,92%"
-- tapOn: "Complete Profile"
+    point: "50%,94%"
 - tapOn: "your_username"
 - "inputRandomText"
 - tapOn: "Next"

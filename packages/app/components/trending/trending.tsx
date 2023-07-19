@@ -26,8 +26,8 @@ const Header = () => {
       <View
         style={{
           height: Platform.select({
-            android: 8,
-            default: headerHeight + 8,
+            ios: headerHeight + 8,
+            default: 8,
           }),
         }}
       />
@@ -51,7 +51,7 @@ export const Trending = () => {
 
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-      const marginLeft = isMdWidth ? 0 : index % numColumns === 0 ? 0 : 8;
+      const marginLeft = isMdWidth ? 0 : index % numColumns === 0 ? 0 : 12;
       return (
         <TrendingItem
           nft={item}
@@ -108,7 +108,7 @@ export const Trending = () => {
       <View tw="md:max-w-screen-content mx-auto w-full">
         <ErrorBoundary>
           <InfiniteScrollList
-            useWindowScroll={isMdWidth}
+            useWindowScroll
             data={list}
             preserveScrollPosition
             keyExtractor={keyExtractor}
@@ -117,7 +117,10 @@ export const Trending = () => {
             drawDistance={500}
             getItemType={getItemType}
             style={{
-              height: screenHeight,
+              height: Platform.select({
+                web: undefined,
+                default: screenHeight,
+              }),
             }}
             contentContainerStyle={{
               paddingHorizontal: 16,

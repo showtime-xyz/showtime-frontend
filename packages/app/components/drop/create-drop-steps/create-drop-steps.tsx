@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import {
   useWindowDimensions,
   Platform,
@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -44,20 +45,13 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { Creator } from "app/components/card/rows/elements/creator";
-import { Media } from "app/components/media";
 import { Preview } from "app/components/preview";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { usePersistForm } from "app/hooks/use-persist-form";
-import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { FilePickerResolveValue } from "app/lib/file-picker";
-import { getTwitterIntent } from "app/utilities";
 
 import { DateTimePicker } from "design-system/date-time-picker";
-import { toast } from "design-system/toast";
 
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
@@ -993,27 +987,33 @@ const Layout = (props: {
   const isDark = useIsDarkMode();
   const insets = useSafeAreaInsets();
   return (
-    <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
-      <View tw="mx-4 my-8 flex-row items-center">
-        <Pressable tw="absolute" onPress={props.onBackPress}>
-          {props.closeIcon ? (
-            <Close color={isDark ? "white" : "black"} width={24} height={24} />
-          ) : (
-            <ArrowLeft
-              color={isDark ? "white" : "black"}
-              width={24}
-              height={24}
-            />
-          )}
-        </Pressable>
-        <View tw="mx-auto">
-          <Text tw="text-base font-bold text-black dark:text-white">
-            {props.title}
-          </Text>
+    <BottomSheetModalProvider>
+      <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
+        <View tw="mx-4 my-8 flex-row items-center">
+          <Pressable tw="absolute" onPress={props.onBackPress}>
+            {props.closeIcon ? (
+              <Close
+                color={isDark ? "white" : "black"}
+                width={24}
+                height={24}
+              />
+            ) : (
+              <ArrowLeft
+                color={isDark ? "white" : "black"}
+                width={24}
+                height={24}
+              />
+            )}
+          </Pressable>
+          <View tw="mx-auto">
+            <Text tw="text-base font-bold text-black dark:text-white">
+              {props.title}
+            </Text>
+          </View>
         </View>
+        {props.children}
       </View>
-      {props.children}
-    </View>
+    </BottomSheetModalProvider>
   );
 };
 

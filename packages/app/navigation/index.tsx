@@ -1,6 +1,8 @@
 import { useState, useRef, useMemo } from "react";
 import { Platform } from "react-native";
 
+import * as SplashScreen from "expo-splash-screen";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 
 import {
@@ -22,6 +24,9 @@ function useLinkingConfig(
         Platform.select({
           web: () => {
             trackedLinking.current.enabled = false;
+          },
+          native: async () => {
+            await SplashScreen.hideAsync();
           },
         }),
       [trackedLinking]
