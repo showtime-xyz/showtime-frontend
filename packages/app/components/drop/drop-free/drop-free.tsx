@@ -378,10 +378,25 @@ const CreateDropStepMedia = (
   } = props;
   const { width: windowWidth } = useWindowDimensions();
 
-  const mediaWidth = Math.min(340, windowWidth - 32);
+  const mediaWidth = Math.min(300, windowWidth - 32);
+
+  const onNextStep = async () => {
+    const res = await trigger("file");
+    if (res) {
+      handleNextStep();
+    }
+  };
 
   return (
-    <Layout onBackPress={handlePrevStep} title="Create">
+    <Layout
+      onBackPress={handlePrevStep}
+      title="Create"
+      topRightComponent={
+        <Button tw="md:hidden" onPress={onNextStep}>
+          Next
+        </Button>
+      }
+    >
       <View tw="px-4">
         <Text tw="px-8 text-center text-xl font-medium text-gray-900 dark:text-gray-50">
           Upload an image or video for your paid unlockable.
@@ -407,17 +422,8 @@ const CreateDropStepMedia = (
           </Text>
         </View>
       </View>
-      <View tw="mt-4 px-4">
-        <Button
-          size="regular"
-          tw="w-full self-center"
-          onPress={async () => {
-            const res = await trigger("file");
-            if (res) {
-              handleNextStep();
-            }
-          }}
-        >
+      <View tw="mt-4 hidden px-4 md:flex">
+        <Button size="regular" tw="w-full self-center" onPress={onNextStep}>
           Next
         </Button>
       </View>
@@ -430,8 +436,25 @@ const CreateDropStepTitle = (props: StepProps) => {
   const { control, errors, handlePrevStep, handleNextStep, trigger } = props;
   const mediaDimension = Math.min(200, windowWidth - 32);
 
+  const onNextStep = async () => {
+    const res = await trigger(["title", "description"], {
+      shouldFocus: true,
+    });
+    if (res) {
+      handleNextStep();
+    }
+  };
+
   return (
-    <Layout onBackPress={handlePrevStep} title="Create">
+    <Layout
+      onBackPress={handlePrevStep}
+      title="Create"
+      topRightComponent={
+        <Button tw="md:hidden" onPress={onNextStep}>
+          Next
+        </Button>
+      }
+    >
       <ScrollView tw="px-4">
         <View tw="items-center">
           <Preview
@@ -494,15 +517,8 @@ const CreateDropStepTitle = (props: StepProps) => {
       <View tw="px-4">
         <Button
           size="regular"
-          tw="mt-4 w-full self-center"
-          onPress={async () => {
-            const res = await trigger(["title", "description"], {
-              shouldFocus: true,
-            });
-            if (res) {
-              handleNextStep();
-            }
-          }}
+          tw="mt-4 hidden w-full self-center md:flex"
+          onPress={onNextStep}
         >
           Next
         </Button>
@@ -539,9 +555,46 @@ const SetPriceAndDuration = (
     useState(false);
   const isDark = useIsDarkMode();
   const scrollViewRef = useRef<RNScrollView>(null);
+  const onNextStep = async () => {
+    const res = await trigger(
+      ["releaseDate", "spotifyUrl", "appleMusicTrackUrl"],
+      {
+        shouldFocus: true,
+      }
+    );
+    if (res) {
+      const hasAcceptedTerms = await trigger("hasAcceptedTerms");
+      if (hasAcceptedTerms) {
+        handleNextStep();
+      } else {
+        scrollViewRef.current?.scrollTo({ y: 10000, animated: true });
+      }
+    }
+  };
 
   return (
-    <Layout onBackPress={props.handlePrevStep} title="Create">
+    <Layout
+      onBackPress={props.handlePrevStep}
+      title="Create"
+      topRightComponent={
+        <Button
+          variant="primary"
+          disabled={state.status === "loading"}
+          tw={`md:hidden ${state.status === "loading" ? "opacity-[0.45]" : ""}`}
+          onPress={onNextStep}
+        >
+          {state.status === "loading" ? (
+            <View tw="items-center justify-center">
+              <Spinner size="small" />
+            </View>
+          ) : state.status === "error" ? (
+            "Failed. Please retry!"
+          ) : (
+            "Drop now"
+          )}
+        </Button>
+      }
+    >
       <BottomSheetScrollView
         ref={scrollViewRef}
         style={{ paddingHorizontal: 16 }}
@@ -696,23 +749,10 @@ const SetPriceAndDuration = (
           variant="primary"
           size="regular"
           disabled={state.status === "loading"}
-          tw={state.status === "loading" ? "opacity-[0.45]" : ""}
-          onPress={async () => {
-            const res = await trigger(
-              ["releaseDate", "spotifyUrl", "appleMusicTrackUrl"],
-              {
-                shouldFocus: true,
-              }
-            );
-            if (res) {
-              const hasAcceptedTerms = await trigger("hasAcceptedTerms");
-              if (hasAcceptedTerms) {
-                handleNextStep();
-              } else {
-                scrollViewRef.current?.scrollTo({ y: 10000, animated: true });
-              }
-            }
-          }}
+          tw={`hidden md:flex ${
+            state.status === "loading" ? "opacity-[0.45]" : ""
+          }`}
+          onPress={onNextStep}
         >
           {state.status === "loading" ? (
             <View tw="items-center justify-center">
@@ -739,19 +779,19 @@ const SetPriceAndDuration = (
   );
 };
 
-const SECONDS_IN_A_DAY = 24 * 60 * 60;
-const SECONDS_IN_A_WEEK = 7 * SECONDS_IN_A_DAY;
-const SECONDS_IN_A_MONTH = 30 * SECONDS_IN_A_DAY;
-const durationOptions = [
-  { label: "1 day", value: SECONDS_IN_A_DAY },
-  { label: "1 week", value: SECONDS_IN_A_WEEK },
-  { label: "1 month", value: SECONDS_IN_A_MONTH },
-];
 const CreateDropMoreOptions = (props: StepProps) => {
   const { control, errors, handlePrevStep } = props;
 
   return (
-    <Layout onBackPress={handlePrevStep} title="More options">
+    <Layout
+      onBackPress={handlePrevStep}
+      title="More options"
+      topRightComponent={
+        <Button size="regular" tw="md:hidden" onPress={handlePrevStep}>
+          Save
+        </Button>
+      }
+    >
       <BottomSheetScrollView style={{ paddingHorizontal: 16 }}>
         <View tw="mt-4 flex-1">
           <Controller
@@ -850,7 +890,11 @@ const CreateDropMoreOptions = (props: StepProps) => {
         </View>
       </BottomSheetScrollView>
       <View tw="px-4">
-        <Button size="regular" tw="w-full self-center" onPress={handlePrevStep}>
+        <Button
+          size="regular"
+          tw="hidden w-full self-center md:flex"
+          onPress={handlePrevStep}
+        >
           Save
         </Button>
       </View>
@@ -863,13 +907,14 @@ const Layout = (props: {
   onBackPress: () => void;
   children: any;
   closeIcon?: boolean;
+  topRightComponent?: React.ReactNode;
 }) => {
   const isDark = useIsDarkMode();
   const insets = useSafeAreaInsets();
   return (
     <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
       <View tw="mx-4 my-8 flex-row items-center">
-        <Pressable tw="absolute" onPress={props.onBackPress}>
+        <Pressable tw="absolute z-20" onPress={props.onBackPress}>
           {props.closeIcon ? (
             <Close color={isDark ? "white" : "black"} width={24} height={24} />
           ) : (
@@ -880,10 +925,13 @@ const Layout = (props: {
             />
           )}
         </Pressable>
-        <View tw="mx-auto">
-          <Text tw="text-base font-bold text-black dark:text-white">
-            {props.title}
-          </Text>
+        <View tw="w-full flex-row items-center">
+          <View tw="ml-auto">
+            <Text tw="text-base font-bold text-black dark:text-white">
+              {props.title}
+            </Text>
+          </View>
+          <View tw="ml-auto">{props.topRightComponent}</View>
         </View>
       </View>
       {props.children}
