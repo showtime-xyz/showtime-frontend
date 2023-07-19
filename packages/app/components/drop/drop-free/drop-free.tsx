@@ -28,7 +28,6 @@ import {
   ChevronRight,
   Clock,
   Close,
-  Raffle,
 } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
@@ -36,7 +35,6 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import Spinner from "@showtime-xyz/universal.spinner";
-import { Switch } from "@showtime-xyz/universal.switch";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -474,7 +472,7 @@ const CreateDropStepTitle = (props: StepProps) => {
                   ref={ref}
                   label="Description"
                   tw="flex-1"
-                  placeholder="Why should people collect this drop? Raffle Automatically selects a winner once your song is live."
+                  placeholder="Why should people collect this drop?"
                   multiline
                   textAlignVertical="top"
                   numberOfLines={3}
@@ -486,29 +484,10 @@ const CreateDropStepTitle = (props: StepProps) => {
               );
             }}
           />
-          <View tw="absolute right-3 top-3 flex-row items-center">
-            <Controller
-              key="raffle"
-              control={control}
-              name="raffle"
-              render={({ field: { onChange, value } }) => {
-                return (
-                  <>
-                    <Raffle color="black" width={18} height={18} />
-                    <Text tw="mx-1 text-xs font-bold text-gray-800 dark:text-gray-200">
-                      Raffle
-                    </Text>
-                    <Switch checked={value} onChange={onChange} size="small" />
-                  </>
-                );
-              }}
-            />
-          </View>
         </View>
         <View>
           <Text tw="text-13 pt-4 text-gray-700 dark:text-gray-200">
-            Promote a collectible, raffle or allow-list to attract more
-            collectors. You can edit up to 30 minutes after creating.
+            You can edit up to 30 minutes after creating.
           </Text>
         </View>
       </ScrollView>
@@ -1120,6 +1099,18 @@ const countries = [
     value: "US",
   },
 ];
+
+const businessType = [
+  {
+    label: "Individual",
+    value: "individual",
+  },
+  {
+    label: "Company",
+    value: "company",
+  },
+];
+
 const CompleteStripeFlow = () => {
   const {
     control,
@@ -1140,7 +1131,7 @@ const CompleteStripeFlow = () => {
       country_code: data.countryCode,
       refresh_url: `${websiteUrl}/drop/free?stripeRefresh=true`,
       return_url: `${websiteUrl}/drop/free?stripeReturn=true`,
-      business_type: "individual",
+      business_type: data.businessType,
     });
     if (Platform.OS === "web") {
       window.location.href = res.url;
@@ -1181,35 +1172,67 @@ const CompleteStripeFlow = () => {
         }}
       />
 
-      <Controller
-        control={control}
-        name="countryCode"
-        rules={{
-          required: {
-            value: true,
-            message: "Please select a country",
-          },
-        }}
-        render={({ field: { onChange, onBlur, value, ref } }) => {
-          return (
-            <Fieldset
-              ref={ref}
-              tw="flex-1"
-              label="Country"
-              onBlur={onBlur}
-              errorText={errors.countryCode?.message}
-              selectOnly
-              select={{
-                options: countries,
-                placeholder: "Country",
-                value: value,
-                onChange,
-                tw: "flex-1",
-              }}
-            />
-          );
-        }}
-      />
+      <View tw="flex-row" style={{ columnGap: 16 }}>
+        <Controller
+          control={control}
+          name="countryCode"
+          rules={{
+            required: {
+              value: true,
+              message: "Please select a country",
+            },
+          }}
+          render={({ field: { onChange, onBlur, value, ref } }) => {
+            return (
+              <Fieldset
+                ref={ref}
+                tw="flex-1"
+                label="Country"
+                onBlur={onBlur}
+                errorText={errors.countryCode?.message}
+                selectOnly
+                select={{
+                  options: countries,
+                  placeholder: "Country",
+                  value: value,
+                  onChange,
+                  tw: "flex-1",
+                }}
+              />
+            );
+          }}
+        />
+
+        <Controller
+          control={control}
+          name="businessType"
+          rules={{
+            required: {
+              value: true,
+              message: "Please select a business type",
+            },
+          }}
+          render={({ field: { onChange, onBlur, value, ref } }) => {
+            return (
+              <Fieldset
+                ref={ref}
+                tw="flex-1"
+                label="Business type"
+                onBlur={onBlur}
+                errorText={errors.countryCode?.message}
+                selectOnly
+                select={{
+                  options: businessType,
+                  placeholder: "Business type",
+                  value: value,
+                  onChange,
+                  tw: "flex-1",
+                }}
+              />
+            );
+          }}
+        />
+      </View>
       <Button
         onPress={handleSubmit(onSubmit)}
         tw={onboardingCreator.isMutating ? `opacity-30` : ""}
