@@ -46,15 +46,11 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
   return (
     <BottomSheetScrollView useNativeModal={false}>
       <View tw="justify-center px-8" style={{ rowGap: 16 }}>
-        <View tw="rounded-4xl border-[1px] border-yellow-300 p-4">
+        <View tw="rounded-3xl border-[1px] border-yellow-300 p-4">
           <Pressable
             onPress={() => {
               if (Platform.OS !== "web") {
-                modalScreenContext?.pop?.({
-                  callback: () => {
-                    router.push("/drop/free");
-                  },
-                });
+                router.push("/drop/free");
               } else {
                 router.replace("/drop/free");
               }
@@ -121,7 +117,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
             </View>
           </View>
         </View>
-        <View tw="rounded-4xl border-[1px] border-gray-300 p-4">
+        <View tw="rounded-3xl border-[1px] border-gray-300 p-4">
           <Pressable
             onPress={() => {
               if (canCreateMusicDrop) {

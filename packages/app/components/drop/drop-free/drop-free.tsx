@@ -32,6 +32,7 @@ import {
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import Spinner from "@showtime-xyz/universal.spinner";
@@ -42,8 +43,10 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Preview } from "app/components/preview";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
+import { useWallet } from "app/hooks/use-wallet";
 import { FilePickerResolveValue } from "app/lib/file-picker";
 import { createParam } from "app/navigation/use-param";
+import { formatAddressShort } from "app/utilities";
 
 import { MediaPicker } from "../common/media-picker";
 import { useStarDropForm } from "../common/star-drop-form-utils";
@@ -97,6 +100,7 @@ export const DropFree = () => {
   const isDark = useIsDarkMode();
   const file = getValues("file");
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
+  const router = useRouter();
 
   const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
     watch,
@@ -270,7 +274,6 @@ export const DropFree = () => {
 
   if (onboardinStatus.status !== "onboarded") return null;
 
-  console.log("errrors ", formState);
   switch (step) {
     case "media":
       return (
@@ -288,8 +291,7 @@ export const DropFree = () => {
             handleNextStep={() => setStep("title")}
             handleFileChange={handleFileChange}
             handlePrevStep={() => {
-              modalContext?.snapToIndex(0);
-              modalContext?.pop();
+              router.pop();
             }}
             description={description}
             file={file}
@@ -396,7 +398,7 @@ const CreateDropStepMedia = (
   return (
     <Layout
       onBackPress={handlePrevStep}
-      title="Create"
+      title="New Drop"
       topRightComponent={
         <Button tw="md:hidden" onPress={onNextStep}>
           Next
@@ -454,7 +456,7 @@ const CreateDropStepTitle = (props: StepProps) => {
   return (
     <Layout
       onBackPress={handlePrevStep}
-      title="Create"
+      title="New Drop"
       topRightComponent={
         <Button tw="md:hidden" onPress={onNextStep}>
           Next
@@ -558,6 +560,7 @@ const SetPriceAndDuration = (
   const { state } = useDropNFT();
   const duration = watch("duration") / 86400;
   const selectedPrice = watch("paidNFTPrice");
+  const wallet = useWallet();
 
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
@@ -583,7 +586,7 @@ const SetPriceAndDuration = (
   return (
     <Layout
       onBackPress={props.handlePrevStep}
-      title="Create"
+      title="New Drop"
       topRightComponent={
         <Button
           variant="primary"
@@ -591,15 +594,11 @@ const SetPriceAndDuration = (
           tw={`md:hidden ${state.status === "loading" ? "opacity-[0.45]" : ""}`}
           onPress={onNextStep}
         >
-          {state.status === "loading" ? (
-            <View tw="items-center justify-center">
-              <Spinner size="small" />
-            </View>
-          ) : state.status === "error" ? (
-            "Failed. Please retry!"
-          ) : (
-            "Drop now"
-          )}
+          {state.status === "loading"
+            ? "Creating..."
+            : state.status === "error"
+            ? "Failed. Retry!"
+            : "Create"}
         </Button>
       }
     >
@@ -628,20 +627,17 @@ const SetPriceAndDuration = (
               We suggest lower price starting out and higher price for creators
               with 1,000 followers
             </Text>
-            <View
-              tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black"
-              style={{ columnGap: 64 }}
-            >
+            <View tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black">
               {prices.map((price) => (
                 <Pressable
                   key={price}
                   onPress={() => setPrice(price)}
-                  tw={`items-center rounded-2xl p-4 ${
+                  tw={`flex-1 items-center rounded-2xl p-4 ${
                     selectedPrice === price
-                      ? "bg-orange-100 dark:bg-yellow-800"
+                      ? "bg-amber-200 dark:bg-yellow-800"
                       : ""
                   }`}
-                  style={{ rowGap: 16 }}
+                  style={{ rowGap: 8 }}
                 >
                   <Text
                     tw={`text-4xl text-gray-700
@@ -664,16 +660,13 @@ const SetPriceAndDuration = (
               After duration expires, drop will not be purchasable on Showtime,
               but will continue to trade on OpenSea
             </Text>
-            <View
-              tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black"
-              style={{ columnGap: 64 }}
-            >
+            <View tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black">
               {dropDurations.map((day) => (
                 <Pressable
                   key={day}
                   onPress={() => setDays(day)}
-                  tw={`items-center rounded-2xl p-4 ${
-                    duration === day ? "bg-orange-100 dark:bg-yellow-800" : ""
+                  tw={`flex-1 items-center rounded-2xl p-4 ${
+                    duration === day ? "bg-amber-200 dark:bg-yellow-800" : ""
                   }`}
                   style={{ rowGap: 16 }}
                 >
@@ -691,6 +684,7 @@ const SetPriceAndDuration = (
           <Pressable
             tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800"
             onPress={props.handleMoreOptions}
+            style={{ rowGap: 8 }}
           >
             <View tw="flex-row items-center justify-between">
               <Text tw="text-sm font-semibold text-black dark:text-white">
@@ -702,55 +696,37 @@ const SetPriceAndDuration = (
                 height={24}
               />
             </View>
-            <View tw="items-start">
-              <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
-                <DataPill
-                  tw={isDark ? "bg-black" : "bg-white"}
-                  label={`${getValues("royalty")}% Royalties`}
-                  type="text"
-                />
-                <DataPill
-                  tw={isDark ? "bg-black" : "bg-white"}
-                  label={
-                    isUnlimited
-                      ? `Open Edition`
-                      : `${watch("editionSize")} ${
-                          watch("editionSize") == 1 ? "Edition" : "Editions"
-                        }`
-                  }
-                  type="text"
-                />
-              </View>
+            <View tw="ml-[-2px] flex-row flex-wrap" style={{ gap: 4 }}>
+              <DataPill
+                tw={isDark ? "bg-black" : "bg-white"}
+                label={`${getValues("royalty")}% Royalties`}
+                type="text"
+              />
+              <DataPill
+                tw={isDark ? "bg-black" : "bg-white"}
+                label={
+                  isUnlimited
+                    ? `Open Edition`
+                    : `${watch("editionSize")} ${
+                        watch("editionSize") == 1 ? "Edition" : "Editions"
+                      }`
+                }
+                type="text"
+              />
             </View>
+            <Text tw="pt-1 text-xs text-gray-600 dark:text-gray-400">
+              Your wallet{" "}
+              <Text tw="font-bold">{formatAddressShort(wallet.address)}</Text>{" "}
+              will be the collection owner.
+            </Text>
           </Pressable>
         </View>
-        <Text tw="pt-4 text-sm text-gray-600 dark:text-gray-200">
-          This drop will be owned by you
-        </Text>
-        <View tw="mt-4 flex-1 flex-row">
-          <Controller
-            control={control}
-            name="hasAcceptedTerms"
-            render={({ field: { onChange, value } }) => (
-              <>
-                <Pressable
-                  onPress={() => onChange(!value)}
-                  tw="flex-1 flex-row items-center rounded-xl bg-gray-100 p-4 dark:bg-gray-900"
-                >
-                  <Checkbox
-                    onChange={(v) => onChange(v)}
-                    checked={value}
-                    aria-label="I agree to the terms and conditions"
-                  />
 
-                  <Text tw="px-4 text-gray-600 dark:text-gray-400">
-                    I have the rights to publish this content, and understand it
-                    will be minted on the Polygon network.
-                  </Text>
-                </Pressable>
-              </>
-            )}
-          />
+        <View tw="mt-4">
+          <Text tw="text-xs text-gray-600 dark:text-gray-400">
+            By clicking Create, you imply you have the rights to publish this
+            content, and understand it will be minted on the Base network.
+          </Text>
         </View>
         {errors.hasAcceptedTerms?.message ? (
           <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
@@ -767,15 +743,11 @@ const SetPriceAndDuration = (
           }`}
           onPress={onNextStep}
         >
-          {state.status === "loading" ? (
-            <View tw="items-center justify-center">
-              <Spinner size="small" />
-            </View>
-          ) : state.status === "error" ? (
-            "Failed. Please retry!"
-          ) : (
-            "Drop now"
-          )}
+          {state.status === "loading"
+            ? "Creating..."
+            : state.status === "error"
+            ? "Failed. Please retry!"
+            : "Create"}
         </Button>
       </View>
 
@@ -806,32 +778,12 @@ const CreateDropMoreOptions = (
       onBackPress={handlePrevStep}
       title="More options"
       topRightComponent={
-        <Button size="regular" tw="md:hidden" onPress={handlePrevStep}>
+        <Button tw="md:hidden" onPress={handlePrevStep}>
           Save
         </Button>
       }
     >
       <BottomSheetScrollView style={{ paddingHorizontal: 16 }}>
-        <View tw="mt-4">
-          <Controller
-            control={control}
-            name="royalty"
-            render={({ field: { onChange, onBlur, value, ref } }) => {
-              return (
-                <Fieldset
-                  ref={ref}
-                  label="Your royalties (%)"
-                  onBlur={onBlur}
-                  placeholder="Enter number"
-                  helperText="Earn royalties each time an edition is sold."
-                  errorText={errors.royalty?.message}
-                  value={value?.toString()}
-                  onChangeText={onChange}
-                />
-              );
-            }}
-          />
-        </View>
         <View tw="mt-4">
           <Controller
             control={control}
@@ -867,6 +819,26 @@ const CreateDropMoreOptions = (
               aria-label="unlimited editions for drop"
             />
           </Pressable>
+        </View>
+        <View tw="mt-4">
+          <Controller
+            control={control}
+            name="royalty"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  label="Your royalties (%)"
+                  onBlur={onBlur}
+                  placeholder="Enter number"
+                  helperText="Earn royalties each time an edition is sold."
+                  errorText={errors.royalty?.message}
+                  value={value?.toString()}
+                  onChangeText={onChange}
+                />
+              );
+            }}
+          />
         </View>
         {/* <View tw="mt-4">
           <Controller
@@ -958,13 +930,13 @@ const Layout = (props: {
             />
           )}
         </Pressable>
-        <View tw="w-full flex-row items-center">
-          <View tw="ml-auto">
+        <View tw="w-full flex-row items-center justify-center">
+          <View>
             <Text tw="text-base font-bold text-black dark:text-white">
               {props.title}
             </Text>
           </View>
-          <View tw="ml-auto">{props.topRightComponent}</View>
+          <View tw="absolute right-0">{props.topRightComponent}</View>
         </View>
       </View>
       {props.children}
