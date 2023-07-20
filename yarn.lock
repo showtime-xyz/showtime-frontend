@@ -8922,7 +8922,6 @@ __metadata:
     babel-plugin-dynamic-import-node: ^2.3.3
     babel-plugin-inline-dotenv: ^1.7.0
     blurhash: 2.0.5
-    bn.js: ^5.2.1
     browserify-zlib: ~0.2.0
     burnt: ^0.11.7
     comment-json: ^4.2.3
