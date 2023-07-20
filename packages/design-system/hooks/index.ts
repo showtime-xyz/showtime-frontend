@@ -243,38 +243,6 @@ export function useWebClientRect<T>(ele: React.RefObject<T>) {
   ];
 }
 
-export function useLockBodyScroll(isLocked = true) {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useIsomorphicLayoutEffect(() => {
-    if (typeof window !== "undefined" && window.document) {
-      setIsMounted(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      window.document &&
-      isMounted &&
-      isLocked
-    ) {
-      document.body.classList.add("no-scroll");
-    }
-
-    return () => {
-      if (
-        typeof window !== "undefined" &&
-        window.document &&
-        isMounted &&
-        isLocked
-      ) {
-        document.body.classList.remove("no-scroll");
-      }
-    };
-  }, [isMounted, isLocked]);
-}
-
 export function useEffectOnce(effect: EffectCallback) {
   useEffect(effect, []);
 }
