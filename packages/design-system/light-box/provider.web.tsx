@@ -2,8 +2,8 @@ import React, { createContext, useContext, useMemo, useState } from "react";
 import { Modal } from "react-native";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
 
+import { useLockHtmlScroll } from "@showtime-xyz/universal.hooks";
 import { Close } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -49,7 +49,7 @@ export const LightBoxProvider: React.FC<{ children: JSX.Element }> = ({
     setVisible(false);
     setImageElement(null);
   };
-
+  useLockHtmlScroll(visible);
   return (
     <LightBoxContext.Provider value={value}>
       {children}
@@ -59,7 +59,6 @@ export const LightBoxProvider: React.FC<{ children: JSX.Element }> = ({
         statusBarTranslucent
         animationType="fade"
       >
-        <RemoveScrollBar />
         <View tw="flex-1 items-center justify-center">
           <div
             onClick={onClose}
