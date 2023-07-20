@@ -45,19 +45,15 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                           <AuthProvider>
                             <UserProvider>
                               <BottomSheetModalProvider>
-                                <GrowthBookProvider growthbook={growthbook}>
-                                  <FeedProvider>
-                                    <NavigationProvider>
-                                      <MuteProvider>
-                                        <ClaimProvider>
-                                          <DropProvider>
-                                            {children}
-                                          </DropProvider>
-                                        </ClaimProvider>
-                                      </MuteProvider>
-                                    </NavigationProvider>
-                                  </FeedProvider>
-                                </GrowthBookProvider>
+                                <FeedProvider>
+                                  <NavigationProvider>
+                                    <MuteProvider>
+                                      <ClaimProvider>
+                                        <DropProvider>{children}</DropProvider>
+                                      </ClaimProvider>
+                                    </MuteProvider>
+                                  </NavigationProvider>
+                                </FeedProvider>
                               </BottomSheetModalProvider>
                             </UserProvider>
                           </AuthProvider>
