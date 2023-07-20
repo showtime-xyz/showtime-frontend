@@ -3,6 +3,8 @@ import { Alert, useColorScheme } from "react-native";
 
 import { SUBSCRIBER_EVENTS } from "@walletconnect/core";
 
+import { Logger } from "app/lib/logger";
+
 import { AccountCtrl } from "../controllers/AccountCtrl";
 import { ClientCtrl } from "../controllers/ClientCtrl";
 import { ConfigCtrl } from "../controllers/ConfigCtrl";
@@ -108,8 +110,8 @@ export function useConfigure({
           ClientCtrl.setInitialized(true);
         }
       } catch (error) {
-        console.log("error ", error);
-        Alert.alert("Error", "Error initializing provider");
+        Logger.log("error ", error);
+        //Alert.alert("Error", "Error initializing provider");
       }
     }
     if (!ClientCtrl.provider() && projectId && providerMetadata) {
