@@ -109,6 +109,7 @@ html {
   -webkit-text-size-adjust: 100%;
   height: 100%;
   overflow-y: scroll !important;
+  overscroll-behavior-y: none;
 }
 
 body {
