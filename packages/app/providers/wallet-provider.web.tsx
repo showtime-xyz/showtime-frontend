@@ -4,12 +4,15 @@ import {
   connectorsForWallets,
 } from "@rainbow-me/rainbowkit";
 import { configureChains, WagmiConfig, createConfig } from "wagmi";
-import { polygon, polygonMumbai, mainnet } from "wagmi/chains";
+import * as allChains from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
+// @ts-ignore
+const allChainsArray = Object.keys(allChains).map((key) => allChains[key]);
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, polygon, polygonMumbai],
+  allChainsArray,
   [
     publicProvider(),
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
