@@ -73,14 +73,21 @@ export const Home = () => {
     return "homeItem";
   }, []);
   return (
-    <View tw="w-full flex-1 items-center bg-white dark:bg-black">
+    <View
+      tw="w-full flex-1 items-center bg-white dark:bg-black"
+      style={{
+        marginBottom: Platform.select({
+          native: bottomBarHeight,
+        }),
+      }}
+    >
       <View tw="md:max-w-screen-content w-full">
         <ErrorBoundary>
           <InfiniteScrollList
             data={data}
             renderItem={renderItem}
             estimatedItemSize={600}
-            drawDistance={Platform.OS === "android" ? height * 2 : undefined}
+            drawDistance={Platform.OS === "android" ? height : undefined}
             preserveScrollPosition
             ListHeaderComponent={ListHeaderComponent}
             contentContainerStyle={{
@@ -89,17 +96,13 @@ export const Home = () => {
                 default: headerHeight,
               }),
             }}
+            automaticallyAdjustContentInsets
+            automaticallyAdjustsScrollIndicatorInsets
             ref={listRef}
             getItemType={getItemType}
             ListEmptyComponent={ListEmptyComponent}
             useWindowScroll
-            style={{
-              height: Platform.select({
-                android: windowHeight - headerHeight - bottomBarHeight,
-                default: undefined,
-                ios: windowHeight - bottomBarHeight,
-              }),
-            }}
+            style={{ flexGrow: 1 }}
           />
         </ErrorBoundary>
       </View>

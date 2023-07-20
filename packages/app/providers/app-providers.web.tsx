@@ -35,7 +35,7 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
       <ReactionProvider>
         <MagicProvider>
           <ColorSchemeProvider>
-            <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+            <SafeAreaProvider>
               <LightBoxProvider>
                 <WalletProvider>
                   <AlertProvider>

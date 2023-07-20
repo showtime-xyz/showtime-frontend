@@ -126,7 +126,7 @@ export function RootStackNavigator() {
             headerTitle: "Settings",
             headerRight: () => (
               <Text tw="text-xl font-extrabold text-gray-100 dark:text-gray-900">
-                v{Constants?.manifest?.version ?? packageJson?.version}
+                v{Constants?.expoConfig?.version ?? packageJson?.version}
               </Text>
             ),
           }}
