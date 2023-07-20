@@ -22,7 +22,7 @@ class Document extends NextDocument {
           <meta charSet="UTF-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         </Head>
-        <body className="!max-w-screen !mr-0">
+        <body>
           <Main />
           <NextScript />
         </body>

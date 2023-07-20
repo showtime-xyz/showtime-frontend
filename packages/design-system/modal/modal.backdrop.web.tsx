@@ -1,7 +1,8 @@
 import { memo, forwardRef, useCallback } from "react";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
-import { RemoveScrollBar } from "react-remove-scroll-bar";
+
+import { useLockHtmlScroll } from "@showtime-xyz/universal.hooks";
 
 import type { ModalBackdropProps } from "./types";
 
@@ -23,16 +24,14 @@ const ModalBackdropComponent = forwardRef<any, ModalBackdropProps>(
       event.preventDefault();
       return onCloseMethod();
     });
+    useLockHtmlScroll();
     return (
-      <>
-        <RemoveScrollBar />
-        <div
-          ref={ref}
-          className={BACKDROP_TW.join(" ")}
-          onClick={onCloseMethod}
-          onTouchEnd={onClose}
-        />
-      </>
+      <div
+        ref={ref}
+        className={BACKDROP_TW.join(" ")}
+        onClick={onCloseMethod}
+        onTouchEnd={onClose}
+      />
     );
   }
 );
