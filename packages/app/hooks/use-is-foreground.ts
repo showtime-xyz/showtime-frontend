@@ -15,7 +15,7 @@ export const useIsForeground = (): boolean => {
         listener.remove();
       }
     };
-  }, [setIsForeground]);
+  }, []);
 
   return isForeground;
 };
