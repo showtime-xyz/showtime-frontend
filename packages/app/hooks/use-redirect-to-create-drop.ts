@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { MMKV } from "react-native-mmkv";
@@ -19,7 +20,7 @@ export const useRedirectToCreateDrop = () => {
   const router = useRouter();
   const Alert = useAlert();
 
-  const redirectToCreateDrop = async () => {
+  const redirectToCreateDrop = useCallback(async () => {
     if (isAuthenticated && user?.data.can_create_drop === false) {
       const timeRemaining = 24 - new Date().getUTCHours();
       Alert.alert(
@@ -65,7 +66,14 @@ export const useRedirectToCreateDrop = () => {
         );
       }
     }
-  };
+  }, [
+    Alert,
+    isAuthenticated,
+    loginPromise,
+    onboardingPromise,
+    router,
+    user?.data.can_create_drop,
+  ]);
 
   return redirectToCreateDrop;
 };
