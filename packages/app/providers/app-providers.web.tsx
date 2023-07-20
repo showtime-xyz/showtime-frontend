@@ -5,7 +5,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
-import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";

@@ -27,7 +27,7 @@ export function useSendFeedback() {
           ios: "iOS",
           android: "Android",
           web: "Web",
-        })} ${`v${Constants?.manifest?.version ?? packageJson?.version}`}`,
+        })} ${`v${Constants?.expoConfig?.version ?? packageJson?.version}`}`,
         recipients: [FEEDBACK_EMAIL_ADDRESS],
         body: ``,
       });

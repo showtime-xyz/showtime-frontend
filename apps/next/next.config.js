@@ -45,7 +45,6 @@ const nextConfig = {
     "sentry-expo",
     "solito",
     "nativewind",
-    "expo-app-loading",
     "expo-application",
     "expo-av",
     "expo-asset",

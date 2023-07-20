@@ -433,11 +433,7 @@ export const CreatorChannelsList = memo(
             : item.itemType ?? "row";
         }}
         style={{
-          height: Platform.select({
-            default: windowHeight - bottomBarHeight + insets.top,
-            web: web_height ? web_height : windowHeight - bottomBarHeight - 40, // 40 is the height of pt-10
-            ios: windowHeight,
-          }),
+          flexGrow: 1,
           paddingTop: insets.top,
         }}
         // for blur effect on Native

@@ -2,7 +2,6 @@ import { useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { useUser } from "app/hooks/use-user";
 import CreateNavigator from "app/pages/create";
 import CreatorChannelsNavigator from "app/pages/creator-channels";
 import HomeNavigator from "app/pages/home";
@@ -21,7 +20,6 @@ const BottomTab = createBottomTabNavigator();
 
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
-  const { user } = useUser();
 
   return (
     <BottomTab.Navigator
@@ -67,7 +65,6 @@ export function BottomTabNavigator() {
         <BottomTab.Screen
           name="profileTab"
           component={ProfileNavigator}
-          navigationKey={user?.data?.profile?.profile_id?.toString()}
           options={{
             tabBarIcon: ProfileTabBarIcon,
           }}
