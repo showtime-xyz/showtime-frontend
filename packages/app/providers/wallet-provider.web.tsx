@@ -59,7 +59,6 @@ const allChainsArray = [
   lineaChain,
 ];
 
-console.log("Efeff ", allChainsArray);
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   allChainsArray,
   [
