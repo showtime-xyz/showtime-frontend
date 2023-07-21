@@ -23,6 +23,7 @@ import { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useChannelsUnreadMessages } from "app/components/creator-channels/hooks/use-channels-unread-messages";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNotifications } from "app/hooks/use-notifications";
@@ -139,10 +140,7 @@ export const CreatorChannelsTabBarIcon = ({
 }: TabBarIconProps & {
   tooltipSide?: ContentProps["side"];
 }) => {
-  // TODO: use real badge number once API is ready
-  // @ts-ignore
-  // eslint-disable-next-line unused-imports/no-unused-vars
-  const [badgeNumber, setBadgeNumber] = useState(0);
+  const { data } = useChannelsUnreadMessages();
 
   return (
     <TabBarIcon tab="/channels">
@@ -151,10 +149,10 @@ export const CreatorChannelsTabBarIcon = ({
       ) : (
         <CreatorChannel width={24} height={24} color={color} />
       )}
-      {badgeNumber > 0 && (
-        <View tw="web:-top-0.5 absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-indigo-700">
-          <Text tw="text-xs font-medium text-white">
-            {badgeNumber > 99 ? "99" : badgeNumber}
+      {data && data.unread > 0 && (
+        <View tw="web:-right-0.5 absolute right-0.5 top-0 h-4 w-4 items-center justify-center rounded-full bg-indigo-700">
+          <Text tw="text-[8px] text-white" style={{ lineHeight: 12 }}>
+            {data.unread > 99 ? "99" : data.unread}
           </Text>
         </View>
       )}
