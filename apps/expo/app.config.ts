@@ -122,6 +122,10 @@ const expoConfig: ExpoConfig = {
     backgroundColor: "#00000000",
     barStyle: "light-content",
   },
+  notification: {
+    icon: "./assets/notification-icon.png",
+    color: "#EBB64F",
+  },
   assetBundlePatterns: ["**/*"],
   orientation: "portrait",
   updates: {
