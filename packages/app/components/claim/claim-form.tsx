@@ -13,7 +13,6 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
@@ -544,7 +543,7 @@ export const ClaimForm = ({
                   <View>
                     <Image
                       source={{
-                        uri: "https://showtime-media.b-cdn.net/assets/gold-button-icon.png",
+                        uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
                       }}
                       width={24}
                       height={24}

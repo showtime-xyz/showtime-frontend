@@ -21,6 +21,7 @@ import { useScript } from "app/hooks/use-script";
 import { initialiseAppleMusic } from "app/lib/apple-music-auth/apple-music-auth";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
+import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
 import { CheckoutScreen } from "app/screens/checkout";
 import { CheckoutReturnScreen } from "app/screens/checkout-return";
 import { ClaimScreen } from "app/screens/claim";
@@ -175,12 +176,7 @@ function App({ Component, pageProps, router }: AppProps) {
               }
             />
 
-            <View
-              tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]"
-              style={{
-                minHeight: "100svh",
-              }}
-            >
+            <View tw="w-full items-center md:ml-auto md:w-[calc(100vw-248px)]">
               <Component {...pageProps} />
             </View>
           </View>
@@ -215,7 +211,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <OnboardingScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
-
+        <UnlockedChannelScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />

@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 
-const prop = {
+const linearProps = {
   start: { x: 1.75, y: -1.79 },
   end: { x: 0.25, y: 1.1 },
   colors: [
@@ -34,7 +34,7 @@ export const GoldLinearGradient = () => {
           borderRadius: 999,
         },
       ]}
-      {...prop}
+      {...linearProps}
     />
   );
 };

@@ -397,7 +397,7 @@ export const ClaimButton = ({
             <View>
               <Image
                 source={{
-                  uri: "https://showtime-media.b-cdn.net/assets/gold-button-icon.png",
+                  uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
                 }}
                 width={buttonProps.size === "regular" ? 24 : 20}
                 height={buttonProps.size === "regular" ? 24 : 20}
