@@ -29,6 +29,7 @@ import {
   Clock,
   Close,
 } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -236,7 +237,7 @@ export const DropFree = () => {
   if (onboardinStatus.status === "not_onboarded") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => router.pop()}
         closeIcon
         title="Payment processing details"
       >
@@ -1319,7 +1320,14 @@ const CompleteStripeFlow = () => {
         tw={onboardingCreator.isMutating ? `opacity-30` : ""}
         size="regular"
       >
-        {onboardingCreator.isMutating ? "Please wait..." : "Setup cash payout"}
+        <View tw="flex-row items-center" style={{ columnGap: 4 }}>
+          <Image source={require("./stripe-logo.png")} height={20} width={20} />
+          <Text tw="font-semibold text-white dark:text-black">
+            {onboardingCreator.isMutating
+              ? "Please wait..."
+              : "Setup cash payout"}
+          </Text>
+        </View>
       </Button>
     </View>
   );
