@@ -445,7 +445,7 @@ const CreateDropStepTitle = (props: StepProps) => {
   const mediaDimension = Math.min(200, windowWidth - 32);
 
   const onNextStep = async () => {
-    const res = await trigger(["title", "description"], {
+    const res = await trigger(["title", "description", "exclusiveLink"], {
       shouldFocus: true,
     });
     if (res) {
@@ -472,6 +472,28 @@ const CreateDropStepTitle = (props: StepProps) => {
             style={{ borderRadius: 16 }}
           />
         </View>
+        <View tw="mt-4">
+          <Controller
+            control={control}
+            name="exclusiveLink"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  label="Exclusive collector link"
+                  placeholder="https://dropbox.com/2308fyh28v2h"
+                  onBlur={onBlur}
+                  errorText={errors.exclusiveLink?.message}
+                  value={value}
+                  helperText="Drop an exclusive link to merchandise discount, unreleased music, unlisted YouTube video... in your collector channel."
+                  onChangeText={onChange}
+                  numberOfLines={1}
+                />
+              );
+            }}
+          />
+        </View>
+
         <View tw="mt-4">
           <Controller
             control={control}
@@ -518,7 +540,7 @@ const CreateDropStepTitle = (props: StepProps) => {
         </View>
         <View>
           <Text tw="text-13 pt-4 text-gray-700 dark:text-gray-200">
-            You can edit up to 30 minutes after creating.
+            You can edit this up to 30 minutes after creating.
           </Text>
         </View>
       </ScrollView>

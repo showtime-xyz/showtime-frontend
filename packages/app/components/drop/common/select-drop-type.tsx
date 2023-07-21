@@ -94,10 +94,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                 tw="absolute rounded-full bg-yellow-300"
                 style={{ top: -8, right: 11, padding: 2 }}
               >
-                <Text
-                  tw="font-semibold text-black dark:text-white"
-                  style={{ fontSize: 10 }}
-                >
+                <Text tw="font-semibold text-black" style={{ fontSize: 10 }}>
                   $3
                 </Text>
               </View>
