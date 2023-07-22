@@ -89,7 +89,7 @@ export const ClaimButton = ({
     user?.data?.profile.profile_id ===
     edition.creator_airdrop_edition?.owner_profile_id;
   const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
-  const isGold = true;
+  const isPaidGated = edition?.gating_type === "paid_nft";
   const raffleConcludedAt = useMemo(() => {
     if (!isSelf || !isRaffleDrop) return null;
     if (
@@ -384,13 +384,13 @@ export const ClaimButton = ({
     <Button
       {...buttonProps}
       style={{
-        backgroundColor: isGold ? "transparent" : undefined,
+        backgroundColor: isPaidGated ? "transparent" : undefined,
       }}
       onPress={() => {
         handleCollectPress("free");
       }}
     >
-      {isGold ? (
+      {isPaidGated ? (
         <>
           <GoldLinearGradient />
           <View tw="w-full flex-row items-center justify-center">

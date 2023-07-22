@@ -62,7 +62,7 @@ import {
 
 import { GoldLinearGradient } from "./gold-linear-gradient";
 
-export type ClaimType = "appleMusic" | "spotify" | "free";
+export type ClaimType = "appleMusic" | "spotify" | "free" | "paid";
 type Query = {
   type: ClaimType;
 };
@@ -238,7 +238,9 @@ export const ClaimForm = ({
     ContractVersion.BATCH_V1
       ? "Collecting..."
       : "Collecting... it should take about 10 seconds";
-  const isGold = true;
+
+  const isPaidGated = edition?.gating_type === "paid_nft";
+
   if (isIncompletedProfile) {
     return null;
   }
@@ -461,7 +463,7 @@ export const ClaimForm = ({
               </Text>
             </View>
           </View>
-          {isGold ? (
+          {isPaidGated ? (
             <>
               <View tw="mt-4 flex-row items-center">
                 <CheckIcon />
@@ -516,13 +518,13 @@ export const ClaimForm = ({
               size="regular"
               variant="primary"
               style={{
-                backgroundColor: isGold ? "transparent" : undefined,
+                backgroundColor: isPaidGated ? "transparent" : undefined,
               }}
               disabled={isDisableButton}
               tw={isDisableButton ? "opacity-[0.45]" : ""}
               onPress={handleClaimNFT}
             >
-              {isGold ? <GoldLinearGradient /> : null}
+              {isPaidGated ? <GoldLinearGradient /> : null}
               {isLoading ? (
                 "Loading..."
               ) : state.status === "loading" ? (
@@ -538,7 +540,7 @@ export const ClaimForm = ({
                     Save to Collect
                   </Text>
                 </View>
-              ) : isGold ? (
+              ) : isPaidGated ? (
                 <View tw="w-full flex-row items-center justify-center">
                   <View>
                     <Image

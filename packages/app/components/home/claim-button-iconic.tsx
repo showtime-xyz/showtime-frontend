@@ -17,6 +17,7 @@ import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-button";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useRedirectToChannelUnlocked } from "app/hooks/use-redirect-to-channel-unlocked";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
@@ -62,7 +63,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     );
   }, [router, nft]);
   const handleCollectPress = useCallback(
-    (type: "free" | "appleMusic" | "spotify") => {
+    (type: ClaimType) => {
       if (
         claimStates.status === "loading" &&
         claimStates.signaturePrompt === false
@@ -102,6 +103,8 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       edition?.gating_type === "spotify_presave"
     ) {
       type = "spotify";
+    } else if (edition?.gating_type === "paid_nft") {
+      type = "paid";
     } else {
       type =
         edition?.creator_spotify_id || edition?.spotify_track_url
@@ -117,8 +120,12 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     edition?.spotify_track_url,
     handleCollectPress,
   ]);
-  const isGold = true;
-  const prices = 100;
+  const isPaidGated = edition?.gating_type === "paid_nft";
+  const prices =
+    edition?.gating_type === "paid_nft" && edition?.price > 0
+      ? edition?.price
+      : 12;
+
   if (loading) {
     return (
       <View tw="mb-4">
@@ -233,10 +240,10 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
           </Text>
         </>
       }
-      buttonColor={isGold ? undefined : isDark ? "#fff" : colors.gray[900]}
+      buttonColor={isPaidGated ? undefined : isDark ? "#fff" : colors.gray[900]}
       {...rest}
     >
-      {isGold ? (
+      {isPaidGated ? (
         <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
           <Image
             source={require("./gold-button-bg.svg")}
@@ -247,10 +254,15 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       <Showtime
         height={25}
         width={25}
-        color={isGold ? "#000" : isDark ? "#000" : "#fff"}
+        color={isPaidGated ? "#000" : isDark ? "#000" : "#fff"}
       />
       {prices > 0 ? (
-        <View tw="absolute -right-2.5 -top-2 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full px-1">
+        <View
+          tw={[
+            "absolute -right-1 -top-1.5 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full px-1",
+            prices?.toString()?.length > 2 ? "-right-2.5" : "-right-1",
+          ]}
+        >
           <View tw="-z-1 absolute h-10 w-20">
             <Image
               source={require("./gold-button-bg.svg")}
