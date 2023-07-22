@@ -5,8 +5,11 @@ import { useRouter } from "@showtime-xyz/universal.router";
 export const useRedirectToChannelUnlocked = () => {
   const router = useRouter();
 
-  const redirectToChannelUnlocked = async (channelId?: string | number) => {
-    const as = `/channels/${channelId}/unlocked`;
+  const redirectToChannelUnlocked = async (
+    channelId: string | number,
+    contractAddress?: string
+  ) => {
+    const as = `/channels/${channelId}/${contractAddress}/unlocked`;
     router.push(
       Platform.select({
         native: as,
@@ -15,6 +18,7 @@ export const useRedirectToChannelUnlocked = () => {
           query: {
             ...router.query,
             channelId,
+            contractAddress,
             unlockedChannelModal: true,
           },
         } as any,

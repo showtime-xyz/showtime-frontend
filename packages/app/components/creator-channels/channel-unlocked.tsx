@@ -1,9 +1,15 @@
-import { useCallback, useRef, useMemo } from "react";
+import { useCallback, useRef, useMemo, useState } from "react";
 import { Linking, Platform, StyleSheet } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
 import { LinearGradient } from "expo-linear-gradient";
 import * as MediaLibrary from "expo-media-library";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  runOnJS,
+} from "react-native-reanimated";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -11,6 +17,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InstagramColorful, Link, Twitter } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
   useSafeAreaInsets,
@@ -22,6 +29,9 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useMyInfo } from "app/hooks/api-hooks";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import Share, { Social } from "app/lib/react-native-share";
 import { captureRef, CaptureOptions } from "app/lib/view-shot";
 import { createParam } from "app/navigation/use-param";
@@ -34,6 +44,7 @@ import { useChannelById } from "./hooks/use-channel-detail";
 
 const { useParam } = createParam<{
   channelId: string;
+  contractAddress: string;
 }>();
 
 const linearProps = {
@@ -62,22 +73,33 @@ const linearProps = {
 };
 export const UnlockedChannel = () => {
   const [channelId] = useParam("channelId");
+  const [contractAddress] = useParam("contractAddress");
+  const linearOpaticy = useSharedValue(0);
+  const { data: edition } = useCreatorCollectionDetail(contractAddress);
+  const { data: nft } = useNFTDetailByTokenId({
+    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    tokenId: "0",
+    contractAddress: edition?.creator_airdrop_edition.contract_address,
+  });
   const { data } = useChannelById(channelId?.toString());
   const isDark = useIsDarkMode();
   const router = useRouter();
   const { data: user } = useMyInfo();
-  const { top } = useSafeAreaInsets();
   const viewRef = useRef<any>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
-
+  const { top } = useSafeAreaInsets();
+  const url = useMemo(
+    () => (nft ? `${getWebBaseURL()}${getNFTSlug(nft?.data.item)}` : ""),
+    [nft]
+  );
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
-        url: "",
-        message: ``,
+        url: url,
+        message: `Just unlocked TITLE from @${nft?.data?.item.creator_name} on @Showtime_xyz ✦ \nCollect to unlock:`,
       })
     );
-  }, []);
+  }, [nft?.data?.item.creator_name, url]);
 
   const getViewShot = async (result?: CaptureOptions["result"]) => {
     const date = new Date();
@@ -129,7 +151,7 @@ export const UnlockedChannel = () => {
     },
     [checkPhotosPermission]
   );
-  const shareSingleImage = useCallback(
+  const shareSingleImageToPlatform = useCallback(
     async (social: Social.Twitter | Social.Instagram) => {
       const url = await getViewShot();
 
@@ -148,39 +170,75 @@ export const UnlockedChannel = () => {
           return;
         }
       }
-      try {
-        await Share.shareSingle({
-          title: ``,
-          message: ``,
-          url,
-          filename: `Unlocked-Channel-Share-${new Date().valueOf()}`,
-          social,
-        });
-      } catch (error) {}
+      await Share.shareSingle({
+        title: ``,
+        message: ``,
+        url,
+        filename: `Unlocked-Channel-Share-${new Date().valueOf()}`,
+        social,
+      }).catch((err) => {});
     },
     [prepareShareToIG]
   );
-
-  const url = useMemo(
-    () => `${getWebBaseURL()}/channels/` + channelId?.replace("$", ""),
-    [channelId]
+  const shareSingleImage = useCallback(
+    async (social: Social.Twitter | Social.Instagram) => {
+      linearOpaticy.value = withTiming(1, {}, () => {
+        runOnJS(shareSingleImageToPlatform)(social);
+        linearOpaticy.value = withTiming(0);
+      });
+    },
+    [linearOpaticy, shareSingleImageToPlatform]
   );
 
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(url.toString());
     toast.success("Copied!");
   }, [url]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: linearOpaticy.value,
+    };
+  }, []);
+
+  const viewChannel = useCallback(() => {
+    if (Platform.OS === "web") {
+      router.replace(`/channels/${channelId}`);
+    } else {
+      router.pop();
+      router.push(`/channels/${channelId}`);
+    }
+  }, [router, channelId]);
+
   return (
-    <View tw="min-h-[70svh] flex-1">
-      <LinearGradient style={[StyleSheet.absoluteFill]} {...linearProps} />
+    <View tw="web:pb-8 flex-1" pointerEvents="box-none">
+      <LinearGradient
+        style={[StyleSheet.absoluteFill]}
+        pointerEvents="none"
+        {...linearProps}
+      />
+
       <SafeAreaView>
-        <CloseButton
-          tw="absolute left-4"
-          style={{ top: 8 }}
-          color={colors.gray[900]}
-        />
-        <View tw="items-center pb-10" collapsable={false} ref={viewRef as any}>
-          <View tw="mt-14 self-center">
+        <View
+          tw="items-center overflow-hidden rounded-2xl pb-10"
+          collapsable={false}
+          ref={viewRef as any}
+        >
+          <Animated.View
+            pointerEvents="none"
+            style={[StyleSheet.absoluteFill, animatedStyle]}
+          >
+            <LinearGradient
+              style={[StyleSheet.absoluteFill]}
+              pointerEvents="none"
+              {...linearProps}
+            />
+          </Animated.View>
+
+          <Pressable
+            onPress={() => router.push(`/@${data?.owner.username}`)}
+            tw="mt-14 self-center"
+          >
             <Avatar alt="Avatar" url={data?.owner?.img_url} size={176} />
             <View tw="absolute bottom-0 right-0 h-12 w-12">
               <Image
@@ -190,7 +248,7 @@ export const UnlockedChannel = () => {
                 style={{ width: "100%", height: "100%" }}
               />
             </View>
-          </View>
+          </Pressable>
           <View tw="mt-6">
             <Text tw="text-center text-3xl font-bold text-gray-900">
               Star drop collector
@@ -198,13 +256,24 @@ export const UnlockedChannel = () => {
             <View tw="h-2" />
             <Text tw="px-12 text-center text-sm text-gray-900">
               You’ve unlocked exclusive channel content for
-              <Text tw="font-medium"> @{data?.owner.username} </Text>
+              <Text
+                tw="font-medium"
+                onPress={() => router.push(`/@${data?.owner.username}`)}
+              >
+                {" "}
+                @{data?.owner.username}{" "}
+              </Text>
               and a star badge!
             </Text>
           </View>
           <View tw="mt-6 flex-row items-center justify-center rounded-2xl bg-white px-6 py-2.5 shadow-md">
             <Avatar url={user?.data?.profile?.img_url} tw="mr-2" size={38} />
-            <Text tw="text-base text-gray-900">
+            <Text
+              onPress={() =>
+                router.push(`/@${getProfileName(user?.data?.profile)}`)
+              }
+              tw="text-base text-gray-900"
+            >
               @{getProfileName(user?.data?.profile)}
             </Text>
             <VerificationBadge
@@ -260,11 +329,14 @@ export const UnlockedChannel = () => {
             </View>
             Copy Link
           </Button>
-          <Button theme="dark" size="regular" onPress={() => {}}>
+          <Button theme="dark" size="regular" onPress={viewChannel}>
             View Channel
           </Button>
         </View>
       </SafeAreaView>
+      <View tw="absolute left-4 top-12 z-50">
+        <CloseButton color={colors.gray[900]} onPress={viewChannel} />
+      </View>
     </View>
   );
 };

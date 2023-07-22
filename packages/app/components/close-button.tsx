@@ -26,7 +26,7 @@ export const CloseButton = memo<CloseButtonProps>(function CloseButton({
         if (onPress) {
           onPress();
         } else {
-          router.back();
+          router.pop();
         }
       }}
       hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}

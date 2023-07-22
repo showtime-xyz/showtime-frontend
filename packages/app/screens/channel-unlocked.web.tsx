@@ -4,8 +4,10 @@ import { UnlockedChannel } from "app/components/creator-channels/channel-unlocke
 
 export const UnlockedChannelScreen = withModalScreen(UnlockedChannel, {
   title: "",
-  matchingPathname: "/channels/[channelId]/unlocked",
+  matchingPathname: "/channels/[channelId]/[contractAddress]/unlocked",
   matchingQueryParam: "unlockedChannelModal",
   disableBackdropPress: true,
   snapPoints: ["100%"],
+  headerShown: false,
+  tw: "!pb-0",
 });
