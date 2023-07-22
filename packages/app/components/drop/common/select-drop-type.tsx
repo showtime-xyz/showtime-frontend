@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Spotify,
   Showtime,
+  Boost,
 } from "@showtime-xyz/universal.icon";
 import {
   Raffle,
@@ -44,16 +45,12 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
 
   return (
     <BottomSheetScrollView useNativeModal={false}>
-      <View tw="justify-center px-4" style={{ rowGap: 16 }}>
-        {Platform.OS !== "web" && !user.user?.data.profile.verified ? null : (
+      <View tw="justify-center px-8" style={{ rowGap: 16 }}>
+        <View tw="rounded-3xl border-[1px] border-yellow-300 p-4">
           <Pressable
             onPress={() => {
               if (Platform.OS !== "web") {
-                modalScreenContext?.pop?.({
-                  callback: () => {
-                    router.push("/drop/free");
-                  },
-                });
+                router.push("/drop/free");
               } else {
                 router.replace("/drop/free");
               }
@@ -85,45 +82,100 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
               </View>
             </LinearGradient>
           </Pressable>
-        )}
-        <Pressable
-          onPress={() => {
-            if (canCreateMusicDrop) {
-              props.handleNextStep();
-            } else {
-              Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
-            }
-          }}
-        >
-          <LinearGradient
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 9999,
-              paddingVertical: 24,
-            }}
-            {...fromCSS(
-              `linear-gradient(154deg, #00E786 0%, #4B27FE 36.26%, #B013D8 100%);`
-            )}
-          >
-            <View tw="ml-auto">
-              <View tw="mr-2 flex-row">
-                <View tw="mr-1 mt-[2px]">
-                  <AppleMusic color={"white"} width={18} height={18} />
-                </View>
-                <Spotify color={"white"} width={22} height={22} />
+          <View tw="mt-4 flex-row" style={{ columnGap: 8 }}>
+            <View>
+              <CreatorChannel
+                fill={iconColor}
+                color={iconColor}
+                width={20}
+                height={20}
+              />
+              <View
+                tw="absolute rounded-full bg-yellow-300"
+                style={{ top: -8, right: 11, padding: 2 }}
+              >
+                <Text tw="font-semibold text-black" style={{ fontSize: 10 }}>
+                  $3
+                </Text>
               </View>
             </View>
-            <Text tw="text-lg font-bold text-white">Pre-Save Drop</Text>
-            <View tw="right-4 ml-auto">
-              <ChevronRight color={"white"} width={24} height={24} />
+            <View tw="flex-1">
+              <Text tw="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                Offer exclusive content, get paid in cash
+              </Text>
+              <Text tw="text-13 pt-2 text-gray-900 dark:text-gray-100">
+                Star Drop collectors unlock exclusive channel content from you.
+                The{" "}
+                <Text tw="font-semibold">
+                  better your content, the more valuable
+                </Text>{" "}
+                your Star Drops become
+              </Text>
             </View>
-          </LinearGradient>
-        </Pressable>
+          </View>
+        </View>
+        <View tw="rounded-3xl border-[1px] border-gray-300 p-4">
+          <Pressable
+            onPress={() => {
+              if (canCreateMusicDrop) {
+                props.handleNextStep();
+              } else {
+                Linking.openURL("https://showtimexyz.typeform.com/to/pXQVhkZo");
+              }
+            }}
+          >
+            <LinearGradient
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 9999,
+                paddingVertical: 24,
+              }}
+              {...fromCSS(
+                `linear-gradient(154deg, #00E786 0%, #4B27FE 36.26%, #B013D8 100%);`
+              )}
+            >
+              <View tw="ml-auto">
+                <View tw="mr-2 flex-row">
+                  <View tw="mr-1 mt-[2px]">
+                    <AppleMusic color={"white"} width={18} height={18} />
+                  </View>
+                  <Spotify color={"white"} width={22} height={22} />
+                </View>
+              </View>
+              <Text tw="text-lg font-bold text-white">Pre-Save Drop</Text>
+              <View tw="right-4 ml-auto">
+                <ChevronRight color={"white"} width={24} height={24} />
+              </View>
+            </LinearGradient>
+          </Pressable>
+          <View tw="mt-4 flex-row" style={{ columnGap: 8 }}>
+            <View tw="mt-[-4px]">
+              <Boost
+                fill={iconColor}
+                color={iconColor}
+                width={20}
+                height={20}
+              />
+            </View>
+            <View tw="flex-1">
+              <Text tw="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                Boost streams before release
+              </Text>
+              <Text tw="text-13 pt-2 text-gray-900 dark:text-gray-100">
+                Give a free collectible for saving your song to their{" "}
+                <Text tw="font-semibold">
+                  Spotify and/or Apple Music library.
+                </Text>{" "}
+                It auto-adds the day of release
+              </Text>
+            </View>
+          </View>
+        </View>
 
-        <View tw="mt-4 w-full items-center">
+        <View tw="w-full items-center">
           <View style={{ rowGap: 16 }}>
             <View tw="flex-row" style={{ columnGap: 12 }}>
               <Raffle

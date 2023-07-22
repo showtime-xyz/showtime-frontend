@@ -10,7 +10,6 @@ const SECONDS_IN_A_DAY = 24 * 60 * 60;
 const defaultValues = {
   royalty: 10,
   duration: 7 * SECONDS_IN_A_DAY,
-  hasAcceptedTerms: false,
   notSafeForWork: false,
   editionSize: 15,
   raffle: false,
@@ -60,6 +59,7 @@ export const useStarDropForm = () => {
       yup.lazy(() => {
         const baseSchema = yup.object({
           file: yup.mixed().required("Media is required"),
+          exclusiveLink: yup.string().required("Required"),
           title: yup
             .string()
             .label("Title")
@@ -75,11 +75,6 @@ export const useStarDropForm = () => {
             .typeError("Please enter a valid number")
             .max(69)
             .default(defaultValues.royalty),
-          hasAcceptedTerms: yup
-            .boolean()
-            .default(defaultValues.hasAcceptedTerms)
-            .required()
-            .isTrue("You must accept the terms and conditions."),
           notSafeForWork: yup.boolean().default(defaultValues.notSafeForWork),
           googleMapsUrl: yup.string().url(),
           radius: yup.number().min(0.01).max(10),
