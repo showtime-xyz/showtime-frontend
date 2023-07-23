@@ -240,6 +240,7 @@ export const ClaimForm = ({
       : "Collecting... it should take about 10 seconds";
 
   const isPaidGated = edition?.gating_type === "paid_nft";
+  const price = edition?.price ? ` - $${edition?.price}` : "";
 
   if (isIncompletedProfile) {
     return null;
@@ -525,6 +526,7 @@ export const ClaimForm = ({
               onPress={handleClaimNFT}
             >
               {isPaidGated ? <GoldLinearGradient /> : null}
+
               {isLoading ? (
                 "Loading..."
               ) : state.status === "loading" ? (
@@ -554,7 +556,7 @@ export const ClaimForm = ({
                   </View>
 
                   <Text tw="ml-2 text-base font-semibold text-black">
-                    Collect Star Drop - ${3}
+                    Collect Star Drop{price}
                   </Text>
                 </View>
               ) : (

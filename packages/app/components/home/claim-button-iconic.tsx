@@ -121,10 +121,8 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     handleCollectPress,
   ]);
   const isPaidGated = edition?.gating_type === "paid_nft";
-  const prices =
-    edition?.gating_type === "paid_nft" && edition?.price > 0
-      ? edition?.price
-      : 12;
+  const price =
+    edition?.gating_type === "paid_nft" && edition?.price ? edition?.price : 0;
 
   if (loading) {
     return (
@@ -256,28 +254,30 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
         width={25}
         color={isPaidGated ? "#000" : isDark ? "#000" : "#fff"}
       />
-      {prices > 0 ? (
-        <View
-          tw={[
-            "absolute -right-1 -top-1.5 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full px-1",
-            prices?.toString()?.length > 2 ? "-right-2.5" : "-right-1",
-          ]}
-        >
-          <View tw="-z-1 absolute h-10 w-20">
-            <Image
-              source={require("./gold-button-bg.svg")}
-              style={{ height: "100%", width: "100%" }}
-            />
+      {isPaidGated ? (
+        price > 0 ? (
+          <View
+            tw={[
+              "absolute -right-1 -top-1.5 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full px-1",
+              price?.toString()?.length > 2 ? "-right-2.5" : "-right-1",
+            ]}
+          >
+            <View tw="-z-1 absolute h-10 w-20">
+              <Image
+                source={require("./gold-button-bg.svg")}
+                style={{ height: "100%", width: "100%" }}
+              />
+            </View>
+            <Text tw="text-xs font-semibold text-black">${price}</Text>
           </View>
-          <Text tw="text-xs font-semibold text-black">${prices}</Text>
-        </View>
-      ) : (
-        <View tw="absolute -right-1 -top-1 h-[22px] min-w-[24px] items-center justify-center rounded-full bg-white dark:bg-black">
-          <Text tw="text-xs font-semibold text-black dark:text-white">
-            ${prices}
-          </Text>
-        </View>
-      )}
+        ) : (
+          <View tw="absolute -right-1 -top-1 h-[22px] min-w-[22px] items-center justify-center rounded-full bg-white dark:bg-black">
+            <Text tw="text-xs font-semibold text-black dark:text-white">
+              ${price}
+            </Text>
+          </View>
+        )
+      ) : null}
     </FeedSocialButton>
   );
 }

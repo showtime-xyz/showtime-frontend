@@ -90,6 +90,7 @@ export const ClaimButton = ({
     edition.creator_airdrop_edition?.owner_profile_id;
   const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
   const isPaidGated = edition?.gating_type === "paid_nft";
+  const price = edition?.price ? ` - ${edition?.price}` : "";
   const raffleConcludedAt = useMemo(() => {
     if (!isSelf || !isRaffleDrop) return null;
     if (
@@ -413,7 +414,7 @@ export const ClaimButton = ({
                 buttonProps.size === "regular" ? "text-base" : "text-sm",
               ]}
             >
-              Collect Star Drop - ${3}
+              Collect Star Drop{price}
             </Text>
           </View>
         </>
