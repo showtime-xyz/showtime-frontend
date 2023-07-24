@@ -105,9 +105,7 @@ export function useConfigure({
       }
     }
     if (!ClientCtrl.provider() && projectId && providerMetadata) {
-      requestAnimationFrame(() => {
-        initProvider();
-      });
+      initProvider();
     }
   }, [projectId, providerMetadata, relayUrl, onDisplayUri, onSessionDelete]);
 }
