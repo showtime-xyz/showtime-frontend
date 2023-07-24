@@ -2,6 +2,8 @@ import type { ExpoConfig } from "@expo/config-types";
 import { ExportedConfigWithProps } from "expo/config-plugins";
 
 const STAGE = process.env.NODE_ENV ?? "production";
+// @ts-expect-error: invalid type declaration, process is mutable in Node.js environments.
+process.env.NODE_ENV = STAGE;
 
 const { withInfoPlist } = require("@expo/config-plugins");
 
