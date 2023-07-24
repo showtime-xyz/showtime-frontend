@@ -9027,7 +9027,7 @@ __metadata:
     use-unmount-signal: ^1.0.0
     util: ~0.12.5
     uuid: ^9.0.0
-    valtio: 1.11.0
+    valtio: 1.10.7
     vm-browserify: 1.1.2
     yup: ^1.2.0
     zeego: ^1.6.2
@@ -32376,9 +32376,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"valtio@npm:1.11.0":
-  version: 1.11.0
-  resolution: "valtio@npm:1.11.0"
+"valtio@npm:1.10.7":
+  version: 1.10.7
+  resolution: "valtio@npm:1.10.7"
   dependencies:
     proxy-compare: 2.5.1
     use-sync-external-store: 1.2.0
@@ -32387,7 +32387,7 @@ __metadata:
   peerDependenciesMeta:
     react:
       optional: true
-  checksum: 77e42f5841054ba3e41b456fbb96b679eaeb6d9dbb46b7ce9aee6acf1352de73969858dea837a706c969ca908155d6cb97966e33be10b69b097744dd99b5174a
+  checksum: fec3aa06e494d8230e5074a2da1077835c0940e383a411935f92e27db2d75ca28d53b63cb815b07dca0edb4bb4c3b6beabd6bec475be70bf26c03b04bd201058
   languageName: node
   linkType: hard
 
