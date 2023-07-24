@@ -178,7 +178,7 @@
     "use-unmount-signal": "^1.0.0",
     "util": "~0.12.5",
     "uuid": "^9.0.0",
-    "valtio": "1.11.0",
+    "valtio": "1.10.7",
     "vm-browserify": "1.1.2",
     "yup": "^1.2.0",
     "zeego": "^1.6.2"
