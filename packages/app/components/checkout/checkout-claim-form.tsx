@@ -14,21 +14,37 @@ import type { StripeError } from "@stripe/stripe-js";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
+import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Media } from "app/components/media";
+import {
+  CreatorEditionResponse,
+  useCreatorCollectionDetail,
+} from "app/hooks/use-creator-collection-detail";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { Logger } from "app/lib/logger";
+import { getCreatorUsernameFromNFT } from "app/utilities";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
 import { stripePromise } from "./stripe";
 
-export function CheckoutClaimForm({ clientSecret }: { clientSecret: string }) {
+export function CheckoutClaimForm({
+  clientSecret,
+  contractAddress,
+}: {
+  clientSecret: string;
+  contractAddress: string;
+}) {
+  const { data: edition, loading } =
+    useCreatorCollectionDetail(contractAddress);
+
   const isDark = useIsDarkMode();
   const stripeOptions = useMemo(
     () =>
@@ -46,28 +62,18 @@ export function CheckoutClaimForm({ clientSecret }: { clientSecret: string }) {
       stripe={stripePromise({ stripeAccount: `acct_1NUlvaPBtojzJwfb` })}
       options={stripeOptions}
     >
-      <CheckoutForm />
+      <CheckoutForm edition={edition} clientSecret={clientSecret} />
     </Elements>
   ) : null;
 }
-const CARD_ELEMENT_OPTIONS = {
-  style: {
-    base: {
-      color: "#32325d",
-      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-      fontSmoothing: "antialiased",
-      fontSize: "16px",
-      "::placeholder": {
-        color: "#aab7c4",
-      },
-    },
-    invalid: {
-      color: "#fa755a",
-      iconColor: "#fa755a",
-    },
-  },
-};
-const CheckoutForm = () => {
+
+const CheckoutForm = ({
+  edition,
+  clientSecret,
+}: {
+  edition?: CreatorEditionResponse;
+  clientSecret: string;
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const isDark = useIsDarkMode();
@@ -75,7 +81,11 @@ const CheckoutForm = () => {
     useState(true);
   const [email, setEmail] = useState("");
   const [cardholderName, setCardHolderName] = useState("");
-
+  const { data: nft } = useNFTDetailByTokenId({
+    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    tokenId: "0",
+    contractAddress: edition?.creator_airdrop_edition.contract_address,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -86,29 +96,29 @@ const CheckoutForm = () => {
 
     setIsLoading(true);
     const fetch = new Promise((resolve, reject) => {
-      // const stripeFetch = stripe
-      //   .confirmPayment({
-      //     elements,
-      //     confirmParams: {
-      //       return_url:
-      //         Platform.select({
-      //           web: window.location.origin,
-      //           default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
-      //         }) +
-      //         "/drop/free?setAsDefaultPaymentMethod=" +
-      //         setAsDefaultPaymentMethod,
-      //       receipt_email: email,
-      //     },
-      //   })
-      //   .then(({ error }) => {
-      //     if (error) {
-      //       Logger.error("Stripe payment failure ", error);
-      //       reject(error);
-      //     } else {
-      //       resolve(undefined);
-      //     }
-      //   });
-      // return stripeFetch;
+      const stripeFetch = stripe
+        .confirmPayment({
+          elements,
+          confirmParams: {
+            return_url:
+              Platform.select({
+                web: window.location.origin,
+                default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
+              }) +
+              "/claim?" +
+              setAsDefaultPaymentMethod,
+            receipt_email: email,
+          },
+        })
+        .then(({ error }) => {
+          if (error) {
+            Logger.error("Stripe payment failure ", error);
+            reject(error);
+          } else {
+            resolve(undefined);
+          }
+        });
+      return stripeFetch;
     }).finally(() => {
       setIsLoading(false);
     });
@@ -116,6 +126,8 @@ const CheckoutForm = () => {
       loading: "Processing Payment...",
       success: "Redirecting",
       error: (error: StripeError) => {
+        console.log(error);
+
         // This point will only be reached if there is an immediate error when
         // confirming the payment. Otherwise, your customer will be redirected to
         // your `return_url`. For some payment methods like iDEAL, your customer will
@@ -129,28 +141,47 @@ const CheckoutForm = () => {
       },
     });
   };
+
   return (
     <>
-      <View tw="min-h-[380px] justify-end" id="payment-form">
+      <View tw="" id="payment-form">
         <View tw="p-4">
-          <TextInput
-            value={email}
-            placeholder={"Email"}
-            placeholderTextColor={isDark ? colors.gray[300] : colors.gray[500]}
-            tw="ios:pb-1 max-h-20 w-full flex-1 text-base text-black dark:text-white md:text-sm"
-            onChangeText={setEmail}
-          />
-          <View tw="h-3" />
+          <View tw="flex-row">
+            <View tw="relative overflow-hidden rounded-2xl">
+              <Media
+                isMuted
+                item={nft?.data.item}
+                sizeStyle={{
+                  width: 80,
+                  height: 80,
+                }}
+              />
+            </View>
+            <View tw="ml-4 flex-1 justify-center">
+              <Text
+                tw="text-xl font-bold text-black dark:text-white"
+                numberOfLines={2}
+              >
+                {edition?.creator_airdrop_edition.name}
+              </Text>
+              <View tw="h-2" />
+              <Text tw="text-gray-700 dark:text-gray-400">
+                {getCreatorUsernameFromNFT(nft?.data.item)}
+              </Text>
+            </View>
+          </View>
+          <Divider tw="my-6" />
 
-          <TextInput
-            value={cardholderName}
-            placeholder={"Cardholder Name"}
-            placeholderTextColor={isDark ? colors.gray[300] : colors.gray[500]}
-            tw="ios:pb-1 max-h-20 w-full flex-1 text-base text-black dark:text-white md:text-sm"
-            onChangeText={setCardHolderName}
+          <LinkAuthenticationElement
+            onChange={(e) => setEmail(e.value.email)}
           />
+
           <View tw="h-3" />
-          <CardElement options={CARD_ELEMENT_OPTIONS} />
+          <PaymentElement
+            options={{
+              layout: "tabs",
+            }}
+          />
           <View tw="h-4" />
           <View tw="flex-row items-center">
             <Checkbox

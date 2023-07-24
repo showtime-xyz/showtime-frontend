@@ -125,7 +125,6 @@ export const useClaimNFT = (edition: IEdition) => {
       if (isPaidGated) {
         // console.log(res);
         console.log("paid gated");
-        return;
       }
       if (edition?.minter_address) {
         dispatch({ type: "loading" });

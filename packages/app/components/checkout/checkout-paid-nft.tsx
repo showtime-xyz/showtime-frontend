@@ -9,11 +9,20 @@ import { SelectPlan } from "./select-plan";
 
 type Query = {
   clientSecret?: string;
+  contractAddress?: string;
 };
 const { useParam } = createParam<Query>();
 
 export const CheckoutPaidNFT = () => {
-  const [clientSecret, setClientSecret] = useParam("clientSecret");
-  if (!clientSecret) return <EmptyPlaceholder title="No payment yet" />;
-  return <CheckoutClaimForm clientSecret={clientSecret} />;
+  const [clientSecret] = useParam("clientSecret");
+  const [contractAddress] = useParam("contractAddress");
+
+  if (!clientSecret || !contractAddress)
+    return <EmptyPlaceholder title="No payment yet" />;
+  return (
+    <CheckoutClaimForm
+      clientSecret={clientSecret}
+      contractAddress={contractAddress}
+    />
+  );
 };

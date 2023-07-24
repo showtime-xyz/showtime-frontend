@@ -521,6 +521,10 @@ export const ClaimForm = ({
               <ClaimPaidNFTButton
                 price={edition?.price}
                 editionId={edition?.creator_airdrop_edition.id}
+                contractAddress={
+                  edition?.creator_airdrop_edition.contract_address
+                }
+                onPress={handleClaimNFT}
               />
             ) : (
               <Button

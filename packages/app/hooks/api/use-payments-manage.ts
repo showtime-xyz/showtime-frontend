@@ -35,7 +35,7 @@ export type PaymentsMethods = {
     };
   };
 };
-const PAYMENTS_METHODS_ENDPOINT = "/v1/payments/methods";
+const PAYMENTS_METHODS_ENDPOINT = "";
 
 export const usePaymentsManage = () => {
   const { mutate } = useSWRConfig();

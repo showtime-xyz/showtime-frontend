@@ -115,10 +115,12 @@ export const ClaimPaidNFTButton = ({
   price,
   onPress,
   editionId,
+  contractAddress,
   ...rest
 }: ButtonProps & {
   price?: number;
   editionId: number;
+  contractAddress: string;
 }) => {
   const router = useRouter();
   const {
@@ -163,8 +165,8 @@ export const ClaimPaidNFTButton = ({
             query: {
               ...router.query,
               clientSecret: res?.client_secret,
-
               checkoutPaidNFTModal: true,
+              contractAddress: contractAddress,
             },
           } as any,
         }),
