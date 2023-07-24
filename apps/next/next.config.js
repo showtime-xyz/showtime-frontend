@@ -76,6 +76,7 @@ const nextConfig = {
     "react-native-reanimated-carousel",
   ],
   webpack: (config, options) => {
+    config.resolve.fallback = { fs: false, net: false, tls: false };
     // Mix in aliases
     if (!config.resolve) {
       config.resolve = {};
