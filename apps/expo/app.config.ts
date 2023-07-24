@@ -5,8 +5,6 @@ const path = require("path");
 const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
 
-require("@expo/env").load(envPath);
-
 const { withInfoPlist } = require("@expo/config-plugins");
 
 type EnvConfig = {
@@ -23,6 +21,7 @@ const url = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 const packageJSON = require("../../package.json");
 
 const semver = require("semver");
+require("@expo/env").load(envPath);
 
 const SCHEME = process.env.SCHEME ?? "io.showtime";
 
