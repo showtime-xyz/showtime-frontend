@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { Alert, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 
 import { SUBSCRIBER_EVENTS } from "@walletconnect/core";
 
@@ -8,7 +8,6 @@ import { Logger } from "app/lib/logger";
 import { AccountCtrl } from "../controllers/AccountCtrl";
 import { ClientCtrl } from "../controllers/ClientCtrl";
 import { ConfigCtrl } from "../controllers/ConfigCtrl";
-import { ExplorerCtrl } from "../controllers/ExplorerCtrl";
 import { OptionsCtrl } from "../controllers/OptionsCtrl";
 import { ThemeCtrl } from "../controllers/ThemeCtrl";
 import { WcConnectionCtrl } from "../controllers/WcConnectionCtrl";
@@ -70,17 +69,8 @@ export function useConfigure({
    * Fetch wallet list
    */
   useEffect(() => {
-    async function fetchWallets() {
-      try {
-        if (!ExplorerCtrl.state.wallets.total) {
-          await ExplorerCtrl.getMobileWallets({ version: 2 });
-          OptionsCtrl.setIsDataLoaded(true);
-        }
-      } catch (error) {
-        Alert.alert("Error", "Error fetching wallets");
-      }
-    }
-    fetchWallets();
+    // HIRBOD: since we have hardcoded our wallets, we don't need to fetch them and just set them as loaded
+    OptionsCtrl.setIsDataLoaded(true);
   }, []);
 
   /**
@@ -115,7 +105,9 @@ export function useConfigure({
       }
     }
     if (!ClientCtrl.provider() && projectId && providerMetadata) {
-      initProvider();
+      requestAnimationFrame(() => {
+        initProvider();
+      });
     }
   }, [projectId, providerMetadata, relayUrl, onDisplayUri, onSessionDelete]);
 }
