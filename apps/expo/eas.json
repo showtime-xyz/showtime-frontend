@@ -14,6 +14,7 @@
       },
       "env": {
         "STAGE": "production",
+        "NODE_ENV": "production",
         "FLIPPER_DISABLE": "1",
         "EX_UPDATES_ANDROID_DELAY_LOAD_APP": "false"
       },
@@ -33,6 +34,7 @@
       },
       "env": {
         "STAGE": "staging",
+        "NODE_ENV": "development",
         "FLIPPER_DISABLE": "1",
         "EX_UPDATES_ANDROID_DELAY_LOAD_APP": "false"
       },
@@ -73,6 +75,7 @@
       },
       "env": {
         "STAGE": "staging",
+        "NODE_ENV": "development",
         "EX_UPDATES_ANDROID_DELAY_LOAD_APP": "false"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
