@@ -15,7 +15,7 @@
       "env": {
         "STAGE": "production",
         "FLIPPER_DISABLE": "1",
-        "EXPO_NO_DOTENV": "1"
+        "EX_UPDATES_ANDROID_DELAY_LOAD_APP": "false"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
@@ -37,7 +37,8 @@
       "env": {
         "STAGE": "staging",
         "FLIPPER_DISABLE": "1",
-        "EXPO_NO_DOTENV": "1"
+        "EXPO_NO_DOTENV": "1",
+        "EX_UPDATES_ANDROID_DELAY_LOAD_APP": "false"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
@@ -57,7 +58,8 @@
       },
       "env": {
         "STAGE": "development",
-        "EXPO_NO_DOTENV": "1"
+        "EXPO_NO_DOTENV": "1",
+        "EX_UPDATES_ANDROID_DELAY_LOAD_APP": "false"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
@@ -76,7 +78,8 @@
       },
       "env": {
         "STAGE": "staging",
-        "EXPO_NO_DOTENV": "1"
+        "EXPO_NO_DOTENV": "1",
+        "EX_UPDATES_ANDROID_DELAY_LOAD_APP": "false"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
       "cache": {
