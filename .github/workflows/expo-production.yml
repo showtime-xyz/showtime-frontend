@@ -57,6 +57,8 @@ jobs:
         env:
           SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE: ${{ secrets.SERVICE_ACCOUNT_KEY_SECRET_PASSPHRASE }}
           GOOGLE_SERVICES_SECRET_PASSPHRASE: ${{ secrets.GOOGLE_SERVICES_SECRET_PASSPHRASE }}
+          NODE_ENV: production
+          STAGE: production
         run: |
           cd ../../scripts
           sh ./decrypt_secrets.sh
@@ -78,12 +80,12 @@ jobs:
 
       - name: EAS Update
         if: steps.version.outputs.type == 'patch'
-        run: NODE_OPTIONS=--max-old-space-size=5120 EXPO_DEBUG=true STAGE=production eas update --branch production --message "Deploy to production"
+        run: NODE_OPTIONS=--max-old-space-size=5120 EXPO_DEBUG=true NODE_ENV=production STAGE=production eas update --branch production --message "Deploy to production"
 
       - name: Build Android on EAS
         if: steps.version.outputs.type == 'major'
-        run: eas build --platform android --non-interactive --no-wait --auto-submit --resource-class=large
+        run: NODE_ENV=production STAGE=production eas build --platform android --non-interactive --no-wait --auto-submit --resource-class=large
 
       - name: Build iOS on EAS
         if: steps.version.outputs.type == 'major'
-        run: STAGE=production eas build --platform ios --non-interactive --no-wait --auto-submit --resource-class=m1-experimental
+        run: NODE_ENV=production STAGE=production eas build --platform ios --non-interactive --no-wait --auto-submit --resource-class=m1-experimental

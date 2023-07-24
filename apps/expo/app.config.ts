@@ -1,9 +1,7 @@
 import type { ExpoConfig } from "@expo/config-types";
 import { ExportedConfigWithProps } from "expo/config-plugins";
 
-const path = require("path");
-const STAGE = process.env.STAGE ?? "production";
-const envPath = path.resolve(__dirname, `.env.${STAGE}`);
+const STAGE = process.env.NODE_ENV ?? "production";
 
 const { withInfoPlist } = require("@expo/config-plugins");
 
@@ -21,7 +19,7 @@ const url = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 const packageJSON = require("../../package.json");
 
 const semver = require("semver");
-require("@expo/env").load(envPath);
+require("@expo/env").load(__dirname);
 
 const SCHEME = process.env.SCHEME ?? "io.showtime";
 
