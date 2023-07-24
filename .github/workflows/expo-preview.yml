@@ -36,7 +36,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
 
       - uses: 8BitJonny/gh-get-current-pr@1.3.0
         id: PR
@@ -107,4 +107,3 @@ jobs:
 
               Comment ID: ${{ steps.existing-comment.outputs.comment-id }}
             </details>
-

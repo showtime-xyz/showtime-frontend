@@ -37,7 +37,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+          node-version: 16.x
 
       - name: Find yarn cache
         id: yarn-cache-path
@@ -82,7 +82,7 @@ jobs:
 
       - name: Build Android on EAS
         if: steps.version.outputs.type == 'major'
-        run: EXPO_NO_DOTENV=1 STAGE=production eas build --platform android --non-interactive --no-wait --auto-submit --resource-class=large
+        run: eas build --platform android --non-interactive --no-wait --auto-submit --resource-class=large
 
       - name: Build iOS on EAS
         if: steps.version.outputs.type == 'major'
