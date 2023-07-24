@@ -4,6 +4,9 @@ import { ExportedConfigWithProps } from "expo/config-plugins";
 const path = require("path");
 const STAGE = process.env.STAGE ?? "production";
 const envPath = path.resolve(__dirname, `.env.${STAGE}`);
+
+require("@expo/env").load(envPath);
+
 const { withInfoPlist } = require("@expo/config-plugins");
 
 type EnvConfig = {
@@ -16,10 +19,6 @@ type EnvConfig = {
 };
 
 const url = process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
-
-require("dotenv").config({
-  path: envPath,
-});
 
 const packageJSON = require("../../package.json");
 
