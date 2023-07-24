@@ -15,6 +15,7 @@ import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { toast } from "design-system/toast";
 
 import { ClaimStatus, getClaimStatus } from "./claim-button";
+import { ClaimType } from "./claim-form";
 
 type ClaimButtonProps = {
   edition?: CreatorEditionResponse;
@@ -42,7 +43,7 @@ export const ClaimButtonSimplified = ({
     claimStates.signaturePrompt === false &&
     contractAddress === edition?.creator_airdrop_edition.contract_address;
 
-  const handleCollectPress = (type: "free" | "appleMusic" | "spotify") => {
+  const handleCollectPress = (type: ClaimType) => {
     if (
       claimStates.status === "loading" &&
       claimStates.signaturePrompt === false
@@ -126,7 +127,7 @@ export const ClaimButtonSimplified = ({
       tw={["h-6 w-24 items-center justify-center rounded-full", tw]}
       disabled={disabled}
       onPress={() => {
-        let type: "free" | "appleMusic" | "spotify" = "free";
+        let type: ClaimType = "free";
         if (edition?.gating_type === "spotify_save") {
           type = "spotify";
         } else if (edition?.gating_type === "multi_provider_music_presave") {
@@ -138,6 +139,8 @@ export const ClaimButtonSimplified = ({
           edition?.gating_type === "spotify_presave"
         ) {
           type = "spotify";
+        } else if (edition?.gating_type === "paid_nft") {
+          type = "paid";
         }
         handleCollectPress(type);
       }}

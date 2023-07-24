@@ -29,6 +29,7 @@ import { Analytics, EVENTS } from "app/lib/analytics";
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
+import { ClaimType } from "./claim-form";
 import { GoldLinearGradient } from "./gold-linear-gradient";
 
 type ClaimButtonProps = ButtonProps & {
@@ -127,7 +128,7 @@ export const ClaimButton = ({
     redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
   };
 
-  const handleCollectPress = (type: "free" | "appleMusic" | "spotify") => {
+  const handleCollectPress = (type: ClaimType) => {
     if (
       claimStates.status === "loading" &&
       claimStates.signaturePrompt === false
@@ -388,7 +389,7 @@ export const ClaimButton = ({
         backgroundColor: isPaidGated ? "transparent" : undefined,
       }}
       onPress={() => {
-        handleCollectPress("free");
+        handleCollectPress(isPaidGated ? "paid" : "free");
       }}
     >
       {isPaidGated ? (

@@ -1,17 +1,22 @@
-import { useContext, useCallback } from "react";
+import { useContext, useCallback, useMemo } from "react";
 import { Platform } from "react-native";
 
+import type { AxiosError } from "axios";
 import type { LocationObject } from "expo-location";
+import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { stripePromise } from "app/components/checkout/stripe";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
 import { ContractVersion, IEdition } from "app/types";
 import {
   formatAPIErrorMessage,
@@ -20,6 +25,8 @@ import {
 
 import { toast } from "design-system/toast";
 
+import { useConfirmPayment } from "./api/use-confirm-payment";
+import { usePaymentsManage } from "./api/use-payments-manage";
 import { useSendFeedback } from "./use-send-feedback";
 
 export type State = {
@@ -105,13 +112,21 @@ export const useClaimNFT = (edition: IEdition) => {
     password?: string;
     location?: LocationObject;
     closeModal?: () => void;
+    isPaidGated?: boolean;
   };
+
   const claimNFT = async ({
     password,
     location,
     closeModal,
+    isPaidGated,
   }: ClaimNFTParams): Promise<boolean | undefined> => {
     try {
+      if (isPaidGated) {
+        // console.log(res);
+        console.log("paid gated");
+        return;
+      }
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
         if (edition?.is_gated) {

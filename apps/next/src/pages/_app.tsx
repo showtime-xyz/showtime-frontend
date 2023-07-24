@@ -23,6 +23,7 @@ import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
 import { CheckoutScreen } from "app/screens/checkout";
+import { CheckoutPaidNFTScreen } from "app/screens/checkout-paid-nft";
 import { CheckoutReturnScreen } from "app/screens/checkout-return";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
@@ -199,6 +200,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropFreeScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />
+        <CheckoutPaidNFTScreen />
         <QRCodeShareScreen />
         <DropViewShareScreen />
         <CreatorChannelsIntroScreen />

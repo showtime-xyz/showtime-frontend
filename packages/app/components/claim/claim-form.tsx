@@ -60,6 +60,7 @@ import {
   removeTags,
 } from "app/utilities";
 
+import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
 import { GoldLinearGradient } from "./gold-linear-gradient";
 
 export type ClaimType = "appleMusic" | "spotify" | "free" | "paid";
@@ -203,6 +204,8 @@ export const ClaimForm = ({
         location,
         closeModal,
       });
+    } else if (claimType === "paid") {
+      success = await claimNFT({ closeModal, isPaidGated: true });
     } else {
       success = await claimNFT({ closeModal });
     }
@@ -240,7 +243,6 @@ export const ClaimForm = ({
       : "Collecting... it should take about 10 seconds";
 
   const isPaidGated = edition?.gating_type === "paid_nft";
-  const price = edition?.price ? ` - $${edition?.price}` : "";
 
   if (isIncompletedProfile) {
     return null;
@@ -515,54 +517,39 @@ export const ClaimForm = ({
           ) : null}
 
           <View tw="mt-4">
-            <Button
-              size="regular"
-              variant="primary"
-              style={{
-                backgroundColor: isPaidGated ? "transparent" : undefined,
-              }}
-              disabled={isDisableButton}
-              tw={isDisableButton ? "opacity-[0.45]" : ""}
-              onPress={handleClaimNFT}
-            >
-              {isPaidGated ? <GoldLinearGradient /> : null}
-
-              {isLoading ? (
-                "Loading..."
-              ) : state.status === "loading" ? (
-                collectingMsg
-              ) : state.status === "error" ? (
-                "Failed. Retry!"
-              ) : edition.gating_type === "spotify_save" ||
-                edition.gating_type === "spotify_presave" ||
-                edition?.gating_type === "music_presave" ? (
-                <View tw="w-full flex-row items-center justify-center">
-                  <Spotify color={isDark ? "#000" : "#fff"} />
-                  <Text tw="ml-2 font-semibold text-white dark:text-black">
-                    Save to Collect
-                  </Text>
-                </View>
-              ) : isPaidGated ? (
-                <View tw="w-full flex-row items-center justify-center">
-                  <View>
-                    <Image
-                      source={{
-                        uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
-                      }}
-                      width={24}
-                      height={24}
-                      style={{ width: 24, height: 24 }}
-                    />
+            {isPaidGated ? (
+              <ClaimPaidNFTButton
+                price={edition?.price}
+                editionId={edition?.creator_airdrop_edition.id}
+              />
+            ) : (
+              <Button
+                size="regular"
+                variant="primary"
+                disabled={isDisableButton}
+                tw={isDisableButton ? "opacity-[0.45]" : ""}
+                onPress={handleClaimNFT}
+              >
+                {isLoading ? (
+                  "Loading..."
+                ) : state.status === "loading" ? (
+                  collectingMsg
+                ) : state.status === "error" ? (
+                  "Failed. Retry!"
+                ) : edition.gating_type === "spotify_save" ||
+                  edition.gating_type === "spotify_presave" ||
+                  edition?.gating_type === "music_presave" ? (
+                  <View tw="w-full flex-row items-center justify-center">
+                    <Spotify color={isDark ? "#000" : "#fff"} />
+                    <Text tw="ml-2 font-semibold text-white dark:text-black">
+                      Save to Collect
+                    </Text>
                   </View>
-
-                  <Text tw="ml-2 text-base font-semibold text-black">
-                    Collect Star Drop{price}
-                  </Text>
-                </View>
-              ) : (
-                "Collect"
-              )}
-            </Button>
+                ) : (
+                  "Collect"
+                )}
+              </Button>
+            )}
             <View tw="mt-4">
               <Text tw="text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
                 to{" "}
