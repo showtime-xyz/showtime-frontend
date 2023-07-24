@@ -8956,7 +8956,7 @@ __metadata:
     expo-splash-screen: ~0.20.4
     expo-status-bar: ~1.6.0
     expo-system-ui: ~2.4.0
-    expo-updates: ~0.18.10
+    expo-updates: ~0.18.11
     expo-web-browser: ~12.3.2
     fastestsmallesttextencoderdecoder: ^1.0.22
     https-browserify: ~1.0.0
@@ -19032,9 +19032,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-updates@npm:~0.18.10":
-  version: 0.18.10
-  resolution: "expo-updates@npm:0.18.10"
+"expo-updates@npm:~0.18.11":
+  version: 0.18.11
+  resolution: "expo-updates@npm:0.18.11"
   dependencies:
     "@expo/code-signing-certificates": 0.0.5
     "@expo/config": ~8.1.0
@@ -19051,7 +19051,7 @@ __metadata:
     expo: "*"
   bin:
     expo-updates: bin/cli.js
-  checksum: 3d413b1f3a9087d5bcf2bd476e879aa5b8e1540ebf4a2407fba0f0ce197a37b2e9e70423ac1d62bf0a25c0f7ce6e54a34f0b53161c42221c533cd3390ebb5e14
+  checksum: 0c01e7d0c9aca8c289255eb0e987ac0e3ff34bf2d294d5229a812cbd00cd0c732e2cc318646dbf4d7789d6ca3e7f35aa678b1e894c45187a2d37e3b74b5ad2f9
   languageName: node
   linkType: hard
 
