@@ -45,7 +45,6 @@ const nextConfig = {
     "sentry-expo",
     "solito",
     "nativewind",
-    "expo-app-loading",
     "expo-application",
     "expo-av",
     "expo-asset",
@@ -77,6 +76,9 @@ const nextConfig = {
     "react-native-reanimated-carousel",
   ],
   webpack: (config, options) => {
+    if (!options.isServer) {
+      config.resolve.fallback = { fs: false, net: false, tls: false };
+    }
     // Mix in aliases
     if (!config.resolve) {
       config.resolve = {};

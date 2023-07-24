@@ -9,7 +9,6 @@ import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableFreeze, enableScreens } from "react-native-screens";
 
 import { useExpoUpdate } from "app/hooks/use-expo-update";
-import { growthbook } from "app/lib/growthbook";
 import { Logger } from "app/lib/logger";
 import { Sentry } from "app/lib/sentry";
 import { RootStackNavigator } from "app/navigation/root-stack-navigator";
@@ -18,7 +17,9 @@ import { AppProviders } from "app/providers/app-providers";
 enableScreens(true);
 enableFreeze(true);
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync().catch(() => {
+  // in very rare cases, preventAutoHideAsync can reject, this is a best effort
+});
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -88,6 +89,7 @@ function App() {
     };
   }, []);
 
+  /*
   useEffect(() => {
     // Load feature definitions from API
     fetch(process.env.GROWTHBOOK_FEATURES_ENDPOINT)
@@ -96,6 +98,7 @@ function App() {
         growthbook.setFeatures(json.features);
       });
   }, []);
+  */
 
   return (
     <AppProviders>

@@ -1,15 +1,16 @@
-import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { ColorSchemeProvider } from "@showtime-xyz/universal.color-scheme";
 import { LightBoxProvider } from "@showtime-xyz/universal.light-box";
-import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
-import { growthbook } from "app/lib/growthbook";
 import { KeyboardProvider } from "app/lib/keyboard-controller";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
@@ -26,11 +27,11 @@ import { WalletProvider } from "./wallet-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ColorSchemeProvider>
-      <ReactionProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <KeyboardProvider statusBarTranslucent>
-            <SafeAreaProvider style={{ backgroundColor: "black" }}>
+    <GestureHandlerRootView style={{ flexGrow: 1 }}>
+      <KeyboardProvider statusBarTranslucent>
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <ColorSchemeProvider>
+            <ReactionProvider>
               <WalletMobileSDKProvider>
                 <Web3Provider>
                   <WalletProvider>
@@ -43,17 +44,15 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                 <UserProvider>
                                   <BottomSheetModalProvider>
                                     {/* @ts-ignore */}
-                                    <GrowthBookProvider growthbook={growthbook}>
-                                      <FeedProvider>
-                                        <MuteProvider>
-                                          <ClaimProvider>
-                                            <DropProvider>
-                                              {children}
-                                            </DropProvider>
-                                          </ClaimProvider>
-                                        </MuteProvider>
-                                      </FeedProvider>
-                                    </GrowthBookProvider>
+                                    <FeedProvider>
+                                      <MuteProvider>
+                                        <ClaimProvider>
+                                          <DropProvider>
+                                            {children}
+                                          </DropProvider>
+                                        </ClaimProvider>
+                                      </MuteProvider>
+                                    </FeedProvider>
                                   </BottomSheetModalProvider>
                                 </UserProvider>
                               </AuthProvider>
@@ -65,10 +64,10 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                   </WalletProvider>
                 </Web3Provider>
               </WalletMobileSDKProvider>
-            </SafeAreaProvider>
-          </KeyboardProvider>
-        </GestureHandlerRootView>
-      </ReactionProvider>
-    </ColorSchemeProvider>
+            </ReactionProvider>
+          </ColorSchemeProvider>
+        </SafeAreaProvider>
+      </KeyboardProvider>
+    </GestureHandlerRootView>
   );
 };

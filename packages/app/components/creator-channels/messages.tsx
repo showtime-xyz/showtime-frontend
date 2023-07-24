@@ -27,6 +27,7 @@ import Animated, {
   Layout,
   enableLayoutAnimations,
 } from "react-native-reanimated";
+import { useSWRConfig } from "swr";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -105,6 +106,10 @@ import {
   ChannelMessageItem,
   useChannelMessages,
 } from "./hooks/use-channel-messages";
+import {
+  UNREAD_MESSAGES_KEY,
+  useChannelsUnreadMessages,
+} from "./hooks/use-channels-unread-messages";
 import { useDeleteMessage } from "./hooks/use-delete-message";
 import { useEditChannelMessage } from "./hooks/use-edit-channel-message";
 import { useReactOnMessage } from "./hooks/use-react-on-message";
@@ -267,6 +272,7 @@ const keyExtractor = (item: ChannelMessageItem) =>
 //const getItemType = (item: ChannelMessageItem) => item.reaction_group.length > 0 ? "reaction" : "message";
 
 export const Messages = memo(() => {
+  const { mutate: globalMutate } = useSWRConfig();
   const listRef = useRef<FlashList<any>>(null);
   const [channelId] = useParam("channelId");
   const [fresh] = useParam("fresh");
@@ -374,23 +380,25 @@ export const Messages = memo(() => {
   };
   const { data, isLoading, fetchMore, isLoadingMore, error } =
     useChannelMessages(channelId);
+
   const isCurrentUserOwner =
     channelDetail.data?.owner.profile_id === user.user?.data.profile.profile_id;
-  const onLoadMore = async () => {
-    fetchMore();
-  };
 
-  /* HIRBOD: PLEASE KEEP FOR NOW
-  const {
-    configureAnimationOnNextFrame,
-    CellRendererComponent,
-    animationIsRunning,
-  } = useAnimatedInsert({
-    flashList: listRef,
-    data: data as any,
-    animationDuration: 1000,
-  });
-  */
+  const onLoadMore = useCallback(async () => {
+    fetchMore();
+  }, [fetchMore]);
+
+  // this effect fires only once after isLoading changed from true to false
+  // after the first load of the messages we mutate the unread messages count
+  useEffect(() => {
+    if (!isLoading) {
+      // trigger at the next tick to release stress from JS thread
+      requestAnimationFrame(() => {
+        globalMutate(UNREAD_MESSAGES_KEY);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   useLayoutEffect(() => {
     if (isLoadingMore) {
