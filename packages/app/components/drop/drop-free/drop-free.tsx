@@ -446,9 +446,12 @@ const CreateDropStepTitle = (props: StepProps) => {
   const mediaDimension = Math.min(200, windowWidth - 32);
 
   const onNextStep = async () => {
-    const res = await trigger(["title", "description", "exclusiveLink"], {
-      shouldFocus: true,
-    });
+    const res = await trigger(
+      ["title", "description", "paidNFTUnlockableLink"],
+      {
+        shouldFocus: true,
+      }
+    );
     if (res) {
       handleNextStep();
     }
@@ -476,7 +479,7 @@ const CreateDropStepTitle = (props: StepProps) => {
         <View tw="mt-4">
           <Controller
             control={control}
-            name="exclusiveLink"
+            name="paidNFTUnlockableLink"
             render={({ field: { onChange, onBlur, value, ref } }) => {
               return (
                 <Fieldset
@@ -484,7 +487,7 @@ const CreateDropStepTitle = (props: StepProps) => {
                   label="Exclusive collector link"
                   placeholder="https://dropbox.com/2308fyh28v2h"
                   onBlur={onBlur}
-                  errorText={errors.exclusiveLink?.message}
+                  errorText={errors.paidNFTUnlockableLink?.message}
                   value={value}
                   helperText="Drop an exclusive link to merchandise discount, unreleased music, unlisted YouTube video... in your collector channel."
                   onChangeText={onChange}

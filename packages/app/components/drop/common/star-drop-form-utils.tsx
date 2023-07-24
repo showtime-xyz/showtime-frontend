@@ -59,7 +59,7 @@ export const useStarDropForm = () => {
       yup.lazy(() => {
         const baseSchema = yup.object({
           file: yup.mixed().required("Media is required"),
-          exclusiveLink: yup.string().required("Required"),
+          paidNFTUnlockableLink: yup.string().required("Required"),
           title: yup
             .string()
             .label("Title")

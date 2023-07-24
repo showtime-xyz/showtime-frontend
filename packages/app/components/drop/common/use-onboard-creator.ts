@@ -17,7 +17,7 @@ export const useOnBoardCreator = () => {
   const getOnboardLink = useCallback(
     async (_key: string, values: { arg: IParams }) => {
       const res = await axios({
-        url: "/v1/payments/payouts/account/onboard",
+        url: "/v1/payments/nft/payouts/account/onboard",
         method: "POST",
         data: values.arg,
       });

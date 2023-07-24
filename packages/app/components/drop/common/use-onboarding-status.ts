@@ -13,7 +13,7 @@ export const useOnboardingStatus = () => {
   const user = useUser();
   const queryState = useSWR<{
     can_charge: boolean;
-  }>("/v1/payments/onboarding/creator/status", fetcher);
+  }>("/v1/payments/nft/payouts/onboarding/status", fetcher);
 
   let status = "not_onboarded" as OnboardingStatus;
   let loading = queryState.isLoading || user.isLoading;
