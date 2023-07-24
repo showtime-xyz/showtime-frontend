@@ -18,9 +18,6 @@
         "EX_UPDATES_ANDROID_DELAY_LOAD_APP": "false"
       },
       "prebuildCommand": "prebuild --skip-dependency-update react",
-      "cache": {
-        "key": "showtime-4"
-      }
     },
     "preview": {
       "channel": "staging",
