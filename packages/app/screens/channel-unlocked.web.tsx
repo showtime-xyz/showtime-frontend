@@ -1,8 +1,8 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { UnlockedChannel } from "app/components/creator-channels/channel-unlocked";
+import { UnlockedChannelModal } from "app/components/creator-channels/channel-unlocked";
 
-export const UnlockedChannelScreen = withModalScreen(UnlockedChannel, {
+export const UnlockedChannelScreen = withModalScreen(UnlockedChannelModal, {
   title: "",
   matchingPathname: "/channels/[channelId]/[contractAddress]/unlocked",
   matchingQueryParam: "unlockedChannelModal",

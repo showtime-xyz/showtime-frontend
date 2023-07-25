@@ -258,7 +258,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
         price > 0 ? (
           <View
             tw={[
-              "absolute -right-1 -top-1.5 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full px-1",
+              "absolute -right-1 -top-1.5 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full",
               price?.toString()?.length > 2 ? "-right-2.5" : "-right-1",
             ]}
           >

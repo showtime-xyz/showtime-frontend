@@ -1,5 +1,5 @@
-import { UnlockedChannel } from "app/components/creator-channels/channel-unlocked";
+import { UnlockedChannelModal } from "app/components/creator-channels/channel-unlocked";
 
 export const UnlockedChannelScreen = () => {
-  return <UnlockedChannel />;
+  return <UnlockedChannelModal />;
 };

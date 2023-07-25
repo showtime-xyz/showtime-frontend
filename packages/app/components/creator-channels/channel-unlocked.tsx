@@ -24,6 +24,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { useEffectOnce, useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InstagramColorful, Link, Twitter } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -39,7 +40,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import {
+  CreatorEditionResponse,
+  useCreatorCollectionDetail,
+} from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import Share, { Social } from "app/lib/react-native-share";
@@ -50,10 +54,10 @@ import { getProfileName, getTwitterIntent, getWebBaseURL } from "app/utilities";
 import { toast } from "design-system/toast";
 
 import { CloseButton } from "../close-button";
+import { EmptyPlaceholder } from "../empty-placeholder";
 import { useChannelById } from "./hooks/use-channel-detail";
 
 const { useParam } = createParam<{
-  channelId: string;
   contractAddress: string;
   isPaid?: string;
 }>();
@@ -82,13 +86,19 @@ const linearProps = {
     "#F5E794",
   ],
 };
-export const UnlockedChannel = () => {
-  const [contractAddress] = useParam("contractAddress");
-  const [isPaid] = useParam("isPaid");
-  const { state } = useContext(ClaimContext);
 
-  const linearOpaticy = useSharedValue(0);
+export const UnlockedChannelModal = () => {
+  const [contractAddress] = useParam("contractAddress");
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
+  if (!edition) return null;
+  return <UnlockedChannel edition={edition} />;
+};
+
+const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
+  const [isPaid] = useParam("isPaid");
+  const modalScreenContext = useModalScreenContext();
+  const { state } = useContext(ClaimContext);
+  const linearOpaticy = useSharedValue(0);
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
@@ -126,11 +136,7 @@ export const UnlockedChannel = () => {
   useEffectOnce(() => {
     initPaidNFT();
   });
-  useEffect(() => {
-    if (state.status === "error") {
-      router.pop();
-    }
-  }, [router, state]);
+
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
@@ -248,6 +254,18 @@ export const UnlockedChannel = () => {
       router.push(`/channels/${channelId}`);
     }
   }, [router, channelId]);
+  if (state.status === "error") {
+    return (
+      <View tw="web:pb-8 min-h-[200px] flex-1 items-center justify-center">
+        <EmptyPlaceholder
+          title={state.error}
+          text={"Please retry it later!"}
+          tw="mb-4"
+        />
+        <Button onPress={() => router.pop()}>Got it!</Button>
+      </View>
+    );
+  }
   if (!showCongratsScreen) {
     return (
       <View tw="web:pb-8 min-h-[200px] flex-1 items-center justify-center">
