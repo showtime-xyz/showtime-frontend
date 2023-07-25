@@ -1,8 +1,9 @@
-import { Platform } from "react-native";
+import { Platform, Linking } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { LinkOut } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { TabScrollView } from "@showtime-xyz/universal.tab-view";
@@ -10,14 +11,22 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useOnboardingStatus } from "app/components/drop/common/use-onboarding-status";
+import { useStripeAccountLink } from "app/components/drop/common/use-stripe-account-link";
 
 import { SettingsTitle } from "../settings-title";
+
+const websiteUrl = `${
+  __DEV__
+    ? "http://localhost:3000"
+    : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
+}`;
 
 const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 
 export const Payout = ({ index = 0 }: { index: number }) => {
   const onboardinStatus = useOnboardingStatus();
   const router = useRouter();
+  const stripeAccountLink = useStripeAccountLink();
 
   if (onboardinStatus.status === "loading") {
     return (
@@ -51,17 +60,31 @@ export const Payout = ({ index = 0 }: { index: number }) => {
           </Button>
         ) : onboardinStatus.status === "onboarded" ? (
           <View>
-            <View tw="flex-row items-center" style={{ columnGap: 4 }}>
-              <Image
-                source={require("app/components/drop/drop-free/stripe-logo.png")}
-                height={20}
-                width={20}
-              />
-              <Text tw="font-semibold text-[#6672e4]">
-                View payout settings
-              </Text>
-              <LinkOut height={16} width={16} color="#6672e4" />
-            </View>
+            <Pressable
+              onPress={async () => {
+                const value = await stripeAccountLink.trigger({
+                  refresh_url: `${websiteUrl}/settings?tab=${index}&stripeRefresh=true`,
+                  return_url: `${websiteUrl}/settings?tab=${index}&stripeReturn=true`,
+                });
+                if (Platform.OS === "web") {
+                  window.location.href = value.url;
+                } else {
+                  Linking.openURL(value.url);
+                }
+              }}
+            >
+              <View tw="flex-row items-center" style={{ columnGap: 4 }}>
+                <Image
+                  source={require("app/components/drop/drop-free/stripe-logo.png")}
+                  height={20}
+                  width={20}
+                />
+                <Text tw="font-semibold text-[#6672e4]">
+                  View payout settings
+                </Text>
+                <LinkOut height={16} width={16} color="#6672e4" />
+              </View>
+            </Pressable>
             <Text tw="pt-4 text-sm text-gray-700 dark:text-gray-300">
               For each Star Drop sale Showtime takes 10% while Stripe payments
               processing takes 30¢ + 2.9% per sale.

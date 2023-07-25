@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import {
   useWindowDimensions,
   ScrollView as RNScrollView,
@@ -560,7 +560,7 @@ const CreateDropStepTitle = (props: StepProps) => {
     </Layout>
   );
 };
-const prices = [3, 8, 19];
+
 const dropDurations = [3, 7, 30];
 
 const SetPriceAndDuration = (
@@ -587,6 +587,7 @@ const SetPriceAndDuration = (
   const duration = watch("duration") / 86400;
   const selectedPrice = watch("paidNFTPrice");
   const wallet = useWallet();
+  const [showCustomPriceModal, setShowCustomPriceModal] = useState(false);
 
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
@@ -608,6 +609,11 @@ const SetPriceAndDuration = (
       }
     }
   };
+  const defaultPrices = useMemo(() => [3, 8, 19], []);
+
+  const isDefaultPrice = useMemo(() => {
+    return defaultPrices.includes(selectedPrice);
+  }, [defaultPrices, selectedPrice]);
 
   return (
     <Layout
@@ -650,11 +656,11 @@ const SetPriceAndDuration = (
               Price of drop
             </Text>
             <Text tw="pt-1 text-gray-700 dark:text-gray-200">
-              We suggest lower price starting out and higher price for creators
-              with 1,000 followers
+              Depends on your fan perks. For example, unreleased songs can be
+              more affordable than discounts.
             </Text>
             <View tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black">
-              {prices.map((price) => (
+              {defaultPrices.map((price) => (
                 <Pressable
                   key={price}
                   onPress={() => setPrice(price)}
@@ -675,6 +681,41 @@ const SetPriceAndDuration = (
                 </Pressable>
               ))}
             </View>
+            {isDefaultPrice ? (
+              <Pressable
+                tw="pt-4"
+                onPress={() => {
+                  setShowCustomPriceModal(true);
+                }}
+              >
+                <View tw="items-center">
+                  <Text tw="font-semibold text-blue-700 dark:text-blue-500">
+                    Enter custom price
+                  </Text>
+                  <Text tw="pt-1 text-gray-600 dark:text-gray-300">
+                    From $1-$100
+                  </Text>
+                </View>
+              </Pressable>
+            ) : (
+              <Pressable
+                onPress={() => {
+                  setPrice(defaultPrices[1]);
+                }}
+              >
+                <View
+                  tw="mt-4 flex-row items-center self-center rounded-full bg-yellow-300 px-4 py-2 dark:bg-yellow-700"
+                  style={{ columnGap: 8 }}
+                >
+                  <Text tw="text-gray-900 dark:text-gray-100">
+                    Custom price: <Text tw="font-bold">${selectedPrice}</Text>
+                  </Text>
+                  <View tw="rounded-full bg-gray-100 p-1">
+                    <Close height={14} width={14} color={"black"} />
+                  </View>
+                </View>
+              </Pressable>
+            )}
           </View>
         </View>
         <View tw="mt-4">
@@ -786,7 +827,46 @@ const SetPriceAndDuration = (
       >
         <CopySpotifyLinkTutorial />
       </ModalSheet>
+      <ModalSheet
+        snapPoints={["100%"]}
+        title="Set custom price"
+        visible={showCustomPriceModal}
+        close={() => setShowCustomPriceModal(false)}
+        onClose={() => setShowCustomPriceModal(false)}
+      >
+        <View tw="p-4">
+          <SetCustomPrice
+            handleSubmit={(price: number) => {
+              setPrice(price);
+              setShowCustomPriceModal(false);
+            }}
+          />
+        </View>
+      </ModalSheet>
     </Layout>
+  );
+};
+
+const SetCustomPrice = ({
+  handleSubmit,
+}: {
+  handleSubmit: (price: number) => void;
+}) => {
+  const [price, setPrice] = useState("1");
+  const isDark = useIsDarkMode();
+  return (
+    <View>
+      <Fieldset
+        label="Price"
+        placeholder="Set custom price"
+        keyboardAppearance={isDark ? "dark" : "light"}
+        value={price.toString()}
+        onChangeText={(price) => setPrice(price)}
+      />
+      <Button tw="mt-2" onPress={() => handleSubmit(parseFloat(price))}>
+        Set price
+      </Button>
+    </View>
   );
 };
 
