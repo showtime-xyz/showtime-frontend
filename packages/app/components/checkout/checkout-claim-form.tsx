@@ -16,18 +16,24 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Media } from "app/components/media";
+import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
+import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useRedirectToChannelUnlocked } from "app/hooks/use-redirect-to-channel-unlocked";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { Logger } from "app/lib/logger";
+import { TextLink } from "app/navigation/link";
 import { getCreatorUsernameFromNFT } from "app/utilities";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
@@ -57,7 +63,7 @@ export function CheckoutClaimForm({
     [clientSecret, isDark]
   );
 
-  return stripeOptions?.clientSecret ? (
+  return stripeOptions?.clientSecret && edition ? (
     <Elements
       stripe={stripePromise({ stripeAccount: `acct_1NUlvaPBtojzJwfb` })}
       options={stripeOptions}
@@ -71,22 +77,31 @@ const CheckoutForm = ({
   edition,
   clientSecret,
 }: {
-  edition?: CreatorEditionResponse;
+  edition: CreatorEditionResponse;
   clientSecret: string;
 }) => {
   const stripe = useStripe();
   const elements = useElements();
   const isDark = useIsDarkMode();
+  const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
+  const redirectToChannelUnlocked = useRedirectToChannelUnlocked();
+
   const [setAsDefaultPaymentMethod, setSetAsDefaultPaymentMethod] =
     useState(true);
   const [email, setEmail] = useState("");
-  const [cardholderName, setCardHolderName] = useState("");
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const closeModal = () => {
+    redirectToChannelUnlocked(
+      101,
+      edition?.creator_airdrop_edition.contract_address
+    );
+  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -97,24 +112,17 @@ const CheckoutForm = ({
     setIsLoading(true);
     const fetch = new Promise((resolve, reject) => {
       const stripeFetch = stripe
-        .confirmPayment({
-          elements,
-          confirmParams: {
-            return_url:
-              Platform.select({
-                web: window.location.origin,
-                default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
-              }) +
-              "/claim?" +
-              setAsDefaultPaymentMethod,
-            receipt_email: email,
+        .confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: elements.getElement(CardElement) as any,
           },
         })
-        .then(({ error }) => {
-          if (error) {
-            Logger.error("Stripe payment failure ", error);
-            reject(error);
+        .then(async (rest) => {
+          if (rest.error) {
+            Logger.error("Stripe payment failure ", rest.error);
+            reject(rest.error);
           } else {
+            await claimNFT({ closeModal });
             resolve(undefined);
           }
         });
@@ -126,8 +134,6 @@ const CheckoutForm = ({
       loading: "Processing Payment...",
       success: "Redirecting",
       error: (error: StripeError) => {
-        console.log(error);
-
         // This point will only be reached if there is an immediate error when
         // confirming the payment. Otherwise, your customer will be redirected to
         // your `return_url`. For some payment methods like iDEAL, your customer will
@@ -170,20 +176,64 @@ const CheckoutForm = ({
               </Text>
             </View>
           </View>
-          <Divider tw="my-6" />
+          <View tw="my-6 flex-row items-center px-6">
+            <Divider tw="flex-1" orientation="horizontal" />
+            <Text tw="mx-2 text-sm text-gray-400 dark:text-gray-400">
+              use card
+            </Text>
+            <Divider tw="flex-1" orientation="horizontal" />
+          </View>
 
-          <LinkAuthenticationElement
+          {/* <LinkAuthenticationElement
             onChange={(e) => setEmail(e.value.email)}
+          /> */}
+          <CardElement
+            options={{
+              hidePostalCode: true,
+              style: {
+                base: {
+                  fontSize: "16px",
+                  color: isDark ? colors.gray[300] : colors.black,
+                  "::placeholder": {
+                    color: isDark ? colors.gray[400] : colors.gray[500],
+                  },
+                  iconColor: isDark ? colors.gray[300] : colors.gray[400],
+                },
+                invalid: {
+                  color: colors.red[500],
+                },
+              },
+            }}
+            className="boder-gray-300 min-h-[45px] rounded-md border px-4 py-3 dark:border-gray-800"
           />
 
           <View tw="h-3" />
-          <PaymentElement
+          {/* <PaymentElement
             options={{
               layout: "tabs",
             }}
-          />
+          /> */}
           <View tw="h-4" />
-          <View tw="flex-row items-center">
+          <View tw="px-4">
+            <Text
+              tw="text-center text-xs text-gray-900 dark:text-gray-50"
+              onPress={() =>
+                setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
+              }
+            >
+              By clicking submit you will accept the{" "}
+              <TextLink
+                href="https://showtime-xyz.notion.site/Legal-Public-c407e36eb7cd414ca190245ca8621e68"
+                tw="font-bold"
+                target="_blank"
+              >
+                Terms & Conditions
+              </TextLink>{" "}
+              and understand that you are purchasing a non-refundable digital
+              item.
+            </Text>
+          </View>
+          {/* <View tw="flex-row items-center">
             <Checkbox
               checked={setAsDefaultPaymentMethod}
               onChange={() =>
@@ -197,9 +247,10 @@ const CheckoutForm = ({
                 setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
               }
             >
-              Set as default payment method
+              I accept the <Text tw="font-bold">Terms of Service</Text> and
+              understand that I am purchasing a non-refundable digital item.
             </Text>
-          </View>
+          </View> */}
           {isLoading && (
             <View tw="animate-fade-in-250 absolute inset-0 items-center justify-center bg-black/30">
               <Spinner />

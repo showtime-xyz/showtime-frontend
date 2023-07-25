@@ -112,20 +112,14 @@ export const useClaimNFT = (edition: IEdition) => {
     password?: string;
     location?: LocationObject;
     closeModal?: () => void;
-    isPaidGated?: boolean;
   };
 
   const claimNFT = async ({
     password,
     location,
     closeModal,
-    isPaidGated,
   }: ClaimNFTParams): Promise<boolean | undefined> => {
     try {
-      if (isPaidGated) {
-        // console.log(res);
-        console.log("paid gated");
-      }
       if (edition?.minter_address) {
         dispatch({ type: "loading" });
         if (edition?.is_gated) {

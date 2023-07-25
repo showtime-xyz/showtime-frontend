@@ -205,7 +205,7 @@ export const ClaimForm = ({
         closeModal,
       });
     } else if (claimType === "paid") {
-      success = await claimNFT({ closeModal, isPaidGated: true });
+      success = await claimNFT({ closeModal });
     } else {
       success = await claimNFT({ closeModal });
     }

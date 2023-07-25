@@ -146,7 +146,7 @@ export const ClaimPaidNFTButton = ({
             defaultPaymentMethod.id
           );
           toast.success("Payment Succeeded");
-          console.log(123);
+          onPress?.(e);
         } catch (e) {
           // Error handled in hook
         }
@@ -177,7 +177,6 @@ export const ClaimPaidNFTButton = ({
         { shallow: true }
       );
     }
-    onPress?.(e);
   };
   const priceText = price ? ` - $${price}` : "";
 
