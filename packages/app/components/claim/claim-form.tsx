@@ -20,7 +20,10 @@ import type { LocationObject } from "expo-location";
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  useIsDarkMode,
+  useIsomorphicLayoutEffect,
+} from "@showtime-xyz/universal.hooks";
 import { CheckFilled } from "@showtime-xyz/universal.icon";
 import { Spotify } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
@@ -525,6 +528,7 @@ export const ClaimForm = ({
                   edition?.creator_airdrop_edition.contract_address
                 }
                 onPress={handleClaimNFT}
+                profileId={nft?.data.item.creator_id}
               />
             ) : (
               <Button

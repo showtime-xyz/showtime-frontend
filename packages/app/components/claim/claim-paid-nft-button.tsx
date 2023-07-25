@@ -17,6 +17,7 @@ import type { AxiosError } from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
+import useSWR from "swr";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
@@ -47,9 +48,11 @@ import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
+import { fetcher } from "app/hooks/use-infinite-list-query";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
+import { useSwitchNetwork } from "app/hooks/use-switch-network";
 import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
@@ -111,24 +114,40 @@ async function fetchClaimPaymentIntent({
     }
   }
 }
+
+export const useStripeAccountId = (
+  profileId: string | number | null | undefined
+) => {
+  const queryState = useSWR<{ stripe_account_id: string }>(
+    profileId ? `/v1/payments/nft/stripe-account/${profileId}` : null,
+    fetcher
+  );
+
+  return queryState;
+};
+
 export const ClaimPaidNFTButton = ({
   price,
   onPress,
   editionId,
   contractAddress,
+  profileId,
   ...rest
 }: ButtonProps & {
   price?: number;
   editionId: number;
   contractAddress: string;
+  profileId?: string | number | null | undefined;
 }) => {
   const router = useRouter();
-  const {
-    paymentStatus,
-    confirmCardPaymentStatus,
-    message: paymentStatusMessage,
-  } = useConfirmPayment();
+  // const {
+  //   paymentStatus,
+  //   confirmCardPaymentStatus,
+  //   message: paymentStatusMessage,
+  // } = useConfirmPayment();
   const [selectDefault, setSelectDefault] = useState(true);
+  const { data: stripeAccount } = useStripeAccountId(profileId);
+  console.log(stripeAccount);
 
   const paymentMethods = usePaymentsManage();
   const defaultPaymentMethod = useMemo(
@@ -136,27 +155,16 @@ export const ClaimPaidNFTButton = ({
     [paymentMethods.data]
   );
   const onHandlePayment = async (e: any) => {
-    const res = await fetchClaimPaymentIntent({ editionId });
+    if (Platform.OS !== "web") {
+      toast("This drop is only available on web");
+    }
+    const res = await fetchClaimPaymentIntent({
+      editionId,
+      useDefaultPaymentMethod: false,
+    });
 
-    if (selectDefault && defaultPaymentMethod) {
-      if (res?.client_secret) {
-        try {
-          await confirmCardPaymentStatus(
-            res?.client_secret,
-            defaultPaymentMethod.id
-          );
-          toast.success("Payment Succeeded");
-          onPress?.(e);
-        } catch (e) {
-          // Error handled in hook
-        }
-      }
-    } else {
-      const res = await fetchClaimPaymentIntent({
-        editionId,
-        useDefaultPaymentMethod: false,
-      });
-      const as = `/checkout`;
+    if (Platform.OS === "web") {
+      const as = `/checkout-paid-nft`;
       router.push(
         Platform.select({
           native: as,
@@ -166,7 +174,8 @@ export const ClaimPaidNFTButton = ({
               ...router.query,
               clientSecret: res?.client_secret,
               checkoutPaidNFTModal: true,
-              contractAddress: contractAddress,
+              contractAddress,
+              stripeAccount: stripeAccount?.stripe_account_id,
             },
           } as any,
         }),
@@ -208,18 +217,5 @@ export const ClaimPaidNFTButton = ({
         </Text>
       </View>
     </Button>
-  );
-};
-
-const CheckIcon = ({ disabled = false }) => {
-  const isDark = useIsDarkMode();
-  return (
-    <View tw={["items-center justify-center", disabled ? "opacity-60" : ""]}>
-      <CheckFilled
-        height={20}
-        width={20}
-        color={isDark ? colors.white : colors.gray[700]}
-      />
-    </View>
   );
 };

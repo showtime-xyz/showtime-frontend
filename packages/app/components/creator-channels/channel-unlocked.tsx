@@ -1,4 +1,11 @@
-import { useCallback, useRef, useMemo, useState } from "react";
+import {
+  useCallback,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useContext,
+} from "react";
 import { Linking, Platform, StyleSheet } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
@@ -14,7 +21,7 @@ import Animated, {
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useEffectOnce, useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InstagramColorful, Link, Twitter } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -23,12 +30,15 @@ import {
   useSafeAreaInsets,
   SafeAreaView,
 } from "@showtime-xyz/universal.safe-area";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useMyInfo } from "app/hooks/api-hooks";
+import { ClaimContext } from "app/context/claim-context";
+import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
+import { useClaimNFT } from "app/hooks/use-claim-nft";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
@@ -45,6 +55,7 @@ import { useChannelById } from "./hooks/use-channel-detail";
 const { useParam } = createParam<{
   channelId: string;
   contractAddress: string;
+  isPaid?: string;
 }>();
 
 const linearProps = {
@@ -72,8 +83,10 @@ const linearProps = {
   ],
 };
 export const UnlockedChannel = () => {
-  const [channelId] = useParam("channelId");
   const [contractAddress] = useParam("contractAddress");
+  const [isPaid] = useParam("isPaid");
+  const { state } = useContext(ClaimContext);
+
   const linearOpaticy = useSharedValue(0);
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
   const { data: nft } = useNFTDetailByTokenId({
@@ -81,17 +94,43 @@ export const UnlockedChannel = () => {
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
+  const { data: userInfo } = useUserProfile({
+    address:
+      nft?.data.item.creator_username || nft?.data.item.creator_address_nonens,
+  });
+  const channelId = userInfo?.data?.profile.channels[0]?.id;
   const { data } = useChannelById(channelId?.toString());
+  const [showCongratsScreen, setShowCongratsScreen] = useState(!isPaid);
   const isDark = useIsDarkMode();
   const router = useRouter();
   const { data: user } = useMyInfo();
   const viewRef = useRef<any>(null);
   const [status, requestPermission] = MediaLibrary.usePermissions();
-  const { top } = useSafeAreaInsets();
+  const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
   const url = useMemo(
     () => (nft ? `${getWebBaseURL()}${getNFTSlug(nft?.data.item)}` : ""),
     [nft]
   );
+  const closeModal = useCallback(() => {
+    setShowCongratsScreen(true);
+    router.query = {};
+  }, [router]);
+  console.log(state);
+
+  const initPaidNFT = useCallback(async () => {
+    if (isPaid) {
+      await claimNFT({ closeModal });
+    }
+  }, [claimNFT, closeModal, isPaid]);
+
+  useEffectOnce(() => {
+    initPaidNFT();
+  });
+  useEffect(() => {
+    if (state.status === "error") {
+      router.pop();
+    }
+  }, [router, state]);
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
@@ -209,7 +248,13 @@ export const UnlockedChannel = () => {
       router.push(`/channels/${channelId}`);
     }
   }, [router, channelId]);
-
+  if (!showCongratsScreen) {
+    return (
+      <View tw="web:pb-8 min-h-[200px] flex-1 items-center justify-center">
+        <Spinner />
+      </View>
+    );
+  }
   return (
     <View tw="web:pb-8 flex-1" pointerEvents="box-none">
       <LinearGradient

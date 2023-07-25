@@ -101,7 +101,7 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const useClaimNFT = (edition: IEdition) => {
+export const useClaimNFT = (edition: IEdition | null | undefined) => {
   const router = useRouter();
   const { data: userProfile } = useMyInfo();
   const { state, dispatch, pollTransaction } = useContext(ClaimContext);

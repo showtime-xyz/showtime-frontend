@@ -8,12 +8,12 @@ import {
   Elements,
   PaymentElement,
   LinkAuthenticationElement,
+  ExpressCheckoutElement,
   CardElement,
 } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
 
 import { Button } from "@showtime-xyz/universal.button";
-import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -23,7 +23,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Media } from "app/components/media";
-import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -44,9 +43,11 @@ import { stripePromise } from "./stripe";
 export function CheckoutClaimForm({
   clientSecret,
   contractAddress,
+  stripeAccount,
 }: {
   clientSecret: string;
   contractAddress: string;
+  stripeAccount: string;
 }) {
   const { data: edition, loading } =
     useCreatorCollectionDetail(contractAddress);
@@ -64,10 +65,7 @@ export function CheckoutClaimForm({
   );
 
   return stripeOptions?.clientSecret && edition ? (
-    <Elements
-      stripe={stripePromise({ stripeAccount: `acct_1NUlvaPBtojzJwfb` })}
-      options={stripeOptions}
-    >
+    <Elements stripe={stripePromise({ stripeAccount })} options={stripeOptions}>
       <CheckoutForm edition={edition} clientSecret={clientSecret} />
     </Elements>
   ) : null;
@@ -83,7 +81,6 @@ const CheckoutForm = ({
   const stripe = useStripe();
   const elements = useElements();
   const isDark = useIsDarkMode();
-  const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
   const redirectToChannelUnlocked = useRedirectToChannelUnlocked();
 
   const [setAsDefaultPaymentMethod, setSetAsDefaultPaymentMethod] =
@@ -96,12 +93,7 @@ const CheckoutForm = ({
   });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const closeModal = () => {
-    redirectToChannelUnlocked(
-      101,
-      edition?.creator_airdrop_edition.contract_address
-    );
-  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
@@ -110,11 +102,26 @@ const CheckoutForm = ({
     }
 
     setIsLoading(true);
+    // Trigger form validation and wallet collection
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      Logger.error("Stripe payment failure ", submitError);
+      return;
+    }
+
     const fetch = new Promise((resolve, reject) => {
       const stripeFetch = stripe
-        .confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: elements.getElement(CardElement) as any,
+        .confirmPayment({
+          elements,
+          clientSecret,
+          confirmParams: {
+            return_url:
+              Platform.select({
+                web: window.location.href,
+                default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
+              }) +
+              `?unlockedChannelModal=true&contractAddress=${edition.creator_airdrop_edition?.contract_address}&isPaid=true`,
+            receipt_email: email,
           },
         })
         .then(async (rest) => {
@@ -122,7 +129,6 @@ const CheckoutForm = ({
             Logger.error("Stripe payment failure ", rest.error);
             reject(rest.error);
           } else {
-            await claimNFT({ closeModal });
             resolve(undefined);
           }
         });
@@ -176,18 +182,14 @@ const CheckoutForm = ({
               </Text>
             </View>
           </View>
-          <View tw="my-6 flex-row items-center px-6">
-            <Divider tw="flex-1" orientation="horizontal" />
-            <Text tw="mx-2 text-sm text-gray-400 dark:text-gray-400">
-              use card
-            </Text>
-            <Divider tw="flex-1" orientation="horizontal" />
-          </View>
 
-          {/* <LinkAuthenticationElement
+          {/* <ExpressCheckoutElement onConfirm={onConfirm} /> */}
+          <View tw="h-6" />
+          <LinkAuthenticationElement
             onChange={(e) => setEmail(e.value.email)}
-          /> */}
-          <CardElement
+          />
+          <View tw="h-3" />
+          {/* <CardElement
             options={{
               hidePostalCode: true,
               style: {
@@ -205,14 +207,22 @@ const CheckoutForm = ({
               },
             }}
             className="boder-gray-300 min-h-[45px] rounded-md border px-4 py-3 dark:border-gray-800"
-          />
+          /> */}
 
-          <View tw="h-3" />
-          {/* <PaymentElement
+          <PaymentElement
             options={{
               layout: "tabs",
+              // fields: {
+              //   billingDetails: {
+              //     address: "never",
+              //   },
+              // },
+              wallets: {
+                applePay: "auto",
+                googlePay: "auto",
+              },
             }}
-          /> */}
+          />
           <View tw="h-4" />
           <View tw="px-4">
             <Text
