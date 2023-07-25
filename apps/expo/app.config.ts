@@ -127,7 +127,7 @@ const expoConfig: ExpoConfig = {
   },
   notification: {
     icon: "./assets/notification-icon.png",
-    color: "#EBB64F",
+    color: "#F1C972",
   },
   assetBundlePatterns: ["**/*"],
   orientation: "portrait",
@@ -240,7 +240,6 @@ const expoConfig: ExpoConfig = {
         config: {
           organization: "showtime-l3",
           project: "showtime-mobile",
-          authToken: process.env.SENTRY_AUTH_TOKEN,
         },
       },
     ],
