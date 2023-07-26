@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -19,6 +20,8 @@ import {
   limitLineBreaks,
   removeTags,
 } from "app/utilities";
+
+import { toast } from "design-system/toast";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { CreatorOnFeed } from "../creator-on-feed";
@@ -109,12 +112,29 @@ export const NFTDetails = ({
         </View>
         <View tw="mt-4 h-12 flex-row">
           {edition ? (
-            <ClaimButton
-              tw="flex-1"
-              edition={edition}
-              size="regular"
-              theme="dark"
-            />
+            <View tw="flex-1 flex-row">
+              <ClaimButton
+                tw="flex-1"
+                edition={edition}
+                size="regular"
+                theme="dark"
+              />
+              {edition.gating_type === "paid_nft" ? (
+                <>
+                  <View tw="w-4" />
+                  <Button
+                    size="regular"
+                    onPress={() => {
+                      toast("Coming soon");
+                    }}
+                    tw="flex-1"
+                    theme="dark"
+                  >
+                    View Channel
+                  </Button>
+                </>
+              ) : null}
+            </View>
           ) : null}
         </View>
         <View tw="mt-3 h-5 items-center">

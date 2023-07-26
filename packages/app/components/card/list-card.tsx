@@ -374,7 +374,7 @@ const ListCardLargeScreen = ({
                   edition={edition}
                   size="regular"
                   nft={nft}
-                />{" "}
+                />
               </>
             ) : null}
           </View>

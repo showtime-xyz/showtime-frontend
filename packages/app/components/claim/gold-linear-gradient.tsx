@@ -32,6 +32,7 @@ export const GoldLinearGradient = () => {
         StyleSheet.absoluteFill,
         {
           borderRadius: 999,
+          zIndex: -1,
         },
       ]}
       {...linearProps}

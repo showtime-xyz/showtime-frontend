@@ -49,12 +49,12 @@ const CONTAINER_BACKGROUND_MAPPER = {
 };
 
 const LABEL_SIZE_TW = {
-  small: "text-xs",
-  regular: "text-sm",
+  small: "text-sm",
+  regular: "text-base",
 };
 
 const LABEL_WEIGHT_TW = {
-  small: "font-bold",
+  small: "font-semibold",
   regular: "font-semibold",
 };
 

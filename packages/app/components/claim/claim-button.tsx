@@ -11,6 +11,7 @@ import {
   Check,
   Hourglass,
   PreAddAppleMusic,
+  Sendv2,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -22,10 +23,12 @@ import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useRedirectToRaffleResult } from "app/hooks/use-redirect-to-raffle-result";
+import { useRedirectToStarDropShareScreen } from "app/hooks/use-redirect-to-star-drop-share-screen";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
 
+import { LABEL_SIZE_TW } from "design-system/button/constants";
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
@@ -73,6 +76,7 @@ export const ClaimButton = ({
   const { claimAppleMusicGatedDrop, isMutating: isAppleMusicCollectLoading } =
     useAppleMusicGatedClaim(edition.creator_airdrop_edition);
   const redirectToClaimDrop = useRedirectToClaimDrop();
+  const redirectToStarDropShareScreen = useRedirectToStarDropShareScreen();
   const redirectToRaffleResult = useRedirectToRaffleResult();
   const {
     state: claimStates,
@@ -89,41 +93,8 @@ export const ClaimButton = ({
   const isSelf =
     user?.data?.profile.profile_id ===
     edition.creator_airdrop_edition?.owner_profile_id;
-  const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
-  const isPaidGated = edition?.gating_type === "paid_nft";
-  const price = edition?.price ? ` - $${edition?.price}` : "";
 
-  const raffleConcludedAt = useMemo(() => {
-    if (!isSelf || !isRaffleDrop) return null;
-    if (
-      (edition.gating_type === "spotify_presave" ||
-        edition?.gating_type === "music_presave") &&
-      edition?.presave_release_date
-    ) {
-      return formatDistanceToNowStrict(
-        new Date(edition?.presave_release_date),
-        {
-          addSuffix: true,
-        }
-      );
-    }
-    if (edition?.time_limit) {
-      return formatDistanceToNowStrict(new Date(edition?.time_limit), {
-        addSuffix: true,
-      });
-    }
-  }, [
-    edition.gating_type,
-    edition?.presave_release_date,
-    edition?.time_limit,
-    isRaffleDrop,
-    isSelf,
-  ]);
-  const isCanViewRaffleResult = useMemo(() => {
-    const isRaffleHasWinner =
-      isRaffleDrop && edition.raffles?.findIndex((r) => !!r.winner) != -1;
-    return isSelf && isRaffleHasWinner;
-  }, [edition.raffles, isRaffleDrop, isSelf]);
+  const price = edition?.price ? ` - $${edition?.price}` : "";
 
   const handleRaffleResultPress = () => {
     redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
@@ -163,26 +134,26 @@ export const ClaimButton = ({
   };
 
   const status = getClaimStatus(edition);
+  const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
 
-  const bgIsGreen =
-    status === ClaimStatus.Claimed || status === ClaimStatus.Soldout;
+  const isPaidGated = edition?.gating_type === "paid_nft";
+
+  const isSoldOut =
+    status === ClaimStatus.Soldout || status === ClaimStatus.Claimed;
+  const isExpired = status === ClaimStatus.Expired;
 
   const buttonProps = {
     style: [
-      bgIsGreen
+      isSoldOut
         ? { backgroundColor: colors.green[600] }
-        : status === ClaimStatus.Expired && !bgIsGreen
+        : isExpired && !isSoldOut
         ? { backgroundColor: colors.gray[500] }
         : {},
       style,
     ],
     size,
     tw: [
-      isProgress
-        ? "opacity-50"
-        : status === ClaimStatus.Expired && !bgIsGreen
-        ? "opacity-100"
-        : "",
+      isProgress ? "opacity-50" : isExpired && !isSoldOut ? "opacity-100" : "",
       tw,
     ],
     theme,
@@ -190,11 +161,44 @@ export const ClaimButton = ({
   };
 
   const preAddIconheight = buttonProps.size === "small" ? 24 : 26;
+  const raffleConcludedAt = useMemo(() => {
+    if (!isSelf || !isRaffleDrop) return null;
+    if (
+      (edition.gating_type === "spotify_presave" ||
+        edition?.gating_type === "music_presave") &&
+      edition?.presave_release_date
+    ) {
+      return formatDistanceToNowStrict(
+        new Date(edition?.presave_release_date),
+        {
+          addSuffix: true,
+        }
+      );
+    }
+    if (edition?.time_limit) {
+      return formatDistanceToNowStrict(new Date(edition?.time_limit), {
+        addSuffix: true,
+      });
+    }
+  }, [
+    edition.gating_type,
+    edition?.presave_release_date,
+    edition?.time_limit,
+    isRaffleDrop,
+    isSelf,
+  ]);
+
+  const isCanViewRaffleResult = useMemo(() => {
+    const isRaffleHasWinner =
+      isRaffleDrop && edition.raffles?.findIndex((r) => !!r.winner) != -1;
+    return isSelf && isRaffleHasWinner;
+  }, [edition.raffles, isRaffleDrop, isSelf]);
+
   if (isCanViewRaffleResult) {
     return (
       <Button {...buttonProps} onPress={handleRaffleResultPress}>
         <>
-          <Text tw="text-sm font-semibold text-white">
+          <Text tw={["font-semibold text-white", LABEL_SIZE_TW[size]]}>
             Announce your raffle
           </Text>
         </>
@@ -204,18 +208,46 @@ export const ClaimButton = ({
     return (
       <Button {...buttonProps}>
         <>
-          <Text tw="text-center text-sm font-semibold text-white">
+          <Text
+            tw={["text-center font-semibold text-white", LABEL_SIZE_TW[size]]}
+          >
             Your raffle ends {`${raffleConcludedAt}`}
           </Text>
         </>
       </Button>
     );
   } else if (status === ClaimStatus.Claimed) {
+    if (isPaidGated) {
+      return (
+        <Button
+          tw={tw}
+          size={size}
+          {...rest}
+          onPress={() =>
+            redirectToStarDropShareScreen(
+              edition?.creator_airdrop_edition?.contract_address
+            )
+          }
+        >
+          <>
+            <GoldLinearGradient />
+            <Sendv2 color={colors.gray[900]} width={20} height={20} />
+            <Text
+              tw={["ml-1 font-semibold text-gray-900", LABEL_SIZE_TW[size]]}
+            >
+              Share
+            </Text>
+          </>
+        </Button>
+      );
+    }
     return (
-      <Button {...buttonProps} disabled>
+      <Button {...buttonProps}>
         <>
           <Check color="white" width={18} height={18} />
-          <Text tw="ml-1 text-sm font-semibold text-white">Collected</Text>
+          <Text tw={["ml-1 font-semibold text-white", LABEL_SIZE_TW[size]]}>
+            Collected
+          </Text>
         </>
       </Button>
     );
@@ -224,23 +256,27 @@ export const ClaimButton = ({
       <Button {...buttonProps} disabled>
         <>
           <Check color="white" width={20} height={20} />
-          <Text tw="ml-1 text-sm font-semibold text-white">Sold out</Text>
+          <Text tw={["ml-1 font-semibold text-white", LABEL_SIZE_TW[size]]}>
+            Sold out
+          </Text>
         </>
       </Button>
     );
-  } else if (status === ClaimStatus.Expired) {
+  } else if (isExpired) {
     return (
       <Button {...buttonProps} disabled>
         <>
           <Hourglass color="white" width={16} height={16} />
-          <Text tw="ml-1 text-sm font-semibold text-white">Time out</Text>
+          <Text tw={["ml-1 font-semibold text-white", LABEL_SIZE_TW[size]]}>
+            Time out
+          </Text>
         </>
       </Button>
     );
   } else if (isProgress) {
     return (
       <Button {...buttonProps} disabled>
-        <Text tw="text-sm font-bold">
+        <Text tw={["font-semibold", LABEL_SIZE_TW[size]]}>
           Collecting
           <ThreeDotsAnimation color={isDark ? colors.black : colors.white} />
         </Text>
@@ -256,7 +292,7 @@ export const ClaimButton = ({
             height={20}
           />
           <Text
-            tw="ml-1 text-sm font-semibold"
+            tw={["ml-1 font-semibold", LABEL_SIZE_TW[size]]}
             style={{ color: isDark ? colors.black : colors.white }}
           >
             {isAuthenticated ? "Save to Collect" : "Save on Spotify"}
@@ -299,7 +335,7 @@ export const ClaimButton = ({
                 height={preAddIconheight}
               />
               <Text
-                tw="ml-1 text-sm font-semibold"
+                tw={["ml-1 font-semibold", LABEL_SIZE_TW[size]]}
                 style={{
                   fontSize: 12,
                   color: isDark ? colors.black : colors.white,
@@ -347,7 +383,7 @@ export const ClaimButton = ({
                 height={preAddIconheight}
               />
               <Text
-                tw="ml-1 text-sm font-semibold"
+                tw={["ml-1 font-semibold", LABEL_SIZE_TW[size]]}
                 style={{
                   fontSize: 12,
                   color: isDark ? colors.black : colors.white,
@@ -373,7 +409,7 @@ export const ClaimButton = ({
             height={20}
           />
           <Text
-            tw="ml-1 text-sm font-semibold leading-5"
+            tw={["ml-1 font-semibold", LABEL_SIZE_TW[size]]}
             style={{ color: isDark ? colors.black : colors.white }}
           >
             {isAuthenticated ? "Pre-Save to Collect" : "Pre-Save on Spotify"}
@@ -410,12 +446,7 @@ export const ClaimButton = ({
                 }}
               />
             </View>
-            <Text
-              tw={[
-                "ml-2 font-semibold text-black",
-                buttonProps.size === "regular" ? "text-base" : "text-sm",
-              ]}
-            >
+            <Text tw={["ml-2 font-semibold text-black", LABEL_SIZE_TW[size]]}>
               Collect Star Drop{price}
             </Text>
           </View>
