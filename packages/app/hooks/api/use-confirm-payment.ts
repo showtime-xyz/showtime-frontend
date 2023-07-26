@@ -25,7 +25,9 @@ export const useConfirmPayment = () => {
             await delay(3000);
             const res = await axios({
               method: "GET",
-              url: "/v1/payments/status?payment_intent_id=" + paymentIntentId,
+              url:
+                "/v1/payments/drops/status?payment_intent_id=" +
+                paymentIntentId,
             });
             if (res.current_status === "succeeded") {
               setPaymentStatus("success");
