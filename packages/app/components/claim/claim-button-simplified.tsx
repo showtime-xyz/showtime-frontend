@@ -16,6 +16,7 @@ import { toast } from "design-system/toast";
 
 import { ClaimStatus, getClaimStatus } from "./claim-button";
 import { ClaimType } from "./claim-form";
+import { GoldLinearGradient } from "./gold-linear-gradient";
 
 type ClaimButtonProps = {
   edition?: CreatorEditionResponse;
@@ -59,6 +60,7 @@ export const ClaimButtonSimplified = ({
       );
     }
   };
+  const isPaidGated = edition?.gating_type === "paid_nft";
 
   const status = getClaimStatus(edition);
 
@@ -149,6 +151,8 @@ export const ClaimButtonSimplified = ({
       }}
       {...rest}
     >
+      {isPaidGated ? <GoldLinearGradient /> : null}
+
       <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
         {buttonText}
       </Text>
