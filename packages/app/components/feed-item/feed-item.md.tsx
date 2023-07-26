@@ -12,7 +12,6 @@ import { useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
 import { Video as ExpoVideo } from "expo-av";
-import { useSwiper } from "swiper/react";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -41,7 +40,6 @@ import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
 import { FeedItemTapGesture } from "app/components/feed/feed-item-tap-gesture";
-// import { LikedBy } from "app/components/liked-by";
 import { Media } from "app/components/media";
 import { NFTDropdown } from "app/components/nft-dropdown";
 import { UserList } from "app/components/user-list";
@@ -63,13 +61,10 @@ import { breakpoints } from "design-system/theme";
 
 import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
-import { FeedItemProps } from "./index";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
+import { FeedItemProps } from "./type";
 
-// Media header height is the height of the header of the media
-
-const MEDIA_HEADER_HEIGHT = 80;
 type TabProps = {
   nft: NFT;
   ListHeaderComponent?: React.ComponentType<any>;
@@ -85,14 +80,16 @@ const Collectors = ({ nft, ListHeaderComponent }: TabProps) => {
     />
   );
 };
-
+const NFT_DETAIL_WIDTH = 380;
 const TAB_SCENES_MAP = new Map([
   [0, Comments],
   [1, Collectors],
 ]);
 export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   nft,
-  itemHeight,
+  listLength,
+  slideToNext,
+  slideToPrev,
 }) {
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -102,10 +99,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     chainName: nft?.chain_name,
   });
   const videoRef = useRef<ExpoVideo | null>(null);
-
   const [muted, setMuted] = useMuted();
-  const swiper = useSwiper();
-  const activeIndex = useContext(SwiperActiveIndexContext);
   const { commentsCount } = useComments(nft.nft_id);
   const headerHeight = useHeaderHeight();
   const [showFullScreen, setShowFullScreen] = useState(false);
@@ -121,10 +115,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     [nft?.token_description]
   );
 
-  const disablePrevButton = activeIndex === 0;
-  const disableNextButton = swiper
-    ? activeIndex === swiper.snapGrid.length - 1
-    : false;
   const routes = useMemo(
     () => [
       {
@@ -144,7 +134,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
 
   const [index, setIndex] = useState(0);
 
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const contentWidth = useContentWidth(ContentLayoutOffset.HEADER);
 
   const { data: edition } = useCreatorCollectionDetail(
@@ -159,29 +149,31 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   const isCreatorDrop = !!nft.creator_airdrop_edition_address;
 
   const feedItemStyle = {
-    height: itemHeight,
+    height: windowHeight,
     width: windowWidth,
   };
   // Media padding is the padding between the media and the content
-  const media_padding = windowWidth > breakpoints["xl"] ? 160 : 20;
-
-  // NFT detail width is the width of the NFT detail on the right side of the feed item
-  const NFT_DETAIL_WIDTH = windowWidth > breakpoints["xl"] ? 380 : 280;
+  const mediaPadding =
+    windowWidth > breakpoints["2xl"]
+      ? 220
+      : windowWidth > breakpoints["xl"]
+      ? 180
+      : 80;
+  const maxMediaHeight = feedItemStyle.height - mediaPadding;
   const mediaHeight =
-    Math.min(windowWidth, feedItemStyle.height) -
-    media_padding -
-    MEDIA_HEADER_HEIGHT;
-  const maxContentWidth = contentWidth - NFT_DETAIL_WIDTH - media_padding;
-  const mediaWidth = useMemo(() => {
-    return Math.min(
-      mediaHeight *
-        (isNaN(Number(nft.token_aspect_ratio))
-          ? 1
-          : Number(nft.token_aspect_ratio)),
-      maxContentWidth
-    );
-  }, [maxContentWidth, mediaHeight, nft.token_aspect_ratio]);
+    windowWidth > breakpoints["lg"]
+      ? maxMediaHeight
+      : maxMediaHeight - 248 - mediaPadding;
 
+  const mediaWidth = useMemo(() => {
+    if (windowWidth < breakpoints["lg"]) {
+      return contentWidth - mediaPadding;
+    }
+    return contentWidth - NFT_DETAIL_WIDTH - mediaPadding;
+  }, [contentWidth, mediaPadding, windowWidth]);
+  const activeIndex = useContext(SwiperActiveIndexContext);
+  const disablePrevButton = activeIndex === 0;
+  const disableNextButton = activeIndex === (listLength ? listLength - 1 : 0);
   const onFullScreen = () => {
     setShowFullScreen(!showFullScreen);
   };
@@ -198,75 +190,77 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
   };
   const TabScene = TAB_SCENES_MAP.get(index);
 
-  const ListHeaderComponent = useCallback(() => {
-    return (
-      <>
-        <View tw="px-4">
-          <View tw="flex-row items-center justify-between pt-4">
-            <Social nft={nft} />
-            <RaffleTooltip edition={edition} tw="mr-1" />
-          </View>
-          {/* <View tw="mt-4 min-h-[12px]">
-            <LikedBy nft={nft} max={1} />
-          </View> */}
-          <View tw="my-4 mr-4 flex-row items-center">
-            <Text tw="text-xl font-bold text-black dark:text-white">
-              {nft.token_name}
+  const ListHeaderComponent = useCallback(
+    (props: { hideTabs?: boolean }) => {
+      return (
+        <>
+          <View tw="px-4">
+            <View tw="flex-row items-center justify-between pt-4">
+              <Social nft={nft} />
+              <RaffleTooltip edition={edition} tw="mr-1" />
+            </View>
+
+            <View tw="my-4 mr-4 flex-row items-center">
+              <Text tw="text-lg font-bold text-black dark:text-white">
+                {nft.token_name}
+              </Text>
+            </View>
+            <Text tw="text-sm text-gray-600 dark:text-gray-200">
+              {description}
             </Text>
-          </View>
-          <Text tw="text-sm text-gray-600 dark:text-gray-200">
-            {description}
-          </Text>
 
-          <View tw="mt-6 flex-row items-center justify-between">
-            <Creator nft={nft} />
-            <Owner nft={nft} price={false} />
-          </View>
+            <View tw="mt-6 flex-row items-center justify-between">
+              <Creator nft={nft} />
+              <Owner nft={nft} price={false} />
+            </View>
 
-          <View tw="mt mb-4 h-5">
-            <ClaimedBy
-              claimersList={detailData?.data.item?.multiple_owners_list}
-              nft={nft}
+            <View tw="mt mb-4 h-5">
+              <ClaimedBy
+                claimersList={detailData?.data.item?.multiple_owners_list}
+                nft={nft}
+              />
+            </View>
+            <View tw="h-8 flex-row">
+              {isCreatorDrop && edition ? (
+                <>
+                  <ClaimButton tw="flex-1" edition={edition} />
+                  <ClaimedShareButton
+                    tw="ml-3 w-1/4"
+                    edition={edition}
+                    nft={nft}
+                  />
+                </>
+              ) : null}
+            </View>
+          </View>
+          {props.hideTabs ? null : (
+            <TabBarSingle
+              onPress={(i) => {
+                setIndex(i);
+              }}
+              routes={routes as any}
+              index={index}
             />
-          </View>
-          <View tw="flex-row">
-            {isCreatorDrop && edition ? (
-              <>
-                <ClaimButton tw="flex-1" edition={edition} />
-                <ClaimedShareButton
-                  tw="ml-3 w-1/4"
-                  edition={edition}
-                  nft={nft}
-                />
-              </>
-            ) : null}
-          </View>
-        </View>
-        <TabBarSingle
-          onPress={(i) => {
-            setIndex(i);
-          }}
-          routes={routes as any}
-          index={index}
-        />
-        <View tw="h-4" />
-      </>
-    );
-  }, [
-    description,
-    detailData?.data.item?.multiple_owners_list,
-    edition,
-    index,
-    isCreatorDrop,
-    nft,
-    routes,
-  ]);
+          )}
+          <View tw="h-4" />
+        </>
+      );
+    },
+    [
+      description,
+      detailData?.data.item?.multiple_owners_list,
+      edition,
+      index,
+      isCreatorDrop,
+      nft,
+      routes,
+    ]
+  );
 
   return (
     <View
-      tw="h-full w-full flex-row overflow-hidden border-l border-gray-200 dark:border-gray-800"
+      tw="h-[100svh] w-full overflow-hidden border-l border-gray-200 dark:border-gray-800 lg:flex-row"
       style={{
-        height: itemHeight,
         paddingTop: headerHeight,
       }}
     >
@@ -322,7 +316,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </Suspense>
           </View>
         </View>
-        <View tw="items-center justify-center px-4 xl:px-20 xl:pb-20">
+        <View tw="items-center justify-center px-4 lg:px-20 lg:pb-20">
           <View
             style={{
               height: mediaHeight,
@@ -350,10 +344,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           </View>
         </View>
         {/* Control Swiper */}
-        {swiper && (
+        {activeIndex !== null ? (
           <View
             tw={[
-              "absolute right-4 top-1/2 -mt-8 -translate-y-1/2 transform",
+              "absolute right-2 top-1/2 -mt-8 -translate-y-1/2 transform 2xl:right-4",
               showFullScreen ? "hidden" : "flex",
             ]}
           >
@@ -366,7 +360,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 disabled={disablePrevButton}
                 style={{ opacity: disablePrevButton ? 0.4 : 1 }}
                 onPress={() => {
-                  swiper.slideTo(Math.max(activeIndex - 1, 0));
+                  slideToPrev?.();
                 }}
               >
                 <ChevronUp width={24} height={24} />
@@ -381,24 +375,25 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 disabled={disableNextButton}
                 style={{ opacity: disableNextButton ? 0.4 : 1 }}
                 onPress={() => {
-                  swiper.slideTo(
-                    Math.min(activeIndex + 1, swiper.snapGrid.length)
-                  );
+                  slideToNext?.();
                 }}
               >
                 <ChevronDown width={24} height={24} />
               </Button>
             </View>
           </View>
-        )}
+        ) : null}
 
         <View tw="absolute bottom-10 left-4">
           <ContentTypeTooltip edition={edition} />
         </View>
       </View>
+      <View tw="bg-white dark:bg-black lg:hidden">
+        {ListHeaderComponent({ hideTabs: true })}
+      </View>
 
       <View
-        tw="swiper-no-swiping bg-white dark:bg-gray-900"
+        tw="swiper-no-swiping hidden bg-white dark:bg-gray-900 lg:flex"
         style={{
           width: NFT_DETAIL_WIDTH,
         }}

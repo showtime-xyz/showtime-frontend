@@ -94,6 +94,11 @@ export type Channel = {
   owner: ChannelProfile;
 };
 
+export type ChannelById = {
+  viewer_has_unlocked_messages: boolean;
+  latest_paid_nft_slug?: string;
+} & Channel;
+
 export type ChannelSetting = {
   muted: boolean;
 };

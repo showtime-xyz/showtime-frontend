@@ -12,6 +12,28 @@ function delay(ms: number = 2000) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+export const StarDropBadge = () => {
+  return (
+    <View tw="rounded-md bg-[#CE8903] px-1 py-1">
+      <View tw="flex-row items-center justify-center">
+        <View tw="mr-1">
+          <Showtime
+            width={10}
+            height={10}
+            color={"white"}
+            stroke={"white"}
+            fill={"white"}
+          />
+        </View>
+
+        <Text tw="text-xs font-medium text-white" style={{ lineHeight: 14 }}>
+          Star drop
+        </Text>
+      </View>
+    </View>
+  );
+};
+
 export const GatedMessage = memo(() => {
   const [loading, setIsLoading] = useState(false);
 
@@ -30,7 +52,7 @@ export const GatedMessage = memo(() => {
   }, [loading]);
 
   return (
-    <View tw="mx-2 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
+    <View tw="mx-3 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
       <BorderlessButton
         onPress={unlockMessage}
         activeOpacity={0.7}
@@ -59,9 +81,9 @@ export const GatedMessage = memo(() => {
             "#F5E794",
             "#F5E794",
             "#F5E794",
-            "#FFD24D",
             "#E6A130",
             "#FFE956",
+            "#FFEC92",
             "#FFEC92",
             "#FED749",
             "#FDC93F",
@@ -77,24 +99,12 @@ export const GatedMessage = memo(() => {
             "#F5E794",
           ]}
         />
-        <View tw="absolute left-3 top-3 rounded-md bg-[#CE8903] px-1 py-1">
-          <View tw="flex-row items-center justify-center">
-            <View tw="mr-1">
-              <Showtime
-                width={10}
-                height={10}
-                color={"white"}
-                stroke={"white"}
-                fill={"white"}
-              />
-            </View>
-
-            <Text tw="text-xs font-medium text-white">Star drop</Text>
-          </View>
+        <View tw="absolute left-3 top-3">
+          <StarDropBadge />
         </View>
         <View tw="flex-row items-center justify-center">
           {loading ? (
-            <Spinner />
+            <Spinner secondaryColor="white" />
           ) : (
             <>
               <View tw="mr-2">

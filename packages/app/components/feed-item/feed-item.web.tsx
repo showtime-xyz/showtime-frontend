@@ -87,19 +87,13 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
   }
 
   return (
-    <View tw="bg-black">
+    <View tw="bg-black" style={{ marginBottom: -bottomHeight }}>
       {nft?.mime_type?.startsWith("video") ? (
         <View tw="absolute left-1/2 top-2 z-50 -translate-x-1/2">
           <MuteButton variant="mobile-web" />
         </View>
       ) : null}
-      <View
-        tw="max-h-[100svh] min-h-[100dvh] w-full"
-        style={{
-          height: itemHeight,
-          overflow: "hidden",
-        }}
-      >
+      <View tw="h-[100svh] w-full overflow-hidden">
         <View
           tw="animate-fade-in-500"
           style={{

@@ -117,7 +117,10 @@ export const Trending = () => {
             drawDistance={500}
             getItemType={getItemType}
             style={{
-              height: screenHeight,
+              height: Platform.select({
+                web: undefined,
+                default: screenHeight,
+              }),
             }}
             contentContainerStyle={{
               paddingHorizontal: 16,
