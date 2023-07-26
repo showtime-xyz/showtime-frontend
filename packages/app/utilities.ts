@@ -108,9 +108,13 @@ export function formatNumber(number: number) {
 }
 export function formatToUSNumber(number: number) {
   if (number >= 1000000) {
-    return `${(number / 1000000).toFixed(1)}m`;
-  } else if (number >= 10000) {
-    return `${(number / 1000).toFixed(1)}k`;
+    return number % 1000000 === 0
+      ? `${Math.round(number / 1000000)}m`
+      : `${Math.round(number / 100000) / 10}m`;
+  } else if (number >= 1000) {
+    return number % 1000 === 0
+      ? `${Math.round(number / 1000)}k`
+      : `${Math.round(number / 100) / 10}k`;
   } else {
     const str = number.toString();
     const reg =

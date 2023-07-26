@@ -13,6 +13,7 @@ export type ChannelLatestMessage = {
   created_at: string;
   updated_at: string;
   profile: ChannelProfile;
+  is_payment_gated?: boolean;
   sent_by: {
     id: number;
     admin: boolean;
@@ -92,6 +93,11 @@ export type Channel = {
   latest_message_updated_at: string | null;
   owner: ChannelProfile;
 };
+
+export type ChannelById = {
+  viewer_has_unlocked_messages: boolean;
+  latest_paid_nft_slug?: string;
+} & Channel;
 
 export type ChannelSetting = {
   muted: boolean;
