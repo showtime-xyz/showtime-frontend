@@ -81,7 +81,6 @@ const CheckoutForm = ({
   const stripe = useStripe();
   const elements = useElements();
   const isDark = useIsDarkMode();
-  const redirectToChannelUnlocked = useRedirectToChannelUnlocked();
 
   const [setAsDefaultPaymentMethod, setSetAsDefaultPaymentMethod] =
     useState(true);
@@ -92,7 +91,6 @@ const CheckoutForm = ({
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -101,13 +99,14 @@ const CheckoutForm = ({
       return;
     }
 
-    setIsLoading(true);
     // Trigger form validation and wallet collection
     const { error: submitError } = await elements.submit();
     if (submitError) {
       Logger.error("Stripe payment failure ", submitError);
       return;
     }
+
+    setIsLoading(true);
 
     const fetch = new Promise((resolve, reject) => {
       const stripeFetch = stripe

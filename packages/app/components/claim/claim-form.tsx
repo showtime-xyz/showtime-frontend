@@ -163,7 +163,7 @@ export const ClaimForm = ({
     if (edition.gating_type === "location" || edition.gating_type === "multi") {
       getLocation();
     }
-  }, [edition.gating_type, getLocation]);
+  }, [edition.gating_type, getLocation, router]);
   const closeModal = () => {
     router.pop();
   };

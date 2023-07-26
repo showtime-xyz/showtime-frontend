@@ -115,15 +115,12 @@ async function fetchClaimPaymentIntent({
   }
 }
 
-export const useStripeAccountId = (
+export const fetchStripeAccountId = async (
   profileId: string | number | null | undefined
 ) => {
-  const queryState = useSWR<{ stripe_account_id: string }>(
-    profileId ? `/v1/payments/nft/stripe-account/${profileId}` : null,
-    fetcher
-  );
+  const res = await fetcher(`/v1/payments/nft/stripe-account/${profileId}`);
 
-  return queryState;
+  return res;
 };
 
 export const ClaimPaidNFTButton = ({
@@ -140,28 +137,17 @@ export const ClaimPaidNFTButton = ({
   profileId?: string | number | null | undefined;
 }) => {
   const router = useRouter();
-  // const {
-  //   paymentStatus,
-  //   confirmCardPaymentStatus,
-  //   message: paymentStatusMessage,
-  // } = useConfirmPayment();
-  const [selectDefault, setSelectDefault] = useState(true);
-  const { data: stripeAccount } = useStripeAccountId(profileId);
-  console.log(stripeAccount);
 
-  const paymentMethods = usePaymentsManage();
-  const defaultPaymentMethod = useMemo(
-    () => paymentMethods.data?.find((method) => method.is_default),
-    [paymentMethods.data]
-  );
-  const onHandlePayment = async (e: any) => {
+  const onHandlePayment = async () => {
     if (Platform.OS !== "web") {
       toast("This drop is only available on web");
+      return;
     }
     const res = await fetchClaimPaymentIntent({
       editionId,
       useDefaultPaymentMethod: false,
     });
+    const stripeAccount = await fetchStripeAccountId(profileId);
 
     if (Platform.OS === "web") {
       const as = `/checkout-paid-nft`;

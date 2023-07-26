@@ -97,6 +97,7 @@ export const UnlockedChannelModal = () => {
 const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
   const [isPaid] = useParam("isPaid");
   const modalScreenContext = useModalScreenContext();
+  const { top } = useSafeAreaInsets();
   const { state } = useContext(ClaimContext);
   const linearOpaticy = useSharedValue(0);
   const { data: nft } = useNFTDetailByTokenId({
@@ -121,11 +122,29 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
     () => (nft ? `${getWebBaseURL()}${getNFTSlug(nft?.data.item)}` : ""),
     [nft]
   );
-  const closeModal = useCallback(() => {
-    setShowCongratsScreen(true);
-    router.query = {};
+
+  const removeQueryParam = useCallback(() => {
+    router.replace({ pathname: router.pathname }, undefined, {
+      shallow: true,
+    });
   }, [router]);
-  console.log(state);
+
+  const closeModal = useCallback(() => {
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: {
+          contractAddress: edition?.creator_airdrop_edition.contract_address,
+          unlockedChannelModal: true,
+        },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
+    setShowCongratsScreen(true);
+  }, [edition?.creator_airdrop_edition.contract_address, router]);
 
   const initPaidNFT = useCallback(async () => {
     if (isPaid) {
@@ -254,21 +273,24 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
       router.push(`/channels/${channelId}`);
     }
   }, [router, channelId]);
+
   if (state.status === "error") {
     return (
-      <View tw="web:pb-8 min-h-[200px] flex-1 items-center justify-center">
-        <EmptyPlaceholder
-          title={state.error}
-          text={"Please retry it later!"}
-          tw="mb-4"
-        />
-        <Button onPress={() => router.pop()}>Got it!</Button>
+      <View tw="min-h-[200px] flex-1 items-center justify-center px-8">
+        <Text
+          tw={`text-center text-lg font-extrabold leading-6 text-gray-900 dark:text-gray-100`}
+        >
+          {state.error}
+        </Text>
+        <Button tw="mt-4" onPress={removeQueryParam}>
+          Got it.
+        </Button>
       </View>
     );
   }
   if (!showCongratsScreen) {
     return (
-      <View tw="web:pb-8 min-h-[200px] flex-1 items-center justify-center">
+      <View tw="min-h-[200px] flex-1 items-center justify-center">
         <Spinner />
       </View>
     );
@@ -397,7 +419,12 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
           </Button>
         </View>
       </SafeAreaView>
-      <View tw="absolute left-4 top-12 z-50">
+      <View
+        tw="absolute left-4 z-50"
+        style={{
+          top: top + 12,
+        }}
+      >
         <CloseButton color={colors.gray[900]} onPress={viewChannel} />
       </View>
     </View>
