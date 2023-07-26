@@ -1,4 +1,11 @@
-import { useCallback, useRef, useMemo, useState, useContext } from "react";
+import {
+  useCallback,
+  useRef,
+  useMemo,
+  useState,
+  useContext,
+  useEffect,
+} from "react";
 import { Linking, Platform, StyleSheet } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
@@ -48,6 +55,7 @@ import { toast } from "design-system/toast";
 
 import { CloseButton } from "../close-button";
 import { useChannelById } from "./hooks/use-channel-detail";
+import { useJoinChannel } from "./hooks/use-join-channel";
 
 const { useParam } = createParam<{
   contractAddress: string;
@@ -88,6 +96,8 @@ export const UnlockedChannelModal = () => {
 
 const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
   const [isPaid] = useParam("isPaid");
+  const joinChannel = useJoinChannel();
+
   const modalScreenContext = useModalScreenContext();
   const { top } = useSafeAreaInsets();
   const { state } = useContext(ClaimContext);
@@ -120,8 +130,7 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
       shallow: true,
     });
   }, [router]);
-
-  const closeModal = useCallback(() => {
+  const closeModal = useCallback(async () => {
     // router.replace(
     //   {
     //     pathname: router.pathname,
@@ -135,18 +144,23 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
     //     shallow: true,
     //   }
     // );
+    if (channelId) {
+      await joinChannel.trigger({ channelId: channelId });
+    }
+
     setShowCongratsScreen(true);
-  }, []);
+  }, [channelId, joinChannel]);
 
   const initPaidNFT = useCallback(async () => {
-    if (isPaid) {
+    if (isPaid && channelId) {
       await claimNFT({ closeModal });
     }
-  }, [claimNFT, closeModal, isPaid]);
+  }, [channelId, claimNFT, closeModal, isPaid]);
 
-  useEffectOnce(() => {
+  useEffect(() => {
     initPaidNFT();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channelId]);
 
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
