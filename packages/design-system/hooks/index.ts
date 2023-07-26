@@ -14,6 +14,8 @@ import { useSharedValue } from "react-native-reanimated";
 import { useColorScheme } from "@showtime-xyz/universal.color-scheme";
 import { getScrollParent } from "@showtime-xyz/universal.utils";
 
+export { useLockHtmlScroll } from "./use-lock-html-scroll";
+
 export const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -239,38 +241,6 @@ export function useWebClientRect<T>(ele: React.RefObject<T>) {
     typeof clientRect,
     typeof updateClientRect
   ];
-}
-
-export function useLockBodyScroll(isLocked = true) {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useIsomorphicLayoutEffect(() => {
-    if (typeof window !== "undefined" && window.document) {
-      setIsMounted(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      window.document &&
-      isMounted &&
-      isLocked
-    ) {
-      document.body.classList.add("no-scroll");
-    }
-
-    return () => {
-      if (
-        typeof window !== "undefined" &&
-        window.document &&
-        isMounted &&
-        isLocked
-      ) {
-        document.body.classList.remove("no-scroll");
-      }
-    };
-  }, [isMounted, isLocked]);
 }
 
 export function useEffectOnce(effect: EffectCallback) {

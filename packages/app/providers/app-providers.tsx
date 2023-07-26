@@ -1,4 +1,3 @@
-import { GrowthBookProvider } from "@growthbook/growthbook-react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { AlertProvider } from "@showtime-xyz/universal.alert";
@@ -12,7 +11,6 @@ import {
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
-import { growthbook } from "app/lib/growthbook";
 import { KeyboardProvider } from "app/lib/keyboard-controller";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
@@ -46,17 +44,15 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                 <UserProvider>
                                   <BottomSheetModalProvider>
                                     {/* @ts-ignore */}
-                                    <GrowthBookProvider growthbook={growthbook}>
-                                      <FeedProvider>
-                                        <MuteProvider>
-                                          <ClaimProvider>
-                                            <DropProvider>
-                                              {children}
-                                            </DropProvider>
-                                          </ClaimProvider>
-                                        </MuteProvider>
-                                      </FeedProvider>
-                                    </GrowthBookProvider>
+                                    <FeedProvider>
+                                      <MuteProvider>
+                                        <ClaimProvider>
+                                          <DropProvider>
+                                            {children}
+                                          </DropProvider>
+                                        </ClaimProvider>
+                                      </MuteProvider>
+                                    </FeedProvider>
                                   </BottomSheetModalProvider>
                                 </UserProvider>
                               </AuthProvider>

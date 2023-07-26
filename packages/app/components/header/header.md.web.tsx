@@ -60,6 +60,7 @@ import {
   DropdownMenuSubContent,
 } from "design-system/dropdown-menu";
 
+import { useChannelsUnreadMessages } from "../creator-channels/hooks/use-channels-unread-messages";
 import { withColorScheme } from "../memo-with-theme";
 
 const NotificationsInHeader = () => {
@@ -221,6 +222,21 @@ const MenuItem = ({
     </Link>
   );
 };
+
+const ChannelsUnreadMessages = () => {
+  const { data } = useChannelsUnreadMessages();
+
+  if (!data || data.unread <= 0) return null;
+
+  return (
+    <View tw="absolute right-2 items-center justify-center rounded-full bg-indigo-500 px-2.5 py-1.5 text-center">
+      <Text tw="text-center text-sm text-white" style={{ lineHeight: 12 }}>
+        {data.unread > 99 ? "99+" : data.unread}
+      </Text>
+    </View>
+  );
+};
+
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
   const redirectToCreateDrop = useRedirectToCreateDrop();
@@ -319,13 +335,20 @@ export const HeaderMd = withColorScheme(() => {
               <MenuItem
                 focused={item.focused}
                 href={item.pathname}
-                icon={() =>
-                  item.icon({
-                    color: iconColor,
-                    width: 24,
-                    height: 24,
-                  })
-                }
+                icon={() => {
+                  return (
+                    <>
+                      {item.icon({
+                        color: iconColor,
+                        width: 24,
+                        height: 24,
+                      })}
+                      {item.key === "Channels" ? (
+                        <ChannelsUnreadMessages />
+                      ) : null}
+                    </>
+                  );
+                }}
                 title={item.title}
                 key={item.pathname}
               />

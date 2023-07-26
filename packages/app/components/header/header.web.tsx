@@ -1,10 +1,5 @@
 import { useWindowDimensions } from "react-native";
 
-import { useRouter } from "@showtime-xyz/universal.router";
-
-import { HIDE_MOBILE_WEB_HEADER_SCREENS } from "app/lib/constants";
-import { useNavigationElements } from "app/navigation/use-navigation-elements";
-
 import { breakpoints } from "design-system/theme";
 
 import { withColorScheme } from "../memo-with-theme";

@@ -85,7 +85,7 @@ export const ContentType = ({ edition, ...rest }: ContentTypeTooltipProps) => {
     );
   }
 
-  if (!edition?.raffles) {
+  if (edition?.raffles) {
     return (
       <TextTooltip
         side="bottom"
