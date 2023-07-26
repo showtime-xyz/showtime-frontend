@@ -216,7 +216,7 @@ async function fetchPaymentIntent(
     try {
       const res = await axios({
         method: "POST",
-        url: "/v1/payments/start",
+        url: "/v1/payments/drops/start",
         data: {
           payment_plan: arg.dropPlan.name,
           use_default_payment_method: arg.useDefaultPaymentMethod,
@@ -229,7 +229,7 @@ async function fetchPaymentIntent(
       if (axiosError?.response?.data?.error?.code === 400) {
         const res = await axios({
           method: "POST",
-          url: "/v1/payments/resume",
+          url: "/v1/payments/drops/resume",
         });
         return res;
       } else {
