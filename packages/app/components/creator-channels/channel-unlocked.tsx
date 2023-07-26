@@ -122,21 +122,21 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
   }, [router]);
 
   const closeModal = useCallback(() => {
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          contractAddress: edition?.creator_airdrop_edition.contract_address,
-          unlockedChannelModal: true,
-        },
-      },
-      undefined,
-      {
-        shallow: true,
-      }
-    );
+    // router.replace(
+    //   {
+    //     pathname: router.pathname,
+    //     query: {
+    //       contractAddress: edition?.creator_airdrop_edition.contract_address,
+    //       unlockedChannelModal: true,
+    //     },
+    //   },
+    //   router.asPath,
+    //   {
+    //     shallow: true,
+    //   }
+    // );
     setShowCongratsScreen(true);
-  }, [edition?.creator_airdrop_edition.contract_address, router]);
+  }, []);
 
   const initPaidNFT = useCallback(async () => {
     if (isPaid) {
