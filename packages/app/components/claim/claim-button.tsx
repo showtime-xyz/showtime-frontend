@@ -12,6 +12,7 @@ import {
   Hourglass,
   PreAddAppleMusic,
 } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -27,6 +28,9 @@ import { Analytics, EVENTS } from "app/lib/analytics";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
+
+import { ClaimType } from "./claim-form";
+import { GoldLinearGradient } from "./gold-linear-gradient";
 
 type ClaimButtonProps = ButtonProps & {
   edition: CreatorEditionResponse;
@@ -86,6 +90,8 @@ export const ClaimButton = ({
     user?.data?.profile.profile_id ===
     edition.creator_airdrop_edition?.owner_profile_id;
   const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
+  const isPaidGated = edition?.gating_type === "paid_nft";
+  const price = edition?.price ? ` - $${edition?.price}` : "";
 
   const raffleConcludedAt = useMemo(() => {
     if (!isSelf || !isRaffleDrop) return null;
@@ -123,7 +129,7 @@ export const ClaimButton = ({
     redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
   };
 
-  const handleCollectPress = (type: "free" | "appleMusic" | "spotify") => {
+  const handleCollectPress = (type: ClaimType) => {
     if (
       claimStates.status === "loading" &&
       claimStates.signaturePrompt === false
@@ -380,11 +386,43 @@ export const ClaimButton = ({
   return (
     <Button
       {...buttonProps}
+      style={{
+        backgroundColor: isPaidGated ? "transparent" : undefined,
+      }}
       onPress={() => {
-        handleCollectPress("free");
+        handleCollectPress(isPaidGated ? "paid" : "free");
       }}
     >
-      Collect
+      {isPaidGated ? (
+        <>
+          <GoldLinearGradient />
+          <View tw="w-full flex-row items-center justify-center">
+            <View>
+              <Image
+                source={{
+                  uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
+                }}
+                width={buttonProps.size === "regular" ? 24 : 20}
+                height={buttonProps.size === "regular" ? 24 : 20}
+                style={{
+                  width: buttonProps.size === "regular" ? 24 : 20,
+                  height: buttonProps.size === "regular" ? 24 : 20,
+                }}
+              />
+            </View>
+            <Text
+              tw={[
+                "ml-2 font-semibold text-black",
+                buttonProps.size === "regular" ? "text-base" : "text-sm",
+              ]}
+            >
+              Collect Star Drop{price}
+            </Text>
+          </View>
+        </>
+      ) : (
+        "Collect"
+      )}
     </Button>
   );
 };

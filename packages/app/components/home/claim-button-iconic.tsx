@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime, Check2 } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -58,7 +59,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     );
   }, [router, nft]);
   const handleCollectPress = useCallback(
-    (type: "free" | "appleMusic" | "spotify") => {
+    (type: ClaimType) => {
       if (
         claimStates.status === "loading" &&
         claimStates.signaturePrompt === false
@@ -98,6 +99,8 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       edition?.gating_type === "spotify_presave"
     ) {
       type = "spotify";
+    } else if (edition?.gating_type === "paid_nft") {
+      type = "paid";
     } else {
       type =
         edition?.creator_spotify_id || edition?.spotify_track_url
@@ -113,7 +116,9 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     edition?.spotify_track_url,
     handleCollectPress,
   ]);
-
+  const isPaidGated = edition?.gating_type === "paid_nft";
+  const price =
+    edition?.gating_type === "paid_nft" && edition?.price ? edition?.price : 0;
   if (loading) {
     return (
       <View tw="mb-4">
@@ -228,18 +233,46 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
           </Text>
         </>
       }
-      buttonColor={isDark ? "#fff" : colors.gray[900]}
+      buttonColor={isPaidGated ? undefined : isDark ? "#fff" : colors.gray[900]}
       {...rest}
     >
-      {/* <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
-        <Image
-          source={{
-            uri: "https://media.showtime.xyz/assets/showtime-abstract.png",
-          }}
-          style={{ height: "100%", width: "100%" }}
-        />
-      </View> */}
-      <Showtime height={25} width={25} color={isDark ? "#000" : "#fff"} />
+      {isPaidGated ? (
+        <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
+          <Image
+            source={require("./gold-button-bg.svg")}
+            style={{ height: "100%", width: "100%" }}
+          />
+        </View>
+      ) : null}
+      <Showtime
+        height={25}
+        width={25}
+        color={isPaidGated ? "#000" : isDark ? "#000" : "#fff"}
+      />
+      {isPaidGated ? (
+        price > 0 ? (
+          <View
+            tw={[
+              "absolute -right-1 -top-1.5 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full",
+              price?.toString()?.length > 2 ? "-right-2.5" : "-right-1",
+            ]}
+          >
+            <View tw="-z-1 absolute h-10 w-20">
+              <Image
+                source={require("./gold-button-bg.svg")}
+                style={{ height: "100%", width: "100%" }}
+              />
+            </View>
+            <Text tw="text-xs font-semibold text-black">${price}</Text>
+          </View>
+        ) : (
+          <View tw="absolute -right-1 -top-1 h-[22px] min-w-[22px] items-center justify-center rounded-full bg-white dark:bg-black">
+            <Text tw="text-xs font-semibold text-black dark:text-white">
+              ${price}
+            </Text>
+          </View>
+        )
+      ) : null}
     </FeedSocialButton>
   );
 }

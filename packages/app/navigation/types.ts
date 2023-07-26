@@ -116,6 +116,7 @@ type RootStackNavigatorParams = {
   spotifyAuth: undefined;
   claimLimitExplanation: undefined;
   channelsSettings: undefined;
+  channelUnlocked: undefined;
   likers: undefined;
   appleMusicAuthNativeWebView: undefined;
   report: {

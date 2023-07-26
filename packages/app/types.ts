@@ -296,4 +296,5 @@ export type GatingType =
   | "multi"
   | "spotify_presave"
   // This is for compatibility with the old spotify_presave
-  | "music_presave";
+  | "music_presave"
+  | "paid_nft";

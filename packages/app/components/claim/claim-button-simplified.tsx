@@ -6,6 +6,7 @@ import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
@@ -14,6 +15,8 @@ import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { toast } from "design-system/toast";
 
 import { ClaimStatus, getClaimStatus } from "./claim-button";
+import { ClaimType } from "./claim-form";
+import { GoldLinearGradient } from "./gold-linear-gradient";
 
 type ClaimButtonProps = {
   edition?: CreatorEditionResponse;
@@ -31,7 +34,7 @@ export const ClaimButtonSimplified = memo(
       dispatch,
       contractAddress,
     } = useContext(ClaimContext);
-
+    const isPaidGated = edition?.gating_type === "paid_nft";
     const isProgress = useMemo(() => {
       return (
         claimStates.status === "loading" &&
@@ -46,7 +49,7 @@ export const ClaimButtonSimplified = memo(
     ]);
 
     const handleCollectPress = useCallback(
-      (type: "free" | "appleMusic" | "spotify") => {
+      (type: ClaimType) => {
         if (
           claimStates.status === "loading" &&
           claimStates.signaturePrompt === false
@@ -86,9 +89,11 @@ export const ClaimButtonSimplified = memo(
       if (status === ClaimStatus.Claimed) {
         return colors.green[500];
       }
-
+      if (isPaidGated) {
+        return "transparent";
+      }
       return isDark ? colors.white : colors.gray[900];
-    }, [isDark, status, isProgress]);
+    }, [isProgress, status, isPaidGated, isDark]);
 
     const buttonTextColor = useMemo(() => {
       if (isProgress) {
@@ -103,8 +108,11 @@ export const ClaimButtonSimplified = memo(
       if (status === ClaimStatus.Claimed) {
         return colors.white;
       }
+      if (isPaidGated) {
+        return colors.gray[900];
+      }
       return isDark ? colors.gray[900] : colors.white;
-    }, [isDark, isProgress, status]);
+    }, [isDark, isPaidGated, isProgress, status]);
 
     const buttonText = useMemo(() => {
       if (isProgress) {
@@ -132,7 +140,7 @@ export const ClaimButtonSimplified = memo(
     );
 
     const onPress = useCallback(() => {
-      let type: "free" | "appleMusic" | "spotify" = "free";
+      let type: ClaimType = "free";
       if (edition?.gating_type === "spotify_save") {
         type = "spotify";
       } else if (edition?.gating_type === "multi_provider_music_presave") {
@@ -166,6 +174,7 @@ export const ClaimButtonSimplified = memo(
         }}
         {...rest}
       >
+        {isPaidGated ? <GoldLinearGradient /> : null}
         <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
           {buttonText}
         </Text>

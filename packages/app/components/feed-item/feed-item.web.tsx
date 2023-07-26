@@ -129,11 +129,6 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
             detail={detailData?.data?.item}
           />
         </View>
-        <EngagementIcons
-          nft={nft}
-          bottomPadding={bottomHeight}
-          edition={edition}
-        />
 
         {isAuthenticated && (
           <View

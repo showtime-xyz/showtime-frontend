@@ -12,6 +12,7 @@ import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
 import { BlockedListScreen } from "app/screens/blocked-list";
+import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
@@ -116,6 +117,14 @@ export function RootStackNavigator() {
           }}
         />
         <Stack.Screen name="channelsMessage" component={Messages} />
+        <Stack.Screen
+          name="channelUnlocked"
+          component={UnlockedChannelScreen}
+          options={{
+            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
+            animationDuration: 200,
+          }}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}

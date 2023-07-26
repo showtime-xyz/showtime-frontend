@@ -38,6 +38,8 @@ export type CreatorEditionResponse = {
   raffles?: Raffle[];
   is_editable?: boolean;
   is_onchain?: boolean;
+  price?: number;
+  currency?: string;
 };
 
 export function useCreatorCollectionDetail(editionAddress?: string) {
