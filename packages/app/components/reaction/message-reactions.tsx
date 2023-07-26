@@ -20,13 +20,11 @@ export const MessageReactions = ({
   messageId,
   reactionGroup,
   channelReactions,
-  isStarDrop,
 }: {
   channelId: string;
   reactionGroup: ReactionGroup[];
   messageId: number;
   channelReactions: ChannelReactionResponse;
-  isStarDrop?: boolean;
 }) => {
   const router = useRouter();
 
@@ -78,18 +76,12 @@ export const MessageReactions = ({
                 tw={[
                   "min-h-[25px] items-center justify-center px-2",
                   userReaction.self_reacted
-                    ? isStarDrop
-                      ? "rounded-lg bg-gray-50 dark:bg-gray-50"
-                      : "rounded-lg bg-gray-100 dark:bg-gray-900"
+                    ? "rounded-lg bg-gray-100 dark:bg-gray-900"
                     : "",
                 ]}
               >
                 <Text
-                  tw={[
-                    isStarDrop
-                      ? "text-black"
-                      : "text-gray-700 dark:text-gray-200",
-                  ]}
+                  tw="text-gray-700 dark:text-gray-200"
                   style={{
                     fontSize: 12,
                     lineHeight: Platform.select({
