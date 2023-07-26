@@ -60,31 +60,10 @@ export const Payout = ({ index = 0 }: { index: number }) => {
           </Button>
         ) : onboardinStatus.status === "onboarded" ? (
           <View>
-            <Pressable
-              onPress={async () => {
-                const value = await stripeAccountLink.trigger({
-                  refresh_url: `${websiteUrl}/settings?tab=${index}&stripeRefresh=true`,
-                  return_url: `${websiteUrl}/settings?tab=${index}&stripeReturn=true`,
-                });
-                if (Platform.OS === "web") {
-                  window.location.href = value.url;
-                } else {
-                  Linking.openURL(value.url);
-                }
-              }}
-            >
-              <View tw="flex-row items-center" style={{ columnGap: 4 }}>
-                <Image
-                  source={require("app/components/drop/drop-free/stripe-logo.png")}
-                  height={20}
-                  width={20}
-                />
-                <Text tw="font-semibold text-[#6672e4]">
-                  View payout settings
-                </Text>
-                <LinkOut height={16} width={16} color="#6672e4" />
-              </View>
-            </Pressable>
+            <PayoutSettings
+              refreshUrl={`${websiteUrl}/settings?tab=${index}&stripeRefresh=true`}
+              returnUrl={`${websiteUrl}/settings?tab=${index}&stripeReturn=true`}
+            />
             <Text tw="pt-4 text-sm text-gray-700 dark:text-gray-300">
               For each Star Drop sale Showtime takes 10% while Stripe payments
               processing takes 30¢ + 2.9% per sale.
@@ -153,5 +132,41 @@ export const Payout = ({ index = 0 }: { index: number }) => {
         </View>
       </View>
     </SettingScrollComponent>
+  );
+};
+
+export const PayoutSettings = ({
+  refreshUrl,
+  returnUrl,
+}: {
+  returnUrl: string;
+  refreshUrl: string;
+}) => {
+  const stripeAccountLink = useStripeAccountLink();
+
+  return (
+    <Pressable
+      onPress={async () => {
+        const value = await stripeAccountLink.trigger({
+          refresh_url: refreshUrl,
+          return_url: returnUrl,
+        });
+        if (Platform.OS === "web") {
+          window.location.href = value.url;
+        } else {
+          Linking.openURL(value.url);
+        }
+      }}
+    >
+      <View tw="flex-row items-center" style={{ columnGap: 4 }}>
+        <Image
+          source={require("app/components/drop/drop-free/stripe-logo.png")}
+          height={20}
+          width={20}
+        />
+        <Text tw="font-semibold text-[#6672e4]">View payout settings</Text>
+        <LinkOut height={16} width={16} color="#6672e4" />
+      </View>
+    </Pressable>
   );
 };

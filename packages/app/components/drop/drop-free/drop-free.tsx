@@ -42,6 +42,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Preview } from "app/components/preview";
+import { PayoutSettings } from "app/components/settings/tabs/payout";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useWallet } from "app/hooks/use-wallet";
@@ -71,6 +72,12 @@ type Query = {
 };
 
 const { useParam } = createParam<Query>();
+
+const websiteUrl = `${
+  __DEV__
+    ? "http://localhost:3000"
+    : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
+}`;
 
 export const DropFree = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
@@ -218,8 +225,13 @@ export const DropFree = () => {
             <Text tw="font-bold">
               You will be notified when you’re approved.{" "}
             </Text>
-            Usually 1-2 hours.
+            Usually 1-2 hours. In the meanwhile if you want to change your
+            stripe details. Press below
           </Text>
+          <PayoutSettings
+            refreshUrl={`${websiteUrl}/drop/free?stripeRefresh=true`}
+            returnUrl={`${websiteUrl}/drop/free?stripeReturn=true`}
+          />
           <Button
             tw="w-full"
             onPress={() => {
@@ -1283,11 +1295,6 @@ const CompleteStripeFlow = () => {
   });
 
   const onboardingCreator = useOnBoardCreator();
-  const websiteUrl = `${
-    __DEV__
-      ? "http://localhost:3000"
-      : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
-  }`;
 
   const onSubmit = async (data: any) => {
     const res = await onboardingCreator.trigger({
