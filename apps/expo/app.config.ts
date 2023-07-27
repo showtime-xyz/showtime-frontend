@@ -194,6 +194,7 @@ const expoConfig: ExpoConfig = {
           CADisableMinimumFrameDurationOnPhone: true,
           // let RNS handle status bar management
           UIViewControllerBasedStatusBarAppearance: true,
+          UISupportedInterfaceOrientations: ["UIInterfaceOrientationPortrait"],
           LSApplicationQueriesSchemes: [
             "mailto",
             "instagram",
@@ -240,6 +241,7 @@ const expoConfig: ExpoConfig = {
         config: {
           organization: "showtime-l3",
           project: "showtime-mobile",
+          authToken: process.env.SENTRY_AUTH_TOKEN,
         },
       },
     ],
