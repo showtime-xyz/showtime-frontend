@@ -223,12 +223,16 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             <View tw="h-8 flex-row">
               {isCreatorDrop && edition ? (
                 <>
-                  <ClaimButton tw="flex-1" edition={edition} />
-                  <ClaimedShareButton
-                    tw="ml-3 w-1/4"
-                    edition={edition}
-                    nft={nft}
-                  />
+                  <ClaimButton nft={nft} tw="flex-1" edition={edition} />
+                  <View tw="w-3" />
+                  <Button
+                    tw="flex-1"
+                    onPress={() =>
+                      router.push(`/channels/${nft?.creator_channel_id}`)
+                    }
+                  >
+                    View Channel
+                  </Button>
                 </>
               ) : null}
             </View>
@@ -253,6 +257,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
       index,
       isCreatorDrop,
       nft,
+      router,
       routes,
     ]
   );

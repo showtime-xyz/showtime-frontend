@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
@@ -43,6 +44,7 @@ export const NFTDetails = ({
   bottomPadding,
   tw = "",
 }: NFTDetailsProps) => {
+  const router = useRouter();
   const description = useMemo(
     () =>
       nft?.token_description
@@ -116,6 +118,7 @@ export const NFTDetails = ({
               <ClaimButton
                 tw="flex-1"
                 edition={edition}
+                nft={nft}
                 size="regular"
                 theme="dark"
               />
@@ -125,7 +128,7 @@ export const NFTDetails = ({
                   <Button
                     size="regular"
                     onPress={() => {
-                      toast("Coming soon");
+                      router.push(`/channels/${nft?.creator_channel_id}`);
                     }}
                     tw="flex-1"
                     theme="dark"

@@ -223,7 +223,7 @@ export const CssFeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             <View tw="h-8 flex-row">
               {isCreatorDrop && edition ? (
                 <>
-                  <ClaimButton tw="flex-1" edition={edition} />
+                  <ClaimButton tw="flex-1" nft={nft} edition={edition} />
                   <ClaimedShareButton
                     tw="ml-3 w-1/4"
                     edition={edition}

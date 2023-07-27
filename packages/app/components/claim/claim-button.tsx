@@ -27,6 +27,7 @@ import { useRedirectToStarDropShareScreen } from "app/hooks/use-redirect-to-star
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
+import { NFT } from "app/types";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";
 import { ThreeDotsAnimation } from "design-system/three-dots";
@@ -39,6 +40,7 @@ type ClaimButtonProps = ButtonProps & {
   edition: CreatorEditionResponse;
   tw?: string;
   style?: StyleProp<ViewStyle>;
+  nft: NFT | null | undefined;
 };
 
 export enum ClaimStatus {
@@ -69,6 +71,7 @@ export const ClaimButton = ({
   tw = "",
   style,
   theme,
+  nft,
   ...rest
 }: ClaimButtonProps) => {
   const isDarkMode = useIsDarkMode();
@@ -76,7 +79,6 @@ export const ClaimButton = ({
   const { claimAppleMusicGatedDrop, isMutating: isAppleMusicCollectLoading } =
     useAppleMusicGatedClaim(edition.creator_airdrop_edition);
   const redirectToClaimDrop = useRedirectToClaimDrop();
-  const redirectToStarDropShareScreen = useRedirectToStarDropShareScreen();
   const redirectToRaffleResult = useRedirectToRaffleResult();
   const {
     state: claimStates,
@@ -93,6 +95,7 @@ export const ClaimButton = ({
   const isSelf =
     user?.data?.profile.profile_id ===
     edition.creator_airdrop_edition?.owner_profile_id;
+  const redirectToStarDropShareScreen = useRedirectToStarDropShareScreen(nft);
 
   const price = edition?.price ? ` - $${edition?.price}` : "";
 
@@ -223,11 +226,7 @@ export const ClaimButton = ({
           tw={tw}
           size={size}
           {...rest}
-          onPress={() =>
-            redirectToStarDropShareScreen(
-              edition?.creator_airdrop_edition?.contract_address
-            )
-          }
+          onPress={() => redirectToStarDropShareScreen()}
         >
           <>
             <GoldLinearGradient />

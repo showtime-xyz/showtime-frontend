@@ -37,7 +37,11 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { TwitterButton } from "app/components/social-buttons/twitter-button";
+import {
+  TwitterButton,
+  InstagramButton,
+  CopyLinkButton,
+} from "app/components/social-buttons";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
@@ -112,7 +116,7 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
     address:
       nft?.data.item.creator_username || nft?.data.item.creator_address_nonens,
   });
-  const channelId = userInfo?.data?.profile.channels[0]?.id;
+  const channelId = nft?.data.item.creator_channel_id;
   const { data } = useChannelById(channelId?.toString());
   const [showCongratsScreen, setShowCongratsScreen] = useState(!isPaid);
   const isDark = useIsDarkMode();
@@ -387,24 +391,11 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
         <View tw="w-full px-6" style={{ rowGap: 16 }}>
           <TwitterButton onPress={shareWithTwitterIntent} />
           {Platform.OS !== "web" ? (
-            <Button
-              variant="primary"
-              theme="light"
-              size="regular"
+            <InstagramButton
               onPress={() => shareSingleImage(Social.Instagram)}
-            >
-              <View tw="mr-1">
-                <InstagramColorful width={20} height={20} />
-              </View>
-              Share Instagram
-            </Button>
+            />
           ) : null}
-          <Button theme="dark" size="regular" onPress={onCopyLink}>
-            <View tw="mr-1">
-              <Link color="#000" width={20} height={20} />
-            </View>
-            Copy Link
-          </Button>
+          <CopyLinkButton onPress={onCopyLink} />
           <Button theme="dark" size="regular" onPress={viewChannel}>
             View Channel
           </Button>
