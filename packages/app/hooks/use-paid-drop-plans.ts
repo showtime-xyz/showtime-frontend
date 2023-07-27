@@ -9,12 +9,15 @@ export type DropPlan = {
 };
 
 export const usePaidDropPlans = () => {
-  const state = useSWR<DropPlan[]>("/v1/payments/drops/plans", (url) => {
-    return axios({
-      method: "GET",
-      url,
-    });
-  });
+  const state = useSWR<DropPlan[]>(
+    "/v1/payments/drops/drops/plans",
+    (url: string) => {
+      return axios({
+        method: "GET",
+        url,
+      });
+    }
+  );
 
   return state;
 };
