@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import { Showtime } from "@showtime-xyz/universal.icon";
+import { useRouter } from "@showtime-xyz/universal.router";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -34,22 +35,15 @@ export const StarDropBadge = () => {
   );
 };
 
-export const GatedMessage = memo(() => {
-  const [loading, setIsLoading] = useState(false);
+export const GatedMessage = memo(({ latestNFT }: { latestNFT?: string }) => {
+  const router = useRouter();
 
   const unlockMessage = useCallback(async () => {
-    if (loading) return;
-    try {
-      setIsLoading(true);
-      console.warn("unlock logic not implemented, simulating");
-      await delay();
-      console.warn("success");
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [loading]);
+    if (!latestNFT) return;
+    router.push(latestNFT);
+  }, [latestNFT, router]);
+
+  if (!latestNFT) return null;
 
   return (
     <View tw="mx-3 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
@@ -103,16 +97,10 @@ export const GatedMessage = memo(() => {
           <StarDropBadge />
         </View>
         <View tw="flex-row items-center justify-center">
-          {loading ? (
-            <Spinner secondaryColor="white" />
-          ) : (
-            <>
-              <View tw="mr-2">
-                <Showtime width={16} height={16} fill={"black"} />
-              </View>
-              <Text tw="text-sm font-semibold">Collect to unlock</Text>
-            </>
-          )}
+          <View tw="mr-2">
+            <Showtime width={16} height={16} fill={"black"} />
+          </View>
+          <Text tw="text-sm font-semibold">Collect to unlock</Text>
         </View>
       </BorderlessButton>
     </View>

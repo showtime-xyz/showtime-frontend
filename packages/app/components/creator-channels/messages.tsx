@@ -355,6 +355,12 @@ export const Messages = memo(() => {
 
   const channelDetail = useChannelById(channelId);
   const membersCount = channelDetail.data?.member_count || 0;
+  const latest_paid_nft_slug = channelDetail.data?.latest_paid_nft_slug
+    ? `/@${
+        channelDetail?.data?.owner.username ??
+        channelDetail?.data?.owner.wallet_address
+      }/${channelDetail.data?.latest_paid_nft_slug}`
+    : "";
 
   useIntroducingCreatorChannels();
 
@@ -456,10 +462,11 @@ export const Messages = memo(() => {
           setEditMessage={setEditMessage}
           editMessageIdSharedValue={editMessageIdSharedValue}
           editMessageItemDimension={editMessageItemDimension}
+          latestNFTSlug={latest_paid_nft_slug}
         />
       );
     },
-    [editMessageIdSharedValue, editMessageItemDimension]
+    [editMessageIdSharedValue, editMessageItemDimension, latest_paid_nft_slug]
   );
 
   // TODO: add back to keyboard controller?
@@ -900,7 +907,9 @@ const MessageItem = memo(
     setEditMessage,
     editMessageIdSharedValue,
     editMessageItemDimension,
+    latestNFTSlug,
   }: MessageItemProps & {
+    latestNFTSlug?: string;
     listRef: RefObject<FlashList<any>>;
     editMessageIdSharedValue: Animated.SharedValue<number | undefined>;
     editMessageItemDimension: Animated.SharedValue<{
@@ -973,7 +982,7 @@ const MessageItem = memo(
 
     if (channel_message.is_payment_gated && !channel_message.body) {
       // TODO: determine which props to pass
-      return <GatedMessage />;
+      return <GatedMessage latestNFT={latestNFTSlug} />;
     }
 
     // const isStarDrop = channel_message.is_payment_gated;
