@@ -37,6 +37,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { TwitterButton } from "app/components/social-buttons/twitter-button";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
@@ -384,23 +385,7 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
           </View>
         </View>
         <View tw="w-full px-6" style={{ rowGap: 16 }}>
-          <Button
-            size="regular"
-            onPress={shareWithTwitterIntent}
-            style={{
-              backgroundColor: "#4A99E9",
-            }}
-          >
-            <Twitter color="white" width={20} height={20} />
-            <Text
-              tw="ml-1 text-sm font-semibold"
-              style={{
-                color: "white",
-              }}
-            >
-              Tweet
-            </Text>
-          </Button>
+          <TwitterButton onPress={shareWithTwitterIntent} />
           {Platform.OS !== "web" ? (
             <Button
               variant="primary"

@@ -15,6 +15,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { TwitterButton } from "app/components/social-buttons/twitter-button";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
@@ -103,39 +104,25 @@ export const DropViewShare = memo(function DropViewShare({
       ) : (
         <>
           <BottomSheetModalProvider>
-            <BottomSheetScrollView
-              contentContainerStyle={{
-                paddingBottom: Math.max(bottom, 8) + BUTTON_HEIGHT,
-              }}
-            >
+            <BottomSheetScrollView>
               <DropPreview
                 ctaCopy="View"
                 buttonProps={{ variant: "primary" }}
-                tw="web:mb-5 mt-2"
-                onPressCTA={() => {
-                  if (!nft) return;
-
-                  if (Platform.OS !== "web") {
-                    router.pop();
-                    router.push(`${getNFTSlug(nft)}`);
-                  } else {
-                    router.replace(`${getNFTSlug(nft)}`);
-                  }
-                }}
+                tw="mt-2"
                 {...rest}
               />
-            </BottomSheetScrollView>
-          </BottomSheetModalProvider>
-          <View
-            tw="absolute bottom-0 w-full flex-row border-t border-gray-100 bg-white dark:border-gray-700 dark:bg-black sm:px-4"
-            style={{
-              paddingBottom: Platform.select({
-                default: Math.max(bottom, 8),
-                web: 0,
-              }),
-            }}
-          >
-            {shareButtons.map(({ onPress, Icon, title }) => (
+              <View
+                tw="w-full flex-1 self-center px-4 py-4 sm:max-w-[332px]"
+                style={{
+                  paddingBottom: Platform.select({
+                    default: Math.max(bottom, 8),
+                    web: 0,
+                  }),
+                }}
+              >
+                <TwitterButton onPress={shareWithTwitterIntent} />
+
+                {/* {shareButtons.map(({ onPress, Icon, title }) => (
               <Pressable
                 onPress={() => {
                   Haptics.impactAsync();
@@ -151,8 +138,10 @@ export const DropViewShare = memo(function DropViewShare({
                   {title}
                 </Text>
               </Pressable>
-            ))}
-          </View>
+            ))} */}
+              </View>
+            </BottomSheetScrollView>
+          </BottomSheetModalProvider>
         </>
       )}
     </View>

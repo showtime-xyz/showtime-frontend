@@ -60,7 +60,6 @@ export const DropPreview = memo(function DropPreview({
   const [muted] = useMuted();
   const { width } = useWindowDimensions();
   const isSmWidth = width >= breakpoints["sm"];
-  const { state } = useDropNFT();
   const onPressSpotify = useCallback(
     (e: GestureResponderEvent) => {
       if (Platform.OS === "web") {
@@ -76,27 +75,24 @@ export const DropPreview = memo(function DropPreview({
     [releaseDate, spotifyUrl]
   );
   const renderButtons = useCallback(() => {
-    if (state.status === "loading" && state.transactionHash) {
-      return <PolygonScanButton transactionHash={state.transactionHash} />;
-    }
     return onPressCTA ? (
       <Button
         variant="tertiary"
         size="regular"
-        disabled={state.status === "loading"}
-        tw={state.status === "loading" ? "opacity-60" : ""}
         onPress={onPressCTA}
         {...buttonProps}
+        tw="mt-4"
       >
         {ctaCopy}
       </Button>
     ) : null;
-  }, [state.status, state.transactionHash, onPressCTA, buttonProps, ctaCopy]);
+  }, [onPressCTA, buttonProps, ctaCopy]);
+
   const size = isSmWidth ? 300 : width - 32;
 
   return (
-    <View tw={["animate-fade-in-250 items-center px-4", tw]}>
-      <View tw="shadow-light dark:shadow-dark ios:border android:border web:py-8 ios:pb-4 android:pb-4 overflow-hidden rounded-3xl border-gray-100 dark:border-gray-900 sm:w-[300px]">
+    <View tw={["animate-fade-in-250 items-center", tw]}>
+      <View tw="shadow-light dark:shadow-dark ios:border android:borderoverflow-hidden overflow-hidden rounded-3xl border-gray-100 bg-white pb-8">
         <View>
           {preivewComponent ? (
             preivewComponent({ size })
@@ -166,14 +162,14 @@ export const DropPreview = memo(function DropPreview({
           </View>
         </View>
         <View tw="px-4">
-          <View tw="flex-row py-4">
-            <View tw="rounded-full border border-gray-200 dark:border-gray-700">
+          <View tw="flex-row pb-1.5 pt-2.5">
+            <View tw="rounded-full border border-gray-200">
               <Avatar alt="Avatar" url={userProfile?.data.profile.img_url} />
             </View>
             <View tw="ml-2 justify-center">
               <View>
                 <View tw="flex flex-row items-center">
-                  <Text tw="text-13 flex font-semibold text-gray-900 dark:text-white">
+                  <Text tw="text-13 flex font-semibold text-gray-900">
                     {getCreatorUsernameFromNFT({
                       creator_address:
                         userProfile?.data.profile.primary_wallet?.address,
@@ -187,19 +183,14 @@ export const DropPreview = memo(function DropPreview({
                   ) : null}
                 </View>
                 <View tw="h-2" />
-                <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
-                  now
-                </Text>
+                <Text tw="text-xs font-semibold text-gray-900">now</Text>
               </View>
             </View>
           </View>
-          <Text tw="text-lg dark:text-white" numberOfLines={3}>
+          <Text tw="text-sm font-medium text-gray-900" numberOfLines={3}>
             {title}
           </Text>
-          <Text tw="pt-2 text-xs text-gray-600 dark:text-gray-200 ">
-            {description}
-          </Text>
-          <View tw="h-4" />
+          <Text tw="pt-2 text-sm text-gray-900 ">{description}</Text>
           {renderButtons()}
         </View>
       </View>
