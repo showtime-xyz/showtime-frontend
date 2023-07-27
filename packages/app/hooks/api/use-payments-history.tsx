@@ -43,7 +43,7 @@ export const usePaymentsHistory = () => {
   const notificationsFetcher = useCallback(
     (index: number, previousPageData: []) => {
       if (previousPageData && !previousPageData.length) return null;
-      return `/v1/payments?page=${index + 1}&limit=${PAGE_SIZE}`;
+      return `/v1/payments/drops?page=${index + 1}&limit=${PAGE_SIZE}`;
     },
     []
   );
