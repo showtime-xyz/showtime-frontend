@@ -50,11 +50,13 @@ import { FilePickerResolveValue } from "app/lib/file-picker";
 import { createParam } from "app/navigation/use-param";
 import { formatAddressShort } from "app/utilities";
 
+import { CountryPicker } from "../common/country-picker";
 import { MediaPicker } from "../common/media-picker";
 import { useStarDropForm } from "../common/star-drop-form-utils";
 import { StepProps } from "../common/types";
 import { useOnBoardCreator } from "../common/use-onboard-creator";
 import { useOnboardingStatus } from "../common/use-onboarding-status";
+import { usePaymentSupportedCountries } from "../common/use-payment-supported-countries";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
@@ -1288,12 +1290,15 @@ const CompleteStripeFlow = () => {
     handleSubmit,
     formState: { errors },
     register,
+    setValue,
+    watch,
   } = useForm({
     defaultValues: {
       businessType: "individual",
     } as any,
   });
 
+  const selectedCountryCode = watch("countryCode");
   const onboardingCreator = useOnBoardCreator();
 
   const onSubmit = async (data: any) => {
@@ -1310,6 +1315,8 @@ const CompleteStripeFlow = () => {
       Linking.openURL(res.url);
     }
   };
+
+  const paymentSupportedCountries = usePaymentSupportedCountries();
 
   return (
     <View tw="p-4" style={{ rowGap: 16 }}>
@@ -1344,34 +1351,11 @@ const CompleteStripeFlow = () => {
       />
 
       <View tw="flex-row" style={{ columnGap: 16 }}>
-        <Controller
-          control={control}
-          name="countryCode"
-          rules={{
-            required: {
-              value: true,
-              message: "Please select a country",
-            },
+        <CountryPicker
+          handleCountrySelect={(code: string) => {
+            setValue("countryCode", code);
           }}
-          render={({ field: { onChange, onBlur, value, ref } }) => {
-            return (
-              <Fieldset
-                ref={ref}
-                tw="flex-1"
-                label="Country"
-                onBlur={onBlur}
-                errorText={errors.countryCode?.message}
-                selectOnly
-                select={{
-                  options: countries,
-                  placeholder: "Country",
-                  value: value,
-                  onChange,
-                  tw: "flex-1",
-                }}
-              />
-            );
-          }}
+          selectedCountryCode={selectedCountryCode}
         />
 
         <Controller
