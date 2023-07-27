@@ -46,7 +46,6 @@ import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { TrendingScreen } from "app/screens/trending";
 
-import packageJson from "../../../package.json";
 import { DropFreeScreen } from "../screens/drop-free";
 import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
@@ -126,7 +125,7 @@ export function RootStackNavigator() {
             headerTitle: "Settings",
             headerRight: () => (
               <Text tw="text-xl font-extrabold text-gray-100 dark:text-gray-900">
-                v{Constants?.expoConfig?.version ?? packageJson?.version}
+                v{Constants?.expoConfig?.version}
               </Text>
             ),
           }}

@@ -12,7 +12,7 @@ import { CreatorChannelsScreen } from "app/screens/creator-channels";
 
 const CreatorChannelsStack = createStackNavigator<CreatorChannelsStackParams>();
 
-const HeaderRight = () => {
+export const CreatorChannelsHeaderRight = () => {
   const router = useRouter();
   const { isLoading, isAuthenticated } = useUser();
 
@@ -40,7 +40,7 @@ function CreatorChannelsNavigator() {
       screenOptions={screenOptions({
         safeAreaTop,
         isDark,
-        headerRight: HeaderRight,
+        headerRight: CreatorChannelsHeaderRight,
       })}
     >
       <CreatorChannelsStack.Screen

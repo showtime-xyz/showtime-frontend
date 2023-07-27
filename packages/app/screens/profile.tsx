@@ -5,7 +5,6 @@ import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { Profile } from "app/components/profile";
-import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
 import { createParam } from "app/navigation/use-param";
