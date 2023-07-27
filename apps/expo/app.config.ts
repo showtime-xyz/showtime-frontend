@@ -127,7 +127,7 @@ const expoConfig: ExpoConfig = {
   },
   notification: {
     icon: "./assets/notification-icon.png",
-    color: "#EBB64F",
+    color: "#F1C972",
   },
   assetBundlePatterns: ["**/*"],
   orientation: "portrait",
@@ -194,6 +194,7 @@ const expoConfig: ExpoConfig = {
           CADisableMinimumFrameDurationOnPhone: true,
           // let RNS handle status bar management
           UIViewControllerBasedStatusBarAppearance: true,
+          UISupportedInterfaceOrientations: ["UIInterfaceOrientationPortrait"],
           LSApplicationQueriesSchemes: [
             "mailto",
             "instagram",
