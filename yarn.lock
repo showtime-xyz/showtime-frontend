@@ -6786,7 +6786,7 @@ __metadata:
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.7
     react-native-quick-crypto: ^0.6.1
-    react-native-reanimated: 3.4.0
+    react-native-reanimated: 3.4.1
     react-native-reanimated-carousel: ^3.5.1
     react-native-safe-area-context: 4.7.1
     react-native-screens: ^3.23.0
@@ -24612,9 +24612,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:3.4.0":
-  version: 3.4.0
-  resolution: "react-native-reanimated@npm:3.4.0"
+"react-native-reanimated@npm:3.4.1":
+  version: 3.4.1
+  resolution: "react-native-reanimated@npm:3.4.1"
   dependencies:
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
@@ -24629,7 +24629,7 @@ __metadata:
     "@babel/plugin-transform-template-literals": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 60312602dfe471153a5cc151aca2d359aaf55ec81db342defa67fa983d77c577ee5b22ec3fd744a281aacc3e560b52777d449cdbb9447cf596cf7a8dc231e61d
+  checksum: 2462cd9a1166688fb74da1586a7700df04484d5c18d3b8385e80bc195ffad7b7a780230431435696780b601549a4f7b652a9b4380ff9231bdb61a6a3d7ecfce1
   languageName: node
   linkType: hard
 
