@@ -1,17 +1,16 @@
-import { useCallback, useState, memo } from "react";
+import { useCallback, memo } from "react";
+import { Platform } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import { Showtime } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-function delay(ms: number = 2000) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const PlatformPressable = Platform.OS === "web" ? Pressable : BorderlessButton;
 
 export const StarDropBadge = () => {
   return (
@@ -47,7 +46,7 @@ export const GatedMessage = memo(({ latestNFT }: { latestNFT?: string }) => {
 
   return (
     <View tw="mx-3 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
-      <BorderlessButton
+      <PlatformPressable
         onPress={unlockMessage}
         activeOpacity={0.7}
         foreground
@@ -102,7 +101,7 @@ export const GatedMessage = memo(({ latestNFT }: { latestNFT?: string }) => {
           </View>
           <Text tw="text-sm font-semibold">Collect to unlock</Text>
         </View>
-      </BorderlessButton>
+      </PlatformPressable>
     </View>
   );
 });
