@@ -108,7 +108,11 @@ export const DropPreviewComponent = forwardRef<typeof View, DropPreviewProps>(
     const size = isSmWidth ? 300 : width - 32;
 
     return (
-      <View tw={["animate-fade-in-250 items-center", tw]} ref={ref}>
+      <View
+        tw={["animate-fade-in-250 items-center", tw]}
+        collapsable={false}
+        ref={ref}
+      >
         <View tw="shadow-light dark:shadow-dark ios:border android:borderoverflow-hidden overflow-hidden rounded-3xl border-gray-100 bg-white pb-8 shadow-md">
           <View>
             {preivewComponent ? (

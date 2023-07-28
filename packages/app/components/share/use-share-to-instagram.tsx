@@ -66,6 +66,7 @@ export const useShareToInstagram = (viewRef: any) => {
   );
   const shareImageToIG = useCallback(async () => {
     const url = await getViewShot();
+
     if (!url) {
       Alert.alert("Oops, An error occurred.");
       return;

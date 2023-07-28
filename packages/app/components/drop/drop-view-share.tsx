@@ -50,7 +50,6 @@ export const DropViewShare = memo(function DropViewShare({
   dropCreated = false,
   ...rest
 }: DropPreviewShareProps) {
-  const { bottom } = useSafeAreaInsets();
   const isDark = useIsDarkMode();
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
   const viewRef = useRef(null);
@@ -62,7 +61,7 @@ export const DropViewShare = memo(function DropViewShare({
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
-  const { top } = useSafeAreaInsets();
+  const { top, bottom } = useSafeAreaInsets();
   const isPaidNFT = edition?.gating_type === "paid_nft";
   const nft = data?.data.item;
   const qrCodeUrl = useMemo(() => {
@@ -96,51 +95,54 @@ export const DropViewShare = memo(function DropViewShare({
   return (
     <View tw="flex-1">
       {isPaidNFT ? <BgGoldLinearGradient /> : null}
-      <ScrollView>
-        <SafeAreaView style={{ paddingTop: 12 }}>
-          <DropPreview
-            ctaCopy="View"
-            buttonProps={{ variant: "primary" }}
-            tw="mt-2"
-            {...rest}
-            ref={viewRef}
+      <ScrollView
+        contentContainerStyle={{
+          paddingTop: dropCreated ? 0 : Math.max(top, 12),
+          paddingBottom: dropCreated ? 0 : Math.max(bottom, 12),
+        }}
+      >
+        <DropPreview
+          ctaCopy="View"
+          buttonProps={{ variant: "primary" }}
+          tw="mt-2"
+          {...rest}
+          ref={viewRef}
+        />
+        <View
+          tw="w-full flex-1 self-center px-4 py-4 sm:max-w-[332px]"
+          style={{
+            paddingBottom: Math.max(bottom + 8, 12),
+          }}
+        >
+          <TwitterButton onPress={shareWithTwitterIntent} />
+
+          <InstagramButton
+            tw="mt-4"
+            theme={isPaidNFT ? "light" : undefined}
+            onPress={shareImageToIG}
           />
-          <View
-            tw="w-full flex-1 self-center px-4 py-4 sm:max-w-[332px]"
-            style={{
-              paddingBottom: Math.max(bottom + 8, 12),
+          <CopyLinkButton
+            tw="mt-4"
+            theme={isPaidNFT ? "dark" : undefined}
+            onPress={onCopyLink}
+          />
+          <Button
+            tw="mt-4"
+            size="regular"
+            theme={isPaidNFT ? "dark" : undefined}
+            onPress={() => {
+              if (!nft) return;
+              if (Platform.OS !== "web") {
+                router.pop();
+                router.push(getNFTSlug(nft));
+              } else {
+                router.replace(getNFTSlug(nft));
+              }
             }}
           >
-            <TwitterButton onPress={shareWithTwitterIntent} />
-
-            <InstagramButton
-              tw="mt-4"
-              theme={isPaidNFT ? "light" : undefined}
-              onPress={shareImageToIG}
-            />
-            <CopyLinkButton
-              tw="mt-4"
-              theme={isPaidNFT ? "dark" : undefined}
-              onPress={onCopyLink}
-            />
-            <Button
-              tw="mt-4"
-              size="regular"
-              theme={isPaidNFT ? "dark" : undefined}
-              onPress={() => {
-                if (!nft) return;
-                if (Platform.OS !== "web") {
-                  router.pop();
-                  router.push(getNFTSlug(nft));
-                } else {
-                  router.replace(getNFTSlug(nft));
-                }
-              }}
-            >
-              View Drop
-            </Button>
-          </View>
-        </SafeAreaView>
+            View Drop
+          </Button>
+        </View>
         {Platform.OS === "web" && (
           <View
             tw="absolute left-4 z-50"
