@@ -141,7 +141,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
               Trending
             </Text>
           ) : null}
-          {(isShowSeeAll || __DEV__) && (
+          {(isShowSeeAll || (__DEV__ && data.length > 0)) && (
             <PlatformPressable
               onPress={() => {
                 router.push("/trending");
