@@ -121,7 +121,10 @@ export function RootStackNavigator() {
           name="channelUnlocked"
           component={UnlockedChannelScreen}
           options={{
-            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
             animationDuration: 200,
           }}
         />
@@ -129,8 +132,12 @@ export function RootStackNavigator() {
           name="dropViewShareModal"
           component={DropViewShareScreen}
           options={{
-            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
             animationDuration: 200,
+            statusBarStyle: "dark",
           }}
         />
       </Stack.Group>

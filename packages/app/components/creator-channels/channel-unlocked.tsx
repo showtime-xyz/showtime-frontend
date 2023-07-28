@@ -21,8 +21,7 @@ import Animated, {
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
-import { useEffectOnce, useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InstagramColorful, Link, Twitter } from "@showtime-xyz/universal.icon";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -37,6 +36,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { BgGoldLinearGradient } from "app/components/gold-gradient";
+import { useShareToInstagram } from "app/components/share/use-share-to-instagram";
 import {
   TwitterButton,
   InstagramButton,
@@ -51,8 +52,6 @@ import {
 } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
-import Share, { Social } from "app/lib/react-native-share";
-import { captureRef, CaptureOptions } from "app/lib/view-shot";
 import { createParam } from "app/navigation/use-param";
 import { getProfileName, getTwitterIntent, getWebBaseURL } from "app/utilities";
 
@@ -67,31 +66,6 @@ const { useParam } = createParam<{
   isPaid?: string;
 }>();
 
-const linearProps = {
-  start: { x: 6, y: 1.9 },
-  end: { x: 0, y: 1 },
-  colors: [
-    "#F5E794",
-    "#F5E794",
-    "#FED749",
-    "#F6C33D",
-    "#F6C33D",
-    "#FED749",
-    "#FDC93F",
-    "#FED749",
-    "#FDC93F",
-    "#F6C33D",
-    "#FBC73F",
-    "#FBC73F",
-    "#F4CE5E",
-    "#F6C33D",
-    "#F6C33D",
-    "#FFD480",
-    "#FBC73F",
-    "#F5E794",
-  ],
-};
-
 export const UnlockedChannelModal = () => {
   const [contractAddress] = useParam("contractAddress");
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
@@ -103,7 +77,6 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
   const [isPaid] = useParam("isPaid");
   const joinChannel = useJoinChannel();
 
-  const modalScreenContext = useModalScreenContext();
   const { top } = useSafeAreaInsets();
   const { state } = useContext(ClaimContext);
   const linearOpaticy = useSharedValue(0);
@@ -112,18 +85,13 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
-  const { data: userInfo } = useUserProfile({
-    address:
-      nft?.data.item.creator_username || nft?.data.item.creator_address_nonens,
-  });
+
   const channelId = nft?.data.item.creator_channel_id;
   const { data } = useChannelById(channelId?.toString());
   const [showCongratsScreen, setShowCongratsScreen] = useState(!isPaid);
-  const isDark = useIsDarkMode();
   const router = useRouter();
   const { data: user } = useMyInfo();
   const viewRef = useRef<any>(null);
-  const [status, requestPermission] = MediaLibrary.usePermissions();
   const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
   const url = useMemo(
     () => (nft ? `${getWebBaseURL()}${getNFTSlug(nft?.data.item)}` : ""),
@@ -135,6 +103,7 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
       shallow: true,
     });
   }, [router]);
+  const { shareImageToIG } = useShareToInstagram(viewRef);
   const closeModal = useCallback(async () => {
     // router.replace(
     //   {
@@ -171,99 +140,17 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
     Linking.openURL(
       getTwitterIntent({
         url: url,
-        message: `Just unlocked TITLE from @${nft?.data?.item.creator_name} on @Showtime_xyz ✦ \nCollect to unlock:`,
+        message: `Just unlocked "${nft?.data.item.token_name}" from @${nft?.data?.item.creator_name} on @Showtime_xyz ✦ \nCollect to unlock:`,
       })
     );
-  }, [nft?.data?.item.creator_name, url]);
+  }, [nft?.data.item.creator_name, nft?.data.item.token_name, url]);
 
-  const getViewShot = async (result?: CaptureOptions["result"]) => {
-    const date = new Date();
-    try {
-      const uri = await captureRef(viewRef, {
-        format: "png",
-        quality: 0.8,
-        fileName: `QR Code - ${date.valueOf()}`,
-        ...(result ? { result } : {}),
-      });
-      return uri;
-    } catch (error) {}
-  };
-  const checkPhotosPermission = useCallback(async () => {
-    let hasPermission = false;
-    if (status?.granted) {
-      hasPermission = status?.granted;
-    } else {
-      const res = await requestPermission();
-      hasPermission = res?.granted;
-    }
-    if (!hasPermission) {
-      Alert.alert(
-        "No permission",
-        "To share the photo, you'll need to enable photo permissions first",
-        [
-          {
-            text: "Open Settings",
-            onPress: () => {
-              Linking.openSettings();
-            },
-          },
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-        ]
-      );
-    }
-    return hasPermission;
-  }, [requestPermission, status?.granted]);
-  const prepareShareToIG = useCallback(
-    async (url: string) => {
-      const hasPermission = await checkPhotosPermission();
-      if (hasPermission) {
-        await MediaLibrary.saveToLibraryAsync(url);
-      }
-      return hasPermission;
-    },
-    [checkPhotosPermission]
-  );
-  const shareSingleImageToPlatform = useCallback(
-    async (social: Social.Twitter | Social.Instagram) => {
-      const url = await getViewShot();
-
-      if (!url) {
-        Alert.alert("Oops, An error occurred.");
-        return;
-      }
-      if (social === Share.Social.INSTAGRAM) {
-        /**
-         * IG is not support private path address, and if you pass a uri, IG will always read the last pic from you Photos!
-         * so we need to hack it, flow here.
-         * check permission -> save to Photo -> share to IG(IG will read the last pic from you Photo)
-         */
-        const isCanShareToIG = await prepareShareToIG(url);
-        if (!isCanShareToIG) {
-          return;
-        }
-      }
-      await Share.shareSingle({
-        title: ``,
-        message: ``,
-        url,
-        filename: `Unlocked-Channel-Share-${new Date().valueOf()}`,
-        social,
-      }).catch((err) => {});
-    },
-    [prepareShareToIG]
-  );
-  const shareSingleImage = useCallback(
-    async (social: Social.Twitter | Social.Instagram) => {
-      linearOpaticy.value = withTiming(1, {}, () => {
-        runOnJS(shareSingleImageToPlatform)(social);
-        linearOpaticy.value = withTiming(0);
-      });
-    },
-    [linearOpaticy, shareSingleImageToPlatform]
-  );
+  const shareSingleImage = useCallback(async () => {
+    linearOpaticy.value = withTiming(1, {}, () => {
+      runOnJS(shareImageToIG)();
+      linearOpaticy.value = withTiming(0);
+    });
+  }, [linearOpaticy, shareImageToIG]);
 
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(url.toString());
@@ -308,11 +195,7 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
   }
   return (
     <View tw="web:pb-8 flex-1" pointerEvents="box-none">
-      <LinearGradient
-        style={[StyleSheet.absoluteFill]}
-        pointerEvents="none"
-        {...linearProps}
-      />
+      <BgGoldLinearGradient />
 
       <SafeAreaView>
         <View
@@ -324,11 +207,7 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
             pointerEvents="none"
             style={[StyleSheet.absoluteFill, animatedStyle]}
           >
-            <LinearGradient
-              style={[StyleSheet.absoluteFill]}
-              pointerEvents="none"
-              {...linearProps}
-            />
+            <BgGoldLinearGradient />
           </Animated.View>
 
           <Pressable
@@ -391,9 +270,7 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
         <View tw="w-full px-6" style={{ rowGap: 16 }}>
           <TwitterButton onPress={shareWithTwitterIntent} />
           {Platform.OS !== "web" ? (
-            <InstagramButton
-              onPress={() => shareSingleImage(Social.Instagram)}
-            />
+            <InstagramButton onPress={shareSingleImage} />
           ) : null}
           <CopyLinkButton onPress={onCopyLink} />
           <Button theme="dark" size="regular" onPress={viewChannel}>

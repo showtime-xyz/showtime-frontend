@@ -25,7 +25,7 @@ const linearProps = {
     "#F5E794",
   ],
 };
-export const GoldLinearGradient = () => {
+export const ButtonGoldLinearGradient = () => {
   return (
     <LinearGradient
       style={[

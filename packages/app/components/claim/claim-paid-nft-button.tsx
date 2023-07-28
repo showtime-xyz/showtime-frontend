@@ -8,13 +8,12 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 
 import { toast } from "design-system/toast";
-
-import { GoldLinearGradient } from "./gold-linear-gradient";
 
 type PiadNFTParams = {
   editionId: number;
@@ -129,7 +128,7 @@ export const ClaimPaidNFTButton = ({
       onPress={onHandlePayment}
       {...rest}
     >
-      <GoldLinearGradient />
+      <ButtonGoldLinearGradient />
       <View tw="w-full flex-row items-center justify-center">
         <View>
           <Image

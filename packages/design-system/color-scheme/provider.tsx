@@ -20,17 +20,9 @@ import {
 } from "./store";
 
 export const toggleColorScheme = (isDark?: boolean) => {
-  if (isDark) {
-    if (Platform.OS === "android") {
-      NavigationBar.setBackgroundColorAsync("#000");
-      NavigationBar.setButtonStyleAsync("light");
-    }
-  } else {
-    if (Platform.OS === "android") {
-      NavigationBar.setBackgroundColorAsync("#FFF");
-      NavigationBar.setButtonStyleAsync("dark");
-    }
-  }
+  if (Platform.OS !== "android") return;
+  NavigationBar.setBackgroundColorAsync(isDark ? "#000" : "#FFF");
+  NavigationBar.setButtonStyleAsync(isDark ? "light" : "dark");
 };
 
 export function ColorSchemeProvider({

@@ -18,6 +18,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { ClaimContext } from "app/context/claim-context";
 import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
@@ -34,7 +35,6 @@ import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
 import { ClaimType } from "./claim-form";
-import { GoldLinearGradient } from "./gold-linear-gradient";
 
 type ClaimButtonProps = ButtonProps & {
   edition: CreatorEditionResponse;
@@ -229,7 +229,7 @@ export const ClaimButton = ({
           onPress={() => redirectToStarDropShareScreen()}
         >
           <>
-            <GoldLinearGradient />
+            <ButtonGoldLinearGradient />
             <Sendv2 color={colors.gray[900]} width={18} height={20} />
             <Text
               tw={["ml-1 font-semibold text-gray-900", LABEL_SIZE_TW[size]]}
@@ -430,7 +430,7 @@ export const ClaimButton = ({
     >
       {isPaidGated ? (
         <>
-          <GoldLinearGradient />
+          <ButtonGoldLinearGradient />
           <View tw="w-full flex-row items-center justify-center">
             <View>
               <Image

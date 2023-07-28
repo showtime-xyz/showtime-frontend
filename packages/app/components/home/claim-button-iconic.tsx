@@ -14,6 +14,7 @@ import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-button";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-congrats";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
@@ -29,7 +30,6 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const isDark = useIsDarkMode();
   const { state: claimStates, dispatch } = useContext(ClaimContext);
-
   const { data: edition, loading } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );

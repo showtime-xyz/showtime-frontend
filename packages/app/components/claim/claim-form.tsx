@@ -60,7 +60,6 @@ import {
 } from "app/utilities";
 
 import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
-import { GoldLinearGradient } from "./gold-linear-gradient";
 
 export type ClaimType = "appleMusic" | "spotify" | "free" | "paid";
 type Query = {

@@ -8,6 +8,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
@@ -16,7 +17,6 @@ import { toast } from "design-system/toast";
 
 import { ClaimStatus, getClaimStatus } from "./claim-button";
 import { ClaimType } from "./claim-form";
-import { GoldLinearGradient } from "./gold-linear-gradient";
 
 type ClaimButtonProps = {
   edition?: CreatorEditionResponse;
@@ -174,7 +174,7 @@ export const ClaimButtonSimplified = memo(
         }}
         {...rest}
       >
-        {isPaidGated ? <GoldLinearGradient /> : null}
+        {isPaidGated ? <ButtonGoldLinearGradient /> : null}
         <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
           {buttonText}
         </Text>
