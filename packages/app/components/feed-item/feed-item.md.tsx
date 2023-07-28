@@ -32,7 +32,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Creator } from "app/components/card/rows/elements/creator";
-import { Owner } from "app/components/card/rows/owner";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
@@ -211,7 +210,6 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
 
             <View tw="mt-6 flex-row items-center justify-between">
               <Creator nft={nft} />
-              <Owner nft={nft} price={false} />
             </View>
 
             <View tw="mt mb-4 h-5">
