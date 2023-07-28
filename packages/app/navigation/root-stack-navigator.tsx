@@ -125,6 +125,14 @@ export function RootStackNavigator() {
             animationDuration: 200,
           }}
         />
+        <Stack.Screen
+          name="dropViewShareModal"
+          component={DropViewShareScreen}
+          options={{
+            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
+            animationDuration: 200,
+          }}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -238,10 +246,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
-        <Stack.Screen
-          name="dropViewShareModal"
-          component={DropViewShareScreen}
-        />
+
         <Stack.Screen
           name="dropEditDetailsModal"
           component={DropEditDetailsScreen}

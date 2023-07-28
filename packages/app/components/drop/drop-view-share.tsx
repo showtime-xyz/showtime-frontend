@@ -8,14 +8,20 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Link, QrCode, TwitterOutline } from "@showtime-xyz/universal.icon";
+import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "@showtime-xyz/universal.safe-area";
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { Media } from "app/components/media";
 import {
   TwitterButton,
   InstagramButton,
@@ -24,10 +30,12 @@ import {
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
+import { createParam } from "app/navigation/use-param";
 import { getTwitterIntent } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
+import { CloseButton } from "../close-button";
 import { QRCode } from "../qr-code";
 import { DropPreview, DropPreviewProps } from "./drop-preview";
 
@@ -52,6 +60,7 @@ export const DropViewShare = memo(function DropViewShare({
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
   const [isShowQRCode, setIsShowQRCode] = useState(false);
+  const { top } = useSafeAreaInsets();
   const iconColor = isDark ? colors.white : colors.gray[900];
   const nft = data?.data.item;
   const qrCodeUrl = useMemo(() => {
@@ -104,12 +113,12 @@ export const DropViewShare = memo(function DropViewShare({
         <QRCode
           value={qrCodeUrl.toString()}
           size={240}
-          tw="web:mt-0 -mt-28 flex-1 items-center justify-center"
+          tw="flex-1 items-center justify-center"
         />
       ) : (
         <>
-          <BottomSheetModalProvider>
-            <BottomSheetScrollView>
+          <BottomSheetScrollView>
+            <SafeAreaView>
               <DropPreview
                 ctaCopy="View"
                 buttonProps={{ variant: "primary" }}
@@ -163,10 +172,72 @@ export const DropViewShare = memo(function DropViewShare({
               </Pressable>
             ))} */}
               </View>
-            </BottomSheetScrollView>
-          </BottomSheetModalProvider>
+            </SafeAreaView>
+            <View
+              tw="absolute left-4 z-50"
+              style={{
+                top: top + 12,
+              }}
+            >
+              <CloseButton
+                color={colors.gray[900]}
+                onPress={() => router.pop()}
+              />
+            </View>
+          </BottomSheetScrollView>
         </>
       )}
     </View>
   );
 });
+
+type Query = {
+  contractAddress: string;
+  tokenId?: string;
+  chainName?: string;
+};
+
+const { useParam } = createParam<Query>();
+
+export const DropViewShareComponent = () => {
+  const [contractAddress] = useParam("contractAddress");
+  const [tokenId] = useParam("tokenId");
+  const [chainName] = useParam("chainName");
+
+  const { data: edition } = useCreatorCollectionDetail(contractAddress);
+  const { data: nft } = useNFTDetailByTokenId({
+    chainName: chainName as string,
+    tokenId: tokenId as string,
+    contractAddress: contractAddress as string,
+  });
+
+  if (!edition || !nft)
+    return (
+      <View tw="h-80 items-center justify-center">
+        <Spinner />
+      </View>
+    );
+
+  return (
+    <DropViewShare
+      title={edition?.creator_airdrop_edition?.name}
+      description={edition?.creator_airdrop_edition.description}
+      file={edition?.creator_airdrop_edition?.image_url}
+      contractAddress={contractAddress}
+      appleMusicTrackUrl={edition?.apple_music_track_url}
+      spotifyUrl={edition?.spotify_track_url}
+      preivewComponent={({ size }) => (
+        <Media
+          item={nft.data.item}
+          sizeStyle={{
+            width: size,
+            height: size,
+          }}
+          optimizedWidth={size}
+          isMuted
+        />
+      )}
+      tw="my-2"
+    />
+  );
+};

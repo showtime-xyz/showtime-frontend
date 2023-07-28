@@ -125,16 +125,18 @@ export const NFTDetails = ({
               {edition.gating_type === "paid_nft" ? (
                 <>
                   <View tw="w-4" />
-                  <Button
-                    size="regular"
-                    onPress={() => {
-                      router.push(`/channels/${nft?.creator_channel_id}`);
-                    }}
-                    tw="flex-1"
-                    theme="dark"
-                  >
-                    View Channel
-                  </Button>
+                  {edition?.is_already_claimed ? (
+                    <Button
+                      size="regular"
+                      onPress={() => {
+                        router.push(`/channels/${nft?.creator_channel_id}`);
+                      }}
+                      tw="flex-1"
+                      theme="dark"
+                    >
+                      View Channel
+                    </Button>
+                  ) : null}
                 </>
               ) : null}
             </View>

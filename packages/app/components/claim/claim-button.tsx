@@ -230,7 +230,7 @@ export const ClaimButton = ({
         >
           <>
             <GoldLinearGradient />
-            <Sendv2 color={colors.gray[900]} width={20} height={20} />
+            <Sendv2 color={colors.gray[900]} width={18} height={20} />
             <Text
               tw={["ml-1 font-semibold text-gray-900", LABEL_SIZE_TW[size]]}
             >
