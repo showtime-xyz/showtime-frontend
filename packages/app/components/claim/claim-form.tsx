@@ -516,15 +516,7 @@ export const ClaimForm = ({
 
           <View tw="mt-4">
             {isPaidGated ? (
-              <ClaimPaidNFTButton
-                price={edition?.price}
-                editionId={edition?.creator_airdrop_edition.id}
-                contractAddress={
-                  edition?.creator_airdrop_edition.contract_address
-                }
-                onPress={handleClaimNFT}
-                profileId={nft?.data.item.creator_id}
-              />
+              <ClaimPaidNFTButton edition={edition} />
             ) : (
               <Button
                 size="regular"

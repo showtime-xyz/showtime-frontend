@@ -35,6 +35,7 @@ import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
 import { ClaimType } from "./claim-form";
+import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
 
 type ClaimButtonProps = ButtonProps & {
   edition: CreatorEditionResponse;
@@ -417,42 +418,18 @@ export const ClaimButton = ({
       </Button>
     );
   }
+  if (isPaidGated) {
+    return <ClaimPaidNFTButton edition={edition} theme={theme} />;
+  }
 
   return (
     <Button
       {...buttonProps}
-      style={{
-        backgroundColor: isPaidGated ? "transparent" : undefined,
-      }}
       onPress={() => {
         handleCollectPress(isPaidGated ? "paid" : "free");
       }}
     >
-      {isPaidGated ? (
-        <>
-          <ButtonGoldLinearGradient />
-          <View tw="w-full flex-row items-center justify-center">
-            <View>
-              <Image
-                source={{
-                  uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
-                }}
-                width={buttonProps.size === "regular" ? 24 : 20}
-                height={buttonProps.size === "regular" ? 24 : 20}
-                style={{
-                  width: buttonProps.size === "regular" ? 24 : 20,
-                  height: buttonProps.size === "regular" ? 24 : 20,
-                }}
-              />
-            </View>
-            <Text tw={["ml-2 font-semibold text-black", LABEL_SIZE_TW[size]]}>
-              Collect Star Drop{price}
-            </Text>
-          </View>
-        </>
-      ) : (
-        "Collect"
-      )}
+      Collect
     </Button>
   );
 };

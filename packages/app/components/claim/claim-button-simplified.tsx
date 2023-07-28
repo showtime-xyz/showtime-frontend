@@ -2,11 +2,10 @@ import { useContext, useMemo, memo, useCallback } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
 import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { ClaimContext } from "app/context/claim-context";
@@ -17,6 +16,7 @@ import { toast } from "design-system/toast";
 
 import { ClaimStatus, getClaimStatus } from "./claim-button";
 import { ClaimType } from "./claim-form";
+import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
 
 type ClaimButtonProps = {
   edition?: CreatorEditionResponse;
@@ -164,8 +164,13 @@ export const ClaimButtonSimplified = memo(
     if (loading) {
       return <Skeleton width={96} height={24} radius={999} show tw={tw} />;
     }
+    if (isPaidGated) {
+      return (
+        <ClaimPaidNFTButton edition={edition} type="trending" side="bottom" />
+      );
+    }
     return (
-      <PressableScale
+      <PressableHover
         tw={["h-6 w-24 items-center justify-center rounded-full", tw]}
         disabled={disabled}
         onPress={onPress}
@@ -178,7 +183,7 @@ export const ClaimButtonSimplified = memo(
         <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
           {buttonText}
         </Text>
-      </PressableScale>
+      </PressableHover>
     );
   }
 );

@@ -244,13 +244,13 @@ const CheckoutForm = ({
           >
             {isLoading ? (
               <Text tw="animate-fade-in-250 text-sm font-semibold">
-                Submitting
+                Processing
                 <ThreeDotsAnimation
                   color={isDark ? colors.black : colors.white}
                 />
               </Text>
             ) : (
-              "Submit"
+              `Pay $${edition?.price ?? 0}`
             )}
           </Button>
         </View>

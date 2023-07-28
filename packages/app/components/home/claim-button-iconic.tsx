@@ -11,10 +11,11 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-button";
+import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
+import { FeedSocialButton } from "app/components/feed-social-button";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-congrats";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
@@ -22,7 +23,6 @@ import { formatClaimNumber } from "app/utilities";
 import { toast } from "design-system/toast";
 
 import { ClaimType } from "../claim/claim-form";
-import { FeedSocialButton } from "../feed-social-button";
 
 export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
   const { data: myInfoData } = useMyInfo();
@@ -117,8 +117,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     handleCollectPress,
   ]);
   const isPaidGated = edition?.gating_type === "paid_nft";
-  const price =
-    edition?.gating_type === "paid_nft" && edition?.price ? edition?.price : 0;
+
   if (loading) {
     return (
       <View tw="mb-4">
@@ -206,6 +205,39 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       </FeedSocialButton>
     );
   }
+  if (isPaidGated) {
+    return (
+      <View {...rest}>
+        <ClaimPaidNFTButton edition={edition} type="feed" side="left" />
+        <View tw="h-2" />
+        <Text
+          tw={[
+            "text-center text-xs font-semibold text-gray-900 dark:text-white",
+          ]}
+        >
+          <Text
+            tw={[
+              "text-center text-xs font-semibold",
+              edition.creator_airdrop_edition.edition_size -
+                edition.total_claimed_count <=
+                10 &&
+              edition.creator_airdrop_edition.edition_size -
+                edition.total_claimed_count >
+                0
+                ? "text-orange-500"
+                : "text-gray-900 dark:text-white",
+            ]}
+            onPress={viewCollecters}
+          >
+            {formatClaimNumber(edition.total_claimed_count)}
+            {edition.creator_airdrop_edition.edition_size > 0
+              ? `/${edition.creator_airdrop_edition.edition_size}`
+              : ""}
+          </Text>
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <FeedSocialButton
@@ -233,46 +265,10 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
           </Text>
         </>
       }
-      buttonColor={isPaidGated ? undefined : isDark ? "#fff" : colors.gray[900]}
+      buttonColor={isDark ? "#fff" : colors.gray[900]}
       {...rest}
     >
-      {isPaidGated ? (
-        <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
-          <Image
-            source={require("./gold-button-bg.svg")}
-            style={{ height: "100%", width: "100%" }}
-          />
-        </View>
-      ) : null}
-      <Showtime
-        height={25}
-        width={25}
-        color={isPaidGated ? "#000" : isDark ? "#000" : "#fff"}
-      />
-      {isPaidGated ? (
-        price > 0 ? (
-          <View
-            tw={[
-              "absolute -right-1 -top-1.5 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full",
-              price?.toString()?.length > 2 ? "-right-2.5" : "-right-1",
-            ]}
-          >
-            <View tw="-z-1 absolute h-10 w-20">
-              <Image
-                source={require("./gold-button-bg.svg")}
-                style={{ height: "100%", width: "100%" }}
-              />
-            </View>
-            <Text tw="text-xs font-semibold text-black">${price}</Text>
-          </View>
-        ) : (
-          <View tw="absolute -right-1 -top-1 h-[22px] min-w-[22px] items-center justify-center rounded-full bg-white dark:bg-black">
-            <Text tw="text-xs font-semibold text-black dark:text-white">
-              ${price}
-            </Text>
-          </View>
-        )
-      ) : null}
+      <Showtime height={25} width={25} color={isDark ? "#000" : "#fff"} />
     </FeedSocialButton>
   );
 }
