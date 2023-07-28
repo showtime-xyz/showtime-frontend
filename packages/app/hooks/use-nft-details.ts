@@ -12,7 +12,11 @@ export function useNFTDetails(nftId?: number) {
   const { data, error, mutate } = useSWR<NFTDetailsPayload>(
     nftId ? "/v2/nft_detail/" + nftId : null,
     fetcher,
-    { focusThrottleInterval: 300000, revalidateIfStale: false }
+    {
+      focusThrottleInterval: 30000,
+      revalidateIfStale: false,
+      dedupingInterval: 30000,
+    }
   );
 
   return {

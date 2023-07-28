@@ -115,7 +115,8 @@ export const useTrendingNFTS = ({
     fetcher,
     {
       revalidateIfStale: false,
-      focusThrottleInterval: 200000,
+      focusThrottleInterval: 20000,
+      dedupingInterval: 20000,
     }
   );
   const newData = useMemo(() => {
@@ -140,7 +141,7 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
     data?: UserProfile;
   }>(queryKey, fetcher, {
     revalidateIfStale: false,
-    focusThrottleInterval: 200000,
+    focusThrottleInterval: 20000,
   });
 
   const { data: myInfoData } = useMyInfo();
@@ -307,6 +308,8 @@ export const useMyInfo = () => {
     {
       revalidateOnMount: false,
       revalidateIfStale: false,
+      dedupingInterval: 30000,
+      focusThrottleInterval: 30000,
     }
   );
 
