@@ -25,7 +25,14 @@ export async function getServerSideProps(context) {
       stillPreview: nft?.mime_type?.startsWith("video"),
       optimized: true,
     });
-
+    const username = nft?.creator_name;
+    const pfp = nft?.creator_img_url;
+    const desc = nft?.creator_img_url;
+    const image = `${
+      __DEV__
+        ? "http://localhost:3000"
+        : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
+    }/api/drop?username=${username}&image=${imageUrl}&pfp=${pfp}&dropCreated=true`;
     // lets check if the image is from showtime.xyz (eg Bunny,
     // since they start with media.showtime.xyz and video.showtime.xyz)
     if (imageUrl && imageUrl.includes("showtime.xyz/")) {

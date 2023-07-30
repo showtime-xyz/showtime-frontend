@@ -8,4 +8,5 @@ export const DropViewShareScreen = withModalScreen(DropViewShareComponent, {
   matchingQueryParam: "dropViewShareModal",
   snapPoints: ["100%"],
   headerShown: false,
+  tw: "!pb-0",
 });
