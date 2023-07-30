@@ -45,6 +45,7 @@ import {
 } from "app/components/social-buttons";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
+import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
   CreatorEditionResponse,
@@ -57,6 +58,8 @@ import { getProfileName, getTwitterIntent, getWebBaseURL } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
+import { stripePromise } from "../checkout/stripe";
+import { fetchStripeAccountId } from "../claim/claim-paid-nft-button";
 import { CloseButton } from "../close-button";
 import { useChannelById } from "./hooks/use-channel-detail";
 import { useJoinChannel } from "./hooks/use-join-channel";
@@ -66,6 +69,7 @@ const { useParam } = createParam<{
   isPaid?: string;
 }>();
 
+const REDIRECT_SECONDS = 5;
 export const UnlockedChannelModal = () => {
   const [contractAddress] = useParam("contractAddress");
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
@@ -75,6 +79,8 @@ export const UnlockedChannelModal = () => {
 
 const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
   const [isPaid] = useParam("isPaid");
+  // const [isPaid] = useParam("isPaid");
+
   const joinChannel = useJoinChannel();
 
   const { top } = useSafeAreaInsets();
@@ -124,12 +130,38 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
 
     setShowCongratsScreen(true);
   }, [channelId, joinChannel]);
+  const { setPaymentByDefault } = usePaymentsManage();
+
+  const handlePaymentSuccess = useCallback(async () => {
+    const setAsDefaultPaymentMethod = new URLSearchParams(
+      window.location.search
+    ).get("setAsDefaultPaymentMethod");
+    if (!setAsDefaultPaymentMethod) return;
+
+    const profileId = edition?.creator_airdrop_edition.owner_profile_id;
+    const { stripe_account_id: stripeAccount } = await fetchStripeAccountId(
+      profileId
+    );
+
+    const stripe = await stripePromise({ stripeAccount });
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
+    );
+
+    if (stripe && clientSecret) {
+      const res = await stripe.retrievePaymentIntent(clientSecret);
+      if (typeof res.paymentIntent?.payment_method === "string") {
+        setPaymentByDefault(res.paymentIntent.payment_method);
+      }
+    }
+  }, [edition?.creator_airdrop_edition.owner_profile_id, setPaymentByDefault]);
 
   const initPaidNFT = useCallback(async () => {
     if (isPaid && channelId) {
+      handlePaymentSuccess();
       await claimNFT({ closeModal });
     }
-  }, [channelId, claimNFT, closeModal, isPaid]);
+  }, [channelId, claimNFT, closeModal, handlePaymentSuccess, isPaid]);
 
   useEffect(() => {
     initPaidNFT();
@@ -230,7 +262,7 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
             </Text>
             <View tw="h-2" />
             <Text tw="px-12 text-center text-sm text-gray-900">
-              You’ve unlocked exclusive channel content for
+              You just unlocked exclusive content from
               <Text
                 tw="font-medium"
                 onPress={() => router.push(`/@${data?.owner.username}`)}

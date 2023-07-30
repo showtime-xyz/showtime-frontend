@@ -70,7 +70,7 @@ async function fetchClaimPaymentIntent({
   }
 }
 
-const fetchStripeAccountId = async (
+export const fetchStripeAccountId = async (
   profileId: string | number | null | undefined
 ) => {
   const res = await fetcher(`/v1/payments/nft/stripe-account/${profileId}`);
