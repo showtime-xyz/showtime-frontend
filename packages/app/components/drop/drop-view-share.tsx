@@ -1,23 +1,14 @@
-import React, { memo, useCallback, useMemo, useState, useRef } from "react";
+import React, { memo, useCallback, useMemo, useRef } from "react";
 import { Linking, Platform, ScrollView } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
 
-import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
-import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Link, QrCode, TwitterOutline } from "@showtime-xyz/universal.icon";
-import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from "@showtime-xyz/universal.safe-area";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Media } from "app/components/media";
@@ -36,7 +27,6 @@ import { toast } from "design-system/toast";
 
 import { CloseButton } from "../close-button";
 import { BgGoldLinearGradient } from "../gold-gradient";
-import { QRCode } from "../qr-code";
 import { useShareToInstagram } from "../share/use-share-to-instagram";
 import { DropPreview, DropPreviewProps } from "./drop-preview";
 

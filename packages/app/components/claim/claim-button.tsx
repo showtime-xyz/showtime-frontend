@@ -13,7 +13,6 @@ import {
   PreAddAppleMusic,
   Sendv2,
 } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
