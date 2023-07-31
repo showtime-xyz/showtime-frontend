@@ -58,7 +58,6 @@ import { StepProps } from "../common/types";
 import { useOnBoardCreator } from "../common/use-onboard-creator";
 import { useOnboardingStatus } from "../common/use-onboarding-status";
 import { usePaymentEditionPriceRange } from "../common/use-payment-edition-price-range";
-import { usePaymentSupportedCountries } from "../common/use-payment-supported-countries";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
@@ -233,8 +232,8 @@ export const DropFree = () => {
             stripe details. Press below
           </Text>
           <PayoutSettings
-            refreshUrl={`${websiteUrl}/drop/free?stripeRefresh=true`}
-            returnUrl={`${websiteUrl}/drop/free?stripeReturn=true`}
+            refreshUrl={`${websiteUrl}/drop/free?stripeRefresh=true&platform=${Platform.OS}`}
+            returnUrl={`${websiteUrl}/drop/free?stripeReturn=true&platform=${Platform.OS}`}
           />
           <Button
             tw="w-full"
@@ -257,7 +256,9 @@ export const DropFree = () => {
         closeIcon
         title="Payment processing details"
       >
-        <CompleteStripeFlow />
+        <BottomSheetModalProvider>
+          <CompleteStripeFlow />
+        </BottomSheetModalProvider>
       </Layout>
     );
   }
@@ -1349,8 +1350,6 @@ const CompleteStripeFlow = () => {
     }
   };
 
-  const paymentSupportedCountries = usePaymentSupportedCountries();
-
   return (
     <View tw="p-4" style={{ rowGap: 16 }}>
       <Text tw="text-gray-700 dark:text-gray-200">
@@ -1370,7 +1369,6 @@ const CompleteStripeFlow = () => {
         render={({ field: { onChange, onBlur, value, ref } }) => {
           return (
             <Fieldset
-              tw="flex-1"
               ref={ref}
               label="Email"
               placeholder="Enter an email"
@@ -1427,7 +1425,7 @@ const CompleteStripeFlow = () => {
         tw={onboardingCreator.isMutating ? `opacity-30` : ""}
         size="regular"
       >
-        <View tw="flex-row items-center" style={{ columnGap: 4 }}>
+        <View tw="flex-row items-center" style={{ columnGap: 8 }}>
           <Image source={require("./stripe-logo.png")} height={20} width={20} />
           <Text tw="font-semibold text-white dark:text-black">
             {onboardingCreator.isMutating

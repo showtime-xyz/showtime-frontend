@@ -18,13 +18,19 @@ import Animated, {
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronLeft, Close, Search } from "@showtime-xyz/universal.icon";
+import {
+  ChevronDown,
+  ChevronLeft,
+  Close,
+  Search,
+} from "@showtime-xyz/universal.icon";
 import { Check } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { SafeAreaView } from "@showtime-xyz/universal.safe-area";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -58,6 +64,7 @@ export const CountryPicker = (props: PhoneNumberPickerProp) => {
   }, [filteredData, selectedCountryCode]);
 
   const textInputRef = useRef<TextInput>(null);
+  const isDark = useIsDarkMode();
 
   const handleModalHide = useCallback(() => {
     setModalVisible(false);
@@ -101,19 +108,31 @@ export const CountryPicker = (props: PhoneNumberPickerProp) => {
           />
         </View>
       </Modal>
-      <View tw="flex-1 rounded-xl bg-gray-900 p-4">
+      <View tw="flex-1 rounded-xl bg-gray-100 p-4 dark:bg-gray-900">
         <Text tw="font-bold text-gray-900 dark:text-gray-50">
           Select Country
         </Text>
         <View tw="self-start pt-4">
           <Button
-            variant="outlined"
+            variant="secondary"
             onPress={() => {
               setSearch("");
               setModalVisible(true);
             }}
           >
-            {selectedCountry?.label ?? "Select Country"}
+            <View tw="flex-row items-center" style={{ columnGap: 8 }}>
+              <Text
+                tw="text-xs font-bold text-gray-900 dark:text-gray-100"
+                style={{ maxWidth: "90%" }}
+              >
+                {selectedCountry?.label ?? "Select Country"}
+              </Text>
+              <ChevronDown
+                color={isDark ? colors.gray[100] : colors.gray[900]}
+                height={16}
+                width={16}
+              />
+            </View>
           </Button>
         </View>
       </View>

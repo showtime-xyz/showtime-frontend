@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { AppState } from "react-native";
+
 import useSWR from "swr";
 
 import { fetcher } from "app/hooks/use-infinite-list-query";
@@ -13,7 +16,11 @@ export const useOnboardingStatus = () => {
   const user = useUser();
   const queryState = useSWR<{
     can_charge: boolean;
-  }>("/v1/payments/nft/payouts/onboarding/status", fetcher);
+  }>("/v1/payments/nft/payouts/onboarding/status", fetcher, {
+    revalidateOnFocus: true,
+    // Refresh every 5 seconds if mounted
+    refreshInterval: 5 * 1000,
+  });
 
   let status = "not_onboarded" as OnboardingStatus;
   let loading = queryState.isLoading || user.isLoading;
