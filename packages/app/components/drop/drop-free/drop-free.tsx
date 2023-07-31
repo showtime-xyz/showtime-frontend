@@ -14,7 +14,7 @@ import Animated, {
   enableLayoutAnimations,
 } from "react-native-reanimated";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
+import { Alert, useAlert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -48,7 +48,7 @@ import { usePersistForm } from "app/hooks/use-persist-form";
 import { useWallet } from "app/hooks/use-wallet";
 import { FilePickerResolveValue } from "app/lib/file-picker";
 import { createParam } from "app/navigation/use-param";
-import { formatAddressShort } from "app/utilities";
+import { formatAddressShort, getCurrencySymbol } from "app/utilities";
 
 import { CountryPicker } from "../common/country-picker";
 import { MediaPicker } from "../common/media-picker";
@@ -56,6 +56,7 @@ import { useStarDropForm } from "../common/star-drop-form-utils";
 import { StepProps } from "../common/types";
 import { useOnBoardCreator } from "../common/use-onboard-creator";
 import { useOnboardingStatus } from "../common/use-onboarding-status";
+import { usePaymentEditionPriceRange } from "../common/use-payment-edition-price-range";
 import { usePaymentSupportedCountries } from "../common/use-payment-supported-countries";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
@@ -602,11 +603,12 @@ const SetPriceAndDuration = (
   const selectedPrice = watch("paidNFTPrice");
   const wallet = useWallet();
   const [showCustomPriceModal, setShowCustomPriceModal] = useState(false);
-
   const [showCopySpotifyLinkTutorial, setShowCopySpotifyLinkTutorial] =
     useState(false);
   const isDark = useIsDarkMode();
   const scrollViewRef = useRef<RNScrollView>(null);
+  const { data: editionPriceRange } = usePaymentEditionPriceRange();
+
   const onNextStep = async () => {
     const res = await trigger(
       ["releaseDate", "spotifyUrl", "appleMusicTrackUrl"],
@@ -689,9 +691,12 @@ const SetPriceAndDuration = (
                     tw={`text-4xl text-gray-700
                     dark:text-gray-100`}
                   >
-                    ${price}
+                    {getCurrencySymbol(editionPriceRange?.currency)}
+                    {price}
                   </Text>
-                  <Text tw="text-xs text-gray-700 dark:text-gray-100">USD</Text>
+                  <Text tw="text-xs text-gray-700 dark:text-gray-100">
+                    {editionPriceRange?.currency}
+                  </Text>
                 </Pressable>
               ))}
             </View>
@@ -707,7 +712,10 @@ const SetPriceAndDuration = (
                     Enter custom price
                   </Text>
                   <Text tw="pt-1 text-gray-600 dark:text-gray-300">
-                    From $1-$100
+                    From {getCurrencySymbol(editionPriceRange?.currency)}
+                    {editionPriceRange?.min}-
+                    {getCurrencySymbol(editionPriceRange?.currency)}
+                    {editionPriceRange?.max}
                   </Text>
                 </View>
               </Pressable>
@@ -722,7 +730,11 @@ const SetPriceAndDuration = (
                   style={{ columnGap: 8 }}
                 >
                   <Text tw="text-gray-900 dark:text-gray-100">
-                    Custom price: <Text tw="font-bold">${selectedPrice}</Text>
+                    Custom price:{" "}
+                    <Text tw="font-bold">
+                      {getCurrencySymbol(editionPriceRange?.currency)}
+                      {selectedPrice}
+                    </Text>
                   </Text>
                   <View tw="rounded-full bg-gray-100 p-1">
                     <Close height={14} width={14} color={"black"} />
@@ -851,6 +863,21 @@ const SetPriceAndDuration = (
         <View tw="p-4">
           <SetCustomPrice
             handleSubmit={(price: number) => {
+              if (editionPriceRange) {
+                if (
+                  price > editionPriceRange?.max ||
+                  price < editionPriceRange?.min
+                ) {
+                  Alert.alert(
+                    `The price range must be between ${getCurrencySymbol(
+                      editionPriceRange?.currency
+                    )}${editionPriceRange?.min} and ${getCurrencySymbol(
+                      editionPriceRange?.currency
+                    )}${editionPriceRange?.max}.`
+                  );
+                  return;
+                }
+              }
               setPrice(price);
               setShowCustomPriceModal(false);
             }}

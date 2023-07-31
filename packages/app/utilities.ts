@@ -1006,3 +1006,8 @@ export function shortenLongWords(str: string, maxLength: number = 35): string {
   }
   return words.join(" ");
 }
+
+export const getCurrencySymbol = (currency?: string) => {
+  if (currency === "INR") return "₹";
+  return "$";
+};
