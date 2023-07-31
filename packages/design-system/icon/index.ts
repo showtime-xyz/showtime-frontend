@@ -50,6 +50,7 @@ export { default as LogOut } from "./LogOut";
 export { default as Layers } from "./Layers";
 export { default as Liked } from "./Liked";
 export { default as Link } from "./Link";
+export { default as LinkOut } from "./LinkOut";
 export { default as List } from "./List";
 export { default as Mail } from "./Mail";
 export { default as MarketFilled } from "./MarketFilled";

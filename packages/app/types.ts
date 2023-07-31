@@ -271,6 +271,10 @@ export type MyInfo = {
         name: string;
         self_is_member: boolean;
       }>;
+      stripe_connect_details: null | {
+        details_submitted: boolean;
+        charges_enabled: boolean;
+      };
     };
     likes_nft: number[];
     likes_comment: any[];
@@ -280,6 +284,7 @@ export type MyInfo = {
     can_create_drop: boolean;
     daily_claim_limit: number;
     paid_drop_credits?: DropPlan[];
+
     claim_tank: {
       available_claims: number;
       next_refill_at: string;

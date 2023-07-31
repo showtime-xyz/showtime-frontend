@@ -10,7 +10,5 @@ export const useChannelById = (channelId?: string) => {
     fetcher
   );
 
-  return {
-    ...queryState,
-  };
+  return queryState;
 };
