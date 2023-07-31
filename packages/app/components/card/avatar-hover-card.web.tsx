@@ -27,7 +27,7 @@ import { AvatarHoverCardProps } from "./avatar-hover-card";
 
 export const CARD_WIDTH = 320;
 
-export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
+export const AvatarHoverCardContent = ({ username }: AvatarHoverCardProps) => {
   const { data, isLoading } = useUserProfile({ address: username });
   const userId = useCurrentUserId();
   const { getIsBlocked, unblock } = useBlock();
@@ -159,13 +159,13 @@ export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
       </View>
     </>
   );
-}
+};
 
-export function AvatarHoverCard({
+export const AvatarHoverCard = ({
   username,
   url,
   ...rest
-}: AvatarHoverCardProps) {
+}: AvatarHoverCardProps) => {
   if (isMobileWeb()) {
     return (
       <Link href={`/@${username}`}>
@@ -194,4 +194,4 @@ export function AvatarHoverCard({
       </HoverCard.Portal>
     </HoverCard.Root>
   );
-}
+};

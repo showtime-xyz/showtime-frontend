@@ -7,7 +7,7 @@ import { useHeaderTabContext } from "./context";
 import { useSharedScrollableRef } from "./hooks";
 import type { SceneProps } from "./types";
 
-export function SceneComponent<P extends ScrollViewProps>({
+export const SceneComponent = <P extends ScrollViewProps>({
   index,
   onScroll,
   ContainerView,
@@ -15,7 +15,7 @@ export function SceneComponent<P extends ScrollViewProps>({
   forwardedRef,
   style,
   ...restProps
-}: SceneProps<P>) {
+}: SceneProps<P>) => {
   const { updateSceneInfo } = useHeaderTabContext();
   const scollViewRef =
     useSharedScrollableRef<Animated.ScrollView>(forwardedRef);
@@ -43,7 +43,7 @@ export function SceneComponent<P extends ScrollViewProps>({
       {...restProps}
     />
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

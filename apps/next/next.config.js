@@ -2,7 +2,7 @@
  * @type {import('next').NextConfig}
  */
 const isDev = process.env.NODE_ENV === "development";
-
+const million = require("million/compiler");
 const withImages = require("next-images");
 const withPlugins = require("next-compose-plugins");
 const { withSentryConfig } = require("@sentry/nextjs");
@@ -18,7 +18,7 @@ const withPWA = require("next-pwa")({
 
 const nextConfig = {
   swcMinify: false,
-  reactStrictMode: false,
+  reactStrictMode: true,
   experimental: {
     appDir: false,
     optimizeCss: true,
@@ -214,5 +214,5 @@ module.exports = withPlugins(
     !isDev ? withSentryConfig : null,
     withPWA,
   ].filter(Boolean),
-  nextConfig
+  million.next(nextConfig, { auto: true, server: false })
 );

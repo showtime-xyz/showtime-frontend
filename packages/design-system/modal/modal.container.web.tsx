@@ -111,7 +111,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
   }
 );
 
-export function FocusTrap(props: JSX.IntrinsicElements["div"]) {
+export const FocusTrap = (props: JSX.IntrinsicElements["div"]) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -152,7 +152,7 @@ export function FocusTrap(props: JSX.IntrinsicElements["div"]) {
       <div onFocus={onEndNodeFocus} tabIndex={0} />
     </>
   );
-}
+};
 
 const moveFocusWithin = (element: HTMLElement, position: "start" | "end") => {
   const focusableElements = element.querySelectorAll(

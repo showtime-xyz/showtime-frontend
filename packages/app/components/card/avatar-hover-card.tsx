@@ -8,14 +8,14 @@ export type AvatarHoverCardProps = Omit<AvatarProps, "alt"> & {
   alt?: string;
 };
 
-export function AvatarHoverCard({
+export const AvatarHoverCard = ({
   url,
   username,
   ...rest
-}: AvatarHoverCardProps) {
+}: AvatarHoverCardProps) => {
   return (
     <Link href={`/@${username}`}>
       <Avatar alt={"Avatar"} url={url} {...rest} />
     </Link>
   );
-}
+};

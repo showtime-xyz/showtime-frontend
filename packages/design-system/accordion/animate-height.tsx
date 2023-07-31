@@ -20,14 +20,14 @@ export type AnimateHeightProps = {
 };
 const transition = { duration: 200 } as const;
 
-export function AnimateHeight({
+export const AnimateHeight = ({
   children,
   hide = false,
   style,
   onHeightDidAnimate,
   initialHeight = 0,
   extraHeight = 0,
-}: AnimateHeightProps) {
+}: AnimateHeightProps) => {
   const measuredHeight = useSharedValue(initialHeight);
   const childStyle = useAnimatedStyle(
     () => ({
@@ -63,7 +63,7 @@ export function AnimateHeight({
       </Animated.View>
     </Animated.View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   autoBottom: {

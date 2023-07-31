@@ -51,6 +51,7 @@
     "export-from-json": "^1.7.2",
     "fortmatic": "^2.4.0",
     "magic-sdk": "^13.1.0",
+    "million": "^2.5.2",
     "next": "^13.4.9",
     "next-images": "^1.8.5",
     "next-pwa": "^5.6.0",
