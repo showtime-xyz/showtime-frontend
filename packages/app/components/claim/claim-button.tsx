@@ -97,8 +97,6 @@ export const ClaimButton = ({
     edition.creator_airdrop_edition?.owner_profile_id;
   const redirectToStarDropShareScreen = useRedirectToStarDropShareScreen(nft);
 
-  const price = edition?.price ? ` - $${edition?.price}` : "";
-
   const handleRaffleResultPress = () => {
     redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
   };

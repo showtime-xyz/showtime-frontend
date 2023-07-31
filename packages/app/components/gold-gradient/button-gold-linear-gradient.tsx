@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { StyleSheet } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
 
 const linearProps = {
   start: { x: 1.75, y: -1.79 },
@@ -25,17 +26,22 @@ const linearProps = {
     "#F5E794",
   ],
 };
-export const ButtonGoldLinearGradient = () => {
-  return (
-    <LinearGradient
-      style={[
-        StyleSheet.absoluteFill,
-        {
-          borderRadius: 999,
-          zIndex: -1,
-        },
-      ]}
-      {...linearProps}
-    />
-  );
-};
+type ButtonGoldLinearGradientProps = Omit<LinearGradientProps, "colors"> & {};
+export const ButtonGoldLinearGradient = memo<ButtonGoldLinearGradientProps>(
+  function ButtonGoldLinearGradient({ style, ...rest }) {
+    return (
+      <LinearGradient
+        style={[
+          StyleSheet.absoluteFill,
+          {
+            borderRadius: 999,
+            zIndex: -1,
+          },
+          style,
+        ]}
+        {...linearProps}
+        {...rest}
+      />
+    );
+  }
+);

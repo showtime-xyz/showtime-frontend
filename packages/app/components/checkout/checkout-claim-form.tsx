@@ -26,7 +26,7 @@ import {
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { Logger } from "app/lib/logger";
 import { TextLink } from "app/navigation/link";
-import { getCreatorUsernameFromNFT } from "app/utilities";
+import { getCreatorUsernameFromNFT, getCurrencyPrice } from "app/utilities";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
@@ -250,7 +250,7 @@ const CheckoutForm = ({
                 />
               </Text>
             ) : (
-              `Pay $${edition?.price ?? 0}`
+              `Pay ${getCurrencyPrice(edition.currency, edition.price)}`
             )}
           </Button>
         </View>

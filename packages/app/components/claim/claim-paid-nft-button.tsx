@@ -22,6 +22,7 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
+import { getCurrencyPrice, getCurrencySymbol } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -90,7 +91,8 @@ const GoldButton = memo(function GoldButton({
   ...rest
 }: GoldButtonProps) {
   const router = useRouter();
-  const price = edition?.price ?? 0;
+  const price = getCurrencyPrice(edition?.currency, edition?.price);
+
   const editionId = edition?.creator_airdrop_edition.id;
   const contractAddress = edition?.creator_airdrop_edition.contract_address;
   const profileId = edition?.creator_airdrop_edition.owner_profile_id;
@@ -128,7 +130,7 @@ const GoldButton = memo(function GoldButton({
       );
     }
   };
-  const priceText = price ? ` - $${price}` : "";
+  const priceText = price ? ` - ${price}` : "";
   if (type === "trending") {
     return (
       <PressableHover
@@ -138,7 +140,7 @@ const GoldButton = memo(function GoldButton({
       >
         <ButtonGoldLinearGradient />
         <Text tw="text-xs font-bold" style={{ color: colors.gray[900] }}>
-          ${price}
+          {price}
         </Text>
       </PressableHover>
     );
@@ -147,32 +149,25 @@ const GoldButton = memo(function GoldButton({
     return (
       <PressableHover onPress={onHandlePayment} {...rest}>
         <View tw={"h-14 w-14 items-center justify-center rounded-full"}>
-          <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
-            <Image
-              source={require("./gold-button-bg.svg")}
-              style={{ height: "100%", width: "100%" }}
-            />
-          </View>
+          <ButtonGoldLinearGradient
+            style={{ transform: [{ rotate: "100deg" }] }}
+          />
 
-          {price > 0 ? (
+          {edition?.price ? (
             <View
               tw={[
-                "absolute -right-1 -top-1.5 h-[22px] min-w-[24px] items-center justify-center overflow-hidden rounded-full",
+                "absolute -right-1 -top-1.5 h-[22px] min-w-[30px] items-center justify-center overflow-hidden rounded-full px-1",
                 price?.toString()?.length > 2 ? "-right-2.5" : "-right-1",
               ]}
             >
-              <View tw="-z-1 absolute h-10 w-20">
-                <Image
-                  source={require("./gold-button-bg.svg")}
-                  style={{ height: "100%", width: "100%" }}
-                />
-              </View>
-              <Text tw="text-xs font-semibold text-black">${price}</Text>
+              <ButtonGoldLinearGradient />
+              <Text tw="text-xs font-semibold text-black">{price}</Text>
             </View>
           ) : (
             <View tw="absolute -right-1 -top-1 h-[22px] min-w-[22px] items-center justify-center rounded-full bg-white dark:bg-black">
               <Text tw="text-xs font-semibold text-black dark:text-white">
-                ${price}
+                {getCurrencySymbol(edition?.currency)}
+                {price}
               </Text>
             </View>
           )}
@@ -220,7 +215,6 @@ export const ClaimPaidNFTButton = memo(function ClaimPaidNFTButton({
   const [open, setOpen] = useState(false);
   const isDarkMode = useIsDarkMode();
   const isDark = theme ? theme === "dark" : isDarkMode;
-  const router = useRouter();
   if (Platform.OS !== "web") {
     return (
       <Tooltip.Root

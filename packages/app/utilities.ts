@@ -1011,7 +1011,13 @@ export function shortenLongWords(str: string, maxLength: number = 35): string {
   return words.join(" ");
 }
 
-export const getCurrencySymbol = (currency?: string) => {
+export const getCurrencySymbol = (currency: string | null | undefined) => {
   if (currency === "INR") return "₹";
   return "$";
+};
+export const getCurrencyPrice = (
+  currency: string | null | undefined,
+  price: number | null | undefined
+) => {
+  return `${getCurrencySymbol(currency)}${price ?? 0}`;
 };

@@ -69,7 +69,6 @@ const { useParam } = createParam<{
   isPaid?: string;
 }>();
 
-const REDIRECT_SECONDS = 5;
 export const UnlockedChannelModal = () => {
   const [contractAddress] = useParam("contractAddress");
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
@@ -111,6 +110,9 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
   }, [router]);
   const { shareImageToIG } = useShareToInstagram(viewRef);
   const closeModal = useCallback(async () => {
+    router.replace(
+      `${router.pathname}?contractAddress=${edition?.creator_airdrop_edition.contract_address}&unlockedChannelModal=true`
+    );
     // router.replace(
     //   {
     //     pathname: router.pathname,
@@ -129,7 +131,12 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
     }
 
     setShowCongratsScreen(true);
-  }, [channelId, joinChannel]);
+  }, [
+    channelId,
+    edition?.creator_airdrop_edition.contract_address,
+    joinChannel,
+    router,
+  ]);
   const { setPaymentByDefault } = usePaymentsManage();
 
   const handlePaymentSuccess = useCallback(async () => {
