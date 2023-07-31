@@ -1,16 +1,7 @@
-import {
-  useCallback,
-  useRef,
-  useMemo,
-  useState,
-  useContext,
-  useEffect,
-} from "react";
+import { useCallback, useRef, useMemo, memo } from "react";
 import { Linking, Platform, StyleSheet } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
-import { LinearGradient } from "expo-linear-gradient";
-import * as MediaLibrary from "expo-media-library";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -18,12 +9,9 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated";
 
-import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -43,10 +31,7 @@ import {
   InstagramButton,
   CopyLinkButton,
 } from "app/components/social-buttons";
-import { ClaimContext } from "app/context/claim-context";
-import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
-import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
-import { useClaimNFT } from "app/hooks/use-claim-nft";
+import { useMyInfo } from "app/hooks/api-hooks";
 import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
@@ -58,11 +43,8 @@ import { getProfileName, getTwitterIntent, getWebBaseURL } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
-import { stripePromise } from "../checkout/stripe";
-import { fetchStripeAccountId } from "../claim/claim-paid-nft-button";
 import { CloseButton } from "../close-button";
 import { useChannelById } from "./hooks/use-channel-detail";
-import { useJoinChannel } from "./hooks/use-join-channel";
 
 const { useParam } = createParam<{
   contractAddress: string;
@@ -72,18 +54,21 @@ const { useParam } = createParam<{
 export const UnlockedChannelModal = () => {
   const [contractAddress] = useParam("contractAddress");
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
-  if (!edition) return null;
+  if (!edition)
+    return (
+      <View tw="min-h-[200px] flex-1 items-center justify-center">
+        <Spinner />
+      </View>
+    );
   return <UnlockedChannel edition={edition} />;
 };
 
-const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
-  const [isPaid] = useParam("isPaid");
-  // const [isPaid] = useParam("isPaid");
-
-  const joinChannel = useJoinChannel();
-
+const UnlockedChannel = memo(function UnlockedChannel({
+  edition,
+}: {
+  edition: CreatorEditionResponse;
+}) {
   const { top } = useSafeAreaInsets();
-  const { state } = useContext(ClaimContext);
   const linearOpaticy = useSharedValue(0);
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
@@ -93,87 +78,14 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
 
   const channelId = nft?.data.item.creator_channel_id;
   const { data } = useChannelById(channelId?.toString());
-  const [showCongratsScreen, setShowCongratsScreen] = useState(!isPaid);
   const router = useRouter();
   const { data: user } = useMyInfo();
   const viewRef = useRef<any>(null);
-  const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
   const url = useMemo(
     () => (nft ? `${getWebBaseURL()}${getNFTSlug(nft?.data.item)}` : ""),
     [nft]
   );
-
-  const removeQueryParam = useCallback(() => {
-    router.replace({ pathname: router.pathname }, undefined, {
-      shallow: true,
-    });
-  }, [router]);
   const { shareImageToIG } = useShareToInstagram(viewRef);
-  const closeModal = useCallback(async () => {
-    router.replace(
-      `${router.pathname}?contractAddress=${edition?.creator_airdrop_edition.contract_address}&unlockedChannelModal=true`
-    );
-    // router.replace(
-    //   {
-    //     pathname: router.pathname,
-    //     query: {
-    //       contractAddress: edition?.creator_airdrop_edition.contract_address,
-    //       unlockedChannelModal: true,
-    //     },
-    //   },
-    //   router.asPath,
-    //   {
-    //     shallow: true,
-    //   }
-    // );
-    if (channelId) {
-      await joinChannel.trigger({ channelId: channelId });
-    }
-
-    setShowCongratsScreen(true);
-  }, [
-    channelId,
-    edition?.creator_airdrop_edition.contract_address,
-    joinChannel,
-    router,
-  ]);
-  const { setPaymentByDefault } = usePaymentsManage();
-
-  const handlePaymentSuccess = useCallback(async () => {
-    const setAsDefaultPaymentMethod = new URLSearchParams(
-      window.location.search
-    ).get("setAsDefaultPaymentMethod");
-    if (!setAsDefaultPaymentMethod) return;
-
-    const profileId = edition?.creator_airdrop_edition.owner_profile_id;
-    const { stripe_account_id: stripeAccount } = await fetchStripeAccountId(
-      profileId
-    );
-
-    const stripe = await stripePromise({ stripeAccount });
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-
-    if (stripe && clientSecret) {
-      const res = await stripe.retrievePaymentIntent(clientSecret);
-      if (typeof res.paymentIntent?.payment_method === "string") {
-        setPaymentByDefault(res.paymentIntent.payment_method);
-      }
-    }
-  }, [edition?.creator_airdrop_edition.owner_profile_id, setPaymentByDefault]);
-
-  const initPaidNFT = useCallback(async () => {
-    if (isPaid && channelId) {
-      handlePaymentSuccess();
-      await claimNFT({ closeModal });
-    }
-  }, [channelId, claimNFT, closeModal, handlePaymentSuccess, isPaid]);
-
-  useEffect(() => {
-    initPaidNFT();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channelId]);
 
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
@@ -211,27 +123,6 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
     }
   }, [router, channelId]);
 
-  if (state.status === "error") {
-    return (
-      <View tw="min-h-[200px] flex-1 items-center justify-center px-8">
-        <Text
-          tw={`text-center text-lg font-extrabold leading-6 text-gray-900 dark:text-gray-100`}
-        >
-          {state.error}
-        </Text>
-        <Button tw="mt-4" onPress={removeQueryParam}>
-          Got it.
-        </Button>
-      </View>
-    );
-  }
-  if (!showCongratsScreen) {
-    return (
-      <View tw="min-h-[200px] flex-1 items-center justify-center">
-        <Spinner />
-      </View>
-    );
-  }
   return (
     <View tw="web:pb-8 flex-1" pointerEvents="box-none">
       <BgGoldLinearGradient />
@@ -327,4 +218,4 @@ const UnlockedChannel = ({ edition }: { edition: CreatorEditionResponse }) => {
       </View>
     </View>
   );
-};
+});

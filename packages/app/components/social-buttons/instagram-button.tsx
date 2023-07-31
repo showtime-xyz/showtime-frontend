@@ -1,13 +1,13 @@
+import { memo } from "react";
 import { Platform } from "react-native";
 
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { InstagramColorful } from "@showtime-xyz/universal.icon";
-import { View } from "@showtime-xyz/universal.view";
 
-export const InstagramButton = ({
+export const InstagramButton = memo(function InstagramButton({
   ctaCopy = "Share on Instagram",
   ...rest
-}: { ctaCopy?: string } & ButtonProps) => {
+}: { ctaCopy?: string } & ButtonProps) {
   if (Platform.OS === "web") {
     return null;
   }
@@ -19,4 +19,4 @@ export const InstagramButton = ({
       {` ${ctaCopy}`}
     </Button>
   );
-};
+});

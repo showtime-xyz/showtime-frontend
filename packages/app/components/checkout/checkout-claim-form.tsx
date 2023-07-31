@@ -112,7 +112,7 @@ const CheckoutForm = ({
                 web: window.location.href,
                 default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
               }) +
-              `?unlockedChannelModal=true&contractAddress=${edition.creator_airdrop_edition?.contract_address}&isPaid=true`,
+              `/checkout-return-for-paid-nft?contractAddress=${edition.creator_airdrop_edition?.contract_address}`,
             receipt_email: email,
           },
         })

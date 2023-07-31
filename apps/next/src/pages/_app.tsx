@@ -26,6 +26,7 @@ import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
 import { CheckoutScreen } from "app/screens/checkout";
 import { CheckoutPaidNFTScreen } from "app/screens/checkout-paid-nft";
 import { CheckoutReturnScreen } from "app/screens/checkout-return";
+import { CheckoutReturnForPaidNFTScreen } from "app/screens/checkout-return-for-paid-nft";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
@@ -205,6 +206,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropFreeScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />
+        <CheckoutReturnForPaidNFTScreen />
         <CheckoutPaidNFTScreen />
         <QRCodeShareScreen />
         <DropViewShareScreen />

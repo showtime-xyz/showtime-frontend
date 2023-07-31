@@ -41,6 +41,7 @@ export type DropPreviewProps = {
   }: {
     size: number;
   }) => React.ReactNode | JSX.Element;
+  isPaidNFT?: boolean;
 };
 
 export const DropPreviewComponent = forwardRef<typeof View, DropPreviewProps>(
@@ -57,6 +58,7 @@ export const DropPreviewComponent = forwardRef<typeof View, DropPreviewProps>(
       tw = "",
       buttonProps,
       preivewComponent,
+      isPaidNFT,
     },
     ref
   ) {
@@ -200,7 +202,11 @@ export const DropPreviewComponent = forwardRef<typeof View, DropPreviewProps>(
                     </Text>
 
                     {userProfile?.data.profile.verified ? (
-                      <VerificationBadge style={{ marginLeft: 4 }} size={12} />
+                      <VerificationBadge
+                        theme={isPaidNFT ? "light" : undefined}
+                        style={{ marginLeft: 4 }}
+                        size={12}
+                      />
                     ) : null}
                   </View>
                   <View tw="h-2" />

@@ -95,6 +95,7 @@ export const DropViewShare = memo(function DropViewShare({
           ctaCopy="View"
           buttonProps={{ variant: "primary" }}
           tw="mt-2"
+          isPaidNFT={isPaidNFT}
           {...rest}
           ref={viewRef}
         />
