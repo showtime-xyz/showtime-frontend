@@ -101,7 +101,7 @@ export const CountryPicker = (props: PhoneNumberPickerProp) => {
           />
         </View>
       </Modal>
-      <View tw="flex-1 rounded-xl bg-gray-900 p-4">
+      <View tw="flex-1 rounded-xl bg-gray-100 p-4 dark:bg-gray-900">
         <Text tw="font-bold text-gray-900 dark:text-gray-50">
           Select Country
         </Text>
