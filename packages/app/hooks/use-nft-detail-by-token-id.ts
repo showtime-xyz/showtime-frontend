@@ -42,7 +42,8 @@ export const useNFTDetailByTokenId = (params: UseNFTDetailByTokenIdParams) => {
     (url) => axios({ url, method: "GET" }),
     {
       revalidateIfStale: false,
-      focusThrottleInterval: 300000,
+      focusThrottleInterval: 30000,
+      dedupingInterval: 30000,
     }
     // { suspense: true }
   );

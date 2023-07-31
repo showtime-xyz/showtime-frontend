@@ -826,6 +826,23 @@ const MessageInput = ({
     [channelId, sendMessage, sendMessageCallback]
   );
 
+  const handleEditMessage = useCallback(async () => {
+    if (!editMessage) return;
+
+    const newMessage = inputRef.current?.value;
+    if (newMessage.trim().length === 0) return;
+    inputRef.current?.reset();
+    enableLayoutAnimations(true);
+    requestAnimationFrame(() => {
+      editMessages.trigger({
+        messageId: editMessage.id,
+        message: newMessage,
+        channelId,
+      });
+      setEditMessage(undefined);
+    });
+  }, [channelId, editMessage, editMessages, setEditMessage]);
+
   return (
     <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
       {isUserAdmin ? (
@@ -835,7 +852,7 @@ const MessageInput = ({
           textInputProps={{
             maxLength: 2000,
           }}
-          onSubmit={handleSubmit}
+          onSubmit={editMessage ? handleEditMessage : handleSubmit}
           submitting={editMessages.isMutating || sendMessage.isMutating}
           tw="bg-white dark:bg-black"
           submitButton={
@@ -856,20 +873,7 @@ const MessageInput = ({
                   <Button
                     disabled={editMessages.isMutating || !editMessage}
                     iconOnly
-                    onPress={() => {
-                      const newMessage = inputRef.current?.value;
-                      if (newMessage.trim().length === 0) return;
-                      inputRef.current?.reset();
-                      enableLayoutAnimations(true);
-                      requestAnimationFrame(() => {
-                        editMessages.trigger({
-                          messageId: editMessage.id,
-                          message: newMessage,
-                          channelId,
-                        });
-                        setEditMessage(undefined);
-                      });
-                    }}
+                    onPress={handleEditMessage}
                   >
                     <Check width={20} height={20} />
                   </Button>
