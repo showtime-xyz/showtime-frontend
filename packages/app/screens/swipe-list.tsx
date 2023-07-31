@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -57,9 +58,10 @@ const FeedSwipeList = () => {
   const { data } = useFeed();
   const [initialScrollItemId] = useParam("initialScrollItemId");
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const initialScrollIndex = data?.findIndex(
-    (item) => item.nft_id == initialScrollItemId
-  );
+  const initialScrollIndex = useMemo(() => {
+    const index = data?.findIndex((item) => item.nft_id == initialScrollItemId);
+    return index === -1 ? 0 : index;
+  }, [data, initialScrollItemId]);
 
   return (
     <SwipeList
@@ -89,9 +91,10 @@ const ProfileSwipeList = () => {
   );
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
-  const initialScrollIndex = data?.findIndex(
-    (item) => item.nft_id == initialScrollItemId
-  );
+  const initialScrollIndex = useMemo(() => {
+    const index = data?.findIndex((item) => item.nft_id == initialScrollItemId);
+    return index === -1 ? 0 : index;
+  }, [data, initialScrollItemId]);
 
   return (
     <MutateProvider mutate={updateItem}>
@@ -123,9 +126,10 @@ const TrendingNFTsSwipeList = () => {
     filter,
   });
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const initialScrollIndex = data?.findIndex(
-    (item) => item.nft_id == initialScrollItemId
-  );
+  const initialScrollIndex = useMemo(() => {
+    const index = data?.findIndex((item) => item.nft_id == initialScrollItemId);
+    return index === -1 ? 0 : index;
+  }, [data, initialScrollItemId]);
 
   return (
     <SwipeList
