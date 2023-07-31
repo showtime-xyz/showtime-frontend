@@ -88,6 +88,7 @@ type GoldButtonProps = Omit<ButtonProps, ""> & {
 const GoldButton = memo(function GoldButton({
   type,
   edition,
+  style,
   ...rest
 }: GoldButtonProps) {
   const router = useRouter();
@@ -181,10 +182,13 @@ const GoldButton = memo(function GoldButton({
       size="regular"
       variant="primary"
       onPress={onHandlePayment}
+      style={[
+        {
+          backgroundColor: "transparent",
+        },
+        style as any,
+      ]}
       {...rest}
-      style={{
-        backgroundColor: "transparent",
-      }}
     >
       <ButtonGoldLinearGradient />
       <View tw="w-full flex-row items-center justify-center">

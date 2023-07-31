@@ -223,17 +223,24 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             <View tw="h-8 flex-row">
               {isCreatorDrop && edition ? (
                 <>
-                  <ClaimButton nft={nft} tw="flex-1" edition={edition} />
-                  <View tw="w-3" />
+                  <ClaimButton
+                    nft={nft}
+                    tw="flex-1"
+                    size="small"
+                    edition={edition}
+                  />
                   {edition?.is_already_claimed ? (
-                    <Button
-                      tw="flex-1"
-                      onPress={() =>
-                        router.push(`/channels/${nft?.creator_channel_id}`)
-                      }
-                    >
-                      View Channel
-                    </Button>
+                    <>
+                      <View tw="w-3" />
+                      <Button
+                        tw="flex-1"
+                        onPress={() =>
+                          router.push(`/channels/${nft?.creator_channel_id}`)
+                        }
+                      >
+                        View Channel
+                      </Button>
+                    </>
                   ) : null}
                 </>
               ) : null}

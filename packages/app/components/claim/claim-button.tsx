@@ -416,7 +416,16 @@ export const ClaimButton = ({
     );
   }
   if (isPaidGated) {
-    return <ClaimPaidNFTButton edition={edition} theme={theme} />;
+    return (
+      <ClaimPaidNFTButton
+        edition={edition}
+        size={size}
+        theme={theme}
+        style={style}
+        tw={tw}
+        {...rest}
+      />
+    );
   }
 
   return (
