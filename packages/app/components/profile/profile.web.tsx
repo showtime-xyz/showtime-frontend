@@ -224,15 +224,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
     }: ListRenderItemInfo<NFT[] & { loading?: boolean }>) => {
       return (
         <View tw="mx-auto mb-px max-w-screen-xl flex-row space-x-px px-0 md:space-x-6 md:px-4 lg:space-x-8">
-          {chuckItem.map((item, chuckItemIndex) => (
+          {chuckItem.map((item) => (
             <Card
               index={itemIndex}
               key={item.nft_id}
               nft={item}
               numColumns={numColumns}
               as={getNFTSlug(item)}
-              href={`${getNFTSlug(item)}?initialScrollIndex=${
-                itemIndex * numColumns + chuckItemIndex
+              href={`${getNFTSlug(item)}?initialScrollItemId=${
+                item.nft_id
               }&tabType=${type}&profileId=${profileId}&collectionId=${
                 filter.collectionId
               }&sortType=${filter.sortType}&type=profile`}

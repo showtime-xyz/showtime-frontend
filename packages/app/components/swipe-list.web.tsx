@@ -49,7 +49,7 @@ export const SwipeList = ({
 }: Props) => {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [initialParamProp] = useParam("initialScrollIndex");
+  const [initialParamProp] = useParam("initialScrollItemId");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
   const isSwiped = useRef(false);
   const swiper = useRef<any>(null);
@@ -89,25 +89,23 @@ export const SwipeList = ({
         e.activeIndex + 1 < data.length ? e.activeIndex + 1 : undefined,
       ];
       if (isSwipeListScreen) {
-        scrollTimer.current = setTimeout(() => {
-          router.replace(
-            {
-              pathname: "/profile/[username]/[dropSlug]",
-              query: {
-                ...router.query,
-                initialScrollIndex: activeIndex,
-                username: data[activeIndex].creator_username,
-                dropSlug: data[activeIndex].slug,
-              },
+        router.replace(
+          {
+            pathname: "/profile/[username]/[dropSlug]",
+            query: {
+              ...router.query,
+              initialScrollItemId: data[e.activeIndex].nft_id,
+              username: data[e.activeIndex].creator_username,
+              dropSlug: data[e.activeIndex].slug,
             },
-            getNFTSlug(data[activeIndex]),
-            { shallow: true }
-          );
-        }, 700);
+          },
+          getNFTSlug(data[e.activeIndex]),
+          { shallow: true }
+        );
       }
       setActiveIndex(e.activeIndex);
     },
-    [router, visibleItems, data, isSwipeListScreen, activeIndex]
+    [router, visibleItems, data, isSwipeListScreen]
   );
 
   if (data.length === 0) return null;

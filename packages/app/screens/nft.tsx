@@ -43,7 +43,7 @@ type Query = {
   showClaim?: boolean;
   username?: string;
   dropSlug?: string;
-  initialScrollIndex?: string;
+  initialScrollItemId?: string;
   showCreatorChannelIntro?: boolean;
 };
 
@@ -51,8 +51,8 @@ const { useParam } = createParam<Query>();
 const { height: screenHeight, width: screenWidth } = Dimensions.get("screen");
 
 export function NftScreen({ fallback = {} }: { fallback?: object }) {
-  const [initialScrollIndex] = useParam("initialScrollIndex");
-  if (typeof initialScrollIndex !== "undefined") {
+  const [initialScrollItemId] = useParam("initialScrollItemId");
+  if (typeof initialScrollItemId !== "undefined") {
     return <SwipeListScreen />;
   }
 

@@ -23,7 +23,7 @@ type Query = {
   profileId: any;
   collectionId: any;
   sortType: string;
-  initialScrollIndex: any;
+  initialScrollItemId: any;
   filter: string;
   creatorId: any;
 };
@@ -55,12 +55,16 @@ export const SwipeListScreen = withColorScheme(() => {
 const FeedSwipeList = () => {
   const { useParam } = createParam<Query>();
   const { data } = useFeed();
-  const [initialScrollIndex] = useParam("initialScrollIndex");
+  const [initialScrollItemId] = useParam("initialScrollItemId");
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const initialScrollIndex = data?.findIndex(
+    (item) => item.nft_id == initialScrollItemId
+  );
+
   return (
     <SwipeList
       data={data}
-      initialScrollIndex={Number(initialScrollIndex)}
+      initialScrollIndex={initialScrollIndex}
       bottomPadding={safeAreaBottom}
     />
   );
@@ -72,7 +76,7 @@ const ProfileSwipeList = () => {
   const [profileId] = useParam("profileId");
   const [collectionId] = useParam("collectionId");
   const [sortType] = useParam("sortType");
-  const [initialScrollIndex] = useParam("initialScrollIndex");
+  const [initialScrollItemId] = useParam("initialScrollItemId");
   const { user } = useUser();
 
   const { data, fetchMore, updateItem, isRefreshing, refresh } = useProfileNFTs(
@@ -84,6 +88,10 @@ const ProfileSwipeList = () => {
     }
   );
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+
+  const initialScrollIndex = data?.findIndex(
+    (item) => item.nft_id == initialScrollItemId
+  );
 
   return (
     <MutateProvider mutate={updateItem}>
@@ -99,7 +107,7 @@ const ProfileSwipeList = () => {
           fetchMore={fetchMore}
           isRefreshing={isRefreshing}
           refresh={refresh}
-          initialScrollIndex={Number(initialScrollIndex)}
+          initialScrollIndex={initialScrollIndex}
           bottomPadding={safeAreaBottom}
         />
       </ProfileTabsNFTProvider>
@@ -110,11 +118,14 @@ const ProfileSwipeList = () => {
 const TrendingNFTsSwipeList = () => {
   const { useParam } = createParam<Query>();
   const [filter] = useParam("filter");
-  const [initialScrollIndex] = useParam("initialScrollIndex");
+  const [initialScrollItemId] = useParam("initialScrollItemId");
   const { data } = useTrendingNFTS({
     filter,
   });
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const initialScrollIndex = data?.findIndex(
+    (item) => item.nft_id == initialScrollItemId
+  );
 
   return (
     <SwipeList
@@ -122,7 +133,7 @@ const TrendingNFTsSwipeList = () => {
       // fetchMore={fetchMore}
       // isRefreshing={isRefreshing}
       // refresh={refresh}
-      initialScrollIndex={Number(initialScrollIndex)}
+      initialScrollIndex={initialScrollIndex}
       bottomPadding={safeAreaBottom}
     />
   );

@@ -42,7 +42,7 @@ export const CssSwipeList = ({
 }: Props) => {
   const router = useRouter();
   const listRef = useRef<HTMLDivElement>(null);
-  const [initialParamProp] = useParam("initialScrollIndex");
+  const [initialParamProp] = useParam("initialScrollItemId");
   const isSwipeListScreen = typeof initialParamProp !== "undefined";
   const visibleItems = useSharedValue<any[]>([
     undefined,
@@ -80,7 +80,7 @@ export const CssSwipeList = ({
               pathname: "/profile/[username]/[dropSlug]",
               query: {
                 ...router.query,
-                initialScrollIndex: activeIndex,
+                initialScrollItemId: data[activeIndex].nft_id,
                 username: data[activeIndex].creator_username,
                 dropSlug: data[activeIndex].slug,
               },
