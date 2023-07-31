@@ -275,6 +275,7 @@ export const DropFree = () => {
           onBackPress={() => modalContext?.pop()}
           closeIcon
           title="Congrats! Now share it ✦"
+          headerShown={false}
         >
           <DropViewShare
             title={getValues("title")}
@@ -1054,39 +1055,52 @@ const CreateDropMoreOptions = (
   );
 };
 
-const Layout = (props: {
+const Layout = ({
+  headerShown = true,
+  ...rest
+}: {
   title: string;
   onBackPress: () => void;
   children: any;
   closeIcon?: boolean;
+  headerShown?: boolean;
   topRightComponent?: React.ReactNode;
 }) => {
   const isDark = useIsDarkMode();
   const insets = useSafeAreaInsets();
   return (
-    <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
-      <View tw="mx-4 my-8 flex-row items-center">
-        <Pressable tw="absolute z-20" onPress={props.onBackPress}>
-          {props.closeIcon ? (
-            <Close color={isDark ? "white" : "black"} width={24} height={24} />
-          ) : (
-            <ArrowLeft
-              color={isDark ? "white" : "black"}
-              width={24}
-              height={24}
-            />
-          )}
-        </Pressable>
-        <View tw="w-full flex-row items-center justify-center">
-          <View>
-            <Text tw="text-base font-bold text-black dark:text-white">
-              {props.title}
-            </Text>
+    <View
+      tw="flex-1"
+      style={{ paddingBottom: headerShown ? Math.max(insets.bottom, 16) : 0 }}
+    >
+      {headerShown ? (
+        <View tw="mx-4 my-8 flex-row items-center">
+          <Pressable tw="absolute z-20" onPress={rest.onBackPress}>
+            {rest.closeIcon ? (
+              <Close
+                color={isDark ? "white" : "black"}
+                width={24}
+                height={24}
+              />
+            ) : (
+              <ArrowLeft
+                color={isDark ? "white" : "black"}
+                width={24}
+                height={24}
+              />
+            )}
+          </Pressable>
+          <View tw="w-full flex-row items-center justify-center">
+            <View>
+              <Text tw="text-base font-bold text-black dark:text-white">
+                {rest.title}
+              </Text>
+            </View>
+            <View tw="absolute right-0">{rest.topRightComponent}</View>
           </View>
-          <View tw="absolute right-0">{props.topRightComponent}</View>
         </View>
-      </View>
-      {props.children}
+      ) : null}
+      {rest.children}
     </View>
   );
 };
