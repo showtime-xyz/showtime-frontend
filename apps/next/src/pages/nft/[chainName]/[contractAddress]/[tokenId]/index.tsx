@@ -35,6 +35,8 @@ export async function getServerSideProps(context) {
     }/api/drop?username=${username}&image=${imageUrl}&pfp=${pfp}&dropCreated=true`;
     // lets check if the image is from showtime.xyz (eg Bunny,
     // since they start with media.showtime.xyz and video.showtime.xyz)
+    console.log(image);
+
     if (imageUrl && imageUrl.includes("showtime.xyz/")) {
       imageUrl = imageUrl + "?class=ogimage";
     }
