@@ -74,9 +74,9 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
     <View tw={["h-full w-full", tw]} style={viewStyle} {...rest}>
       <RouteComponent
         as={getNFTSlug(nft)}
-        href={`${getNFTSlug(
-          nft
-        )}?initialScrollIndex=${index}&filter=${filter}&type=trendingNFTs`}
+        href={`${getNFTSlug(nft)}?initialScrollItemId=${
+          nft.nft_id
+        }&filter=${filter}&type=trendingNFTs`}
       >
         <View
           tw="overflow-hidden rounded-2xl"
@@ -122,9 +122,9 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
       </View>
       <RouteComponent
         as={getNFTSlug(nft)}
-        href={`${getNFTSlug(
-          nft
-        )}?initialScrollIndex=${index}&filter=all&type=trendingNFTs`}
+        href={`${getNFTSlug(nft)}?initialScrollItemId=${
+          nft.nft_id
+        }&filter=all&type=trendingNFTs`}
         tw="mt-2.5"
       >
         <Text

@@ -42,6 +42,8 @@ export const useInfiniteListQuerySWR = <T>(
       // suspense: true,
       refreshInterval,
       revalidateOnMount: true,
+      dedupingInterval: 30000,
+      focusThrottleInterval: 30000,
     });
 
   const isRefreshingSWR = isValidating && data && data.length === size;
