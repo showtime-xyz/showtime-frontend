@@ -33,7 +33,7 @@ import { formatDateRelativeWithIntl } from "app/utilities";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
-} from "./animated-cell-container";
+} from "./components/animated-cell-container";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,

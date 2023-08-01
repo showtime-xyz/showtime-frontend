@@ -60,7 +60,7 @@ export const CreatorChannelsIntro = () => {
             tw="absolute -top-24 self-center"
           >
             <Image
-              source={require("./channel-graphic.png")}
+              source={require("./assets/channel-graphic.png")}
               width={imageSize}
               height={imageSize}
             />
