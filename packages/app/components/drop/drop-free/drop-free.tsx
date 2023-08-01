@@ -612,7 +612,6 @@ const SetPriceAndDuration = (
   const scrollViewRef = useRef<RNScrollView>(null);
   const { data: editionPriceRange, isLoading: editionPriceRangeLoading } =
     usePaymentEditionPriceRange();
-  console.log("price ranges ", editionPriceRange);
 
   const onNextStep = async () => {
     const res = await trigger(
@@ -1419,7 +1418,6 @@ const CompleteStripeFlow = () => {
             },
           }}
           render={({ field: { onChange, onBlur, value, ref } }) => {
-            console.log("valuee ", value);
             return (
               <Fieldset
                 ref={ref}
