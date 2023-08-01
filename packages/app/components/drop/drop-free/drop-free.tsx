@@ -37,6 +37,7 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -609,7 +610,8 @@ const SetPriceAndDuration = (
     useState(false);
   const isDark = useIsDarkMode();
   const scrollViewRef = useRef<RNScrollView>(null);
-  const { data: editionPriceRange } = usePaymentEditionPriceRange();
+  const { data: editionPriceRange, isLoading: editionPriceRangeLoading } =
+    usePaymentEditionPriceRange();
   console.log("price ranges ", editionPriceRange);
 
   const onNextStep = async () => {
@@ -628,7 +630,17 @@ const SetPriceAndDuration = (
       }
     }
   };
-  const defaultPrices = useMemo(() => [3, 8, 19], []);
+  const defaultPrices = useMemo(
+    () =>
+      editionPriceRange
+        ? [
+            editionPriceRange.default_prices.first,
+            editionPriceRange.default_prices.second,
+            editionPriceRange.default_prices.third,
+          ]
+        : [],
+    [editionPriceRange]
+  );
 
   const isDefaultPrice = useMemo(() => {
     return defaultPrices.includes(selectedPrice);
@@ -682,29 +694,37 @@ const SetPriceAndDuration = (
                 more affordable than discounts.
               </Text>
               <View tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black">
-                {defaultPrices.map((price) => (
-                  <Pressable
-                    key={price}
-                    onPress={() => setPrice(price)}
-                    tw={`flex-1 items-center rounded-2xl p-4 ${
-                      selectedPrice === price
-                        ? "bg-amber-200 dark:bg-yellow-800"
-                        : ""
-                    }`}
-                    style={{ rowGap: 8 }}
-                  >
-                    <Text
-                      tw={`text-4xl text-gray-700
-                    dark:text-gray-100`}
+                {editionPriceRangeLoading ? (
+                  <View tw="flex-1 flex-row items-center justify-between">
+                    <Skeleton width="30%" height={72} />
+                    <Skeleton width="30%" height={72} />
+                    <Skeleton width="30%" height={72} />
+                  </View>
+                ) : (
+                  defaultPrices.map((price) => (
+                    <Pressable
+                      key={price}
+                      onPress={() => setPrice(price)}
+                      tw={`flex-1 items-center rounded-2xl p-4 ${
+                        selectedPrice === price
+                          ? "bg-amber-200 dark:bg-yellow-800"
+                          : ""
+                      }`}
+                      style={{ rowGap: 8 }}
                     >
-                      {getCurrencySymbol(editionPriceRange?.currency)}
-                      {price}
-                    </Text>
-                    <Text tw="text-xs text-gray-700 dark:text-gray-100">
-                      {editionPriceRange?.currency}
-                    </Text>
-                  </Pressable>
-                ))}
+                      <Text
+                        tw={`text-4xl text-gray-700
+                    dark:text-gray-100`}
+                      >
+                        {getCurrencySymbol(editionPriceRange?.currency)}
+                        {price}
+                      </Text>
+                      <Text tw="text-xs text-gray-700 dark:text-gray-100">
+                        {editionPriceRange?.currency}
+                      </Text>
+                    </Pressable>
+                  ))
+                )}
               </View>
               {isDefaultPrice ? (
                 <Pressable
@@ -795,7 +815,7 @@ const SetPriceAndDuration = (
                   height={24}
                 />
               </View>
-              <View tw="ml-[-2px] flex-row flex-wrap" style={{ gap: 4 }}>
+              <View tw="ml-[-2px] flex-row flex-wrap" style={{ gap: 8 }}>
                 <DataPill
                   tw={isDark ? "bg-black" : "bg-white"}
                   label={`${getValues("royalty")}% Royalties`}

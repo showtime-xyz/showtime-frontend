@@ -6,6 +6,11 @@ type EditionPriceRange = {
   min: number;
   max: number;
   currency: string;
+  default_prices: {
+    first: number;
+    second: number;
+    third: number;
+  };
 };
 
 export const usePaymentEditionPriceRange = () => {
