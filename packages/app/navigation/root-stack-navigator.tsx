@@ -27,6 +27,7 @@ import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
+import { DropImageShareScreen } from "app/screens/drop-image-share";
 import { DropUpdateScreen } from "app/screens/drop-update";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
@@ -253,7 +254,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
-
+        <Stack.Screen name="dropImageShare" component={DropImageShareScreen} />
         <Stack.Screen
           name="dropEditDetailsModal"
           component={DropEditDetailsScreen}

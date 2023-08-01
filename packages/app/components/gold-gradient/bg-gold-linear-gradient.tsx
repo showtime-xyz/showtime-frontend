@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient, LinearGradientProps } from "expo-linear-gradient";
 
 const linearProps = {
   start: { x: 6, y: 1.9 },
@@ -26,13 +26,18 @@ const linearProps = {
     "#F5E794",
   ],
 };
-
-export const BgGoldLinearGradient = () => {
+type BgGoldLinearGradientProps = Omit<LinearGradientProps, "colors"> & {
+  colors?: LinearGradientProps["colors"];
+};
+export const BgGoldLinearGradient = ({
+  ...rest
+}: BgGoldLinearGradientProps) => {
   return (
     <LinearGradient
-      style={[StyleSheet.absoluteFill]}
+      style={[StyleSheet.absoluteFillObject]}
       pointerEvents="none"
       {...linearProps}
+      {...rest}
     />
   );
 };

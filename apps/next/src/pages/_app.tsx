@@ -41,6 +41,7 @@ import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropFreeScreen } from "app/screens/drop-free";
+import { DropImageShareScreen } from "app/screens/drop-image-share";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
@@ -209,6 +210,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <CheckoutReturnForPaidNFTScreen />
         <CheckoutPaidNFTScreen />
         <QRCodeShareScreen />
+        <DropImageShareScreen />
         <DropViewShareScreen />
         <CreatorChannelsIntroScreen />
         <CreatorChannelsMembersScreen />

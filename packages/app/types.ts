@@ -76,6 +76,7 @@ export type NFT = {
   image_path: string | null;
   video_urls: BunnyVideoUrls | null;
   creator_channel_id?: number;
+  gating_type?: GatingType;
 };
 
 export type Creator = {

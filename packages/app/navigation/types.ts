@@ -109,6 +109,7 @@ type RootStackNavigatorParams = {
   dropExplanation: undefined;
   drop: undefined;
   qrCodeShare: undefined;
+  dropImageShare: undefined;
   dropViewShareModal: undefined;
   raffle: undefined;
   claim: undefined;

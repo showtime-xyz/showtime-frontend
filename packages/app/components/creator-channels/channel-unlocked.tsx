@@ -25,7 +25,7 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BgGoldLinearGradient } from "app/components/gold-gradient";
-import { useShareToInstagram } from "app/components/share/use-share-to-instagram";
+import { useShareImage } from "app/components/share/use-share-image";
 import {
   TwitterButton,
   InstagramButton,
@@ -85,7 +85,7 @@ const UnlockedChannel = memo(function UnlockedChannel({
     () => (nft ? `${getWebBaseURL()}${getNFTSlug(nft?.data.item)}` : ""),
     [nft]
   );
-  const { shareImageToIG } = useShareToInstagram(viewRef);
+  const { shareImageToIG } = useShareImage(viewRef);
 
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(

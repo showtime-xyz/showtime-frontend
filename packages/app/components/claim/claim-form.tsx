@@ -33,7 +33,6 @@ import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary"
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
-import { QRCodeModal } from "app/components/qr-code";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
@@ -244,14 +243,6 @@ export const ClaimForm = ({
 
   if (isIncompletedProfile) {
     return null;
-  }
-
-  if (state.status === "share") {
-    return (
-      <QRCodeModal
-        contractAddress={edition?.creator_airdrop_edition.contract_address}
-      />
-    );
   }
 
   const primaryWallet = user?.data.profile.primary_wallet;

@@ -27,19 +27,20 @@ export async function getServerSideProps(context) {
     });
     const username = nft?.creator_name;
     const pfp = nft?.creator_img_url;
-    const desc = nft?.creator_img_url;
-    const image = `${
-      __DEV__
-        ? "http://localhost:3000"
-        : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
-    }/api/drop?username=${username}&image=${imageUrl}&pfp=${pfp}&dropCreated=true`;
-    // lets check if the image is from showtime.xyz (eg Bunny,
-    // since they start with media.showtime.xyz and video.showtime.xyz)
-    console.log(image);
+    const desc = nft?.token_description;
+    const gatingType = nft?.gating_type;
 
     if (imageUrl && imageUrl.includes("showtime.xyz/")) {
       imageUrl = imageUrl + "?class=ogimage";
     }
+
+    const image = encodeURI(
+      `${
+        __DEV__
+          ? "http://localhost:3000"
+          : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
+      }/api/drop?username=${username}&image=${imageUrl}&pfp=${pfp}&dropCreated=true&desc=${desc}&gatingType=${gatingType}`
+    );
 
     if (nft) {
       return {
@@ -50,7 +51,7 @@ export async function getServerSideProps(context) {
               nft.creator_name ?? getCreatorUsernameFromNFT(nft)
             } | Showtime`,
             description: nft.token_description,
-            image: nft?.nsfw ? fallbackImage : imageUrl,
+            image: nft?.nsfw ? fallbackImage : image,
             deeplinkUrl: `nft/${chainName}/${contractAddress}/${tokenId}`,
           },
         },

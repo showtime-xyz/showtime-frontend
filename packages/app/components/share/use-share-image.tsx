@@ -1,14 +1,19 @@
-import { useCallback } from "react";
-import { Linking } from "react-native";
+import { useCallback, useState } from "react";
+import { Linking, Platform } from "react-native";
 
 import * as MediaLibrary from "expo-media-library";
 
 import { Alert } from "@showtime-xyz/universal.alert";
+import { Haptics } from "@showtime-xyz/universal.haptics";
 
+import domtoimage from "app/lib/dom-to-image";
+import { Logger } from "app/lib/logger";
 import Share, { Social } from "app/lib/react-native-share";
 import { captureRef, CaptureOptions } from "app/lib/view-shot";
 
-export const useShareToInstagram = (viewRef: any) => {
+import { toast } from "design-system/toast";
+
+export const useShareImage = (viewRef: any) => {
   const [status, requestPermission] = MediaLibrary.usePermissions();
 
   const getViewShot = useCallback(
@@ -64,6 +69,7 @@ export const useShareToInstagram = (viewRef: any) => {
     },
     [checkPhotosPermission]
   );
+
   const shareImageToIG = useCallback(async () => {
     const url = await getViewShot();
 
@@ -89,7 +95,51 @@ export const useShareToInstagram = (viewRef: any) => {
     }).catch((err) => {});
   }, [getViewShot, prepareShareToIG]);
 
+  const downloadToLocal = useCallback(async () => {
+    console.log(viewRef.current);
+
+    if (Platform.OS === "web") {
+      const dataUrl = await domtoimage.toPng(viewRef.current as Node, {
+        quality: 1,
+      });
+      const link = document.createElement("a");
+      link.download = `${new Date().valueOf()}`;
+      link.href = dataUrl;
+      link.click();
+    } else {
+      const url = await getViewShot();
+      if (!url) {
+        Alert.alert("Oops, An error occurred.");
+        return;
+      }
+      const hasPermission = await checkPhotosPermission();
+      if (hasPermission) {
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        await MediaLibrary.saveToLibraryAsync(url);
+        toast.success("Saved to Photos");
+      } else {
+        Alert.alert("No write permission");
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      }
+    }
+  }, [checkPhotosPermission, getViewShot, viewRef]);
+
+  const shareOpenMore = useCallback(async () => {
+    const url = await getViewShot();
+    try {
+      const ShareResponse = await Share.open({
+        title: ``,
+        message: ``,
+        url,
+      });
+      Logger.log("shareOpenMore Result =>", ShareResponse);
+    } catch (error) {
+      Logger.error("shareOpenMore Error =>", error);
+    }
+  }, [getViewShot]);
   return {
     shareImageToIG,
+    downloadToLocal,
+    shareOpenMore,
   };
 };

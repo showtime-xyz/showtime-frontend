@@ -5,6 +5,7 @@ import {
   Globe,
   Lock,
   SpotifyPure,
+  LockBadge,
 } from "@showtime-xyz/universal.icon";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -60,6 +61,11 @@ export const contentGatingType = {
     icon: SpotifyPure,
     text: "Pre-Save to collect",
     typeName: "Pre-Save",
+  },
+  paid_nft: {
+    icon: LockBadge,
+    text: "Collect to unlock channel",
+    typeName: "Paid NFT",
   },
 };
 
