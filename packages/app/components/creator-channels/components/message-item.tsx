@@ -45,10 +45,10 @@ import {
 
 import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
-import { GatedMessage, StarDropBadge } from "../gated-message";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { MessageItemProps } from "../types";
+import { GatedMessage, StarDropBadge } from "./gated-message";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -135,13 +135,14 @@ export const MessageItem = memo(
       return false;
     }, [channel_message.created_at]);
 
-    if (channel_message.is_payment_gated && !channel_message.body) {
-      // TODO: determine which props to pass
+    const isStarDrop = channel_message.is_payment_gated;
+    const isUnlockedStarDrop = isStarDrop && channel_message.body;
+
+    if (isStarDrop && !isUnlockedStarDrop) {
+      // StarDrop but not unlocked
       return <GatedMessage latestNFT={latestNFTSlug} />;
     }
 
-    const isStarDrop = channel_message.is_payment_gated;
-    //const isStarDrop = false;
     return (
       <AnimatedView tw="my-2 px-3" style={style} ref={animatedViewRef}>
         <View tw="flex-row" style={{ columnGap: 8 }}>
@@ -361,7 +362,7 @@ export const MessageItem = memo(
               )}
             </Text>
             <PlatformAnimateHeight
-              initialHeight={item.reaction_group.length > 0 ? 34 : 0}
+              initialHeight={item.reaction_group.length > 0 ? 29 : 0}
             >
               {item.reaction_group.length > 0 ? (
                 <AnimatedView tw="pt-1" layout={Layout}>
