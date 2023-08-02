@@ -99,7 +99,9 @@ const NFTScrollList = ({ data, isLoading, fetchMore }: NFTScrollListProps) => {
       <View tw="p-2">
         <Card
           as={getNFTSlug(item)}
-          href={`${getNFTSlug(item)}?initialScrollIndex=${index}&type=feed`}
+          href={`${getNFTSlug(item)}?initialScrollItemId=${
+            item.nft_id
+          }&type=feed`}
           nft={item}
           sizeStyle={{ width: CARD_WIDTH, height: CARD_WIDTH }}
           tw="mb-4"

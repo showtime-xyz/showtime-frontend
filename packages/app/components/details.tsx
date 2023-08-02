@@ -1,7 +1,6 @@
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Owner } from "app/components/card";
 import type { NFT } from "app/types";
 
 function Details({ nft }: { nft?: NFT }) {
@@ -24,7 +23,6 @@ function Details({ nft }: { nft?: NFT }) {
       {nft ? (
         <View tw="mx-4 border-b border-gray-100 dark:border-gray-900" />
       ) : null}
-      <Owner nft={nft} />
     </>
   );
 }

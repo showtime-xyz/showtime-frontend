@@ -33,7 +33,7 @@ import { formatDateRelativeWithIntl } from "app/utilities";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
-} from "./animated-cell-container";
+} from "./components/animated-cell-container";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,
@@ -216,6 +216,12 @@ const CreatorChannelsListItem = memo(
                 </Text>
               </View>
             </View>
+            {item.itemType !== "owned" && !item.read ? (
+              // we don't want to show the unread indicator for owned channels
+              <View>
+                <View tw="h-3 w-3 rounded-full bg-indigo-600" />
+              </View>
+            ) : null}
           </View>
         </View>
       </PlatformPressable>

@@ -48,7 +48,11 @@ export function useCreatorCollectionDetail(editionAddress?: string) {
       ? "/v1/creator-airdrops/edition?edition_address=" + editionAddress
       : null,
     fetcher,
-    { focusThrottleInterval: 300000, revalidateIfStale: false }
+    {
+      focusThrottleInterval: 30000,
+      revalidateIfStale: false,
+      dedupingInterval: 30000,
+    }
   );
 
   return {

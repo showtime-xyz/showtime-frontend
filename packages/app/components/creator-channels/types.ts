@@ -3,7 +3,7 @@ import {
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 
-import { AnimatedInfiniteScrollList } from "./animated-cell-container";
+import { AnimatedInfiniteScrollList } from "./components/animated-cell-container";
 import { ChannelMessageItem } from "./hooks/use-channel-messages";
 import { ChannelReactionResponse } from "./hooks/use-channel-reactions";
 

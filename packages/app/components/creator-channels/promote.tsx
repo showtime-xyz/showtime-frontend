@@ -178,7 +178,7 @@ export const ChannelsPromote = () => {
                   >
                     <View tw="absolute inset-0">
                       <Image
-                        source={require("./channel-promo.png")}
+                        source={require("./assets/channel-promo.png")}
                         width={imageWidth}
                         height={imageHeight}
                       />

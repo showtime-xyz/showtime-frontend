@@ -192,6 +192,11 @@ const CreatorChannelsListItem = memo(
                 </Text>
               </View>
             </View>
+            {item.itemType !== "owned" && !item.read ? (
+              <View tw="self-center">
+                <View tw="h-3 w-3 rounded-full bg-indigo-600" />
+              </View>
+            ) : null}
           </View>
         </View>
       </Pressable>

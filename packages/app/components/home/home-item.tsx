@@ -87,7 +87,7 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
 
     return (
       <NativeRouteComponent
-        href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
+        href={`${getNFTSlug(nft)}?initialScrollItemId=${nft.nft_id}&type=feed`}
       >
         <View tw="mb-2 mt-6 px-4 md:px-0">
           <CreatorOnFeed
@@ -115,7 +115,9 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
           >
             <RouteComponent
               as={getNFTSlug(nft)}
-              href={`${getNFTSlug(nft)}?initialScrollIndex=${index}&type=feed`}
+              href={`${getNFTSlug(nft)}?initialScrollItemId=${
+                nft.nft_id
+              }&type=feed`}
             >
               <Text tw="text-15 font-bold text-gray-900 dark:text-white">
                 {nft?.token_name}
@@ -139,9 +141,9 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
             <View tw="mt-3 flex-row items-center">
               <RouteComponent
                 as={getNFTSlug(nft)}
-                href={`${getNFTSlug(
-                  nft
-                )}?initialScrollIndex=${index}&type=feed`}
+                href={`${getNFTSlug(nft)}?initialScrollItemId=${
+                  nft.nft_id
+                }&type=feed`}
               >
                 <View
                   tw="overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-900"
