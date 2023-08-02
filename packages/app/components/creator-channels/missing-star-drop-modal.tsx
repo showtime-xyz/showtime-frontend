@@ -23,7 +23,7 @@ export const MissingStarDropModal = ({ isOpen, close }: Props) => {
       visible={isOpen}
       onRequestClose={close}
     >
-      <View tw="bg-black/30" style={StyleSheet.absoluteFillObject} />
+      <View tw="bg-black/70" style={StyleSheet.absoluteFillObject} />
       <View tw="flex-1 items-center justify-center px-4">
         <View tw="max-w-[380px] rounded-3xl bg-white dark:bg-gray-900">
           <ModalHeader title="Star Drops" onClose={close} />
