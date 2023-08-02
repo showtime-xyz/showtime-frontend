@@ -52,7 +52,6 @@ LogBox.ignoreLogs([
   "Sending `onAnimatedValueUpdate` with no listeners registered.", // `react-native-tab-view` waring issue.
   "Did not receive response to shouldStartLoad in time", // warning from @magic-sdk/react-native's react-native-webview dependency. https://github.com/react-native-webview/react-native-webview/issues/124,
   "Looks like you're trying",
-  "The default export has been moved to a named export and it will be removed in version 1, change to import { kv }",
 ]);
 
 function App() {
