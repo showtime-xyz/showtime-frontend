@@ -11,7 +11,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
-import { MessageBox } from "app/components/messages";
 
 import { HeaderProps } from "../types";
 
