@@ -17,6 +17,7 @@ async function postMessage(
     method: "POST",
     data: {
       body: arg.message,
+      is_payment_gated: true,
     },
   });
 }
@@ -46,6 +47,7 @@ export const useSendChannelMessage = (channelId?: string) => {
           const optimisticObject = {
             channel_message: {
               body: message,
+              is_payment_gated: true,
               id: optimisticObjectId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
