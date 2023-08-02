@@ -80,6 +80,7 @@ type GoldButtonProps = Omit<ButtonProps, ""> & {
   edition?: CreatorEditionResponse;
   side?: "top" | "bottom" | "left" | "right";
 };
+
 const GoldButton = memo(function GoldButton({
   type,
   edition,
@@ -192,9 +193,11 @@ const GoldButton = memo(function GoldButton({
       <View tw="w-full flex-row items-center justify-center">
         <View>
           <Image
-            source={{
-              uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
-            }}
+            source={
+              Platform.OS === "web"
+                ? "https://media.showtime.xyz/assets/st-logo.png"
+                : require("app/components/assets/st-logo.png")
+            }
             width={iconSize}
             height={iconSize}
             style={{ width: iconSize, height: iconSize }}
