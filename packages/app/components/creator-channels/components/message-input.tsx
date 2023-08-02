@@ -22,6 +22,7 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 
 import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
+import { MissingStarDropModal } from "../missing-star-drop-modal";
 
 export const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
   return (
@@ -160,47 +161,50 @@ export const MessageInput = ({
   }, [channelId, editMessage, editMessages, setEditMessage]);
 
   return (
-    <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
-      {isUserAdmin ? (
-        <MessageBox
-          ref={inputRef}
-          placeholder="Send an update..."
-          textInputProps={{
-            maxLength: 2000,
-          }}
-          onSubmit={editMessage ? handleEditMessage : handleSubmit}
-          submitting={editMessages.isMutating || sendMessage.isMutating}
-          tw="bg-white dark:bg-black"
-          submitButton={
-            editMessage ? (
-              <Animated.View entering={FadeIn} exiting={FadeOut}>
-                <View tw="flex-row" style={{ gap: 8 }}>
-                  <Button
-                    variant="secondary"
-                    style={{ backgroundColor: colors.red[500] }}
-                    iconOnly
-                    onPress={() => {
-                      setEditMessage(undefined);
-                      inputRef.current?.reset();
-                    }}
-                  >
-                    <Close width={20} height={20} color="white" />
-                  </Button>
-                  <Button
-                    disabled={editMessages.isMutating || !editMessage}
-                    iconOnly
-                    onPress={handleEditMessage}
-                  >
-                    <Check width={20} height={20} />
-                  </Button>
-                </View>
-              </Animated.View>
-            ) : null
-          }
-        />
-      ) : (
-        <MessageBoxUnavailable />
-      )}
-    </Animated.View>
+    <>
+      <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
+        {isUserAdmin ? (
+          <MessageBox
+            ref={inputRef}
+            placeholder="Send an update..."
+            textInputProps={{
+              maxLength: 2000,
+            }}
+            onSubmit={editMessage ? handleEditMessage : handleSubmit}
+            submitting={editMessages.isMutating || sendMessage.isMutating}
+            tw="bg-white dark:bg-black"
+            submitButton={
+              editMessage ? (
+                <Animated.View entering={FadeIn} exiting={FadeOut}>
+                  <View tw="flex-row" style={{ gap: 8 }}>
+                    <Button
+                      variant="secondary"
+                      style={{ backgroundColor: colors.red[500] }}
+                      iconOnly
+                      onPress={() => {
+                        setEditMessage(undefined);
+                        inputRef.current?.reset();
+                      }}
+                    >
+                      <Close width={20} height={20} color="white" />
+                    </Button>
+                    <Button
+                      disabled={editMessages.isMutating || !editMessage}
+                      iconOnly
+                      onPress={handleEditMessage}
+                    >
+                      <Check width={20} height={20} />
+                    </Button>
+                  </View>
+                </Animated.View>
+              ) : null
+            }
+          />
+        ) : (
+          <MessageBoxUnavailable />
+        )}
+      </Animated.View>
+      <MissingStarDropModal isOpen />
+    </>
   );
 };
