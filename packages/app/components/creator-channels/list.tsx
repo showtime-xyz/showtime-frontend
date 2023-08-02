@@ -13,7 +13,7 @@ import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Showtime } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -112,10 +112,10 @@ const CreatorChannelsListItem = memo(
         return (
           <View tw="flex-row items-center">
             <View tw="mr-2">
-              <Showtime
-                width={14}
-                height={14}
-                fill={isDark ? "white" : "black"}
+              <Image
+                source={require("app/components/assets/st-logo.png")}
+                width={18}
+                height={18}
               />
             </View>
             <Text

@@ -5,6 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import { Showtime } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -97,7 +98,15 @@ export const GatedMessage = memo(({ latestNFT }: { latestNFT?: string }) => {
         </View>
         <View tw="flex-row items-center justify-center">
           <View tw="mr-2">
-            <Showtime width={16} height={16} fill={"black"} />
+            <Image
+              source={
+                Platform.OS === "web"
+                  ? "https://media.showtime.xyz/assets/st-logo.png"
+                  : require("app/components/assets/st-logo.png")
+              }
+              width={18}
+              height={18}
+            />
           </View>
           <Text tw="text-sm font-semibold">Collect to unlock</Text>
         </View>

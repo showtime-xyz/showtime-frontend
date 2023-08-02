@@ -3,7 +3,7 @@ import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Showtime } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -99,10 +99,10 @@ const CreatorChannelsListItem = memo(
         return (
           <View tw="flex-row items-center">
             <View tw="mr-2">
-              <Showtime
+              <Image
+                source={"https://media.showtime.xyz/assets/icon-96x96.png"}
                 width={14}
                 height={14}
-                fill={isDark ? "white" : "black"}
               />
             </View>
             <Text tw={["text-sm", isDark ? "text-white" : "text-black"]}>
