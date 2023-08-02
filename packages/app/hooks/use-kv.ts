@@ -3,14 +3,6 @@ import { useMemo } from "react";
 import axios from "axios";
 import useSWR from "swr";
 
-export type Banner = {
-  type: "profile" | "drop" | "link";
-  username: string;
-  slug: string;
-  link: string;
-  image: string;
-};
-
 const fetcher = (key: string) =>
   axios
     .get(`${process.env.NEXT_PUBLIC_KV_REST_API_URL}/get/${key}`, {
