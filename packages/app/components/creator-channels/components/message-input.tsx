@@ -75,7 +75,7 @@ export const MessageInput = ({
   hasPaidNFT?: boolean;
 }) => {
   const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
-    useState(hasPaidNFT || false);
+    useState(Boolean(!hasPaidNFT && isUserAdmin));
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);

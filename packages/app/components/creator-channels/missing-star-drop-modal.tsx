@@ -53,11 +53,9 @@ export const MissingStarDropModal = ({ isOpen, close }: Props) => {
               size="regular"
               onPress={() => {
                 close();
-                if (Platform.OS !== "web") {
+                requestAnimationFrame(() => {
                   router.push("/drop/free");
-                } else {
-                  router.replace("/drop/free");
-                }
+                });
               }}
               tw="w-full"
               style={[
@@ -81,7 +79,7 @@ export const MissingStarDropModal = ({ isOpen, close }: Props) => {
                 </View>
 
                 <Text tw={["ml-2 text-base font-semibold text-black"]}>
-                  Collect Star Drop
+                  Create a Star Drop
                 </Text>
               </View>
             </Button>
