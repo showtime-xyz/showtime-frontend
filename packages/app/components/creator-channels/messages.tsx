@@ -484,7 +484,7 @@ export const Messages = memo(() => {
             "flex-1 overflow-hidden",
             //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
             !isUserAdmin && !hasUnlockedMessage
-              ? ""
+              ? "pb-2"
               : "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
           ]}
         >

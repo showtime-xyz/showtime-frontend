@@ -186,6 +186,7 @@ export const MessageInput = ({
         }}
       >
         <Button
+          tw={"bg-black dark:bg-white"}
           size={"regular"}
           variant="primary"
           onPress={() => {
@@ -193,7 +194,6 @@ export const MessageInput = ({
               router.push(latestPaidNFTSlug);
             }
           }}
-          style={{ backgroundColor: "black" }}
         >
           <View tw="w-full flex-row items-center justify-center">
             <View>
@@ -209,13 +209,17 @@ export const MessageInput = ({
               />
             </View>
 
-            <Text tw={"ml-2 text-base font-semibold text-[#FFCB6C]"}>
+            <Text
+              tw={
+                "ml-2 text-base font-semibold text-[#FFCB6C] dark:text-[#E88A3F]"
+              }
+            >
               Collect a Star Drop
             </Text>
           </View>
         </Button>
         <View tw="mt-3 pb-4">
-          <Text tw="text-center text-xs text-gray-500">
+          <Text tw="text-center text-xs text-gray-500 dark:text-gray-300">
             Collecting a Star Drop unlocks privileges with this artist like
             exclusive channel content, a Star Badge, and more
           </Text>
