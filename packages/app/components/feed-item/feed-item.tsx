@@ -248,6 +248,7 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               edition={edition}
               nft={nft}
               detail={detailData?.data?.item}
+              channelId={detailData?.data?.item.creator_channel_id}
             />
           </View>
         </Reanimated.View>

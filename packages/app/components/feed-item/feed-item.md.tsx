@@ -232,9 +232,11 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                       <View tw="w-3" />
                       <Button
                         tw="flex-1"
-                        onPress={() =>
-                          router.push(`/channels/${nft?.creator_channel_id}`)
-                        }
+                        onPress={() => {
+                          router.push(
+                            `/channels/${detailData?.data.item?.creator_channel_id}`
+                          );
+                        }}
                       >
                         View Channel
                       </Button>
@@ -259,6 +261,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     },
     [
       description,
+      detailData?.data.item?.creator_channel_id,
       detailData?.data.item?.multiple_owners_list,
       edition,
       index,

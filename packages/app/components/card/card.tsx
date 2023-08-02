@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useCallback, ReactNode } from "react";
+import { Suspense, useMemo, useCallback, ReactNode, useContext } from "react";
 import {
   Platform,
   StyleProp,
@@ -25,6 +25,7 @@ import { GridMedia, Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
+import { ClaimContext } from "app/context/claim-context";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
@@ -170,7 +171,6 @@ const CardLargeScreen = ({
     tokenId: nft?.token_id,
     chainName: nft?.chain_name,
   });
-
   return (
     <View
       role="article"

@@ -35,6 +35,7 @@ type NFTDetailsProps = {
   detail?: NFT | undefined;
   bottomPadding?: number;
   tw?: string;
+  channelId: number | null | undefined;
 };
 
 export const NFTDetails = ({
@@ -43,6 +44,7 @@ export const NFTDetails = ({
   detail,
   bottomPadding,
   tw = "",
+  channelId,
 }: NFTDetailsProps) => {
   const router = useRouter();
   const description = useMemo(
@@ -125,11 +127,11 @@ export const NFTDetails = ({
               {edition.gating_type === "paid_nft" ? (
                 <>
                   <View tw="w-4" />
-                  {edition?.is_already_claimed ? (
+                  {edition?.is_already_claimed && channelId ? (
                     <Button
                       size="regular"
                       onPress={() => {
-                        router.push(`/channels/${nft?.creator_channel_id}`);
+                        router.push(`/channels/${channelId}`);
                       }}
                       tw="flex-1"
                       theme="dark"

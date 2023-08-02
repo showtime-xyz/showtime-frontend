@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, useContext } from "react";
 import { Platform } from "react-native";
 
 import type { AxiosError } from "axios";
@@ -15,13 +15,18 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
+import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
+import { useRedirectToStarDropShareScreen } from "app/hooks/use-redirect-to-star-drop-share-screen";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
+import { NFT } from "app/types";
 import { getCurrencyPrice } from "app/utilities";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";
+
+import { ClaimStatus, getClaimStatus } from "./claim-button";
 
 type PiadNFTParams = {
   editionId?: number;
@@ -79,7 +84,6 @@ type GoldButtonProps = Omit<ButtonProps, ""> & {
   type?: "feed" | "trending" | "detail";
   edition?: CreatorEditionResponse;
   side?: "top" | "bottom" | "left" | "right";
-  isClaimed?: boolean;
 };
 
 const GoldButton = memo(function GoldButton({
@@ -95,8 +99,37 @@ const GoldButton = memo(function GoldButton({
   const contractAddress = edition?.creator_airdrop_edition.contract_address;
   const profileId = edition?.creator_airdrop_edition.owner_profile_id;
   const iconSize = size === "small" ? 20 : 24;
+  const status = getClaimStatus(edition);
+  const isClaimed = status === ClaimStatus.Claimed;
 
   const onHandlePayment = async () => {
+    if (isClaimed) {
+      const chainName = process.env.NEXT_PUBLIC_CHAIN_ID;
+      const tokenId = "0";
+      const contractAddress = edition?.creator_airdrop_edition.contract_address;
+      const as = `/nft/${chainName}/${contractAddress}/${tokenId}/share`;
+      router.push(
+        Platform.select({
+          native: as,
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              contractAddress: contractAddress,
+              tokenId: tokenId,
+              chainName: chainName,
+              dropViewShareModal: true,
+            },
+          } as any,
+        }),
+        Platform.select({
+          native: as,
+          web: router.asPath,
+        }),
+        { shallow: true }
+      );
+      return;
+    }
     if (Platform.OS !== "web") {
       return;
     }
@@ -140,7 +173,7 @@ const GoldButton = memo(function GoldButton({
       >
         <ButtonGoldLinearGradient />
         <Text tw="text-xs font-bold" style={{ color: colors.gray[900] }}>
-          {price}
+          {isClaimed ? "Share" : price}
         </Text>
       </PressableHover>
     );
@@ -153,7 +186,7 @@ const GoldButton = memo(function GoldButton({
             style={{ transform: [{ rotate: "100deg" }] }}
           />
 
-          {edition?.price ? (
+          {isClaimed ? null : edition?.price ? (
             <View
               tw={[
                 "absolute -right-1 -top-1.5 h-[22px] min-w-[30px] items-center justify-center overflow-hidden rounded-full px-1",
@@ -215,7 +248,6 @@ const GoldButton = memo(function GoldButton({
 export const ClaimPaidNFTButton = memo(function ClaimPaidNFTButton({
   theme,
   side = "top",
-  isClaimed,
   ...rest
 }: GoldButtonProps) {
   const [open, setOpen] = useState(false);
