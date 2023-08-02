@@ -38,7 +38,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const { data, isLoading } = useTrendingNFTS({ pageSize: 8, filter: "music" });
-  const { data: banners, isLoading: isLoadingBanner } = useBanners();
+  const { data: banners = [], isLoading: isLoadingBanner } = useBanners();
   const numColumns = isMdWidth ? 3.25 : 2.25;
   const router = useRouter();
   const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);

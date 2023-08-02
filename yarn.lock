@@ -6857,7 +6857,6 @@ __metadata:
     "@types/react-datepicker": ^4.11.2
     "@types/react-dropzone": ^5.1.0
     "@types/react-stickynode": ^4.0.0
-    "@vercel/kv": ^0.2.2
     "@vercel/og": ^0.5.9
     app: "*"
     array-to-image: ^1.0.0
@@ -9292,15 +9291,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@upstash/redis@npm:1.21.0":
-  version: 1.21.0
-  resolution: "@upstash/redis@npm:1.21.0"
-  dependencies:
-    isomorphic-fetch: ^3.0.0
-  checksum: ba2ba971c1f6d0297afddf73aba0817a39fcf8d71e51131030a24541e4564138a11bae50b78da7dd0eca5a11baa1322888688cb206f078603ea3a8d0a639a30e
-  languageName: node
-  linkType: hard
-
 "@urql/core@npm:2.3.6":
   version: 2.3.6
   resolution: "@urql/core@npm:2.3.6"
@@ -9376,15 +9366,6 @@ __metadata:
   peerDependencies:
     "@vanilla-extract/css": ^1.0.0
   checksum: 522b96afe856a72d76072ab41453edc35117772a6ac829c8a5ad09cddd69152e152b1cbda0b4344d50dbde59d0effa39301beb7acf319ef88f485966c89c80fd
-  languageName: node
-  linkType: hard
-
-"@vercel/kv@npm:^0.2.2":
-  version: 0.2.2
-  resolution: "@vercel/kv@npm:0.2.2"
-  dependencies:
-    "@upstash/redis": 1.21.0
-  checksum: ba724fe25cc4f2eba6b94ff7cc057e9e30481beb89ada5a9c121544f284e47eed5586996ed1fb3c11b5455e8f67b281713805638c215fb172b3f566e4ad509d1
   languageName: node
   linkType: hard
 
@@ -18791,16 +18772,6 @@ __metadata:
   version: 3.0.1
   resolution: "isobject@npm:3.0.1"
   checksum: db85c4c970ce30693676487cca0e61da2ca34e8d4967c2e1309143ff910c207133a969f9e4ddb2dc6aba670aabce4e0e307146c310350b298e74a31f7d464703
-  languageName: node
-  linkType: hard
-
-"isomorphic-fetch@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "isomorphic-fetch@npm:3.0.0"
-  dependencies:
-    node-fetch: ^2.6.1
-    whatwg-fetch: ^3.4.1
-  checksum: e5ab79a56ce5af6ddd21265f59312ad9a4bc5a72cebc98b54797b42cb30441d5c5f8d17c5cd84a99e18101c8af6f90c081ecb8d12fd79e332be1778d58486d75
   languageName: node
   linkType: hard
 
@@ -28829,7 +28800,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"whatwg-fetch@npm:^3.0.0, whatwg-fetch@npm:^3.4.1":
+"whatwg-fetch@npm:^3.0.0":
   version: 3.6.17
   resolution: "whatwg-fetch@npm:3.6.17"
   checksum: 0a8785dc2d1515c17ee9365d3f6438cf8fd281567426652fc6c55fc99e58cc6287ae5d1add5b8b1dd665f149e38d3de4ebe3812fd7170438ba0681d03b88b4dd

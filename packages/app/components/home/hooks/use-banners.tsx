@@ -1,13 +1,4 @@
-import { useState, useEffect } from "react";
-
-import { createClient } from "@vercel/kv";
-
-const kv = createClient({
-  url: "https://patient-gar-40486.kv.vercel-storage.com",
-  // This is a read-only token.
-  token:
-    "Ap4mASQgZmRhZDFlNTYtOTViMi00ZDQzLTg3N2ItOWEzYWQwY2Y5NGJmXFJxyhlB-QtE3C_-WS3HwhtKmaDdlHR65OjUS1jFTok=",
-});
+import { useKV } from "app/hooks/use-kv";
 
 export type Banner = {
   type: "profile" | "drop" | "link";
@@ -16,25 +7,11 @@ export type Banner = {
   link: string;
   image: string;
 };
+
 export const useBanners = () => {
-  const [banners, setbanners] = useState<Banner[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function getBanners() {
-      setIsLoading(true);
-      await kv.get<Banner[]>("banners").then((data) => {
-        if (data) {
-          setbanners(data);
-        }
-        setIsLoading(false);
-      });
-    }
-    getBanners();
-  }, []);
-
+  const { data, ...rest } = useKV<Banner[]>("banners");
   return {
-    data: banners,
-    isLoading,
+    data: data ?? [],
+    ...rest,
   };
 };
