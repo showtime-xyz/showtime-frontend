@@ -19,7 +19,7 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
-import { getCurrencyPrice, getCurrencySymbol } from "app/utilities";
+import { getCurrencyPrice } from "app/utilities";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";
 
@@ -165,7 +165,6 @@ const GoldButton = memo(function GoldButton({
           ) : (
             <View tw="absolute -right-1 -top-1 h-[22px] min-w-[22px] items-center justify-center rounded-full bg-white dark:bg-black">
               <Text tw="text-xs font-semibold text-black dark:text-white">
-                {getCurrencySymbol(edition?.currency)}
                 {price}
               </Text>
             </View>
