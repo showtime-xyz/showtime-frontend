@@ -532,6 +532,7 @@ export const Messages = memo(() => {
           editMessage={editMessage}
           isUserAdmin={isUserAdmin}
           keyboard={keyboard}
+          hasPaidNFT={isUserAdmin && latest_paid_nft_slug !== ""}
         />
         <AnimatedView style={fakeView} />
 

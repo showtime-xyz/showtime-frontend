@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useMemo, RefObject } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+  RefObject,
+  useState,
+} from "react";
 import { Platform } from "react-native";
 
 import Animated, {
@@ -56,6 +63,7 @@ export const MessageInput = ({
   setEditMessage,
   isUserAdmin,
   keyboard,
+  hasPaidNFT,
 }: {
   listRef: RefObject<FlashList<any>>;
   channelId: string;
@@ -64,7 +72,10 @@ export const MessageInput = ({
   editMessage?: undefined | { id: number; text: string };
   setEditMessage: (v: undefined | { id: number; text: string }) => void;
   isUserAdmin?: boolean;
+  hasPaidNFT?: boolean;
 }) => {
+  const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
+    useState(hasPaidNFT || false);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
@@ -170,7 +181,15 @@ export const MessageInput = ({
             textInputProps={{
               maxLength: 2000,
             }}
-            onSubmit={editMessage ? handleEditMessage : handleSubmit}
+            onSubmit={
+              !hasPaidNFT
+                ? async () => {
+                    setShouldShowMissingStarDropModal(true);
+                  }
+                : editMessage
+                ? handleEditMessage
+                : handleSubmit
+            }
             submitting={editMessages.isMutating || sendMessage.isMutating}
             tw="bg-white dark:bg-black"
             submitButton={
@@ -204,7 +223,12 @@ export const MessageInput = ({
           <MessageBoxUnavailable />
         )}
       </Animated.View>
-      <MissingStarDropModal isOpen />
+      <MissingStarDropModal
+        isOpen={shouldShowMissingStarDropModal}
+        close={() => {
+          setShouldShowMissingStarDropModal(false);
+        }}
+      />
     </>
   );
 };
