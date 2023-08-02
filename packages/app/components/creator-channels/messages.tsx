@@ -190,6 +190,8 @@ export const Messages = memo(() => {
       }/${channelDetail.data?.latest_paid_nft_slug}`
     : "";
 
+  const hasUnlockedMessage = channelDetail.data?.viewer_has_unlocked_messages;
+
   useIntroducingCreatorChannels();
 
   useEffect(() => {
@@ -481,7 +483,9 @@ export const Messages = memo(() => {
           tw={[
             "flex-1 overflow-hidden",
             //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
-            "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
+            !isUserAdmin && !hasUnlockedMessage
+              ? ""
+              : "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
           ]}
         >
           {isLoading || channelDetail.isLoading ? (
@@ -532,7 +536,8 @@ export const Messages = memo(() => {
           editMessage={editMessage}
           isUserAdmin={isUserAdmin}
           keyboard={keyboard}
-          hasPaidNFT={Boolean(latest_paid_nft_slug)}
+          latestPaidNFTSlug={latest_paid_nft_slug}
+          hasUnlockedMessages={hasUnlockedMessage}
         />
         <AnimatedView style={fakeView} />
 

@@ -18,10 +18,13 @@ import Animated, {
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check, Close, ChevronDown } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MessageBox } from "app/components/messages";
@@ -63,7 +66,8 @@ export const MessageInput = ({
   setEditMessage,
   isUserAdmin,
   keyboard,
-  hasPaidNFT,
+  latestPaidNFTSlug,
+  hasUnlockedMessages,
 }: {
   listRef: RefObject<FlashList<any>>;
   channelId: string;
@@ -72,16 +76,18 @@ export const MessageInput = ({
   editMessage?: undefined | { id: number; text: string };
   setEditMessage: (v: undefined | { id: number; text: string }) => void;
   isUserAdmin?: boolean;
-  hasPaidNFT?: boolean;
+  latestPaidNFTSlug?: string;
+  hasUnlockedMessages?: boolean;
 }) => {
   const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
-    useState(Boolean(!hasPaidNFT && isUserAdmin));
+    useState(false);
   const insets = useSafeAreaInsets();
   const bottomHeight = usePlatformBottomHeight();
   const sendMessage = useSendChannelMessage(channelId);
   const inputRef = useRef<any>(null);
   const editMessages = useEditChannelMessage(channelId);
   const isDark = useIsDarkMode();
+  const router = useRouter();
   const bottom = useMemo(
     () =>
       Platform.select({
@@ -171,6 +177,53 @@ export const MessageInput = ({
     });
   }, [channelId, editMessage, editMessages, setEditMessage]);
 
+  if (!isUserAdmin && !hasUnlockedMessages) {
+    return (
+      <View
+        tw="justify-center px-3"
+        style={{
+          paddingBottom: bottom,
+        }}
+      >
+        <Button
+          size={"regular"}
+          variant="primary"
+          onPress={() => {
+            if (latestPaidNFTSlug) {
+              router.push(latestPaidNFTSlug);
+            }
+          }}
+          style={{ backgroundColor: "black" }}
+        >
+          <View tw="w-full flex-row items-center justify-center">
+            <View>
+              <Image
+                source={
+                  Platform.OS === "web"
+                    ? "https://media.showtime.xyz/assets/st-logo.png"
+                    : require("app/components/assets/st-logo.png")
+                }
+                width={16}
+                height={16}
+                style={{ width: 16, height: 16 }}
+              />
+            </View>
+
+            <Text tw={"ml-2 text-base font-semibold text-[#FFCB6C]"}>
+              Collect a Star Drop
+            </Text>
+          </View>
+        </Button>
+        <View tw="mt-3 pb-4">
+          <Text tw="text-center text-xs text-gray-500">
+            Collecting a Star Drop unlocks privileges with this artist like
+            exclusive channel content, a Star Badge, and more
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <>
       <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
@@ -182,7 +235,7 @@ export const MessageInput = ({
               maxLength: 2000,
             }}
             onSubmit={
-              !hasPaidNFT
+              !latestPaidNFTSlug
                 ? async () => {
                     setShouldShowMissingStarDropModal(true);
                   }
