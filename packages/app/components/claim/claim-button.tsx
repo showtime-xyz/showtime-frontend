@@ -224,6 +224,12 @@ export const ClaimButton = ({
           tw={tw}
           size={size}
           {...rest}
+          style={[
+            style as any,
+            {
+              backgroundColor: "transparent",
+            },
+          ]}
           onPress={() => redirectToStarDropShareScreen()}
         >
           <>

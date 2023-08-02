@@ -1,5 +1,5 @@
 import { memo, useState } from "react";
-import { Linking, Platform } from "react-native";
+import { Platform } from "react-native";
 
 import type { AxiosError } from "axios";
 import * as Tooltip from "universal-tooltip";
@@ -8,25 +8,20 @@ import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
-import { TextTooltip } from "app/components/text-tooltip";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { getCurrencyPrice, getCurrencySymbol } from "app/utilities";
 
-import { toast } from "design-system/toast";
-
-import { FeedSocialButton } from "../feed-social-button";
+import { LABEL_SIZE_TW } from "design-system/button/constants";
 
 type PiadNFTParams = {
   editionId?: number;
@@ -89,14 +84,16 @@ const GoldButton = memo(function GoldButton({
   type,
   edition,
   style,
+  size = "regular",
   ...rest
 }: GoldButtonProps) {
   const router = useRouter();
   const price = getCurrencyPrice(edition?.currency, edition?.price);
-
   const editionId = edition?.creator_airdrop_edition.id;
   const contractAddress = edition?.creator_airdrop_edition.contract_address;
   const profileId = edition?.creator_airdrop_edition.owner_profile_id;
+  const iconSize = size === "small" ? 20 : 24;
+
   const onHandlePayment = async () => {
     if (Platform.OS !== "web") {
       return;
@@ -177,16 +174,17 @@ const GoldButton = memo(function GoldButton({
       </PressableHover>
     );
   }
+
   return (
     <Button
-      size="regular"
+      size={size}
       variant="primary"
       onPress={onHandlePayment}
       style={[
+        style as any,
         {
           backgroundColor: "transparent",
         },
-        style as any,
       ]}
       {...rest}
     >
@@ -197,13 +195,13 @@ const GoldButton = memo(function GoldButton({
             source={{
               uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
             }}
-            width={24}
-            height={24}
-            style={{ width: 24, height: 24 }}
+            width={iconSize}
+            height={iconSize}
+            style={{ width: iconSize, height: iconSize }}
           />
         </View>
 
-        <Text tw="ml-2 text-base font-semibold text-black">
+        <Text tw={["ml-2 font-semibold text-black", LABEL_SIZE_TW[size]]}>
           Collect Star Drop{priceText}
         </Text>
       </View>
