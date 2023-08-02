@@ -15,6 +15,7 @@ import {
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
 
 import { stripePromise } from "../checkout/stripe";
@@ -64,15 +65,22 @@ const CheckoutReturn = memo(function CheckoutReturn({
     if (channelId) {
       await joinChannel.trigger({ channelId: channelId });
     }
+    const { asPath, pathname } = router;
+
+    const pathWithoutQuery = asPath.split("?")[0];
+
     router.replace(
       {
-        pathname: router.pathname,
+        pathname:
+          pathname === "/profile/[username]/[dropSlug]"
+            ? pathWithoutQuery
+            : pathname,
         query: {
           contractAddress: edition?.creator_airdrop_edition.contract_address,
           unlockedChannelModal: true,
         },
       },
-      router.asPath,
+      pathWithoutQuery,
       {
         shallow: true,
       }

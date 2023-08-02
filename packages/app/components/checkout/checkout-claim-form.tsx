@@ -109,10 +109,10 @@ const CheckoutForm = ({
           confirmParams: {
             return_url:
               Platform.select({
-                web: window.location.origin,
+                web: window.location.href,
                 default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
               }) +
-              `/checkout-return-for-paid-nft?contractAddress=${edition.creator_airdrop_edition?.contract_address}`,
+              `?checkoutReturnForPaidNFTModal=true&contractAddress=${edition.creator_airdrop_edition?.contract_address}`,
             receipt_email: email,
           },
         })

@@ -79,6 +79,7 @@ type GoldButtonProps = Omit<ButtonProps, ""> & {
   type?: "feed" | "trending" | "detail";
   edition?: CreatorEditionResponse;
   side?: "top" | "bottom" | "left" | "right";
+  isClaimed?: boolean;
 };
 
 const GoldButton = memo(function GoldButton({
@@ -214,6 +215,7 @@ const GoldButton = memo(function GoldButton({
 export const ClaimPaidNFTButton = memo(function ClaimPaidNFTButton({
   theme,
   side = "top",
+  isClaimed,
   ...rest
 }: GoldButtonProps) {
   const [open, setOpen] = useState(false);

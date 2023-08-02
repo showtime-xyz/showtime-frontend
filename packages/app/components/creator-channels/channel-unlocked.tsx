@@ -31,7 +31,7 @@ import {
   InstagramButton,
   CopyLinkButton,
 } from "app/components/social-buttons";
-import { useMyInfo } from "app/hooks/api-hooks";
+import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
@@ -39,7 +39,12 @@ import {
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
-import { getProfileName, getTwitterIntent, getWebBaseURL } from "app/utilities";
+import {
+  getProfileName,
+  getShowtimeUsernameOnTwitter,
+  getTwitterIntent,
+  getWebBaseURL,
+} from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -75,7 +80,10 @@ const UnlockedChannel = memo(function UnlockedChannel({
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
-
+  const { data: userInfo } = useUserProfile({
+    address:
+      nft?.data.item.creator_username || nft?.data.item.creator_address_nonens,
+  });
   const channelId = nft?.data.item.creator_channel_id;
   const { data } = useChannelById(channelId?.toString());
   const router = useRouter();
@@ -91,10 +99,14 @@ const UnlockedChannel = memo(function UnlockedChannel({
     Linking.openURL(
       getTwitterIntent({
         url: url,
-        message: `Just unlocked "${nft?.data.item.token_name}" from @${nft?.data?.item.creator_name} on @Showtime_xyz ✦ \nCollect to unlock:`,
+        message: `Just unlocked "${
+          nft?.data.item.token_name
+        }" from @${getShowtimeUsernameOnTwitter(
+          userInfo?.data?.profile
+        )} on @Showtime_xyz ✦ \nCollect to unlock:`,
       })
     );
-  }, [nft?.data.item.creator_name, nft?.data.item.token_name, url]);
+  }, [nft?.data.item.token_name, url, userInfo?.data?.profile]);
 
   const shareSingleImage = useCallback(async () => {
     linearOpaticy.value = withTiming(1, {}, () => {
@@ -202,7 +214,7 @@ const UnlockedChannel = memo(function UnlockedChannel({
           {Platform.OS !== "web" ? (
             <InstagramButton onPress={shareSingleImage} />
           ) : null}
-          <CopyLinkButton onPress={onCopyLink} />
+          <CopyLinkButton theme="dark" onPress={onCopyLink} />
           <Button theme="dark" size="regular" onPress={viewChannel}>
             View Channel
           </Button>

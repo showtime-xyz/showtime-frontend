@@ -567,6 +567,23 @@ export const getTwitterIntentUsername = (profile?: Profile) => {
     ? profile.wallet_addresses_v2[0].ens_domain
     : formatAddressShort(profile.wallet_addresses_v2?.[0]?.address);
 };
+
+export const getShowtimeUsernameOnTwitter = (profile?: Profile) => {
+  if (!profile) return "";
+  const twitterUsername = profile.social_login_handles.twitter;
+  if (twitterUsername) {
+    return `@${twitterUsername.replace(/@/g, "")}`;
+  }
+
+  if (profile.username) {
+    return profile.username;
+  }
+  return profile.name
+    ? profile.name
+    : profile.wallet_addresses_v2?.[0]?.ens_domain
+    ? profile.wallet_addresses_v2[0].ens_domain
+    : formatAddressShort(profile.wallet_addresses_v2?.[0]?.address);
+};
 export const getInstagramUsername = (profile?: Profile) => {
   if (!profile) return "";
 
