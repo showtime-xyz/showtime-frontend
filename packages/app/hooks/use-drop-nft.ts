@@ -72,6 +72,7 @@ type DropRequestData = {
   raffle?: boolean;
   paid_nft_price?: number;
   paid_nft_unlockable_link?: string;
+  paid_nft_currency?: string;
 };
 
 export const reducer = (state: State, action: Action): State => {
@@ -137,6 +138,7 @@ export type UseDropNFT = {
   raffle?: boolean;
   paidNFTPrice: number;
   paidNFTUnlockableLink?: string;
+  paidNFTCurrency?: string;
 };
 
 export const useDropNFT = () => {
@@ -268,6 +270,10 @@ export const useDropNFT = () => {
 
       if (params.paidNFTUnlockableLink) {
         requestData.paid_nft_unlockable_link = params.paidNFTUnlockableLink;
+      }
+
+      if (params.paidNFTCurrency) {
+        requestData.paid_nft_currency = params.paidNFTCurrency;
       }
 
       if (params.paidNFTPrice) {

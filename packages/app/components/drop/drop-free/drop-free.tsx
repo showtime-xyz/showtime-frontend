@@ -132,12 +132,15 @@ export const DropFree = () => {
     };
   }, []);
 
+  const editionPriceRangeState = usePaymentEditionPriceRange();
+
   const onSubmit = async (values: UseDropNFT) => {
     await dropNFT(
       {
         ...values,
         gatingType: "paid_nft",
         editionSize: isUnlimited ? 0 : values.editionSize,
+        paidNFTCurrency: editionPriceRangeState.data?.currency,
       },
       clearStorage
     );
