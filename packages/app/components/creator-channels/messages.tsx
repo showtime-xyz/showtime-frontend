@@ -483,7 +483,7 @@ export const Messages = memo(() => {
           tw={[
             "flex-1 overflow-hidden",
             //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
-            !isUserAdmin && !hasUnlockedMessage
+            !isUserAdmin && !hasUnlockedMessage && Boolean(latest_paid_nft_slug)
               ? "pb-2"
               : "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
           ]}

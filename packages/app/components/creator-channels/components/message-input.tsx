@@ -177,7 +177,7 @@ export const MessageInput = ({
     });
   }, [channelId, editMessage, editMessages, setEditMessage]);
 
-  if (!isUserAdmin && !hasUnlockedMessages) {
+  if (!isUserAdmin && Boolean(latestPaidNFTSlug) && !hasUnlockedMessages) {
     return (
       <View
         tw="justify-center px-3"
