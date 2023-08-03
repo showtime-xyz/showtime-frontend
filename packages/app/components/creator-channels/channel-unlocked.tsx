@@ -70,7 +70,6 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
   const { data: userInfo } = useUserProfile({
     address: nft.creator_username || nft.creator_address_nonens,
   });
-  const channelId = nft.creator_channel_id;
   const router = useRouter();
   const { data: user } = useMyInfo();
   const viewRef = useRef<any>(null);
@@ -111,19 +110,17 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
   }, []);
 
   const viewChannel = useCallback(() => {
+    const pathname = `/channels/${nft.creator_channel_id}?unlocked=now`;
     if (Platform.OS === "web") {
-      router.replace(`/channels/${channelId}`);
+      router.replace(pathname);
     } else {
       router.pop();
-      router.push(`/channels/${channelId}`);
+      router.push(pathname);
     }
-  }, [router, channelId]);
+  }, [nft.creator_channel_id, router]);
 
   return (
-    <View
-      tw="web:pb-8 animate-unlocked-modal flex-1 overflow-hidden"
-      pointerEvents="box-none"
-    >
+    <View tw="web:pb-8 flex-1 overflow-hidden" pointerEvents="box-none">
       <BgGoldLinearGradient />
       <SafeAreaView>
         <View
