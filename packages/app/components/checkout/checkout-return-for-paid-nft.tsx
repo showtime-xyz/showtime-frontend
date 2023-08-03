@@ -1,6 +1,7 @@
-import { useCallback, useContext, useEffect, memo } from "react";
+import { useCallback, useContext, memo } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
@@ -14,8 +15,6 @@ import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
-import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
 
 import { stripePromise } from "../checkout/stripe";
@@ -46,13 +45,7 @@ const CheckoutReturn = memo(function CheckoutReturn({
   const joinChannel = useJoinChannel();
 
   const { state } = useContext(ClaimContext);
-  const { data: nft } = useNFTDetailByTokenId({
-    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
-    tokenId: "0",
-    contractAddress: edition?.creator_airdrop_edition.contract_address,
-  });
 
-  const channelId = nft?.data.item.creator_channel_id;
   const router = useRouter();
   const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
 
@@ -61,36 +54,32 @@ const CheckoutReturn = memo(function CheckoutReturn({
       shallow: true,
     });
   }, [router]);
-  const closeModal = useCallback(async () => {
-    if (channelId) {
+  const closeModal = useCallback(
+    async (channelId?: number) => {
       await joinChannel.trigger({ channelId: channelId });
-    }
-    const { asPath, pathname } = router;
+      const { asPath, pathname } = router;
 
-    const pathWithoutQuery = asPath.split("?")[0];
+      const pathWithoutQuery = asPath.split("?")[0];
 
-    router.replace(
-      {
-        pathname:
-          pathname === "/profile/[username]/[dropSlug]"
-            ? pathWithoutQuery
-            : pathname,
-        query: {
-          contractAddress: edition?.creator_airdrop_edition.contract_address,
-          unlockedChannelModal: true,
+      router.replace(
+        {
+          pathname:
+            pathname === "/profile/[username]/[dropSlug]"
+              ? pathWithoutQuery
+              : pathname,
+          query: {
+            contractAddress: edition?.creator_airdrop_edition.contract_address,
+            unlockedChannelModal: true,
+          },
         },
-      },
-      pathWithoutQuery,
-      {
-        shallow: true,
-      }
-    );
-  }, [
-    channelId,
-    edition?.creator_airdrop_edition.contract_address,
-    joinChannel,
-    router,
-  ]);
+        pathWithoutQuery,
+        {
+          shallow: true,
+        }
+      );
+    },
+    [edition?.creator_airdrop_edition.contract_address, joinChannel, router]
+  );
   const { setPaymentByDefault } = usePaymentsManage();
 
   const handlePaymentSuccess = useCallback(async () => {
@@ -119,16 +108,13 @@ const CheckoutReturn = memo(function CheckoutReturn({
   }, [edition?.creator_airdrop_edition.owner_profile_id, setPaymentByDefault]);
 
   const initPaidNFT = useCallback(async () => {
-    if (channelId) {
-      handlePaymentSuccess();
-      await claimNFT({ closeModal });
-    }
-  }, [channelId, claimNFT, closeModal, handlePaymentSuccess]);
+    handlePaymentSuccess();
+    await claimNFT({ closeModal });
+  }, [claimNFT, closeModal, handlePaymentSuccess]);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     initPaidNFT();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channelId]);
+  });
 
   if (state.status === "error") {
     return (

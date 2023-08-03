@@ -9,5 +9,5 @@ export const UnlockedChannelScreen = withModalScreen(UnlockedChannelModal, {
   disableBackdropPress: true,
   snapPoints: ["100%"],
   headerShown: false,
-  tw: "!pb-0",
+  tw: "!pb-0 !bg-transparent",
 });

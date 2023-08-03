@@ -14,10 +14,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import {
-  useSafeAreaInsets,
-  SafeAreaView,
-} from "@showtime-xyz/universal.safe-area";
+import { SafeAreaView } from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -32,13 +29,11 @@ import {
   CopyLinkButton,
 } from "app/components/social-buttons";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
-import {
-  CreatorEditionResponse,
-  useCreatorCollectionDetail,
-} from "app/hooks/use-creator-collection-detail";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
+import { NFT } from "app/types";
 import {
   getProfileName,
   getShowtimeUsernameOnTwitter,
@@ -48,9 +43,6 @@ import {
 
 import { toast } from "design-system/toast";
 
-import { CloseButton } from "../close-button";
-import { useChannelById } from "./hooks/use-channel-detail";
-
 const { useParam } = createParam<{
   contractAddress: string;
   isPaid?: string;
@@ -59,54 +51,46 @@ const { useParam } = createParam<{
 export const UnlockedChannelModal = () => {
   const [contractAddress] = useParam("contractAddress");
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
-  if (!edition)
-    return (
-      <View tw="min-h-[200px] flex-1 items-center justify-center">
-        <Spinner />
-      </View>
-    );
-  return <UnlockedChannel edition={edition} />;
-};
-
-const UnlockedChannel = memo(function UnlockedChannel({
-  edition,
-}: {
-  edition: CreatorEditionResponse;
-}) {
-  const { top } = useSafeAreaInsets();
-  const linearOpaticy = useSharedValue(0);
-  const { data: nft } = useNFTDetailByTokenId({
+  const { data: nft, isLoading } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
+  if (!nft || isLoading)
+    return (
+      <View tw="min-h-[200px] flex-1 items-center justify-center">
+        <Spinner color={colors.yellow[400]} secondaryColor={colors.white} />
+      </View>
+    );
+  return <UnlockedChannel nft={nft?.data.item} />;
+};
+
+const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
+  const linearOpaticy = useSharedValue(0);
   const { data: userInfo } = useUserProfile({
-    address:
-      nft?.data.item.creator_username || nft?.data.item.creator_address_nonens,
+    address: nft.creator_username || nft.creator_address_nonens,
   });
-  const channelId = nft?.data.item.creator_channel_id;
-  const { data } = useChannelById(channelId?.toString());
+  const channelId = nft.creator_channel_id;
   const router = useRouter();
   const { data: user } = useMyInfo();
   const viewRef = useRef<any>(null);
   const url = useMemo(
-    () => (nft ? `${getWebBaseURL()}${getNFTSlug(nft?.data.item)}` : ""),
+    () => (nft ? `${getWebBaseURL()}${getNFTSlug(nft)}` : ""),
     [nft]
   );
   const { shareImageToIG } = useShareImage(viewRef);
-
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
         url: url,
         message: `Just unlocked "${
-          nft?.data.item.token_name
+          nft.token_name
         }" from @${getShowtimeUsernameOnTwitter(
           userInfo?.data?.profile
         )} on @Showtime_xyz ✦ \nCollect to unlock:`,
       })
     );
-  }, [nft?.data.item.token_name, url, userInfo?.data?.profile]);
+  }, [nft.token_name, url, userInfo?.data?.profile]);
 
   const shareSingleImage = useCallback(async () => {
     linearOpaticy.value = withTiming(1, {}, () => {
@@ -136,9 +120,11 @@ const UnlockedChannel = memo(function UnlockedChannel({
   }, [router, channelId]);
 
   return (
-    <View tw="web:pb-8 flex-1" pointerEvents="box-none">
+    <View
+      tw="web:pb-8 animate-unlocked-modal flex-1 overflow-hidden"
+      pointerEvents="box-none"
+    >
       <BgGoldLinearGradient />
-
       <SafeAreaView>
         <View
           tw="items-center overflow-hidden rounded-2xl pb-10"
@@ -153,10 +139,10 @@ const UnlockedChannel = memo(function UnlockedChannel({
           </Animated.View>
 
           <Pressable
-            onPress={() => router.push(`/@${data?.owner.username}`)}
+            onPress={() => router.push(`/@${nft?.creator_username}`)}
             tw="mt-14 self-center"
           >
-            <Avatar alt="Avatar" url={data?.owner?.img_url} size={176} />
+            <Avatar alt="Avatar" url={nft?.creator_img_url} size={176} />
             <View tw="absolute bottom-0 right-0 h-12 w-12">
               <Image
                 source={{
@@ -170,16 +156,27 @@ const UnlockedChannel = memo(function UnlockedChannel({
             <Text tw="text-center text-3xl font-bold text-gray-900">
               Star drop collector
             </Text>
-            <View tw="h-2" />
+            <View tw="h-4" />
             <Text tw="px-12 text-center text-sm text-gray-900">
               You just unlocked exclusive content from
               <Text
                 tw="font-medium"
-                onPress={() => router.push(`/@${data?.owner.username}`)}
+                onPress={() => router.push(`/@${nft?.creator_username}`)}
               >
                 {" "}
-                @{data?.owner.username}{" "}
-              </Text>
+                @{nft?.creator_username}{" "}
+                {Platform.OS === "web" ? (
+                  <>
+                    <VerificationBadge
+                      fillColor="#fff"
+                      bgColor="#000"
+                      style={{ marginTop: -2 }}
+                      size={14}
+                      className="inline-block"
+                    />
+                  </>
+                ) : null}
+              </Text>{" "}
               and a star badge!
             </Text>
           </View>
@@ -201,9 +198,11 @@ const UnlockedChannel = memo(function UnlockedChannel({
             />
             <View tw="ml-1 h-4 w-4">
               <Image
-                source={{
-                  uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
-                }}
+                source={
+                  Platform.OS === "web"
+                    ? "https://media.showtime.xyz/assets/st-logo.png"
+                    : require("app/components/assets/st-logo.png")
+                }
                 style={{ width: "100%", height: "100%" }}
               />
             </View>
@@ -220,14 +219,6 @@ const UnlockedChannel = memo(function UnlockedChannel({
           </Button>
         </View>
       </SafeAreaView>
-      <View
-        tw="absolute left-4 z-50"
-        style={{
-          top: top + 12,
-        }}
-      >
-        <CloseButton color={colors.gray[900]} onPress={viewChannel} />
-      </View>
     </View>
   );
 });

@@ -172,3 +172,22 @@ textarea:focus-visible {
   overflow: hidden;
   height: 100%;
 }
+.animate-unlocked-modal {
+  animation: modalComeIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+@keyframes modalComeIn {
+  0% {
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0.8, 0.8);
+    border-radius: 64px;
+  }
+
+  100% {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1, 1);
+    border-radius: 32px;
+  }
+}

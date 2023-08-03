@@ -104,7 +104,7 @@ export const useClaimNFT = (edition: IEdition | null | undefined) => {
   type ClaimNFTParams = {
     password?: string;
     location?: LocationObject;
-    closeModal?: () => void;
+    closeModal?: (channelId?: number) => void;
   };
   const claimNFT = async ({
     password,
@@ -264,7 +264,7 @@ export const useClaimNFT = (edition: IEdition | null | undefined) => {
             toast.success("Collected!");
             Analytics.track(EVENTS.DROP_COLLECTED);
             dispatch({ type: "success", mint: res.mint });
-            closeModal?.();
+            closeModal?.(res.channel_id);
           }
         });
     }
