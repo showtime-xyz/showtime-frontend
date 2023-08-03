@@ -219,7 +219,7 @@ const CreatorChannelsListItem = memo(
             {item.itemType !== "owned" && !item.read ? (
               // we don't want to show the unread indicator for owned channels
               <View>
-                <View tw="h-3 w-3 rounded-full bg-indigo-600" />
+                <View tw="h-2 w-2 rounded-full bg-indigo-600" />
               </View>
             ) : null}
           </View>

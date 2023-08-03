@@ -194,7 +194,7 @@ const CreatorChannelsListItem = memo(
             </View>
             {item.itemType !== "owned" && !item.read ? (
               <View tw="self-center">
-                <View tw="h-3 w-3 rounded-full bg-indigo-600" />
+                <View tw="h-2 w-2 rounded-full bg-indigo-600" />
               </View>
             ) : null}
           </View>
