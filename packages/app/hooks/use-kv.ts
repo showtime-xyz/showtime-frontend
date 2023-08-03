@@ -13,7 +13,11 @@ const fetcher = (key: string) =>
     .then((res) => res.data);
 
 export function useKV<T = any>(key: string) {
-  const { data, ...rest } = useSWR<{ result: string }>(key, fetcher);
+  const { data, ...rest } = useSWR<{ result: string }>(key, fetcher, {
+    revalidateOnFocus: false,
+    revalidateIfStale: false,
+    focusThrottleInterval: 100000,
+  });
 
   const result = useMemo(() => {
     if (!data?.result) return null;
