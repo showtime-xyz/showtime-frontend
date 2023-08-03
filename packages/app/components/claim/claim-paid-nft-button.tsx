@@ -183,7 +183,7 @@ const GoldButton = memo(function GoldButton({
       <PressableHover onPress={onHandlePayment} {...rest}>
         <View tw={"h-14 w-14 items-center justify-center rounded-full"}>
           <ButtonGoldLinearGradient
-            style={{ transform: [{ rotate: "100deg" }] }}
+            style={{ transform: [{ rotate: "84deg" }] }}
           />
 
           {isClaimed ? null : edition?.price ? (
