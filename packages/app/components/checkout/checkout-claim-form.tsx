@@ -36,14 +36,11 @@ import { stripePromise } from "./stripe";
 export function CheckoutClaimForm({
   clientSecret,
   contractAddress,
-  stripeAccount,
 }: {
   clientSecret: string;
   contractAddress: string;
-  stripeAccount: string;
 }) {
-  const { data: edition, loading } =
-    useCreatorCollectionDetail(contractAddress);
+  const { data: edition } = useCreatorCollectionDetail(contractAddress);
 
   const isDark = useIsDarkMode();
   const stripeOptions = useMemo(
@@ -58,7 +55,7 @@ export function CheckoutClaimForm({
   );
 
   return stripeOptions?.clientSecret && edition ? (
-    <Elements stripe={stripePromise({ stripeAccount })} options={stripeOptions}>
+    <Elements stripe={stripePromise()} options={stripeOptions}>
       <CheckoutForm edition={edition} clientSecret={clientSecret} />
     </Elements>
   ) : null;

@@ -89,12 +89,7 @@ const CheckoutReturn = memo(function CheckoutReturn({
 
     if (!setAsDefaultPaymentMethod) return;
 
-    const profileId = edition?.creator_airdrop_edition.owner_profile_id;
-    const { stripe_account_id: stripeAccount } = await fetchStripeAccountId(
-      profileId
-    );
-
-    const stripe = await stripePromise({ stripeAccount });
+    const stripe = await stripePromise();
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );
@@ -105,7 +100,7 @@ const CheckoutReturn = memo(function CheckoutReturn({
         setPaymentByDefault(res.paymentIntent.payment_method);
       }
     }
-  }, [edition?.creator_airdrop_edition.owner_profile_id, setPaymentByDefault]);
+  }, [setPaymentByDefault]);
 
   const initPaidNFT = useCallback(async () => {
     handlePaymentSuccess();

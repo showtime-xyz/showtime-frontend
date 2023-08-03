@@ -137,7 +137,6 @@ const GoldButton = memo(function GoldButton({
       editionId,
       useDefaultPaymentMethod: false,
     });
-    const stripeAccount = await fetchStripeAccountId(profileId);
 
     if (Platform.OS === "web") {
       const as = `/checkout-paid-nft`;
@@ -151,7 +150,6 @@ const GoldButton = memo(function GoldButton({
               clientSecret: res?.client_secret,
               checkoutPaidNFTModal: true,
               contractAddress,
-              stripeAccount: stripeAccount?.stripe_account_id,
             },
           } as any,
         }),

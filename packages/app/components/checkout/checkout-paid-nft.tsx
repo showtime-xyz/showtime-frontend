@@ -8,22 +8,19 @@ import { CheckoutClaimForm } from "./checkout-claim-form";
 type Query = {
   clientSecret?: string;
   contractAddress?: string;
-  stripeAccount?: string;
 };
 const { useParam } = createParam<Query>();
 
 export const CheckoutPaidNFT = () => {
   const [clientSecret] = useParam("clientSecret");
   const [contractAddress] = useParam("contractAddress");
-  const [stripeAccount] = useParam("stripeAccount");
 
-  if (!clientSecret || !contractAddress || !stripeAccount)
+  if (!clientSecret || !contractAddress)
     return <EmptyPlaceholder title="No payment yet" />;
   return (
     <CheckoutClaimForm
       clientSecret={clientSecret}
       contractAddress={contractAddress}
-      stripeAccount={stripeAccount}
     />
   );
 };
