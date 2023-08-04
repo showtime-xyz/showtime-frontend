@@ -17,7 +17,6 @@ import {
   CreatorChannel,
   CollectorList,
 } from "@showtime-xyz/universal.icon";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -25,6 +24,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useUser } from "app/hooks/use-user";
+
+import { useOnboardingStatus } from "./use-onboarding-status";
 
 export const SelectDropType = (props: { handleNextStep: any }) => {
   const user = useUser({
@@ -35,8 +36,8 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
     !!user.user?.data.profile.spotify_artist_id ||
     !!user.user?.data.profile.apple_music_artist_id;
   const isDark = useIsDarkMode();
-  const modalScreenContext = useModalScreenContext();
   const router = useRouter();
+  const onboardingStatus = useOnboardingStatus();
 
   if (user.isIncompletedProfile) {
     return null;
@@ -49,7 +50,22 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
         <View tw="rounded-3xl border-[1px] border-yellow-300 p-4">
           <Pressable
             onPress={() => {
-              if (Platform.OS !== "web") {
+              if (onboardingStatus.status === "not_onboarded") {
+                router.push(
+                  Platform.select({
+                    native: `/payouts/setup`,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        payoutsSetup: true,
+                      },
+                    } as any,
+                  }),
+                  router.asPath,
+                  { shallow: true }
+                );
+              } else if (Platform.OS !== "web") {
                 router.push("/drop/free");
               } else {
                 router.replace("/drop/free");

@@ -26,7 +26,6 @@ const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 export const Payout = ({ index = 0 }: { index: number }) => {
   const onboardinStatus = useOnboardingStatus();
   const router = useRouter();
-  const stripeAccountLink = useStripeAccountLink();
 
   if (onboardinStatus.status === "loading") {
     return (
@@ -46,10 +45,28 @@ export const Payout = ({ index = 0 }: { index: number }) => {
       ) : null}
       <View tw="p-4 md:px-0">
         {onboardinStatus.status === "not_onboarded" ? (
-          <Button size="regular" onPress={() => router.push("/drop/free")}>
+          <Button
+            size="regular"
+            onPress={() => {
+              router.push(
+                Platform.select({
+                  native: `/payouts/setup`,
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      payoutsSetup: true,
+                    },
+                  } as any,
+                }),
+                router.asPath,
+                { shallow: true }
+              );
+            }}
+          >
             <View tw="flex-row items-center" style={{ columnGap: 4 }}>
               <Image
-                source={require("app/components/drop/drop-free/stripe-logo.png")}
+                source={require("app/components/payouts/stripe-logo.png")}
                 height={20}
                 width={20}
               />
@@ -160,7 +177,7 @@ export const PayoutSettings = ({
     >
       <View tw="flex-row items-center" style={{ columnGap: 4 }}>
         <Image
-          source={require("app/components/drop/drop-free/stripe-logo.png")}
+          source={require("app/components/payouts/stripe-logo.png")}
           height={20}
           width={20}
         />
