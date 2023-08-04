@@ -7,6 +7,7 @@ import { WalletAddressesV2 } from "app/types";
 import { AccountTab } from "./account";
 import { AdvancedTab } from "./advanced";
 import { BillingTab } from "./billing";
+import { Payouts } from "./payouts";
 import { PushNotificationTab } from "./push-notifications";
 import { SignInTab } from "./sign-in";
 import { WalletsTab } from "./wallets";
@@ -42,6 +43,10 @@ export const SETTINGS_ROUTES = [
     title: "Advanced",
     key: "Advanced",
   },
+  {
+    title: "Cash Payouts",
+    key: "Payouts",
+  },
 ]
   .filter((item) => !item.hidden)
   .map((item, index) => ({ ...item, index }));
@@ -63,6 +68,8 @@ export const SettingTabsScene = ({
       return <PushNotificationTab index={index} />;
     case "Advanced":
       return <AdvancedTab index={index} />;
+    case "Payouts":
+      return <Payouts index={index} />;
     default:
       return null;
   }

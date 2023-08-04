@@ -270,6 +270,10 @@ export type MyInfo = {
         name: string;
         self_is_member: boolean;
       }>;
+      stripe_connect_details: null | {
+        details_submitted: boolean;
+        charges_enabled: boolean;
+      };
     };
     likes_nft: number[];
     likes_comment: any[];
