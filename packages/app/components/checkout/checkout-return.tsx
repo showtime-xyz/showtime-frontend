@@ -19,29 +19,8 @@ export const CheckoutReturn = () => {
   const { setPaymentByDefault } = usePaymentsManage();
   const { paymentStatus, message, confirmPaymentStatus } = useConfirmPayment();
   const handlePaymentSuccess = useCallback(async () => {
-    const isPaid = new URLSearchParams(window.location.search).get("isPaid");
-    const contractAddress = new URLSearchParams(window.location.search).get(
-      "contractAddress"
-    );
-
     setTimeout(() => {
-      if (isPaid && contractAddress) {
-        router.replace(
-          {
-            pathname: router.pathname,
-            query: {
-              contractAddress: contractAddress,
-              unlockedChannelModal: true,
-            },
-          },
-          router.asPath,
-          {
-            shallow: true,
-          }
-        );
-      } else {
-        router.replace("/drop/free?checkoutSuccess=true");
-      }
+      router.replace("/drop/free?checkoutSuccess=true");
     }, REDIRECT_SECONDS * 1000);
     setInterval(() => {
       setTime((time) => (time > 0 ? time - 1 : 0));

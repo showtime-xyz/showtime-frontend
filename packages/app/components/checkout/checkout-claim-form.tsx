@@ -12,6 +12,7 @@ import {
 import type { StripeError } from "@stripe/stripe-js";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -73,7 +74,7 @@ const CheckoutForm = ({
   const isDark = useIsDarkMode();
 
   const [setAsDefaultPaymentMethod, setSetAsDefaultPaymentMethod] =
-    useState(true);
+    useState(false);
   const [email, setEmail] = useState("");
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
@@ -81,6 +82,13 @@ const CheckoutForm = ({
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
   const [isLoading, setIsLoading] = useState(false);
+  console.log(
+    `checkoutReturnForPaidNFTModal=true&contractAddress=${
+      edition.creator_airdrop_edition?.contract_address
+    }&setAsDefaultPaymentMethod=${
+      setAsDefaultPaymentMethod ? setAsDefaultPaymentMethod : ""
+    }`
+  );
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -109,7 +117,11 @@ const CheckoutForm = ({
                 web: window.location.href,
                 default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
               }) +
-              `?checkoutReturnForPaidNFTModal=true&contractAddress=${edition.creator_airdrop_edition?.contract_address}`,
+              `?checkoutReturnForPaidNFTModal=true&contractAddress=${
+                edition.creator_airdrop_edition?.contract_address
+              }&setAsDefaultPaymentMethod=${
+                setAsDefaultPaymentMethod ? setAsDefaultPaymentMethod : ""
+              }`,
             receipt_email: email,
           },
         })
@@ -187,27 +199,7 @@ const CheckoutForm = ({
               },
             }}
           />
-          <View tw="h-4" />
-          <View tw="px-4">
-            <Text
-              tw="text-center text-xs text-gray-900 dark:text-gray-50"
-              onPress={() =>
-                setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
-              }
-            >
-              By clicking submit you will accept the{" "}
-              <TextLink
-                href="https://showtime-xyz.notion.site/Legal-Public-c407e36eb7cd414ca190245ca8621e68"
-                tw="font-bold"
-                target="_blank"
-              >
-                Terms & Conditions
-              </TextLink>{" "}
-              and understand that you are purchasing a non-refundable digital
-              item.
-            </Text>
-          </View>
-          {/* <View tw="flex-row items-center">
+          {/* <View tw="mt-3 flex-row items-center">
             <Checkbox
               checked={setAsDefaultPaymentMethod}
               onChange={() =>
@@ -221,18 +213,31 @@ const CheckoutForm = ({
                 setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
               }
             >
-              I accept the <Text tw="font-bold">Terms of Service</Text> and
-              understand that I am purchasing a non-refundable digital item.
+              Set as default payment method
             </Text>
           </View> */}
+          <View tw="mt-4 px-4">
+            <Text tw="text-center text-xs text-gray-900 dark:text-gray-50">
+              By clicking submit you will accept the{" "}
+              <TextLink
+                href="https://showtime-xyz.notion.site/Legal-Public-c407e36eb7cd414ca190245ca8621e68"
+                tw="font-bold"
+                target="_blank"
+              >
+                Terms & Conditions
+              </TextLink>{" "}
+              and understand that you are purchasing a non-refundable digital
+              item.
+            </Text>
+          </View>
+
           {isLoading && (
             <View tw="animate-fade-in-250 absolute inset-0 items-center justify-center bg-black/30">
               <Spinner />
             </View>
           )}
         </View>
-
-        <View tw="px-4 pt-4">
+        <View tw="px-4">
           <Button
             disabled={isLoading || !stripe || !elements}
             tw={`${isLoading || !stripe || !elements ? "opacity-60" : ""}`}
