@@ -1,26 +1,8 @@
-import {
-  useRef,
-  useMemo,
-  useCallback,
-  useEffect,
-  useState,
-  Suspense,
-} from "react";
-import {
-  Dimensions,
-  Linking,
-  Platform,
-  View as RNView,
-  StyleSheet,
-} from "react-native";
+import { useRef, useMemo, useCallback, useEffect, Suspense } from "react";
+import { Dimensions, Linking, Platform, View as RNView } from "react-native";
 
-import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
-import { BlurView } from "expo-blur";
 import * as Clipboard from "expo-clipboard";
-import { LinearGradient } from "expo-linear-gradient";
-import * as MediaLibrary from "expo-media-library";
 
-import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Haptics } from "@showtime-xyz/universal.haptics";
@@ -37,9 +19,8 @@ import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors, styled } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
@@ -47,14 +28,10 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useIsInstalledApps, useShareImage } from "app/components/share";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { useGetImageColors } from "app/hooks/use-get-image-colors";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTURL } from "app/hooks/use-share-nft";
-import { ReactQRCode } from "app/lib/qr-code";
 import { createParam } from "app/navigation/use-param";
 import {
-  formatClaimNumber,
-  getCreatorNameFromNFT,
   getCreatorUsernameFromNFT,
   getMediaUrl,
   getTwitterIntent,
@@ -64,9 +41,9 @@ import {
 import { Skeleton } from "design-system";
 import { toast } from "design-system/toast";
 
-import { contentGatingType } from "../content-type-tooltip";
 import { BgGoldLinearGradient } from "../gold-gradient";
 import { ShowtimeBrandLogo } from "../showtime-brand";
+import { contentGatingType } from "../tooltips/content-type-tooltip";
 
 const { width: windowWidth } = Dimensions.get("window");
 type QRCodeModalParams = {

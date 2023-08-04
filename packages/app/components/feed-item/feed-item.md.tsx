@@ -58,8 +58,9 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
+import { CollectToUnlockContentTooltip } from "../tooltips";
+import { ContentTypeTooltip } from "../tooltips/content-type-tooltip";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
 import { FeedItemProps } from "./type";
@@ -400,7 +401,15 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         ) : null}
 
         <View tw="absolute bottom-10 left-4">
-          <ContentTypeTooltip edition={edition} />
+          {edition?.gating_type === "paid_nft" ? (
+            <CollectToUnlockContentTooltip
+              creatorUsername={nft?.creator_username}
+              price={edition?.price}
+              currency={edition?.currency}
+            />
+          ) : (
+            <ContentTypeTooltip edition={edition} />
+          )}
         </View>
       </View>
       <View tw="bg-white dark:bg-black lg:hidden">

@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useCallback, ReactNode, useContext } from "react";
+import { Suspense, useMemo, useCallback, ReactNode } from "react";
 import {
   Platform,
   StyleProp,
@@ -21,18 +21,17 @@ import { Creator } from "app/components/card/rows/elements/creator";
 import { Social } from "app/components/card/social";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
-import { GridMedia, Media } from "app/components/media";
+import { GridMedia } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { MuteButton } from "app/components/mute-button/mute-button";
 import { NFTDropdown } from "app/components/nft-dropdown";
-import { ClaimContext } from "app/context/claim-context";
+import { ContentTypeTooltip } from "app/components/tooltips/content-type-tooltip";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { NFT } from "app/types";
 
 import { ClaimButtonSimplified } from "../claim/claim-button-simplified";
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 
 const isWeb = Platform.OS === "web";

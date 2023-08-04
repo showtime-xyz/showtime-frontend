@@ -1034,7 +1034,25 @@ export const getCurrencySymbol = (currency: string | null | undefined) => {
 };
 export const getCurrencyPrice = (
   currency: string | null | undefined,
-  price: number | null | undefined
+  price: number | null | undefined | string
 ) => {
   return `${getCurrencySymbol(currency)}${price ?? 0}`;
+};
+export const getCreatorEarnedMoney = (
+  currency: string | null | undefined,
+  price: number | null | undefined
+) => {
+  /**
+   * Notes: Payment Fee formula:
+   * if currency is USD: showtime + payment fees = 13.5% => creator gets 86.5% of the total amount
+   * else: showtime + payment fees = 15.5% => creator gets 84.5% of the total amount
+   */
+  if (!price) {
+    return getCurrencyPrice(currency, 0);
+  }
+  if (currency === "USD") {
+    return getCurrencyPrice(currency, (price * 0.865).toFixed(2));
+  } else {
+    return getCurrencyPrice(currency, (price * 0.845).toFixed(2));
+  }
 };

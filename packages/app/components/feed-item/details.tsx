@@ -11,6 +11,10 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimButton } from "app/components/claim/claim-button";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
+import {
+  ContentTypeTooltip,
+  CollectToUnlockContentTooltip,
+} from "app/components/tooltips";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { linkifyDescription } from "app/lib/linkify";
 import { TextLink } from "app/navigation/link";
@@ -22,9 +26,6 @@ import {
   removeTags,
 } from "app/utilities";
 
-import { toast } from "design-system/toast";
-
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { CreatorOnFeed } from "../creator-on-feed";
 import { EngagementIcons } from "./engagement-icons";
 import { RaffleTooltip } from "./raffle-tooltip";
@@ -108,7 +109,16 @@ export const NFTDetails = ({
               </Text>
             </Text>
             <View tw="absolute bottom-0 -ml-1 mt-3 h-6 flex-row justify-start">
-              <ContentTypeTooltip edition={edition} theme="dark" />
+              {edition?.gating_type === "paid_nft" ? (
+                <CollectToUnlockContentTooltip
+                  creatorUsername={nft?.creator_username}
+                  price={edition?.price}
+                  currency={edition?.currency}
+                  theme="dark"
+                />
+              ) : (
+                <ContentTypeTooltip edition={edition} theme="dark" />
+              )}
               <RaffleTooltip edition={edition} theme="dark" tw="mr-1" />
             </View>
           </View>

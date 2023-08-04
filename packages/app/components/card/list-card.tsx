@@ -31,8 +31,8 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NSFWGate } from "../feed-item/nsfw-gate";
+import { ContentTypeTooltip } from "../tooltips/content-type-tooltip";
 
 const isWeb = Platform.OS === "web";
 

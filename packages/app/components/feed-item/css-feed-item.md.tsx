@@ -58,8 +58,8 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
+import { ContentTypeTooltip } from "../tooltips/content-type-tooltip";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
 import { FeedItemProps } from "./type";
