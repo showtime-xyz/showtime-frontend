@@ -84,7 +84,7 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
         url: url,
         message: `Just unlocked "${
           nft.token_name
-        }" from @${getShowtimeUsernameOnTwitter(
+        }" from ${getShowtimeUsernameOnTwitter(
           userInfo?.data?.profile
         )} on @Showtime_xyz ✦ \nCollect to unlock:`,
       })
