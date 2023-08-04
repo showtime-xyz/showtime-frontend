@@ -87,6 +87,16 @@ export const Payouts = ({ index = 0 }: { index: number }) => {
               processing takes 30¢ + 2.9% per sale.
             </Text>
           </View>
+        ) : onboardinStatus.status === "processing" ? (
+          <View>
+            <PayoutSettings
+              refreshUrl={`${websiteUrl}/settings?tab=${index}&stripeRefresh=true`}
+              returnUrl={`${websiteUrl}/settings?tab=${index}&stripeReturn=true`}
+            />
+            <Text tw="pt-4 text-sm text-gray-700 dark:text-gray-300">
+              Payout under processing. You will be notified when it is approved.
+            </Text>
+          </View>
         ) : null}
         <View tw="mt-4 max-w-[320px] rounded-2xl bg-gray-100 p-4  dark:bg-gray-800">
           <Text tw="text-gray-900 dark:text-gray-100">

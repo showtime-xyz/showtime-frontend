@@ -22,7 +22,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { useOnboardingStatus } from "app/components/payouts/hooks/use-onboarding-status";
 import { useUser } from "app/hooks/use-user";
 
 export const SelectDropType = (props: { handleNextStep: any }) => {
@@ -36,7 +35,6 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
   const isDark = useIsDarkMode();
   const modalScreenContext = useModalScreenContext();
   const router = useRouter();
-  const onboardingStatus = useOnboardingStatus();
 
   if (user.isIncompletedProfile) {
     return null;
@@ -85,22 +83,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
         {Platform.OS !== "web" && !user.user?.data.profile.verified ? null : (
           <Pressable
             onPress={() => {
-              if (onboardingStatus.status === "not_onboarded") {
-                router.push(
-                  Platform.select({
-                    native: `/payouts/setup`,
-                    web: {
-                      pathname: router.pathname,
-                      query: {
-                        ...router.query,
-                        payoutsSetup: true,
-                      },
-                    } as any,
-                  }),
-                  router.asPath,
-                  { shallow: true }
-                );
-              } else if (Platform.OS !== "web") {
+              if (Platform.OS !== "web") {
                 modalScreenContext?.pop?.({
                   callback: () => {
                     router.push("/drop/free");
