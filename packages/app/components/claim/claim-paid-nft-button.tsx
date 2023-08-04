@@ -1,4 +1,4 @@
-import { memo, useState, useContext } from "react";
+import { memo, useState } from "react";
 import { Platform } from "react-native";
 
 import type { AxiosError } from "axios";
@@ -15,13 +15,11 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
-import { ClaimContext } from "app/context/claim-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
-import { useRedirectToStarDropShareScreen } from "app/hooks/use-redirect-to-star-drop-share-screen";
+import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
-import { NFT } from "app/types";
 import { getCurrencyPrice } from "app/utilities";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";
@@ -97,37 +95,17 @@ const GoldButton = memo(function GoldButton({
   const price = getCurrencyPrice(edition?.currency, edition?.price);
   const editionId = edition?.creator_airdrop_edition.id;
   const contractAddress = edition?.creator_airdrop_edition.contract_address;
-  const profileId = edition?.creator_airdrop_edition.owner_profile_id;
   const iconSize = size === "small" ? 20 : 24;
   const status = getClaimStatus(edition);
   const isClaimed = status === ClaimStatus.Claimed;
+  const redirectToDropImageShareScreen = useRedirectDropImageShareScreen();
 
   const onHandlePayment = async () => {
     if (isClaimed) {
-      const chainName = process.env.NEXT_PUBLIC_CHAIN_ID;
-      const tokenId = "0";
-      const contractAddress = edition?.creator_airdrop_edition.contract_address;
-      const as = `/nft/${chainName}/${contractAddress}/${tokenId}/share`;
-      router.push(
-        Platform.select({
-          native: as,
-          web: {
-            pathname: router.pathname,
-            query: {
-              ...router.query,
-              contractAddress: contractAddress,
-              tokenId: tokenId,
-              chainName: chainName,
-              dropViewShareModal: true,
-            },
-          } as any,
-        }),
-        Platform.select({
-          native: as,
-          web: router.asPath,
-        }),
-        { shallow: true }
+      redirectToDropImageShareScreen(
+        edition?.creator_airdrop_edition.contract_address
       );
+
       return;
     }
     if (Platform.OS !== "web") {

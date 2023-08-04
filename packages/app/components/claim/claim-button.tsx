@@ -22,8 +22,8 @@ import { ClaimContext } from "app/context/claim-context";
 import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
 import { useRedirectToRaffleResult } from "app/hooks/use-redirect-to-raffle-result";
-import { useRedirectToStarDropShareScreen } from "app/hooks/use-redirect-to-star-drop-share-screen";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { Analytics, EVENTS } from "app/lib/analytics";
@@ -95,7 +95,7 @@ export const ClaimButton = ({
   const isSelf =
     user?.data?.profile.profile_id ===
     edition.creator_airdrop_edition?.owner_profile_id;
-  const redirectToStarDropShareScreen = useRedirectToStarDropShareScreen(nft);
+  const redirectToStarDropShareScreen = useRedirectDropImageShareScreen();
 
   const handleRaffleResultPress = () => {
     redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
@@ -230,7 +230,7 @@ export const ClaimButton = ({
               backgroundColor: "transparent",
             },
           ]}
-          onPress={() => redirectToStarDropShareScreen()}
+          onPress={() => redirectToStarDropShareScreen(nft?.contract_address)}
         >
           <>
             <ButtonGoldLinearGradient />

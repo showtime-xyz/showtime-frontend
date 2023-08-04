@@ -16,6 +16,7 @@ import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
 
@@ -34,6 +35,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     nft?.creator_airdrop_edition_address
   );
   const status = getClaimStatus(edition);
+  const redirectToDropImageShareScreen = useRedirectDropImageShareScreen();
 
   const viewCollecters = useCallback(() => {
     const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
@@ -197,6 +199,11 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
                 : ""}
             </Text>
           </>
+        }
+        onPress={() =>
+          redirectToDropImageShareScreen(
+            edition?.creator_airdrop_edition?.contract_address
+          )
         }
         {...rest}
       >
