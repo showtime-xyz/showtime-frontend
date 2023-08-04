@@ -48,20 +48,21 @@ export const Payouts = ({ index = 0 }: { index: number }) => {
           <Button
             size="regular"
             onPress={() => {
-              router.push(
-                Platform.select({
-                  native: `/payouts/setup`,
-                  web: {
+              if (Platform.OS === "web") {
+                router.push(
+                  {
                     pathname: router.pathname,
                     query: {
                       ...router.query,
                       payoutsSetup: true,
                     },
-                  } as any,
-                }),
-                router.asPath,
-                { shallow: true }
-              );
+                  },
+                  router.asPath,
+                  { shallow: true }
+                );
+              } else {
+                router.push("/payouts/setup");
+              }
             }}
           >
             <View tw="flex-row items-center" style={{ columnGap: 4 }}>
