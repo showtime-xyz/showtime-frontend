@@ -23,9 +23,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { useOnboardingStatus } from "app/components/payouts/hooks/use-onboarding-status";
 import { useUser } from "app/hooks/use-user";
-
-import { useOnboardingStatus } from "./use-onboarding-status";
 
 export const SelectDropType = (props: { handleNextStep: any }) => {
   const user = useUser({

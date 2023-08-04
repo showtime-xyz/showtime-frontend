@@ -10,8 +10,8 @@ import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useOnboardingStatus } from "app/components/drop/common/use-onboarding-status";
-import { useStripeAccountLink } from "app/components/drop/common/use-stripe-account-link";
+import { useOnboardingStatus } from "app/components/payouts/hooks/use-onboarding-status";
+import { useStripeAccountLink } from "app/components/payouts/hooks/use-stripe-account-link";
 
 import { SettingsTitle } from "../settings-title";
 

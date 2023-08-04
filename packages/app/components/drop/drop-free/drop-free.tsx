@@ -1,13 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from "react";
-import {
-  useWindowDimensions,
-  ScrollView as RNScrollView,
-  Platform,
-  Linking,
-} from "react-native";
+import { useWindowDimensions, ScrollView as RNScrollView } from "react-native";
 
 import { Controller } from "react-hook-form";
-import { useForm } from "react-hook-form";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -24,43 +18,30 @@ import {
   useIsDarkMode,
   useIsomorphicLayoutEffect,
 } from "@showtime-xyz/universal.hooks";
-import {
-  ArrowLeft,
-  ChevronRight,
-  Clock,
-  Close,
-} from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
+import { ArrowLeft, ChevronRight, Close } from "@showtime-xyz/universal.icon";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
+import { useOnboardingStatus } from "app/components/payouts/hooks/use-onboarding-status";
 import { Preview } from "app/components/preview";
-import { PayoutSettings } from "app/components/settings/tabs/payout";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useWallet } from "app/hooks/use-wallet";
 import { FilePickerResolveValue } from "app/lib/file-picker";
-import { createParam } from "app/navigation/use-param";
 import { formatAddressShort, getCurrencySymbol } from "app/utilities";
 
-import { CountryPicker } from "../common/country-picker";
 import { MediaPicker } from "../common/media-picker";
 import { useStarDropForm } from "../common/star-drop-form-utils";
 import { StepProps } from "../common/types";
-import { useOnBoardCreator } from "../common/use-onboard-creator";
-import { useOnboardingStatus } from "../common/use-onboarding-status";
 import { usePaymentEditionPriceRange } from "../common/use-payment-edition-price-range";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
-import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
 
 type CreateDropStep =
@@ -70,26 +51,9 @@ type CreateDropStep =
   | "more-options"
   | "select-drop";
 
-type Query = {
-  stripeReturn?: boolean;
-  stripeRefresh?: string;
-};
-
-const { useParam } = createParam<Query>();
-
-const websiteUrl = `${
-  __DEV__
-    ? "http://localhost:3000"
-    : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
-}`;
-
 export const DropFree = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
-  const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
-  const [stripeReturn, setStripeReturn] = useParam("stripeReturn", (g) => {
-    return g === "true";
-  });
   const {
     control,
     setValue,
@@ -109,9 +73,8 @@ export const DropFree = () => {
   const title = getValues("title");
   const description = getValues("description");
 
-  const isDark = useIsDarkMode();
   const file = getValues("file");
-  const { state, dropNFT, reset: resetDropState } = useDropNFT();
+  const { dropNFT, reset: resetDropState } = useDropNFT();
   const router = useRouter();
 
   const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
@@ -176,123 +139,6 @@ export const DropFree = () => {
       setValue("file", file);
     }
   };
-
-  if (onboardinStatus.status === "loading") {
-    return (
-      <Layout
-        onBackPress={() => modalContext?.pop()}
-        closeIcon
-        title="Complete payout info"
-      >
-        <View tw="items-center p-4">
-          <Spinner />
-        </View>
-      </Layout>
-    );
-  }
-
-  if (stripeReturn && onboardinStatus.status === "onboarded") {
-    return (
-      <Layout
-        onBackPress={() => modalContext?.pop()}
-        closeIcon
-        title="You're approved"
-      >
-        <View tw="items-center p-4" style={{ rowGap: 24 }}>
-          <Text tw="text-base text-gray-900 dark:text-gray-100">
-            Your cash payout has been approved for creating Star Drops!
-          </Text>
-          <Button
-            tw="w-full"
-            size="regular"
-            onPress={() => {
-              setStripeReturn(undefined);
-              setStep("media");
-            }}
-          >
-            Create Star Drop
-          </Button>
-        </View>
-      </Layout>
-    );
-  }
-
-  if (onboardinStatus.status === "processing") {
-    return (
-      <Layout
-        onBackPress={() => modalContext?.pop()}
-        closeIcon
-        title="Come back later"
-      >
-        <View tw="items-center p-4" style={{ rowGap: 24 }}>
-          <Clock color={isDark ? "white" : "black"} width={54} height={54} />
-          <Text tw="text-gray-900 dark:text-gray-100">
-            Unable to purchase Star Drop at this time. We need more time to
-            approve your payment.{" "}
-            <Text tw="font-bold">
-              You will be notified when you’re approved.{" "}
-            </Text>
-            Usually 1-2 hours. In the meanwhile if you want to change your
-            stripe details. Press below
-          </Text>
-          <PayoutSettings
-            refreshUrl={`${websiteUrl}/drop/free?stripeRefresh=true&platform=${Platform.OS}`}
-            returnUrl={`${websiteUrl}/drop/free?stripeReturn=true&platform=${Platform.OS}`}
-          />
-          <Button
-            tw="w-full"
-            onPress={() => {
-              setStripeReturn(undefined);
-              modalContext?.pop();
-            }}
-          >
-            Okay
-          </Button>
-        </View>
-      </Layout>
-    );
-  }
-
-  if (onboardinStatus.status === "not_onboarded") {
-    return (
-      <Layout
-        onBackPress={() => router.pop()}
-        closeIcon
-        title="Payment processing details"
-      >
-        <BottomSheetModalProvider>
-          <CompleteStripeFlow />
-        </BottomSheetModalProvider>
-      </Layout>
-    );
-  }
-
-  if (state.status === "success") {
-    return (
-      <Animated.View
-        style={{
-          flex: 1,
-        }}
-        entering={FadeIn}
-        exiting={FadeOut}
-        key={step}
-      >
-        <Layout
-          onBackPress={() => modalContext?.pop()}
-          closeIcon
-          title="Congrats! Now share it ✦"
-        >
-          <DropViewShare
-            title={getValues("title")}
-            description={getValues("description")}
-            file={getValues("file")}
-            contractAddress={state.edition?.contract_address}
-            dropCreated
-          />
-        </Layout>
-      </Animated.View>
-    );
-  }
 
   if (onboardinStatus.status !== "onboarded") return null;
 
@@ -595,7 +441,6 @@ const SetPriceAndDuration = (
 ) => {
   const {
     errors,
-    control,
     handleNextStep,
     trigger,
     getValues,
@@ -1116,345 +961,6 @@ const Layout = (props: {
         </View>
       </View>
       {props.children}
-    </View>
-  );
-};
-
-// const DropSuccess = (props: { contractAddress?: string }) => {
-//   const contractAddress = props.contractAddress;
-//   const isDark = useIsDarkMode();
-//   const { data: edition } = useCreatorCollectionDetail(contractAddress);
-//   const router = useRouter();
-//   const { data } = useNFTDetailByTokenId({
-//     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
-//     tokenId: "0",
-//     contractAddress: edition?.creator_airdrop_edition.contract_address,
-//   });
-//   const nft = dummyNFT ?? data?.data.item;
-//   const qrCodeUrl = useMemo(() => {
-//     if (!nft) return "";
-//     const url = new URL(getNFTURL(nft));
-//     if (edition && edition.password) {
-//       url.searchParams.set("password", edition?.password);
-//     }
-//     return url;
-//   }, [edition, nft]);
-
-//   const shareWithTwitterIntent = useCallback(() => {
-//     Linking.openURL(
-//       getTwitterIntent({
-//         url: qrCodeUrl.toString(),
-//         message: `Just dropped "${nft?.token_name}" on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
-//       })
-//     );
-//   }, [nft?.token_name, qrCodeUrl]);
-
-//   const onCopyLink = useCallback(async () => {
-//     await Clipboard.setStringAsync(qrCodeUrl.toString());
-//     toast.success("Copied!");
-//   }, [qrCodeUrl]);
-
-//   return (
-//     <BottomSheetScrollView>
-//       <View tw="items-center justify-center p-4 px-8">
-//         <View
-//           style={{ borderWidth: 1 }}
-//           tw="mt-4 w-full overflow-hidden rounded-xl border-gray-500"
-//         >
-//           <Media
-//             item={nft}
-//             resizeMode="cover"
-//             numColumns={1}
-//             sizeStyle={{
-//               height: 220,
-//             }}
-//             theme="dark"
-//           />
-//           <View tw="px-4">
-//             <Creator nft={nft} shouldShowDateCreated={false} />
-//             <View tw="mt-[-4px] pb-4">
-//               <Text tw="font-semibold text-gray-800 dark:text-gray-100">
-//                 {nft?.token_name}
-//               </Text>
-//               <Text tw="text-gray-800 dark:text-gray-100">
-//                 {nft?.token_description}
-//               </Text>
-//             </View>
-//           </View>
-//         </View>
-//         <View tw="mt-4 w-full items-center" style={{ rowGap: 16 }}>
-//           <Button
-//             tw="w-full"
-//             size="regular"
-//             onPress={shareWithTwitterIntent}
-//             style={{
-//               backgroundColor: "#4A99E9",
-//             }}
-//           >
-//             <Twitter color="white" width={20} height={20} />
-//             <Text
-//               tw="ml-1 text-sm font-semibold"
-//               style={{
-//                 color: "white",
-//               }}
-//             >
-//               Tweet
-//             </Text>
-//           </Button>
-//           <Button
-//             variant="primary"
-//             tw="w-full"
-//             size="regular"
-//             onPress={onCopyLink}
-//           >
-//             <View tw="mr-1">
-//               <InstagramColorful width={20} height={20} />
-//             </View>
-//             Share Instagram
-//           </Button>
-//           <Button
-//             variant="outlined"
-//             tw="w-full"
-//             size="regular"
-//             onPress={onCopyLink}
-//           >
-//             <View tw="mr-1">
-//               <Link color={isDark ? "white" : "black"} width={20} height={20} />
-//             </View>
-//             Copy Link
-//           </Button>
-//           <Button
-//             variant="outlined"
-//             tw="mt-8 w-full"
-//             size="regular"
-//             onPress={() => {
-//               if (!nft) return;
-
-//               if (Platform.OS !== "web") {
-//                 router.pop();
-//                 router.push(`${getNFTSlug(nft)}`);
-//               } else {
-//                 router.replace(`${getNFTSlug(nft)}`);
-//               }
-//             }}
-//           >
-//             View Drop
-//           </Button>
-//         </View>
-//       </View>
-//     </BottomSheetScrollView>
-//   );
-// };
-
-// const dummyNFT = {
-//   multiple_owners_list: [
-//     {
-//       quantity: 1,
-//       profile_id: 3366447,
-//       name: "Nishan Bende",
-//       img_url:
-//         "https://lh3.googleusercontent.com/AEnH2_JXVpF55uZc0WWhws48yF2TXccF5HbCrz7BXfmPgQQFMr_gDBsQHY6Y5zXT7T_OLz6pQpdr9BML3oIGfUqzI989xPrr3AN4",
-//       username: "nishanbende",
-//       verified: true,
-//       address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
-//       wallet_address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
-//     },
-//   ],
-//   like_count: 0,
-//   comment_count: 0,
-//   nft_id: 283274803,
-//   contract_address: "0x7EF25B27D5168f52481e342E40570591fAD6CE71",
-//   token_id: "0",
-//   token_name: "Moon drop",
-//   token_description: "Moon drop",
-//   token_img_url: null,
-//   token_img_original_url: null,
-//   token_has_video: false,
-//   token_animation_url: null,
-//   animation_preview_url: null,
-//   blurhash: null,
-//   token_background_color: null,
-//   token_aspect_ratio: 1.966189856957087,
-//   token_hidden: false,
-//   creator_id: 3366447,
-//   creator_name: "Nishan Bende",
-//   creator_address: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
-//   creator_address_nonens: "0x38515E6c8561c9A3e1186E2c1fa274Cc7e3aa7c6",
-//   creator_img_url:
-//     "https://lh3.googleusercontent.com/AEnH2_JXVpF55uZc0WWhws48yF2TXccF5HbCrz7BXfmPgQQFMr_gDBsQHY6Y5zXT7T_OLz6pQpdr9BML3oIGfUqzI989xPrr3AN4",
-//   creator_followers_count: 651,
-//   multiple_owners: false,
-//   token_creator_followers_only: false,
-//   creator_username: "nishanbende",
-//   creator_verified: true,
-//   nsfw: false,
-//   owner_id: null,
-//   owner_name: null,
-//   owner_address: null,
-//   owner_address_nonens: null,
-//   owner_username: null,
-//   owner_verified: false,
-//   owner_count: null,
-//   owner_img_url: null,
-//   token_count: null,
-//   token_ko_edition: null,
-//   token_edition_identifier: null,
-//   source_url: "ipfs://QmYpX8J7vsaGYaFyVAsHveGZtRZ8hURfyEgSqCP1cx2KqE",
-//   still_preview_url: null,
-//   mime_type: "image/webp",
-//   chain_identifier: "80001",
-//   chain_name: "mumbai",
-//   token_listing_identifier: null,
-//   collection_name: null,
-//   collection_slug: null,
-//   collection_img_url: null,
-//   contract_is_creator: false,
-//   creator_airdrop_edition_address: "0x7EF25B27D5168f52481e342E40570591fAD6CE71",
-//   creator_airdrop_edition_contract_version: 2,
-//   token_created: "2023-06-30T09:15:36.676Z",
-//   is_user_owner: null,
-//   slug: "moon-drop-1688116536",
-//   video_urls: null,
-//   image_path: "46f0b6f0-6a40-4435-b0b9-b4aae9777d58.png",
-//   image_url:
-//     "https://media-stage.showtime.xyz/46f0b6f0-6a40-4435-b0b9-b4aae9777d58.png",
-//   cloudinary_video_url: null,
-//   cloudinary_thumbnail_url: null,
-// };
-
-const countries = [
-  {
-    label: "United States",
-    value: "US",
-  },
-];
-
-const businessType = [
-  {
-    label: "Individual",
-    value: "individual",
-  },
-  {
-    label: "Company",
-    value: "company",
-  },
-];
-
-const CompleteStripeFlow = () => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    register,
-    setValue,
-    watch,
-  } = useForm({
-    defaultValues: {
-      businessType: "individual",
-    } as any,
-  });
-
-  const selectedCountryCode = watch("countryCode");
-  const onboardingCreator = useOnBoardCreator();
-
-  const onSubmit = async (data: any) => {
-    const res = await onboardingCreator.trigger({
-      email: data.email,
-      country_code: data.countryCode,
-      refresh_url: `${websiteUrl}/drop/free?stripeRefresh=true`,
-      return_url: `${websiteUrl}/drop/free?stripeReturn=true`,
-      business_type: data.businessType,
-    });
-    if (Platform.OS === "web") {
-      window.location.href = res.url;
-    } else {
-      Linking.openURL(res.url);
-    }
-  };
-
-  return (
-    <View tw="p-4" style={{ rowGap: 16 }}>
-      <Text tw="text-gray-700 dark:text-gray-200">
-        The following is required in order to take payments. You’ll be
-        redirected to create an account with Stripe who will hold and payout
-        your drop sales.
-      </Text>
-      <Controller
-        control={control}
-        {...register("email", {
-          required: "Please enter an email",
-          pattern: {
-            value: /\S+@\S+\.\S+/,
-            message: "Please enter a valid email",
-          },
-        })}
-        render={({ field: { onChange, onBlur, value, ref } }) => {
-          return (
-            <Fieldset
-              ref={ref}
-              label="Email"
-              placeholder="Enter an email"
-              onBlur={onBlur}
-              errorText={errors.email?.message}
-              value={value}
-              onChangeText={onChange}
-            />
-          );
-        }}
-      />
-
-      <View tw="flex-row" style={{ columnGap: 16 }}>
-        <CountryPicker
-          handleCountrySelect={(code: string) => {
-            setValue("countryCode", code);
-          }}
-          selectedCountryCode={selectedCountryCode}
-        />
-
-        <Controller
-          control={control}
-          name="businessType"
-          rules={{
-            required: {
-              value: true,
-              message: "Please select a business type",
-            },
-          }}
-          render={({ field: { onChange, onBlur, value, ref } }) => {
-            return (
-              <Fieldset
-                ref={ref}
-                tw="flex-1"
-                label="Business type"
-                onBlur={onBlur}
-                errorText={errors.countryCode?.message}
-                selectOnly
-                select={{
-                  options: businessType,
-                  placeholder: "Business type",
-                  value: value,
-                  onChange,
-                  tw: "flex-1",
-                }}
-              />
-            );
-          }}
-        />
-      </View>
-      <Button
-        onPress={handleSubmit(onSubmit)}
-        tw={onboardingCreator.isMutating ? `opacity-30` : ""}
-        size="regular"
-      >
-        <View tw="flex-row items-center" style={{ columnGap: 8 }}>
-          <Image source={require("./stripe-logo.png")} height={20} width={20} />
-          <Text tw="font-semibold text-white dark:text-black">
-            {onboardingCreator.isMutating
-              ? "Please wait..."
-              : "Setup cash payout"}
-          </Text>
-        </View>
-      </Button>
     </View>
   );
 };
