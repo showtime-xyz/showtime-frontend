@@ -18,7 +18,6 @@ import {
 import { createParam } from "app/navigation/use-param";
 
 import { stripePromise } from "../checkout/stripe";
-import { fetchStripeAccountId } from "../claim/claim-paid-nft-button";
 
 const { useParam } = createParam<{
   contractAddress: string;

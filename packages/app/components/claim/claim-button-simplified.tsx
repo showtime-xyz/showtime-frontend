@@ -14,9 +14,9 @@ import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 
 import { toast } from "design-system/toast";
 
-import { ClaimStatus, getClaimStatus } from "./claim-button";
 import { ClaimType } from "./claim-form";
 import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
+import { ClaimStatus, getClaimStatus } from "./claim-status";
 
 type ClaimButtonProps = {
   edition?: CreatorEditionResponse;

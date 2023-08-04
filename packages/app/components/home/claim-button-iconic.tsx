@@ -9,8 +9,8 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-button";
 import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
+import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-status";
 import { FeedSocialButton } from "app/components/feed-social-button";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";

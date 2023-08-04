@@ -24,7 +24,7 @@ import { getCurrencyPrice } from "app/utilities";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";
 
-import { ClaimStatus, getClaimStatus } from "./claim-button";
+import { ClaimStatus, getClaimStatus } from "./claim-status";
 
 type PiadNFTParams = {
   editionId?: number;
