@@ -45,6 +45,7 @@ import { FollowingScreen } from "app/screens/following";
 import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { OnboardingScreen } from "app/screens/onboarding";
+import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
@@ -201,6 +202,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <LikersScreen />
         <ReportScreen />
         <DropFreeScreen />
+        <PayoutsSetupScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />
         <QRCodeShareScreen />

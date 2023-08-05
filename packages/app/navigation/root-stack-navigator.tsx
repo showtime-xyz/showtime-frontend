@@ -35,6 +35,7 @@ import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
+import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { ProfileScreen } from "app/screens/profile";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
@@ -225,6 +226,11 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="dropFree"
           component={DropFreeScreen}
+          options={{ gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="payoutsSetup"
+          component={PayoutsSetupScreen}
           options={{ gestureEnabled: false }}
         />
         <Stack.Screen name="claim" component={ClaimScreen} />

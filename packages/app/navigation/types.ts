@@ -84,6 +84,7 @@ type RootStackNavigatorParams = {
   notificationSettings: undefined;
   blockedList: undefined;
   dropFree: undefined;
+  payoutsSetup: undefined;
   dropSlug: SwipeListParams & {
     dropSlug?: string;
   };
