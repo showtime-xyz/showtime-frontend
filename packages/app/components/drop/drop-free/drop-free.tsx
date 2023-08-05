@@ -19,6 +19,7 @@ import {
   useIsomorphicLayoutEffect,
 } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, ChevronRight, Close } from "@showtime-xyz/universal.icon";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -42,6 +43,7 @@ import { useStarDropForm } from "../common/star-drop-form-utils";
 import { StepProps } from "../common/types";
 import { usePaymentEditionPriceRange } from "../common/use-payment-edition-price-range";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
+import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
 
 type CreateDropStep =
@@ -53,6 +55,7 @@ type CreateDropStep =
 
 export const DropFree = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
+  const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
   const {
     control,
@@ -74,7 +77,7 @@ export const DropFree = () => {
   const description = getValues("description");
 
   const file = getValues("file");
-  const { dropNFT, reset: resetDropState } = useDropNFT();
+  const { state, dropNFT, reset: resetDropState } = useDropNFT();
   const router = useRouter();
 
   const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
@@ -139,6 +142,34 @@ export const DropFree = () => {
       setValue("file", file);
     }
   };
+
+  if (state.status === "success") {
+    return (
+      <Animated.View
+        style={{
+          flex: 1,
+        }}
+        entering={FadeIn}
+        exiting={FadeOut}
+        key={step}
+      >
+        <Layout
+          onBackPress={() => modalContext?.pop()}
+          closeIcon
+          title="Congrats! Now share it ✦"
+          headerShown={false}
+        >
+          <DropViewShare
+            title={getValues("title")}
+            description={getValues("description")}
+            file={getValues("file")}
+            contractAddress={state.edition?.contract_address}
+            dropCreated
+          />
+        </Layout>
+      </Animated.View>
+    );
+  }
 
   if (onboardinStatus.status !== "onboarded") return null;
 
