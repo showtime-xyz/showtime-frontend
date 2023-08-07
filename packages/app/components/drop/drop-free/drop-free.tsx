@@ -1447,7 +1447,11 @@ const CompleteStripeFlow = () => {
         size="regular"
       >
         <View tw="flex-row items-center" style={{ columnGap: 8 }}>
-          <Image source={require("./stripe-logo.png")} height={20} width={20} />
+          <Image
+            source={require("app/components/payouts/stripe-logo.png")}
+            height={20}
+            width={20}
+          />
           <Text tw="font-semibold text-white dark:text-black">
             {onboardingCreator.isMutating
               ? "Please wait..."
