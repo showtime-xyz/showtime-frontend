@@ -118,7 +118,6 @@ const CheckoutFormLayout = ({
     defaultPaymentMethod?.id
   );
   const [isUseSavedCard, setIsUseSavedCard] = useState(true);
-
   const stripe = useStripe();
   const elements = useElements();
 
@@ -149,7 +148,7 @@ const CheckoutFormLayout = ({
     }
 
     setIsLoading(true);
-    return new Promise((resolve, reject) => {
+    const fetch = new Promise((resolve, reject) => {
       const stripeFetch = stripe
         .confirmPayment({
           elements,
@@ -171,44 +170,6 @@ const CheckoutFormLayout = ({
     }).finally(() => {
       setIsLoading(false);
     });
-  };
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    let fetch;
-    if (isUseSavedCard && savedPaymentMethodId && clientSecret) {
-      fetch = new Promise((resolve, reject) => {
-        return stripe
-          ?.confirmCardPayment(clientSecret, {
-            payment_method: savedPaymentMethodId,
-          })
-          .then(async () => {
-            resolve(undefined);
-            router.push(
-              {
-                pathname: router.pathname,
-                query: {
-                  ...router.query,
-                  contractAddress:
-                    edition?.creator_airdrop_edition.contract_address,
-                  checkoutReturnForPaidNFTModal: true,
-                },
-              },
-              router.asPath,
-              {
-                shallow: true,
-              }
-            );
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      }).finally(() => {
-        setIsLoading(false);
-      });
-    } else {
-      fetch = paymentWithStripeFetch();
-    }
-
     toast.promise(fetch, {
       loading: "Processing Payment...",
       success: "Redirecting",
@@ -230,10 +191,42 @@ const CheckoutFormLayout = ({
       },
     });
   };
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (isUseSavedCard && savedPaymentMethodId && clientSecret) {
+      setIsLoading(true);
+      await stripe
+        ?.confirmCardPayment(clientSecret, {
+          payment_method: savedPaymentMethodId,
+        })
+        .then(async () => {
+          router.push(
+            {
+              pathname: router.pathname,
+              query: {
+                ...router.query,
+                contractAddress:
+                  edition?.creator_airdrop_edition.contract_address,
+                checkoutReturnForPaidNFTModal: true,
+              },
+            },
+            router.asPath,
+            {
+              shallow: true,
+            }
+          );
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      await paymentWithStripeFetch();
+    }
+  };
   return (
     <>
       <View tw="" id="payment-form">
-        <View tw="p-4">
+        <View tw="px-4 pb-2 pt-4">
           <View tw="flex-row">
             <View tw="relative overflow-hidden rounded-2xl">
               <Media
@@ -263,7 +256,7 @@ const CheckoutFormLayout = ({
             <>
               {paymentMethods.data?.map((method) => {
                 return (
-                  <View key={method.id}>
+                  <View tw="mb-4" key={method.id}>
                     <PressableHover
                       onPress={() => {
                         setSavedPaymentMethodId(method.id);
@@ -289,7 +282,7 @@ const CheckoutFormLayout = ({
                       </View>
                       <View tw="ml-2 flex-row">
                         <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
-                          Default Card
+                          {method?.is_default ? "Default Card" : "Card"}
                         </Text>
                         <Text tw="ml-1 text-sm font-medium text-gray-400">
                           {`(Ending in ${method.details.last4} · ${
@@ -303,7 +296,7 @@ const CheckoutFormLayout = ({
               })}
               <PressableHover
                 onPress={() => setIsUseSavedCard(false)}
-                tw="my-4 flex-row items-center"
+                tw="mb-4 flex-row items-center"
               >
                 {!isUseSavedCard ? (
                   <CheckFilled
@@ -365,7 +358,7 @@ const CheckoutFormLayout = ({
             </View>
           )}
         </View>
-        <View tw="px-4">
+        <View tw="mt-2 px-4">
           <Button
             disabled={isLoading}
             tw={`${isLoading ? "opacity-60" : ""}`}
@@ -380,7 +373,10 @@ const CheckoutFormLayout = ({
                 />
               </Text>
             ) : (
-              `Pay ${getCurrencyPrice(edition.currency, edition.price)}`
+              `Collect to unlock - ${getCurrencyPrice(
+                edition.currency,
+                edition.price
+              )}`
             )}
           </Button>
         </View>
