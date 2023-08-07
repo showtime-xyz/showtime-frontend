@@ -11,15 +11,21 @@ import {
 } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
 
+import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { CreditCard, CheckFilled } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Media } from "app/components/media";
+import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
@@ -32,6 +38,7 @@ import { getCreatorUsernameFromNFT, getCurrencyPrice } from "app/utilities";
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
+import { EmptyPlaceholder } from "../empty-placeholder";
 import { stripePromise } from "./stripe";
 
 export function CheckoutClaimForm({
@@ -41,9 +48,10 @@ export function CheckoutClaimForm({
   clientSecret: string;
   contractAddress: string;
 }) {
-  const { data: edition } = useCreatorCollectionDetail(contractAddress);
-
+  const { data: edition, loading } =
+    useCreatorCollectionDetail(contractAddress);
   const isDark = useIsDarkMode();
+  const router = useRouter();
   const stripeOptions = useMemo(
     () =>
       ({
@@ -55,44 +63,77 @@ export function CheckoutClaimForm({
     [clientSecret, isDark]
   );
 
-  return stripeOptions?.clientSecret && edition ? (
+  if (loading) {
+    return (
+      <View tw="min-h-[200px] flex-1 items-center justify-center">
+        <Spinner />
+      </View>
+    );
+  }
+  if (!edition || !clientSecret)
+    return (
+      <View tw="min-h-[200px] flex-1 items-center justify-center">
+        <EmptyPlaceholder
+          title="Payment failed, please try again!"
+          tw="mb-8"
+          hideLoginBtn
+        />
+        <Button
+          onPress={() => {
+            router.pop();
+          }}
+        >
+          Go Back
+        </Button>
+      </View>
+    );
+
+  return (
     <Elements stripe={stripePromise()} options={stripeOptions}>
-      <CheckoutForm edition={edition} clientSecret={clientSecret} />
+      <CheckoutFormLayout edition={edition} clientSecret={clientSecret} />
     </Elements>
-  ) : null;
+  );
 }
 
-const CheckoutForm = ({
+const CheckoutFormLayout = ({
   edition,
   clientSecret,
 }: {
   edition: CreatorEditionResponse;
   clientSecret: string;
 }) => {
-  const stripe = useStripe();
-  const elements = useElements();
   const isDark = useIsDarkMode();
-
-  const [setAsDefaultPaymentMethod, setSetAsDefaultPaymentMethod] =
-    useState(false);
-  const [email, setEmail] = useState("");
   const { data: nft } = useNFTDetailByTokenId({
     chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
+  const router = useRouter();
+  const paymentMethods = usePaymentsManage();
+  const defaultPaymentMethod = useMemo(
+    () => paymentMethods.data?.find((method) => method.is_default),
+    [paymentMethods.data]
+  );
+  const [isUseDefaultCard, setIsUseDefaultCard] = useState(true);
+
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const [setAsDefaultPaymentMethod, setSetAsDefaultPaymentMethod] =
+    useState(true);
+  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  console.log(
-    `checkoutReturnForPaidNFTModal=true&contractAddress=${
+  const paymentReturnUrl =
+    Platform.select({
+      web: window.location.href,
+      default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
+    }) +
+    `?checkoutReturnForPaidNFTModal=true&contractAddress=${
       edition.creator_airdrop_edition?.contract_address
     }&setAsDefaultPaymentMethod=${
       setAsDefaultPaymentMethod ? setAsDefaultPaymentMethod : ""
-    }`
-  );
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-
+    }`;
+  const paymentWithStripeFetch = async () => {
     if (!stripe || !elements) {
       return;
     }
@@ -105,23 +146,13 @@ const CheckoutForm = ({
     }
 
     setIsLoading(true);
-
-    const fetch = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const stripeFetch = stripe
         .confirmPayment({
           elements,
           clientSecret,
           confirmParams: {
-            return_url:
-              Platform.select({
-                web: window.location.href,
-                default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
-              }) +
-              `?checkoutReturnForPaidNFTModal=true&contractAddress=${
-                edition.creator_airdrop_edition?.contract_address
-              }&setAsDefaultPaymentMethod=${
-                setAsDefaultPaymentMethod ? setAsDefaultPaymentMethod : ""
-              }`,
+            return_url: paymentReturnUrl,
             receipt_email: email,
           },
         })
@@ -137,6 +168,44 @@ const CheckoutForm = ({
     }).finally(() => {
       setIsLoading(false);
     });
+  };
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    let fetch;
+    if (isUseDefaultCard && defaultPaymentMethod && clientSecret) {
+      fetch = new Promise((resolve, reject) => {
+        return stripe
+          ?.confirmCardPayment(clientSecret, {
+            payment_method: defaultPaymentMethod.id,
+          })
+          .then(async () => {
+            resolve(undefined);
+            router.push(
+              {
+                pathname: router.pathname,
+                query: {
+                  ...router.query,
+                  contractAddress:
+                    edition?.creator_airdrop_edition.contract_address,
+                  checkoutReturnForPaidNFTModal: true,
+                },
+              },
+              router.asPath,
+              {
+                shallow: true,
+              }
+            );
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }).finally(() => {
+        setIsLoading(false);
+      });
+    } else {
+      fetch = paymentWithStripeFetch();
+    }
+
     toast.promise(fetch, {
       loading: "Processing Payment...",
       success: "Redirecting",
@@ -146,15 +215,18 @@ const CheckoutForm = ({
         // your `return_url`. For some payment methods like iDEAL, your customer will
         // be redirected to an intermediate site first to authorize the payment, then
         // redirected to the `return_url`.
-        if (error.type === "card_error" || error.type === "validation_error") {
+        if (
+          error?.type === "card_error" ||
+          error?.type === "validation_error"
+        ) {
           return error.message ?? "An unexpected error occurred.";
         } else {
+          Logger.error("Stripe payment failure ", error);
           return "An unexpected error occurred. Please try again";
         }
       },
     });
   };
-
   return (
     <>
       <View tw="" id="payment-form">
@@ -184,38 +256,84 @@ const CheckoutForm = ({
             </View>
           </View>
           <View tw="h-6" />
-          <LinkAuthenticationElement
-            onChange={(e) => setEmail(e.value.email)}
-          />
-          <View tw="h-3" />
 
-          <PaymentElement
-            options={{
-              layout: "tabs",
-
-              wallets: {
-                applePay: "auto",
-                googlePay: "auto",
-              },
-            }}
-          />
-          {/* <View tw="mt-3 flex-row items-center">
-            <Checkbox
-              checked={setAsDefaultPaymentMethod}
-              onChange={() =>
-                setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
-              }
-              aria-label="Set as default payment method"
+          {defaultPaymentMethod ? (
+            <>
+              <PressableHover
+                onPress={() => setIsUseDefaultCard(true)}
+                tw="flex-row items-center"
+              >
+                {isUseDefaultCard ? (
+                  <CheckFilled
+                    height={20}
+                    width={20}
+                    color={isDark ? colors.white : colors.gray[700]}
+                  />
+                ) : (
+                  <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
+                )}
+                <View tw="ml-2 self-start md:self-center">
+                  <CreditCard
+                    width={20}
+                    height={20}
+                    color={isDark ? colors.white : colors.black}
+                  />
+                </View>
+                <View tw="ml-2 flex-row">
+                  <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
+                    Default Card
+                  </Text>
+                  <Text tw="ml-1 text-sm font-medium text-gray-400">
+                    {`(Ending in ${defaultPaymentMethod.details.last4} · ${
+                      defaultPaymentMethod.details.exp_month
+                    }/${defaultPaymentMethod.details.exp_year
+                      .toString()
+                      .slice(-2)})`}
+                  </Text>
+                </View>
+              </PressableHover>
+              <PressableHover
+                onPress={() => setIsUseDefaultCard(false)}
+                tw="my-4 flex-row items-center"
+              >
+                {!isUseDefaultCard ? (
+                  <CheckFilled
+                    height={20}
+                    width={20}
+                    color={isDark ? colors.white : colors.gray[700]}
+                  />
+                ) : (
+                  <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
+                )}
+                <View tw="ml-2 self-start md:self-center">
+                  <Image
+                    source={require("app/components/drop/drop-free/stripe-logo.png")}
+                    height={20}
+                    width={20}
+                  />
+                </View>
+                <View tw="ml-2 flex-row">
+                  <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
+                    Other payment method
+                  </Text>
+                </View>
+              </PressableHover>
+              <AnimateHeight hide={isUseDefaultCard}>
+                <PaymentCustomPaymentForm
+                  setEmail={setEmail}
+                  setAsDefaultPaymentMethod={setAsDefaultPaymentMethod}
+                  setSetAsDefaultPaymentMethod={setSetAsDefaultPaymentMethod}
+                />
+              </AnimateHeight>
+            </>
+          ) : (
+            <PaymentCustomPaymentForm
+              setEmail={setEmail}
+              setAsDefaultPaymentMethod={setAsDefaultPaymentMethod}
+              setSetAsDefaultPaymentMethod={setSetAsDefaultPaymentMethod}
             />
-            <Text
-              tw="ml-2 text-gray-900 dark:text-gray-50"
-              onPress={() =>
-                setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
-              }
-            >
-              Set as default payment method
-            </Text>
-          </View> */}
+          )}
+
           <View tw="mt-4 px-4">
             <Text tw="text-center text-xs text-gray-900 dark:text-gray-50">
               By clicking submit you will accept the{" "}
@@ -239,8 +357,8 @@ const CheckoutForm = ({
         </View>
         <View tw="px-4">
           <Button
-            disabled={isLoading || !stripe || !elements}
-            tw={`${isLoading || !stripe || !elements ? "opacity-60" : ""}`}
+            disabled={isLoading}
+            tw={`${isLoading ? "opacity-60" : ""}`}
             onPress={handleSubmit}
             size="regular"
           >
@@ -258,5 +376,49 @@ const CheckoutForm = ({
         </View>
       </View>
     </>
+  );
+};
+
+const PaymentCustomPaymentForm = ({
+  setEmail,
+  setAsDefaultPaymentMethod,
+  setSetAsDefaultPaymentMethod,
+}: {
+  setEmail: (v: string) => void;
+  setAsDefaultPaymentMethod: boolean;
+  setSetAsDefaultPaymentMethod: (v: boolean) => void;
+}) => {
+  return (
+    <View>
+      <LinkAuthenticationElement onChange={(e) => setEmail(e.value.email)} />
+      <View tw="h-3" />
+
+      <PaymentElement
+        options={{
+          layout: "tabs",
+          wallets: {
+            applePay: "auto",
+            googlePay: "auto",
+          },
+        }}
+      />
+      <View tw="mt-3 flex-row items-center">
+        <Checkbox
+          checked={setAsDefaultPaymentMethod}
+          onChange={() =>
+            setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
+          }
+          aria-label="Set as default payment method"
+        />
+        <Text
+          tw="ml-2 text-gray-900 dark:text-gray-50"
+          onPress={() =>
+            setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
+          }
+        >
+          Set as default payment method
+        </Text>
+      </View>
+    </View>
   );
 };

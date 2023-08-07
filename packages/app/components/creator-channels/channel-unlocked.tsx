@@ -14,7 +14,10 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { SafeAreaView } from "@showtime-xyz/universal.safe-area";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "@showtime-xyz/universal.safe-area";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -43,6 +46,8 @@ import {
 
 import { toast } from "design-system/toast";
 
+import { CloseButton } from "../close-button";
+
 const { useParam } = createParam<{
   contractAddress: string;
   isPaid?: string;
@@ -70,6 +75,7 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
   const { data: userInfo } = useUserProfile({
     address: nft.creator_username || nft.creator_address_nonens,
   });
+  const { top } = useSafeAreaInsets();
   const router = useRouter();
   const { data: user } = useMyInfo();
   const viewRef = useRef<any>(null);
@@ -181,11 +187,18 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
             <Avatar url={user?.data?.profile?.img_url} tw="mr-2" size={38} />
             <Text
               onPress={() =>
-                router.push(`/@${getProfileName(user?.data?.profile)}`)
+                router.push(
+                  `/@${
+                    user?.data?.profile.username ??
+                    user?.data?.profile.primary_wallet?.address
+                  }`
+                )
               }
               tw="text-base text-gray-900"
             >
-              @{getProfileName(user?.data?.profile)}
+              {user?.data?.profile.username
+                ? `@${user?.data?.profile.username}`
+                : getProfileName(user?.data?.profile)}
             </Text>
             <VerificationBadge
               fillColor="#fff"
@@ -216,6 +229,14 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
           </Button>
         </View>
       </SafeAreaView>
+      <View
+        tw="absolute left-4 z-50"
+        style={{
+          top: top + 12,
+        }}
+      >
+        <CloseButton color={colors.gray[900]} onPress={() => router.pop()} />
+      </View>
     </View>
   );
 });
