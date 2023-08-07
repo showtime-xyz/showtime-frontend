@@ -283,6 +283,7 @@ export type MyInfo = {
     can_create_drop: boolean;
     daily_claim_limit: number;
     paid_drop_credits?: DropPlan[];
+
     claim_tank: {
       available_claims: number;
       next_refill_at: string;
@@ -300,4 +301,5 @@ export type GatingType =
   | "multi"
   | "spotify_presave"
   // This is for compatibility with the old spotify_presave
-  | "music_presave";
+  | "music_presave"
+  | "paid_nft";

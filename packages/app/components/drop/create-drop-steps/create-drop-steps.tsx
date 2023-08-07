@@ -53,13 +53,16 @@ import { FilePickerResolveValue } from "app/lib/file-picker";
 
 import { DateTimePicker } from "design-system/date-time-picker";
 
+import { MediaPicker } from "../common/media-picker";
+import {
+  getDefaultDate,
+  useMusicDropForm,
+} from "../common/music-drop-form-utils";
+import { SelectDropType } from "../common/select-drop-type";
+import { StepProps } from "../common/types";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
-import { MediaPicker } from "./media-picker";
-import { getDefaultDate, useMusicDropForm } from "./music-drop-form-utils";
-import { SelectDropType } from "./select-drop-type";
-import { StepProps } from "./types";
 
 type CreateDropStep =
   | "media"
@@ -196,11 +199,9 @@ export const CreateDropSteps = () => {
           getValues={getValues}
           control={control}
           handleNextStep={() => {
-            modalContext?.snapToIndex(1);
             setStep("media");
           }}
           handlePrevStep={() => {
-            modalContext?.snapToIndex(0);
             modalContext?.pop();
           }}
           title={title}
@@ -224,7 +225,6 @@ export const CreateDropSteps = () => {
             handleNextStep={() => setStep("title")}
             handleFileChange={handleFileChange}
             handlePrevStep={() => {
-              modalContext?.snapToIndex(0);
               setStep("select-drop");
             }}
             description={description}
