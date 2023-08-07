@@ -26,49 +26,6 @@ import { LABEL_SIZE_TW } from "design-system/button/constants";
 
 import { ClaimStatus, getClaimStatus } from "./claim-status";
 
-type PiadNFTParams = {
-  editionId?: number;
-  showtimeFee?: number;
-  setPaymentMethodAsdefault?: boolean;
-  useDefaultPaymentMethod?: boolean;
-};
-
-async function fetchClaimPaymentIntent({
-  useDefaultPaymentMethod = true,
-  editionId,
-  showtimeFee,
-  setPaymentMethodAsdefault = true,
-}: PiadNFTParams) {
-  if (editionId) {
-    try {
-      const res = await axios({
-        method: "POST",
-        url: "/v1/payments/nft/claim/start",
-        data: {
-          edition_id: editionId,
-          showtime_fee: showtimeFee,
-          use_default_payment_method: useDefaultPaymentMethod,
-          set_payment_method_as_default: setPaymentMethodAsdefault,
-        },
-      });
-
-      return res;
-    } catch (e) {
-      const axiosError = e as AxiosError;
-      if (axiosError?.response?.data?.error?.code === 400) {
-        const res = await axios({
-          method: "POST",
-          url: "/v1/payments/nft/claim/resume",
-        });
-        return res;
-      } else {
-        Logger.error("Payment intent fetch failed ", e);
-        throw e;
-      }
-    }
-  }
-}
-
 export const fetchStripeAccountId = async (
   profileId: string | number | null | undefined
 ) => {
@@ -111,10 +68,6 @@ const GoldButton = memo(function GoldButton({
     if (Platform.OS !== "web") {
       return;
     }
-    const res = await fetchClaimPaymentIntent({
-      editionId,
-      useDefaultPaymentMethod: false,
-    });
 
     if (Platform.OS === "web") {
       const as = `/checkout-paid-nft`;
@@ -125,9 +78,9 @@ const GoldButton = memo(function GoldButton({
             pathname: router.pathname,
             query: {
               ...router.query,
-              clientSecret: res?.client_secret,
               checkoutPaidNFTModal: true,
               contractAddress,
+              editionId,
             },
           } as any,
         }),

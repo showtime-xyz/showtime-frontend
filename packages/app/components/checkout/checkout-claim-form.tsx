@@ -114,7 +114,10 @@ const CheckoutFormLayout = ({
     () => paymentMethods.data?.find((method) => method.is_default),
     [paymentMethods.data]
   );
-  const [isUseDefaultCard, setIsUseDefaultCard] = useState(true);
+  const [savedPaymentMethodId, setSavedPaymentMethodId] = useState(
+    defaultPaymentMethod?.id
+  );
+  const [isUseSavedCard, setIsUseSavedCard] = useState(true);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -172,11 +175,11 @@ const CheckoutFormLayout = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     let fetch;
-    if (isUseDefaultCard && defaultPaymentMethod && clientSecret) {
+    if (isUseSavedCard && savedPaymentMethodId && clientSecret) {
       fetch = new Promise((resolve, reject) => {
         return stripe
           ?.confirmCardPayment(clientSecret, {
-            payment_method: defaultPaymentMethod.id,
+            payment_method: savedPaymentMethodId,
           })
           .then(async () => {
             resolve(undefined);
@@ -256,47 +259,53 @@ const CheckoutFormLayout = ({
             </View>
           </View>
           <View tw="h-6" />
-
-          {defaultPaymentMethod ? (
+          {paymentMethods?.data && paymentMethods.data?.length > 0 ? (
             <>
+              {paymentMethods.data?.map((method) => {
+                return (
+                  <View key={method.id}>
+                    <PressableHover
+                      onPress={() => {
+                        setSavedPaymentMethodId(method.id);
+                        setIsUseSavedCard(true);
+                      }}
+                      tw="flex-row items-center"
+                    >
+                      {method.id === savedPaymentMethodId && isUseSavedCard ? (
+                        <CheckFilled
+                          height={20}
+                          width={20}
+                          color={isDark ? colors.white : colors.gray[700]}
+                        />
+                      ) : (
+                        <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
+                      )}
+                      <View tw="ml-2 self-start md:self-center">
+                        <CreditCard
+                          width={20}
+                          height={20}
+                          color={isDark ? colors.white : colors.black}
+                        />
+                      </View>
+                      <View tw="ml-2 flex-row">
+                        <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
+                          Default Card
+                        </Text>
+                        <Text tw="ml-1 text-sm font-medium text-gray-400">
+                          {`(Ending in ${method.details.last4} · ${
+                            method.details.exp_month
+                          }/${method.details.exp_year.toString().slice(-2)})`}
+                        </Text>
+                      </View>
+                    </PressableHover>
+                  </View>
+                );
+              })}
               <PressableHover
-                onPress={() => setIsUseDefaultCard(true)}
-                tw="flex-row items-center"
-              >
-                {isUseDefaultCard ? (
-                  <CheckFilled
-                    height={20}
-                    width={20}
-                    color={isDark ? colors.white : colors.gray[700]}
-                  />
-                ) : (
-                  <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
-                )}
-                <View tw="ml-2 self-start md:self-center">
-                  <CreditCard
-                    width={20}
-                    height={20}
-                    color={isDark ? colors.white : colors.black}
-                  />
-                </View>
-                <View tw="ml-2 flex-row">
-                  <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
-                    Default Card
-                  </Text>
-                  <Text tw="ml-1 text-sm font-medium text-gray-400">
-                    {`(Ending in ${defaultPaymentMethod.details.last4} · ${
-                      defaultPaymentMethod.details.exp_month
-                    }/${defaultPaymentMethod.details.exp_year
-                      .toString()
-                      .slice(-2)})`}
-                  </Text>
-                </View>
-              </PressableHover>
-              <PressableHover
-                onPress={() => setIsUseDefaultCard(false)}
+                onPress={() => setIsUseSavedCard(false)}
                 tw="my-4 flex-row items-center"
               >
-                {!isUseDefaultCard ? (
+                {!isUseSavedCard ? (
                   <CheckFilled
                     height={20}
                     width={20}
@@ -307,18 +316,20 @@ const CheckoutFormLayout = ({
                 )}
                 <View tw="ml-2 self-start md:self-center">
                   <Image
-                    source={require("app/components/drop/drop-free/stripe-logo.png")}
+                    source={{
+                      uri: "https://media.showtime.xyz/assets/stripe-logo.png",
+                    }}
                     height={20}
                     width={20}
                   />
                 </View>
                 <View tw="ml-2 flex-row">
                   <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
-                    Other payment method
+                    Other payment methods
                   </Text>
                 </View>
               </PressableHover>
-              <AnimateHeight hide={isUseDefaultCard}>
+              <AnimateHeight hide={isUseSavedCard}>
                 <PaymentCustomPaymentForm
                   setEmail={setEmail}
                   setAsDefaultPaymentMethod={setAsDefaultPaymentMethod}
@@ -333,7 +344,6 @@ const CheckoutFormLayout = ({
               setSetAsDefaultPaymentMethod={setSetAsDefaultPaymentMethod}
             />
           )}
-
           <View tw="mt-4 px-4">
             <Text tw="text-center text-xs text-gray-900 dark:text-gray-50">
               By clicking submit you will accept the{" "}
