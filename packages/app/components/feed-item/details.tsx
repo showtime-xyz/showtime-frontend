@@ -108,7 +108,7 @@ export const NFTDetails = ({
                 {description}
               </Text>
             </Text>
-            <View tw="absolute bottom-0 -ml-1 mt-3 h-6 flex-row justify-start">
+            <View tw="-ml-1 mt-2 h-6 flex-row justify-start">
               {edition?.gating_type === "paid_nft" ? (
                 <CollectToUnlockContentTooltip
                   creatorUsername={nft?.creator_username}
