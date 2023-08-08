@@ -115,7 +115,12 @@ export const DropPreviewComponent = forwardRef<typeof View, DropPreviewProps>(
         collapsable={false}
         ref={ref}
       >
-        <View tw="shadow-light dark:shadow-dark ios:border android:borderoverflow-hidden overflow-hidden rounded-3xl border-gray-100 bg-white pb-8 shadow-md">
+        <View
+          tw="shadow-light dark:shadow-dark ios:border android:borderoverflow-hidden overflow-hidden rounded-3xl border-gray-100 bg-white pb-8 shadow-md"
+          style={{
+            width: size,
+          }}
+        >
           <View>
             {preivewComponent ? (
               preivewComponent({ size })
@@ -217,7 +222,9 @@ export const DropPreviewComponent = forwardRef<typeof View, DropPreviewProps>(
             <Text tw="text-sm font-medium text-gray-900" numberOfLines={3}>
               {title}
             </Text>
-            <Text tw="pt-2 text-sm text-gray-900 ">{description}</Text>
+            <Text tw="line-clamp-4 pt-2 text-sm text-gray-900">
+              {description}
+            </Text>
             {renderButtons()}
           </View>
         </View>

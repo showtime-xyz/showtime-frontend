@@ -87,14 +87,13 @@ export const DropViewShare = memo(function DropViewShare({
       {isPaidNFT ? <BgGoldLinearGradient /> : null}
       <ScrollView
         contentContainerStyle={{
-          paddingTop: dropCreated ? 0 : Math.max(top, 12),
-          paddingBottom: dropCreated ? 0 : Math.max(bottom, 12),
+          paddingTop: Math.max(top, 20),
+          paddingBottom: Math.max(bottom, 12),
         }}
       >
         <DropPreview
           ctaCopy="View"
           buttonProps={{ variant: "primary" }}
-          tw="mt-2"
           isPaidNFT={isPaidNFT}
           {...rest}
           ref={viewRef}
@@ -134,6 +133,19 @@ export const DropViewShare = memo(function DropViewShare({
             View Drop
           </Button>
         </View>
+        {Platform.OS === "web" && (
+          <View
+            tw="absolute left-4 z-50 hidden sm:flex"
+            style={{
+              top: top + 12,
+            }}
+          >
+            <CloseButton
+              color={isDark ? colors.gray[200] : colors.gray[900]}
+              onPress={() => router.pop()}
+            />
+          </View>
+        )}
       </ScrollView>
     </View>
   );

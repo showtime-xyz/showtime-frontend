@@ -71,7 +71,7 @@ type CreateDropStep =
   | "select-drop";
 
 type Query = {
-  stripeReturn?: boolean;
+  stripeReturn?: string;
   stripeRefresh?: string;
 };
 
@@ -87,9 +87,7 @@ export const DropFree = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
   const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
-  const [stripeReturn, setStripeReturn] = useParam("stripeReturn", (g) => {
-    return g === "true";
-  });
+  const [stripeReturn, setStripeReturn] = useParam("stripeReturn");
   const {
     control,
     setValue,
@@ -191,7 +189,7 @@ export const DropFree = () => {
     );
   }
 
-  if (stripeReturn && onboardinStatus.status === "onboarded") {
+  if (stripeReturn === "true" && onboardinStatus.status === "onboarded") {
     return (
       <Layout
         onBackPress={() => modalContext?.pop()}
