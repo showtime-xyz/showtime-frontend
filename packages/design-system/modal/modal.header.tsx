@@ -31,14 +31,13 @@ function ModalHeaderComponent({
           onPress={onClose}
           iconOnly
           hitSlop={10}
-          tw="mr-2"
           {...closeButtonProps}
         >
           <CloseLarge />
         </Button>
       )}
 
-      <Text tw={[MODAL_HEADER_TITLE_TW, "flex-1 text-base font-bold"]}>
+      <Text tw={[MODAL_HEADER_TITLE_TW, "ml-5 flex-1 text-base font-bold"]}>
         {title}
       </Text>
 

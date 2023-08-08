@@ -40,7 +40,6 @@ import { useUser } from "app/hooks/use-user";
 import { getMediaUrl } from "app/utilities";
 
 import { NFTDetails } from "./details";
-import { EngagementIcons } from "./engagement-icons";
 import { NSFWGate } from "./nsfw-gate";
 import { FeedItemProps } from "./type";
 
@@ -249,13 +248,9 @@ export const FeedItem = memo<FeedItemProps>(function FeedItem({
               edition={edition}
               nft={nft}
               detail={detailData?.data?.item}
+              channelId={detailData?.data?.item.creator_channel_id}
             />
           </View>
-          <EngagementIcons
-            nft={nft}
-            bottomPadding={bottomPadding}
-            edition={edition}
-          />
         </Reanimated.View>
         {isAuthenticated && (
           <View

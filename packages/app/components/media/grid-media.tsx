@@ -13,7 +13,7 @@ import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail"
 import type { NFT } from "app/types";
 import { getMediaUrl } from "app/utilities";
 
-import { ContentTypeIcon } from "../content-type-tooltip";
+import { ContentTypeIcon } from "../tooltips/content-type-tooltip";
 
 type Props = {
   item?: NFT & { loading?: boolean };

@@ -1,64 +1,12 @@
-import { StyleSheet } from "react-native";
-
-import {
-  Globe,
-  Lock,
-  SpotifyPure,
-  RaffleHorizontal,
-  Music,
-  MusicBadge,
-  RaffleBadge,
-} from "@showtime-xyz/universal.icon";
+import { MusicBadge, RaffleBadge } from "@showtime-xyz/universal.icon";
 import { View } from "@showtime-xyz/universal.view";
 
-import { TextTooltip } from "app/components/text-tooltip";
+import { TextTooltip, contentGatingType } from "app/components/tooltips";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 
 type ContentTypeTooltipProps = {
   edition: CreatorEditionResponse | undefined;
   theme?: "dark" | "light";
-};
-export const contentGatingType = {
-  location: {
-    icon: Globe,
-    text: "Share location to collect",
-    typeName: "Location",
-  },
-  password: {
-    icon: Lock,
-    text: "Enter password to collect",
-    typeName: "Password",
-  },
-  spotify_save: {
-    icon: SpotifyPure,
-    text: "Save on Spotify to collect",
-    typeName: "Music",
-  },
-  multi: {
-    icon: Lock,
-    text: "Enter password & location to collect",
-    typeName: "Password & Location",
-  },
-  spotify_presave: {
-    icon: SpotifyPure,
-    text: "Pre-Save to collect",
-    typeName: "Pre-Save",
-  },
-  multi_provider_music_save: {
-    icon: SpotifyPure,
-    text: "Save on Spotify or Apple Music to collect",
-    typeName: "Music",
-  },
-  music_presave: {
-    icon: SpotifyPure,
-    text: "Pre-Save to collect",
-    typeName: "Pre-Save",
-  },
-  multi_provider_music_presave: {
-    icon: SpotifyPure,
-    text: "Pre-Save to collect",
-    typeName: "Pre-Save",
-  },
 };
 
 export const ContentType = ({ edition, ...rest }: ContentTypeTooltipProps) => {

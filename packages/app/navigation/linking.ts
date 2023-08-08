@@ -49,6 +49,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       dropEditDetailsModal:
         "drop/edit-details/:chainName/:contractAddress/:tokenId",
       qrCodeShare: "/qr-code-share/:contractAddress",
+      dropImageShare: "/drop-image-share/:contractAddress",
       raffle: "/raffle/:contractAddress",
       claim: "claim/:contractAddress",
       collectors: "collectors/:chainName/:contractAddress/:tokenId",
@@ -85,6 +86,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       channelsShare: "channels/:channelId/share",
       channelsMessageReactions:
         "channels/:channelId/messages/:messageId/reactions",
+      channelUnlocked: "channels/:contractAddress/unlocked",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {

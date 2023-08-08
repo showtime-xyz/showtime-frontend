@@ -13,8 +13,12 @@ import {
 
 async function joinChannel(
   url: string,
-  { arg }: { arg: { channelId: number } }
+  { arg }: { arg: { channelId: number | null | undefined } }
 ) {
+  if (!arg.channelId) {
+    Logger.error("Channel id is not provided");
+    return;
+  }
   return axios({
     url: `/v1/channels/${arg.channelId}/join`,
     method: "POST",
@@ -32,7 +36,11 @@ export const useJoinChannel = () => {
   const suggestedChannels = useSuggestedChannelsList();
   const { onboardingPromise } = useOnboardingPromise();
 
-  const handleSubmit = async ({ channelId }: { channelId: number }) => {
+  const handleSubmit = async ({
+    channelId,
+  }: {
+    channelId: number | null | undefined;
+  }) => {
     try {
       await loginPromise();
       await onboardingPromise();

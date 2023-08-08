@@ -22,8 +22,11 @@ import { initialiseAppleMusic } from "app/lib/apple-music-auth/apple-music-auth"
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
+import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
 import { CheckoutScreen } from "app/screens/checkout";
+import { CheckoutPaidNFTScreen } from "app/screens/checkout-paid-nft";
 import { CheckoutReturnScreen } from "app/screens/checkout-return";
+import { CheckoutReturnForPaidNFTScreen } from "app/screens/checkout-return-for-paid-nft";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
@@ -38,6 +41,7 @@ import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropFreeScreen } from "app/screens/drop-free";
+import { DropImageShareScreen } from "app/screens/drop-image-share";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
@@ -205,7 +209,10 @@ function App({ Component, pageProps, router }: AppProps) {
         <PayoutsSetupScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />
+        <CheckoutReturnForPaidNFTScreen />
+        <CheckoutPaidNFTScreen />
         <QRCodeShareScreen />
+        <DropImageShareScreen />
         <DropViewShareScreen />
         <CreatorChannelsIntroScreen />
         <CreatorChannelsMembersScreen />
@@ -217,7 +224,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <OnboardingScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
-
+        <UnlockedChannelScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />

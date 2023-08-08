@@ -58,8 +58,9 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
+import { CollectToUnlockContentTooltip } from "../tooltips";
+import { ContentTypeTooltip } from "../tooltips/content-type-tooltip";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
 import { FeedItemProps } from "./type";
@@ -221,12 +222,27 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             <View tw="h-8 flex-row">
               {isCreatorDrop && edition ? (
                 <>
-                  <ClaimButton tw="flex-1" edition={edition} />
-                  <ClaimedShareButton
-                    tw="ml-3 w-1/4"
-                    edition={edition}
+                  <ClaimButton
                     nft={nft}
+                    tw="flex-1"
+                    size="small"
+                    edition={edition}
                   />
+                  {edition?.is_already_claimed ? (
+                    <>
+                      <View tw="w-3" />
+                      <Button
+                        tw="flex-1"
+                        onPress={() => {
+                          router.push(
+                            `/channels/${detailData?.data.item?.creator_channel_id}`
+                          );
+                        }}
+                      >
+                        View Channel
+                      </Button>
+                    </>
+                  ) : null}
                 </>
               ) : null}
             </View>
@@ -246,11 +262,13 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     },
     [
       description,
+      detailData?.data.item?.creator_channel_id,
       detailData?.data.item?.multiple_owners_list,
       edition,
       index,
       isCreatorDrop,
       nft,
+      router,
       routes,
     ]
   );
@@ -383,7 +401,15 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         ) : null}
 
         <View tw="absolute bottom-10 left-4">
-          <ContentTypeTooltip edition={edition} />
+          {edition?.gating_type === "paid_nft" ? (
+            <CollectToUnlockContentTooltip
+              creatorUsername={nft?.creator_username}
+              price={edition?.price}
+              currency={edition?.currency}
+            />
+          ) : (
+            <ContentTypeTooltip edition={edition} />
+          )}
         </View>
       </View>
       <View tw="bg-white dark:bg-black lg:hidden">
