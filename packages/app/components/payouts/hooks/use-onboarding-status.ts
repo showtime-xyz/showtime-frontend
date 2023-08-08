@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { AppState } from "react-native";
-
 import useSWR from "swr";
 
 import { fetcher } from "app/hooks/use-infinite-list-query";

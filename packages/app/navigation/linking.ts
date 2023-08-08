@@ -61,6 +61,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       dropViewShareModal: "nft/:chainName/:contractAddress/:tokenId/share",
       search: "search",
       profile: "profile/:username",
+      payoutsSetup: "payouts/setup",
       dropSlug: "profile/:username/:dropSlug",
       report: "report",
       editProfile: "profile/edit",

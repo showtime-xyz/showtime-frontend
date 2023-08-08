@@ -37,7 +37,7 @@ import { View } from "@showtime-xyz/universal.view";
 import {
   usePaymentSupportedCountries,
   CountryType,
-} from "./use-payment-supported-countries";
+} from "./hooks/use-payment-supported-countries";
 
 type PhoneNumberPickerProp = {
   handleCountrySelect: any;
