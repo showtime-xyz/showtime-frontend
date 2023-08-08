@@ -43,7 +43,7 @@ import { toast } from "design-system/toast";
 
 import { BgGoldLinearGradient } from "../gold-gradient";
 import { ShowtimeBrandLogo } from "../showtime-brand";
-import { contentGatingType } from "../tooltips/content-type-tooltip";
+import { contentGatingType } from "../tooltips";
 
 const { width: windowWidth } = Dimensions.get("window");
 type QRCodeModalParams = {
