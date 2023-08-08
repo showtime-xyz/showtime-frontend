@@ -417,7 +417,7 @@ export const ClaimButton = ({
     <Button
       {...buttonProps}
       onPress={() => {
-        handleCollectPress(isPaidGated ? "paid" : "free");
+        handleCollectPress("free");
       }}
     >
       Collect
