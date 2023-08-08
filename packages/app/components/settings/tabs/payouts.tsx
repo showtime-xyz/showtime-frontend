@@ -43,7 +43,7 @@ export const Payouts = ({ index = 0 }: { index: number }) => {
           descTw="mt-1"
         />
       ) : null}
-      <View tw="p-4 md:px-0">
+      <View tw="p-4 lg:px-0">
         {onboardinStatus.status === "not_onboarded" ? (
           <Button
             size="regular"
