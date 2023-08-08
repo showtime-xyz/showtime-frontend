@@ -34,7 +34,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
-import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
@@ -199,8 +198,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Social nft={nft} />
               <RaffleTooltip edition={edition} tw="mr-1" />
             </View>
-
-            <View tw="my-4 mr-4 flex-row items-center">
+            <View tw="flex-row items-center justify-between">
+              <Creator nft={nft} />
+            </View>
+            <View tw="mb-4 mr-4 flex-row items-center">
               <Text tw="text-lg font-bold text-black dark:text-white">
                 {nft.token_name}
               </Text>
@@ -208,18 +209,18 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             <Text tw="text-sm text-gray-600 dark:text-gray-200">
               {description}
             </Text>
+            <View tw="h-4" />
+            {edition?.gating_type === "paid_nft" ? (
+              <View tw="mb-4 flex-row">
+                <CollectToUnlockContentTooltip
+                  creatorUsername={nft?.creator_username}
+                  price={edition?.price}
+                  currency={edition?.currency}
+                />
+              </View>
+            ) : null}
 
-            <View tw="mt-6 flex-row items-center justify-between">
-              <Creator nft={nft} />
-            </View>
-
-            <View tw="mt mb-4 h-5">
-              <ClaimedBy
-                claimersList={detailData?.data.item?.multiple_owners_list}
-                nft={nft}
-              />
-            </View>
-            <View tw="h-8 flex-row">
+            <View tw="mb-4 h-8 flex-row">
               {isCreatorDrop && edition ? (
                 <>
                   <ClaimButton
@@ -245,6 +246,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   ) : null}
                 </>
               ) : null}
+            </View>
+            <View tw="h-5 items-center">
+              <ClaimedBy
+                claimersList={detailData?.data.item?.multiple_owners_list}
+                nft={nft}
+              />
             </View>
           </View>
           {props.hideTabs ? null : (
@@ -401,15 +408,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
         ) : null}
 
         <View tw="absolute bottom-10 left-4">
-          {edition?.gating_type === "paid_nft" ? (
-            <CollectToUnlockContentTooltip
-              creatorUsername={nft?.creator_username}
-              price={edition?.price}
-              currency={edition?.currency}
-            />
-          ) : (
-            <ContentTypeTooltip edition={edition} />
-          )}
+          <ContentTypeTooltip edition={edition} />
         </View>
       </View>
       <View tw="bg-white dark:bg-black lg:hidden">
