@@ -1,4 +1,5 @@
 export { default as ShowtimeBrand } from "./ShowtimeBrand";
+export { default as ShowtimeXyz } from "./ShowtimeXyz";
 
 export { default as Alert } from "./Alert";
 export { default as ArrowLeft } from "./ArrowLeft";
