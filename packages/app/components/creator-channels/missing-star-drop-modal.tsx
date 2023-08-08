@@ -54,7 +54,7 @@ export const MissingStarDropModal = ({ isOpen, close }: Props) => {
               onPress={() => {
                 close();
                 requestAnimationFrame(() => {
-                  router.push("/drop/free");
+                  router.push("/drop/star");
                 });
               }}
               tw="w-full"

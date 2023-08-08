@@ -71,7 +71,7 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
             );
 
             toast.success("Payment Succeeded");
-            router.replace("/drop/free?checkoutSuccess=true");
+            router.replace("/drop/star?checkoutSuccess=true");
           } catch (e) {
             // Error handled in hook
           }

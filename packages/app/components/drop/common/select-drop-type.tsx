@@ -65,9 +65,9 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                   { shallow: true }
                 );
               } else if (Platform.OS !== "web") {
-                router.push("/drop/free");
+                router.push("/drop/star");
               } else {
-                router.replace("/drop/free");
+                router.replace("/drop/star");
               }
             }}
           >

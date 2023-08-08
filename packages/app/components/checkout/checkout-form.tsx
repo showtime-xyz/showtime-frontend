@@ -72,7 +72,7 @@ const CheckoutFormStripe = () => {
                 web: window.location.origin,
                 default: "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN,
               }) +
-              "/drop/free?setAsDefaultPaymentMethod=" +
+              "/drop/star?setAsDefaultPaymentMethod=" +
               setAsDefaultPaymentMethod,
             receipt_email: email,
           },

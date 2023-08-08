@@ -70,7 +70,7 @@ const websiteUrl = `${
     : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
 }`;
 
-export const DropFree = () => {
+export const DropStar = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
   const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
@@ -194,8 +194,8 @@ export const DropFree = () => {
             stripe details. Press below
           </Text>
           <PayoutSettings
-            refreshUrl={`${websiteUrl}/drop/free?stripeRefresh=true&platform=${Platform.OS}`}
-            returnUrl={`${websiteUrl}/drop/free?stripeReturn=true&platform=${Platform.OS}`}
+            refreshUrl={`${websiteUrl}/drop/star?stripeRefresh=true&platform=${Platform.OS}`}
+            returnUrl={`${websiteUrl}/drop/star?stripeReturn=true&platform=${Platform.OS}`}
           />
           <Button
             tw="w-full"

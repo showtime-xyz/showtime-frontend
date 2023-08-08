@@ -40,8 +40,8 @@ import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
-import { DropFreeScreen } from "app/screens/drop-free";
 import { DropImageShareScreen } from "app/screens/drop-image-share";
+import { DropStarScreen } from "app/screens/drop-star";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
@@ -205,7 +205,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <ClaimLimitExplanationScreen />
         <LikersScreen />
         <ReportScreen />
-        <DropFreeScreen />
+        <DropStarScreen />
         <PayoutsSetupScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />

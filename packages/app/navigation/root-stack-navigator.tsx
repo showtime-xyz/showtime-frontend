@@ -50,7 +50,7 @@ import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-numbe
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
-import { DropFreeScreen } from "../screens/drop-free";
+import { DropStarScreen } from "../screens/drop-star";
 import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
@@ -249,8 +249,8 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen
-          name="dropFree"
-          component={DropFreeScreen}
+          name="dropStar"
+          component={DropStarScreen}
           options={{ gestureEnabled: false }}
         />
         <Stack.Screen

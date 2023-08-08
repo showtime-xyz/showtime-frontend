@@ -65,7 +65,7 @@ export const PayoutsSetup = () => {
             tw="w-full"
             size="regular"
             onPress={() => {
-              router.push("/drop/free");
+              router.push("/drop/star");
             }}
           >
             Create Star Drop

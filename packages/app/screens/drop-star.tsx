@@ -1,11 +1,11 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { DropFree } from "app/components/drop/drop-free";
+import { DropStar } from "app/components/drop/drop-star";
 
-export const DropFreeScreen = withModalScreen(DropFree, {
+export const DropStarScreen = withModalScreen(DropStar, {
   title: "Create a Drop",
-  matchingPathname: "/drop/free",
-  matchingQueryParam: "dropFree",
+  matchingPathname: "/drop/star",
+  matchingQueryParam: "dropStar",
   tw: "w-full lg:w-[800px] !pb-0 md:max-h-[98vh]",
   disableBackdropPress: true,
   snapPoints: ["100%"],

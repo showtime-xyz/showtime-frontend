@@ -11,14 +11,14 @@ import { useIsomorphicLayoutEffect } from "app/hooks/use-isomorphic-layout-effec
 
 import { toast } from "design-system/toast";
 
-import { DropFree as OriginDropFree } from "./drop-free";
+import { DropStar as OriginDropStar } from "./drop-star";
 
-export const DropFree = () => {
+export const DropStar = () => {
   const [isHasPaymentIntentId, setIsHasPaymentIntentId] = useState(false);
   const router = useRouter();
   const { paymentStatus, confirmPaymentStatus } = useConfirmPayment();
   const handlePaymentSuccess = useCallback(async () => {
-    router.replace("/drop/free?checkoutSuccess=true");
+    router.replace("/drop/star?checkoutSuccess=true");
 
     const setAsDefaultPaymentMethod = new URLSearchParams(
       window.location.search
@@ -66,7 +66,7 @@ export const DropFree = () => {
 
   return (
     <>
-      <OriginDropFree />
+      <OriginDropStar />
       {isHasPaymentIntentId && paymentStatus !== "success" && (
         <View tw="absolute inset-0 items-center justify-center bg-black/30 p-4">
           <View tw="ml-4">
