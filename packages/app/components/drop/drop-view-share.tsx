@@ -134,19 +134,6 @@ export const DropViewShare = memo(function DropViewShare({
             View Drop
           </Button>
         </View>
-        {Platform.OS === "web" && (
-          <View
-            tw="absolute left-4 z-50"
-            style={{
-              top: top + 12,
-            }}
-          >
-            <CloseButton
-              color={colors.gray[900]}
-              onPress={() => router.pop()}
-            />
-          </View>
-        )}
       </ScrollView>
     </View>
   );
