@@ -13,6 +13,7 @@ import {
   TwitterOutline,
   Download,
   Link,
+  ShowtimeXyz,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
@@ -325,7 +326,7 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
                         Collect on
                       </Text>
                       <View tw="h-2" />
-                      <ShowtimeBrandLogo color={brandColor} />
+                      <ShowtimeXyz color={brandColor} height={18} width={127} />
                     </View>
                   </View>
                 </View>
