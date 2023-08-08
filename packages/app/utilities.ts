@@ -2,6 +2,7 @@ import React from "react";
 import { Platform } from "react-native";
 
 import axios, { AxiosError } from "axios";
+import getSymbolFromCurrency from "currency-symbol-map";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
@@ -108,9 +109,13 @@ export function formatNumber(number: number) {
 }
 export function formatToUSNumber(number: number) {
   if (number >= 1000000) {
-    return `${(number / 1000000).toFixed(1)}m`;
-  } else if (number >= 10000) {
-    return `${(number / 1000).toFixed(1)}k`;
+    return number % 1000000 === 0
+      ? `${Math.round(number / 1000000)}m`
+      : `${Math.round(number / 100000) / 10}m`;
+  } else if (number >= 1000) {
+    return number % 1000 === 0
+      ? `${Math.round(number / 1000)}k`
+      : `${Math.round(number / 100) / 10}k`;
   } else {
     const str = number.toString();
     const reg =
@@ -563,6 +568,23 @@ export const getTwitterIntentUsername = (profile?: Profile) => {
     ? profile.wallet_addresses_v2[0].ens_domain
     : formatAddressShort(profile.wallet_addresses_v2?.[0]?.address);
 };
+
+export const getShowtimeUsernameOnTwitter = (profile?: Profile) => {
+  if (!profile) return "";
+  const twitterUsername = profile.social_login_handles.twitter;
+  if (twitterUsername) {
+    return `@${twitterUsername.replace(/@/g, "")}`;
+  }
+
+  if (profile.username) {
+    return profile.username;
+  }
+  return profile.name
+    ? profile.name
+    : profile.wallet_addresses_v2?.[0]?.ens_domain
+    ? profile.wallet_addresses_v2[0].ens_domain
+    : formatAddressShort(profile.wallet_addresses_v2?.[0]?.address);
+};
 export const getInstagramUsername = (profile?: Profile) => {
   if (!profile) return "";
 
@@ -1007,8 +1029,33 @@ export function shortenLongWords(str: string, maxLength: number = 35): string {
   return words.join(" ");
 }
 
-export const getCurrencySymbol = (currency?: string) => {
-  if (currency === "INR") return "₹";
-  if (currency === "USD") return "$";
+export const getCurrencySymbol = (currency: string | null | undefined) => {
+  if (currency) {
+    return getSymbolFromCurrency(currency);
+  }
   return "$";
+};
+export const getCurrencyPrice = (
+  currency: string | null | undefined,
+  price: number | null | undefined | string
+) => {
+  return `${getCurrencySymbol(currency)}${price ?? 0}`;
+};
+export const getCreatorEarnedMoney = (
+  currency: string | null | undefined,
+  price: number | null | undefined
+) => {
+  /**
+   * Notes: Payment Fee formula:
+   * if currency is USD: showtime + payment fees = 13.5% => creator gets 86.5% of the total amount
+   * else: showtime + payment fees = 15.5% => creator gets 84.5% of the total amount
+   */
+  if (!price) {
+    return getCurrencyPrice(currency, 0);
+  }
+  if (currency === "USD") {
+    return getCurrencyPrice(currency, (price * 0.865).toFixed(2));
+  } else {
+    return getCurrencyPrice(currency, (price * 0.845).toFixed(2));
+  }
 };

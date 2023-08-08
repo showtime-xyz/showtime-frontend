@@ -4,7 +4,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 
-import { TextTooltip } from "../text-tooltip";
+import { TextTooltip } from "../tooltips/text-tooltip";
 
 type RaffleTooltipProps = {
   edition?: CreatorEditionResponse;

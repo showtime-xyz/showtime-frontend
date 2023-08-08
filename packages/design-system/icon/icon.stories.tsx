@@ -80,6 +80,7 @@ export const Default = () => {
           <IconItem icon={Icon.Check2} title="Check2" />
           <IconItem icon={Icon.Check} title="Check" />
           <IconItem icon={Icon.CheckFilled} title="CheckFilled" />
+          <IconItem icon={Icon.CheckFilled1} title="CheckFilled1" />
           <IconItem icon={Icon.ChevronDown} title="ChevronDown" />
           <IconItem icon={Icon.ChevronLeft} title="ChevronLeft" />
           <IconItem icon={Icon.ChevronRight} title="ChevronRight" />
@@ -194,6 +195,7 @@ export const Default = () => {
           <IconItem icon={Icon.Messagev2} title="Messagev2" />
           <IconItem icon={Icon.RaffleBadge} title="RaffleBadge" />
           <IconItem icon={Icon.MusicBadge} title="MusicBadge" />
+          <IconItem icon={Icon.LockBadge} title="LockBadge" />
         </View>
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>

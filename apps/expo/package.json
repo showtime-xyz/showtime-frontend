@@ -82,6 +82,7 @@
     "comment-json": "^4.2.3",
     "console-browserify": "^1.2.0",
     "constants-browserify": "^1.0.0",
+    "currency-symbol-map": "^5.1.0",
     "design-system": "*",
     "dns.js": "^1.0.1",
     "domain-browser": "^4.22.0",

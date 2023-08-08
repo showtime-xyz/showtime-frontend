@@ -10,8 +10,10 @@ import {
   Linking,
   Platform,
   ScrollView as ReactNativeScrollView,
+  StyleSheet,
 } from "react-native";
 
+import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
 
@@ -31,7 +33,6 @@ import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary"
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
-import { QRCodeModal } from "app/components/qr-code";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
@@ -57,7 +58,9 @@ import {
   removeTags,
 } from "app/utilities";
 
-export type ClaimType = "appleMusic" | "spotify" | "free";
+import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
+
+export type ClaimType = "appleMusic" | "spotify" | "free" | "paid";
 type Query = {
   type: ClaimType;
 };
@@ -154,7 +157,7 @@ export const ClaimForm = ({
     if (edition.gating_type === "location" || edition.gating_type === "multi") {
       getLocation();
     }
-  }, [edition.gating_type, getLocation]);
+  }, [edition.gating_type, getLocation, router]);
   const closeModal = () => {
     router.pop();
   };
@@ -198,6 +201,8 @@ export const ClaimForm = ({
         location,
         closeModal,
       });
+    } else if (claimType === "paid") {
+      success = await claimNFT({ closeModal });
     } else {
       success = await claimNFT({ closeModal });
     }
@@ -234,16 +239,10 @@ export const ClaimForm = ({
       ? "Collecting..."
       : "Collecting... it should take about 10 seconds";
 
+  const isPaidGated = edition?.gating_type === "paid_nft";
+
   if (isIncompletedProfile) {
     return null;
-  }
-
-  if (state.status === "share") {
-    return (
-      <QRCodeModal
-        contractAddress={edition?.creator_airdrop_edition.contract_address}
-      />
-    );
   }
 
   const primaryWallet = user?.data.profile.primary_wallet;
@@ -450,8 +449,50 @@ export const ClaimForm = ({
               </Text>
               's channel
             </Text>
+            <View tw="ml-2 overflow-hidden rounded-full bg-indigo-700 px-1.5 py-1">
+              <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
+                NEW
+              </Text>
+            </View>
           </View>
-
+          {isPaidGated ? (
+            <>
+              <View tw="mt-4 flex-row items-center">
+                <CheckIcon />
+                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                  You will unlock exclusive channel content
+                </Text>
+                <View tw="ml-2 overflow-hidden rounded-full px-1.5 py-1">
+                  <LinearGradient
+                    style={StyleSheet.absoluteFill}
+                    start={{ x: 0.81, y: 1.28 }}
+                    end={{ x: 0.21, y: -0.31 }}
+                    colors={["#FF9E2C", "#FFC93F"]}
+                  />
+                  <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
+                    NEW
+                  </Text>
+                </View>
+              </View>
+              <View tw="mt-4 flex-row items-center">
+                <CheckIcon />
+                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
+                  Your handle will display a star badge
+                </Text>
+                <View tw="ml-2 overflow-hidden rounded-full px-1.5 py-1">
+                  <LinearGradient
+                    style={StyleSheet.absoluteFill}
+                    start={{ x: 0.81, y: 1.28 }}
+                    end={{ x: 0.21, y: -0.31 }}
+                    colors={["#FF9E2C", "#FFC93F"]}
+                  />
+                  <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
+                    NEW
+                  </Text>
+                </View>
+              </View>
+            </>
+          ) : null}
           {state.status === "idle" ? (
             <Fieldset
               tw="mt-4 flex-1"
@@ -465,32 +506,36 @@ export const ClaimForm = ({
           ) : null}
 
           <View tw="mt-4">
-            <Button
-              size="regular"
-              variant="primary"
-              disabled={isDisableButton}
-              tw={isDisableButton ? "opacity-[0.45]" : ""}
-              onPress={handleClaimNFT}
-            >
-              {isLoading ? (
-                "Loading..."
-              ) : state.status === "loading" ? (
-                collectingMsg
-              ) : state.status === "error" ? (
-                "Failed. Retry!"
-              ) : edition.gating_type === "spotify_save" ||
-                edition.gating_type === "spotify_presave" ||
-                edition?.gating_type === "music_presave" ? (
-                <View tw="w-full flex-row items-center justify-center">
-                  <Spotify color={isDark ? "#000" : "#fff"} />
-                  <Text tw="ml-2 font-semibold text-white dark:text-black">
-                    Save to Collect
-                  </Text>
-                </View>
-              ) : (
-                "Collect"
-              )}
-            </Button>
+            {isPaidGated ? (
+              <ClaimPaidNFTButton edition={edition} />
+            ) : (
+              <Button
+                size="regular"
+                variant="primary"
+                disabled={isDisableButton}
+                tw={isDisableButton ? "opacity-[0.45]" : ""}
+                onPress={handleClaimNFT}
+              >
+                {isLoading ? (
+                  "Loading..."
+                ) : state.status === "loading" ? (
+                  collectingMsg
+                ) : state.status === "error" ? (
+                  "Failed. Retry!"
+                ) : edition.gating_type === "spotify_save" ||
+                  edition.gating_type === "spotify_presave" ||
+                  edition?.gating_type === "music_presave" ? (
+                  <View tw="w-full flex-row items-center justify-center">
+                    <Spotify color={isDark ? "#000" : "#fff"} />
+                    <Text tw="ml-2 font-semibold text-white dark:text-black">
+                      Save to Collect
+                    </Text>
+                  </View>
+                ) : (
+                  "Collect"
+                )}
+              </Button>
+            )}
             <View tw="mt-4">
               <Text tw="text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
                 to{" "}

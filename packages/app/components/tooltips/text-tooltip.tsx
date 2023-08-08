@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { Platform, View } from "react-native";
+import { Platform, View, Pressable } from "react-native";
 
 import * as Tooltip from "universal-tooltip";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 
 import { isMobileWeb } from "app/utilities";
 
-const TriggerView = isMobileWeb() ? View : PressableHover;
+const TriggerView = isMobileWeb() ? View : Pressable;
 
 type ShowtimeTooltipProps = {
   triggerElement: JSX.Element;
