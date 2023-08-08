@@ -10,10 +10,8 @@ import {
   Linking,
   Platform,
   ScrollView as ReactNativeScrollView,
-  StyleSheet,
 } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import type { LocationObject } from "expo-location";
 
@@ -57,8 +55,6 @@ import {
   limitLineBreaks,
   removeTags,
 } from "app/utilities";
-
-import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
 
 export type ClaimType = "appleMusic" | "spotify" | "free" | "paid";
 type Query = {
@@ -201,8 +197,6 @@ export const ClaimForm = ({
         location,
         closeModal,
       });
-    } else if (claimType === "paid") {
-      success = await claimNFT({ closeModal });
     } else {
       success = await claimNFT({ closeModal });
     }
@@ -238,8 +232,6 @@ export const ClaimForm = ({
     ContractVersion.BATCH_V1
       ? "Collecting..."
       : "Collecting... it should take about 10 seconds";
-
-  const isPaidGated = edition?.gating_type === "paid_nft";
 
   if (isIncompletedProfile) {
     return null;
@@ -455,44 +447,7 @@ export const ClaimForm = ({
               </Text>
             </View>
           </View>
-          {isPaidGated ? (
-            <>
-              <View tw="mt-4 flex-row items-center">
-                <CheckIcon />
-                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                  You will unlock exclusive channel content
-                </Text>
-                <View tw="ml-2 overflow-hidden rounded-full px-1.5 py-1">
-                  <LinearGradient
-                    style={StyleSheet.absoluteFill}
-                    start={{ x: 0.81, y: 1.28 }}
-                    end={{ x: 0.21, y: -0.31 }}
-                    colors={["#FF9E2C", "#FFC93F"]}
-                  />
-                  <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
-                    NEW
-                  </Text>
-                </View>
-              </View>
-              <View tw="mt-4 flex-row items-center">
-                <CheckIcon />
-                <Text tw="ml-1 text-gray-900 dark:text-gray-100">
-                  Your handle will display a star badge
-                </Text>
-                <View tw="ml-2 overflow-hidden rounded-full px-1.5 py-1">
-                  <LinearGradient
-                    style={StyleSheet.absoluteFill}
-                    start={{ x: 0.81, y: 1.28 }}
-                    end={{ x: 0.21, y: -0.31 }}
-                    colors={["#FF9E2C", "#FFC93F"]}
-                  />
-                  <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
-                    NEW
-                  </Text>
-                </View>
-              </View>
-            </>
-          ) : null}
+
           {state.status === "idle" ? (
             <Fieldset
               tw="mt-4 flex-1"
@@ -506,36 +461,32 @@ export const ClaimForm = ({
           ) : null}
 
           <View tw="mt-4">
-            {isPaidGated ? (
-              <ClaimPaidNFTButton edition={edition} />
-            ) : (
-              <Button
-                size="regular"
-                variant="primary"
-                disabled={isDisableButton}
-                tw={isDisableButton ? "opacity-[0.45]" : ""}
-                onPress={handleClaimNFT}
-              >
-                {isLoading ? (
-                  "Loading..."
-                ) : state.status === "loading" ? (
-                  collectingMsg
-                ) : state.status === "error" ? (
-                  "Failed. Retry!"
-                ) : edition.gating_type === "spotify_save" ||
-                  edition.gating_type === "spotify_presave" ||
-                  edition?.gating_type === "music_presave" ? (
-                  <View tw="w-full flex-row items-center justify-center">
-                    <Spotify color={isDark ? "#000" : "#fff"} />
-                    <Text tw="ml-2 font-semibold text-white dark:text-black">
-                      Save to Collect
-                    </Text>
-                  </View>
-                ) : (
-                  "Collect"
-                )}
-              </Button>
-            )}
+            <Button
+              size="regular"
+              variant="primary"
+              disabled={isDisableButton}
+              tw={isDisableButton ? "opacity-[0.45]" : ""}
+              onPress={handleClaimNFT}
+            >
+              {isLoading ? (
+                "Loading..."
+              ) : state.status === "loading" ? (
+                collectingMsg
+              ) : state.status === "error" ? (
+                "Failed. Retry!"
+              ) : edition.gating_type === "spotify_save" ||
+                edition.gating_type === "spotify_presave" ||
+                edition?.gating_type === "music_presave" ? (
+                <View tw="w-full flex-row items-center justify-center">
+                  <Spotify color={isDark ? "#000" : "#fff"} />
+                  <Text tw="ml-2 font-semibold text-white dark:text-black">
+                    Save to Collect
+                  </Text>
+                </View>
+              ) : (
+                "Collect"
+              )}
+            </Button>
             <View tw="mt-4">
               <Text tw="text-center text-sm font-semibold text-gray-900 dark:text-gray-100">
                 to{" "}
