@@ -2,6 +2,7 @@ import React from "react";
 import { Platform } from "react-native";
 
 import axios, { AxiosError } from "axios";
+import getSymbolFromCurrency from "currency-symbol-map";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
@@ -1029,7 +1030,9 @@ export function shortenLongWords(str: string, maxLength: number = 35): string {
 }
 
 export const getCurrencySymbol = (currency: string | null | undefined) => {
-  if (currency === "INR") return "₹";
+  if (currency) {
+    return getSymbolFromCurrency(currency);
+  }
   return "$";
 };
 export const getCurrencyPrice = (

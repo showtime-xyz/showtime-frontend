@@ -6711,6 +6711,7 @@ __metadata:
     comment-json: ^4.2.3
     console-browserify: ^1.2.0
     constants-browserify: ^1.0.0
+    currency-symbol-map: ^5.1.0
     design-system: "*"
     dns.js: ^1.0.1
     domain-browser: ^4.22.0
@@ -13787,6 +13788,13 @@ __metadata:
   version: 3.1.2
   resolution: "csstype@npm:3.1.2"
   checksum: e1a52e6c25c1314d6beef5168da704ab29c5186b877c07d822bd0806717d9a265e8493a2e35ca7e68d0f5d472d43fac1cdce70fd79fd0853dff81f3028d857b5
+  languageName: node
+  linkType: hard
+
+"currency-symbol-map@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "currency-symbol-map@npm:5.1.0"
+  checksum: 7c84dd81bff5703179a816012650b3e11f128e1fa83b7d376acdf8f41d544e9f6036ab08a02521cf365ed9b7a5c34bae276c7f23e0239936165534cb39d52a43
   languageName: node
   linkType: hard
 

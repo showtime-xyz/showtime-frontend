@@ -15,6 +15,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Alert, useAlert } from "@showtime-xyz/universal.alert";
+import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
@@ -36,6 +37,7 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -57,7 +59,6 @@ import { StepProps } from "../common/types";
 import { useOnBoardCreator } from "../common/use-onboard-creator";
 import { useOnboardingStatus } from "../common/use-onboarding-status";
 import { usePaymentEditionPriceRange } from "../common/use-payment-edition-price-range";
-import { usePaymentSupportedCountries } from "../common/use-payment-supported-countries";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
@@ -131,12 +132,15 @@ export const DropFree = () => {
     };
   }, []);
 
+  const editionPriceRangeState = usePaymentEditionPriceRange();
+
   const onSubmit = async (values: UseDropNFT) => {
     await dropNFT(
       {
         ...values,
         gatingType: "paid_nft",
         editionSize: isUnlimited ? 0 : values.editionSize,
+        paidNFTCurrency: editionPriceRangeState.data?.currency,
       },
       clearStorage
     );
@@ -232,8 +236,8 @@ export const DropFree = () => {
             stripe details. Press below
           </Text>
           <PayoutSettings
-            refreshUrl={`${websiteUrl}/drop/free?stripeRefresh=true`}
-            returnUrl={`${websiteUrl}/drop/free?stripeReturn=true`}
+            refreshUrl={`${websiteUrl}/drop/free?stripeRefresh=true&platform=${Platform.OS}`}
+            returnUrl={`${websiteUrl}/drop/free?stripeReturn=true&platform=${Platform.OS}`}
           />
           <Button
             tw="w-full"
@@ -256,7 +260,9 @@ export const DropFree = () => {
         closeIcon
         title="Payment processing details"
       >
-        <CompleteStripeFlow />
+        <BottomSheetModalProvider>
+          <CompleteStripeFlow />
+        </BottomSheetModalProvider>
       </Layout>
     );
   }
@@ -608,7 +614,8 @@ const SetPriceAndDuration = (
     useState(false);
   const isDark = useIsDarkMode();
   const scrollViewRef = useRef<RNScrollView>(null);
-  const { data: editionPriceRange } = usePaymentEditionPriceRange();
+  const { data: editionPriceRange, isLoading: editionPriceRangeLoading } =
+    usePaymentEditionPriceRange();
 
   const onNextStep = async () => {
     const res = await trigger(
@@ -626,266 +633,288 @@ const SetPriceAndDuration = (
       }
     }
   };
-  const defaultPrices = useMemo(() => [3, 8, 19], []);
+  const defaultPrices = useMemo(
+    () =>
+      editionPriceRange
+        ? [
+            editionPriceRange.default_prices.first,
+            editionPriceRange.default_prices.second,
+            editionPriceRange.default_prices.third,
+          ]
+        : [],
+    [editionPriceRange]
+  );
 
   const isDefaultPrice = useMemo(() => {
     return defaultPrices.includes(selectedPrice);
   }, [defaultPrices, selectedPrice]);
 
   return (
-    <Layout
-      onBackPress={props.handlePrevStep}
-      title="New Drop"
-      topRightComponent={
-        <Button
-          variant="primary"
-          disabled={state.status === "loading"}
-          tw={`md:hidden ${state.status === "loading" ? "opacity-[0.45]" : ""}`}
-          onPress={onNextStep}
-        >
-          {state.status === "loading"
-            ? "Creating..."
-            : state.status === "error"
-            ? "Failed. Retry!"
-            : "Create"}
-        </Button>
-      }
-    >
-      <BottomSheetScrollView
-        ref={scrollViewRef}
-        style={{ paddingHorizontal: 16 }}
-      >
-        <View tw="flex-row items-center">
-          <Preview
-            width={40}
-            height={40}
-            resizeMode="cover"
-            style={{ borderRadius: 4 }}
-            file={props.file}
-          />
-          <Text tw="ml-2 text-base font-semibold text-gray-600 dark:text-gray-200">
-            {props.title}
-          </Text>
-        </View>
-        <View tw="mt-4">
-          <View tw="rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-            <Text tw="font-bold text-gray-900 dark:text-gray-50">
-              Price of drop
-            </Text>
-            <Text tw="pt-1 text-gray-700 dark:text-gray-200">
-              Depends on your fan perks. For example, unreleased songs can be
-              more affordable than discounts.
-            </Text>
-            <View tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black">
-              {defaultPrices.map((price) => (
-                <Pressable
-                  key={price}
-                  onPress={() => setPrice(price)}
-                  tw={`flex-1 items-center rounded-2xl p-4 ${
-                    selectedPrice === price
-                      ? "bg-amber-200 dark:bg-yellow-800"
-                      : ""
-                  }`}
-                  style={{ rowGap: 8 }}
-                >
-                  <Text
-                    tw={`text-4xl text-gray-700
-                    dark:text-gray-100`}
-                  >
-                    {getCurrencySymbol(editionPriceRange?.currency)}
-                    {price}
-                  </Text>
-                  <Text tw="text-xs text-gray-700 dark:text-gray-100">
-                    {editionPriceRange?.currency}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-            {isDefaultPrice ? (
-              <Pressable
-                tw="pt-4"
-                onPress={() => {
-                  setShowCustomPriceModal(true);
-                }}
-              >
-                <View tw="items-center">
-                  <Text tw="font-semibold text-blue-700 dark:text-blue-500">
-                    Enter custom price
-                  </Text>
-                  <Text tw="pt-1 text-gray-600 dark:text-gray-300">
-                    From {getCurrencySymbol(editionPriceRange?.currency)}
-                    {editionPriceRange?.min}-
-                    {getCurrencySymbol(editionPriceRange?.currency)}
-                    {editionPriceRange?.max}
-                  </Text>
-                </View>
-              </Pressable>
-            ) : (
-              <Pressable
-                onPress={() => {
-                  setPrice(defaultPrices[1]);
-                }}
-              >
-                <View
-                  tw="mt-4 flex-row items-center self-center rounded-full bg-yellow-300 px-4 py-2 dark:bg-yellow-700"
-                  style={{ columnGap: 8 }}
-                >
-                  <Text tw="text-gray-900 dark:text-gray-100">
-                    Custom price:{" "}
-                    <Text tw="font-bold">
-                      {getCurrencySymbol(editionPriceRange?.currency)}
-                      {selectedPrice}
-                    </Text>
-                  </Text>
-                  <View tw="rounded-full bg-gray-100 p-1">
-                    <Close height={14} width={14} color={"black"} />
-                  </View>
-                </View>
-              </Pressable>
-            )}
-          </View>
-        </View>
-        <View tw="mt-4">
-          <View tw="rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-            <Text tw="font-bold text-gray-900 dark:text-gray-50">
-              How long will drop be available?
-            </Text>
-            <Text tw="pt-1 text-gray-700 dark:text-gray-200">
-              After duration expires, drop will not be purchasable on Showtime,
-              but will continue to trade on OpenSea
-            </Text>
-            <View tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black">
-              {dropDurations.map((day) => (
-                <Pressable
-                  key={day}
-                  onPress={() => setDays(day)}
-                  tw={`flex-1 items-center rounded-2xl p-4 ${
-                    duration === day ? "bg-amber-200 dark:bg-yellow-800" : ""
-                  }`}
-                  style={{ rowGap: 16 }}
-                >
-                  <Text tw={`text-4xl text-gray-700 dark:text-gray-100`}>
-                    {day}
-                  </Text>
-                  <Text tw="text-xs text-gray-700 dark:text-gray-100">
-                    Days
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-          </View>
-
-          <Pressable
-            tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800"
-            onPress={props.handleMoreOptions}
-            style={{ rowGap: 8 }}
+    <BottomSheetModalProvider>
+      <Layout
+        onBackPress={props.handlePrevStep}
+        title="New Drop"
+        topRightComponent={
+          <Button
+            variant="primary"
+            disabled={state.status === "loading"}
+            tw={`md:hidden ${
+              state.status === "loading" ? "opacity-[0.45]" : ""
+            }`}
+            onPress={onNextStep}
           >
-            <View tw="flex-row items-center justify-between">
-              <Text tw="text-sm font-semibold text-black dark:text-white">
-                More options
-              </Text>
-              <ChevronRight
-                color={isDark ? "white" : "black"}
-                width={24}
-                height={24}
-              />
-            </View>
-            <View tw="ml-[-2px] flex-row flex-wrap" style={{ gap: 4 }}>
-              <DataPill
-                tw={isDark ? "bg-black" : "bg-white"}
-                label={`${getValues("royalty")}% Royalties`}
-                type="text"
-              />
-              <DataPill
-                tw={isDark ? "bg-black" : "bg-white"}
-                label={
-                  isUnlimited
-                    ? `Open Edition`
-                    : `${watch("editionSize")} ${
-                        watch("editionSize") == 1 ? "Edition" : "Editions"
-                      }`
-                }
-                type="text"
-              />
-            </View>
-            <Text tw="pt-1 text-xs text-gray-600 dark:text-gray-400">
-              Your wallet{" "}
-              <Text tw="font-bold">{formatAddressShort(wallet.address)}</Text>{" "}
-              will be the collection owner.
-            </Text>
-          </Pressable>
-        </View>
-
-        <View tw="mt-4">
-          <Text tw="text-xs text-gray-600 dark:text-gray-400">
-            By clicking Create, you imply you have the rights to publish this
-            content, and understand it will be minted on the Base network.
-          </Text>
-        </View>
-        {errors.hasAcceptedTerms?.message ? (
-          <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
-        ) : null}
-      </BottomSheetScrollView>
-
-      <View tw="mx-4 mt-4">
-        <Button
-          variant="primary"
-          size="regular"
-          disabled={state.status === "loading"}
-          tw={`hidden md:flex ${
-            state.status === "loading" ? "opacity-[0.45]" : ""
-          }`}
-          onPress={onNextStep}
+            {state.status === "loading"
+              ? "Creating..."
+              : state.status === "error"
+              ? "Failed. Retry!"
+              : "Create"}
+          </Button>
+        }
+      >
+        <BottomSheetScrollView
+          ref={scrollViewRef}
+          style={{ paddingHorizontal: 16 }}
         >
-          {state.status === "loading"
-            ? "Creating..."
-            : state.status === "error"
-            ? "Failed. Please retry!"
-            : "Create"}
-        </Button>
-      </View>
+          <View tw="flex-row items-center">
+            <Preview
+              width={40}
+              height={40}
+              resizeMode="cover"
+              style={{ borderRadius: 4 }}
+              file={props.file}
+            />
+            <Text tw="ml-2 text-base font-semibold text-gray-600 dark:text-gray-200">
+              {props.title}
+            </Text>
+          </View>
+          <View tw="mt-4">
+            <View tw="rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
+              <Text tw="font-bold text-gray-900 dark:text-gray-50">
+                Price of drop
+              </Text>
+              <Text tw="pt-1 text-gray-700 dark:text-gray-200">
+                Depends on your fan perks. For example, unreleased songs can be
+                more affordable than discounts.
+              </Text>
+              <View tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black">
+                {editionPriceRangeLoading ? (
+                  <View tw="flex-1 flex-row items-center justify-between">
+                    <Skeleton width="30%" height={72} />
+                    <Skeleton width="30%" height={72} />
+                    <Skeleton width="30%" height={72} />
+                  </View>
+                ) : (
+                  defaultPrices.map((price) => (
+                    <Pressable
+                      key={price}
+                      onPress={() => setPrice(price)}
+                      tw={`flex-1 items-center rounded-2xl p-4 ${
+                        selectedPrice === price
+                          ? "bg-amber-200 dark:bg-yellow-800"
+                          : ""
+                      }`}
+                      style={{ rowGap: 8 }}
+                    >
+                      <Text
+                        tw={`text-4xl text-gray-700
+                    dark:text-gray-100`}
+                      >
+                        {getCurrencySymbol(editionPriceRange?.currency)}
+                        {price}
+                      </Text>
+                      <Text tw="text-xs text-gray-700 dark:text-gray-100">
+                        {editionPriceRange?.currency}
+                      </Text>
+                    </Pressable>
+                  ))
+                )}
+              </View>
+              {isDefaultPrice ? (
+                <Pressable
+                  tw="pt-4"
+                  onPress={() => {
+                    setShowCustomPriceModal(true);
+                  }}
+                >
+                  <View tw="items-center">
+                    <Text tw="font-semibold text-blue-700 dark:text-blue-500">
+                      Enter custom price
+                    </Text>
+                    <Text tw="pt-1 text-gray-600 dark:text-gray-300">
+                      From {getCurrencySymbol(editionPriceRange?.currency)}
+                      {editionPriceRange?.min}-
+                      {getCurrencySymbol(editionPriceRange?.currency)}
+                      {editionPriceRange?.max}
+                    </Text>
+                  </View>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    setPrice(defaultPrices[1]);
+                  }}
+                >
+                  <View
+                    tw="mt-4 flex-row items-center self-center rounded-full bg-yellow-300 px-4 py-2 dark:bg-yellow-700"
+                    style={{ columnGap: 8 }}
+                  >
+                    <Text tw="text-gray-900 dark:text-gray-100">
+                      Custom price:{" "}
+                      <Text tw="font-bold">
+                        {getCurrencySymbol(editionPriceRange?.currency)}
+                        {selectedPrice}
+                      </Text>
+                    </Text>
+                    <View tw="rounded-full bg-gray-100 p-1">
+                      <Close height={14} width={14} color={"black"} />
+                    </View>
+                  </View>
+                </Pressable>
+              )}
+            </View>
+          </View>
+          <View tw="mt-4">
+            <View tw="rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
+              <Text tw="font-bold text-gray-900 dark:text-gray-50">
+                How long will drop be available?
+              </Text>
+              <Text tw="pt-1 text-gray-700 dark:text-gray-200">
+                After duration expires, drop will not be purchasable on
+                Showtime, but will continue to trade on OpenSea
+              </Text>
+              <View tw="mt-4 flex-row justify-center rounded-3xl bg-white p-2 dark:bg-black">
+                {dropDurations.map((day) => (
+                  <Pressable
+                    key={day}
+                    onPress={() => setDays(day)}
+                    tw={`flex-1 items-center rounded-2xl p-4 ${
+                      duration === day ? "bg-amber-200 dark:bg-yellow-800" : ""
+                    }`}
+                    style={{ rowGap: 16 }}
+                  >
+                    <Text tw={`text-4xl text-gray-700 dark:text-gray-100`}>
+                      {day}
+                    </Text>
+                    <Text tw="text-xs text-gray-700 dark:text-gray-100">
+                      Days
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            </View>
 
-      <ModalSheet
-        snapPoints={["100%"]}
-        title="Spotify Song Link"
-        visible={showCopySpotifyLinkTutorial}
-        close={() => setShowCopySpotifyLinkTutorial(false)}
-        onClose={() => setShowCopySpotifyLinkTutorial(false)}
-      >
-        <CopySpotifyLinkTutorial />
-      </ModalSheet>
-      <ModalSheet
-        snapPoints={["100%"]}
-        title="Set custom price"
-        visible={showCustomPriceModal}
-        close={() => setShowCustomPriceModal(false)}
-        onClose={() => setShowCustomPriceModal(false)}
-      >
-        <View tw="p-4">
-          <SetCustomPrice
-            handleSubmit={(price: number) => {
-              if (editionPriceRange) {
-                if (
-                  price > editionPriceRange?.max ||
-                  price < editionPriceRange?.min
-                ) {
-                  Alert.alert(
-                    `The price range must be between ${getCurrencySymbol(
-                      editionPriceRange?.currency
-                    )}${editionPriceRange?.min} and ${getCurrencySymbol(
-                      editionPriceRange?.currency
-                    )}${editionPriceRange?.max}.`
-                  );
-                  return;
-                }
-              }
-              setPrice(price);
-              setShowCustomPriceModal(false);
-            }}
-          />
+            <Pressable
+              tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800"
+              onPress={props.handleMoreOptions}
+              style={{ rowGap: 8 }}
+            >
+              <View tw="flex-row items-center justify-between">
+                <Text tw="text-sm font-semibold text-black dark:text-white">
+                  More options
+                </Text>
+                <ChevronRight
+                  color={isDark ? "white" : "black"}
+                  width={24}
+                  height={24}
+                />
+              </View>
+              <View tw="ml-[-2px] flex-row flex-wrap" style={{ gap: 8 }}>
+                <DataPill
+                  tw={isDark ? "bg-black" : "bg-white"}
+                  label={`${getValues("royalty")}% Royalties`}
+                  type="text"
+                />
+                <DataPill
+                  tw={isDark ? "bg-black" : "bg-white"}
+                  label={
+                    isUnlimited
+                      ? `Open Edition`
+                      : `${watch("editionSize")} ${
+                          watch("editionSize") == 1 ? "Edition" : "Editions"
+                        }`
+                  }
+                  type="text"
+                />
+              </View>
+              <Text tw="pt-1 text-xs text-gray-600 dark:text-gray-400">
+                Your wallet{" "}
+                <Text tw="font-bold">{formatAddressShort(wallet.address)}</Text>{" "}
+                will be the collection owner.
+              </Text>
+            </Pressable>
+          </View>
+
+          <View tw="mt-4">
+            <Text tw="text-xs text-gray-600 dark:text-gray-400">
+              By clicking Create, you imply you have the rights to publish this
+              content, and understand it will be minted on the Base network.
+            </Text>
+          </View>
+          {errors.hasAcceptedTerms?.message ? (
+            <ErrorText>{errors.hasAcceptedTerms?.message}</ErrorText>
+          ) : null}
+        </BottomSheetScrollView>
+
+        <View tw="mx-4 mt-4">
+          <Button
+            variant="primary"
+            size="regular"
+            disabled={state.status === "loading"}
+            tw={`hidden md:flex ${
+              state.status === "loading" ? "opacity-[0.45]" : ""
+            }`}
+            onPress={onNextStep}
+          >
+            {state.status === "loading"
+              ? "Creating..."
+              : state.status === "error"
+              ? "Failed. Please retry!"
+              : "Create"}
+          </Button>
         </View>
-      </ModalSheet>
-    </Layout>
+
+        <ModalSheet
+          snapPoints={["100%"]}
+          title="Spotify Song Link"
+          visible={showCopySpotifyLinkTutorial}
+          close={() => setShowCopySpotifyLinkTutorial(false)}
+          onClose={() => setShowCopySpotifyLinkTutorial(false)}
+        >
+          <CopySpotifyLinkTutorial />
+        </ModalSheet>
+        <ModalSheet
+          snapPoints={["100%"]}
+          title="Set custom price"
+          visible={showCustomPriceModal}
+          close={() => setShowCustomPriceModal(false)}
+          onClose={() => setShowCustomPriceModal(false)}
+        >
+          <View tw="p-4">
+            <SetCustomPrice
+              handleSubmit={(price: number) => {
+                if (editionPriceRange) {
+                  if (
+                    price > editionPriceRange?.max ||
+                    price < editionPriceRange?.min
+                  ) {
+                    Alert.alert(
+                      `The price range must be between ${getCurrencySymbol(
+                        editionPriceRange?.currency
+                      )}${editionPriceRange?.min} and ${getCurrencySymbol(
+                        editionPriceRange?.currency
+                      )}${editionPriceRange?.max}.`
+                    );
+                    return;
+                  }
+                }
+                setPrice(price);
+                setShowCustomPriceModal(false);
+              }}
+            />
+          </View>
+        </ModalSheet>
+      </Layout>
+    </BottomSheetModalProvider>
   );
 };
 
@@ -1357,8 +1386,6 @@ const CompleteStripeFlow = () => {
     }
   };
 
-  const paymentSupportedCountries = usePaymentSupportedCountries();
-
   return (
     <View tw="p-4" style={{ rowGap: 16 }}>
       <Text tw="text-gray-700 dark:text-gray-200">
@@ -1378,7 +1405,6 @@ const CompleteStripeFlow = () => {
         render={({ field: { onChange, onBlur, value, ref } }) => {
           return (
             <Fieldset
-              tw="flex-1"
               ref={ref}
               label="Email"
               placeholder="Enter an email"
@@ -1409,7 +1435,6 @@ const CompleteStripeFlow = () => {
             },
           }}
           render={({ field: { onChange, onBlur, value, ref } }) => {
-            console.log("valuee ", value);
             return (
               <Fieldset
                 ref={ref}
@@ -1435,7 +1460,7 @@ const CompleteStripeFlow = () => {
         tw={onboardingCreator.isMutating ? `opacity-30` : ""}
         size="regular"
       >
-        <View tw="flex-row items-center" style={{ columnGap: 4 }}>
+        <View tw="flex-row items-center" style={{ columnGap: 8 }}>
           <Image source={require("./stripe-logo.png")} height={20} width={20} />
           <Text tw="font-semibold text-white dark:text-black">
             {onboardingCreator.isMutating
