@@ -136,6 +136,8 @@ export const CHAIN_IDENTIFIERS = {
   tezos: "NetXdQprcVkpaWU",
   polygon: 137,
   mumbai: 80001,
+  base: 8453,
+  base_goerli: 84531,
 };
 
 // static height can improve tabs list initial rendering
