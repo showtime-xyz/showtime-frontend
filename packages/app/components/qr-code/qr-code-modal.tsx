@@ -95,7 +95,7 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
     useCreatorCollectionDetail(contractAddress || contractAddressProp);
 
   const { data, isLoading: isLoadingNFT } = useNFTDetailByTokenId({
-    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    chainName: edition?.chain_name,
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });

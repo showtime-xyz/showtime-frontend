@@ -499,7 +499,7 @@ const CreateDropStepTitle = (props: StepProps) => {
               return (
                 <Fieldset
                   ref={ref}
-                  label="Song Title"
+                  label="Title"
                   placeholder="Give your drop a title"
                   onBlur={onBlur}
                   errorText={errors.title?.message}

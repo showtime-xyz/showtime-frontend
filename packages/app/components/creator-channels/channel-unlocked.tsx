@@ -57,7 +57,7 @@ export const UnlockedChannelModal = () => {
   const [contractAddress] = useParam("contractAddress");
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
   const { data: nft, isLoading } = useNFTDetailByTokenId({
-    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    chainName: edition?.chain_name,
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });

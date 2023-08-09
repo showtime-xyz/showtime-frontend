@@ -47,7 +47,7 @@ export const DropViewShare = memo(function DropViewShare({
 
   const router = useRouter();
   const { data } = useNFTDetailByTokenId({
-    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    chainName: edition?.chain_name,
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
