@@ -62,10 +62,8 @@ const CheckoutReturn = memo(function CheckoutReturn({
 
       router.replace(
         {
-          pathname:
-            pathname === "/profile/[username]/[dropSlug]"
-              ? pathWithoutQuery
-              : pathname,
+          // Notes: Because we have rewritten the profile route pathname, we need to handle it specially.
+          pathname: pathname.includes("/profile") ? pathWithoutQuery : pathname,
           query: {
             contractAddress: edition?.creator_airdrop_edition.contract_address,
             unlockedChannelModal: true,
