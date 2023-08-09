@@ -12,14 +12,9 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useOnboardingStatus } from "app/components/payouts/hooks/use-onboarding-status";
 import { useStripeAccountLink } from "app/components/payouts/hooks/use-stripe-account-link";
+import { payoutsRedirectOrigin } from "app/components/payouts/payouts-setup";
 
 import { SettingsTitle } from "../settings-title";
-
-const websiteUrl = `${
-  __DEV__
-    ? "http://localhost:3000"
-    : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
-}`;
 
 const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
 
@@ -79,8 +74,8 @@ export const Payouts = ({ index = 0 }: { index: number }) => {
         ) : onboardinStatus.status === "onboarded" ? (
           <View>
             <PayoutSettings
-              refreshUrl={`${websiteUrl}/settings?tab=${index}&stripeRefresh=true`}
-              returnUrl={`${websiteUrl}/settings?tab=${index}&stripeReturn=true`}
+              refreshUrl={`${payoutsRedirectOrigin}/settings?tab=${index}&stripeRefresh=true`}
+              returnUrl={`${payoutsRedirectOrigin}/settings?tab=${index}&stripeReturn=true`}
             />
             <Text tw="pt-4 text-sm text-gray-700 dark:text-gray-300">
               For each Star Drop sale Showtime takes 10% while Stripe payments
@@ -90,8 +85,8 @@ export const Payouts = ({ index = 0 }: { index: number }) => {
         ) : onboardinStatus.status === "processing" ? (
           <View>
             <PayoutSettings
-              refreshUrl={`${websiteUrl}/settings?tab=${index}&stripeRefresh=true`}
-              returnUrl={`${websiteUrl}/settings?tab=${index}&stripeReturn=true`}
+              refreshUrl={`${payoutsRedirectOrigin}/settings?tab=${index}&stripeRefresh=true`}
+              returnUrl={`${payoutsRedirectOrigin}/settings?tab=${index}&stripeReturn=true`}
             />
             <Text tw="pt-4 text-sm text-gray-700 dark:text-gray-300">
               Payout under processing. You will be notified when it is approved.

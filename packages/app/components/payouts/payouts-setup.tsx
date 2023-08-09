@@ -23,9 +23,9 @@ import { CountryPicker } from "./country-picker";
 import { useOnBoardCreator } from "./hooks/use-onboard-creator";
 import { useOnboardingStatus } from "./hooks/use-onboarding-status";
 
-const websiteUrl = `${
-  __DEV__
-    ? "http://localhost:3000"
+export const payoutsRedirectOrigin = `${
+  Platform.OS === "web" && typeof window !== "undefined"
+    ? window.location.origin
     : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
 }`;
 
@@ -85,7 +85,7 @@ export const PayoutsSetup = () => {
         <View tw="items-center p-4" style={{ rowGap: 24 }}>
           <Clock color={isDark ? "white" : "black"} width={54} height={54} />
           <Text tw="text-gray-900 dark:text-gray-100">
-            Unable to purchase Star Drop at this time. We need more time to
+            Unable to create Star Drop at this time. We need more time to
             approve your payment.{" "}
             <Text tw="font-bold">
               You will be notified when you’re approved.{" "}
@@ -94,8 +94,8 @@ export const PayoutsSetup = () => {
             stripe details. Press below
           </Text>
           <PayoutSettings
-            refreshUrl={`${websiteUrl}/payouts/setup?stripeRefresh=true&platform=${Platform.OS}`}
-            returnUrl={`${websiteUrl}/payouts/setup?stripeReturn=true&platform=${Platform.OS}`}
+            refreshUrl={`${payoutsRedirectOrigin}/payouts/setup?stripeRefresh=true&platform=${Platform.OS}`}
+            returnUrl={`${payoutsRedirectOrigin}/payouts/setup?stripeReturn=true&platform=${Platform.OS}`}
           />
           <Button
             tw="w-full"
@@ -196,8 +196,8 @@ const CompleteStripeFlow = () => {
     const res = await onboardingCreator.trigger({
       email: data.email,
       country_code: data.countryCode,
-      refresh_url: `${websiteUrl}/payouts/setup?stripeRefresh=true&platform=${Platform.OS}`,
-      return_url: `${websiteUrl}/payouts/setup?stripeReturn=true&platform=${Platform.OS}`,
+      refresh_url: `${payoutsRedirectOrigin}/payouts/setup?stripeRefresh=true&platform=${Platform.OS}`,
+      return_url: `${payoutsRedirectOrigin}/payouts/setup?stripeReturn=true&platform=${Platform.OS}`,
       business_type: data.businessType,
     });
     if (Platform.OS === "web") {
