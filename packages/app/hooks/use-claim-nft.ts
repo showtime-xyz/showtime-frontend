@@ -20,6 +20,7 @@ import {
 
 import { toast } from "design-system/toast";
 
+import { useCreatorCollectionDetail } from "./use-creator-collection-detail";
 import { useSendFeedback } from "./use-send-feedback";
 
 export type State = {
@@ -100,6 +101,9 @@ export const useClaimNFT = (edition: IEdition | null | undefined) => {
   const { state, dispatch, pollTransaction } = useContext(ClaimContext);
   const Alert = useAlert();
   const { onSendFeedback } = useSendFeedback();
+  const { mutate: mutateEdition } = useCreatorCollectionDetail(
+    edition?.contract_address
+  );
 
   type ClaimNFTParams = {
     password?: string;
@@ -124,6 +128,7 @@ export const useClaimNFT = (edition: IEdition | null | undefined) => {
         } else {
           closeModal?.();
         }
+        mutateEdition();
         return true;
       }
     } catch (e: any) {
