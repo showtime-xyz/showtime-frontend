@@ -164,7 +164,11 @@ export const ClaimButtonSimplified = memo(
     if (loading) {
       return <Skeleton width={96} height={24} radius={999} show tw={tw} />;
     }
-    if (isPaidGated) {
+    if (
+      isPaidGated &&
+      status !== ClaimStatus.Expired &&
+      status !== ClaimStatus.Soldout
+    ) {
       return (
         <ClaimPaidNFTButton edition={edition} type="trending" side="bottom" />
       );
@@ -179,7 +183,6 @@ export const ClaimButtonSimplified = memo(
         }}
         {...rest}
       >
-        {isPaidGated ? <ButtonGoldLinearGradient /> : null}
         <Text tw="text-xs font-bold" style={{ color: buttonTextColor }}>
           {buttonText}
         </Text>
