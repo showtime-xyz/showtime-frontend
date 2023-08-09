@@ -1,6 +1,10 @@
 import { useCallback, useState, useEffect } from "react";
 
+import { Alert } from "@showtime-xyz/universal.alert";
+import { Button } from "@showtime-xyz/universal.button";
+import { useRouter } from "@showtime-xyz/universal.router";
 import Spinner from "@showtime-xyz/universal.spinner";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { axios } from "app/lib/axios";
@@ -20,6 +24,8 @@ export const CheckoutPaidNFT = () => {
   const [contractAddress] = useParam("contractAddress");
   const [clientSecret, setClientSecret] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
+  const router = useRouter();
   const getClaimPaymentsIntent = useCallback(async () => {
     await axios({
       method: "POST",
@@ -39,20 +45,57 @@ export const CheckoutPaidNFT = () => {
           await axios({
             method: "POST",
             url: "/v1/payments/nft/claim/resume",
-          }).then((res) => {
-            setClientSecret(res?.client_secret);
-          });
+          })
+            .then((res) => {
+              setClientSecret(res?.client_secret);
+            })
+            .catch((err) => {
+              Alert.alert(
+                "Oops, An error occurred.",
+                err?.response?.data?.error?.message
+              );
+              setErrorMsg(err?.response?.data?.error.message);
+            });
+        } else {
+          Alert.alert(
+            "Oops, An error occurred.",
+            error?.response?.data?.error?.message
+          );
+          setErrorMsg(error?.response?.data?.error.message);
         }
+        setIsLoading(false);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   }, [editionId]);
   useEffect(() => {
     getClaimPaymentsIntent();
   }, [getClaimPaymentsIntent]);
+
   if (isLoading) {
     return (
       <View tw="min-h-[296px] flex-1 items-center justify-center">
         <Spinner />
+      </View>
+    );
+  }
+  if (errorMsg) {
+    return (
+      <View tw="min-h-[200px] flex-1 items-center justify-center px-8">
+        <Text
+          tw={`text-center text-lg font-extrabold leading-6 text-gray-900 dark:text-gray-100`}
+        >
+          {errorMsg}
+        </Text>
+        <Button
+          tw="mt-4"
+          onPress={() => {
+            router.pop();
+          }}
+        >
+          Got it.
+        </Button>
       </View>
     );
   }
