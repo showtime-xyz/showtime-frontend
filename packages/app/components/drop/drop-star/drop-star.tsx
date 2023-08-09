@@ -277,7 +277,15 @@ export const DropStar = () => {
             handleNextStep={() => setStep("title")}
             handleFileChange={handleFileChange}
             handlePrevStep={() => {
-              router.pop();
+              if (Platform.OS === "web") {
+                if (history?.length > 1) {
+                  router.back();
+                } else {
+                  router.push("/");
+                }
+              } else {
+                router.back();
+              }
             }}
             description={description}
             file={file}
