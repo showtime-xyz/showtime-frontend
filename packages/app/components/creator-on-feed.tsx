@@ -51,7 +51,7 @@ export const CreatorOnFeed = memo<{
         <View tw="h-2" />
         <Text
           tw={[
-            "text-xs text-gray-600 dark:text-gray-400",
+            "text-xs",
             dark ? "text-gray-200" : "text-gray-600 dark:text-gray-400",
           ]}
         >

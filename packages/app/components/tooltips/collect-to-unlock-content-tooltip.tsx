@@ -31,10 +31,10 @@ export const CollectToUnlockContentTooltip = ({
             tw="rounded bg-black/60"
             style={StyleSheet.absoluteFillObject}
           />
-          <View tw="flex-row items-center py-0.5 pl-0.5">
-            <View tw="flex-row items-center py-0.5 pl-0.5">
+          <View tw="flex-row items-center pl-0.5">
+            <View tw="h-6 flex-row items-center pl-0.5">
               <InformationCircle color="#FFD554" width={18} height={18} />
-              <Text tw="mx-1 text-sm font-medium text-[#FFD554]">
+              <Text tw="mx-1 font-medium leading-6 text-[#FFD554]">
                 Collect to unlock content
               </Text>
             </View>
