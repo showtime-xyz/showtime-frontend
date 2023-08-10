@@ -201,6 +201,7 @@ export const CreateDropSteps = () => {
           control={control}
           handleNextStep={() => {
             setStep("media");
+            modalContext?.snapToIndex(1);
           }}
           handlePrevStep={() => {
             modalContext?.pop();
@@ -227,6 +228,7 @@ export const CreateDropSteps = () => {
             handleFileChange={handleFileChange}
             handlePrevStep={() => {
               setStep("select-drop");
+              modalContext?.snapToIndex(0);
             }}
             description={description}
             file={file}
