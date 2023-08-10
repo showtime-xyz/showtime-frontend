@@ -49,10 +49,14 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
         <View tw="rounded-3xl border-[1px] border-yellow-300 p-4">
           <Pressable
             onPress={() => {
+              const as = `/payouts/setup`;
+              if (Platform.OS !== "web") {
+                router.pop();
+              }
               if (onboardingStatus.status === "not_onboarded") {
                 router.push(
                   Platform.select({
-                    native: `/payouts/setup`,
+                    native: as,
                     web: {
                       pathname: router.pathname,
                       query: {
@@ -61,7 +65,10 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                       },
                     } as any,
                   }),
-                  router.asPath,
+                  Platform.select({
+                    native: as,
+                    web: router.asPath,
+                  }),
                   { shallow: true }
                 );
               } else if (Platform.OS !== "web") {

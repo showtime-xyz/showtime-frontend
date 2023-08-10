@@ -191,6 +191,7 @@ const CompleteStripeFlow = () => {
 
   const selectedCountryCode = watch("countryCode");
   const onboardingCreator = useOnBoardCreator();
+  const router = useRouter();
 
   const onSubmit = async (data: any) => {
     const res = await onboardingCreator.trigger({
@@ -203,6 +204,7 @@ const CompleteStripeFlow = () => {
     if (Platform.OS === "web") {
       window.location.href = res.url;
     } else {
+      router.pop();
       Linking.openURL(res.url);
     }
   };
