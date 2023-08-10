@@ -9,7 +9,6 @@ import * as FileSystem from "expo-file-system";
 
 import { ResizeMode as ImageResizeMode } from "@showtime-xyz/universal.image";
 
-import { axios as showtimeAPIAxios } from "app/lib/axios";
 import { CHAIN_IDENTIFIERS, CONTRACTS } from "app/lib/constants";
 import { SORT_FIELDS } from "app/lib/constants";
 import { removeMd } from "app/lib/remove-markdown";
