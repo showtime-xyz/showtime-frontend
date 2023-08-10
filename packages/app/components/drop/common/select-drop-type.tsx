@@ -116,15 +116,12 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
             </View>
             <View tw="flex-1">
               <Text tw="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                Offer exclusive content, get paid in cash
+                Offer exclusive content, get paid.
               </Text>
               <Text tw="text-13 pt-2 text-gray-900 dark:text-gray-100">
-                Star Drop collectors unlock exclusive channel content from you.
-                The{" "}
-                <Text tw="font-semibold">
-                  better your content, the more valuable
-                </Text>{" "}
-                your Star Drops become
+                Collectors unlock your exclusive channel content (unreleased
+                song, video, discount...) & a special star badge. Money goes
+                straight to your bank.
               </Text>
             </View>
           </View>
@@ -180,60 +177,12 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                 Boost streams before release
               </Text>
               <Text tw="text-13 pt-2 text-gray-900 dark:text-gray-100">
-                Give a free collectible for saving your song to their{" "}
+                Give a free collectible for fans who Pre-Save your song to their{" "}
                 <Text tw="font-semibold">
                   Spotify and/or Apple Music library.
                 </Text>{" "}
-                It auto-adds the day of release
+                It auto-adds the song on its release day.
               </Text>
-            </View>
-          </View>
-        </View>
-
-        <View tw="w-full items-center">
-          <View style={{ rowGap: 16 }}>
-            <View tw="flex-row" style={{ columnGap: 12 }}>
-              <Raffle
-                fill={iconColor}
-                color={iconColor}
-                width={20}
-                height={20}
-              />
-              <View style={{ gap: 2 }}>
-                <Text tw="font-semibold text-gray-900 dark:text-gray-50">
-                  Offer Raffles
-                </Text>
-                <Text tw="text-gray-900 dark:text-gray-50">
-                  Gift an NFT to attract collectors
-                </Text>
-              </View>
-            </View>
-            <View tw="flex-row" style={{ columnGap: 12 }}>
-              <CreatorChannel
-                fill={iconColor}
-                color={iconColor}
-                width={20}
-                height={20}
-              />
-              <View style={{ gap: 2 }}>
-                <Text tw="font-semibold text-gray-900 dark:text-gray-50">
-                  Build a fanbase
-                </Text>
-                <Text tw="text-gray-900 dark:text-gray-50">
-                  Collectors auto-join your channel
-                </Text>
-              </View>
-            </View>
-            <View tw="flex-row" style={{ columnGap: 12 }}>
-              <CollectorList color={iconColor} width={20} height={20} />
-              <View style={{ gap: 2 }}>
-                <Text tw="font-semibold text-gray-900 dark:text-gray-50">
-                  Collector lists
-                </Text>
-                <Text tw="text-gray-900 dark:text-gray-50">
-                  Share a link to instantly create
-                </Text>
-              </View>
             </View>
           </View>
         </View>

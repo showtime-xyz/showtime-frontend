@@ -13,7 +13,6 @@ const defaultValues = {
   notSafeForWork: false,
   editionSize: 15,
   raffle: false,
-  paidNFTPrice: 8,
 };
 
 export const getDefaultDate = () => {

@@ -48,7 +48,7 @@ import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useWallet } from "app/hooks/use-wallet";
 import { FilePickerResolveValue } from "app/lib/file-picker";
-import { formatAddressShort, getCurrencySymbol } from "app/utilities";
+import { formatAddressShort, getCurrencySymbol, isNumber } from "app/utilities";
 
 import { MediaPicker } from "../common/media-picker";
 import { useStarDropForm } from "../common/star-drop-form-utils";
@@ -401,7 +401,7 @@ const CreateDropStepMedia = (
     >
       <View tw="px-4">
         <Text tw="px-8 text-center text-xl font-medium text-gray-900 dark:text-gray-50">
-          Upload an image or video for your paid unlockable.
+          Upload an image or video
         </Text>
         <View tw="mt-8 self-center" style={{ maxWidth: mediaWidth }}>
           <Controller
@@ -614,6 +614,15 @@ const SetPriceAndDuration = (
         : [],
     [editionPriceRange]
   );
+
+  useEffect(() => {
+    // Set initial default price
+    if (typeof selectedPrice === "undefined") {
+      if (defaultPrices.length > 0) {
+        setPrice(defaultPrices[1]);
+      }
+    }
+  }, [defaultPrices, selectedPrice, setPrice]);
 
   const isDefaultPrice = useMemo(() => {
     return defaultPrices.includes(selectedPrice);
@@ -904,7 +913,14 @@ const SetCustomPrice = ({
         value={price.toString()}
         onChangeText={(price) => setPrice(price)}
       />
-      <Button tw="mt-2" onPress={() => handleSubmit(parseFloat(price))}>
+      <Button
+        tw="mt-2"
+        onPress={() => {
+          if (isNumber(price)) {
+            handleSubmit(parseFloat(price));
+          }
+        }}
+      >
         Set price
       </Button>
     </View>
