@@ -201,7 +201,7 @@ export default async function handler(req: NextRequest) {
               display: "flex",
               flex: 1,
               marginLeft: "20px",
-              paddingRight: "16px",
+              paddingRight: "40px",
               flexDirection: "column",
               justifyContent: "space-between",
               height: "100%",
