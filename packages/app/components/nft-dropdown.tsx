@@ -13,6 +13,7 @@ import {
   Showtime,
   Edit,
   QrCode,
+  Sendv2,
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -23,6 +24,7 @@ import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useHideNFT } from "app/hooks/use-hide-nft";
+import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
 import { useShareNFT } from "app/hooks/use-share-nft";
 import { getNFTSlug } from "app/hooks/use-share-nft";
@@ -43,6 +45,7 @@ import {
 import { OpenSea } from "design-system/icon";
 
 import { MenuItemIcon } from "./dropdown/menu-item-icon";
+import { ShareOnTwitterDropdownMenuItem } from "./nft-share-dropdown";
 
 type Props = {
   nft: NFT;
@@ -77,6 +80,8 @@ function NFTDropdown({
   const { shareNFT, shareNFTOnTwitter } = useShareNFT();
   const refreshMetadata = useRefreshMedadata();
   const navigateToLogin = useNavigateToLogin();
+  const redirectToStarDropShareScreen = useRedirectDropImageShareScreen();
+
   //#endregion
 
   //#region variables
@@ -298,19 +303,26 @@ function NFTDropdown({
               QR Code
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() =>
+              redirectToStarDropShareScreen(nft?.contract_address)
+            }
+            key="drop-image-share"
+          >
+            <MenuItemIcon
+              Icon={Sendv2}
+              ios={{
+                name: "paperplane",
+              }}
+            />
+            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+              Share to Social
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
           {shouldEnableSharing && (
             <>
               {!isShareAPIAvailable && (
-                <DropdownMenuItem
-                  onSelect={() => shareNFTOnTwitter(nft)}
-                  key="share-twitter"
-                >
-                  <MenuItemIcon Icon={Twitter} />
-
-                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                    Share on Twitter
-                  </DropdownMenuItemTitle>
-                </DropdownMenuItem>
+                <ShareOnTwitterDropdownMenuItem nft={nft} />
               )}
               <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
                 <MenuItemIcon

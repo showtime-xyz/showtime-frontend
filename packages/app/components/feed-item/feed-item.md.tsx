@@ -34,7 +34,6 @@ import { View } from "@showtime-xyz/universal.view";
 import { Creator } from "app/components/card/rows/elements/creator";
 import { Social } from "app/components/card/social";
 import { ClaimButton } from "app/components/claim/claim-button";
-import { ClaimedShareButton } from "app/components/claim/claimed-share-button";
 import { Comments } from "app/components/comments";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { ClaimedBy } from "app/components/feed-item/claimed-by";
@@ -58,8 +57,9 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
+import { CollectToUnlockContentTooltip } from "../tooltips";
+import { ContentTypeTooltip } from "../tooltips/content-type-tooltip";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
 import { FeedItemProps } from "./type";
@@ -198,8 +198,10 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <Social nft={nft} />
               <RaffleTooltip edition={edition} tw="mr-1" />
             </View>
-
-            <View tw="my-4 mr-4 flex-row items-center">
+            <View tw="flex-row items-center justify-between">
+              <Creator nft={nft} />
+            </View>
+            <View tw="mb-4 mr-4 flex-row items-center">
               <Text tw="text-lg font-bold text-black dark:text-white">
                 {nft.token_name}
               </Text>
@@ -207,28 +209,49 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             <Text tw="text-sm text-gray-600 dark:text-gray-200">
               {description}
             </Text>
+            <View tw="h-4" />
+            {edition?.gating_type === "paid_nft" ? (
+              <View tw="mb-4 flex-row">
+                <CollectToUnlockContentTooltip
+                  creatorUsername={nft?.creator_username}
+                  price={edition?.price}
+                  currency={edition?.currency}
+                />
+              </View>
+            ) : null}
 
-            <View tw="mt-6 flex-row items-center justify-between">
-              <Creator nft={nft} />
+            <View tw="mb-4 h-8 flex-row">
+              {isCreatorDrop && edition ? (
+                <>
+                  <ClaimButton
+                    nft={nft}
+                    tw="flex-1"
+                    size="small"
+                    edition={edition}
+                  />
+                  {edition?.is_already_claimed ? (
+                    <>
+                      <View tw="w-3" />
+                      <Button
+                        tw="flex-1"
+                        onPress={() => {
+                          router.push(
+                            `/channels/${detailData?.data.item?.creator_channel_id}`
+                          );
+                        }}
+                      >
+                        View Channel
+                      </Button>
+                    </>
+                  ) : null}
+                </>
+              ) : null}
             </View>
-
-            <View tw="mt mb-4 h-5">
+            <View tw="h-5 items-center">
               <ClaimedBy
                 claimersList={detailData?.data.item?.multiple_owners_list}
                 nft={nft}
               />
-            </View>
-            <View tw="h-8 flex-row">
-              {isCreatorDrop && edition ? (
-                <>
-                  <ClaimButton tw="flex-1" edition={edition} />
-                  <ClaimedShareButton
-                    tw="ml-3 w-1/4"
-                    edition={edition}
-                    nft={nft}
-                  />
-                </>
-              ) : null}
             </View>
           </View>
           {props.hideTabs ? null : (
@@ -246,11 +269,13 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     },
     [
       description,
+      detailData?.data.item?.creator_channel_id,
       detailData?.data.item?.multiple_owners_list,
       edition,
       index,
       isCreatorDrop,
       nft,
+      router,
       routes,
     ]
   );

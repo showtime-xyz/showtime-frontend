@@ -16,7 +16,7 @@ import { getMediaUrl } from "app/utilities";
 
 import { Video } from "design-system/video";
 
-import { ContentTypeIcon } from "../content-type-tooltip";
+import { ContentTypeIcon } from "../tooltips/content-type-tooltip";
 
 type Props = {
   item?: NFT & { loading?: boolean };

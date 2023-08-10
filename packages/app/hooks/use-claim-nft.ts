@@ -20,6 +20,7 @@ import {
 
 import { toast } from "design-system/toast";
 
+import { useCreatorCollectionDetail } from "./use-creator-collection-detail";
 import { useSendFeedback } from "./use-send-feedback";
 
 export type State = {
@@ -94,17 +95,20 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const useClaimNFT = (edition: IEdition) => {
+export const useClaimNFT = (edition: IEdition | null | undefined) => {
   const router = useRouter();
   const { data: userProfile } = useMyInfo();
   const { state, dispatch, pollTransaction } = useContext(ClaimContext);
   const Alert = useAlert();
   const { onSendFeedback } = useSendFeedback();
+  const { mutate: mutateEdition } = useCreatorCollectionDetail(
+    edition?.contract_address
+  );
 
   type ClaimNFTParams = {
     password?: string;
     location?: LocationObject;
-    closeModal?: () => void;
+    closeModal?: (channelId?: number) => void;
   };
   const claimNFT = async ({
     password,
@@ -124,6 +128,7 @@ export const useClaimNFT = (edition: IEdition) => {
         } else {
           closeModal?.();
         }
+        mutateEdition();
         return true;
       }
     } catch (e: any) {
@@ -264,7 +269,7 @@ export const useClaimNFT = (edition: IEdition) => {
             toast.success("Collected!");
             Analytics.track(EVENTS.DROP_COLLECTED);
             dispatch({ type: "success", mint: res.mint });
-            closeModal?.();
+            closeModal?.(res.channel_id);
           }
         });
     }

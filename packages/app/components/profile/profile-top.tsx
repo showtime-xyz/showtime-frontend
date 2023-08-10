@@ -345,7 +345,7 @@ export const ProfileTop = ({
                   ) : null}
                   {isSelf && !isIncompletedProfile ? (
                     <Button size="small" onPress={redirectToCreateDrop}>
-                      Create free drop
+                      Create
                     </Button>
                   ) : null}
                   {isSelf && isIncompletedProfile ? (

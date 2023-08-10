@@ -2,6 +2,7 @@ import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { ClaimType } from "app/components/claim/claim-form";
 import { useOnboardingPromise } from "app/components/onboarding";
 import { useLogInPromise } from "app/lib/login-promise";
 import { createParam } from "app/navigation/use-param";
@@ -19,7 +20,7 @@ export const useRedirectToClaimDrop = () => {
 
   const redirectToClaimDrop = async (
     editionContractAddress: string,
-    type?: string
+    type?: ClaimType
   ) => {
     await loginPromise();
     await onboardingPromise();

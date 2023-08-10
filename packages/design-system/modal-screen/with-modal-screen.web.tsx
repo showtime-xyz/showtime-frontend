@@ -46,7 +46,7 @@ function withModalScreen<P extends object>(
       if (
         router.asPath === "/login" ||
         router.asPath === "/create" ||
-        router.asPath === "/drop/free" ||
+        router.asPath === "/drop/star" ||
         router.asPath === "/drop/music" ||
         router.asPath === "/drop" ||
         router.asPath === "/"

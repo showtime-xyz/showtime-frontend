@@ -1,11 +1,4 @@
-import {
-  useRef,
-  useMemo,
-  useCallback,
-  useEffect,
-  useState,
-  Suspense,
-} from "react";
+import { useRef, useMemo, useCallback, useEffect, Suspense } from "react";
 import {
   useWindowDimensions,
   Linking,
@@ -14,9 +7,7 @@ import {
 } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
-import * as MediaLibrary from "expo-media-library";
 
-import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Haptics } from "@showtime-xyz/universal.haptics";
@@ -40,12 +31,9 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useIsInstalledApps, useShareImage } from "app/components/share";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useUser } from "app/hooks/use-user";
-import domtoimage from "app/lib/dom-to-image";
-import { Logger } from "app/lib/logger";
-import Share from "app/lib/react-native-share";
-import { captureRef, CaptureOptions } from "app/lib/view-shot";
 import { createParam } from "app/navigation/use-param";
 import { getTwitterIntent, getWebBaseURL } from "app/utilities";
 import { getTwitterIntentUsername } from "app/utilities";
@@ -76,70 +64,23 @@ export const ChannelsPromote = () => {
     user.user?.data.channels &&
     user.user?.data.channels[0] === Number(channelId);
   const viewRef = useRef<RNView | Node>(null);
-  const [status, requestPermission] = MediaLibrary.usePermissions();
   const isDark = useIsDarkMode();
   const { bottom } = useSafeAreaInsets();
+  const { shareImageToIG, downloadToLocal, shareOpenMore } =
+    useShareImage(viewRef);
+  const { isInstalledApps } = useIsInstalledApps();
 
   const iconColor = isDark ? colors.white : colors.gray[900];
-  const [isInstalledApps, setIsInstalledApps] = useState({
-    twitter: false,
-    instagram: false,
-  });
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const imageWidth = isMdWidth ? 390 : width - 32;
   const imageHeight =
     imageWidth * (475.5 / 390) - (Platform.OS === "web" ? 110 : 0);
-  useEffect(() => {
-    // Notes: According on App Store rules, must be hide the option if the device doesn't have the app installed.
-    const checkInstalled = async () => {
-      let isInstalled = {
-        twitter: false,
-        instagram: false,
-      };
-
-      if (Platform.OS === "ios") {
-        isInstalled = {
-          instagram: await Linking.canOpenURL("instagram://"),
-          twitter: await Linking.canOpenURL("twitter://"),
-        };
-      } else if (Platform.OS === "android") {
-        const { isInstalled: instagram } = await Share.isPackageInstalled(
-          "com.instagram.android"
-        );
-        const { isInstalled: twitter } = await Share.isPackageInstalled(
-          "com.twitter.android"
-        );
-        isInstalled = {
-          instagram,
-          twitter,
-        };
-      }
-      setIsInstalledApps({
-        ...isInstalled,
-      });
-    };
-    checkInstalled();
-  }, []);
 
   useEffect(() => {
     modalScreenContext?.setTitle("Congrats! Now share it ✦");
   }, [modalScreenContext]);
 
-  const getViewShot = async (result?: CaptureOptions["result"]) => {
-    const date = new Date();
-    try {
-      const uri = await captureRef(viewRef, {
-        format: "png",
-        quality: 0.8,
-        fileName: `QR Code - ${date.valueOf()}`,
-        ...(result ? { result } : {}),
-      });
-      return uri;
-    } catch (error) {
-      Logger.log(`captureRefError: ${error}`);
-    }
-  };
   const url = useMemo(
     () => `${getWebBaseURL()}/channels/${channelId}`,
     [channelId]
@@ -151,110 +92,6 @@ export const ChannelsPromote = () => {
         userProfiles?.data?.profile
       )} channel on @Showtime_xyz. Check it out:`;
 
-  const checkPhotosPermission = useCallback(async () => {
-    let hasPermission = false;
-    if (status?.granted) {
-      hasPermission = status?.granted;
-    } else {
-      const res = await requestPermission();
-      hasPermission = res?.granted;
-    }
-    if (!hasPermission) {
-      Alert.alert(
-        "No permission",
-        "To share the photo, you'll need to enable photo permissions first",
-        [
-          {
-            text: "Open Settings",
-            onPress: () => {
-              Linking.openSettings();
-            },
-          },
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-        ]
-      );
-    }
-    return hasPermission;
-  }, [requestPermission, status?.granted]);
-
-  const onDownload = useCallback(async () => {
-    if (Platform.OS === "web") {
-      const dataUrl = await domtoimage.toPng(viewRef.current as Node, {
-        quality: 1,
-      });
-      const link = document.createElement("a");
-      link.download = `${new Date().valueOf()}`;
-      link.href = dataUrl;
-      link.click();
-    } else {
-      const url = await getViewShot();
-      if (!url) {
-        Alert.alert("Oops, An error occurred.");
-        return;
-      }
-      const hasPermission = await checkPhotosPermission();
-      if (hasPermission) {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        await MediaLibrary.saveToLibraryAsync(url);
-        toast.success("Saved to Photos");
-      } else {
-        Alert.alert("No write permission");
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      }
-    }
-  }, [checkPhotosPermission]);
-
-  const prepareShareToIG = useCallback(
-    async (url: string) => {
-      const hasPermission = await checkPhotosPermission();
-      if (hasPermission) {
-        await MediaLibrary.saveToLibraryAsync(url);
-      }
-      return hasPermission;
-    },
-    [checkPhotosPermission]
-  );
-
-  const shareSingleImage = useCallback(
-    async (
-      social: typeof Share.Social.TWITTER | typeof Share.Social.INSTAGRAM
-    ) => {
-      const url = await getViewShot();
-
-      if (!url) {
-        Alert.alert("Oops, An error occurred.");
-        return;
-      }
-      if (social === Share.Social.INSTAGRAM) {
-        /**
-         * IG is not support private path address, and if you pass a uri, IG will always read the last pic from you Photos!
-         * so we need to hack it, flow here.
-         * check permission -> save to Photo -> share to IG(IG will read the last pic from you Photo)
-         */
-        const isCanShareToIG = await prepareShareToIG(url);
-        if (!isCanShareToIG) {
-          return;
-        }
-      }
-      try {
-        const ShareResponse = await Share.shareSingle({
-          title: ``,
-          message: ``,
-          url,
-          social,
-          filename: `${new Date().valueOf()}`,
-        });
-        Logger.log("shareSingleImage Result =>", ShareResponse);
-      } catch (error) {
-        Logger.error("shareSingleImage Error =>", error);
-      }
-    },
-    [prepareShareToIG]
-  );
-
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
@@ -263,20 +100,6 @@ export const ChannelsPromote = () => {
       })
     );
   }, [twitterIntent, url]);
-
-  const shareOpenMore = useCallback(async () => {
-    const url = await getViewShot();
-    try {
-      const ShareResponse = await Share.open({
-        title: ``,
-        message: ``,
-        url,
-      });
-      Logger.log("shareOpenMore Result =>", ShareResponse);
-    } catch (error) {
-      Logger.error("shareOpenMore Error =>", error);
-    }
-  }, []);
 
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(url);
@@ -297,11 +120,6 @@ export const ChannelsPromote = () => {
         onPress: onCopyLink,
         visable: true,
       },
-      {
-        title: "Download",
-        Icon: Download,
-        onPress: onDownload,
-      },
     ],
     default: [
       {
@@ -313,7 +131,7 @@ export const ChannelsPromote = () => {
       {
         title: "Instagram",
         Icon: Instagram,
-        onPress: () => shareSingleImage(Share.Social.INSTAGRAM),
+        onPress: () => shareImageToIG(),
         visable: isInstalledApps.instagram,
       },
       {
@@ -325,7 +143,7 @@ export const ChannelsPromote = () => {
       {
         title: "Save QR",
         Icon: Download,
-        onPress: onDownload,
+        onPress: downloadToLocal,
         visable: true,
       },
       {
@@ -360,7 +178,7 @@ export const ChannelsPromote = () => {
                   >
                     <View tw="absolute inset-0">
                       <Image
-                        source={require("./channel-promo.png")}
+                        source={require("./assets/channel-promo.png")}
                         width={imageWidth}
                         height={imageHeight}
                       />

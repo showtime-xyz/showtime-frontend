@@ -9,18 +9,21 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-button";
+import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
+import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-status";
+import { FeedSocialButton } from "app/components/feed-social-button";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
+import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
 import { ClaimType } from "../claim/claim-form";
-import { FeedSocialButton } from "../feed-social-button";
+import { ButtonGoldLinearGradient } from "../gold-gradient";
 
 export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
   const { data: myInfoData } = useMyInfo();
@@ -28,11 +31,11 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
   const redirectToClaimDrop = useRedirectToClaimDrop();
   const isDark = useIsDarkMode();
   const { state: claimStates, dispatch } = useContext(ClaimContext);
-
   const { data: edition, loading } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
   const status = getClaimStatus(edition);
+  const redirectToDropImageShareScreen = useRedirectDropImageShareScreen();
 
   const viewCollecters = useCallback(() => {
     const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
@@ -58,7 +61,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     );
   }, [router, nft]);
   const handleCollectPress = useCallback(
-    (type: "free" | "appleMusic" | "spotify") => {
+    (type: ClaimType) => {
       if (
         claimStates.status === "loading" &&
         claimStates.signaturePrompt === false
@@ -98,6 +101,8 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       edition?.gating_type === "spotify_presave"
     ) {
       type = "spotify";
+    } else if (edition?.gating_type === "paid_nft") {
+      type = "paid";
     } else {
       type =
         edition?.creator_spotify_id || edition?.spotify_track_url
@@ -113,6 +118,7 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
     edition?.spotify_track_url,
     handleCollectPress,
   ]);
+  const isPaidGated = edition?.gating_type === "paid_nft";
 
   if (loading) {
     return (
@@ -194,11 +200,55 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
             </Text>
           </>
         }
+        onPress={() =>
+          redirectToDropImageShareScreen(
+            edition?.creator_airdrop_edition?.contract_address
+          )
+        }
         {...rest}
       >
-        <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full bg-[#66D654]" />
+        {isPaidGated ? (
+          <ButtonGoldLinearGradient
+            style={{ transform: [{ rotate: "84deg" }] }}
+          />
+        ) : (
+          <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full bg-[#66D654]" />
+        )}
         <Check2 height={18} width={18} color={"#000"} />
       </FeedSocialButton>
+    );
+  }
+  if (isPaidGated) {
+    return (
+      <View {...rest}>
+        <ClaimPaidNFTButton edition={edition} type="feed" side="left" />
+        <View tw="h-2" />
+        <Text
+          tw={[
+            "text-center text-xs font-semibold text-gray-900 dark:text-white",
+          ]}
+        >
+          <Text
+            tw={[
+              "text-center text-xs font-semibold",
+              edition.creator_airdrop_edition.edition_size -
+                edition.total_claimed_count <=
+                10 &&
+              edition.creator_airdrop_edition.edition_size -
+                edition.total_claimed_count >
+                0
+                ? "text-orange-500"
+                : "text-gray-900 dark:text-white",
+            ]}
+            onPress={viewCollecters}
+          >
+            {formatClaimNumber(edition.total_claimed_count)}
+            {edition.creator_airdrop_edition.edition_size > 0
+              ? `/${edition.creator_airdrop_edition.edition_size}`
+              : ""}
+          </Text>
+        </Text>
+      </View>
     );
   }
 
@@ -231,14 +281,6 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
       buttonColor={isDark ? "#fff" : colors.gray[900]}
       {...rest}
     >
-      {/* <View tw="-z-1 absolute h-full w-full overflow-hidden rounded-full">
-        <Image
-          source={{
-            uri: "https://media.showtime.xyz/assets/showtime-abstract.png",
-          }}
-          style={{ height: "100%", width: "100%" }}
-        />
-      </View> */}
       <Showtime height={25} width={25} color={isDark ? "#000" : "#fff"} />
     </FeedSocialButton>
   );

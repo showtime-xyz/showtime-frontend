@@ -29,6 +29,7 @@ export type ChannelMessage = {
   created_at: string;
   updated_at: string;
   id: number;
+  is_payment_gated?: boolean;
   sent_by: {
     admin: boolean;
     created_at: string;

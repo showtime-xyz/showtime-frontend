@@ -1,11 +1,12 @@
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Copy, Twitter, Sendv2 } from "@showtime-xyz/universal.icon";
+import { Copy, Twitter, Sendv2, Corner } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useShareNFT } from "app/hooks/use-share-nft";
+import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
+import { useShareNFT, useShareNFTOnTwitter } from "app/hooks/use-share-nft";
 import type { NFT } from "app/types";
 
 import {
@@ -23,15 +24,14 @@ type Props = {
   nft: NFT;
   tw?: string;
   children?: JSX.Element;
+  dark?: boolean;
 };
 
-export function NFTShareDropdown({ nft, children, tw = "" }: Props) {
+export function NFTShareDropdown({ nft, children, dark, tw = "" }: Props) {
   const isDark = useIsDarkMode();
-  const { shareNFT, shareNFTOnTwitter } = useShareNFT();
-  const isShareAPIAvailable = Platform.select({
-    default: true,
-    web: typeof window !== "undefined" && !!navigator.share,
-  });
+  const { copyNFTLink } = useShareNFT();
+
+  const redirectToStarDropShareScreen = useRedirectDropImageShareScreen();
 
   return (
     <DropdownMenuRoot>
@@ -39,15 +39,19 @@ export function NFTShareDropdown({ nft, children, tw = "" }: Props) {
         {children ? (
           children
         ) : (
-          <FeedSocialButton text="Share" tw={tw}>
+          <FeedSocialButton text="Share" dark={dark} tw={tw}>
             <View tw="h-0.5" />
-            <Sendv2 color={isDark ? colors.white : colors.gray[900]} />
+            <Sendv2
+              color={
+                dark ? colors.white : isDark ? colors.white : colors.gray[900]
+              }
+            />
           </FeedSocialButton>
         )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop sideOffset={8}>
-        <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
+        <DropdownMenuItem onSelect={() => copyNFTLink(nft)} key="copy-link">
           <MenuItemIcon
             Icon={Copy}
             ios={{
@@ -55,25 +59,44 @@ export function NFTShareDropdown({ nft, children, tw = "" }: Props) {
             }}
           />
           <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-            {isShareAPIAvailable ? "Share" : "Copy Link"}
+            Copy Link
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
+
+        <ShareOnTwitterDropdownMenuItem nft={nft} />
         <DropdownMenuItem
-          onSelect={() => shareNFTOnTwitter(nft)}
+          onSelect={() => redirectToStarDropShareScreen(nft.contract_address)}
           key="share-twitter"
         >
           <MenuItemIcon
-            Icon={Twitter}
+            Icon={Corner}
             ios={{
-              name: "link",
+              name: "arrowshape.turn.up.forward",
             }}
           />
-
           <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-            Share on Twitter
+            Share…
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>
   );
 }
+
+export const ShareOnTwitterDropdownMenuItem = ({ nft }: { nft: NFT }) => {
+  const { shareNFTOnTwitter } = useShareNFTOnTwitter(nft);
+  return (
+    <DropdownMenuItem onSelect={shareNFTOnTwitter} key="share-twitter">
+      <MenuItemIcon
+        Icon={Twitter}
+        ios={{
+          name: "link",
+        }}
+      />
+
+      <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+        Share on Twitter
+      </DropdownMenuItemTitle>
+    </DropdownMenuItem>
+  );
+};

@@ -7,21 +7,19 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { CreatorOnFeed } from "app/components/creator-on-feed";
 import { RouteComponent } from "app/components/route-component";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { linkifyDescription } from "app/lib/linkify";
-import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
-import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
+import { removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { ClaimedBy } from "../feed-item/claimed-by";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 import { FollowButtonSmall } from "../follow-button-small";
@@ -68,14 +66,6 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
       nft.creator_airdrop_edition_address
     );
 
-    const badgeStyle = useMemo(
-      () => ({
-        marginLeft: 4,
-        marginBottom: Platform.select({ web: -1, default: 0 }),
-      }),
-      []
-    );
-
     const mediaViewStyle = useMemo(
       () => ({
         width: mediaSize - 1,
@@ -89,49 +79,25 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
         href={`${getNFTSlug(nft)}?initialScrollItemId=${nft.nft_id}&type=feed`}
       >
         <View tw="mb-2 mt-6 px-4 md:px-0">
-          <View tw="flex-row items-center">
-            <AvatarHoverCard
-              username={nft?.creator_username || nft?.creator_address_nonens}
-              url={nft.creator_img_url}
-              size={40}
-            />
-
-            <View tw="ml-2 justify-center">
-              <Link
-                href={`/@${nft.creator_username ?? nft.creator_address}`}
-                tw="flex-row items-center"
-              >
-                <Text
-                  numberOfLines={1}
-                  tw="max-w-[150px] text-sm font-medium text-gray-900 dark:text-white md:max-w-none"
-                >
-                  {getCreatorUsernameFromNFT(nft)}
-                </Text>
-                {nft.creator_verified ? (
-                  <VerificationBadge style={badgeStyle} size={13} />
-                ) : null}
-              </Link>
-              <View tw="h-2" />
-              <Text tw="text-xs text-gray-600 dark:text-gray-400">
-                {`${nft?.creator_followers_count?.toLocaleString()} Followers`}
-              </Text>
-            </View>
-            <View tw="ml-auto flex-row items-center">
-              <FollowButtonSmall
-                profileId={nft.creator_id}
-                name={nft.creator_username}
-                tw="mr-4"
-              />
-              <NFTDropdown
-                nft={nft}
-                edition={edition}
-                iconSize={20}
-                iconColor={isDark ? colors.gray[100] : colors.gray[900]}
-                shouldEnableSharing={false}
-              />
-            </View>
-          </View>
-
+          <CreatorOnFeed
+            nft={nft}
+            rightElement={
+              <>
+                <FollowButtonSmall
+                  profileId={nft.creator_id}
+                  name={nft.creator_username}
+                  tw="mr-4"
+                />
+                <NFTDropdown
+                  nft={nft}
+                  edition={edition}
+                  iconSize={20}
+                  iconColor={isDark ? colors.gray[100] : colors.gray[900]}
+                  shouldEnableSharing={false}
+                />
+              </>
+            }
+          />
           <View
             tw="mt-3"
             style={{ maxWidth: isMdWidth ? mediaSize : undefined }}

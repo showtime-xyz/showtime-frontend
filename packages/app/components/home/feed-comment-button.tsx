@@ -14,9 +14,10 @@ import { FeedSocialButton } from "../feed-social-button";
 interface CommentButtonProps {
   nft?: NFT;
   tw?: string;
+  dark?: boolean;
 }
 
-export function FeedCommentButton({ nft, ...rest }: CommentButtonProps) {
+export function FeedCommentButton({ nft, dark, ...rest }: CommentButtonProps) {
   const router = useRouter();
   const isDark = useIsDarkMode();
   const handleOnPress = useCallback(() => {
@@ -52,9 +53,12 @@ export function FeedCommentButton({ nft, ...rest }: CommentButtonProps) {
     <FeedSocialButton
       onPress={handleOnPress}
       text={`${formatNumber(nft?.comment_count)}`}
+      dark={dark}
       {...rest}
     >
-      <Messagev2 color={isDark ? colors.white : colors.gray[900]} />
+      <Messagev2
+        color={dark ? colors.white : isDark ? colors.white : colors.gray[900]}
+      />
     </FeedSocialButton>
   );
 }

@@ -7,14 +7,18 @@ type VerificationBadgeProps = SvgProps & {
   fillColor?: string;
   bgColor?: string;
   className?: string;
+  theme?: "light" | "dark";
 };
 export const VerificationBadge = ({
   size = 24,
   fillColor,
   bgColor,
+  theme,
   ...props
 }: VerificationBadgeProps) => {
-  const isDark = useIsDarkMode();
+  const isDarkMode = useIsDarkMode();
+
+  const isDark = theme ? theme === "dark" : isDarkMode;
   const fill = fillColor ? fillColor : isDark ? "#18181B" : "#fff";
   const bgFill = bgColor ? bgColor : isDark ? "#fff" : "#18181B";
 

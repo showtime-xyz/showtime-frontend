@@ -20,7 +20,7 @@ export const CheckoutReturn = () => {
   const { paymentStatus, message, confirmPaymentStatus } = useConfirmPayment();
   const handlePaymentSuccess = useCallback(async () => {
     setTimeout(() => {
-      router.replace("/drop/free?checkoutSuccess=true");
+      router.replace("/drop/star?checkoutSuccess=true");
     }, REDIRECT_SECONDS * 1000);
     setInterval(() => {
       setTime((time) => (time > 0 ? time - 1 : 0));
