@@ -75,6 +75,8 @@ export type NFT = {
   image_url: string | null;
   image_path: string | null;
   video_urls: BunnyVideoUrls | null;
+  creator_channel_id?: number;
+  gating_type?: GatingType;
 };
 
 export type Creator = {
@@ -283,6 +285,7 @@ export type MyInfo = {
     can_create_drop: boolean;
     daily_claim_limit: number;
     paid_drop_credits?: DropPlan[];
+
     claim_tank: {
       available_claims: number;
       next_refill_at: string;
@@ -300,4 +303,5 @@ export type GatingType =
   | "multi"
   | "spotify_presave"
   // This is for compatibility with the old spotify_presave
-  | "music_presave";
+  | "music_presave"
+  | "paid_nft";

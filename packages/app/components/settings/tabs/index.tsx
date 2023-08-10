@@ -44,7 +44,7 @@ export const SETTINGS_ROUTES = [
     key: "Advanced",
   },
   {
-    title: "Cash Payouts",
+    title: "Bank Payouts",
     key: "Payouts",
   },
 ]

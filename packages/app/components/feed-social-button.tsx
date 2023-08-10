@@ -8,11 +8,13 @@ type SocialButtonProps = PressableProps & {
   text?: string | JSX.Element;
   children?: React.ReactNode;
   buttonColor?: string;
+  dark?: boolean;
 };
 export function FeedSocialButton({
   children,
   text,
   buttonColor,
+  dark,
   ...rest
 }: SocialButtonProps) {
   const isDark = useIsDarkMode();
@@ -23,7 +25,12 @@ export function FeedSocialButton({
         tw={"h-14 w-14 items-center justify-center rounded-full"}
         style={{
           backgroundColor:
-            buttonColor ?? (isDark ? colors.gray[800] : colors.gray[100]),
+            buttonColor ??
+            (dark
+              ? colors.gray[800]
+              : isDark
+              ? colors.gray[800]
+              : colors.gray[100]),
         }}
       >
         {children}
@@ -31,7 +38,12 @@ export function FeedSocialButton({
       {Boolean(text) && (
         <>
           <View tw="h-2" />
-          <Text tw="text-center text-xs font-semibold text-gray-900 dark:text-white">
+          <Text
+            tw={[
+              "text-center text-xs font-semibold",
+              dark ? "text-white" : "text-gray-900 dark:text-white",
+            ]}
+          >
             {text}
           </Text>
         </>

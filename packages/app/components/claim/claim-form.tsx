@@ -31,7 +31,6 @@ import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary"
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { Media } from "app/components/media";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
-import { QRCodeModal } from "app/components/qr-code";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useComments } from "app/hooks/api/use-comments";
@@ -57,7 +56,7 @@ import {
   removeTags,
 } from "app/utilities";
 
-export type ClaimType = "appleMusic" | "spotify" | "free";
+export type ClaimType = "appleMusic" | "spotify" | "free" | "paid";
 type Query = {
   type: ClaimType;
 };
@@ -91,7 +90,7 @@ export const ClaimForm = ({
   const scrollViewRef = useRef<ReactNativeScrollView>(null);
   const comment = useRef("");
   const { data: nft } = useNFTDetailByTokenId({
-    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    chainName: edition.chain_name,
     tokenId: "0",
     contractAddress: edition.creator_airdrop_edition.contract_address,
   });
@@ -154,7 +153,7 @@ export const ClaimForm = ({
     if (edition.gating_type === "location" || edition.gating_type === "multi") {
       getLocation();
     }
-  }, [edition.gating_type, getLocation]);
+  }, [edition.gating_type, getLocation, router]);
   const closeModal = () => {
     router.pop();
   };
@@ -236,14 +235,6 @@ export const ClaimForm = ({
 
   if (isIncompletedProfile) {
     return null;
-  }
-
-  if (state.status === "share") {
-    return (
-      <QRCodeModal
-        contractAddress={edition?.creator_airdrop_edition.contract_address}
-      />
-    );
   }
 
   const primaryWallet = user?.data.profile.primary_wallet;
@@ -450,6 +441,11 @@ export const ClaimForm = ({
               </Text>
               's channel
             </Text>
+            <View tw="ml-2 overflow-hidden rounded-full bg-indigo-700 px-1.5 py-1">
+              <Text tw="font-semibold text-white" style={{ fontSize: 10 }}>
+                NEW
+              </Text>
+            </View>
           </View>
 
           {state.status === "idle" ? (

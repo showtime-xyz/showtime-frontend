@@ -31,8 +31,8 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { NSFWGate } from "../feed-item/nsfw-gate";
+import { ContentTypeTooltip } from "../tooltips/content-type-tooltip";
 
 const isWeb = Platform.OS === "web";
 
@@ -232,7 +232,7 @@ const ListCardSmallScreen = ({
         </View>
         <View tw="h-12 flex-row items-center bg-gray-200 px-2 dark:bg-gray-800">
           {!!nft.creator_airdrop_edition_address && edition ? (
-            <ClaimButton edition={edition} size="small" tw="flex-1" />
+            <ClaimButton edition={edition} nft={nft} size="small" tw="flex-1" />
           ) : null}
         </View>
       </View>
@@ -368,13 +368,13 @@ const ListCardLargeScreen = ({
             !!nft.creator_airdrop_edition_address &&
             edition ? (
               <>
-                <ClaimButton edition={edition} size="regular" />
+                <ClaimButton edition={edition} nft={nft} size="regular" />
                 <ClaimedShareButton
                   tw="ml-3 hidden lg:flex"
                   edition={edition}
                   size="regular"
                   nft={nft}
-                />{" "}
+                />
               </>
             ) : null}
           </View>

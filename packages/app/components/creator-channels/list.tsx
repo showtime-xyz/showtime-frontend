@@ -13,6 +13,7 @@ import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -32,7 +33,7 @@ import { formatDateRelativeWithIntl } from "app/utilities";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
-} from "./animated-cell-container";
+} from "./components/animated-cell-container";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,
@@ -102,6 +103,58 @@ const CreatorChannelsListItem = memo(
     // yes, react can be annoying sometimes
     const forceUpdate = useReducer((x) => x + 1, 0)[1];
 
+    const getPreviewText = useCallback(() => {
+      // check if its a payment gated message and not paid already, so we output a generic message
+      if (
+        item?.latest_message?.is_payment_gated &&
+        !item?.latest_message?.body
+      ) {
+        return (
+          <View tw="flex-row items-center">
+            <View tw="mr-2">
+              <Image
+                source={require("app/components/assets/st-logo.png")}
+                width={18}
+                height={18}
+              />
+            </View>
+            <Text
+              tw={[
+                "text-sm",
+                isDark ? "text-white" : "text-black",
+                !item.read ? "font-semibold" : "",
+              ]}
+            >
+              Collect to unlock
+            </Text>
+          </View>
+        );
+      }
+
+      // output the latest message if it exists
+      if (item?.latest_message?.body) {
+        return item?.latest_message?.body.trim();
+      }
+
+      // if we don't have a latest message, we're going to output a default message when owned
+      if (item.itemType === "owned") {
+        return (
+          <Text tw="font-semibold">
+            Blast exclusive updates to all your fans at once like Music NFT
+            presale access, raffles, unreleased content & more.
+          </Text>
+        );
+      }
+
+      return "";
+    }, [
+      isDark,
+      item.itemType,
+      item?.latest_message?.body,
+      item?.latest_message?.is_payment_gated,
+      item?.read,
+    ]);
+
     return (
       <PlatformPressable
         onPress={() => {
@@ -159,20 +212,16 @@ const CreatorChannelsListItem = memo(
                   ]}
                   numberOfLines={2}
                 >
-                  {item?.latest_message?.body ? (
-                    item?.latest_message?.body.trim()
-                  ) : item.itemType === "owned" ? (
-                    <Text tw="font-semibold">
-                      Blast exclusive updates to all your fans at once like
-                      Music NFT presale access, raffles, unreleased content &
-                      more.
-                    </Text>
-                  ) : (
-                    ""
-                  )}
+                  {getPreviewText()}
                 </Text>
               </View>
             </View>
+            {item.itemType !== "owned" && !item.read ? (
+              // we don't want to show the unread indicator for owned channels
+              <View>
+                <View tw="h-2 w-2 rounded-full bg-indigo-600" />
+              </View>
+            ) : null}
           </View>
         </View>
       </PlatformPressable>

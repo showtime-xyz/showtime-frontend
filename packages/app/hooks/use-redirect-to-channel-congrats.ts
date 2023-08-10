@@ -6,7 +6,7 @@ export const useRedirectToChannelCongrats = () => {
   const router = useRouter();
 
   const redirectToChannelCongrats = async (channelId?: string | number) => {
-    const as = `/channels/$${channelId}/congrats`;
+    const as = `/channels/${channelId}/congrats`;
     router.push(
       Platform.select({
         native: as,

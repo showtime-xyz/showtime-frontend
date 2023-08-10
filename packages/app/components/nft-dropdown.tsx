@@ -13,6 +13,7 @@ import {
   Showtime,
   Edit,
   QrCode,
+  Sendv2,
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -296,6 +297,40 @@ function NFTDropdown({
             />
             <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
               QR Code
+            </DropdownMenuItemTitle>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              const as = `/drop-image-share/${nft?.contract_address}`;
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      contractAddress: nft?.contract_address,
+                      dropImageShareModal: true,
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: as,
+                  web: router.asPath,
+                }),
+                { shallow: true }
+              );
+            }}
+            key="drop-image-share"
+          >
+            <MenuItemIcon
+              Icon={Sendv2}
+              ios={{
+                name: "paperplane",
+              }}
+            />
+            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+              Share to Social
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
           {shouldEnableSharing && (

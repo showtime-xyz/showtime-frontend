@@ -2,15 +2,13 @@ import useSWR from "swr";
 
 import { fetcher } from "app/hooks/use-infinite-list-query";
 
-import { Channel } from "../types";
+import type { ChannelById } from "../types";
 
 export const useChannelById = (channelId?: string) => {
-  const queryState = useSWR<Channel>(
+  const queryState = useSWR<ChannelById>(
     channelId ? `/v1/channels/${channelId}` : null,
     fetcher
   );
 
-  return {
-    ...queryState,
-  };
+  return queryState;
 };

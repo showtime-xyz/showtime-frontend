@@ -72,11 +72,11 @@ export const DropSelect = () => {
                 if (Platform.OS !== "web") {
                   modalScreenContext?.pop?.({
                     callback: () => {
-                      router.push("/drop/free");
+                      router.push("/drop/star");
                     },
                   });
                 } else {
-                  router.replace("/drop/free");
+                  router.replace("/drop/star");
                 }
               }}
             />

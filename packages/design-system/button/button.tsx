@@ -56,7 +56,7 @@ export function Button({
           </Text>
         );
       }
-      const childTypeName = (child.type?.name as string) ?? "";
+      const childTypeName = (child?.type?.name as string) ?? "";
       // We only want to pass the icon prop to the SvgIcon component.
       const svgIconProps =
         childTypeName.includes("Svg") || iconOnly
@@ -68,17 +68,19 @@ export function Button({
                   : iconColor[isDark ? 1 : 0],
             }
           : {};
-      return cloneElement(child, {
-        tw: [
-          ...labelTW,
-          Array.isArray(child?.props?.tw)
-            ? child?.props?.tw.join(" ")
-            : child?.props?.tw,
-        ],
-        style: labelStyle,
-        ...svgIconProps,
-        ...child?.props,
-      });
+      if (child) {
+        return cloneElement(child, {
+          tw: [
+            ...labelTW,
+            Array.isArray(child?.props?.tw)
+              ? child?.props?.tw.join(" ")
+              : child?.props?.tw,
+          ],
+          style: labelStyle,
+          ...svgIconProps,
+          ...child?.props,
+        });
+      }
     });
   }, [children, iconOnly, size, iconColor, isDark, labelTW, labelStyle]);
 
@@ -131,19 +133,22 @@ export function GradientButton({
           </Text>
         );
       }
-
-      return cloneElement(child, {
-        tw: [
-          ...labelTW,
-          Array.isArray(child?.props?.tw)
-            ? child?.props?.tw.join(" ")
-            : child?.props?.tw,
-        ],
-        color:
-          typeof iconColor === "string" ? iconColor : iconColor[isDark ? 1 : 0],
-        ...ICON_SIZE_TW[size],
-        ...child?.props,
-      });
+      if (child) {
+        return cloneElement(child, {
+          tw: [
+            ...labelTW,
+            Array.isArray(child?.props?.tw)
+              ? child?.props?.tw.join(" ")
+              : child?.props?.tw,
+          ],
+          color:
+            typeof iconColor === "string"
+              ? iconColor
+              : iconColor[isDark ? 1 : 0],
+          ...ICON_SIZE_TW[size],
+          ...child?.props,
+        });
+      }
     });
   }, [size, iconColor, labelTW, children, isDark]);
 

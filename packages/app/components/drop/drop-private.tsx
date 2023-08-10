@@ -34,7 +34,6 @@ import { AddWalletOrSetPrimary } from "app/components/add-wallet-or-set-primary"
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { PolygonScanButton } from "app/components/polygon-scan-button";
 import { Preview } from "app/components/preview";
-import { QRCodeModal } from "app/components/qr-code";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
@@ -221,15 +220,6 @@ export const DropPrivate = () => {
 
   if (user.isIncompletedProfile) {
     return null;
-  }
-
-  if (state.status === "success") {
-    return (
-      <QRCodeModal
-        dropCreated
-        contractAddress={state.edition?.contract_address}
-      />
-    );
   }
 
   const primaryWallet = user.user?.data.profile.primary_wallet;

@@ -1,4 +1,5 @@
 export { default as ShowtimeBrand } from "./ShowtimeBrand";
+export { default as ShowtimeXyz } from "./ShowtimeXyz";
 
 export { default as Alert } from "./Alert";
 export { default as ArrowLeft } from "./ArrowLeft";
@@ -147,6 +148,7 @@ export { default as Sendv2 } from "./Sendv2";
 export { default as Messagev2 } from "./Messagev2";
 export { default as MusicBadge } from "./MusicBadge";
 export { default as RaffleBadge } from "./RaffleBadge";
+export { default as LockBadge } from "./LockBadge";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

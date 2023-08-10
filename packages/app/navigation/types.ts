@@ -83,8 +83,8 @@ type RootStackNavigatorParams = {
   privacySecuritySettings: undefined;
   notificationSettings: undefined;
   blockedList: undefined;
-  dropFree: undefined;
   payoutsSetup: undefined;
+  dropStar: undefined;
   dropSlug: SwipeListParams & {
     dropSlug?: string;
   };
@@ -110,6 +110,7 @@ type RootStackNavigatorParams = {
   dropExplanation: undefined;
   drop: undefined;
   qrCodeShare: undefined;
+  dropImageShare: undefined;
   dropViewShareModal: undefined;
   raffle: undefined;
   claim: undefined;
@@ -117,6 +118,7 @@ type RootStackNavigatorParams = {
   spotifyAuth: undefined;
   claimLimitExplanation: undefined;
   channelsSettings: undefined;
+  channelUnlocked: undefined;
   likers: undefined;
   appleMusicAuthNativeWebView: undefined;
   report: {

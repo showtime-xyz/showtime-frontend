@@ -209,14 +209,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
     sortType: filter.sortType,
   });
 
-  const chuckList = useMemo(() => {
-    return chunk(list, numColumns);
-  }, [list, numColumns]);
-
   const keyExtractor = useCallback(
     (_item: NFT[], index: number) => `${index}`,
     []
   );
+
+  const chuckList = useMemo(() => {
+    return chunk(list, numColumns);
+  }, [list, numColumns]);
+
   const renderItem = useCallback(
     ({
       item: chuckItem,

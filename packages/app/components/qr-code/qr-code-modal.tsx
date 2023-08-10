@@ -1,19 +1,8 @@
-import {
-  useRef,
-  useMemo,
-  useCallback,
-  useEffect,
-  useState,
-  Suspense,
-} from "react";
+import { useRef, useMemo, useCallback, useEffect, Suspense } from "react";
 import { Dimensions, Linking, Platform, View as RNView } from "react-native";
 
-import { BlurView } from "expo-blur";
 import * as Clipboard from "expo-clipboard";
-import { LinearGradient } from "expo-linear-gradient";
-import * as MediaLibrary from "expo-media-library";
 
-import { Alert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Haptics } from "@showtime-xyz/universal.haptics";
@@ -24,49 +13,40 @@ import {
   TwitterOutline,
   Download,
   Link,
+  ShowtimeXyz,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
-import { colors, styled } from "@showtime-xyz/universal.tailwind";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { ErrorBoundary } from "app/components/error-boundary";
+import { useIsInstalledApps, useShareImage } from "app/components/share";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { useGetImageColors } from "app/hooks/use-get-image-colors";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTURL } from "app/hooks/use-share-nft";
-import domtoimage from "app/lib/dom-to-image";
-import { Logger } from "app/lib/logger";
-import { ReactQRCode } from "app/lib/qr-code";
-import Share from "app/lib/react-native-share";
-import { captureRef, CaptureOptions } from "app/lib/view-shot";
 import { createParam } from "app/navigation/use-param";
 import {
-  formatClaimNumber,
-  getCreatorNameFromNFT,
   getCreatorUsernameFromNFT,
   getMediaUrl,
   getTwitterIntent,
   getTwitterIntentUsername,
-  isMobileWeb,
 } from "app/utilities";
 
 import { Skeleton } from "design-system";
 import { toast } from "design-system/toast";
 
-import { contentGatingType } from "../content-type-tooltip";
+import { BgGoldLinearGradient } from "../gold-gradient";
 import { ShowtimeBrandLogo } from "../showtime-brand";
+import { contentGatingType } from "../tooltips";
 
 const { width: windowWidth } = Dimensions.get("window");
-const StyledLinearGradient = styled(LinearGradient);
-const PlatformBlurView = Platform.OS === "web" ? View : styled(BlurView);
 type QRCodeModalParams = {
   contractAddress?: string | undefined;
 };
@@ -106,7 +86,7 @@ const QRCodeSkeleton = ({ size = 375 }) => {
   );
 };
 
-export const QRCodeModal = (props?: QRCodeModalProps) => {
+export const DropImageShare = (props?: QRCodeModalProps) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
   const modalScreenContext = useModalScreenContext();
@@ -115,7 +95,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     useCreatorCollectionDetail(contractAddress || contractAddressProp);
 
   const { data, isLoading: isLoadingNFT } = useNFTDetailByTokenId({
-    chainName: process.env.NEXT_PUBLIC_CHAIN_ID,
+    chainName: edition?.chain_name,
     tokenId: "0",
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
@@ -130,7 +110,6 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     return url;
   }, [edition, nft]);
   const viewRef = useRef<RNView | Node>(null);
-  const [status, requestPermission] = MediaLibrary.usePermissions();
   const isDark = useIsDarkMode();
   const { bottom } = useSafeAreaInsets();
   const { data: creatorProfile } = useUserProfile({
@@ -138,175 +117,29 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
   });
 
   const iconColor = isDark ? colors.white : colors.gray[900];
-  const [isInstalledApps, setIsInstalledApps] = useState({
-    twitter: false,
-    instagram: false,
-  });
-  useEffect(() => {
-    // Notes: According on App Store rules, must be hide the option if the device doesn't have the app installed.
-    const checkInstalled = async () => {
-      let isInstalled = {
-        twitter: false,
-        instagram: false,
-      };
-
-      if (Platform.OS === "ios") {
-        isInstalled = {
-          instagram: await Linking.canOpenURL("instagram://"),
-          twitter: await Linking.canOpenURL("twitter://"),
-        };
-      } else if (Platform.OS === "android") {
-        const { isInstalled: instagram } = await Share.isPackageInstalled(
-          "com.instagram.android"
-        );
-        const { isInstalled: twitter } = await Share.isPackageInstalled(
-          "com.twitter.android"
-        );
-        isInstalled = {
-          instagram,
-          twitter,
-        };
-      }
-      setIsInstalledApps({
-        ...isInstalled,
-      });
-    };
-    checkInstalled();
-  }, []);
+  const { isInstalledApps } = useIsInstalledApps();
+  const { shareImageToIG, downloadToLocal, shareOpenMore } =
+    useShareImage(viewRef);
 
   useEffect(() => {
     modalScreenContext?.setTitle("Congrats! Now share it ✦");
   }, [modalScreenContext]);
 
-  const size = Platform.OS === "web" ? 276 : windowWidth - 48;
+  const size = Platform.OS === "web" ? 276 : windowWidth - 32 - 32 - 32;
   const mediaUri = getMediaUrl({
     nft,
     stillPreview: !nft?.mime_type?.startsWith("image"),
   });
-  const { imageColors } = useGetImageColors({ uri: mediaUri });
-
-  const getViewShot = async (result?: CaptureOptions["result"]) => {
-    const date = new Date();
-    try {
-      const uri = await captureRef(viewRef, {
-        format: "png",
-        quality: 0.8,
-        fileName: `QR Code - ${date.valueOf()}`,
-        ...(result ? { result } : {}),
-      });
-      return uri;
-    } catch (error) {
-      Logger.log(`captureRefError: ${error}`);
-    }
-  };
-
-  const checkPhotosPermission = useCallback(async () => {
-    let hasPermission = false;
-    if (status?.granted) {
-      hasPermission = status?.granted;
-    } else {
-      const res = await requestPermission();
-      hasPermission = res?.granted;
-    }
-    if (!hasPermission) {
-      Alert.alert(
-        "No permission",
-        "To share the photo, you'll need to enable photo permissions first",
-        [
-          {
-            text: "Open Settings",
-            onPress: () => {
-              Linking.openSettings();
-            },
-          },
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-        ]
-      );
-    }
-    return hasPermission;
-  }, [requestPermission, status?.granted]);
-
-  const onDownload = useCallback(async () => {
-    if (Platform.OS === "web") {
-      const dataUrl = await domtoimage.toPng(viewRef.current as Node, {
-        quality: 1,
-      });
-      const link = document.createElement("a");
-      link.download = `${getCreatorUsernameFromNFT(
-        nft
-      )}-QRCode-${new Date().valueOf()}`;
-      link.href = dataUrl;
-      link.click();
-    } else {
-      const url = await getViewShot();
-      if (!url) {
-        Alert.alert("Oops, An error occurred.");
-        return;
-      }
-      const hasPermission = await checkPhotosPermission();
-      if (hasPermission) {
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        await MediaLibrary.saveToLibraryAsync(url);
-        toast.success("Saved to Photos");
-      } else {
-        Alert.alert("No write permission");
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-      }
-    }
-  }, [checkPhotosPermission, nft]);
-
-  const prepareShareToIG = useCallback(
-    async (url: string) => {
-      const hasPermission = await checkPhotosPermission();
-      if (hasPermission) {
-        await MediaLibrary.saveToLibraryAsync(url);
-      }
-      return hasPermission;
-    },
-    [checkPhotosPermission]
+  const isPaidNFT = edition?.gating_type === "paid_nft";
+  const imageColors = useMemo(
+    () => ({
+      colors: ["#F4CE5E", "#F4CE5E", "#F1A819", "#FFD480", "#F5E794"],
+      iconColor: isPaidNFT ? "#FFD554" : "#000000",
+      textColor: "#fff",
+    }),
+    [isPaidNFT]
   );
-
-  const shareSingleImage = useCallback(
-    async (
-      social: typeof Share.Social.TWITTER | typeof Share.Social.INSTAGRAM
-    ) => {
-      const url = await getViewShot();
-
-      if (!url) {
-        Alert.alert("Oops, An error occurred.");
-        return;
-      }
-      if (social === Share.Social.INSTAGRAM) {
-        /**
-         * IG is not support private path address, and if you pass a uri, IG will always read the last pic from you Photos!
-         * so we need to hack it, flow here.
-         * check permission -> save to Photo -> share to IG(IG will read the last pic from you Photo)
-         */
-        const isCanShareToIG = await prepareShareToIG(url);
-        if (!isCanShareToIG) {
-          return;
-        }
-      }
-      try {
-        const ShareResponse = await Share.shareSingle({
-          title: `${nft?.token_name}`,
-          message: `${nft?.token_name}`,
-          url,
-          social,
-          filename: `${getCreatorUsernameFromNFT(
-            nft
-          )}-QRCode-${new Date().valueOf()}`,
-        });
-        Logger.log("shareSingleImage Result =>", ShareResponse);
-      } catch (error) {
-        Logger.error("shareSingleImage Error =>", error);
-      }
-    },
-    [nft, prepareShareToIG]
-  );
+  const brandColor = isPaidNFT ? colors.gray[900] : colors.white;
 
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
@@ -328,29 +161,20 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
     props?.dropCreated,
   ]);
 
-  const shareOpenMore = useCallback(async () => {
-    const url = await getViewShot();
-    try {
-      const ShareResponse = await Share.open({
-        title: `${nft?.token_name}`,
-        message: `${nft?.token_name}`,
-        url,
-      });
-      Logger.log("shareOpenMore Result =>", ShareResponse);
-    } catch (error) {
-      Logger.error("shareOpenMore Error =>", error);
-    }
-  }, [nft]);
-
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(qrCodeUrl.toString());
     toast.success("Copied!");
   }, [qrCodeUrl]);
-  const imageStyle = {
-    height: size,
-    width: size,
-    borderRadius: 16,
-  };
+
+  const imageStyle = useMemo(
+    () => ({
+      height: size,
+      width: size,
+      borderRadius: 16,
+    }),
+    [size]
+  );
+
   const shareButtons = Platform.select({
     web: [
       {
@@ -365,18 +189,6 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         onPress: onCopyLink,
         visable: true,
       },
-      {
-        title: "Download",
-        Icon: Download,
-        onPress: onDownload,
-        /**
-         *  if not contractAddress here, it may use a local blob address file on web
-         *  but we can't convert it to an image, so we need to disable it.
-         *
-         *  the download function is not working on the mobile web..
-         */
-        visable: !!contractAddress && !isMobileWeb(),
-      },
     ],
     default: [
       {
@@ -388,7 +200,7 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       {
         title: "Instagram",
         Icon: Instagram,
-        onPress: () => shareSingleImage(Share.Social.INSTAGRAM),
+        onPress: shareImageToIG,
         visable: isInstalledApps.instagram,
       },
       {
@@ -398,9 +210,9 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         visable: true,
       },
       {
-        title: "Save QR",
+        title: "Save",
         Icon: Download,
-        onPress: onDownload,
+        onPress: downloadToLocal,
         visable: true,
       },
       {
@@ -411,26 +223,27 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
       },
     ],
   });
-  const brandColor = imageColors?.isDark ? "#FFF" : "#000";
+
   const ContentType = useCallback(() => {
     if (!edition?.gating_type || !contentGatingType[edition?.gating_type])
       return null;
     const Icon = contentGatingType[edition?.gating_type].icon;
     return (
-      <View tw="flex-row items-center justify-center">
-        <Icon color={brandColor} width={20} height={20} />
+      <View tw="absolute right-1 top-2 flex-row items-center justify-center rounded-full bg-black/60 px-2 py-1">
+        <Icon color={imageColors.iconColor} height={10} />
         <Text
-          tw="ml-1 text-sm font-medium text-white"
-          style={{ color: brandColor }}
+          tw="font-medium text-white"
+          style={{ color: imageColors.iconColor, fontSize: 10 }}
         >
-          {`${contentGatingType[edition?.gating_type].typeName} Drop`}
+          {`${contentGatingType[edition?.gating_type].text} Drop`}
         </Text>
       </View>
     );
-  }, [edition?.gating_type, brandColor]);
-  if (isLoadingCollection || isLoadingNFT || !imageColors) {
+  }, [edition?.gating_type, imageColors.iconColor]);
+  if (isLoadingCollection || isLoadingNFT) {
     return <QRCodeSkeleton size={size} />;
   }
+
   if (!nft) return null;
   return (
     <ErrorBoundary>
@@ -444,136 +257,78 @@ export const QRCodeModal = (props?: QRCodeModalProps) => {
         <View tw="w-full flex-1">
           <BottomSheetModalProvider>
             <BottomSheetScrollView>
-              <View tw="ios:scale-[0.82] android:scale-[0.82] web:pt-0 web:pb-2 ios:-mt-10 android:-mt-10 web:w-[340px] web:self-center select-none">
+              <View tw="web:mb-[60px] web:w-[370px] web:self-center select-none px-4">
                 <View collapsable={false} ref={viewRef as any}>
-                  <StyledLinearGradient
-                    tw="web:mb-[60px] web:px-8 w-full items-center overflow-hidden rounded-3xl bg-white px-6 pt-8"
-                    colors={imageColors?.colors}
-                    locations={[0, 1]}
-                    start={[0.5, 0.25]}
-                    end={[0.5, 0.75]}
-                  >
-                    <View tw="mb-10 w-full flex-row justify-between">
-                      <ShowtimeBrandLogo color={brandColor} />
-                      <View tw="flex-row">
+                  <View tw=" web:px-8 w-full items-center overflow-hidden rounded-3xl bg-white px-6 pt-8">
+                    <BgGoldLinearGradient
+                      {...(isPaidNFT
+                        ? {}
+                        : {
+                            colors: [
+                              "rgba(176, 19, 216,0.6)",
+                              "rgba(75, 39, 254,1)",
+                              "rgba(0, 231, 134,0.5)",
+                            ],
+                            end: { x: -0.1, y: -0.1 },
+                            locations: [0, 0.6, 1],
+                            start: { x: 0.9, y: 1.5 },
+                          })}
+                    />
+                    <View tw="rounded-3xl bg-gray-900 p-4">
+                      <View tw="flex-row items-center pb-4">
+                        <Avatar
+                          alt={"QRCode Share Avatar"}
+                          size={32}
+                          url={nft.creator_img_url}
+                        />
+                        <Text
+                          tw="ml-2.5 text-sm font-bold"
+                          style={{ color: imageColors.textColor }}
+                        >
+                          {getCreatorUsernameFromNFT(nft)}
+                        </Text>
+                      </View>
+                      <Text
+                        tw="text-base font-bold"
+                        style={{ color: imageColors.textColor }}
+                      >
+                        {nft?.token_name}
+                      </Text>
+                      <View tw="h-4" />
+                      <View
+                        tw="overflow-hidden rounded-xl"
+                        style={{
+                          width: size,
+                          height: size,
+                        }}
+                      >
+                        {props?.renderPreviewComponent ? (
+                          props?.renderPreviewComponent(imageStyle)
+                        ) : (
+                          <Image
+                            source={{
+                              uri: `${mediaUri}?optimizer=image&width=${size}&quality=80`,
+                            }}
+                            recyclingKey={mediaUri}
+                            resizeMode={"cover"}
+                            style={{ height: "100%", width: "100%" }}
+                            transition={200}
+                          />
+                        )}
                         <ContentType />
                       </View>
                     </View>
-
-                    <View style={imageStyle} />
-                    <PlatformBlurView
-                      intensity={100}
-                      tint="dark"
-                      tw="-mt-4 w-full overflow-hidden rounded-xl pt-4"
-                    >
-                      <View tw="web:bg-black/40 w-full flex-row justify-between px-2 py-6 backdrop-blur-lg">
-                        <View tw="mr-2 h-[78px] w-[78px] justify-center rounded-lg border border-gray-600 bg-white p-1">
-                          <ReactQRCode
-                            size={68}
-                            // ecl="L"
-                            value={qrCodeUrl.toString()}
-                            fillColors={["#fff", "#000"]}
-                          />
-                        </View>
-                        <View tw="flex-1 justify-center">
-                          {edition?.creator_airdrop_edition ? (
-                            <Text
-                              tw="flex flex-nowrap text-xs font-medium"
-                              style={{
-                                color: imageColors.textColor,
-                                fontSize: 10,
-                              }}
-                              numberOfLines={1}
-                            >
-                              {edition?.creator_airdrop_edition.edition_size > 0
-                                ? `${formatClaimNumber(
-                                    edition?.creator_airdrop_edition
-                                      .edition_size
-                                  )} EDITIONS`
-                                : "OPEN EDITION COLLECTION"}
-                            </Text>
-                          ) : null}
-                          <View tw="h-2" />
-                          <View tw="h-8">
-                            <Text
-                              tw="text-base font-bold text-white"
-                              style={{ fontSize: 18 }}
-                              numberOfLines={2}
-                            >
-                              {nft.token_name}
-                            </Text>
-                          </View>
-                          <View tw="mt-1 flex-row">
-                            <Avatar
-                              alt={"QRCode Share Avatar"}
-                              size={20}
-                              tw="border"
-                              borderColor="#7C757F"
-                              url={nft.creator_img_url}
-                            />
-                            <View tw="ml-1 flex flex-row items-center">
-                              <Text
-                                tw="flex text-sm font-semibold"
-                                style={{
-                                  color: imageColors.textColor,
-                                  maxWidth: 180,
-                                }}
-                                numberOfLines={1}
-                              >
-                                {getCreatorNameFromNFT(nft)}
-                              </Text>
-                              {!!nft.creator_verified && (
-                                <VerificationBadge
-                                  style={{ marginLeft: 4 }}
-                                  size={12}
-                                  bgColor={imageColors.textColor}
-                                  fillColor={"#000"}
-                                />
-                              )}
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                    </PlatformBlurView>
-                    <View
-                      tw="absolute top-24 rounded-xl"
-                      style={{
-                        shadowColor: "rgba(0, 0, 0, 0.44)",
-                        shadowOffset: {
-                          width: 0,
-                          height: 14,
-                        },
-                        shadowOpacity: 1,
-                        shadowRadius: 16.0,
-                        elevation: 24,
-                      }}
-                    >
-                      {props?.renderPreviewComponent ? (
-                        props?.renderPreviewComponent(imageStyle)
-                      ) : (
-                        <Image
-                          source={{
-                            uri: mediaUri,
-                          }}
-                          style={imageStyle}
-                          width={size}
-                          height={size}
-                          alt={nft?.token_name}
-                          blurhash={nft?.blurhash}
-                        />
-                      )}
-                    </View>
-                    <PlatformBlurView tw="mb-14 mt-12 items-center justify-center overflow-hidden rounded-full bg-black/40 px-4 py-2">
+                    <View tw="pb-4 pt-3">
                       <Text
-                        tw="text-13 text-center font-medium"
-                        style={{ color: imageColors.textColor }}
+                        tw="text-center text-sm font-bold "
+                        style={{ color: brandColor }}
                       >
-                        {`SHOWTIME.XYZ/${getCreatorUsernameFromNFT(
-                          nft
-                        )?.toLocaleUpperCase()}`}
+                        Collect on
                       </Text>
-                    </PlatformBlurView>
-                  </StyledLinearGradient>
+                      <View tw="h-2" />
+                      <ShowtimeXyz color={brandColor} height={18} width={127} />
+                    </View>
+                  </View>
                 </View>
               </View>
             </BottomSheetScrollView>

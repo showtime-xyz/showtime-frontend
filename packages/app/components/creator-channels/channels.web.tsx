@@ -3,6 +3,7 @@ import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -87,6 +88,52 @@ const CreatorChannelsListItem = memo(
     );
     const router = useRouter();
     const currentChannel = useMemo(() => router.query["channelId"], [router]);
+    const isDark = useIsDarkMode();
+
+    const getPreviewText = useCallback(() => {
+      // check if its a payment gated message and not paid already, so we output a generic message
+      if (
+        item?.latest_message?.is_payment_gated &&
+        !item?.latest_message?.body
+      ) {
+        return (
+          <View tw="flex-row items-center">
+            <View tw="mr-2">
+              <Image
+                source={"https://media.showtime.xyz/assets/icon-96x96.png"}
+                width={14}
+                height={14}
+              />
+            </View>
+            <Text tw={["text-sm", isDark ? "text-white" : "text-black"]}>
+              Collect to unlock
+            </Text>
+          </View>
+        );
+      }
+
+      // output the latest message if it exists
+      if (item?.latest_message?.body) {
+        return item?.latest_message?.body.trim();
+      }
+
+      // if we don't have a latest message, we're going to output a default message when owned
+      if (item.itemType === "owned") {
+        return (
+          <Text tw="font-semibold">
+            Blast exclusive updates to all your fans at once like Music NFT
+            presale access, raffles, unreleased content & more.
+          </Text>
+        );
+      }
+
+      return "";
+    }, [
+      isDark,
+      item.itemType,
+      item?.latest_message?.body,
+      item?.latest_message?.is_payment_gated,
+    ]);
 
     return (
       <Pressable
@@ -141,20 +188,15 @@ const CreatorChannelsListItem = memo(
                   ]}
                   numberOfLines={2}
                 >
-                  {item?.latest_message?.body ? (
-                    item?.latest_message?.body.trim()
-                  ) : item.itemType === "owned" ? (
-                    <Text tw="font-semibold">
-                      Blast exclusive updates to all your fans at once like
-                      Music NFT presale access, raffles, unreleased content &
-                      more.
-                    </Text>
-                  ) : (
-                    ""
-                  )}
+                  {getPreviewText()}
                 </Text>
               </View>
             </View>
+            {item.itemType !== "owned" && !item.read ? (
+              <View tw="self-center">
+                <View tw="h-2 w-2 rounded-full bg-indigo-600" />
+              </View>
+            ) : null}
           </View>
         </View>
       </Pressable>

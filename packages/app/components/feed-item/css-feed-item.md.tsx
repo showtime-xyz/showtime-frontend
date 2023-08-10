@@ -58,8 +58,8 @@ import { cleanUserTextInput, limitLineBreaks, removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { ContentTypeTooltip } from "../content-type-tooltip";
 import { SwiperActiveIndexContext } from "../swipe-list.web";
+import { ContentTypeTooltip } from "../tooltips/content-type-tooltip";
 import { NSFWGate } from "./nsfw-gate";
 import { RaffleTooltip } from "./raffle-tooltip";
 import { FeedItemProps } from "./type";
@@ -221,7 +221,7 @@ export const CssFeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             <View tw="h-8 flex-row">
               {isCreatorDrop && edition ? (
                 <>
-                  <ClaimButton tw="flex-1" edition={edition} />
+                  <ClaimButton tw="flex-1" nft={nft} edition={edition} />
                   <ClaimedShareButton
                     tw="ml-3 w-1/4"
                     edition={edition}

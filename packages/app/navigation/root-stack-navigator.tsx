@@ -12,6 +12,7 @@ import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
 import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
 import { BlockedListScreen } from "app/screens/blocked-list";
+import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
 import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
@@ -26,6 +27,7 @@ import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
 import { DropExplanationScreen } from "app/screens/drop-explanation";
+import { DropImageShareScreen } from "app/screens/drop-image-share";
 import { DropUpdateScreen } from "app/screens/drop-update";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
@@ -48,7 +50,7 @@ import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-numbe
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
-import { DropFreeScreen } from "../screens/drop-free";
+import { DropStarScreen } from "../screens/drop-star";
 import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
@@ -117,6 +119,29 @@ export function RootStackNavigator() {
           }}
         />
         <Stack.Screen name="channelsMessage" component={Messages} />
+        <Stack.Screen
+          name="channelUnlocked"
+          component={UnlockedChannelScreen}
+          options={{
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
+            animationDuration: 200,
+          }}
+        />
+        <Stack.Screen
+          name="dropViewShareModal"
+          component={DropViewShareScreen}
+          options={{
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
+            animationDuration: 200,
+            statusBarStyle: "dark",
+          }}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -224,8 +249,8 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen
-          name="dropFree"
-          component={DropFreeScreen}
+          name="dropStar"
+          component={DropStarScreen}
           options={{ gestureEnabled: false }}
         />
         <Stack.Screen
@@ -235,10 +260,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
-        <Stack.Screen
-          name="dropViewShareModal"
-          component={DropViewShareScreen}
-        />
+        <Stack.Screen name="dropImageShare" component={DropImageShareScreen} />
         <Stack.Screen
           name="dropEditDetailsModal"
           component={DropEditDetailsScreen}

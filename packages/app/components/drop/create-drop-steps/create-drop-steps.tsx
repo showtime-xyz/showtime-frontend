@@ -53,13 +53,16 @@ import { FilePickerResolveValue } from "app/lib/file-picker";
 
 import { DateTimePicker } from "design-system/date-time-picker";
 
+import { MediaPicker } from "../common/media-picker";
+import {
+  getDefaultDate,
+  useMusicDropForm,
+} from "../common/music-drop-form-utils";
+import { SelectDropType } from "../common/select-drop-type";
+import { StepProps } from "../common/types";
 import { CopySpotifyLinkTutorial } from "../copy-spotify-link-tutorial";
 import { DropViewShare } from "../drop-view-share";
 import { MUSIC_DROP_FORM_DATA_KEY } from "../utils";
-import { MediaPicker } from "./media-picker";
-import { getDefaultDate, useMusicDropForm } from "./music-drop-form-utils";
-import { SelectDropType } from "./select-drop-type";
-import { StepProps } from "./types";
 
 type CreateDropStep =
   | "media"
@@ -174,6 +177,7 @@ export const CreateDropSteps = () => {
           onBackPress={() => modalContext?.pop()}
           closeIcon
           title="Congrats! Now share it ✦"
+          headerShown={false}
         >
           <DropViewShare
             title={getValues("title")}
@@ -196,11 +200,9 @@ export const CreateDropSteps = () => {
           getValues={getValues}
           control={control}
           handleNextStep={() => {
-            modalContext?.snapToIndex(1);
             setStep("media");
           }}
           handlePrevStep={() => {
-            modalContext?.snapToIndex(0);
             modalContext?.pop();
           }}
           title={title}
@@ -224,7 +226,6 @@ export const CreateDropSteps = () => {
             handleNextStep={() => setStep("title")}
             handleFileChange={handleFileChange}
             handlePrevStep={() => {
-              modalContext?.snapToIndex(0);
               setStep("select-drop");
             }}
             description={description}
@@ -978,40 +979,54 @@ const CreateDropMoreOptions = (
   );
 };
 
-const Layout = (props: {
+const Layout = ({
+  headerShown = true,
+  ...rest
+}: {
   title: string;
   onBackPress: () => void;
   children: any;
   closeIcon?: boolean;
+  headerShown?: boolean;
 }) => {
   const isDark = useIsDarkMode();
   const insets = useSafeAreaInsets();
+  const modalContext = useModalScreenContext();
+  // useEffect(() => {
+  //   if (headerShown) {
+  //   }
+  // }, [headerShown]);
   return (
     <BottomSheetModalProvider>
-      <View tw="flex-1" style={{ paddingBottom: Math.max(insets.bottom, 8) }}>
-        <View tw="mx-4 my-8 flex-row items-center">
-          <Pressable tw="absolute" onPress={props.onBackPress}>
-            {props.closeIcon ? (
-              <Close
-                color={isDark ? "white" : "black"}
-                width={24}
-                height={24}
-              />
-            ) : (
-              <ArrowLeft
-                color={isDark ? "white" : "black"}
-                width={24}
-                height={24}
-              />
-            )}
-          </Pressable>
-          <View tw="mx-auto">
-            <Text tw="text-base font-bold text-black dark:text-white">
-              {props.title}
-            </Text>
+      <View
+        tw="flex-1"
+        style={{ paddingBottom: headerShown ? Math.max(insets.bottom, 8) : 0 }}
+      >
+        {headerShown ? (
+          <View tw="mx-4 my-8 flex-row items-center">
+            <Pressable tw="absolute" onPress={rest.onBackPress}>
+              {rest.closeIcon ? (
+                <Close
+                  color={isDark ? "white" : "black"}
+                  width={24}
+                  height={24}
+                />
+              ) : (
+                <ArrowLeft
+                  color={isDark ? "white" : "black"}
+                  width={24}
+                  height={24}
+                />
+              )}
+            </Pressable>
+            <View tw="mx-auto">
+              <Text tw="text-base font-bold text-black dark:text-white">
+                {rest.title}
+              </Text>
+            </View>
           </View>
-        </View>
-        {props.children}
+        ) : null}
+        {rest.children}
       </View>
     </BottomSheetModalProvider>
   );

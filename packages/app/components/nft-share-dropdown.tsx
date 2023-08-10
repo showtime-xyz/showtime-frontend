@@ -23,9 +23,10 @@ type Props = {
   nft: NFT;
   tw?: string;
   children?: JSX.Element;
+  dark?: boolean;
 };
 
-export function NFTShareDropdown({ nft, children, tw = "" }: Props) {
+export function NFTShareDropdown({ nft, children, dark, tw = "" }: Props) {
   const isDark = useIsDarkMode();
   const { shareNFT, shareNFTOnTwitter } = useShareNFT();
   const isShareAPIAvailable = Platform.select({
@@ -39,9 +40,13 @@ export function NFTShareDropdown({ nft, children, tw = "" }: Props) {
         {children ? (
           children
         ) : (
-          <FeedSocialButton text="Share" tw={tw}>
+          <FeedSocialButton text="Share" dark={dark} tw={tw}>
             <View tw="h-0.5" />
-            <Sendv2 color={isDark ? colors.white : colors.gray[900]} />
+            <Sendv2
+              color={
+                dark ? colors.white : isDark ? colors.white : colors.gray[900]
+              }
+            />
           </FeedSocialButton>
         )}
       </DropdownMenuTrigger>
