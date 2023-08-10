@@ -12,11 +12,7 @@ import {
   Showtime,
   Boost,
 } from "@showtime-xyz/universal.icon";
-import {
-  Raffle,
-  CreatorChannel,
-  CollectorList,
-} from "@showtime-xyz/universal.icon";
+import { CreatorChannel } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";

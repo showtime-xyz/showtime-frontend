@@ -7,7 +7,7 @@ export const DropScreen = withModalScreen(CreateDropSteps, {
   matchingPathname: "/drop",
   matchingQueryParam: "dropModal",
   tw: "w-full",
-  snapPoints: ["100%"],
+  snapPoints: ["78%", "100%"],
   useNativeModal: false,
   headerShown: false,
 });
