@@ -69,13 +69,11 @@ export const DropViewShare = memo(function DropViewShare({
         message: `Just ${dropCreated ? "dropped" : "collected"} "${
           nft?.token_name
         }" on @Showtime_xyz 💫🔗\n\n${
-          edition?.gating_type === "paid_nft"
-            ? "Collect to unlock:"
-            : "Collect it for free here:"
+          isPaidNFT ? "Collect to unlock:" : "Collect it for free here:"
         }`,
       })
     );
-  }, [dropCreated, edition?.gating_type, nft?.token_name, qrCodeUrl]);
+  }, [dropCreated, isPaidNFT, nft?.token_name, qrCodeUrl]);
 
   const onCopyLink = useCallback(async () => {
     await Clipboard.setStringAsync(qrCodeUrl.toString());

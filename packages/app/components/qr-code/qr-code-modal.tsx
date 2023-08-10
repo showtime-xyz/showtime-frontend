@@ -43,7 +43,6 @@ import { Skeleton } from "design-system";
 import { toast } from "design-system/toast";
 
 import { BgGoldLinearGradient } from "../gold-gradient";
-import { ShowtimeBrandLogo } from "../showtime-brand";
 import { contentGatingType } from "../tooltips";
 
 const { width: windowWidth } = Dimensions.get("window");
@@ -134,7 +133,7 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
   const imageColors = useMemo(
     () => ({
       colors: ["#F4CE5E", "#F4CE5E", "#F1A819", "#FFD480", "#F5E794"],
-      iconColor: isPaidNFT ? "#FFD554" : "#000000",
+      iconColor: isPaidNFT ? "#FFD554" : "#fff",
       textColor: "#fff",
     }),
     [isPaidNFT]
@@ -151,14 +150,17 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
           props?.dropCreated
             ? ""
             : `by ${getTwitterIntentUsername(creatorProfile?.data?.profile)}`
-        } on @Showtime_xyz ✦🔗\n\nCollect it for free here:`,
+        } on @Showtime_xyz ✦\n\n${
+          isPaidNFT ? "Collect to unlock:" : "Collect it for free here:"
+        }`,
       })
     );
   }, [
-    creatorProfile?.data?.profile,
-    nft?.token_name,
     qrCodeUrl,
     props?.dropCreated,
+    nft?.token_name,
+    creatorProfile?.data?.profile,
+    isPaidNFT,
   ]);
 
   const onCopyLink = useCallback(async () => {
@@ -229,10 +231,10 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
       return null;
     const Icon = contentGatingType[edition?.gating_type].icon;
     return (
-      <View tw="absolute right-1 top-2 flex-row items-center justify-center rounded-full bg-black/60 px-2 py-1">
-        <Icon color={imageColors.iconColor} height={10} />
+      <View tw="absolute right-1 top-2 h-[18px] flex-row items-center justify-center rounded-full bg-black/60 px-2">
+        <Icon color={imageColors.iconColor} height={12} width={12} />
         <Text
-          tw="font-medium text-white"
+          tw="ml-1 font-medium"
           style={{ color: imageColors.iconColor, fontSize: 10 }}
         >
           {`${contentGatingType[edition?.gating_type].text} Drop`}
