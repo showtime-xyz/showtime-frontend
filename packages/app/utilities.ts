@@ -1059,3 +1059,8 @@ export const getCreatorEarnedMoney = (
     return getCurrencyPrice(currency, (price * 0.845).toFixed(2));
   }
 };
+
+export function isNumber(str: string) {
+  const num = parseFloat(str);
+  return !isNaN(num) && isFinite(num);
+}
