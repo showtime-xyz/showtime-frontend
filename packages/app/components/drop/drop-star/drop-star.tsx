@@ -41,9 +41,9 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useOnboardingStatus } from "app/components/payouts/hooks/use-onboarding-status";
+import { PayoutSettings } from "app/components/payouts/payout-settings";
 import { payoutsRedirectOrigin } from "app/components/payouts/payouts-setup";
 import { Preview } from "app/components/preview";
-import { PayoutSettings } from "app/components/settings/tabs/payouts";
 import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useWallet } from "app/hooks/use-wallet";
