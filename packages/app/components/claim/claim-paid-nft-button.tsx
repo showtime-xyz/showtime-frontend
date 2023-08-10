@@ -17,6 +17,7 @@ import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
+import { useLogInPromise } from "app/lib/login-promise";
 import { getCurrencyPrice } from "app/utilities";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";
@@ -53,6 +54,7 @@ const GoldButton = memo(function GoldButton({
   const status = getClaimStatus(edition);
   const isClaimed = status === ClaimStatus.Claimed;
   const redirectToDropImageShareScreen = useRedirectDropImageShareScreen();
+  const { loginPromise } = useLogInPromise();
 
   const onHandlePayment = async () => {
     if (isClaimed) {
@@ -62,6 +64,7 @@ const GoldButton = memo(function GoldButton({
 
       return;
     }
+    await loginPromise();
     if (Platform.OS !== "web") {
       return;
     }

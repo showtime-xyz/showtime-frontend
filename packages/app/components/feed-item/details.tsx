@@ -109,6 +109,7 @@ export const NFTDetails = ({
               </Text>
             </Text>
             <View tw="-ml-1 mt-2 h-6 flex-row justify-start">
+              <RaffleTooltip edition={edition} theme="dark" tw="mr-1" />
               {edition?.gating_type === "paid_nft" ? (
                 <CollectToUnlockContentTooltip
                   creatorUsername={nft?.creator_username}
@@ -119,7 +120,6 @@ export const NFTDetails = ({
               ) : (
                 <ContentTypeTooltip edition={edition} theme="dark" />
               )}
-              <RaffleTooltip edition={edition} theme="dark" tw="mr-1" />
             </View>
           </View>
           <EngagementIcons nft={nft} edition={edition} />

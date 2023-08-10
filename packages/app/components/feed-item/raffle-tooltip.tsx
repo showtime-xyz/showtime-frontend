@@ -30,7 +30,7 @@ export const RaffleTooltip = ({
           ]}
         >
           <RaffleHorizontal color={"#FFC633"} width={20} height={20} />
-          <Text tw="ml-1 text-xs font-medium text-white">Raffle</Text>
+          <Text tw="ml-1 text-xs font-medium text-[#FFC633]">Raffle</Text>
         </View>
       }
       text="Collect to enter a raffle"
