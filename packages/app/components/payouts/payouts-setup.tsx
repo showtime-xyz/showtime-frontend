@@ -17,7 +17,7 @@ import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { PayoutSettings } from "app/components/settings/tabs/payouts";
+import { PayoutSettings } from "app/components/payouts/payout-settings";
 
 import { CountryPicker } from "./country-picker";
 import { useOnBoardCreator } from "./hooks/use-onboard-creator";

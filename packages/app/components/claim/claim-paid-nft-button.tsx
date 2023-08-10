@@ -1,7 +1,6 @@
 import { memo, useState } from "react";
 import { Platform } from "react-native";
 
-import type { AxiosError } from "axios";
 import * as Tooltip from "universal-tooltip";
 
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
@@ -18,8 +17,6 @@ import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
-import { axios } from "app/lib/axios";
-import { Logger } from "app/lib/logger";
 import { getCurrencyPrice } from "app/utilities";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";

@@ -7,7 +7,6 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CreatorOnFeed } from "app/components/creator-on-feed";
@@ -16,13 +15,11 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { linkifyDescription } from "app/lib/linkify";
-import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
-import { getCreatorUsernameFromNFT, removeTags } from "app/utilities";
+import { removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
-import { AvatarHoverCard } from "../card/avatar-hover-card";
 import { ClaimedBy } from "../feed-item/claimed-by";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 import { FollowButtonSmall } from "../follow-button-small";
@@ -67,14 +64,6 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
 
     const { data: edition } = useCreatorCollectionDetail(
       nft.creator_airdrop_edition_address
-    );
-
-    const badgeStyle = useMemo(
-      () => ({
-        marginLeft: 4,
-        marginBottom: Platform.select({ web: -1, default: 0 }),
-      }),
-      []
     );
 
     const mediaViewStyle = useMemo(
