@@ -20,18 +20,8 @@ export async function setupPlayer() {
           AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
       },
       alwaysPauseOnInterruption: true,
-      capabilities: [
-        Capability.Play,
-        Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
-        Capability.SeekTo,
-      ],
-      compactCapabilities: [
-        Capability.Play,
-        Capability.Pause,
-        Capability.SkipToNext,
-      ],
+      capabilities: [Capability.Play, Capability.Pause],
+      compactCapabilities: [Capability.Play, Capability.Pause],
       progressUpdateEventInterval: 1,
     });
 
@@ -42,6 +32,9 @@ export async function setupPlayer() {
 }
 
 export async function PlaybackService() {
+  TrackPlayer.addEventListener(Event.RemotePlay, () => TrackPlayer.play());
+  TrackPlayer.addEventListener(Event.RemotePause, () => TrackPlayer.pause());
+
   TrackPlayer.addEventListener(Event.PlaybackProgressUpdated, async (event) => {
     try {
       const trackIndex = event.track;
