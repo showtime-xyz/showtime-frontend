@@ -27,7 +27,9 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
 import { MessageBox } from "app/components/messages";
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 
 import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
@@ -66,7 +68,7 @@ export const MessageInput = ({
   setEditMessage,
   isUserAdmin,
   keyboard,
-  latestPaidNFTSlug,
+  edition,
   hasUnlockedMessages,
 }: {
   listRef: RefObject<FlashList<any>>;
@@ -76,7 +78,7 @@ export const MessageInput = ({
   editMessage?: undefined | { id: number; text: string };
   setEditMessage: (v: undefined | { id: number; text: string }) => void;
   isUserAdmin?: boolean;
-  latestPaidNFTSlug?: string;
+  edition?: CreatorEditionResponse;
   hasUnlockedMessages?: boolean;
 }) => {
   const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
@@ -177,7 +179,7 @@ export const MessageInput = ({
     });
   }, [channelId, editMessage, editMessages, setEditMessage]);
 
-  if (!isUserAdmin && Boolean(latestPaidNFTSlug) && !hasUnlockedMessages) {
+  if (!isUserAdmin && edition && !hasUnlockedMessages) {
     return (
       <View
         tw="justify-center px-3"
@@ -185,39 +187,7 @@ export const MessageInput = ({
           paddingBottom: bottom,
         }}
       >
-        <Button
-          tw={"bg-black dark:bg-white"}
-          size={"regular"}
-          variant="primary"
-          onPress={() => {
-            if (latestPaidNFTSlug) {
-              router.push(latestPaidNFTSlug);
-            }
-          }}
-        >
-          <View tw="w-full flex-row items-center justify-center">
-            <View>
-              <Image
-                source={
-                  Platform.OS === "web"
-                    ? "https://media.showtime.xyz/assets/st-logo.png"
-                    : require("app/components/assets/st-logo.png")
-                }
-                width={16}
-                height={16}
-                style={{ width: 16, height: 16 }}
-              />
-            </View>
-
-            <Text
-              tw={
-                "ml-2 text-base font-semibold text-[#FFCB6C] dark:text-[#E88A3F]"
-              }
-            >
-              Collect a Star Drop
-            </Text>
-          </View>
-        </Button>
+        <ClaimPaidNFTButton edition={edition} type="messageInput" />
         <View tw="mt-3 pb-4">
           <Text tw="text-center text-xs text-gray-500 dark:text-gray-300">
             Collecting a Star Drop unlocks privileges with this artist like
@@ -239,7 +209,7 @@ export const MessageInput = ({
               maxLength: 2000,
             }}
             onSubmit={
-              !latestPaidNFTSlug
+              !edition
                 ? async () => {
                     setShouldShowMissingStarDropModal(true);
                   }

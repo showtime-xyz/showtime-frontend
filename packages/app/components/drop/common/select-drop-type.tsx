@@ -12,11 +12,7 @@ import {
   Showtime,
   Boost,
 } from "@showtime-xyz/universal.icon";
-import {
-  Raffle,
-  CreatorChannel,
-  CollectorList,
-} from "@showtime-xyz/universal.icon";
+import { CreatorChannel } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -49,10 +45,14 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
         <View tw="rounded-3xl border-[1px] border-yellow-300 p-4">
           <Pressable
             onPress={() => {
+              const as = `/payouts/setup`;
+              if (Platform.OS !== "web") {
+                router.pop();
+              }
               if (onboardingStatus.status === "not_onboarded") {
                 router.push(
                   Platform.select({
-                    native: `/payouts/setup`,
+                    native: as,
                     web: {
                       pathname: router.pathname,
                       query: {
@@ -61,7 +61,10 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                       },
                     } as any,
                   }),
-                  router.asPath,
+                  Platform.select({
+                    native: as,
+                    web: router.asPath,
+                  }),
                   { shallow: true }
                 );
               } else if (Platform.OS !== "web") {

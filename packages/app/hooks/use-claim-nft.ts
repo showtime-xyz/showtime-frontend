@@ -2,10 +2,13 @@ import { useContext, useCallback } from "react";
 import { Platform } from "react-native";
 
 import type { LocationObject } from "expo-location";
+import { useSWRConfig } from "swr";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { getChannelByIdCacheKey } from "app/components/creator-channels/hooks/use-channel-detail";
+import { getChannelMessageKey } from "app/components/creator-channels/hooks/use-channel-messages";
 import { ClaimContext } from "app/context/claim-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { Analytics, EVENTS } from "app/lib/analytics";
@@ -104,6 +107,7 @@ export const useClaimNFT = (edition: IEdition | null | undefined) => {
   const { mutate: mutateEdition } = useCreatorCollectionDetail(
     edition?.contract_address
   );
+  const { mutate } = useSWRConfig();
 
   type ClaimNFTParams = {
     password?: string;
@@ -269,7 +273,21 @@ export const useClaimNFT = (edition: IEdition | null | undefined) => {
             toast.success("Collected!");
             Analytics.track(EVENTS.DROP_COLLECTED);
             dispatch({ type: "success", mint: res.mint });
-            closeModal?.(res.channel_id);
+            const channelId = res.channel_id;
+            closeModal?.(channelId);
+            mutate(
+              (key: any) => {
+                if (
+                  typeof key === "string" &&
+                  (key.startsWith(getChannelByIdCacheKey(channelId)) ||
+                    key.startsWith(getChannelMessageKey(channelId)))
+                ) {
+                  return true;
+                }
+              },
+              undefined,
+              { revalidate: true }
+            );
           }
         });
     }
