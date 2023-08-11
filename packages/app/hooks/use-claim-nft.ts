@@ -275,16 +275,19 @@ export const useClaimNFT = (edition: IEdition | null | undefined) => {
             dispatch({ type: "success", mint: res.mint });
             const channelId = res.channel_id;
             closeModal?.(channelId);
-            mutate((key: any) => {
-              if (
-                typeof key === "string" &&
-                (key.startsWith(getChannelByIdCacheKey(channelId)) ||
-                  key.startsWith(getChannelMessageKey(channelId)))
-              ) {
-                console.log("kardiya mutate ", key, channelId);
-                return true;
-              }
-            });
+            mutate(
+              (key: any) => {
+                if (
+                  typeof key === "string" &&
+                  (key.startsWith(getChannelByIdCacheKey(channelId)) ||
+                    key.startsWith(getChannelMessageKey(channelId)))
+                ) {
+                  return true;
+                }
+              },
+              undefined,
+              { revalidate: true }
+            );
           }
         });
     }

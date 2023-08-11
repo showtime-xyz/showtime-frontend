@@ -27,8 +27,6 @@ import { getCurrencyPrice } from "app/utilities";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";
 
-import { getChannelByIdCacheKey } from "../creator-channels/hooks/use-channel-detail";
-import { getChannelMessageKey } from "../creator-channels/hooks/use-channel-messages";
 import { ClaimStatus, getClaimStatus } from "./claim-status";
 
 export const fetchStripeAccountId = async (
@@ -64,58 +62,40 @@ const GoldButton = memo(function GoldButton({
   const isClaimed = status === ClaimStatus.Claimed;
   const redirectToDropImageShareScreen = useRedirectDropImageShareScreen();
   const { loginPromise } = useLogInPromise();
-  const { mutate } = useSWRConfig();
 
   const onHandlePayment = async () => {
-    mutate(
-      (key: any) => {
-        const channelId = 114;
-        if (
-          typeof key === "string" &&
-          (key.startsWith(getChannelByIdCacheKey(channelId)) ||
-            key.startsWith(getChannelMessageKey(channelId)))
-        ) {
-          console.log("kardiya mutate ", key, channelId);
-          return true;
-        }
-      },
-      undefined,
-      { revalidate: true }
-    );
-    // if (isClaimed) {
-    //   redirectToDropImageShareScreen(
-    //     edition?.creator_airdrop_edition.contract_address
-    //   );
-
-    //   return;
-    // }
-    // await loginPromise();
-    // if (Platform.OS !== "web") {
-    //   return;
-    // }
-
-    // if (Platform.OS === "web") {
-    //   const as = `/checkout-paid-nft`;
-    //   router.push(
-    //     Platform.select({
-    //       native: as,
-    //       web: {
-    //         pathname: router.pathname,
-    //         query: {
-    //           ...router.query,
-    //           checkoutPaidNFTModal: true,
-    //           contractAddress,
-    //           editionId,
-    //         },
-    //       } as any,
-    //     }),
-    //     Platform.select({
-    //       native: as,
-    //       web: router.asPath,
-    //     }),
-    //     { shallow: true }
-    //   );
-    // }
+    if (isClaimed) {
+      redirectToDropImageShareScreen(
+        edition?.creator_airdrop_edition.contract_address
+      );
+      return;
+    }
+    await loginPromise();
+    if (Platform.OS !== "web") {
+      return;
+    }
+    if (Platform.OS === "web") {
+      const as = `/checkout-paid-nft`;
+      router.push(
+        Platform.select({
+          native: as,
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              checkoutPaidNFTModal: true,
+              contractAddress,
+              editionId,
+            },
+          } as any,
+        }),
+        Platform.select({
+          native: as,
+          web: router.asPath,
+        }),
+        { shallow: true }
+      );
+    }
   };
   const priceText = price ? ` - ${price}` : "";
   if (type === "trending") {
