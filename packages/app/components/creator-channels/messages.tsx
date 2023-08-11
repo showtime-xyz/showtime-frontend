@@ -43,6 +43,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useIntroducingCreatorChannels } from "app/components/onboarding/introducing-creator-channels";
+import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
+import { useNFTDetailBySlug } from "app/hooks/use-nft-details-by-slug";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-congrats";
 import { useUser } from "app/hooks/use-user";
@@ -183,14 +185,21 @@ export const Messages = memo(() => {
 
   const channelDetail = useChannelById(channelId);
   const membersCount = channelDetail.data?.member_count || 0;
-  const latest_paid_nft_slug = channelDetail.data?.latest_paid_nft_slug
-    ? `/@${
-        channelDetail?.data?.owner.username ??
-        channelDetail?.data?.owner.wallet_address
-      }/${channelDetail.data?.latest_paid_nft_slug}`
-    : "";
+
+  const { data: dropDataBySlug, isLoading: nftDetailLoading } =
+    useNFTDetailBySlug({
+      username: channelDetail?.data?.owner.username,
+      dropSlug: channelDetail.data?.latest_paid_nft_slug,
+    });
+
+  const { data: edition, loading: editionDetailLoading } =
+    useCreatorCollectionDetail(dropDataBySlug?.creator_airdrop_edition_address);
 
   const hasUnlockedMessage = channelDetail.data?.viewer_has_unlocked_messages;
+  const showCollectToUnlock =
+    !isUserAdmin &&
+    !hasUnlockedMessage &&
+    channelDetail.data?.latest_paid_nft_slug;
 
   useIntroducingCreatorChannels();
 
@@ -292,11 +301,11 @@ export const Messages = memo(() => {
           setEditMessage={setEditMessage}
           editMessageIdSharedValue={editMessageIdSharedValue}
           editMessageItemDimension={editMessageItemDimension}
-          latestNFTSlug={latest_paid_nft_slug}
+          edition={edition}
         />
       );
     },
-    [editMessageIdSharedValue, editMessageItemDimension, latest_paid_nft_slug]
+    [editMessageIdSharedValue, editMessageItemDimension, edition]
   );
 
   // TODO: add back to keyboard controller?
@@ -483,12 +492,13 @@ export const Messages = memo(() => {
           tw={[
             "flex-1 overflow-hidden",
             //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
-            !isUserAdmin && !hasUnlockedMessage && Boolean(latest_paid_nft_slug)
-              ? "pb-2"
-              : "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
+            showCollectToUnlock ? "pb-2" : "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
           ]}
         >
-          {isLoading || channelDetail.isLoading ? (
+          {isLoading ||
+          channelDetail.isLoading ||
+          (showCollectToUnlock &&
+            (nftDetailLoading || editionDetailLoading)) ? (
             <MessageSkeleton />
           ) : (
             <>
@@ -527,7 +537,6 @@ export const Messages = memo(() => {
             </>
           )}
         </AnimatedView>
-
         <MessageInput
           listRef={listRef}
           channelId={channelId}
@@ -536,7 +545,7 @@ export const Messages = memo(() => {
           editMessage={editMessage}
           isUserAdmin={isUserAdmin}
           keyboard={keyboard}
-          latestPaidNFTSlug={latest_paid_nft_slug}
+          edition={edition}
           hasUnlockedMessages={hasUnlockedMessage}
         />
         <AnimatedView style={fakeView} />

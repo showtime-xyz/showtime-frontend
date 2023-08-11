@@ -51,14 +51,18 @@ export type ChannelMessageItem = {
 
 type ChannelMessageResponse = Array<ChannelMessageItem>;
 
-export const useChannelMessages = (channelId?: string) => {
+export const getChannelMessageKey = (channelId: string | number) => {
+  return `/v1/channels/${channelId}/messages`;
+};
+
+export const useChannelMessages = (channelId?: string | number) => {
   let indexRef = useRef(0);
   const messagesUrl = useCallback(
     (index: number, previousPageData: []) => {
       if (previousPageData && !previousPageData.length) return null;
       indexRef.current = index;
       if (channelId) {
-        return `/v1/channels/${channelId}/messages?page=${
+        return `${getChannelMessageKey(channelId)}?page=${
           index + 1
         }&limit=${PAGE_SIZE}`;
       } else {

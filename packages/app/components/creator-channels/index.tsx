@@ -6,5 +6,3 @@ export { CreatorChannels } from "./channels";
 export { ChannelsSettings } from "./settings";
 export { MessageReactionUserListModal } from "./message-reaction-user-list";
 export { ChannelsPromote } from "./promote";
-export { GatedMessage } from "./components/gated-message";
-export { StarDropBadge } from "./components/gated-message";

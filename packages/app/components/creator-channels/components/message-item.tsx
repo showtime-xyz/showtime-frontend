@@ -24,7 +24,9 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
 import { Reaction } from "app/components/reaction";
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
@@ -48,7 +50,7 @@ import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { MessageItemProps } from "../types";
-import { GatedMessage, StarDropBadge } from "./gated-message";
+import { StarDropBadge } from "./star-drop-badge";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -62,9 +64,9 @@ export const MessageItem = memo(
     setEditMessage,
     editMessageIdSharedValue,
     editMessageItemDimension,
-    latestNFTSlug,
+    edition,
   }: MessageItemProps & {
-    latestNFTSlug?: string;
+    edition?: CreatorEditionResponse;
     listRef: RefObject<FlashList<any>>;
     editMessageIdSharedValue: Animated.SharedValue<number | undefined>;
     editMessageItemDimension: Animated.SharedValue<{
@@ -138,9 +140,9 @@ export const MessageItem = memo(
     const isStarDrop = channel_message.is_payment_gated;
     const isUnlockedStarDrop = isStarDrop && channel_message.body;
 
-    if (isStarDrop && !isUnlockedStarDrop) {
+    if (isStarDrop && !isUnlockedStarDrop && edition) {
       // StarDrop but not unlocked
-      return <GatedMessage latestNFT={latestNFTSlug} />;
+      return <ClaimPaidNFTButton edition={edition} type="messageItem" />;
     }
 
     return (
