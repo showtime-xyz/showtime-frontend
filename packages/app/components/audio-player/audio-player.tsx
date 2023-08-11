@@ -11,7 +11,7 @@ import TrackPlayer, { State } from "design-system/track-player";
 
 import { useTrackProgress } from "./hooks/use-track-progress";
 import { setupPlayer } from "./service";
-import { pauseAllActiveTracks } from "./store";
+import { pauseAllActiveTracks, setTrackInfo } from "./store";
 import { formatTime } from "./utils";
 
 export const AudioPlayer = ({ id }: { id: number }) => {
@@ -23,6 +23,9 @@ export const AudioPlayer = ({ id }: { id: number }) => {
       {
         id: id,
         url: "https://showtime-media-stage.b-cdn.net/hirbod-test/AUDIO-2023-07-17-20-38-40.mp3",
+        title: "Showtime",
+        artist: "Creator channels",
+        artwork: "https://media.showtime.xyz/assets/st-logo.png",
       },
     ]);
   }, [id]);
@@ -67,10 +70,13 @@ export const AudioPlayer = ({ id }: { id: number }) => {
   const togglePlay = useCallback(async () => {
     if (trackInfo.state === State.Playing) {
       await pause();
+      setTrackInfo(id.toFixed(), {
+        state: State.Paused,
+      });
     } else {
       await play();
     }
-  }, [pause, play, trackInfo?.state]);
+  }, [id, pause, play, trackInfo.state]);
 
   return (
     <View>
