@@ -53,7 +53,9 @@ import {
 } from "app/lib/keyboard-controller";
 import { createParam } from "app/navigation/use-param";
 
-import { AudioPlayer } from "../track-player/track-player";
+import TrackPlayer from "design-system/track-player";
+
+import { AudioPlayer } from "../audio-player/audio-player";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
@@ -144,6 +146,12 @@ export const Messages = memo(() => {
       : { height: { value: 0 }, state: {} };
 
   const editMessageItemDimension = useSharedValue({ pageY: 0, height: 0 });
+
+  useEffect(() => {
+    return () => {
+      TrackPlayer.reset();
+    };
+  }, [channelId]);
 
   useEffect(() => {
     editMessageIdSharedValue.value = editMessage?.id;
