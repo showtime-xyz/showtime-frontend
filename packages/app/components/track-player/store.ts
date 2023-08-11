@@ -34,7 +34,7 @@ export const setTrackInfo = (id: string, info: Partial<TrackPlaybackInfo>) => {
 };
 
 export const pauseAllActiveTracks = () => {
-  for (const [id, trackInfo] of Object.entries(progressState.tracks)) {
+  for (const [_id, trackInfo] of Object.entries(progressState.tracks)) {
     if (trackInfo.position && trackInfo.position > 0) {
       trackInfo.state = State.Paused;
     }
@@ -42,7 +42,7 @@ export const pauseAllActiveTracks = () => {
 };
 
 export const stopAllActiveTracks = () => {
-  for (const [id, trackInfo] of Object.entries(progressState.tracks)) {
+  for (const [_id, trackInfo] of Object.entries(progressState.tracks)) {
     if (trackInfo.position && trackInfo.position > 0) {
       trackInfo.state = State.Paused;
       trackInfo.position = 0;
