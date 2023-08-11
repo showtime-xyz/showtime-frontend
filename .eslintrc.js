@@ -34,7 +34,14 @@ module.exports = {
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "unused-imports/no-unused-vars": "warn",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+      },
+    ],
     "no-empty": "warn",
     "react/display-name": "warn",
     "no-async-promise-executor": "warn",
