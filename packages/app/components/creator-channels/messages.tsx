@@ -156,6 +156,14 @@ export const Messages = memo(() => {
       TrackPlayer.reset();
       pauseAllActiveTracks();
     });
+
+    // yes, this is weird but we need it to run on unmount as well
+    return () => {
+      queueMicrotask(() => {
+        TrackPlayer.reset();
+        pauseAllActiveTracks();
+      });
+    };
   }, [channelId]);
 
   useEffect(() => {
