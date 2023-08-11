@@ -58,6 +58,7 @@ import { createParam } from "app/navigation/use-param";
 import TrackPlayer from "design-system/track-player";
 
 import { AudioPlayer } from "../audio-player/audio-player";
+import { pauseAllActiveTracks } from "../audio-player/store";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
@@ -150,10 +151,11 @@ export const Messages = memo(() => {
   const editMessageItemDimension = useSharedValue({ pageY: 0, height: 0 });
 
   // when component unmounts, reset all running player instances
-  useEffect(() => {
-    return () => {
+  useLayoutEffect(() => {
+    queueMicrotask(() => {
       TrackPlayer.reset();
-    };
+      pauseAllActiveTracks();
+    });
   }, [channelId]);
 
   useEffect(() => {

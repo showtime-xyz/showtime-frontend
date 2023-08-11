@@ -11,7 +11,7 @@ import TrackPlayer, { State } from "design-system/track-player";
 
 import { useTrackProgress } from "./hooks/use-track-progress";
 import { setupPlayer } from "./service";
-import { pauseAllActiveTracks, setTrackInfo } from "./store";
+import { pauseAllActiveTracks } from "./store";
 import { formatTime } from "./utils";
 
 export const AudioPlayer = ({ id }: { id: number }) => {
