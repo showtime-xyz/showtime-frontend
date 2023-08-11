@@ -214,7 +214,7 @@ export const MessageInput = ({
                 "ml-2 text-base font-semibold text-[#FFCB6C] dark:text-[#E88A3F]"
               }
             >
-              Collect a Star Drop
+              Collect to unlock channel
             </Text>
           </View>
         </Button>

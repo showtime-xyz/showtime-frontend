@@ -167,7 +167,7 @@ const GoldButton = memo(function GoldButton({
         </View>
 
         <Text tw={["ml-2 font-semibold text-black", LABEL_SIZE_TW[size]]}>
-          Collect Star Drop{priceText}
+          Collect to unlock{priceText}
         </Text>
       </View>
     </Button>
