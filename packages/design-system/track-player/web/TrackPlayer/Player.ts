@@ -1,7 +1,8 @@
 import { DeviceEventEmitter } from "react-native";
 
 import { State, Track, Progress, PlaybackState } from "../types";
-import { SetupNotCalledError } from "./SetupNotCalledError";
+
+// import { SetupNotCalledError } from "./SetupNotCalledError";
 
 export class Player {
   protected emitter = DeviceEventEmitter;
