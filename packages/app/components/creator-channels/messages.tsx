@@ -57,6 +57,7 @@ import { createParam } from "app/navigation/use-param";
 
 import TrackPlayer from "design-system/track-player";
 
+import { AudioPlayer } from "../audio-player/audio-player";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
@@ -302,16 +303,20 @@ export const Messages = memo(() => {
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
       return (
-        <MessageItem
-          item={item}
-          reactions={extraData.reactions}
-          channelId={extraData.channelId}
-          listRef={listRef}
-          setEditMessage={setEditMessage}
-          editMessageIdSharedValue={editMessageIdSharedValue}
-          editMessageItemDimension={editMessageItemDimension}
-          edition={edition}
-        />
+        <>
+          <MessageItem
+            item={item}
+            reactions={extraData.reactions}
+            channelId={extraData.channelId}
+            listRef={listRef}
+            setEditMessage={setEditMessage}
+            editMessageIdSharedValue={editMessageIdSharedValue}
+            editMessageItemDimension={editMessageItemDimension}
+            edition={edition}
+          />
+          {/* just a demo */}
+          <AudioPlayer id={item.channel_message.id} />
+        </>
       );
     },
     [editMessageIdSharedValue, editMessageItemDimension, edition]
