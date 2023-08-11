@@ -6802,6 +6802,7 @@ __metadata:
     react-native-share: ^9.2.3
     react-native-svg: 13.10.0
     react-native-tab-view: ^3.5.2
+    react-native-track-player: ^3.2.0
     react-native-view-shot: 3.7.0
     react-native-volume-manager: ^1.10.0
     react-native-web: ~0.19.7
@@ -24510,6 +24511,20 @@ __metadata:
     react-native: "*"
     react-native-pager-view: "*"
   checksum: bd287e5543881aa662ee55418a3bd5dacb25033425a9fcb0fff21c3a3b96f956af1a77cd9bab4e7a8e94590080a5d8e3cb99cfa8613b19bf6da24bfc9b4942d4
+  languageName: node
+  linkType: hard
+
+"react-native-track-player@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "react-native-track-player@npm:3.2.0"
+  peerDependencies:
+    react: ">=16.8.6"
+    react-native: ">=0.60.0-rc.2"
+    react-native-windows: ">=0.63.0"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: df64fdc7a25632ae26a35983dbeb906b7875fd97d1eea804dd1fb80b6f0033d3a81e37885c6201e4a02e6263e1273b1f44c6d6fb0e19560a5f62c98e7c510b9d
   languageName: node
   linkType: hard
 
