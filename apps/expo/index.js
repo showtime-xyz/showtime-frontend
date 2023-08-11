@@ -17,6 +17,7 @@ import App from "./App";
 //   activateKeepAwake();
 // }
 
-// register audio service
 registerRootComponent(App);
+
+// register audio service
 TrackPlayer.registerPlaybackService(() => PlaybackService);
