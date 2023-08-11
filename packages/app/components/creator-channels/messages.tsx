@@ -53,6 +53,7 @@ import {
 } from "app/lib/keyboard-controller";
 import { createParam } from "app/navigation/use-param";
 
+import { AudioPlayer } from "../track-player/track-player";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
@@ -284,16 +285,19 @@ export const Messages = memo(() => {
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
       return (
-        <MessageItem
-          item={item}
-          reactions={extraData.reactions}
-          channelId={extraData.channelId}
-          listRef={listRef}
-          setEditMessage={setEditMessage}
-          editMessageIdSharedValue={editMessageIdSharedValue}
-          editMessageItemDimension={editMessageItemDimension}
-          latestNFTSlug={latest_paid_nft_slug}
-        />
+        <>
+          <MessageItem
+            item={item}
+            reactions={extraData.reactions}
+            channelId={extraData.channelId}
+            listRef={listRef}
+            setEditMessage={setEditMessage}
+            editMessageIdSharedValue={editMessageIdSharedValue}
+            editMessageItemDimension={editMessageItemDimension}
+            latestNFTSlug={latest_paid_nft_slug}
+          />
+          <AudioPlayer id={item.channel_message.id} />
+        </>
       );
     },
     [editMessageIdSharedValue, editMessageItemDimension, latest_paid_nft_slug]
