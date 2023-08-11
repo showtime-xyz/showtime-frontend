@@ -58,6 +58,7 @@ import { createParam } from "app/navigation/use-param";
 import TrackPlayer from "design-system/track-player";
 
 import { AudioPlayer } from "../audio-player/audio-player";
+import { setupPlayer } from "../audio-player/service";
 import { pauseAllActiveTracks } from "../audio-player/store";
 import {
   AnimatedInfiniteScrollListWithRef,
@@ -152,8 +153,9 @@ export const Messages = memo(() => {
 
   // when component unmounts, reset all running player instances
   useLayoutEffect(() => {
-    queueMicrotask(() => {
-      TrackPlayer.reset();
+    queueMicrotask(async () => {
+      await setupPlayer();
+      await TrackPlayer.reset();
       pauseAllActiveTracks();
     });
 
