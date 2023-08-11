@@ -55,6 +55,8 @@ import {
 } from "app/lib/keyboard-controller";
 import { createParam } from "app/navigation/use-param";
 
+import TrackPlayer from "design-system/track-player";
+
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
@@ -145,6 +147,13 @@ export const Messages = memo(() => {
       : { height: { value: 0 }, state: {} };
 
   const editMessageItemDimension = useSharedValue({ pageY: 0, height: 0 });
+
+  // when component unmounts, reset all running player instances
+  useEffect(() => {
+    return () => {
+      TrackPlayer.reset();
+    };
+  }, [channelId]);
 
   useEffect(() => {
     editMessageIdSharedValue.value = editMessage?.id;
