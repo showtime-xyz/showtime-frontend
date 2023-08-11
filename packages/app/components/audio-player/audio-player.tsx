@@ -79,12 +79,12 @@ export const AudioPlayer = ({ id }: { id: number }) => {
   }, [id, pause, play, trackInfo.state]);
 
   return (
-    <View tw="mx-3 my-4 overflow-hidden rounded-xl bg-slate-200 p-6">
+    <View tw="mx-3 my-4 overflow-hidden rounded-xl bg-slate-200 p-4">
       <View tw="items-center justify-center">
         <Text>Title</Text>
       </View>
       <View tw="flex-row items-center">
-        <View tw="mr-2">
+        <View tw="mr-2 w-8 items-center justify-center text-center">
           <Text>{formatTime(trackInfo.position || 0)}</Text>
         </View>
         <View tw="flex-1">
@@ -112,22 +112,21 @@ export const AudioPlayer = ({ id }: { id: number }) => {
             }}
           />
         </View>
-        {trackInfo.duration && trackInfo.duration > 0 ? (
-          <View tw="ml-2">
-            <Text>{formatTime(trackInfo.duration || 0)}</Text>
-          </View>
-        ) : null}
+        <View tw="ml-2 w-8 items-center justify-center text-center">
+          <Text>
+            {trackInfo.duration ? formatTime(trackInfo.duration || 0) : "-:--"}
+          </Text>
+        </View>
       </View>
       <View tw="items-center justify-center">
         {isPlayerReady && (
           <Text onPress={togglePlay}>
-            {trackInfo.state === State.Buffering ? (
-              <Spinner size="small" />
-            ) : trackInfo.state === State.Playing ? (
-              "Pause " + id
-            ) : (
-              "Play " + id
-            )}
+            {trackInfo.state === State.Buffering ||
+            trackInfo.state === State.Connecting
+              ? "Loading..."
+              : trackInfo.state === State.Playing
+              ? "Pause " + id
+              : "Play " + id}
           </Text>
         )}
       </View>
