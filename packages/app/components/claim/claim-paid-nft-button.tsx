@@ -1,18 +1,23 @@
 import { memo, useState } from "react";
 import { Platform } from "react-native";
 
+import { LinearGradient } from "expo-linear-gradient";
+import { BorderlessButton } from "react-native-gesture-handler";
+import { useSWRConfig } from "swr";
 import * as Tooltip from "universal-tooltip";
 
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { StarDropBadge } from "app/components/creator-channels/components/star-drop-badge";
 import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
@@ -32,9 +37,11 @@ export const fetchStripeAccountId = async (
   return res;
 };
 
+const PlatformPressable = Platform.OS === "web" ? Pressable : BorderlessButton;
+
 type GoldButtonProps = Omit<ButtonProps, ""> & {
   theme?: "dark" | "light";
-  type?: "feed" | "trending" | "detail";
+  type?: "feed" | "trending" | "detail" | "messageItem" | "messageInput";
   edition?: CreatorEditionResponse;
   side?: "top" | "bottom" | "left" | "right";
 };
@@ -61,14 +68,12 @@ const GoldButton = memo(function GoldButton({
       redirectToDropImageShareScreen(
         edition?.creator_airdrop_edition.contract_address
       );
-
       return;
     }
     await loginPromise();
     if (Platform.OS !== "web") {
       return;
     }
-
     if (Platform.OS === "web") {
       const as = `/checkout-paid-nft`;
       router.push(
@@ -135,6 +140,111 @@ const GoldButton = memo(function GoldButton({
           <Showtime height={25} width={25} color={"#000"} />
         </View>
       </PressableHover>
+    );
+  }
+
+  if (type === "messageInput") {
+    return (
+      <Button
+        tw={"bg-black dark:bg-white"}
+        size={"regular"}
+        variant="primary"
+        onPress={onHandlePayment}
+      >
+        <View tw="w-full flex-row items-center justify-center">
+          <View>
+            <Image
+              source={
+                Platform.OS === "web"
+                  ? "https://media.showtime.xyz/assets/st-logo.png"
+                  : require("app/components/assets/st-logo.png")
+              }
+              width={16}
+              height={16}
+              style={{ width: 16, height: 16 }}
+            />
+          </View>
+
+          <Text
+            tw={
+              "ml-2 text-base font-semibold text-[#FFCB6C] dark:text-gray-900"
+            }
+          >
+            Collect to unlock channel
+          </Text>
+        </View>
+      </Button>
+    );
+  }
+
+  if (type === "messageItem") {
+    return (
+      <View tw="mx-3 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
+        <PlatformPressable
+          onPress={onHandlePayment}
+          activeOpacity={0.7}
+          foreground
+          style={{
+            flexGrow: 1,
+            width: "100%",
+            height: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <LinearGradient
+            style={{
+              position: "absolute",
+              width: "200%",
+              height: "100%",
+              borderRadius: 16,
+              overflow: "hidden",
+              transform: [{ scaleX: 1 }],
+            }}
+            start={{ x: 0, y: 0.5 }}
+            end={{ x: 1, y: -0.6 }}
+            // Adding the color stops manually
+            colors={[
+              "#F5E794",
+              "#F5E794",
+              "#F5E794",
+              "#E6A130",
+              "#FFE956",
+              "#FFEC92",
+              "#FFEC92",
+              "#FED749",
+              "#FDC93F",
+              "#F5E794",
+              "#F6C33D",
+              "#ED9F26",
+              "#E88A3F",
+              "#F4CE5E",
+              "#E4973C",
+              "#FFD480",
+              "#F5E794",
+              "#F5E794",
+              "#F5E794",
+            ]}
+          />
+          <View tw="absolute left-3 top-3">
+            <StarDropBadge />
+          </View>
+          <View tw="flex-row items-center justify-center">
+            <View tw="mr-2">
+              <Image
+                source={
+                  Platform.OS === "web"
+                    ? "https://media.showtime.xyz/assets/st-logo.png"
+                    : require("app/components/assets/st-logo.png")
+                }
+                width={18}
+                height={18}
+              />
+            </View>
+            <Text tw="text-sm font-semibold">Collect to unlock</Text>
+          </View>
+        </PlatformPressable>
+      </View>
     );
   }
 

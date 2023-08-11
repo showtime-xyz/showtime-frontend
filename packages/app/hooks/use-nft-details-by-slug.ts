@@ -1,14 +1,13 @@
 import useSWR from "swr";
 
 import { axios } from "app/lib/axios";
-
-import { NFTDetailPayload } from "./use-nft-detail-by-token-id";
+import { NFT } from "app/types";
 
 export const useNFTDetailBySlug = (params: {
   username?: string;
   dropSlug?: string;
 }) => {
-  const queryState = useSWR<NFTDetailPayload>(
+  const queryState = useSWR<NFT>(
     params.username && params.dropSlug
       ? `/v2/nft/${params.username}/${params.dropSlug}`
       : null,

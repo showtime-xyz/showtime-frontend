@@ -42,7 +42,7 @@ export const useInfiniteListQuerySWR = <T>(
       // suspense: true,
       refreshInterval,
       revalidateOnMount: true,
-      dedupingInterval: 30000,
+      dedupingInterval: 5000,
       focusThrottleInterval: 30000,
     });
 
