@@ -27,15 +27,19 @@ export const AudioPlayer = ({ id }: { id: number }) => {
     ]);
   }, [id]);
 
-  const play = useCallback(async () => {
+  const prepare = useCallback(async () => {
     pauseAllActiveTracks();
     await TrackPlayer.reset().catch(() => {});
     await addTrack();
     if (trackInfo?.position && trackInfo.position > 0) {
       await TrackPlayer.seekTo(trackInfo.position);
     }
+  }, [addTrack, trackInfo.position]);
+
+  const play = useCallback(async () => {
+    await prepare();
     await TrackPlayer.play().catch(() => {});
-  }, [addTrack, trackInfo?.position]);
+  }, [prepare]);
 
   const pause = useCallback(async () => {
     await TrackPlayer.pause().catch(() => {});
@@ -89,22 +93,19 @@ export const AudioPlayer = ({ id }: { id: number }) => {
         maximumTrackTintColor="#ff0"
         step={1}
         value={trackInfo.position || 0}
-        onValueChange={async (value) => {
-          if (trackInfo.state !== State.Playing) {
-            setTrackInfo(id.toString(), {
-              position: value[0],
-              state: State.Playing,
-            });
-            play();
+        onSlidingStart={async () => {
+          if (isPlayerReady && trackInfo.state === State.Playing) {
+            await TrackPlayer.pause();
           } else {
-            TrackPlayer.seekTo(value[0]);
-            setTrackInfo(id.toString(), {
-              position: value[0],
-              state: State.Playing,
-            });
+            await prepare();
           }
         }}
-        disabled={trackInfo.state === State.Buffering || !isPlayerReady}
+        onSlidingComplete={async (value) => {
+          if (isPlayerReady) {
+            await TrackPlayer.seekTo(value[0]);
+            await TrackPlayer.play();
+          }
+        }}
       />
     </View>
   );
