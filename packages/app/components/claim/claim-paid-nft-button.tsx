@@ -167,7 +167,7 @@ const GoldButton = memo(function GoldButton({
 
           <Text
             tw={
-              "ml-2 text-base font-semibold text-[#FFCB6C] dark:text-[#E88A3F]"
+              "ml-2 text-base font-semibold text-[#FFCB6C] dark:text-gray-900"
             }
           >
             Collect to unlock channel
