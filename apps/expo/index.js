@@ -6,9 +6,10 @@ import "expo-dev-launcher";
 // import { activateKeepAwake } from "expo-keep-awake";
 import "expo/build/Expo.fx";
 import "react-native-gesture-handler";
-import TrackPlayer from "react-native-track-player";
 
-import { PlaybackService } from "app/components/track-player/service";
+import { PlaybackService } from "app/components/audio-player/service";
+
+import TrackPlayer from "design-system/track-player";
 
 import App from "./App";
 
@@ -17,5 +18,5 @@ import App from "./App";
 // }
 
 // register audio service
-TrackPlayer.registerPlaybackService(() => PlaybackService);
 registerRootComponent(App);
+TrackPlayer.registerPlaybackService(() => PlaybackService);

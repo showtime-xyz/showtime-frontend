@@ -52,6 +52,7 @@
     "@hookform/resolvers": "^3.1.1",
     "@magic-ext/react-native-expo-oauth": "^8.1.0",
     "@magic-sdk/react-native-expo": "^14.1.0",
+    "@miblanchard/react-native-slider": "^2.3.1",
     "@react-native-async-storage/async-storage": "~1.19.1",
     "@react-native-community/blur": "^4.3.2",
     "@react-native-community/datetimepicker": "7.4.1",

@@ -4254,6 +4254,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@miblanchard/react-native-slider@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@miblanchard/react-native-slider@npm:2.3.1"
+  peerDependencies:
+    react: ">=16.8"
+    react-native: ">=0.59"
+  checksum: 0f66becdd3ef9dc238b6c816b143fc36927d140ff453e46033451a5799177a30f864f91d5d307b7424b49d07e3dac3ca2517e16777c1b34fd99d140cc56e16bc
+  languageName: node
+  linkType: hard
+
 "@motionone/animation@npm:^10.12.0, @motionone/animation@npm:^10.15.1":
   version: 10.15.1
   resolution: "@motionone/animation@npm:10.15.1"
@@ -6684,6 +6694,7 @@ __metadata:
     "@hookform/resolvers": ^3.1.1
     "@magic-ext/react-native-expo-oauth": ^8.1.0
     "@magic-sdk/react-native-expo": ^14.1.0
+    "@miblanchard/react-native-slider": ^2.3.1
     "@react-native-async-storage/async-storage": ~1.19.1
     "@react-native-community/blur": ^4.3.2
     "@react-native-community/datetimepicker": 7.4.1
@@ -6907,6 +6918,7 @@ __metadata:
     resize-observer-polyfill: ^1.5.1
     screenfull: ^6.0.2
     setimmediate: ^1.0.5
+    shaka-player: ^4.3.8
     swiper: ^10.0.4
     swr: ^2.2.0
     tailwindcss: 3.3.2
@@ -14594,6 +14606,13 @@ __metadata:
     minimalistic-assert: ^1.0.1
     minimalistic-crypto-utils: ^1.0.1
   checksum: d56d21fd04e97869f7ffcc92e18903b9f67f2d4637a23c860492fbbff5a3155fd9ca0184ce0c865dd6eb2487d234ce9551335c021c376cd2d3b7cb749c7d10f4
+  languageName: node
+  linkType: hard
+
+"eme-encryption-scheme-polyfill@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "eme-encryption-scheme-polyfill@npm:2.1.1"
+  checksum: 5d67fac0f95cc7e2066c68a15d8ecfb508d0c3774d3b8a37013da1a3a6a25ce86d6f8e185d885aa802c1fca48a3348f13dd310e54966fb96faba833a1e62000b
   languageName: node
   linkType: hard
 
@@ -25920,6 +25939,15 @@ __metadata:
   bin:
     sha.js: ./bin.js
   checksum: ebd3f59d4b799000699097dadb831c8e3da3eb579144fd7eb7a19484cbcbb7aca3c68ba2bb362242eb09e33217de3b4ea56e4678184c334323eca24a58e3ad07
+  languageName: node
+  linkType: hard
+
+"shaka-player@npm:^4.3.8":
+  version: 4.3.8
+  resolution: "shaka-player@npm:4.3.8"
+  dependencies:
+    eme-encryption-scheme-polyfill: ^2.1.1
+  checksum: 37267f485ffba6d22bc6996859784909c8749b8653fd8a20b6f0f65b4822a9cce2ab5bee00e6cc1b9522c1a8e66e98e2d4e78a04eeef0b042369e2128d450399
   languageName: node
   linkType: hard
 
