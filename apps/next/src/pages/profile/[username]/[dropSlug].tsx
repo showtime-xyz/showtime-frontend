@@ -39,8 +39,9 @@ export async function getServerSideProps(context) {
         __DEV__
           ? "http://localhost:3000"
           : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
-      }/api/drop?username=${username}&image=${imageUrl}&pfp=${pfp}&dropCreated=true&desc=${desc}&gatingType=${gatingType}`
+      }/api/drop?username=${username}&gatingType=${gatingType}&image=${imageUrl}&pfp=${pfp}&dropCreated=true&desc=${desc}`
     );
+
     if (nft) {
       return {
         props: {
