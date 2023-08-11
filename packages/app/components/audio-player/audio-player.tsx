@@ -79,40 +79,58 @@ export const AudioPlayer = ({ id }: { id: number }) => {
   }, [id, pause, play, trackInfo.state]);
 
   return (
-    <View>
-      {isPlayerReady && (
-        <Text onPress={togglePlay}>
-          {trackInfo.state === State.Buffering ? (
-            <Spinner size="small" />
-          ) : trackInfo.state === State.Playing ? (
-            "Pause" + id
-          ) : (
-            "Play" + id
-          )}
-        </Text>
-      )}
-      <Text>{formatTime(trackInfo.position || 0)}</Text>
-      <Slider
-        minimumValue={0}
-        maximumValue={trackInfo.duration || 0}
-        minimumTrackTintColor="#000"
-        maximumTrackTintColor="#ff0"
-        step={1}
-        value={trackInfo.position || 0}
-        onSlidingStart={async () => {
-          if (isPlayerReady && trackInfo.state === State.Playing) {
-            await TrackPlayer.pause();
-          } else {
-            await prepare();
-          }
-        }}
-        onSlidingComplete={async (value) => {
-          if (isPlayerReady) {
-            await TrackPlayer.seekTo(value[0]);
-            await TrackPlayer.play();
-          }
-        }}
-      />
+    <View tw="mx-3 my-4 overflow-hidden rounded-xl bg-slate-200 p-6">
+      <View tw="items-center justify-center">
+        <Text>Title</Text>
+      </View>
+      <View tw="flex-row items-center">
+        <View tw="mr-2">
+          <Text>{formatTime(trackInfo.position || 0)}</Text>
+        </View>
+        <View tw="flex-1">
+          <Slider
+            minimumValue={0}
+            maximumValue={trackInfo.duration || 0}
+            minimumTrackTintColor="#000"
+            maximumTrackTintColor="#ff0"
+            step={1}
+            thumbStyle={{ height: 10, width: 10 }}
+            value={trackInfo.position || 0}
+            animateTransitions={false}
+            onSlidingStart={async () => {
+              if (isPlayerReady && trackInfo.state === State.Playing) {
+                await TrackPlayer.pause();
+              } else {
+                await prepare();
+              }
+            }}
+            onSlidingComplete={async (value) => {
+              if (isPlayerReady) {
+                await TrackPlayer.seekTo(value[0]);
+                await TrackPlayer.play();
+              }
+            }}
+          />
+        </View>
+        {trackInfo.duration && trackInfo.duration > 0 ? (
+          <View tw="ml-2">
+            <Text>{formatTime(trackInfo.duration || 0)}</Text>
+          </View>
+        ) : null}
+      </View>
+      <View tw="items-center justify-center">
+        {isPlayerReady && (
+          <Text onPress={togglePlay}>
+            {trackInfo.state === State.Buffering ? (
+              <Spinner size="small" />
+            ) : trackInfo.state === State.Playing ? (
+              "Pause " + id
+            ) : (
+              "Play " + id
+            )}
+          </Text>
+        )}
+      </View>
     </View>
   );
 };
