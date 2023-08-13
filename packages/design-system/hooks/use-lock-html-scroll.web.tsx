@@ -24,17 +24,5 @@ export function useLockHtmlScroll(isLocked = true) {
       document.documentElement.classList.add("no-scroll");
       document.documentElement.style.paddingRight = `${gap.gap}px`;
     }
-
-    return () => {
-      if (
-        typeof window !== "undefined" &&
-        window.document &&
-        isMounted &&
-        isLocked
-      ) {
-        document.documentElement.classList.remove("no-scroll");
-        document.documentElement.style.paddingRight = `0px`;
-      }
-    };
   }, [isMounted, isLocked, gap.gap]);
 }
