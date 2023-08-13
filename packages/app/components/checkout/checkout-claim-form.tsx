@@ -10,6 +10,7 @@ import {
   LinkAuthenticationElement,
 } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
+import uniq from "lodash/union";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Button } from "@showtime-xyz/universal.button";
@@ -112,6 +113,10 @@ const CheckoutFormLayout = ({
   const paymentMethods = usePaymentsManage();
   const defaultPaymentMethod = useMemo(
     () => paymentMethods.data?.find((method) => method.is_default),
+    [paymentMethods.data]
+  );
+  const paymentMethodsList = useMemo(
+    () => uniq(paymentMethods.data),
     [paymentMethods.data]
   );
   const [savedPaymentMethodId, setSavedPaymentMethodId] = useState(
@@ -251,9 +256,9 @@ const CheckoutFormLayout = ({
           </View>
         </View>
         <View tw="h-6" />
-        {paymentMethods?.data && paymentMethods.data?.length > 0 ? (
+        {paymentMethodsList && paymentMethodsList?.length > 0 ? (
           <>
-            {paymentMethods.data?.map((method) => {
+            {paymentMethodsList?.map((method) => {
               return (
                 <View tw="mb-4" key={method.id}>
                   <PressableHover
