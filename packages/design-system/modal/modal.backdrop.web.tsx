@@ -30,7 +30,7 @@ const ModalBackdropComponent = forwardRef<any, ModalBackdropProps>(
         ref={ref}
         className={BACKDROP_TW.join(" ")}
         onClick={onCloseMethod}
-        onTouchEnd={onClose}
+        onTouchEnd={onCloseMethod}
       />
     );
   }
