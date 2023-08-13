@@ -48,7 +48,12 @@ import { MAX_FILE_SIZE, UseDropNFT, useDropNFT } from "app/hooks/use-drop-nft";
 import { usePersistForm } from "app/hooks/use-persist-form";
 import { useWallet } from "app/hooks/use-wallet";
 import { FilePickerResolveValue } from "app/lib/file-picker";
-import { formatAddressShort, getCurrencySymbol, isNumber } from "app/utilities";
+import {
+  formatAddressShort,
+  getCurrencyPrice,
+  getCurrencySymbol,
+  isNumber,
+} from "app/utilities";
 
 import { MediaPicker } from "../common/media-picker";
 import { useStarDropForm } from "../common/star-drop-form-utils";
@@ -698,8 +703,7 @@ const SetPriceAndDuration = (
                         tw={`text-4xl text-gray-700
                     dark:text-gray-100`}
                       >
-                        {getCurrencySymbol(editionPriceRange?.currency)}
-                        {price}
+                        {getCurrencyPrice(editionPriceRange?.currency, price)}
                       </Text>
                       <Text tw="text-xs text-gray-700 dark:text-gray-100">
                         {editionPriceRange?.currency}
@@ -720,10 +724,16 @@ const SetPriceAndDuration = (
                       Enter custom price
                     </Text>
                     <Text tw="pt-1 text-gray-600 dark:text-gray-300">
-                      From {getCurrencySymbol(editionPriceRange?.currency)}
-                      {editionPriceRange?.min}-
-                      {getCurrencySymbol(editionPriceRange?.currency)}
-                      {editionPriceRange?.max}
+                      From{" "}
+                      {getCurrencyPrice(
+                        editionPriceRange?.currency,
+                        editionPriceRange?.min
+                      )}
+                      -
+                      {getCurrencyPrice(
+                        editionPriceRange?.currency,
+                        editionPriceRange?.max
+                      )}
                     </Text>
                   </View>
                 </Pressable>
@@ -740,8 +750,10 @@ const SetPriceAndDuration = (
                     <Text tw="text-gray-900 dark:text-gray-100">
                       Custom price:{" "}
                       <Text tw="font-bold">
-                        {getCurrencySymbol(editionPriceRange?.currency)}
-                        {selectedPrice}
+                        {getCurrencyPrice(
+                          editionPriceRange?.currency,
+                          selectedPrice
+                        )}
                       </Text>
                     </Text>
                     <View tw="rounded-full bg-gray-100 p-1">
@@ -871,24 +883,12 @@ const SetPriceAndDuration = (
           <View tw="p-4">
             <SetCustomPrice
               handleSubmit={(price: number) => {
-                if (editionPriceRange) {
-                  if (
-                    price > editionPriceRange?.max ||
-                    price < editionPriceRange?.min
-                  ) {
-                    Alert.alert(
-                      `The price range must be between ${getCurrencySymbol(
-                        editionPriceRange?.currency
-                      )}${editionPriceRange?.min} and ${getCurrencySymbol(
-                        editionPriceRange?.currency
-                      )}${editionPriceRange?.max}.`
-                    );
-                    return;
-                  }
-                }
                 setPrice(price);
                 setShowCustomPriceModal(false);
               }}
+              maxValue={editionPriceRange?.max}
+              minValue={editionPriceRange?.min}
+              currency={editionPriceRange?.currency}
             />
           </View>
         </ModalSheet>
@@ -896,13 +896,21 @@ const SetPriceAndDuration = (
     </BottomSheetModalProvider>
   );
 };
-
+const numberRegex = /^\s*-?(\d+(\.\d{1,2})?|\.\d{1,2})\s*$/;
 const SetCustomPrice = ({
   handleSubmit,
+  minValue,
+  maxValue,
+  currency,
 }: {
   handleSubmit: (price: number) => void;
+  minValue: number | null | undefined;
+  maxValue: number | null | undefined;
+  currency?: string;
 }) => {
   const [price, setPrice] = useState("1");
+  const [errorText, setErrorText] = useState("");
+
   const isDark = useIsDarkMode();
   return (
     <View>
@@ -911,13 +919,50 @@ const SetCustomPrice = ({
         placeholder="Set custom price"
         keyboardAppearance={isDark ? "dark" : "light"}
         value={price.toString()}
-        onChangeText={(price) => setPrice(price)}
+        errorText={errorText}
+        leftElement={
+          <Text tw="mr-1 text-lg font-bold text-black dark:text-white">
+            {getCurrencySymbol(currency)}
+          </Text>
+        }
+        keyboardType="numeric"
+        helperText={`The price range must be between ${getCurrencyPrice(
+          currency,
+          minValue
+        )} and ${getCurrencyPrice(currency, maxValue)}.`}
+        onChangeText={(price) => {
+          setPrice(price);
+          if (numberRegex.test(price) || !price) {
+            setErrorText("");
+          } else if (price.substring(price.length - 1) != ".") {
+            setErrorText(
+              "Please enter the correct number. Prices only accept integers or numbers with 2 decimal places, for example ($3.00, $3.99, $3.10)."
+            );
+          }
+        }}
       />
       <Button
         tw="mt-2"
         onPress={() => {
-          if (isNumber(price)) {
-            handleSubmit(parseFloat(price));
+          if (isNumber(price) && maxValue && minValue) {
+            const finalPrice = parseFloat(price);
+            if (finalPrice > maxValue || finalPrice < minValue) {
+              Alert.alert(
+                `The price range must be between ${getCurrencyPrice(
+                  currency,
+                  minValue
+                )} and ${getCurrencyPrice(currency, maxValue)}.`
+              );
+              return;
+            }
+            if (numberRegex.test(price)) {
+              setErrorText("");
+              handleSubmit(finalPrice);
+            } else {
+              Alert.alert(
+                "Please enter the correct number. Prices only accept integers or numbers with 2 decimal places, for example ($3.00, $3.99, $3.10)."
+              );
+            }
           }
         }}
       >

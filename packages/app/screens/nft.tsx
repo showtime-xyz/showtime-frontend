@@ -101,8 +101,8 @@ const NFTDetail = () => {
         text={
           <View tw="flex-1 items-center justify-center">
             <View tw="mb-6">
-              <Text tw="text-center text-2xl text-gray-900 dark:text-white">
-                {nftError.response?.status === 404
+              <Text tw="text-center text-2xl text-gray-600 dark:text-white">
+                {nftError?.response?.status === 404
                   ? "Drop not found"
                   : "No drops, yet!"}
               </Text>
@@ -111,7 +111,7 @@ const NFTDetail = () => {
               <View tw="md:hidden">
                 <Text
                   onPress={() => router.pop()}
-                  tw="text-center text-xl font-semibold text-indigo-500 "
+                  tw="text-center text-xl font-semibold text-indigo-400 "
                 >
                   Go back
                 </Text>
@@ -119,7 +119,7 @@ const NFTDetail = () => {
               <View>
                 <TextLink
                   href={`/`}
-                  tw="text-center text-xl font-semibold text-indigo-500"
+                  tw="text-center text-xl font-semibold text-indigo-400"
                 >
                   Go Home
                 </TextLink>
