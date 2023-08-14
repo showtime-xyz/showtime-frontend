@@ -145,11 +145,10 @@ const GoldButton = memo(function GoldButton({
 
   if (type === "messageInput") {
     return (
-      <Button
-        tw={"bg-black dark:bg-white"}
-        size={"regular"}
-        variant="primary"
+      <PressableHover
+        tw="h-12 rounded-full bg-black p-4 dark:bg-white"
         onPress={onHandlePayment}
+        {...rest}
       >
         <View tw="w-full flex-row items-center justify-center">
           <View>
@@ -173,7 +172,7 @@ const GoldButton = memo(function GoldButton({
             Collect to unlock channel
           </Text>
         </View>
-      </Button>
+      </PressableHover>
     );
   }
 
@@ -181,6 +180,7 @@ const GoldButton = memo(function GoldButton({
     return (
       <View tw="mx-3 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
         <PlatformPressable
+          //@ts-ignore
           onPress={onHandlePayment}
           activeOpacity={0.7}
           foreground
@@ -191,6 +191,7 @@ const GoldButton = memo(function GoldButton({
             alignItems: "center",
             justifyContent: "center",
           }}
+          {...rest}
         >
           <LinearGradient
             style={{
