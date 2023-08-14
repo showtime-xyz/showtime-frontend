@@ -35,6 +35,7 @@ import { Banner, useBanners } from "./hooks/use-banners";
 const PlatformPressable = Platform.OS === "web" ? Pressable : BorderlessButton;
 
 // This is one of the fastest shuffling algorithms
+// can be called with fisherYatesShuffle(array)
 function fisherYatesShuffle<T>(array: T[]): T[] {
   const shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
