@@ -10,6 +10,7 @@ import {
   LinkAuthenticationElement,
 } from "@stripe/react-stripe-js";
 import type { StripeError } from "@stripe/stripe-js";
+import uniq from "lodash/union";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Button } from "@showtime-xyz/universal.button";
@@ -112,6 +113,10 @@ const CheckoutFormLayout = ({
   const paymentMethods = usePaymentsManage();
   const defaultPaymentMethod = useMemo(
     () => paymentMethods.data?.find((method) => method.is_default),
+    [paymentMethods.data]
+  );
+  const paymentMethodsList = useMemo(
+    () => uniq(paymentMethods.data),
     [paymentMethods.data]
   );
   const [savedPaymentMethodId, setSavedPaymentMethodId] = useState(
@@ -224,164 +229,162 @@ const CheckoutFormLayout = ({
     }
   };
   return (
-    <>
-      <View tw="" id="payment-form">
-        <View tw="px-4 pb-2 pt-4">
-          <View tw="flex-row">
-            <View tw="relative overflow-hidden rounded-2xl">
-              <Media
-                isMuted
-                item={nft?.data.item}
-                sizeStyle={{
-                  width: 80,
-                  height: 80,
-                }}
-              />
-            </View>
-            <View tw="ml-4 flex-1 justify-center">
-              <Text
-                tw="text-xl font-bold text-black dark:text-white"
-                numberOfLines={2}
-              >
-                {edition?.creator_airdrop_edition.name}
-              </Text>
-              <View tw="h-2" />
-              <Text tw="text-gray-700 dark:text-gray-400">
-                {getCreatorUsernameFromNFT(nft?.data.item)}
-              </Text>
-            </View>
-          </View>
-          <View tw="h-6" />
-          {paymentMethods?.data && paymentMethods.data?.length > 0 ? (
-            <>
-              {paymentMethods.data?.map((method) => {
-                return (
-                  <View tw="mb-4" key={method.id}>
-                    <PressableHover
-                      onPress={() => {
-                        setSavedPaymentMethodId(method.id);
-                        setIsUseSavedCard(true);
-                      }}
-                      tw="flex-row items-center"
-                    >
-                      {method.id === savedPaymentMethodId && isUseSavedCard ? (
-                        <CheckFilled
-                          height={20}
-                          width={20}
-                          color={isDark ? colors.white : colors.gray[700]}
-                        />
-                      ) : (
-                        <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
-                      )}
-                      <View tw="ml-2 self-start md:self-center">
-                        <CreditCard
-                          width={20}
-                          height={20}
-                          color={isDark ? colors.white : colors.black}
-                        />
-                      </View>
-                      <View tw="ml-2 flex-row">
-                        <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
-                          {method?.is_default ? "Default Card" : "Card"}
-                        </Text>
-                        <Text tw="ml-1 text-sm font-medium text-gray-400">
-                          {`(Ending in ${method.details.last4} · ${
-                            method.details.exp_month
-                          }/${method.details.exp_year.toString().slice(-2)})`}
-                        </Text>
-                      </View>
-                    </PressableHover>
-                  </View>
-                );
-              })}
-              <PressableHover
-                onPress={() => setIsUseSavedCard(false)}
-                tw="mb-4 flex-row items-center"
-              >
-                {!isUseSavedCard ? (
-                  <CheckFilled
-                    height={20}
-                    width={20}
-                    color={isDark ? colors.white : colors.gray[700]}
-                  />
-                ) : (
-                  <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
-                )}
-                <View tw="ml-2 self-start md:self-center">
-                  <Image
-                    source={{
-                      uri: "https://media.showtime.xyz/assets/stripe-logo.png",
-                    }}
-                    height={20}
-                    width={20}
-                  />
-                </View>
-                <View tw="ml-2 flex-row">
-                  <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
-                    Other payment methods
-                  </Text>
-                </View>
-              </PressableHover>
-              <AnimateHeight hide={isUseSavedCard}>
-                <PaymentCustomPaymentForm
-                  setEmail={setEmail}
-                  setAsDefaultPaymentMethod={setAsDefaultPaymentMethod}
-                  setSetAsDefaultPaymentMethod={setSetAsDefaultPaymentMethod}
-                />
-              </AnimateHeight>
-            </>
-          ) : (
-            <PaymentCustomPaymentForm
-              setEmail={setEmail}
-              setAsDefaultPaymentMethod={setAsDefaultPaymentMethod}
-              setSetAsDefaultPaymentMethod={setSetAsDefaultPaymentMethod}
+    <View tw="" id="payment-form">
+      <View tw="px-4 pb-16 pt-4">
+        <View tw="flex-row">
+          <View tw="relative overflow-hidden rounded-2xl">
+            <Media
+              isMuted
+              item={nft?.data.item}
+              sizeStyle={{
+                width: 80,
+                height: 80,
+              }}
             />
-          )}
-          <View tw="mt-4 px-4">
-            <Text tw="text-center text-xs text-gray-900 dark:text-gray-50">
-              By clicking submit you will accept the{" "}
-              <TextLink
-                href="https://showtime-xyz.notion.site/Legal-Public-c407e36eb7cd414ca190245ca8621e68"
-                tw="font-bold"
-                target="_blank"
-              >
-                Terms & Conditions
-              </TextLink>{" "}
-              and understand that you are purchasing a non-refundable digital
-              item.
+          </View>
+          <View tw="ml-4 flex-1 justify-center">
+            <Text
+              tw="text-xl font-bold text-black dark:text-white"
+              numberOfLines={2}
+            >
+              {edition?.creator_airdrop_edition.name}
+            </Text>
+            <View tw="h-2" />
+            <Text tw="text-gray-700 dark:text-gray-400">
+              {getCreatorUsernameFromNFT(nft?.data.item)}
             </Text>
           </View>
-
-          {isLoading && (
-            <View tw="animate-fade-in-250 absolute inset-0 items-center justify-center bg-black/30">
-              <Spinner />
-            </View>
-          )}
         </View>
-        <View tw="mt-2 px-4">
-          <Button
-            disabled={isLoading}
-            tw={`${isLoading ? "opacity-60" : ""}`}
-            onPress={handleSubmit}
-            size="regular"
-          >
-            {isLoading ? (
-              <Text tw="animate-fade-in-250 text-sm font-semibold">
-                Processing
-                <ThreeDotsAnimation
-                  color={isDark ? colors.black : colors.white}
+        <View tw="h-6" />
+        {paymentMethodsList && paymentMethodsList?.length > 0 ? (
+          <>
+            {paymentMethodsList?.map((method) => {
+              return (
+                <View tw="mb-4" key={method.id}>
+                  <PressableHover
+                    onPress={() => {
+                      setSavedPaymentMethodId(method.id);
+                      setIsUseSavedCard(true);
+                    }}
+                    tw="flex-row items-center"
+                  >
+                    {method.id === savedPaymentMethodId && isUseSavedCard ? (
+                      <CheckFilled
+                        height={20}
+                        width={20}
+                        color={isDark ? colors.white : colors.gray[700]}
+                      />
+                    ) : (
+                      <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
+                    )}
+                    <View tw="ml-2 self-start md:self-center">
+                      <CreditCard
+                        width={20}
+                        height={20}
+                        color={isDark ? colors.white : colors.black}
+                      />
+                    </View>
+                    <View tw="ml-2 flex-row">
+                      <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
+                        {method?.is_default ? "Default Card" : "Card"}
+                      </Text>
+                      <Text tw="ml-1 text-sm font-medium text-gray-400">
+                        {`(Ending in ${method.details.last4} · ${
+                          method.details.exp_month
+                        }/${method.details.exp_year.toString().slice(-2)})`}
+                      </Text>
+                    </View>
+                  </PressableHover>
+                </View>
+              );
+            })}
+            <PressableHover
+              onPress={() => setIsUseSavedCard(false)}
+              tw="mb-4 flex-row items-center"
+            >
+              {!isUseSavedCard ? (
+                <CheckFilled
+                  height={20}
+                  width={20}
+                  color={isDark ? colors.white : colors.gray[700]}
                 />
-              </Text>
-            ) : (
-              `Collect to unlock - ${getCurrencyPrice(
-                edition.currency,
-                edition.price
-              )}`
-            )}
-          </Button>
+              ) : (
+                <View tw="h-5 w-5 rounded-full border-[1px] border-gray-800 dark:border-gray-100" />
+              )}
+              <View tw="ml-2 self-start md:self-center">
+                <Image
+                  source={{
+                    uri: "https://media.showtime.xyz/assets/stripe-logo.png",
+                  }}
+                  height={20}
+                  width={20}
+                />
+              </View>
+              <View tw="ml-2 flex-row">
+                <Text tw="text-base font-medium text-gray-900 dark:text-gray-100">
+                  Other payment methods
+                </Text>
+              </View>
+            </PressableHover>
+            <AnimateHeight hide={isUseSavedCard}>
+              <PaymentCustomPaymentForm
+                setEmail={setEmail}
+                setAsDefaultPaymentMethod={setAsDefaultPaymentMethod}
+                setSetAsDefaultPaymentMethod={setSetAsDefaultPaymentMethod}
+              />
+            </AnimateHeight>
+          </>
+        ) : (
+          <PaymentCustomPaymentForm
+            setEmail={setEmail}
+            setAsDefaultPaymentMethod={setAsDefaultPaymentMethod}
+            setSetAsDefaultPaymentMethod={setSetAsDefaultPaymentMethod}
+          />
+        )}
+        <View tw="mt-4 px-4">
+          <Text tw="text-center text-xs text-gray-900 dark:text-gray-50">
+            By clicking submit you will accept the{" "}
+            <TextLink
+              href="https://showtime-xyz.notion.site/Legal-Public-c407e36eb7cd414ca190245ca8621e68"
+              tw="font-bold"
+              target="_blank"
+            >
+              Terms & Conditions
+            </TextLink>{" "}
+            and understand that you are purchasing a non-refundable digital
+            item.
+          </Text>
         </View>
+
+        {isLoading && (
+          <View tw="animate-fade-in-250 absolute inset-0 items-center justify-center bg-black/30">
+            <Spinner />
+          </View>
+        )}
       </View>
-    </>
+      <View tw="safe-bottom fixed bottom-4 w-full px-4">
+        <Button
+          disabled={isLoading}
+          tw={`${isLoading ? "opacity-60" : ""}`}
+          onPress={handleSubmit}
+          size="regular"
+        >
+          {isLoading ? (
+            <Text tw="animate-fade-in-250 text-sm font-semibold">
+              Processing
+              <ThreeDotsAnimation
+                color={isDark ? colors.black : colors.white}
+              />
+            </Text>
+          ) : (
+            `Collect to unlock - ${getCurrencyPrice(
+              edition.currency,
+              edition.price
+            )}`
+          )}
+        </Button>
+      </View>
+    </View>
   );
 };
 

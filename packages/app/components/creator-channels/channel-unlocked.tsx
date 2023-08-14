@@ -73,7 +73,7 @@ export const UnlockedChannelModal = () => {
 const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
   const linearOpaticy = useSharedValue(0);
   const { data: userInfo } = useUserProfile({
-    address: nft.creator_username || nft.creator_address_nonens,
+    address: nft.creator_address,
   });
   const { top } = useSafeAreaInsets();
   const router = useRouter();

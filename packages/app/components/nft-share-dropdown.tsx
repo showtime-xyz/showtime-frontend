@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Copy, Twitter, Sendv2, Corner } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
