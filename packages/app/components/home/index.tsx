@@ -17,7 +17,10 @@ import { NFT } from "app/types";
 import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { ListHeaderComponent } from "./header";
+import {
+  ListHeaderComponent,
+  ListHeaderComponentOnChainSummer,
+} from "./header";
 import { HomeItem, HomeItemSketelon } from "./home-item";
 import { PopularCreators } from "./popular-creators";
 
@@ -89,7 +92,7 @@ export const Home = () => {
             estimatedItemSize={600}
             drawDistance={Platform.OS === "android" ? height : undefined}
             preserveScrollPosition
-            ListHeaderComponent={ListHeaderComponent}
+            ListHeaderComponent={ListHeaderComponentOnChainSummer}
             contentContainerStyle={{
               paddingTop: Platform.select({
                 android: 0,

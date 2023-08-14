@@ -30,6 +30,7 @@ type TrendingItemProps = ViewProps & {
   numColumns: number;
   tw?: string;
   filter?: "all" | "music";
+  type?: "onchainsummer" | "default";
 };
 export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   index,
@@ -39,6 +40,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
   numColumns = 3,
   style,
   filter = "all",
+  type = "default",
   ...rest
 }) {
   const { data: edition, loading } = useCreatorCollectionDetail(
@@ -95,7 +97,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black/50">
               <Text tw="font-bold text-white" style={{ fontSize: 15 }}>
-                {index + 1}
+                {type === "onchainsummer" ? "🟡" : index + 1}
               </Text>
             </View>
           </View>
