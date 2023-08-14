@@ -16,6 +16,7 @@ import {
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
 import { createParam } from "app/navigation/use-param";
+import { delay } from "app/utilities";
 
 import { stripePromise } from "../checkout/stripe";
 
@@ -101,6 +102,7 @@ const CheckoutReturn = memo(function CheckoutReturn({
 
   const initPaidNFT = useCallback(async () => {
     handlePaymentSuccess();
+    await delay(3000);
     await claimNFT({ closeModal });
   }, [claimNFT, closeModal, handlePaymentSuccess]);
 
