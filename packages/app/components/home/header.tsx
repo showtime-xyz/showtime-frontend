@@ -51,16 +51,6 @@ export const TrendingCarousel = memo(
       filter: "music",
     });
 
-    /*
-    const data = useMemo(() => {
-      if (type === "onchainsummer") {
-        return fisherYatesShuffle(fetchedData ?? []);
-      }
-
-      return fetchedData ?? [];
-    }, [type, fetchedData]);
-    */
-
     const numColumns = isMdWidth ? 3.25 : 2.25;
     const router = useRouter();
     const isShowSeeAll = data.length > (isMdWidth ? 3 : 2);
