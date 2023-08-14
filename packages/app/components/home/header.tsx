@@ -57,11 +57,12 @@ export const TrendingCarousel = memo(
     const { width } = useWindowDimensions();
     const isMdWidth = width >= breakpoints["md"];
 
-    const { data: fetchedData, isLoading } = useTrendingNFTS({
+    const { data, isLoading } = useTrendingNFTS({
       pageSize: 8,
       filter: "music",
     });
 
+    /*
     const data = useMemo(() => {
       if (type === "onchainsummer") {
         return fisherYatesShuffle(fetchedData ?? []);
@@ -69,6 +70,7 @@ export const TrendingCarousel = memo(
 
       return fetchedData ?? [];
     }, [type, fetchedData]);
+    */
 
     const numColumns = isMdWidth ? 3.25 : 2.25;
     const router = useRouter();
