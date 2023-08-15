@@ -38,7 +38,7 @@ export const PayoutSettings = ({
           height={20}
           width={20}
         />
-        <Text tw="font-semibold text-[#6672e4]">Payout settings</Text>
+        <Text tw="font-semibold text-[#6672e4]">Update payout details</Text>
         <LinkOut height={12} width={12} color="#6672e4" />
       </View>
     </Pressable>
