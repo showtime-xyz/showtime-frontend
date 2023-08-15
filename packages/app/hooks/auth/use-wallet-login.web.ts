@@ -2,8 +2,6 @@ import { useMemo, useEffect, useState, useRef } from "react";
 
 import { useWalletClient } from "wagmi";
 
-import { useEffectOnce } from "@showtime-xyz/universal.hooks";
-
 import { useWallet } from "app/hooks/use-wallet";
 import { useAccessToken } from "app/lib/access-token";
 import { Logger } from "app/lib/logger";
