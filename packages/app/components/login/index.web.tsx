@@ -52,8 +52,13 @@ export function Login() {
               Showtime uses this signature to verify you own this address. This
               doesn't cost gas fees.
             </Text>
-            <Button size="regular" tw="mt-8" onPress={() => verifySignature()}>
-              Continue
+            <Button
+              size="regular"
+              tw={`mt-8 ${loading ? "opacity-[0.5]" : ""}`}
+              onPress={() => verifySignature()}
+              disabled={loading}
+            >
+              {loading ? "Please wait..." : "Continue"}
             </Button>
           </View>
         ) : (

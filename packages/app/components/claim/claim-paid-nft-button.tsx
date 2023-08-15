@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { BorderlessButton } from "react-native-gesture-handler";
-import { useSWRConfig } from "swr";
 import * as Tooltip from "universal-tooltip";
 
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
@@ -22,6 +21,7 @@ import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
+import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
 import { getCurrencyPrice } from "app/utilities";
 
@@ -72,6 +72,7 @@ const GoldButton = memo(function GoldButton({
     }
     await loginPromise();
     if (Platform.OS !== "web") {
+      Logger.error("Purchase only for web.");
       return;
     }
     if (Platform.OS === "web") {
@@ -103,6 +104,7 @@ const GoldButton = memo(function GoldButton({
       <PressableHover
         tw={["h-6 w-24 items-center justify-center rounded-full"]}
         onPress={() => onHandlePayment()}
+        style={style}
         {...rest}
       >
         <ButtonGoldLinearGradient />
@@ -114,7 +116,7 @@ const GoldButton = memo(function GoldButton({
   }
   if (type === "feed") {
     return (
-      <PressableHover onPress={onHandlePayment} {...rest}>
+      <PressableHover onPress={onHandlePayment} style={style} {...rest}>
         <View tw={"h-14 w-14 items-center justify-center rounded-full"}>
           <ButtonGoldLinearGradient
             style={{ transform: [{ rotate: "84deg" }] }}
@@ -145,11 +147,11 @@ const GoldButton = memo(function GoldButton({
 
   if (type === "messageInput") {
     return (
-      <Button
-        tw={"bg-black dark:bg-white"}
-        size={"regular"}
-        variant="primary"
+      <PressableHover
+        tw="h-12 rounded-full bg-black p-4 dark:bg-white"
         onPress={onHandlePayment}
+        style={style}
+        {...rest}
       >
         <View tw="w-full flex-row items-center justify-center">
           <View>
@@ -173,7 +175,7 @@ const GoldButton = memo(function GoldButton({
             Collect to unlock channel
           </Text>
         </View>
-      </Button>
+      </PressableHover>
     );
   }
 
@@ -181,6 +183,7 @@ const GoldButton = memo(function GoldButton({
     return (
       <View tw="mx-3 my-2 h-[120px] items-center justify-center overflow-hidden rounded-2xl bg-slate-400">
         <PlatformPressable
+          //@ts-ignore
           onPress={onHandlePayment}
           activeOpacity={0.7}
           foreground
@@ -191,6 +194,7 @@ const GoldButton = memo(function GoldButton({
             alignItems: "center",
             justifyContent: "center",
           }}
+          {...rest}
         >
           <LinearGradient
             style={{

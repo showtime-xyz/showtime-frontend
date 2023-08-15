@@ -165,6 +165,7 @@ export default async function handler(req: NextRequest) {
                 width: "100%",
                 height: "100%",
                 display: "flex",
+                objectFit: "cover",
               }}
             />
             {getGatingTypeLabel(gatingType) ? (

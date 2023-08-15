@@ -1,20 +1,24 @@
+import { ViewProps } from "react-native";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Pressable, PressableProps } from "@showtime-xyz/universal.pressable";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-type SocialButtonProps = PressableProps & {
+export type SocialButtonProps = PressableProps & {
   text?: string | JSX.Element;
   children?: React.ReactNode;
   buttonColor?: string;
   dark?: boolean;
+  textViewStyle?: ViewProps["style"];
 };
 export function FeedSocialButton({
   children,
   text,
   buttonColor,
   dark,
+  textViewStyle,
   ...rest
 }: SocialButtonProps) {
   const isDark = useIsDarkMode();
@@ -36,8 +40,7 @@ export function FeedSocialButton({
         {children}
       </View>
       {Boolean(text) && (
-        <>
-          <View tw="h-2" />
+        <View tw="mt-2" style={textViewStyle}>
           <Text
             tw={[
               "text-center text-xs font-semibold",
@@ -46,7 +49,7 @@ export function FeedSocialButton({
           >
             {text}
           </Text>
-        </>
+        </View>
       )}
     </Pressable>
   );

@@ -6,6 +6,7 @@ import getSymbolFromCurrency from "currency-symbol-map";
 import { formatDistanceToNowStrict } from "date-fns";
 import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
+import { locale } from "expo-localization";
 
 import { ResizeMode as ImageResizeMode } from "@showtime-xyz/universal.image";
 
@@ -1034,12 +1035,27 @@ export const getCurrencySymbol = (currency: string | null | undefined) => {
   }
   return "$";
 };
+
 export const getCurrencyPrice = (
   currency: string | null | undefined,
+  // TODO: Fix price type, ensure safetey of this function (CC @alan, @jorge, @maxime)
   price: number | null | undefined | string
-) => {
-  return `${getCurrencySymbol(currency)}${price ?? 0}`;
+): string => {
+  // Handle null, undefined, or non-numeric strings
+  if (!price || (typeof price === "string" && isNaN(parseFloat(price)))) {
+    return "N/A";
+  }
+
+  const numberValue = typeof price === "string" ? parseFloat(price) : price;
+
+  return new Intl.NumberFormat(locale ?? "en-US", {
+    style: "currency",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+    currency: currency ?? "USD",
+  }).format(numberValue);
 };
+
 export const getCreatorEarnedMoney = (
   currency: string | null | undefined,
   price: number | null | undefined
@@ -1063,3 +1079,7 @@ export function isNumber(str: string) {
   const num = parseFloat(str);
   return !isNaN(num) && isFinite(num);
 }
+
+export let prevRouteRef = {
+  current: null,
+};

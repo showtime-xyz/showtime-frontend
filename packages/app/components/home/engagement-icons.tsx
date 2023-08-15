@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { Platform } from "react-native";
 
 import { View } from "@showtime-xyz/universal.view";
 
@@ -20,9 +21,29 @@ export const FeedEngagementIcons = memo<EngagementIconsProps>(
     return (
       <View tw={["ml-4", tw]}>
         <View tw="z-10">
-          <ClaimButtonIconic nft={nft} tw="mb-4" />
-          <FeedCommentButton nft={nft} tw="mb-4" />
-          <NFTShareDropdown nft={nft} />
+          <ClaimButtonIconic
+            nft={nft}
+            tw="mb-4"
+            textViewStyle={Platform.select({
+              android: { marginLeft: -16 },
+              default: null,
+            })}
+          />
+          <FeedCommentButton
+            nft={nft}
+            tw="mb-4"
+            textViewStyle={Platform.select({
+              android: { marginLeft: -16 },
+              default: null,
+            })}
+          />
+          <NFTShareDropdown
+            nft={nft}
+            textViewStyle={Platform.select({
+              android: { marginLeft: -16 },
+              default: null,
+            })}
+          />
         </View>
       </View>
     );

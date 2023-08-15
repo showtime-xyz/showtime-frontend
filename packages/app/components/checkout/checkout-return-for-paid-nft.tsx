@@ -9,6 +9,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useJoinChannel } from "app/components/creator-channels/hooks/use-join-channel";
 import { ClaimContext } from "app/context/claim-context";
+import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
 import {
@@ -22,6 +23,7 @@ import { stripePromise } from "../checkout/stripe";
 const { useParam } = createParam<{
   contractAddress: string;
   isPaid?: string;
+  paymentIntentId?: string;
 }>();
 
 export const CheckoutReturnForPaidNFT = () => {
@@ -42,11 +44,13 @@ const CheckoutReturn = memo(function CheckoutReturn({
   edition: CreatorEditionResponse;
 }) {
   const joinChannel = useJoinChannel();
+  const [paymentIntentIdParam] = useParam("paymentIntentId");
 
   const { state } = useContext(ClaimContext);
 
   const router = useRouter();
   const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
+  const { paymentStatus, message, confirmPaymentStatus } = useConfirmPayment();
 
   const removeQueryParam = useCallback(() => {
     router.replace({ pathname: router.pathname }, undefined, {
@@ -84,28 +88,40 @@ const CheckoutReturn = memo(function CheckoutReturn({
       window.location.search
     ).get("setAsDefaultPaymentMethod");
 
-    if (!setAsDefaultPaymentMethod) return;
-
     const stripe = await stripePromise();
+
     const clientSecret = new URLSearchParams(window.location.search).get(
       "payment_intent_client_secret"
     );
 
+    let paymentIntentId = paymentIntentIdParam;
     if (stripe && clientSecret) {
       const res = await stripe.retrievePaymentIntent(clientSecret);
       if (typeof res.paymentIntent?.payment_method === "string") {
-        setPaymentByDefault(res.paymentIntent.payment_method);
+        if (setAsDefaultPaymentMethod) {
+          setPaymentByDefault(res.paymentIntent.payment_method);
+        }
+      }
+      if (!paymentIntentId) {
+        paymentIntentId = res.paymentIntent?.id;
       }
     }
-  }, [setPaymentByDefault]);
 
-  const initPaidNFT = useCallback(async () => {
-    handlePaymentSuccess();
+    if (paymentIntentId) {
+      await confirmPaymentStatus(paymentIntentId);
+    }
+
     await claimNFT({ closeModal });
-  }, [claimNFT, closeModal, handlePaymentSuccess]);
+  }, [
+    setPaymentByDefault,
+    claimNFT,
+    confirmPaymentStatus,
+    paymentIntentIdParam,
+    closeModal,
+  ]);
 
   useEffectOnce(() => {
-    initPaidNFT();
+    handlePaymentSuccess();
   });
 
   if (state.status === "error") {
@@ -122,8 +138,47 @@ const CheckoutReturn = memo(function CheckoutReturn({
       </View>
     );
   }
+
   return (
     <View tw="min-h-[200px] flex-1 items-center justify-center">
+      {paymentStatus === "processing" ? (
+        <>
+          <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
+            {message}
+          </Text>
+        </>
+      ) : null}
+
+      {paymentStatus === "failed" ? (
+        <View>
+          <Text tw="text-4xl font-bold text-gray-900 dark:text-gray-50">
+            Payment Failed
+          </Text>
+          <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
+            {message}
+          </Text>
+          <Button
+            onPress={() => {
+              router.pop();
+            }}
+            size="regular"
+          >
+            Try again
+          </Button>
+        </View>
+      ) : null}
+
+      {paymentStatus === "notSure" ? (
+        <>
+          <Text tw=" text-4xl font-bold text-gray-900 dark:text-gray-50">
+            Something went wrong
+          </Text>
+          <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
+            {message}
+          </Text>
+        </>
+      ) : null}
+
       <Spinner />
     </View>
   );

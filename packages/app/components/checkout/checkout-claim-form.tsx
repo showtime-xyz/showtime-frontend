@@ -32,7 +32,9 @@ import {
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { getNFTSlug } from "app/hooks/use-share-nft";
 import { Logger } from "app/lib/logger";
+import { Link as NavLink } from "app/navigation/link";
 import { TextLink } from "app/navigation/link";
 import { getCreatorUsernameFromNFT, getCurrencyPrice } from "app/utilities";
 
@@ -204,7 +206,7 @@ const CheckoutFormLayout = ({
         ?.confirmCardPayment(clientSecret, {
           payment_method: savedPaymentMethodId,
         })
-        .then(async () => {
+        .then(async (res) => {
           router.push(
             {
               pathname: router.pathname,
@@ -213,6 +215,7 @@ const CheckoutFormLayout = ({
                 contractAddress:
                   edition?.creator_airdrop_edition.contract_address,
                 checkoutReturnForPaidNFTModal: true,
+                paymentIntentId: res.paymentIntent?.id,
               },
             },
             router.asPath,
@@ -229,26 +232,34 @@ const CheckoutFormLayout = ({
     }
   };
   return (
-    <View tw="" id="payment-form">
+    <View tw="safe-bottom" id="payment-form">
       <View tw="px-4 pb-16 pt-4">
         <View tw="flex-row">
           <View tw="relative overflow-hidden rounded-2xl">
-            <Media
-              isMuted
-              item={nft?.data.item}
-              sizeStyle={{
-                width: 80,
-                height: 80,
-              }}
-            />
+            {nft ? (
+              <NavLink href={getNFTSlug(nft.data.item)}>
+                <Media
+                  isMuted
+                  item={nft.data.item}
+                  sizeStyle={{
+                    width: 80,
+                    height: 80,
+                  }}
+                />
+              </NavLink>
+            ) : null}
           </View>
           <View tw="ml-4 flex-1 justify-center">
-            <Text
-              tw="text-xl font-bold text-black dark:text-white"
-              numberOfLines={2}
-            >
-              {edition?.creator_airdrop_edition.name}
-            </Text>
+            {nft ? (
+              <NavLink href={getNFTSlug(nft.data.item)}>
+                <Text
+                  tw="text-xl font-bold text-black dark:text-white"
+                  numberOfLines={2}
+                >
+                  {edition?.creator_airdrop_edition.name}
+                </Text>
+              </NavLink>
+            ) : null}
             <View tw="h-2" />
             <Text tw="text-gray-700 dark:text-gray-400">
               {getCreatorUsernameFromNFT(nft?.data.item)}
@@ -291,7 +302,7 @@ const CheckoutFormLayout = ({
                       <Text tw="ml-1 text-sm font-medium text-gray-400">
                         {`(Ending in ${method.details.last4} · ${
                           method.details.exp_month
-                        }/${method.details.exp_year.toString().slice(-2)})`}
+                        }/${method.details.exp_year?.toString().slice(-2)})`}
                       </Text>
                     </View>
                   </PressableHover>
