@@ -1,6 +1,7 @@
 import { memo, forwardRef, useCallback } from "react";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
+import { RemoveScrollBar } from "react-remove-scroll-bar";
 
 import type { ModalBackdropProps } from "./types";
 
@@ -23,12 +24,15 @@ const ModalBackdropComponent = forwardRef<any, ModalBackdropProps>(
       return onCloseMethod();
     });
     return (
-      <div
-        ref={ref}
-        className={BACKDROP_TW.join(" ")}
-        onClick={onCloseMethod}
-        onTouchEnd={onCloseMethod}
-      />
+      <>
+        <RemoveScrollBar />
+        <div
+          ref={ref}
+          className={BACKDROP_TW.join(" ")}
+          onClick={onCloseMethod}
+          onTouchEnd={onClose}
+        />
+      </>
     );
   }
 );
