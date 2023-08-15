@@ -56,6 +56,22 @@ export const CheckoutPaidNFT = () => {
               );
               setErrorMsg(err?.response?.data?.error.message);
             });
+        } else if (error?.response?.data?.error?.code === 409) {
+          // Begin claiming if user has already paid
+          router.push(
+            {
+              pathname: router.pathname,
+              query: {
+                ...router.query,
+                contractAddress,
+                checkoutReturnForPaidNFTModal: true,
+              },
+            },
+            router.asPath,
+            {
+              shallow: true,
+            }
+          );
         } else {
           Alert.alert(
             "Oops, An error occurred.",
@@ -68,7 +84,7 @@ export const CheckoutPaidNFT = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [editionId]);
+  }, [editionId, router, contractAddress]);
   useEffect(() => {
     getClaimPaymentsIntent();
   }, [getClaimPaymentsIntent]);
