@@ -1,3 +1,5 @@
+import { ViewProps } from "react-native";
+
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Copy, Twitter, Sendv2, Corner } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -23,9 +25,16 @@ type Props = {
   tw?: string;
   children?: JSX.Element;
   dark?: boolean;
+  textViewStyle?: ViewProps["style"];
 };
 
-export function NFTShareDropdown({ nft, children, dark, tw = "" }: Props) {
+export function NFTShareDropdown({
+  nft,
+  children,
+  dark,
+  tw = "",
+  ...rest
+}: Props) {
   const isDark = useIsDarkMode();
   const { copyNFTLink } = useShareNFT();
 
@@ -37,7 +46,7 @@ export function NFTShareDropdown({ nft, children, dark, tw = "" }: Props) {
         {children ? (
           children
         ) : (
-          <FeedSocialButton text="Share" dark={dark} tw={tw}>
+          <FeedSocialButton text="Share" dark={dark} tw={tw} {...rest}>
             <View tw="h-0.5" />
             <Sendv2
               color={

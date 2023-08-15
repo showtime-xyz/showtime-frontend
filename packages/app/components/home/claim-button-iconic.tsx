@@ -7,7 +7,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
 import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-status";
@@ -25,7 +25,15 @@ import { toast } from "design-system/toast";
 import { ClaimType } from "../claim/claim-form";
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 
-export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
+export function ClaimButtonIconic({
+  nft,
+  textViewStyle,
+  ...rest
+}: {
+  nft: NFT;
+  tw?: string;
+  textViewStyle?: ViewProps["style"];
+}) {
   const { data: myInfoData } = useMyInfo();
   const router = useRouter();
   const redirectToClaimDrop = useRedirectToClaimDrop();
@@ -221,33 +229,45 @@ export function ClaimButtonIconic({ nft, ...rest }: { nft: NFT; tw?: string }) {
   if (isPaidGated) {
     return (
       <View {...rest}>
-        <ClaimPaidNFTButton edition={edition} type="feed" side="left" />
-        <View tw="h-2" />
-        <Text
-          tw={[
-            "text-center text-xs font-semibold text-gray-900 dark:text-white",
-          ]}
-        >
+        <ClaimPaidNFTButton
+          edition={edition}
+          style={Platform.select({
+            android: {
+              paddingRight: 16,
+              paddingTop: 6,
+            },
+            default: undefined,
+          })}
+          type="feed"
+          side="left"
+        />
+        <View tw="mt-2" style={textViewStyle}>
           <Text
             tw={[
-              "text-center text-xs font-semibold",
-              edition.creator_airdrop_edition.edition_size -
-                edition.total_claimed_count <=
-                10 &&
-              edition.creator_airdrop_edition.edition_size -
-                edition.total_claimed_count >
-                0
-                ? "text-orange-500"
-                : "text-gray-900 dark:text-white",
+              "text-center text-xs font-semibold text-gray-900 dark:text-white",
             ]}
-            onPress={viewCollecters}
           >
-            {formatClaimNumber(edition.total_claimed_count)}
-            {edition.creator_airdrop_edition.edition_size > 0
-              ? `/${edition.creator_airdrop_edition.edition_size}`
-              : ""}
+            <Text
+              tw={[
+                "text-center text-xs font-semibold",
+                edition.creator_airdrop_edition.edition_size -
+                  edition.total_claimed_count <=
+                  10 &&
+                edition.creator_airdrop_edition.edition_size -
+                  edition.total_claimed_count >
+                  0
+                  ? "text-orange-500"
+                  : "text-gray-900 dark:text-white",
+              ]}
+              onPress={viewCollecters}
+            >
+              {formatClaimNumber(edition.total_claimed_count)}
+              {edition.creator_airdrop_edition.edition_size > 0
+                ? `/${edition.creator_airdrop_edition.edition_size}`
+                : ""}
+            </Text>
           </Text>
-        </Text>
+        </View>
       </View>
     );
   }
