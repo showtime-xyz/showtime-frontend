@@ -362,7 +362,8 @@ const CheckoutFormLayout = ({
               Terms & Conditions
             </TextLink>{" "}
             and understand that you are purchasing a non-refundable digital
-            item.
+            item. Final currency depends on creator bank. USD price may be
+            estimated with latest rates. Currency fees may apply.
           </Text>
         </View>
 
@@ -388,8 +389,8 @@ const CheckoutFormLayout = ({
             </Text>
           ) : (
             `Collect to unlock - ${getCurrencyPrice(
-              edition.currency,
-              edition.price
+              edition.usd_price ? "USD" : edition.currency,
+              edition.usd_price ?? edition.price
             )}`
           )}
         </Button>
