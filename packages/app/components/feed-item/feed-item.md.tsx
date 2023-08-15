@@ -215,6 +215,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                 <CollectToUnlockContentTooltip
                   creatorUsername={nft?.creator_username}
                   price={edition?.price}
+                  usd_price={edition?.usd_price}
                   currency={edition?.currency}
                 />
               </View>

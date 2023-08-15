@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, useRef } from "react";
 
 import { useWalletClient } from "wagmi";
 
@@ -26,6 +26,7 @@ export function useWalletLogin() {
   const { login: _login, logout, setAuthenticationStatus } = useAuth();
   const [showSignMessage, setShowSignMessage] = useState(false);
   const walletConnector = useWallet();
+  const cachedNonce = useRef<string | null>();
 
   const wagmiSigner = useWalletClient();
 
@@ -37,15 +38,19 @@ export function useWalletLogin() {
   const loginWithWallet = async () => {
     let address, walletName;
 
-    if (walletConnector.connected) {
-      // We disconnect so it shows the Wallet selector Rainbow modal
-      await walletConnector.disconnect();
+    dispatch("CONNECT_TO_WALLET_REQUEST");
+
+    if (!walletConnector.address) {
+      const res = await walletConnector.connect();
+      if (res?.address) {
+        address = res.address;
+      }
+      if (res?.walletName) walletName = res.walletName;
+    } else {
+      address = walletConnector.address;
+      walletName = walletConnector.name;
     }
 
-    dispatch("CONNECT_TO_WALLET_REQUEST");
-    const res = await walletConnector.connect();
-    if (res?.address) address = res.address;
-    if (res?.walletName) walletName = res.walletName;
     try {
       if (address) {
         dispatch("CONNECT_TO_WALLET_SUCCESS", {
@@ -55,6 +60,9 @@ export function useWalletLogin() {
 
         // on mobile web we show a prompt to sign a message
         if (isMobileWeb()) {
+          getNonce(address).then((nonce) => {
+            cachedNonce.current = nonce;
+          });
           setShowSignMessage(true);
         } else {
           await verifySignature(address);
@@ -71,8 +79,16 @@ export function useWalletLogin() {
     setAuthenticationStatus("AUTHENTICATING");
     dispatch("FETCH_NONCE_REQUEST");
     const address = addr ?? walletConnector.address;
+
     if (address) {
-      const nonce = await getNonce(address);
+      let nonce;
+      if (cachedNonce.current) {
+        nonce = cachedNonce.current;
+        cachedNonce.current = null;
+      } else {
+        nonce = await getNonce(address);
+      }
+
       dispatch("FETCH_NONCE_SUCCESS", {
         nonce,
       });

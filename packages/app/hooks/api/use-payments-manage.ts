@@ -22,7 +22,7 @@ export type PaymentsMethods = {
     wallet: null;
     country: string;
     funding: string;
-    exp_year: number;
+    exp_year?: number;
     networks: {
       available: Array<string>[];
       preferred: string | null;

@@ -1080,6 +1080,10 @@ export function isNumber(str: string) {
   return !isNaN(num) && isFinite(num);
 }
 
+export let prevRouteRef = {
+  current: null,
+};
+
 // This is one of the fastest shuffling algorithms
 // can be called with fisherYatesShuffle(array)
 export function fisherYatesShuffle<T>(array: T[]): T[] {

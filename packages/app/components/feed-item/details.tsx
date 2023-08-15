@@ -114,6 +114,7 @@ export const NFTDetails = ({
                 <CollectToUnlockContentTooltip
                   creatorUsername={nft?.creator_username}
                   price={edition?.price}
+                  usd_price={edition?.usd_price}
                   currency={edition?.currency}
                   theme="dark"
                 />
