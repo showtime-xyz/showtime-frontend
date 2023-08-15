@@ -97,7 +97,14 @@ export function AuthProvider({
           user_id: res?.data?.profile?.profile_id,
         });
 
-        router.pop();
+        console.log("can go back ", router.canGoBack());
+
+        if (router.canGoBack()) {
+          router.pop();
+        } else {
+          router.replace("/");
+        }
+
         return res;
       }
 

@@ -53,9 +53,6 @@ export function useWalletLogin() {
 
     try {
       if (address) {
-        getNonce(address).then((nonce) => {
-          cachedNonce.current = nonce;
-        });
         dispatch("CONNECT_TO_WALLET_SUCCESS", {
           name: walletName,
           address: address,
@@ -63,6 +60,9 @@ export function useWalletLogin() {
 
         // on mobile web we show a prompt to sign a message
         if (isMobileWeb()) {
+          getNonce(address).then((nonce) => {
+            cachedNonce.current = nonce;
+          });
           setShowSignMessage(true);
         } else {
           await verifySignature(address);
