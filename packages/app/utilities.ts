@@ -1079,3 +1079,7 @@ export function isNumber(str: string) {
   const num = parseFloat(str);
   return !isNaN(num) && isFinite(num);
 }
+
+export let prevRouteRef = {
+  current: null,
+};

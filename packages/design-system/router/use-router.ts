@@ -17,7 +17,7 @@ const getPath = (navigationState: NavigationState) => {
 };
 
 export function useRouter() {
-  const { dispatch, getState } = useNavigation();
+  const { dispatch, getState, canGoBack } = useNavigation();
   const solitoRouter = useSolitoRouter();
 
   return useMemo(() => {
@@ -29,6 +29,7 @@ export function useRouter() {
       pathname: getPath(getState()),
       query: {} as ParsedUrlQuery,
       asPath: getPath(getState()),
+      canGoBack,
     };
-  }, [getState, solitoRouter, dispatch]);
+  }, [getState, solitoRouter, dispatch, canGoBack]);
 }
