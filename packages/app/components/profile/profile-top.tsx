@@ -25,15 +25,13 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { StarDropBadge } from "app/components/badge/star-drop-badge";
 import { useJoinChannel } from "app/components/creator-channels/hooks/use-join-channel";
 import { NotificationsFollowButton } from "app/components/notifications-follow-button";
 import { ProfileDropdown } from "app/components/profile-dropdown";
 import { UserProfile, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
-import {
-  useContentWidth,
-  ContentLayoutOffset,
-} from "app/hooks/use-content-width";
+import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useFollow } from "app/hooks/use-follow";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
@@ -400,6 +398,13 @@ export const ProfileTop = ({
                       <VerificationBadge size={16} />
                     </View>
                   ) : null}
+                  <View tw="ml-1">
+                    <StarDropBadge
+                      size={16}
+                      username={username}
+                      data={profileData?.profile.latest_star_drop_collected}
+                    />
+                  </View>
                   {profileData?.follows_you && !isSelf ? (
                     <Chip label="Follows You" tw="ml-2" />
                   ) : null}

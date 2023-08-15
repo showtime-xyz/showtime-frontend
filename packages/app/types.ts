@@ -110,7 +110,10 @@ export interface WalletAddressesExcludingEmailV2 {
   minting_enabled: boolean;
   nickname?: string;
 }
-
+export type StarDropBadgeType = {
+  contract_address: string;
+  slug: string;
+};
 export interface Link {
   id: number;
   user_input: string;
@@ -162,6 +165,7 @@ export interface Profile {
   has_social_login: boolean;
   social_login_connections: SocialLoginConnections;
   social_login_handles: SocialLoginHandles;
+  latest_star_drop_collected?: StarDropBadgeType;
 }
 
 type FollowType = {
