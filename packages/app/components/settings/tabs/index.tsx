@@ -39,13 +39,14 @@ export const SETTINGS_ROUTES = [
     key: "Billing",
     hidden: Platform.OS !== "web",
   },
-  {
-    title: "Advanced",
-    key: "Advanced",
-  },
+
   {
     title: "Bank Payouts",
     key: "Payouts",
+  },
+  {
+    title: "Advanced",
+    key: "Advanced",
   },
 ]
   .filter((item) => !item.hidden)

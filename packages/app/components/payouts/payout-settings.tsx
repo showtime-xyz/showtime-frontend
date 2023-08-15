@@ -19,6 +19,7 @@ export const PayoutSettings = ({
 
   return (
     <Pressable
+      tw="w-full items-center rounded-full p-4 px-6 text-center"
       onPress={async () => {
         const value = await stripeAccountLink.trigger({
           refresh_url: refreshUrl,
@@ -37,8 +38,8 @@ export const PayoutSettings = ({
           height={20}
           width={20}
         />
-        <Text tw="font-semibold text-[#6672e4]">View payout settings</Text>
-        <LinkOut height={16} width={16} color="#6672e4" />
+        <Text tw="font-semibold text-[#6672e4]">Payout settings</Text>
+        <LinkOut height={12} width={12} color="#6672e4" />
       </View>
     </Pressable>
   );
