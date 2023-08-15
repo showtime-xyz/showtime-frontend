@@ -66,7 +66,7 @@ Sentry.init({
   environment: process.env.STAGE,
 });
 
-console.log("hello from dev");
+console.log("hello from dev 2");
 
 function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;
