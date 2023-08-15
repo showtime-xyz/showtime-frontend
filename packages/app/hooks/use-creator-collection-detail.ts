@@ -41,6 +41,7 @@ export type CreatorEditionResponse = {
   is_editable?: boolean;
   is_onchain?: boolean;
   price?: number;
+  usd_price?: number;
   currency?: string;
 };
 

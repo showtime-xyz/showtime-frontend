@@ -5,7 +5,7 @@ import { Image } from "@showtime-xyz/universal.image";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { getCurrencyPrice, getCreatorEarnedMoney } from "app/utilities";
+import { getCreatorEarnedMoney } from "app/utilities";
 
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { ContentTooltip } from "./content-tooltip";
@@ -13,6 +13,7 @@ import { ContentTooltip } from "./content-tooltip";
 type ContentTypeTooltipProps = {
   creatorUsername?: string;
   price?: number;
+  usd_price?: number;
   theme?: "dark" | "light";
   currency?: string;
 };
@@ -20,6 +21,7 @@ type ContentTypeTooltipProps = {
 export const CollectToUnlockContentTooltip = ({
   creatorUsername,
   price,
+  usd_price,
   currency,
 }: ContentTypeTooltipProps) => {
   return (
@@ -68,7 +70,12 @@ export const CollectToUnlockContentTooltip = ({
                 {creatorUsername ? `@${creatorUsername}` : "Creator"}
               </Text>
               {` will make about ${
-                price ? `${getCreatorEarnedMoney(currency, price)}` : "money"
+                price
+                  ? `${getCreatorEarnedMoney(
+                      usd_price ? "USD" : currency,
+                      usd_price ?? price
+                    )}`
+                  : "money"
               }`}
             </Text>
           </View>
