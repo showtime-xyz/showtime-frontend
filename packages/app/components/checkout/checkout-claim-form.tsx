@@ -229,7 +229,7 @@ const CheckoutFormLayout = ({
     }
   };
   return (
-    <View tw="" id="payment-form">
+    <View tw="safe-bottom" id="payment-form">
       <View tw="px-4 pb-16 pt-4">
         <View tw="flex-row">
           <View tw="relative overflow-hidden rounded-2xl">
