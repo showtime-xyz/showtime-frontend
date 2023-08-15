@@ -54,7 +54,10 @@ const GoldButton = memo(function GoldButton({
   ...rest
 }: GoldButtonProps) {
   const router = useRouter();
-  const price = getCurrencyPrice(edition?.currency, edition?.price);
+  const price = getCurrencyPrice(
+    edition?.usd_price ? "USD" : edition?.currency,
+    edition?.usd_price ?? edition?.price
+  );
   const editionId = edition?.creator_airdrop_edition.id;
   const contractAddress = edition?.creator_airdrop_edition.contract_address;
   const iconSize = size === "small" ? 20 : 24;
