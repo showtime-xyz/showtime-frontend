@@ -291,7 +291,7 @@ const CheckoutFormLayout = ({
                       <Text tw="ml-1 text-sm font-medium text-gray-400">
                         {`(Ending in ${method.details.last4} · ${
                           method.details.exp_month
-                        }/${method.details.exp_year.toString().slice(-2)})`}
+                        }/${method.details.exp_year?.toString().slice(-2)})`}
                       </Text>
                     </View>
                   </PressableHover>
