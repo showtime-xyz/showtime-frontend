@@ -61,7 +61,7 @@ export const CheckoutPaidNFT = () => {
             "Oops, An error occurred.",
             error?.response?.data?.error?.message
           );
-          setErrorMsg(error?.response?.data?.error.message);
+          setErrorMsg(error?.response?.data?.error?.message);
         }
         setIsLoading(false);
       })
