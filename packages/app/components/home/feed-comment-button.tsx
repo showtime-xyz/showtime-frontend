@@ -9,13 +9,13 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
 
-import { FeedSocialButton } from "../feed-social-button";
+import { FeedSocialButton, SocialButtonProps } from "../feed-social-button";
 
-interface CommentButtonProps {
+type CommentButtonProps = Pick<SocialButtonProps, "textViewStyle"> & {
   nft?: NFT;
   tw?: string;
   dark?: boolean;
-}
+};
 
 export function FeedCommentButton({ nft, dark, ...rest }: CommentButtonProps) {
   const router = useRouter();

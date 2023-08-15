@@ -56,6 +56,7 @@ import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { prevRouteRef } from "app/utilities";
 
 import { Toaster } from "design-system/toast";
 import TrackPlayer from "design-system/track-player";
@@ -81,6 +82,16 @@ function App({ Component, pageProps, router }: AppProps) {
       initialiseAppleMusic();
     }
   }, [scriptLoadedRes]);
+
+  useEffect(() => {
+    function setPrevRoute() {
+      prevRouteRef.current = router.asPath;
+    }
+    router.events?.on("routeChangeStart", setPrevRoute);
+    return () => {
+      router.events?.off("routeChangeStart", setPrevRoute);
+    };
+  }, [router]);
 
   const metaTags = meta ? (
     <>

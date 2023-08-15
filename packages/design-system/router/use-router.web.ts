@@ -4,6 +4,8 @@ import { useRouter as useNextRouter } from "next/router";
 import type { NextRouter } from "next/router";
 import { useRouter as useSolitoRouter } from "solito/router";
 
+import { prevRouteRef } from "app/utilities";
+
 interface TransitionOptions {
   shallow?: boolean;
   locale?: string | false;
@@ -50,6 +52,7 @@ export function useRouter() {
       pathname: nextRouter.pathname,
       query: nextRouter.query,
       asPath: nextRouter.asPath,
+      canGoBack: () => prevRouteRef.current !== null,
     };
   }, [nextRouter, solitoRouter]);
 }

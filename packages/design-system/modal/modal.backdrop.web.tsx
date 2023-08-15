@@ -2,6 +2,8 @@ import { memo, forwardRef, useCallback } from "react";
 
 import { useEscapeKeydown } from "@radix-ui/react-use-escape-keydown";
 
+import { useLockHtmlScroll } from "@showtime-xyz/universal.hooks";
+
 import type { ModalBackdropProps } from "./types";
 
 const BACKDROP_TW = [
@@ -22,12 +24,13 @@ const ModalBackdropComponent = forwardRef<any, ModalBackdropProps>(
       event.preventDefault();
       return onCloseMethod();
     });
+    useLockHtmlScroll();
     return (
       <div
         ref={ref}
         className={BACKDROP_TW.join(" ")}
         onClick={onCloseMethod}
-        onTouchEnd={onCloseMethod}
+        onTouchEnd={onClose}
       />
     );
   }
