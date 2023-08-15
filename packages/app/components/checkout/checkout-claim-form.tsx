@@ -206,7 +206,7 @@ const CheckoutFormLayout = ({
         ?.confirmCardPayment(clientSecret, {
           payment_method: savedPaymentMethodId,
         })
-        .then(async () => {
+        .then(async (res) => {
           router.push(
             {
               pathname: router.pathname,
@@ -215,6 +215,7 @@ const CheckoutFormLayout = ({
                 contractAddress:
                   edition?.creator_airdrop_edition.contract_address,
                 checkoutReturnForPaidNFTModal: true,
+                paymentIntentId: res.paymentIntent?.id,
               },
             },
             router.asPath,

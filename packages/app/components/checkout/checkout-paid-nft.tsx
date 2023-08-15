@@ -1,7 +1,8 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useRef } from "react";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
+import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
@@ -79,15 +80,15 @@ export const CheckoutPaidNFT = () => {
           );
           setErrorMsg(error?.response?.data?.error?.message);
         }
-        setIsLoading(false);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, [editionId, router, contractAddress]);
-  useEffect(() => {
+
+  useEffectOnce(() => {
     getClaimPaymentsIntent();
-  }, [getClaimPaymentsIntent]);
+  });
 
   if (isLoading) {
     return (
