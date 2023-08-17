@@ -28,7 +28,6 @@ import {
   Clock,
   Close,
 } from "@showtime-xyz/universal.icon";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -72,7 +71,6 @@ type CreateDropStep =
 
 export const DropStar = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
-  const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
   const {
     control,
@@ -164,7 +162,7 @@ export const DropStar = () => {
   if (onboardinStatus.status === "loading") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => router?.pop()}
         closeIcon
         title="Complete payout info"
       >
@@ -178,7 +176,7 @@ export const DropStar = () => {
   if (onboardinStatus.status === "processing") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => router?.pop()}
         closeIcon
         title="Come back later"
       >
@@ -200,7 +198,7 @@ export const DropStar = () => {
           <Button
             tw="w-full"
             onPress={() => {
-              modalContext?.pop();
+              router.pop();
             }}
           >
             Okay
@@ -246,7 +244,7 @@ export const DropStar = () => {
         key={step}
       >
         <Layout
-          onBackPress={() => modalContext?.pop()}
+          onBackPress={() => router?.pop()}
           closeIcon
           title="Congrats! Now share it ✦"
           headerShown={false}

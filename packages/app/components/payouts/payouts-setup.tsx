@@ -9,7 +9,6 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Clock, Close } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -30,7 +29,6 @@ export const payoutsRedirectOrigin = `${
 }`;
 
 export const PayoutsSetup = () => {
-  const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
 
   const router = useRouter();
@@ -39,7 +37,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "loading") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => router?.pop()}
         closeIcon
         title="Complete payout info"
       >
@@ -53,7 +51,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "onboarded") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => router?.pop()}
         closeIcon
         title="You're approved"
       >
@@ -78,7 +76,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "processing") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => router?.pop()}
         closeIcon
         title="Come back later"
       >
