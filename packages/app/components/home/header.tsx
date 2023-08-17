@@ -17,9 +17,7 @@ import { breakpoints } from "design-system/theme";
 
 import { Banner, useBanners } from "./hooks/use-banners";
 import { OnChainSummerCarousel } from "./onchainsummer-carousel";
-import { TrendingCarousel } from "./trending-carousel";
 
-// This is a temp copy for on-chain summer and can be removed after the campaign
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
@@ -101,7 +99,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      {/* After Onchain summer, just <TrendingCarousel />  */}
+      {/* TODO: After Onchain summer, change against <TrendingCarousel />  */}
       <OnChainSummerCarousel />
     </View>
   );
