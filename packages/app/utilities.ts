@@ -903,7 +903,10 @@ export const generateFakeData = (
   }));
 };
 
-export function formatDateRelativeWithIntl(isoDateString: string): string {
+export function formatDateRelativeWithIntl(
+  isoDateString: string,
+  isDisplayCompleteUnit = false
+): string {
   const date = new Date(isoDateString);
   const now = new Date();
   const diffInSeconds = (now.getTime() - date.getTime()) / 1000;
@@ -921,20 +924,25 @@ export function formatDateRelativeWithIntl(isoDateString: string): string {
     });
     return timeFormatter.format(date);
   } else if (diffInDays >= 1 && diffInDays < 7) {
-    return `${diffInDays}d`;
+    return `${diffInDays}${isDisplayCompleteUnit ? " days ago" : "d"}`;
   } else {
     const diffInWeeks = Math.floor(diffInDays / 7);
     const diffInMonths = Math.floor(diffInDays / 30.44);
     const diffInYears = Math.floor(diffInDays / 365.25);
-
-    if (diffInWeeks < 4) {
-      return `${diffInWeeks}w`;
+    if (diffInWeeks === 1) {
+      return `${diffInWeeks}${isDisplayCompleteUnit ? " week ago" : "w"}`;
+    } else if (diffInWeeks < 4) {
+      return `${diffInWeeks}${isDisplayCompleteUnit ? " weeks ago" : "w"}`;
     } else if (diffInMonths < 1) {
-      return `${diffInWeeks}w`;
+      return `${diffInWeeks}${isDisplayCompleteUnit ? " weeks ago" : "w"}`;
+    } else if (diffInMonths === 1) {
+      return `${diffInMonths}${isDisplayCompleteUnit ? " month ago" : "w"}`;
     } else if (diffInMonths < 12) {
-      return `${diffInMonths}m`;
+      return `${diffInMonths}${isDisplayCompleteUnit ? " months ago" : "w"}`;
+    } else if (diffInYears === 1) {
+      return `${diffInYears}${isDisplayCompleteUnit ? " year ago" : "w"}`;
     } else {
-      return `${diffInYears}y`;
+      return `${diffInYears}${isDisplayCompleteUnit ? " years ago" : "w"}`;
     }
   }
 }
