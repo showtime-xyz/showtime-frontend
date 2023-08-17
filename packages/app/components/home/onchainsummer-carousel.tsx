@@ -36,7 +36,7 @@ export const OnChainSummerCarousel = memo(() => {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
 
-  const { data, isLoading } = useOnchainSummerHardcodedNFTs();
+  const { data = [], isLoading } = useOnchainSummerHardcodedNFTs();
 
   const numColumns = isMdWidth ? 3.25 : 2.25;
 
@@ -57,8 +57,6 @@ export const OnChainSummerCarousel = memo(() => {
     ),
     [pagerWidth, numColumns]
   );
-
-  if (!data) return null;
 
   return (
     <View tw="w-full">

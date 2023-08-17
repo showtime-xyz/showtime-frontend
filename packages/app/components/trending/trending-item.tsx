@@ -76,9 +76,14 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
     <View tw={["h-full w-full", tw]} style={viewStyle} {...rest}>
       <RouteComponent
         as={getNFTSlug(nft)}
-        href={`${getNFTSlug(nft)}?initialScrollItemId=${
-          nft.nft_id
-        }&filter=${filter}&type=trendingNFTs`}
+        // TODO: remove after onchainsummer
+        href={
+          type === "onchainsummer"
+            ? getNFTSlug(nft)
+            : `${getNFTSlug(nft)}?initialScrollItemId=${
+                nft.nft_id
+              }&filter=${filter}&type=trendingNFTs`
+        }
       >
         <View
           tw="overflow-hidden rounded-2xl"
