@@ -71,6 +71,7 @@ export const useShareImage = (viewRef: any) => {
   );
 
   const shareImageToIG = useCallback(async () => {
+    if (Platform.OS === "web") return;
     const url = await getViewShot();
 
     if (!url) {
@@ -125,6 +126,7 @@ export const useShareImage = (viewRef: any) => {
   }, [checkPhotosPermission, getViewShot, viewRef]);
 
   const shareOpenMore = useCallback(async () => {
+    if (Platform.OS === "web") return;
     const url = await getViewShot();
     try {
       const ShareResponse = await Share.open({
