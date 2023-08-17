@@ -26,7 +26,7 @@ import { breakpoints } from "design-system/theme";
 import { HomeSlider } from "./home-slider";
 
 export const useOnchainSummerHardcodedNFTs = () => {
-  return useSWR<NFT[]>(`/v1/onchain-summer`, fetcher);
+  return useSWR<NFT[]>(`/v3/trending/onchain-summer`, fetcher);
 };
 
 // Trending Slider as a Carousel
