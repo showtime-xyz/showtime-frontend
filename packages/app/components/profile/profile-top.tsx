@@ -401,7 +401,6 @@ export const ProfileTop = ({
                   <View tw="ml-1">
                     <StarDropBadge
                       size={16}
-                      username={username}
                       data={profileData?.profile.latest_star_drop_collected}
                     />
                   </View>

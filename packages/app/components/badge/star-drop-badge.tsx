@@ -4,10 +4,7 @@ import { Image, ImageProps } from "@showtime-xyz/universal.image";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { getNFTSlug } from "app/hooks/use-share-nft";
 import { StarDropBadgeType } from "app/types";
-
-import { toast } from "design-system/toast";
 
 type StarDropBadgeProps = Omit<
   ImageProps,
@@ -15,12 +12,10 @@ type StarDropBadgeProps = Omit<
 > & {
   size?: number;
   data?: StarDropBadgeType;
-  username?: string;
 };
 export const StarDropBadge = ({
   size = 18,
   data,
-  username,
   ...rest
 }: StarDropBadgeProps) => {
   const router = useRouter();
@@ -30,10 +25,8 @@ export const StarDropBadge = ({
   return (
     <PressableHover
       onPress={() => {
-        if (data?.slug && username) {
-          router.push(`/@${username}/${data.slug}`);
-        } else {
-          toast("This user doesn't have a star drop yet.");
+        if (data?.slug && data?.creator_username) {
+          router.push(`/@${data?.creator_username}/${data.slug}`);
         }
       }}
     >
