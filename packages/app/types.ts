@@ -162,6 +162,10 @@ export interface Profile {
   has_social_login: boolean;
   social_login_connections: SocialLoginConnections;
   social_login_handles: SocialLoginHandles;
+  latest_star_drop_collected: null | {
+    slug: string;
+    contract_address: string;
+  };
 }
 
 type FollowType = {

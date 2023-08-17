@@ -756,7 +756,9 @@ export const isProfileIncomplete = (profile?: Profile) => {
   // the value is false if user has logged in with email or phone number
   return profile
     ? !profile.username ||
-        (!profile.has_social_login && !profile.captcha_completed_at)
+        (!profile.has_social_login &&
+          !profile.captcha_completed_at &&
+          !profile.latest_star_drop_collected)
     : undefined;
 };
 
