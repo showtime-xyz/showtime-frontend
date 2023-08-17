@@ -17,9 +17,10 @@ import { NFT } from "app/types";
 import { breakpoints } from "design-system/theme";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { ListHeaderComponent, TrendingCarousel } from "./header";
+import { ListHeaderComponent } from "./header";
 import { HomeItem, HomeItemSketelon } from "./home-item";
 import { PopularCreators } from "./popular-creators";
+import { TrendingCarousel } from "./trending-carousel";
 
 export const Home = () => {
   const bottomBarHeight = usePlatformBottomHeight();
