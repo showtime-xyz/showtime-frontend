@@ -179,7 +179,7 @@ export const ClaimButton = ({
       <Button {...buttonProps} onPress={handleRaffleResultPress}>
         <>
           <Text tw={["font-semibold text-white", LABEL_SIZE_TW[size]]}>
-            {isPaidGated ? "Announce" : "Announce your raffle"}
+            {isPaidGated ? "Announce winner" : "Announce your raffle"}
           </Text>
         </>
       </Button>
