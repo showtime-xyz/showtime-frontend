@@ -938,7 +938,7 @@ export function formatDateRelativeWithIntl(
     } else if (diffInMonths === 1) {
       return `${diffInMonths}${isDisplayCompleteUnit ? " month ago" : "w"}`;
     } else if (diffInMonths < 12) {
-      return `${diffInMonths}${isDisplayCompleteUnit ? " month ago" : "w"}`;
+      return `${diffInMonths}${isDisplayCompleteUnit ? " months ago" : "w"}`;
     } else if (diffInYears === 1) {
       return `${diffInYears}${isDisplayCompleteUnit ? " year ago" : "w"}`;
     } else {
