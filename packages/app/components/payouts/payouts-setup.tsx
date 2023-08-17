@@ -9,6 +9,7 @@ import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowLeft, Clock, Close } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -31,13 +32,17 @@ export const payoutsRedirectOrigin = `${
 export const PayoutsSetup = () => {
   const onboardinStatus = useOnboardingStatus();
 
+  const bottomSheetContext = useModalScreenContext();
   const router = useRouter();
   const isDark = useIsDarkMode();
+
+  const closeModal =
+    Platform.OS === "android" ? bottomSheetContext?.pop : router.pop;
 
   if (onboardinStatus.status === "loading") {
     return (
       <Layout
-        onBackPress={() => router?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Complete payout info"
       >
@@ -51,7 +56,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "onboarded") {
     return (
       <Layout
-        onBackPress={() => router?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="You're approved"
       >
@@ -76,7 +81,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "processing") {
     return (
       <Layout
-        onBackPress={() => router?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Come back later"
       >
@@ -98,7 +103,7 @@ export const PayoutsSetup = () => {
           <Button
             tw="w-full"
             onPress={() => {
-              modalContext?.pop();
+              closeModal?.();
             }}
           >
             Okay
@@ -111,7 +116,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "not_onboarded") {
     return (
       <Layout
-        onBackPress={() => router.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Payment processing details"
       >

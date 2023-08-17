@@ -28,6 +28,7 @@ import {
   Clock,
   Close,
 } from "@showtime-xyz/universal.icon";
+import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -93,7 +94,10 @@ export const DropStar = () => {
 
   const file = getValues("file");
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
+  const bottomSheetContext = useModalScreenContext();
   const router = useRouter();
+  const closeModal =
+    Platform.OS === "android" ? bottomSheetContext?.pop : router.pop;
 
   const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
     watch,
@@ -162,7 +166,7 @@ export const DropStar = () => {
   if (onboardinStatus.status === "loading") {
     return (
       <Layout
-        onBackPress={() => router?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Complete payout info"
       >
@@ -176,7 +180,7 @@ export const DropStar = () => {
   if (onboardinStatus.status === "processing") {
     return (
       <Layout
-        onBackPress={() => router?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Come back later"
       >
@@ -198,7 +202,7 @@ export const DropStar = () => {
           <Button
             tw="w-full"
             onPress={() => {
-              router.pop();
+              closeModal?.();
             }}
           >
             Okay
@@ -211,7 +215,7 @@ export const DropStar = () => {
   if (onboardinStatus.status === "not_onboarded") {
     return (
       <Layout
-        onBackPress={() => router.pop()}
+        onBackPress={() => closeModal?.pop()}
         closeIcon
         title="Payment processing details"
       >
@@ -244,7 +248,7 @@ export const DropStar = () => {
         key={step}
       >
         <Layout
-          onBackPress={() => router?.pop()}
+          onBackPress={() => closeModal?.pop()}
           closeIcon
           title="Congrats! Now share it ✦"
           headerShown={false}
