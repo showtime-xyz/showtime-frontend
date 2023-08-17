@@ -33,6 +33,7 @@ import { Link } from "app/navigation/link";
 import {
   cleanUserTextInput,
   formatDateRelativeWithIntl,
+  isMobileWeb,
   limitLineBreaks,
   removeTags,
 } from "app/utilities";
@@ -176,7 +177,10 @@ export const MessageItem = memo(
 
               <View tw="flex-row items-center">
                 <Text tw={["text-xs text-gray-700 dark:text-gray-200"]}>
-                  {formatDateRelativeWithIntl(channel_message.created_at)}
+                  {formatDateRelativeWithIntl(
+                    channel_message.created_at,
+                    !isMobileWeb()
+                  )}
                 </Text>
                 {isStarDrop ? (
                   <View tw="ml-2">

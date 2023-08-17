@@ -10,6 +10,4 @@ export const PayoutsSetupScreen = withModalScreen(PayoutsSetup, {
   disableBackdropPress: true,
   snapPoints: ["100%"],
   headerShown: false,
-  enableContentPanningGesture: false,
-  enableHandlePanningGesture: false,
 });
