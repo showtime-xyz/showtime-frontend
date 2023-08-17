@@ -30,16 +30,19 @@ export const payoutsRedirectOrigin = `${
 }`;
 
 export const PayoutsSetup = () => {
-  const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
 
+  const bottomSheetContext = useModalScreenContext();
   const router = useRouter();
   const isDark = useIsDarkMode();
+
+  const closeModal =
+    Platform.OS === "android" ? bottomSheetContext?.pop : router.pop;
 
   if (onboardinStatus.status === "loading") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Complete payout info"
       >
@@ -53,7 +56,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "onboarded") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="You're approved"
       >
@@ -78,7 +81,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "processing") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Come back later"
       >
@@ -100,7 +103,7 @@ export const PayoutsSetup = () => {
           <Button
             tw="w-full"
             onPress={() => {
-              modalContext?.pop();
+              closeModal?.();
             }}
           >
             Okay
@@ -113,7 +116,7 @@ export const PayoutsSetup = () => {
   if (onboardinStatus.status === "not_onboarded") {
     return (
       <Layout
-        onBackPress={() => router.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Payment processing details"
       >
