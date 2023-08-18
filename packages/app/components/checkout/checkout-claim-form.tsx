@@ -122,7 +122,7 @@ const CheckoutFormLayout = ({
     [paymentMethods.data]
   );
   const paymentMethodsList = useMemo(
-    () => uniq(paymentMethods.data),
+    () => uniq(paymentMethods.data?.filter((f) => f.type == "card")),
     [paymentMethods.data]
   );
   const [savedPaymentMethodId, setSavedPaymentMethodId] = useState(
