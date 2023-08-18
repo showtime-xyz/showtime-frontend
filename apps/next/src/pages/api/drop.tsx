@@ -267,7 +267,7 @@ export default async function handler(req: NextRequest) {
                 "-webkit-box-orient": "vertical",
               }}
             >
-              {desc}
+              {JSON.stringify(desc)}
             </div>
 
             <div
