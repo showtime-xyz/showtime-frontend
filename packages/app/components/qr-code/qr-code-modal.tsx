@@ -1,7 +1,21 @@
-import { useRef, useMemo, useCallback, useEffect, Suspense } from "react";
-import { Dimensions, Linking, Platform, View as RNView } from "react-native";
+import {
+  useRef,
+  useMemo,
+  useCallback,
+  useEffect,
+  Suspense,
+  useState,
+} from "react";
+import {
+  Dimensions,
+  Linking,
+  Platform,
+  View as RNView,
+  StyleSheet,
+} from "react-native";
 
 import * as Clipboard from "expo-clipboard";
+import Reanimated, { Layout, FadeIn, FadeOut } from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
@@ -46,8 +60,17 @@ import { BgGoldLinearGradient } from "../gold-gradient";
 import { contentGatingType } from "../tooltips";
 
 const { width: windowWidth } = Dimensions.get("window");
+
+export type DropImageShareType =
+  | "Twitter"
+  | "Instagram"
+  | "Link"
+  | "Save"
+  | "More";
+
 type QRCodeModalParams = {
   contractAddress?: string | undefined;
+  shareType?: DropImageShareType;
 };
 const { useParam } = createParam<QRCodeModalParams>();
 
@@ -88,6 +111,8 @@ const QRCodeSkeleton = ({ size = 375 }) => {
 export const DropImageShare = (props?: QRCodeModalProps) => {
   const { contractAddress: contractAddressProp } = props ?? {};
   const [contractAddress] = useParam("contractAddress");
+  const [shareType] = useParam("shareType");
+  const [isLoading, setIsLoading] = useState(false);
   const modalScreenContext = useModalScreenContext();
 
   const { data: edition, loading: isLoadingCollection } =
@@ -123,7 +148,11 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
   useEffect(() => {
     modalScreenContext?.setTitle("Congrats! Now share it ✦");
   }, [modalScreenContext]);
-
+  useEffect(() => {
+    if (shareType) {
+      setIsLoading(true);
+    }
+  }, [shareType]);
   const size = Platform.OS === "web" ? 276 : windowWidth - 32 - 32 - 32;
   const mediaUri = getMediaUrl({
     nft,
@@ -242,6 +271,40 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
       </View>
     );
   }, [edition?.gating_type, imageColors.iconColor]);
+
+  const onImageLoad = useCallback(() => {
+    if (shareType) {
+      setIsLoading(false);
+      setTimeout(() => {
+        switch (shareType) {
+          case "Twitter":
+            shareWithTwitterIntent();
+            break;
+          case "Instagram":
+            shareImageToIG();
+            break;
+          case "Link":
+            onCopyLink();
+            break;
+          case "Save":
+            downloadToLocal();
+            break;
+          case "More":
+            shareOpenMore();
+            break;
+          default:
+            return;
+        }
+      }, 600);
+    }
+  }, [
+    shareType,
+    shareWithTwitterIntent,
+    shareImageToIG,
+    onCopyLink,
+    downloadToLocal,
+    shareOpenMore,
+  ]);
   if (isLoadingCollection || isLoadingNFT) {
     return <QRCodeSkeleton size={size} />;
   }
@@ -315,6 +378,7 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
                             resizeMode={"cover"}
                             style={{ height: "100%", width: "100%" }}
                             transition={200}
+                            onLoad={onImageLoad}
                           />
                         )}
                         <ContentType />
@@ -358,6 +422,23 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
                 </Pressable>
               ))}
           </View>
+          {isLoading ? (
+            <Reanimated.View
+              style={[
+                StyleSheet.absoluteFillObject,
+                {
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "rgba(0,0,0,0.4)",
+                },
+              ]}
+              layout={Layout.duration(100)}
+              entering={FadeIn}
+              exiting={FadeOut}
+            >
+              <Spinner />
+            </Reanimated.View>
+          ) : null}
         </View>
       </Suspense>
     </ErrorBoundary>
