@@ -113,7 +113,7 @@ export interface WalletAddressesExcludingEmailV2 {
 export type StarDropBadgeType = {
   contract_address: string;
   slug: string;
-  creator_username: string;
+  username: string;
 };
 export interface Link {
   id: number;
