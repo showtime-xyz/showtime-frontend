@@ -180,7 +180,8 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
                   </>
                 ) : null}
               </Text>{" "}
-              and a star badge!
+              and a star badge!{"\n\n"}
+              Your NFT will be sent to your wallet in 7 days.
             </Text>
           </View>
           <View tw="mt-6 flex-row items-center justify-center rounded-2xl bg-white px-6 py-2.5 shadow-md">
