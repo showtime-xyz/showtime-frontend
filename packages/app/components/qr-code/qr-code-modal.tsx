@@ -295,7 +295,7 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
           default:
             return;
         }
-      }, 800);
+      }, 600);
     }
   }, [
     shareType,
