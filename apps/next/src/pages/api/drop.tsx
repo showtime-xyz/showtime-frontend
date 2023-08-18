@@ -139,7 +139,7 @@ export default async function handler(req: NextRequest) {
     image = image + "?class=ogimage";
   }
   const pfp = nft?.creator_img_url;
-  const desc = nft?.token_description;
+  const desc = nft?.token_description ?? "";
   const gatingType = nft?.gating_type;
 
   return new ImageResponse(
@@ -267,7 +267,8 @@ export default async function handler(req: NextRequest) {
                 "-webkit-box-orient": "vertical",
               }}
             >
-              {desc}
+              {/* We need to convert it because the description is in rich text format, and sometimes emojis cannot be shown. */}
+              {JSON.stringify(desc).slice(1, -1)}
             </div>
 
             <div
