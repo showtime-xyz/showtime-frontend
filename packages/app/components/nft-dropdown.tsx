@@ -128,7 +128,7 @@ function NFTDropdown({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent loop sideOffset={8}>
-          {tabType && tabType !== "hidden" ? (
+          {tabType && tabType !== "hidden" && isSelf ? (
             <DropdownMenuItem
               onSelect={() => {
                 hideNFT(nft.nft_id);
@@ -148,7 +148,7 @@ function NFTDropdown({
             </DropdownMenuItem>
           ) : null}
 
-          {tabType && tabType === "hidden" ? (
+          {tabType && tabType === "hidden" && isSelf ? (
             <DropdownMenuItem
               onSelect={() => {
                 unhideNFT(nft.nft_id);
