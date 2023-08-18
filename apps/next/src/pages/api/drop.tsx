@@ -1,7 +1,8 @@
 import { ImageResponse } from "@vercel/og";
 import { NextRequest } from "next/server";
 
-import { GatingType } from "app/types";
+import { GatingType, NFT } from "app/types";
+import { getMediaUrl } from "app/utilities";
 
 import { colors } from "design-system/tailwind/colors";
 
@@ -21,6 +22,7 @@ const fontBold = fetch(`${baseURL}/assets/Inter-Bold.otf`).then((res) =>
 const fontRegular = fetch(`${baseURL}/assets/Inter-Regular.otf`).then((res) =>
   res.arrayBuffer()
 );
+
 const getGatingTypeLinearGradient = (gatingType: GatingType) => {
   if (gatingType === "paid_nft") {
     return "linear-gradient(158deg, #F4CE5E 23.96%, #F4CE5E 54.12%, #F1A819 69.63%, #FFD480 82.36%, #FBC73F 91.83%, #F5E794 99.79%)";
@@ -118,14 +120,27 @@ export default async function handler(req: NextRequest) {
   const paramsString = decodeURIComponent(search).replace(/&amp;/g, "&");
   const searchParams = new URLSearchParams(paramsString);
   const username = searchParams.get("username");
-  const image = searchParams.get("image");
-  const pfp = searchParams.get("pfp");
-  const desc = searchParams.get("desc");
-  const gatingType = searchParams.get("gatingType") as GatingType;
-
+  const dropSlug = searchParams.get("dropSlug");
   const fontBoldData = await fontBold;
   const fontSemiBoldData = await fontSemiBold;
   const fontRegularData = await fontRegular;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/v2/nft/${username}/${dropSlug}`
+  );
+  const nft = (await res.json()) as NFT;
+  let image = getMediaUrl({
+    nft,
+    stillPreview: nft?.mime_type?.startsWith("video"),
+    optimized: true,
+  });
+  // lets check if the image is from showtime.xyz (eg Bunny,
+  // since they start with media.showtime.xyz and video.showtime.xyz)
+  if (image && image.includes("showtime.xyz/")) {
+    image = image + "?class=ogimage";
+  }
+  const pfp = nft?.creator_img_url;
+  const desc = nft?.token_description;
+  const gatingType = nft?.gating_type;
 
   return new ImageResponse(
     (

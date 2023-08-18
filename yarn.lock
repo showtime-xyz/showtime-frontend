@@ -6867,7 +6867,7 @@ __metadata:
     "@types/react-datepicker": ^4.11.2
     "@types/react-dropzone": ^5.1.0
     "@types/react-stickynode": ^4.0.0
-    "@vercel/og": ^0.5.9
+    "@vercel/og": ^0.5.11
     app: "*"
     array-to-image: ^1.0.0
     autoprefixer: ^10.4.14
@@ -9451,14 +9451,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/og@npm:^0.5.9":
-  version: 0.5.9
-  resolution: "@vercel/og@npm:0.5.9"
+"@vercel/og@npm:^0.5.11":
+  version: 0.5.11
+  resolution: "@vercel/og@npm:0.5.11"
   dependencies:
     "@resvg/resvg-wasm": 2.4.1
-    satori: 0.10.1
+    satori: 0.10.3
     yoga-wasm-web: 0.3.3
-  checksum: c0596288561494bc2bbed1544d1c6121c1612a25955a6316dae1a9e260241569034d139af64225ae981d92cdbe4a59e67701a3e6764285b7ce114767438f2f67
+  checksum: 6bdda9399804e497613fe8a66d1acaa0cef7daf4b91060b79a804508d361fa72ea428db2b5c327e8ea5e20cb7d8ef47c7e155088d4b9f55f0d3b7bc9370926d6
   languageName: node
   linkType: hard
 
@@ -25607,9 +25607,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"satori@npm:0.10.1":
-  version: 0.10.1
-  resolution: "satori@npm:0.10.1"
+"satori@npm:0.10.3":
+  version: 0.10.3
+  resolution: "satori@npm:0.10.3"
   dependencies:
     "@shuding/opentype.js": 1.4.0-beta.0
     css-background-parser: ^0.1.0
@@ -25621,7 +25621,7 @@ __metadata:
     parse-css-color: ^0.2.1
     postcss-value-parser: ^4.2.0
     yoga-wasm-web: ^0.3.3
-  checksum: fd6df0f80002bb1387bbec413f0d07414c1c1d6825abecf79a59f17283ca87db88c6928898ff494230946b9ee4773e389e71e6c4ed8ce5964323ef3baf2ed884
+  checksum: 44c98e2e07dd446daf4bfbfe9434f61e36c47aee1c32ee80eb34230559a904c02f543faaeda8d0b253b1512ac0969c314a22290712156dfb3872c5c9650caeac
   languageName: node
   linkType: hard
 

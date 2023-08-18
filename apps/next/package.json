@@ -39,7 +39,7 @@
     "@types/react-datepicker": "^4.11.2",
     "@types/react-dropzone": "^5.1.0",
     "@types/react-stickynode": "^4.0.0",
-    "@vercel/og": "^0.5.9",
+    "@vercel/og": "^0.5.11",
     "app": "*",
     "array-to-image": "^1.0.0",
     "axios": "^0.24.0",

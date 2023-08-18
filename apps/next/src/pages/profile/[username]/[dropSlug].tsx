@@ -19,27 +19,12 @@ export async function getServerSideProps(context) {
     };
 
     const nft = res.data as NFT;
-    let imageUrl = getMediaUrl({
-      nft,
-      stillPreview: nft?.mime_type?.startsWith("video"),
-      optimized: true,
-    });
-    const pfp = nft?.creator_img_url;
-    const desc = nft?.token_description;
-    const gatingType = nft?.gating_type;
-
-    // lets check if the image is from showtime.xyz (eg Bunny,
-    // since they start with media.showtime.xyz and video.showtime.xyz)
-    if (imageUrl && imageUrl.includes("showtime.xyz/")) {
-      imageUrl = imageUrl + "?class=ogimage";
-    }
-
     const image = encodeURI(
       `${
         __DEV__
           ? "http://localhost:3000"
           : `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}`
-      }/api/drop?username=${username}&gatingType=${gatingType}&image=${imageUrl}&pfp=${pfp}&dropCreated=true&desc=${desc}`
+      }/api/drop?username=${username}&dropSlug=${dropSlug}`
     );
 
     if (nft) {
