@@ -7,7 +7,7 @@ import { useTrackPageViewed } from "app/lib/analytics";
 export const EditProfilePage = () => {
   useTrackPageViewed({ name: "Edit Profile" });
   useUser({
-    redirectIfProfileIncomplete: true,
+    redirectIfProfileIncomplete: false,
   });
 
   return <EditProfile />;
