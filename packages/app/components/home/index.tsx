@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { useWindowDimensions, Dimensions, Platform } from "react-native";
+import { useWindowDimensions, Platform } from "react-native";
 
 import {
   InfiniteScrollList,
@@ -20,8 +20,7 @@ import { EmptyPlaceholder } from "../empty-placeholder";
 import { ListHeaderComponent } from "./header";
 import { HomeItem, HomeItemSketelon } from "./home-item";
 import { PopularCreators } from "./popular-creators";
-
-const windowHeight = Dimensions.get("window").height;
+import { TrendingCarousel } from "./trending-carousel";
 
 export const Home = () => {
   const bottomBarHeight = usePlatformBottomHeight();
@@ -32,6 +31,7 @@ export const Home = () => {
   const listRef = useRef<any>();
   useScrollToTop(listRef);
 
+  const feedItemLength = data?.length ?? 0;
   const mediaSize = isMdWidth ? 500 : width - 48 - 56;
   const renderItem = useCallback(
     ({ item, index }: ListRenderItemInfo<NFT>) => {
@@ -43,9 +43,30 @@ export const Home = () => {
           </>
         );
       }
+
+      // TODO: remove this after onchainsummer
+      if (index === 1) {
+        return (
+          <>
+            <HomeItem nft={item} mediaSize={mediaSize} index={index} />
+            <TrendingCarousel />
+          </>
+        );
+      }
+
+      // New logic for carousel that shows every 25% of the feed
+      if (index % Math.floor(feedItemLength * 0.25) === 0 && index !== 0) {
+        return (
+          <>
+            <HomeItem nft={item} mediaSize={mediaSize} index={index} />
+            <TrendingCarousel />
+          </>
+        );
+      }
+
       return <HomeItem nft={item} mediaSize={mediaSize} index={index} />;
     },
-    [mediaSize]
+    [mediaSize, feedItemLength]
   );
 
   const ListEmptyComponent = useCallback(() => {
@@ -66,12 +87,26 @@ export const Home = () => {
       </View>
     );
   }, [height, isLoading, mediaSize]);
-  const getItemType = useCallback((_: NFT, index: number) => {
-    if (index === 0) {
-      return "popularCreators";
-    }
-    return "homeItem";
-  }, []);
+
+  const getItemType = useCallback(
+    (_: NFT, index: number) => {
+      if (index === 0) {
+        return "popularCreators";
+      }
+
+      if (index === 1) {
+        return "onchainsummer";
+      }
+
+      if (index % Math.floor(feedItemLength * 0.25) === 0 && index !== 0) {
+        return "trendingCarousel";
+      }
+
+      return "homeItem";
+    },
+    [feedItemLength]
+  );
+
   return (
     <View
       tw="w-full flex-1 items-center bg-white dark:bg-black"

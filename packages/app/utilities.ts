@@ -1093,3 +1093,14 @@ export function isNumber(str: string) {
 export let prevRouteRef = {
   current: null,
 };
+
+// This is one of the fastest shuffling algorithms
+// can be called with fisherYatesShuffle(array)
+export function fisherYatesShuffle<T>(array: T[]): T[] {
+  const shuffledArray = [...array];
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  return shuffledArray;
+}
