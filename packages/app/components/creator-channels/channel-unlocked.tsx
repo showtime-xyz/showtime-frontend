@@ -225,7 +225,7 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
             <InstagramButton onPress={shareSingleImage} />
           ) : null}
           <CopyLinkButton theme="dark" onPress={onCopyLink} />
-          <Button theme="dark" size="regular" onPress={viewChannel}>
+          <Button theme="light" size="regular" onPress={viewChannel}>
             View Channel
           </Button>
         </View>
