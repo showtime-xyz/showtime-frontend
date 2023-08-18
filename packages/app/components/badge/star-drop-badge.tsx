@@ -25,8 +25,8 @@ export const StarDropBadge = ({
   return (
     <PressableHover
       onPress={() => {
-        if (data?.slug && data?.creator_username) {
-          router.push(`/@${data?.creator_username}/${data.slug}`);
+        if (data?.slug && data?.username) {
+          router.push(`/@${data?.username}/${data.slug}`);
         }
       }}
     >

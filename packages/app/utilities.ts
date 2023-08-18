@@ -1104,3 +1104,12 @@ export function fisherYatesShuffle<T>(array: T[]): T[] {
   }
   return shuffledArray;
 }
+
+export function formatWalletNameToUpperCase(str?: string) {
+  if (!str) return "";
+  const parts = str.split("_");
+  const formattedParts = parts.map(
+    (part) => part.charAt(0).toUpperCase() + part.slice(1)
+  );
+  return formattedParts.join(" ");
+}
