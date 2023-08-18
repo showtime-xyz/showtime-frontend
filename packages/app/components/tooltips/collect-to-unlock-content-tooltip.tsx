@@ -2,6 +2,8 @@ import { StyleSheet, Platform } from "react-native";
 
 import { LockBadge, InformationCircle } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -16,6 +18,8 @@ type ContentTypeTooltipProps = {
   usd_price?: number;
   theme?: "dark" | "light";
   currency?: string;
+  isAlreadyClaimed?: boolean;
+  channelId?: number;
 };
 
 export const CollectToUnlockContentTooltip = ({
@@ -23,7 +27,29 @@ export const CollectToUnlockContentTooltip = ({
   price,
   usd_price,
   currency,
+  isAlreadyClaimed,
+  channelId,
 }: ContentTypeTooltipProps) => {
+  const router = useRouter();
+  if (isAlreadyClaimed) {
+    return (
+      <PressableHover
+        onPress={() => {
+          if (channelId) {
+            router.push(`/channels/${channelId}`);
+          }
+        }}
+        tw="flex-row items-center"
+      >
+        <View tw="rounded bg-black/60" style={StyleSheet.absoluteFillObject} />
+        <View tw="h-6 flex-row items-center pl-0.5">
+          <Text tw="mx-1 font-medium leading-6 text-[#FFD554]">
+            Channel successfully unlocked!
+          </Text>
+        </View>
+      </PressableHover>
+    );
+  }
   return (
     <ContentTooltip
       side="top"
