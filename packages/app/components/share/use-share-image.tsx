@@ -71,6 +71,7 @@ export const useShareImage = (viewRef: any) => {
   );
 
   const shareImageToIG = useCallback(async () => {
+    if (Platform.OS === "web") return;
     const url = await getViewShot();
 
     if (!url) {
@@ -92,12 +93,12 @@ export const useShareImage = (viewRef: any) => {
       url,
       filename: `Unlocked-Channel-Share-${new Date().valueOf()}`,
       social: Social.Instagram,
-    }).catch((err) => {});
+    }).catch((err) => {
+      Logger.error(err);
+    });
   }, [getViewShot, prepareShareToIG]);
 
   const downloadToLocal = useCallback(async () => {
-    console.log(viewRef.current);
-
     if (Platform.OS === "web") {
       const dataUrl = await domtoimage.toPng(viewRef.current as Node, {
         quality: 1,
@@ -125,6 +126,7 @@ export const useShareImage = (viewRef: any) => {
   }, [checkPhotosPermission, getViewShot, viewRef]);
 
   const shareOpenMore = useCallback(async () => {
+    if (Platform.OS === "web") return;
     const url = await getViewShot();
     try {
       const ShareResponse = await Share.open({

@@ -19,6 +19,7 @@ import {
 } from "app/components/social-buttons";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
+import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
 import { getNFTSlug, getNFTURL } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
 import { getTwitterIntent } from "app/utilities";
@@ -42,9 +43,7 @@ export const DropViewShare = memo(function DropViewShare({
 }: DropPreviewShareProps) {
   const isDark = useIsDarkMode();
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
-  const viewRef = useRef(null);
-  const { shareImageToIG } = useShareImage(viewRef);
-
+  const redirectDropImageShareScreen = useRedirectDropImageShareScreen();
   const router = useRouter();
   const { data } = useNFTDetailByTokenId({
     chainName: edition?.chain_name,
@@ -94,7 +93,6 @@ export const DropViewShare = memo(function DropViewShare({
           buttonProps={{ variant: "primary" }}
           isPaidNFT={isPaidNFT}
           {...rest}
-          ref={viewRef}
         />
         <View
           tw="w-full flex-1 self-center px-4 py-4 sm:max-w-[332px]"
@@ -107,7 +105,12 @@ export const DropViewShare = memo(function DropViewShare({
           <InstagramButton
             tw="mt-4"
             theme={isPaidNFT ? "light" : undefined}
-            onPress={shareImageToIG}
+            onPress={() =>
+              redirectDropImageShareScreen(
+                contractAddress ?? "0xcd59916706368f23c7409f7addb8714a9c093445",
+                "Instagram"
+              )
+            }
           />
           <CopyLinkButton
             tw="mt-4"

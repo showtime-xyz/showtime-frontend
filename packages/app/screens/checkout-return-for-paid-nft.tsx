@@ -11,5 +11,8 @@ export const CheckoutReturnForPaidNFTScreen = withModalScreen(
     tw: "w-full lg:w-[500px]",
     disableBackdropPress: true,
     snapPoints: ["100%"],
+    closeButtonProps: {
+      tw: "pointer-events-none hover:opacity-0 opacity-0",
+    },
   }
 );
