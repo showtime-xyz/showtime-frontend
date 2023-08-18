@@ -58,7 +58,7 @@ export function UserProvider({ children }: UserProviderProps) {
     if (authenticationStatus === "UNAUTHENTICATED") {
       isFirstLoad.current = true;
     }
-  }, [authenticationStatus, mutate, router]);
+  }, [authenticationStatus, mutate]);
 
   useEffect(() => {
     const identifyAndRegisterPushNotification = async () => {

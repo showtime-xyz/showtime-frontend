@@ -9,6 +9,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useJoinChannel } from "app/components/creator-channels/hooks/use-join-channel";
 import { ClaimContext } from "app/context/claim-context";
+import { useMyInfo } from "app/hooks/api-hooks";
 import { useConfirmPayment } from "app/hooks/api/use-confirm-payment";
 import { usePaymentsManage } from "app/hooks/api/use-payments-manage";
 import { useClaimNFT } from "app/hooks/use-claim-nft";
@@ -16,7 +17,9 @@ import {
   CreatorEditionResponse,
   useCreatorCollectionDetail,
 } from "app/hooks/use-creator-collection-detail";
+import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
 import { createParam } from "app/navigation/use-param";
+import { NFT } from "app/types";
 
 import { stripePromise } from "../checkout/stripe";
 
@@ -29,19 +32,27 @@ const { useParam } = createParam<{
 export const CheckoutReturnForPaidNFT = () => {
   const [contractAddress] = useParam("contractAddress");
   const { data: edition } = useCreatorCollectionDetail(contractAddress);
-  if (!edition)
+  const { data: nft } = useNFTDetailByTokenId({
+    chainName: edition?.chain_name,
+    tokenId: "0",
+    contractAddress: edition?.creator_airdrop_edition.contract_address,
+  });
+
+  if (!edition || !nft)
     return (
       <View tw="min-h-[200px] flex-1 items-center justify-center">
         <Spinner />
       </View>
     );
-  return <CheckoutReturn edition={edition} />;
+  return <CheckoutReturn edition={edition} nft={nft.data.item} />;
 };
 
 const CheckoutReturn = memo(function CheckoutReturn({
   edition,
+  nft,
 }: {
   edition: CreatorEditionResponse;
+  nft: NFT;
 }) {
   const joinChannel = useJoinChannel();
   const [paymentIntentIdParam] = useParam("paymentIntentId");
@@ -51,6 +62,7 @@ const CheckoutReturn = memo(function CheckoutReturn({
   const router = useRouter();
   const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
   const { paymentStatus, message, confirmPaymentStatus } = useConfirmPayment();
+  const myInfo = useMyInfo();
 
   const removeQueryParam = useCallback(() => {
     router.replace({ pathname: router.pathname }, undefined, {
@@ -59,6 +71,11 @@ const CheckoutReturn = memo(function CheckoutReturn({
   }, [router]);
   const closeModal = useCallback(
     async (channelId?: number) => {
+      await myInfo.mutateLastCollectedStarDropCache({
+        contractAddress: edition.creator_airdrop_edition.contract_address,
+        username: nft.creator_username ?? nft.creator_address,
+        slug: nft.slug ?? nft.creator_address,
+      });
       await joinChannel.trigger({ channelId: channelId });
       const { asPath, pathname } = router;
 
@@ -79,7 +96,15 @@ const CheckoutReturn = memo(function CheckoutReturn({
         }
       );
     },
-    [edition?.creator_airdrop_edition.contract_address, joinChannel, router]
+    [
+      edition.creator_airdrop_edition.contract_address,
+      joinChannel,
+      myInfo,
+      nft.creator_address,
+      nft.creator_username,
+      nft.slug,
+      router,
+    ]
   );
   const { setPaymentByDefault } = usePaymentsManage();
 
