@@ -345,6 +345,34 @@ export const useMyInfo = () => {
     [data, mutate, loginPromise]
   );
 
+  const mutateLastCollectedStarDropCache = useCallback(
+    async (params: {
+      contractAddress: string;
+      username: string;
+      slug: string;
+    }) => {
+      if (data) {
+        await mutate(
+          {
+            data: {
+              ...data.data,
+              profile: {
+                ...data.data.profile,
+                latest_star_drop_collected: {
+                  contract_address: params.contractAddress,
+                  username: params.username,
+                  slug: params.slug,
+                },
+              },
+            },
+          },
+          { revalidate: false }
+        );
+      }
+    },
+    [data, mutate]
+  );
+
   const unfollow = useCallback(
     async (profileId?: number) => {
       if (data) {
@@ -475,6 +503,7 @@ export const useMyInfo = () => {
     unlike,
     isLiked,
     refetchMyInfo,
+    mutateLastCollectedStarDropCache,
     mutate,
   };
 };
