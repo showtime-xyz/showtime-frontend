@@ -128,7 +128,7 @@ function NFTDropdown({
         </DropdownMenuTrigger>
 
         <DropdownMenuContent loop sideOffset={8}>
-          {tabType && tabType !== "hidden" ? (
+          {tabType && tabType !== "hidden" && isSelf ? (
             <DropdownMenuItem
               onSelect={() => {
                 hideNFT(nft.nft_id);
@@ -148,7 +148,7 @@ function NFTDropdown({
             </DropdownMenuItem>
           ) : null}
 
-          {tabType && tabType === "hidden" ? (
+          {tabType && tabType === "hidden" && isSelf ? (
             <DropdownMenuItem
               onSelect={() => {
                 unhideNFT(nft.nft_id);
@@ -165,7 +165,7 @@ function NFTDropdown({
           {(edition?.gating_type === "spotify_presave" ||
             edition?.gating_type === "music_presave" ||
             edition?.gating_type === "multi_provider_music_presave") &&
-          nft.creator_username === user?.data.profile.username ? (
+          isSelf ? (
             <DropdownMenuItem
               onSelect={() => {
                 router.push(
@@ -187,7 +187,7 @@ function NFTDropdown({
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           ) : null}
-          {edition?.is_editable ? (
+          {edition?.is_editable && isSelf ? (
             <DropdownMenuItem
               onSelect={() => {
                 const contractAddress = nft?.contract_address;
