@@ -72,7 +72,6 @@ type CreateDropStep =
 
 export const DropStar = () => {
   const [step, setStep] = useState<CreateDropStep>("media");
-  const modalContext = useModalScreenContext();
   const onboardinStatus = useOnboardingStatus();
   const {
     control,
@@ -95,7 +94,10 @@ export const DropStar = () => {
 
   const file = getValues("file");
   const { state, dropNFT, reset: resetDropState } = useDropNFT();
+  const bottomSheetContext = useModalScreenContext();
   const router = useRouter();
+  const closeModal =
+    Platform.OS === "android" ? bottomSheetContext?.pop : router.pop;
 
   const { clearStorage } = usePersistForm(MUSIC_DROP_FORM_DATA_KEY, {
     watch,
@@ -164,7 +166,7 @@ export const DropStar = () => {
   if (onboardinStatus.status === "loading") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Complete payout info"
       >
@@ -178,7 +180,7 @@ export const DropStar = () => {
   if (onboardinStatus.status === "processing") {
     return (
       <Layout
-        onBackPress={() => modalContext?.pop()}
+        onBackPress={() => closeModal?.()}
         closeIcon
         title="Come back later"
       >
@@ -200,7 +202,7 @@ export const DropStar = () => {
           <Button
             tw="w-full"
             onPress={() => {
-              modalContext?.pop();
+              closeModal?.();
             }}
           >
             Okay
@@ -213,7 +215,7 @@ export const DropStar = () => {
   if (onboardinStatus.status === "not_onboarded") {
     return (
       <Layout
-        onBackPress={() => router.pop()}
+        onBackPress={() => closeModal?.pop()}
         closeIcon
         title="Payment processing details"
       >
@@ -246,7 +248,7 @@ export const DropStar = () => {
         key={step}
       >
         <Layout
-          onBackPress={() => modalContext?.pop()}
+          onBackPress={() => closeModal?.pop()}
           closeIcon
           title="Congrats! Now share it ✦"
           headerShown={false}

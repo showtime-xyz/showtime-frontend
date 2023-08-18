@@ -26,8 +26,11 @@ export function useExpoUpdate() {
       if (!result.isNew) {
         return;
       }
-
-      await Updates.reloadAsync();
+      // for now, we won't auto reload on android because it causes a crash due to reanimated
+      // since we've downloaded the update, it will be applied on next restart
+      if (Platform.OS === "ios") {
+        await Updates.reloadAsync();
+      }
     } catch (error) {
       captureException(error);
     }
