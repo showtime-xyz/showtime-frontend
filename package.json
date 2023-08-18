@@ -1,6 +1,6 @@
 {
   "name": "showtime",
-  "version": "135.0.23",
+  "version": "135.0.24",
   "private": true,
   "license": "MIT",
   "devDependencies": {
