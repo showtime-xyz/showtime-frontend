@@ -187,7 +187,7 @@ function NFTDropdown({
               </DropdownMenuItemTitle>
             </DropdownMenuItem>
           ) : null}
-          {edition?.is_editable ? (
+          {edition?.is_editable && isSelf ? (
             <DropdownMenuItem
               onSelect={() => {
                 const contractAddress = nft?.contract_address;
