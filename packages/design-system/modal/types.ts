@@ -17,6 +17,11 @@ export type ModalProps = Pick<ModalHeaderProps, "closeButtonProps"> & {
    */
   title?: string;
   /**
+   * Defines the modal subtitle.
+   * @default ""
+   */
+  subtitle?: string;
+  /**
    * Defines if the modal is presenting as
    * a screen.
    * @default false
@@ -109,7 +114,7 @@ export type ModalProps = Pick<ModalHeaderProps, "closeButtonProps"> & {
 };
 
 export interface ModalHeaderProps
-  extends Pick<ModalProps, "title" | "onClose"> {
+  extends Pick<ModalProps, "title" | "onClose" | "subtitle"> {
   /**
    * Defines the component to be placed
    * at the start of the header.
@@ -138,6 +143,7 @@ export interface ModalContainerProps
   extends Pick<
     ModalProps,
     | "title"
+    | "subtitle"
     | "isScreen"
     | "onClose"
     | "children"
