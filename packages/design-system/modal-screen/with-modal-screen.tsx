@@ -16,6 +16,7 @@ function withModalScreen<P extends {}>(
   Screen: FC<P>,
   {
     title: titleProp,
+    subtitle: subtitleProp,
     snapPoints = ["90%", "100%"],
     backPressHandlerEnabled = true,
     onScreenDismiss,
@@ -25,11 +26,13 @@ function withModalScreen<P extends {}>(
   // eslint-disable-next-line react/display-name
   return function (props: P) {
     const [title, setTitle] = useState(titleProp);
+    const [subtitle, setSubtitle] = useState(subtitleProp);
     const closeCallback = useRef<PopCallback>(null);
 
     const [contextValues, setContextValues] = useState<ModalScreenContextValue>(
       {
         setTitle,
+        setSubtitle,
         pop: () => {},
         snapToIndex: () => {},
       }
@@ -48,6 +51,7 @@ function withModalScreen<P extends {}>(
       if (modalRef.current?.close) {
         setContextValues({
           setTitle,
+          setSubtitle,
           pop: (params) => {
             closeCallback.current = params?.callback;
             modalRef.current?.close();
@@ -64,6 +68,7 @@ function withModalScreen<P extends {}>(
         <ModalScreen
           ref={modalRef}
           title={title}
+          subtitle={subtitle}
           mobile_snapPoints={snapPoints}
           isScreen={true}
           onClose={onClose}

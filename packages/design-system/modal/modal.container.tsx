@@ -29,6 +29,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
   function ModalContainerComponent(
     {
       title,
+      subtitle,
       mobile_snapPoints,
       isScreen,
       close,
@@ -95,6 +96,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
             {enableHandlePanningGesture && <ModalHeaderBar />}
             <ModalHeader
               title={title}
+              subtitle={subtitle}
               onClose={close}
               closeButtonProps={closeButtonProps}
               {...props}
@@ -102,7 +104,14 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
           </>
         ) : null;
       },
-      [title, close, headerShown, enableHandlePanningGesture, closeButtonProps]
+      [
+        title,
+        close,
+        headerShown,
+        enableHandlePanningGesture,
+        closeButtonProps,
+        subtitle,
+      ]
     );
 
     return (

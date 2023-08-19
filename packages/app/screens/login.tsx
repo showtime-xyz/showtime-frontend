@@ -2,7 +2,6 @@ import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
 import { Login } from "app/components/login";
 import { useTrackPageViewed } from "app/lib/analytics";
-import { WalletProvider } from "app/providers/wallet-provider";
 
 function LoginModal() {
   useTrackPageViewed({ name: "Login" });
@@ -15,7 +14,7 @@ function LoginModal() {
 }
 
 export const LoginScreen = withModalScreen(LoginModal, {
-  title: "Sign In",
+  title: "Sign in to collect & unlock",
   matchingPathname: "/login",
   matchingQueryParam: "loginModal",
   snapPoints: ["90%"],
