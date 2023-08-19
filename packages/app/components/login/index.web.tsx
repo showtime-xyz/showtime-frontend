@@ -31,7 +31,7 @@ export function Login() {
     if (showSignMessage) {
       modalScreenContext?.setTitle("Sign in with your wallet to continue");
     } else {
-      modalScreenContext?.setTitle("Sign in");
+      modalScreenContext?.setTitle("Sign in to collect & unlock");
     }
   }, [showSignMessage, modalScreenContext]);
 
