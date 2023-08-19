@@ -14,8 +14,7 @@ function LoginModal() {
 }
 
 export const LoginScreen = withModalScreen(LoginModal, {
-  title: "Sign in",
-  subtitle: "Create, collect & unlock perks",
+  title: "Sign in to collect & unlock",
   matchingPathname: "/login",
   matchingQueryParam: "loginModal",
   snapPoints: ["90%"],
