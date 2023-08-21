@@ -411,9 +411,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           </View>
         ) : null}
 
-        <View tw="absolute bottom-10 left-4">
-          <ContentTypeTooltip edition={edition} />
-        </View>
+        {edition?.gating_type === "paid_nft" &&
+        edition?.is_already_claimed ? null : (
+          <View tw="absolute bottom-10 left-4">
+            <ContentTypeTooltip edition={edition} />
+          </View>
+        )}
       </View>
       <View tw="bg-white dark:bg-black lg:hidden">
         {ListHeaderComponent({ hideTabs: true })}
