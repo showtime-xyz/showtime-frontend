@@ -20,7 +20,7 @@ import { StarDropBadge } from "app/components/creator-channels/components/star-d
 import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
-import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
+import { useRedirectToChannelUnlocked } from "app/hooks/use-redirect-to-channel-unlocked-screen";
 import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
 import { getCurrencyPrice } from "app/utilities";
@@ -63,12 +63,12 @@ const GoldButton = memo(function GoldButton({
   const iconSize = size === "small" ? 20 : 24;
   const status = getClaimStatus(edition);
   const isClaimed = status === ClaimStatus.Claimed;
-  const redirectToDropImageShareScreen = useRedirectDropImageShareScreen();
+  const redirectToChannelUnlocked = useRedirectToChannelUnlocked();
   const { loginPromise } = useLogInPromise();
 
   const onHandlePayment = async () => {
     if (isClaimed) {
-      redirectToDropImageShareScreen(
+      redirectToChannelUnlocked(
         edition?.creator_airdrop_edition.contract_address
       );
       return;
@@ -299,7 +299,10 @@ export const ClaimPaidNFTButton = memo(function ClaimPaidNFTButton({
   const [open, setOpen] = useState(false);
   const isDarkMode = useIsDarkMode();
   const isDark = theme ? theme === "dark" : isDarkMode;
-  if (Platform.OS !== "web") {
+  const status = getClaimStatus(rest.edition);
+  const isClaimed = status === ClaimStatus.Claimed;
+
+  if (Platform.OS !== "web" && !isClaimed) {
     return (
       <Tooltip.Root
         onDismiss={() => {

@@ -37,6 +37,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
   function ModalContainerComponent(
     {
       title,
+      subtitle,
       web_height = WEB_HEIGHT,
       onClose,
       close,
@@ -92,6 +93,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
               {headerShown && (
                 <ModalHeader
                   title={title}
+                  subtitle={subtitle}
                   onClose={close}
                   closeButtonProps={closeButtonProps}
                 />

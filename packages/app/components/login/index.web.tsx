@@ -29,9 +29,9 @@ export function Login() {
 
   useEffect(() => {
     if (showSignMessage) {
-      modalScreenContext?.setTitle("Sign with your wallet to continue");
+      modalScreenContext?.setTitle("Sign in with your wallet to continue");
     } else {
-      modalScreenContext?.setTitle("Sign In");
+      modalScreenContext?.setTitle("Sign in to collect & unlock");
     }
   }, [showSignMessage, modalScreenContext]);
 

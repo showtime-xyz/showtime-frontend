@@ -97,6 +97,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
     tokenId: nft?.token_id,
     chainName: nft?.chain_name,
   });
+
   const videoRef = useRef<ExpoVideo | null>(null);
   const [muted, setMuted] = useMuted();
   const { commentsCount } = useComments(nft.nft_id);
@@ -217,6 +218,8 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
                   price={edition?.price}
                   usd_price={edition?.usd_price}
                   currency={edition?.currency}
+                  isAlreadyClaimed={edition.is_already_claimed}
+                  channelId={detailData?.data.item?.creator_channel_id}
                 />
               </View>
             ) : null}
@@ -408,9 +411,12 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
           </View>
         ) : null}
 
-        <View tw="absolute bottom-10 left-4">
-          <ContentTypeTooltip edition={edition} />
-        </View>
+        {edition?.gating_type === "paid_nft" &&
+        edition?.is_already_claimed ? null : (
+          <View tw="absolute bottom-10 left-4">
+            <ContentTypeTooltip edition={edition} />
+          </View>
+        )}
       </View>
       <View tw="bg-white dark:bg-black lg:hidden">
         {ListHeaderComponent({ hideTabs: true })}

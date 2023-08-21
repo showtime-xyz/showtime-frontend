@@ -10,6 +10,7 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
   function ModalComponent(
     {
       title,
+      subtitle,
       isScreen = false,
       web_height = WEB_HEIGHT,
       disableBackdropPress,
@@ -44,6 +45,7 @@ const ModalComponent = forwardRef<ModalMethods, ModalProps>(
       <ModalContainer
         ref={ref}
         title={title}
+        subtitle={subtitle}
         isScreen={isScreen}
         web_height={web_height}
         mobile_snapPoints={mobile_snapPoints}

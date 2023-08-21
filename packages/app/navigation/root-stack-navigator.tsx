@@ -233,11 +233,7 @@ export function RootStackNavigator() {
           name="appleMusicAuthNativeWebView"
           component={AppleMusicAuthNativeWebViewScreen}
         />
-        <Stack.Screen
-          name="onboarding"
-          component={OnboardingScreen}
-          options={{ gestureEnabled: false }}
-        />
+        <Stack.Screen name="onboarding" component={OnboardingScreen} />
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen
           name="verifyPhoneNumber"

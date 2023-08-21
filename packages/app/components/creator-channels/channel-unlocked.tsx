@@ -24,6 +24,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { StarDropBadge } from "app/components/badge/star-drop-badge";
 import { BgGoldLinearGradient } from "app/components/gold-gradient";
 import { useShareImage } from "app/components/share/use-share-image";
 import {
@@ -180,7 +181,8 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
                   </>
                 ) : null}
               </Text>{" "}
-              and a star badge!
+              and a star badge!{"\n\n"}
+              Your NFT will be sent to your wallet in 7 days.
             </Text>
           </View>
           <View tw="mt-6 flex-row items-center justify-center rounded-2xl bg-white px-6 py-2.5 shadow-md">
@@ -206,14 +208,10 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
               style={{ marginLeft: 4 }}
               size={14}
             />
-            <View tw="ml-1 h-4 w-4">
-              <Image
-                source={
-                  Platform.OS === "web"
-                    ? "https://media.showtime.xyz/assets/st-logo.png"
-                    : require("app/components/assets/st-logo.png")
-                }
-                style={{ width: "100%", height: "100%" }}
+            <View tw="ml-1">
+              <StarDropBadge
+                size={16}
+                data={user?.data?.profile.latest_star_drop_collected}
               />
             </View>
           </View>
@@ -224,7 +222,7 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
             <InstagramButton onPress={shareSingleImage} />
           ) : null}
           <CopyLinkButton theme="dark" onPress={onCopyLink} />
-          <Button theme="dark" size="regular" onPress={viewChannel}>
+          <Button theme="light" size="regular" onPress={viewChannel}>
             View Channel
           </Button>
         </View>

@@ -9,6 +9,7 @@ const ModalScreenComponent = forwardRef<any, ModalProps>(
   function ModalScreenComponent(
     {
       title,
+      subtitle,
       children,
       onClose,
       useNativeModal = true,
@@ -27,6 +28,7 @@ const ModalScreenComponent = forwardRef<any, ModalProps>(
               {enableHandlePanningGesture && <ModalHeaderBar />}
               <ModalHeader
                 title={title}
+                subtitle={subtitle}
                 onClose={onClose}
                 closeButtonProps={closeButtonProps}
               />

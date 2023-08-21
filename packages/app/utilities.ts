@@ -754,12 +754,13 @@ export const OAUTH_REDIRECT_URI = Platform.select({
 export const isProfileIncomplete = (profile?: Profile) => {
   // FYI: has_social_login is true if user has logged in with google, apple, spotify, twitter, instagram
   // the value is false if user has logged in with email or phone number
-  return profile
+  const isIncomplete = profile
     ? !profile.username ||
-        (!profile.has_social_login &&
-          !profile.captcha_completed_at &&
-          !profile.latest_star_drop_collected)
+      (!profile.has_social_login &&
+        !profile.captcha_completed_at &&
+        !profile.latest_star_drop_collected)
     : undefined;
+  return isIncomplete;
 };
 
 export function getFullSizeCover(url: string | undefined) {
@@ -1103,4 +1104,13 @@ export function fisherYatesShuffle<T>(array: T[]): T[] {
     [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
   }
   return shuffledArray;
+}
+
+export function formatWalletNameToUpperCase(str?: string) {
+  if (!str) return "";
+  const parts = str.split("_");
+  const formattedParts = parts.map(
+    (part) => part.charAt(0).toUpperCase() + part.slice(1)
+  );
+  return formattedParts.join(" ");
 }

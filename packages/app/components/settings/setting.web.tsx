@@ -25,7 +25,7 @@ const SettingsTabs = () => {
   const { width } = useWindowDimensions();
   const { isAuthenticated } = useUser({
     redirectTo: "/login",
-    redirectIfProfileIncomplete: true,
+    redirectIfProfileIncomplete: false,
   });
   const isLgWidth = width >= breakpoints["lg"];
   const { index, setIndex, routes } = useTabState(SETTINGS_ROUTES);

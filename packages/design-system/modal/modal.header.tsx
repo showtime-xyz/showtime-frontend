@@ -12,6 +12,7 @@ const MODAL_HEADER_TITLE_TW = "dark:text-white font-bold text-center";
 
 function ModalHeaderComponent({
   title,
+  subtitle,
   endContentComponent: EndContentComponent,
   startContentComponent: StartContentComponent,
   tw = "",
@@ -37,9 +38,10 @@ function ModalHeaderComponent({
         </Button>
       )}
 
-      <Text tw={[MODAL_HEADER_TITLE_TW, "ml-5 flex-1 text-base font-bold"]}>
-        {title}
-      </Text>
+      <View tw="ml-5 flex-1 items-center justify-center">
+        <Text tw={[MODAL_HEADER_TITLE_TW, "text-base font-bold"]}>{title}</Text>
+        {subtitle && <Text tw="pt-3 text-sm">{subtitle}</Text>}
+      </View>
 
       {EndContentComponent ? (
         <EndContentComponent />

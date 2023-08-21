@@ -36,7 +36,11 @@ import { getNFTSlug } from "app/hooks/use-share-nft";
 import { Logger } from "app/lib/logger";
 import { Link as NavLink } from "app/navigation/link";
 import { TextLink } from "app/navigation/link";
-import { getCreatorUsernameFromNFT, getCurrencyPrice } from "app/utilities";
+import {
+  formatWalletNameToUpperCase,
+  getCreatorUsernameFromNFT,
+  getCurrencyPrice,
+} from "app/utilities";
 
 import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
@@ -118,7 +122,7 @@ const CheckoutFormLayout = ({
     [paymentMethods.data]
   );
   const paymentMethodsList = useMemo(
-    () => uniq(paymentMethods.data),
+    () => uniq(paymentMethods.data?.filter((f) => f.type == "card")),
     [paymentMethods.data]
   );
   const [savedPaymentMethodId, setSavedPaymentMethodId] = useState(
@@ -303,6 +307,15 @@ const CheckoutFormLayout = ({
                         {`(Ending in ${method.details.last4} · ${
                           method.details.exp_month
                         }/${method.details.exp_year?.toString().slice(-2)})`}
+                        {method.details.wallet &&
+                        (method.details.wallet as any)?.type ? (
+                          <Text tw="text-13 ml-1">
+                            from{" "}
+                            {formatWalletNameToUpperCase(
+                              (method.details.wallet as any).type
+                            )}
+                          </Text>
+                        ) : null}
                       </Text>
                     </View>
                   </PressableHover>

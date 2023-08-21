@@ -10,13 +10,8 @@ import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Gift as GiftIcon,
-  InformationCircle as InformationCircleIcon,
-} from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -39,7 +34,6 @@ import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import {
   getFullSizeCover,
-  getFormatDistanceToNowStrict,
   getProfileImage,
   getProfileName,
 } from "app/utilities";
@@ -421,30 +415,6 @@ export const ProfileTop = ({
                 tw="text-sm text-gray-900 dark:text-white"
               />
             </View>
-          ) : null}
-          {isSelf && user?.data?.claim_tank?.available_claims !== undefined ? (
-            <Pressable
-              onPress={onPressClaimLimit}
-              tw="mt-3 flex-row items-center"
-            >
-              <GiftIcon
-                height={18}
-                width={18}
-                color={isDark ? colors.gray[400] : colors.gray[600]}
-              />
-              <Text tw="ml-0.5 mr-0.5 text-sm text-gray-600 dark:text-gray-400">
-                {user?.data.claim_tank.available_claims
-                  ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
-                  : `Your next claim will be available ${getFormatDistanceToNowStrict(
-                      user?.data.claim_tank.next_refill_at
-                    )}`}
-              </Text>
-              <InformationCircleIcon
-                height={18}
-                width={18}
-                color={isDark ? colors.gray[400] : colors.gray[600]}
-              />
-            </Pressable>
           ) : null}
           <Hidden from="md">
             <ProfileFollows
