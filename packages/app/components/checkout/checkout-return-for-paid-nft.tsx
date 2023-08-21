@@ -108,7 +108,44 @@ const CheckoutReturn = memo(function CheckoutReturn({
   );
   const { setPaymentByDefault } = usePaymentsManage();
 
-  const handlePaymentSuccess = useCallback(async () => {
+  const handleStripePaymentSuccess = useCallback(async () => {
+    const setAsDefaultPaymentMethod = new URLSearchParams(
+      window.location.search
+    ).get("setAsDefaultPaymentMethod");
+
+    const stripe = await stripePromise();
+
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
+    );
+
+    let paymentIntentId = paymentIntentIdParam;
+    if (stripe && clientSecret) {
+      const res = await stripe.retrievePaymentIntent(clientSecret);
+      if (typeof res.paymentIntent?.payment_method === "string") {
+        if (setAsDefaultPaymentMethod) {
+          setPaymentByDefault(res.paymentIntent.payment_method);
+        }
+      }
+      if (!paymentIntentId) {
+        paymentIntentId = res.paymentIntent?.id;
+      }
+    }
+
+    if (paymentIntentId) {
+      await confirmPaymentStatus(paymentIntentId);
+    }
+
+    await claimNFT({ closeModal });
+  }, [
+    setPaymentByDefault,
+    claimNFT,
+    confirmPaymentStatus,
+    paymentIntentIdParam,
+    closeModal,
+  ]);
+
+  const handleOnRampPaymentSuccess = useCallback(async () => {
     const setAsDefaultPaymentMethod = new URLSearchParams(
       window.location.search
     ).get("setAsDefaultPaymentMethod");
@@ -146,7 +183,7 @@ const CheckoutReturn = memo(function CheckoutReturn({
   ]);
 
   useEffectOnce(() => {
-    handlePaymentSuccess();
+    handleStripePaymentSuccess();
   });
 
   if (state.status === "error") {

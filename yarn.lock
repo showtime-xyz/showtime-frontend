@@ -4567,6 +4567,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@onramp.money/onramp-web-sdk@npm:^1.4.5":
+  version: 1.4.5
+  resolution: "@onramp.money/onramp-web-sdk@npm:1.4.5"
+  checksum: 2c808d35807f438d1e2fceec5db2e49bee11032f1564c40cf94a8cc1e0cdd24e2ab1152eb2bfc32d01e492093c18145d11519042b300374d3b245268678d16af
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -6848,6 +6855,7 @@ __metadata:
     "@magic-ext/oauth": ^10.1.0
     "@next/bundle-analyzer": ^13.4.13
     "@nissy-dev/swc-plugin-react-native-web": ^0.3.1
+    "@onramp.money/onramp-web-sdk": ^1.4.5
     "@radix-ui/react-accordion": 1.1.2
     "@radix-ui/react-hover-card": ^1.0.6
     "@radix-ui/react-popover": ^1.0.6

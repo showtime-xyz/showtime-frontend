@@ -46,15 +46,15 @@ import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
+import { OnRampInitDataType, PayWithUPI } from "./PayWithUPI";
 import { stripePromise } from "./stripe";
 
-export function CheckoutClaimForm({
-  clientSecret,
-  contractAddress,
-}: {
+export function CheckoutClaimForm(props: {
   clientSecret: string;
   contractAddress: string;
+  onRampInitData: OnRampInitDataType | null;
 }) {
+  const { clientSecret, contractAddress, onRampInitData } = props;
   const { data: edition, loading } =
     useCreatorCollectionDetail(contractAddress);
   const isDark = useIsDarkMode();
@@ -96,9 +96,12 @@ export function CheckoutClaimForm({
     );
 
   return (
-    <Elements stripe={stripePromise()} options={stripeOptions}>
-      <CheckoutFormLayout edition={edition} clientSecret={clientSecret} />
-    </Elements>
+    <>
+      {onRampInitData ? <PayWithUPI onRampInitData={onRampInitData} /> : null}
+      <Elements stripe={stripePromise()} options={stripeOptions}>
+        <CheckoutFormLayout edition={edition} clientSecret={clientSecret} />
+      </Elements>
+    </>
   );
 }
 

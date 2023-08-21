@@ -20,6 +20,7 @@
     "@magic-ext/oauth": "^10.1.0",
     "@next/bundle-analyzer": "^13.4.13",
     "@nissy-dev/swc-plugin-react-native-web": "^0.3.1",
+    "@onramp.money/onramp-web-sdk": "^1.4.5",
     "@radix-ui/react-accordion": "1.1.2",
     "@radix-ui/react-hover-card": "^1.0.6",
     "@radix-ui/react-popover": "^1.0.6",
