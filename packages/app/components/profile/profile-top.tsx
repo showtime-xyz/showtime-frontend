@@ -422,30 +422,6 @@ export const ProfileTop = ({
               />
             </View>
           ) : null}
-          {isSelf && user?.data?.claim_tank?.available_claims !== undefined ? (
-            <Pressable
-              onPress={onPressClaimLimit}
-              tw="mt-3 flex-row items-center"
-            >
-              <GiftIcon
-                height={18}
-                width={18}
-                color={isDark ? colors.gray[400] : colors.gray[600]}
-              />
-              <Text tw="ml-0.5 mr-0.5 text-sm text-gray-600 dark:text-gray-400">
-                {user?.data.claim_tank.available_claims
-                  ? `You have ${user?.data.claim_tank.available_claims}/${user?.data.claim_tank.tank_limit} claims available`
-                  : `Your next claim will be available ${getFormatDistanceToNowStrict(
-                      user?.data.claim_tank.next_refill_at
-                    )}`}
-              </Text>
-              <InformationCircleIcon
-                height={18}
-                width={18}
-                color={isDark ? colors.gray[400] : colors.gray[600]}
-              />
-            </Pressable>
-          ) : null}
           <Hidden from="md">
             <ProfileFollows
               profileId={profileId}
