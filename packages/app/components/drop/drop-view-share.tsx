@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useRef } from "react";
+import React, { memo, useCallback, useMemo } from "react";
 import { Linking, Platform, ScrollView } from "react-native";
 
 import * as Clipboard from "expo-clipboard";
@@ -28,7 +28,6 @@ import { toast } from "design-system/toast";
 
 import { CloseButton } from "../close-button";
 import { BgGoldLinearGradient } from "../gold-gradient";
-import { useShareImage } from "../share/use-share-image";
 import { DropPreview, DropPreviewProps } from "./drop-preview";
 
 type DropPreviewShareProps = Omit<DropPreviewProps, "onPressCTA"> & {

@@ -10,13 +10,8 @@ import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Gift as GiftIcon,
-  InformationCircle as InformationCircleIcon,
-} from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -39,7 +34,6 @@ import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import {
   getFullSizeCover,
-  getFormatDistanceToNowStrict,
   getProfileImage,
   getProfileName,
 } from "app/utilities";
