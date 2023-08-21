@@ -24,6 +24,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { StarDropBadge } from "app/components/badge/star-drop-badge";
 import { BgGoldLinearGradient } from "app/components/gold-gradient";
 import { useShareImage } from "app/components/share/use-share-image";
 import {
@@ -207,14 +208,10 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
               style={{ marginLeft: 4 }}
               size={14}
             />
-            <View tw="ml-1 h-4 w-4">
-              <Image
-                source={
-                  Platform.OS === "web"
-                    ? "https://media.showtime.xyz/assets/st-logo.png"
-                    : require("app/components/assets/st-logo.png")
-                }
-                style={{ width: "100%", height: "100%" }}
+            <View tw="ml-1">
+              <StarDropBadge
+                size={16}
+                data={user?.data?.profile.latest_star_drop_collected}
               />
             </View>
           </View>
