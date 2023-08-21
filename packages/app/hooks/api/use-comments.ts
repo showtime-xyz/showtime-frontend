@@ -130,13 +130,25 @@ export const useComments = (nftId?: number) => {
   []);
   const deleteComment = useCallback(
     async function deleteComment(commentId: number) {
+      mutateComments(
+        (d) => {
+          if (d) {
+            d.forEach(
+              (_, index) =>
+                (d[index].comments = d[index]?.comments.filter(
+                  (comment) => comment.id !== commentId
+                ))
+            );
+            return [...d];
+          }
+        },
+        { revalidate: false }
+      );
       await axios({
         url: `/v1/deletecomment/${commentId}`,
         method: "POST",
         data: {},
       });
-
-      mutateComments();
     },
     [mutateComments]
   );
