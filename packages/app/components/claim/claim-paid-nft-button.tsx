@@ -299,7 +299,10 @@ export const ClaimPaidNFTButton = memo(function ClaimPaidNFTButton({
   const [open, setOpen] = useState(false);
   const isDarkMode = useIsDarkMode();
   const isDark = theme ? theme === "dark" : isDarkMode;
-  if (Platform.OS !== "web") {
+  const status = getClaimStatus(rest.edition);
+  const isClaimed = status === ClaimStatus.Claimed;
+
+  if (Platform.OS !== "web" && !isClaimed) {
     return (
       <Tooltip.Root
         onDismiss={() => {
