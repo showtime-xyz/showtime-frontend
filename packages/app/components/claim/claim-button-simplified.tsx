@@ -8,6 +8,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { ClaimContext } from "app/context/claim-context";
+import { useClaimDrop } from "app/hooks/use-claim-drop";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 
@@ -27,12 +28,8 @@ type ClaimButtonProps = {
 export const ClaimButtonSimplified = memo(
   ({ edition, tw = "", loading, ...rest }: ClaimButtonProps) => {
     const isDark = useIsDarkMode();
-    const redirectToClaimDrop = useRedirectToClaimDrop();
-    const {
-      state: claimStates,
-      dispatch,
-      contractAddress,
-    } = useContext(ClaimContext);
+    const { state: claimStates, contractAddress } = useContext(ClaimContext);
+    const { handleClaimNFT } = useClaimDrop(edition);
     const isPaidGated = edition?.gating_type === "paid_nft";
     const isProgress = useMemo(() => {
       return (
@@ -46,32 +43,6 @@ export const ClaimButtonSimplified = memo(
       contractAddress,
       edition?.creator_airdrop_edition.contract_address,
     ]);
-
-    const handleCollectPress = useCallback(
-      (type: ClaimType) => {
-        if (
-          claimStates.status === "loading" &&
-          claimStates.signaturePrompt === false
-        ) {
-          toast("Please wait for the previous collect to complete.");
-          return;
-        }
-        dispatch({ type: "initial" });
-        if (edition) {
-          redirectToClaimDrop(
-            edition.creator_airdrop_edition.contract_address,
-            type
-          );
-        }
-      },
-      [
-        claimStates.signaturePrompt,
-        claimStates.status,
-        dispatch,
-        edition,
-        redirectToClaimDrop,
-      ]
-    );
 
     const status = useMemo(() => getClaimStatus(edition), [edition]);
 
@@ -138,28 +109,6 @@ export const ClaimButtonSimplified = memo(
       [status, isProgress]
     );
 
-    const onPress = useCallback(() => {
-      let type: ClaimType = "free";
-      if (edition?.gating_type === "spotify_save") {
-        type = "spotify";
-      } else if (edition?.gating_type === "multi_provider_music_presave") {
-        type = edition?.creator_spotify_id ? "spotify" : "appleMusic";
-      } else if (edition?.gating_type === "multi_provider_music_save") {
-        type = edition?.spotify_track_url ? "spotify" : "appleMusic";
-      } else if (
-        edition?.gating_type === "music_presave" ||
-        edition?.gating_type === "spotify_presave"
-      ) {
-        type = "spotify";
-      }
-      handleCollectPress(type);
-    }, [
-      edition?.creator_spotify_id,
-      edition?.gating_type,
-      edition?.spotify_track_url,
-      handleCollectPress,
-    ]);
-
     if (loading) {
       return <Skeleton width={96} height={24} radius={999} show tw={tw} />;
     }
@@ -176,7 +125,7 @@ export const ClaimButtonSimplified = memo(
       <PressableHover
         tw={["h-6 w-24 items-center justify-center rounded-full", tw]}
         disabled={disabled}
-        onPress={onPress}
+        onPress={() => handleClaimNFT()}
         style={{
           backgroundColor: buttonBgColor,
         }}

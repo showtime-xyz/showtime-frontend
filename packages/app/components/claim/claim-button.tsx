@@ -20,20 +20,17 @@ import { View } from "@showtime-xyz/universal.view";
 import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { ClaimContext } from "app/context/claim-context";
 import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
+import { useClaimDrop } from "app/hooks/use-claim-drop";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToChannelUnlocked } from "app/hooks/use-redirect-to-channel-unlocked-screen";
-import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useRedirectToRaffleResult } from "app/hooks/use-redirect-to-raffle-result";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
-import { Analytics, EVENTS } from "app/lib/analytics";
 import { NFT } from "app/types";
 
 import { LABEL_SIZE_TW } from "design-system/button/constants";
 import { ThreeDotsAnimation } from "design-system/three-dots";
-import { toast } from "design-system/toast";
 
-import { ClaimType } from "./claim-form";
 import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
 import { ClaimStatus, getClaimStatus } from "./claim-status";
 
@@ -55,21 +52,18 @@ export const ClaimButton = ({
 }: ClaimButtonProps) => {
   const isDarkMode = useIsDarkMode();
   const isDark = theme === "dark" || (theme === "light" ? false : isDarkMode);
-  const { claimAppleMusicGatedDrop, isMutating: isAppleMusicCollectLoading } =
-    useAppleMusicGatedClaim(edition.creator_airdrop_edition);
-  const redirectToClaimDrop = useRedirectToClaimDrop();
+  const { isMutating: isAppleMusicCollectLoading } = useAppleMusicGatedClaim(
+    edition.creator_airdrop_edition
+  );
   const redirectToRaffleResult = useRedirectToRaffleResult();
-  const {
-    state: claimStates,
-    dispatch,
-    contractAddress,
-  } = useContext(ClaimContext);
+  const { state: claimStates, contractAddress } = useContext(ClaimContext);
   const isProgress =
     claimStates.status === "loading" &&
     claimStates.signaturePrompt === false &&
     contractAddress === edition.creator_airdrop_edition.contract_address;
-  const { claimSpotifyGatedDrop, isMutating: isSpotifyCollectLoading } =
-    useSpotifyGatedClaim(edition.creator_airdrop_edition);
+  const { isMutating: isSpotifyCollectLoading } = useSpotifyGatedClaim(
+    edition.creator_airdrop_edition
+  );
   const { isAuthenticated, user } = useUser();
   const isSelf =
     user?.data?.profile.profile_id ===
@@ -79,39 +73,7 @@ export const ClaimButton = ({
   const handleRaffleResultPress = () => {
     redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
   };
-
-  const handleCollectPress = (type: ClaimType) => {
-    if (
-      claimStates.status === "loading" &&
-      claimStates.signaturePrompt === false
-    ) {
-      toast("Please wait for the previous collect to complete.");
-      return;
-    }
-    dispatch({ type: "initial" });
-
-    if (
-      (edition.gating_type === "spotify_presave" ||
-        edition.gating_type === "spotify_save" ||
-        edition?.gating_type === "music_presave" ||
-        edition.gating_type === "multi_provider_music_save" ||
-        edition.gating_type === "multi_provider_music_presave") &&
-      !isAuthenticated
-    ) {
-      if (type === "spotify") {
-        Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
-        claimSpotifyGatedDrop({});
-      } else if (type === "appleMusic") {
-        Analytics.track(EVENTS.APPLE_MUSIC_SAVE_PRESSED_BEFORE_LOGIN);
-        claimAppleMusicGatedDrop({});
-      }
-    } else {
-      redirectToClaimDrop(
-        edition.creator_airdrop_edition.contract_address,
-        type
-      );
-    }
-  };
+  const { handleClaimNFT } = useClaimDrop(edition);
 
   const status = getClaimStatus(edition);
   const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
@@ -266,7 +228,7 @@ export const ClaimButton = ({
     );
   } else if (edition?.gating_type === "spotify_save") {
     return (
-      <Button {...buttonProps} onPress={() => handleCollectPress("spotify")}>
+      <Button {...buttonProps} onPress={() => handleClaimNFT("spotify")}>
         <>
           <Spotify
             color={isDark ? colors.black : colors.white}
@@ -288,7 +250,7 @@ export const ClaimButton = ({
         {edition.creator_apple_music_id ? (
           <Button
             {...buttonProps}
-            onPress={() => handleCollectPress("appleMusic")}
+            onPress={() => handleClaimNFT("appleMusic")}
             tw="grow flex-row items-center justify-center bg-black dark:bg-white"
             disabled={isAppleMusicCollectLoading}
           >
@@ -307,7 +269,7 @@ export const ClaimButton = ({
             <View tw="w-2" />
             <Button
               {...buttonProps}
-              onPress={() => handleCollectPress("spotify")}
+              onPress={() => handleClaimNFT("spotify")}
               tw="grow flex-row justify-center"
               disabled={isSpotifyCollectLoading}
             >
@@ -336,7 +298,7 @@ export const ClaimButton = ({
         {edition?.apple_music_track_url ? (
           <Button
             {...buttonProps}
-            onPress={() => handleCollectPress("appleMusic")}
+            onPress={() => handleClaimNFT("appleMusic")}
             tw="grow flex-row items-center justify-center bg-black dark:bg-white"
             disabled={isAppleMusicCollectLoading}
           >
@@ -355,7 +317,7 @@ export const ClaimButton = ({
             <View tw="w-2" />
             <Button
               {...buttonProps}
-              onPress={() => handleCollectPress("spotify")}
+              onPress={() => handleClaimNFT("spotify")}
               tw="grow flex-row justify-center"
               disabled={isSpotifyCollectLoading}
             >
@@ -383,7 +345,7 @@ export const ClaimButton = ({
     edition?.gating_type === "spotify_presave"
   ) {
     return (
-      <Button {...buttonProps} onPress={() => handleCollectPress("spotify")}>
+      <Button {...buttonProps} onPress={() => handleClaimNFT("spotify")}>
         <>
           <Spotify
             color={isDark ? colors.black : colors.white}
@@ -417,7 +379,7 @@ export const ClaimButton = ({
     <Button
       {...buttonProps}
       onPress={() => {
-        handleCollectPress("free");
+        handleClaimNFT();
       }}
     >
       Collect
