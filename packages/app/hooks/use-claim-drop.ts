@@ -24,9 +24,9 @@ export const useClaimDrop = (edition?: CreatorEditionResponse) => {
   const { state: claimStates, dispatch } = useContext(ClaimContext);
   const { data: user, follow } = useMyInfo();
 
-  const handleClaimNFT = async () => {
-    let success: boolean | undefined | void = false;
-    let type: ClaimType = "free";
+  const handleClaimNFT = async (
+    claimType?: "spotify" | "appleMusic" | null
+  ) => {
     if (isLoading) {
       toast("Please wait a moment to claim your drop.");
       return;
@@ -53,16 +53,23 @@ export const useClaimDrop = (edition?: CreatorEditionResponse) => {
       toast("Please wait for the previous collect to complete.");
       return;
     }
-    if (
+    // The claimType parameter is specifically for the Spotify or Apple Music claim button.
+    if (claimType === "spotify") {
+      Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
+      await claimSpotifyGatedDrop({});
+    } else if (claimType === "appleMusic") {
+      Analytics.track(EVENTS.APPLE_MUSIC_SAVE_PRESSED_BEFORE_LOGIN);
+      await claimAppleMusicGatedDrop({});
+    } else if (
       edition?.gating_type === "multi_provider_music_save" ||
       edition?.gating_type === "multi_provider_music_presave"
     ) {
       if (edition?.spotify_track_url) {
         Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
-        success = await claimSpotifyGatedDrop({});
+        await claimSpotifyGatedDrop({});
       } else {
         Analytics.track(EVENTS.APPLE_MUSIC_SAVE_PRESSED_BEFORE_LOGIN);
-        success = await claimAppleMusicGatedDrop({});
+        await claimAppleMusicGatedDrop({});
       }
     } else if (
       edition?.gating_type === "spotify_save" ||
@@ -70,7 +77,7 @@ export const useClaimDrop = (edition?: CreatorEditionResponse) => {
       edition?.gating_type === "music_presave"
     ) {
       Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
-      success = await claimSpotifyGatedDrop({});
+      await claimSpotifyGatedDrop({});
     } else if (
       edition?.gating_type === "password" ||
       edition?.gating_type === "location" ||
@@ -78,10 +85,10 @@ export const useClaimDrop = (edition?: CreatorEditionResponse) => {
     ) {
       redirectToClaimDrop(
         edition?.creator_airdrop_edition.contract_address,
-        type
+        "free"
       );
     } else {
-      success = await claimNFT({});
+      await claimNFT({});
     }
   };
 

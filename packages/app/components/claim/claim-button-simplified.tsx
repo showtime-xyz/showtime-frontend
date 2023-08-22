@@ -125,7 +125,7 @@ export const ClaimButtonSimplified = memo(
       <PressableHover
         tw={["h-6 w-24 items-center justify-center rounded-full", tw]}
         disabled={disabled}
-        onPress={handleClaimNFT}
+        onPress={() => handleClaimNFT()}
         style={{
           backgroundColor: buttonBgColor,
         }}

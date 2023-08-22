@@ -228,7 +228,7 @@ export const ClaimButton = ({
     );
   } else if (edition?.gating_type === "spotify_save") {
     return (
-      <Button {...buttonProps} onPress={handleClaimNFT}>
+      <Button {...buttonProps} onPress={() => handleClaimNFT("spotify")}>
         <>
           <Spotify
             color={isDark ? colors.black : colors.white}
@@ -250,7 +250,7 @@ export const ClaimButton = ({
         {edition.creator_apple_music_id ? (
           <Button
             {...buttonProps}
-            onPress={handleClaimNFT}
+            onPress={() => handleClaimNFT("appleMusic")}
             tw="grow flex-row items-center justify-center bg-black dark:bg-white"
             disabled={isAppleMusicCollectLoading}
           >
@@ -269,7 +269,7 @@ export const ClaimButton = ({
             <View tw="w-2" />
             <Button
               {...buttonProps}
-              onPress={handleClaimNFT}
+              onPress={() => handleClaimNFT("spotify")}
               tw="grow flex-row justify-center"
               disabled={isSpotifyCollectLoading}
             >
@@ -298,7 +298,7 @@ export const ClaimButton = ({
         {edition?.apple_music_track_url ? (
           <Button
             {...buttonProps}
-            onPress={handleClaimNFT}
+            onPress={() => handleClaimNFT("appleMusic")}
             tw="grow flex-row items-center justify-center bg-black dark:bg-white"
             disabled={isAppleMusicCollectLoading}
           >
@@ -317,7 +317,7 @@ export const ClaimButton = ({
             <View tw="w-2" />
             <Button
               {...buttonProps}
-              onPress={handleClaimNFT}
+              onPress={() => handleClaimNFT("spotify")}
               tw="grow flex-row justify-center"
               disabled={isSpotifyCollectLoading}
             >
@@ -345,7 +345,7 @@ export const ClaimButton = ({
     edition?.gating_type === "spotify_presave"
   ) {
     return (
-      <Button {...buttonProps} onPress={handleClaimNFT}>
+      <Button {...buttonProps} onPress={() => handleClaimNFT("spotify")}>
         <>
           <Spotify
             color={isDark ? colors.black : colors.white}
@@ -376,7 +376,12 @@ export const ClaimButton = ({
   }
 
   return (
-    <Button {...buttonProps} onPress={handleClaimNFT}>
+    <Button
+      {...buttonProps}
+      onPress={() => {
+        handleClaimNFT();
+      }}
+    >
       Collect
     </Button>
   );

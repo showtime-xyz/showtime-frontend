@@ -209,7 +209,7 @@ export function ClaimButtonIconic({
 
   return (
     <FeedSocialButton
-      onPress={handleClaimNFT}
+      onPress={() => handleClaimNFT()}
       text={
         <>
           <Text
