@@ -18,7 +18,7 @@ import { useSaveSpotifyToken } from "./use-save-spotify-token";
 import { useStableCallback } from "./use-stable-callback";
 import { useUser } from "./use-user";
 
-export const useSpotifyGatedClaim = (edition: IEdition) => {
+export const useSpotifyGatedClaim = (edition: IEdition | null | undefined) => {
   const user = useUser();
   const { claimNFT } = useClaimNFT(edition);
   const Alert = useAlert();
@@ -48,7 +48,7 @@ export const useSpotifyGatedClaim = (edition: IEdition) => {
               data: {
                 code: spotifyToken.code,
                 redirect_uri: spotifyToken.redirectUri,
-                edition_address: edition.contract_address,
+                edition_address: edition?.contract_address,
               },
               method: "POST",
             });

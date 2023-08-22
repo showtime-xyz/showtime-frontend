@@ -19,7 +19,9 @@ import { useSaveAppleMusicToken } from "./use-save-apple-music-token";
 import { useStableCallback } from "./use-stable-callback";
 import { useUser } from "./use-user";
 
-export const useAppleMusicGatedClaim = (edition: IEdition) => {
+export const useAppleMusicGatedClaim = (
+  edition: IEdition | null | undefined
+) => {
   const user = useUser();
   const Alert = useAlert();
   const { claimNFT } = useClaimNFT(edition);
@@ -59,7 +61,7 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
             url: "/v1/apple_music/gate",
             data: {
               token: appleMusicToken,
-              edition_address: edition.contract_address,
+              edition_address: edition?.contract_address,
             },
             method: "POST",
           });
@@ -81,7 +83,6 @@ export const useAppleMusicGatedClaim = (edition: IEdition) => {
     } catch (error: any) {
       Logger.error("claimAppleMusicGatedDrop failed", error);
       Alert.alert("Something went wrong", formatAPIErrorMessage(error));
-      throw error;
     }
   });
 

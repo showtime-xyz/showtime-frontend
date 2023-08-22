@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -12,17 +12,12 @@ import { View, ViewProps } from "@showtime-xyz/universal.view";
 import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
 import { ClaimStatus, getClaimStatus } from "app/components/claim/claim-status";
 import { FeedSocialButton } from "app/components/feed-social-button";
-import { ClaimContext } from "app/context/claim-context";
-import { useMyInfo } from "app/hooks/api-hooks";
+import { useClaimDrop } from "app/hooks/use-claim-drop";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
 
-import { toast } from "design-system/toast";
-
-import { ClaimType } from "../claim/claim-form";
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 
 export function ClaimButtonIconic({
@@ -34,16 +29,14 @@ export function ClaimButtonIconic({
   tw?: string;
   textViewStyle?: ViewProps["style"];
 }) {
-  const { data: myInfoData } = useMyInfo();
   const router = useRouter();
-  const redirectToClaimDrop = useRedirectToClaimDrop();
   const isDark = useIsDarkMode();
-  const { state: claimStates, dispatch } = useContext(ClaimContext);
   const { data: edition, loading } = useCreatorCollectionDetail(
     nft?.creator_airdrop_edition_address
   );
   const status = getClaimStatus(edition);
   const redirectToDropImageShareScreen = useRedirectDropImageShareScreen();
+  const { handleClaimNFT } = useClaimDrop(edition);
 
   const viewCollecters = useCallback(() => {
     const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
@@ -68,64 +61,6 @@ export function ClaimButtonIconic({
       { shallow: true }
     );
   }, [router, nft]);
-  const handleCollectPress = useCallback(
-    (type: ClaimType) => {
-      if (
-        claimStates.status === "loading" &&
-        claimStates.signaturePrompt === false
-      ) {
-        toast("Please wait for the previous collect to complete.");
-        return;
-      }
-      dispatch({ type: "initial" });
-      if (edition) {
-        redirectToClaimDrop(
-          edition.creator_airdrop_edition.contract_address,
-          type
-        );
-      }
-    },
-    [claimStates, dispatch, edition, redirectToClaimDrop]
-  );
-  const claimDrop = useCallback(() => {
-    let type: ClaimType = "free";
-
-    if (
-      myInfoData?.data.profile.has_spotify_token &&
-      (edition?.gating_type === "spotify_save" ||
-        edition?.gating_type === "spotify_presave" ||
-        edition?.gating_type === "multi_provider_music_save" ||
-        edition?.gating_type === "multi_provider_music_presave")
-    ) {
-      type = "spotify";
-    } else if (
-      myInfoData?.data.profile.has_apple_music_token &&
-      (edition?.gating_type === "multi_provider_music_save" ||
-        edition?.gating_type === "multi_provider_music_presave")
-    ) {
-      type = "appleMusic";
-    } else if (
-      edition?.gating_type === "spotify_save" ||
-      edition?.gating_type === "spotify_presave"
-    ) {
-      type = "spotify";
-    } else if (edition?.gating_type === "paid_nft") {
-      type = "paid";
-    } else {
-      type =
-        edition?.creator_spotify_id || edition?.spotify_track_url
-          ? "spotify"
-          : "appleMusic";
-    }
-    handleCollectPress(type);
-  }, [
-    myInfoData?.data.profile.has_spotify_token,
-    myInfoData?.data.profile.has_apple_music_token,
-    edition?.gating_type,
-    edition?.creator_spotify_id,
-    edition?.spotify_track_url,
-    handleCollectPress,
-  ]);
   const isPaidGated = edition?.gating_type === "paid_nft";
 
   if (loading) {
@@ -274,7 +209,7 @@ export function ClaimButtonIconic({
 
   return (
     <FeedSocialButton
-      onPress={claimDrop}
+      onPress={handleClaimNFT}
       text={
         <>
           <Text
