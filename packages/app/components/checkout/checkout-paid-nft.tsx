@@ -27,7 +27,10 @@ export const CheckoutPaidNFT = () => {
   const [clientSecret, setClientSecret] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [onRampInitData, setOnRampInitData] =
-    useState<null | OnRampInitDataType>(null);
+    useState<null | OnRampInitDataType>({
+      merchantId: "23",
+      appId: 2,
+    });
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
   const getClaimPaymentsIntent = useCallback(async () => {

@@ -97,22 +97,24 @@ export function CheckoutClaimForm(props: {
 
   return (
     <>
-      {onRampInitData ? <PayWithUPI onRampInitData={onRampInitData} /> : null}
       <Elements stripe={stripePromise()} options={stripeOptions}>
-        <CheckoutFormLayout edition={edition} clientSecret={clientSecret} />
+        <CheckoutFormLayout
+          edition={edition}
+          clientSecret={clientSecret}
+          onRampInitData={onRampInitData}
+        />
       </Elements>
     </>
   );
 }
 
-const CheckoutFormLayout = ({
-  edition,
-  clientSecret,
-}: {
+const CheckoutFormLayout = (props: {
   edition: CreatorEditionResponse;
   clientSecret: string;
+  onRampInitData: OnRampInitDataType | null;
 }) => {
   const isDark = useIsDarkMode();
+  const { edition, clientSecret, onRampInitData } = props;
   const { data: nft } = useNFTDetailByTokenId({
     chainName: edition.chain_name,
     tokenId: "0",
@@ -274,6 +276,14 @@ const CheckoutFormLayout = ({
           </View>
         </View>
         <View tw="h-6" />
+        {onRampInitData ? (
+          <View tw="pt-4">
+            <PayWithUPI onRampInitData={onRampInitData} />
+            <Text tw="py-4 text-center text-lg font-semibold text-gray-900 dark:text-gray-50">
+              or
+            </Text>
+          </View>
+        ) : null}
         {paymentMethodsList && paymentMethodsList?.length > 0 ? (
           <>
             {paymentMethodsList?.map((method) => {
