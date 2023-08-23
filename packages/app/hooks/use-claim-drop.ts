@@ -1,6 +1,7 @@
 import { useContext } from "react";
 
 import { ClaimType } from "app/components/claim/claim-form";
+import usePrimaryWalletAlert from "app/components/claim/util";
 import { ClaimContext } from "app/context/claim-context";
 import { Analytics, EVENTS } from "app/lib/analytics";
 
@@ -23,6 +24,7 @@ export const useClaimDrop = (edition?: CreatorEditionResponse) => {
   const isLoading = isAppleMusicDropMutating || isSpotifyDropMutating;
   const { state: claimStates, dispatch } = useContext(ClaimContext);
   const { data: user, follow } = useMyInfo();
+  const showPrimaryWalletAlert = usePrimaryWalletAlert();
 
   const handleClaimNFT = async (
     claimType?: "spotify" | "appleMusic" | null
@@ -53,6 +55,12 @@ export const useClaimDrop = (edition?: CreatorEditionResponse) => {
       toast("Please wait for the previous collect to complete.");
       return;
     }
+
+    if (user?.data?.profile?.primary_wallet === null) {
+      showPrimaryWalletAlert();
+      return;
+    }
+
     // The claimType parameter is specifically for the Spotify or Apple Music claim button.
     if (claimType === "spotify") {
       Analytics.track(EVENTS.SPOTIFY_SAVE_PRESSED_BEFORE_LOGIN);
