@@ -103,7 +103,7 @@ export function CheckoutClaimForm(props: {
       />
     </Elements>
   ) : onRampInitData ? (
-    <View tw="p-4">
+    <View tw="p-16">
       <PayWithUPI onRampInitData={onRampInitData} />
     </View>
   ) : null;

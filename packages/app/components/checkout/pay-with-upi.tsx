@@ -5,6 +5,8 @@ import { Image } from "@showtime-xyz/universal.image";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { Logger } from "app/lib/logger";
+
 export type OnRampInitDataType = {
   app_id: number;
   coin_code: string;
@@ -19,16 +21,29 @@ export type OnRampInitDataType = {
 export const PayWithUPI = (props: { onRampInitData: OnRampInitDataType }) => {
   const { onRampInitData } = props;
   const handleSubmit = () => {
-    const onrampInstance = new OnrampWebSDK({
-      appId: onRampInitData.app_id,
-      walletAddress: onRampInitData.wallet_address,
-      flowType: onRampInitData.flow_type,
-      fiatType: onRampInitData.fiat_type,
-      fiatAmount: onRampInitData.fiat_amount,
-      network: onRampInitData.network,
-      coinCode: onRampInitData.coin_code,
-      merchantRecognitionId: onRampInitData.merchant_id,
-    });
+    let req: any;
+    if (process.env.NEXT_PUBLIC_STAGE === "development") {
+      req = {
+        appId: onRampInitData.app_id,
+        walletAddress: onRampInitData.wallet_address,
+        fiatType: onRampInitData.fiat_type,
+        fiatAmount: onRampInitData.fiat_amount,
+        merchantRecognitionId: onRampInitData.merchant_id,
+      };
+    } else {
+      req = {
+        appId: onRampInitData.app_id,
+        walletAddress: onRampInitData.wallet_address,
+        flowType: onRampInitData.flow_type,
+        fiatType: onRampInitData.fiat_type,
+        fiatAmount: onRampInitData.fiat_amount,
+        network: onRampInitData.network,
+        coinCode: onRampInitData.coin_code,
+        merchantRecognitionId: onRampInitData.merchant_id,
+      };
+    }
+
+    const onrampInstance = new OnrampWebSDK(req);
 
     onrampInstance.show();
 
@@ -37,6 +52,11 @@ export const PayWithUPI = (props: { onRampInitData: OnRampInitDataType }) => {
       if (e.type === "ONRAMP_WIDGET_TX_COMPLETED") {
         console.log("onrampInstance TX_EVENTS", e);
         // Success close the onramp modal. Start polling the server for the status of the onramp transaction and trigger claim if success
+      }
+    });
+    onrampInstance.on("WIDGET_EVENTS", (e) => {
+      if (e.type === "ONRAMP_WIDGET_FAILED") {
+        Logger.error("onrampInstance widget failed", e);
       }
     });
   };
