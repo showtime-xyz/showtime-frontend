@@ -18,4 +18,5 @@ export const DropScreen = withModalScreen(CreateDropSteps, {
   ],
   useNativeModal: false,
   headerShown: false,
+  disableBackdropPress: true,
 });
