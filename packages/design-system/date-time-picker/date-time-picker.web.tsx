@@ -35,6 +35,7 @@ export const DateTimePicker = (props: DateTimePickerProps) => {
           ? "h:mm aa"
           : "MMMM d, yyyy"
       }
+      wrapperClassName="w-full"
     />
   );
 };

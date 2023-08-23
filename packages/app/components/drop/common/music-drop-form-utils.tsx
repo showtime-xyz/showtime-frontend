@@ -37,19 +37,19 @@ export const getDefaultDate = () => {
     const thisWeekFriday = thisWeek.setDate(thisWeek.getDate() + minus);
     return new Date(thisWeekFriday);
   }
-  // If not, fallback to 12:00AM local time the next week
-  const nextweek = new Date(
-    new Date(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate() + 1,
-      0,
-      0,
-      0
-    )
+};
+export const getMinimumDate = () => {
+  const currentDate = new Date();
+  const midnight = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate() + 1,
+    0,
+    0,
+    0
   );
-  const nextFriday = nextweek.setDate(nextweek.getDate() + minus + 7);
-  return new Date(nextFriday);
+  const targetDate = new Date(midnight.getTime() + 24 * 60 * 60 * 1000);
+  return targetDate;
 };
 
 export const useMusicDropForm = () => {
@@ -99,7 +99,7 @@ export const useMusicDropForm = () => {
                     .date()
                     .nullable()
                     .min(
-                      getDefaultDate(),
+                      getMinimumDate(),
                       "The date you entered is invalid. Please enter a date that is at least 24 hours from now and after the next occurrence of 12:00 AM (midnight)"
                     ),
                 }),

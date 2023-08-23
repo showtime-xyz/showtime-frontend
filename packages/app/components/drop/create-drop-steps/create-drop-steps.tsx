@@ -56,6 +56,7 @@ import { DateTimePicker } from "design-system/date-time-picker";
 import { MediaPicker } from "../common/media-picker";
 import {
   getDefaultDate,
+  getMinimumDate,
   useMusicDropForm,
 } from "../common/music-drop-form-utils";
 import { SelectDropType } from "../common/select-drop-type";
@@ -125,7 +126,7 @@ export const CreateDropSteps = () => {
         editionSize: isUnlimited ? 0 : values.editionSize,
         releaseDate: isSaveDrop
           ? undefined
-          : values.releaseDate ?? getDefaultDate().toISOString(),
+          : values.releaseDate ?? getDefaultDate()?.toISOString(),
         appleMusicTrackUrl: values.appleMusicTrackUrl,
       },
       clearStorage
@@ -584,7 +585,7 @@ const CreateDropStepSongURI = (
                           onChange(v);
                           setShowDatePicker(false);
                         }}
-                        minimumDate={getDefaultDate()}
+                        minimumDate={getMinimumDate()}
                         value={dateValue}
                         type="datetime"
                         open={showDatePicker}
@@ -599,7 +600,7 @@ const CreateDropStepSongURI = (
                 );
               }}
             />
-            <View tw="absolute right-4 top-[50%] ml-4 translate-y-[-50%] flex-row items-center">
+            <View tw="absolute right-4 top-7 ml-4 flex-row items-center">
               <Checkbox
                 checked={isSaveDrop}
                 onChange={() => {
