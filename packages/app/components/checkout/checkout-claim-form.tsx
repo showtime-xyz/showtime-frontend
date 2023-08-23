@@ -46,11 +46,11 @@ import { ThreeDotsAnimation } from "design-system/three-dots";
 import { toast } from "design-system/toast";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { OnRampInitDataType, PayWithUPI } from "./PayWithUPI";
+import { OnRampInitDataType, PayWithUPI } from "./pay-with-upi";
 import { stripePromise } from "./stripe";
 
 export function CheckoutClaimForm(props: {
-  clientSecret: string;
+  clientSecret?: string;
   contractAddress: string;
   onRampInitData: OnRampInitDataType | null;
 }) {
@@ -60,13 +60,12 @@ export function CheckoutClaimForm(props: {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const stripeOptions = useMemo(
-    () =>
-      ({
-        clientSecret,
-        appearance: {
-          theme: isDark ? "night" : "stripe",
-        },
-      } as const),
+    () => ({
+      clientSecret,
+      appearance: {
+        theme: isDark ? "night" : "stripe",
+      } as const,
+    }),
     [clientSecret, isDark]
   );
 
@@ -77,7 +76,7 @@ export function CheckoutClaimForm(props: {
       </View>
     );
   }
-  if (!edition || !clientSecret)
+  if (!edition || (!clientSecret && !onRampInitData))
     return (
       <View tw="min-h-[200px] flex-1 items-center justify-center">
         <EmptyPlaceholder
@@ -95,17 +94,19 @@ export function CheckoutClaimForm(props: {
       </View>
     );
 
-  return (
-    <>
-      <Elements stripe={stripePromise()} options={stripeOptions}>
-        <CheckoutFormLayout
-          edition={edition}
-          clientSecret={clientSecret}
-          onRampInitData={onRampInitData}
-        />
-      </Elements>
-    </>
-  );
+  return stripeOptions.clientSecret ? (
+    <Elements stripe={stripePromise()} options={stripeOptions}>
+      <CheckoutFormLayout
+        edition={edition}
+        clientSecret={stripeOptions.clientSecret}
+        onRampInitData={onRampInitData}
+      />
+    </Elements>
+  ) : onRampInitData ? (
+    <View tw="p-4">
+      <PayWithUPI onRampInitData={onRampInitData} />
+    </View>
+  ) : null;
 }
 
 const CheckoutFormLayout = (props: {

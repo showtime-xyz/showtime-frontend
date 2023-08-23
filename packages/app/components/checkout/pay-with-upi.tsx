@@ -6,19 +6,28 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 export type OnRampInitDataType = {
-  merchantId: string;
-  appId: number;
+  app_id: number;
+  coin_code: string;
+  fiat_amount: number;
+  fiat_type: number;
+  flow_type: number;
+  merchant_id: string;
+  network: string;
+  wallet_address: string;
 };
 
 export const PayWithUPI = (props: { onRampInitData: OnRampInitDataType }) => {
+  const { onRampInitData } = props;
   const handleSubmit = () => {
     const onrampInstance = new OnrampWebSDK({
-      appId: 2,
-      walletAddress: "0x8193f4B7A12076A6b9B6Ab76Aa827106696dA8D1",
-      flowType: 1,
-      fiatType: 1,
-      paymentMethod: 1,
-      fiatAmount: 1002,
+      appId: onRampInitData.app_id,
+      walletAddress: onRampInitData.wallet_address,
+      flowType: onRampInitData.flow_type,
+      fiatType: onRampInitData.fiat_type,
+      fiatAmount: onRampInitData.fiat_amount,
+      network: onRampInitData.network,
+      coinCode: onRampInitData.coin_code,
+      merchantRecognitionId: onRampInitData.merchant_id,
     });
 
     onrampInstance.show();
@@ -32,7 +41,12 @@ export const PayWithUPI = (props: { onRampInitData: OnRampInitDataType }) => {
     });
   };
   return (
-    <Button size="regular" variant="tertiary" onPress={handleSubmit}>
+    <Button
+      size="regular"
+      variant="base"
+      tw="bg-gray-100 dark:bg-gray-50"
+      onPress={handleSubmit}
+    >
       <View tw="flex-row items-center" style={{ gap: 8 }}>
         <Image
           source={{

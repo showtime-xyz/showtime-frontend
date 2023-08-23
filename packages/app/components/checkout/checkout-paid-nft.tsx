@@ -12,8 +12,8 @@ import { axios } from "app/lib/axios";
 import { createParam } from "app/navigation/use-param";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { OnRampInitDataType } from "./PayWithUPI";
 import { CheckoutClaimForm } from "./checkout-claim-form";
+import { OnRampInitDataType } from "./pay-with-upi";
 
 type Query = {
   editionId?: string;
@@ -24,13 +24,10 @@ const { useParam } = createParam<Query>();
 export const CheckoutPaidNFT = () => {
   const [editionId] = useParam("editionId");
   const [contractAddress] = useParam("contractAddress");
-  const [clientSecret, setClientSecret] = useState(null);
+  const [clientSecret, setClientSecret] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const [onRampInitData, setOnRampInitData] =
-    useState<null | OnRampInitDataType>({
-      merchantId: "23",
-      appId: 2,
-    });
+    useState<null | OnRampInitDataType>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
   const getClaimPaymentsIntent = useCallback(async () => {
@@ -46,8 +43,8 @@ export const CheckoutPaidNFT = () => {
       });
       setClientSecret(res?.client_secret);
       setIsLoading(false);
-      if (res.onramp) {
-        setOnRampInitData(res.onramp);
+      if (res.onramp_payment_intent) {
+        setOnRampInitData(res.onramp_payment_intent);
       }
     } catch (error: any) {
       if (error?.response?.data?.error?.code === 400) {
@@ -123,9 +120,10 @@ export const CheckoutPaidNFT = () => {
     );
   }
 
-  if (!clientSecret || !contractAddress) {
+  if (!contractAddress || (!clientSecret && !onRampInitData)) {
     return <EmptyPlaceholder tw="min-h-[296px]" title="No payment yet" />;
   }
+
   return (
     <CheckoutClaimForm
       clientSecret={clientSecret}
