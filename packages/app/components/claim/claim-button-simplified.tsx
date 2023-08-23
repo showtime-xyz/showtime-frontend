@@ -1,4 +1,4 @@
-import { useContext, useMemo, memo, useCallback } from "react";
+import { useContext, useMemo, memo } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -10,11 +10,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { ClaimContext } from "app/context/claim-context";
 import { useClaimDrop } from "app/hooks/use-claim-drop";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
-import { useRedirectToClaimDrop } from "app/hooks/use-redirect-to-claim-drop";
 
-import { toast } from "design-system/toast";
-
-import { ClaimType } from "./claim-form";
 import { ClaimPaidNFTButton } from "./claim-paid-nft-button";
 import { ClaimStatus, getClaimStatus } from "./claim-status";
 

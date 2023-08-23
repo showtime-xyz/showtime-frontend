@@ -308,7 +308,7 @@ export const useMyInfo = () => {
     {
       revalidateOnMount: false,
       revalidateIfStale: false,
-      dedupingInterval: 30000,
+      dedupingInterval: 5000,
       focusThrottleInterval: 30000,
     }
   );
