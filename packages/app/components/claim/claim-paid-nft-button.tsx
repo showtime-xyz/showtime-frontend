@@ -5,7 +5,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { BorderlessButton } from "react-native-gesture-handler";
 import * as Tooltip from "universal-tooltip";
 
-import { Alert } from "@showtime-xyz/universal.alert";
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime } from "@showtime-xyz/universal.icon";
