@@ -60,7 +60,7 @@ export const PayWithUPI = (props: {
         if (onrampInstance._isVisible) {
           onrampInstance.close();
         }
-        router.push(
+        router.replace(
           {
             pathname: router.pathname,
             query: {
