@@ -1,5 +1,8 @@
 import { useMemo, useCallback, useState } from "react";
 
+import { unstable_serialize } from "swr/infinite";
+import useSWRMutation from "swr/mutation";
+
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
@@ -33,21 +36,28 @@ export interface CommentType {
   self_liked?: boolean;
 }
 
-export interface Data {
+export interface CommentsPayload {
   comments: CommentType[];
   next_page: number | null;
   count: number;
 }
 
-export type CommentsPayload = Data;
-
+async function deleteCommentFetch(
+  url: string,
+  { arg }: { arg: { commentId: number } }
+) {
+  return await axios({
+    url: `/v1/deletecomment/${arg.commentId}`,
+    method: "POST",
+    data: {},
+  });
+}
 export const useComments = (nftId?: number) => {
   const PAGE_SIZE = 20;
   //#region state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
   const [isReachingEnd, setIsReachingEnd] = useState(false);
-
   //#endregion
 
   //#region hooks
@@ -58,6 +68,14 @@ export const useComments = (nftId?: number) => {
     },
     [nftId]
   );
+  const { trigger } = useSWRMutation<
+    CommentsPayload[],
+    CommentsPayload[],
+    string,
+    {
+      commentId: number;
+    }
+  >(unstable_serialize(fetchCommentsURL), deleteCommentFetch);
 
   const {
     data,
@@ -130,27 +148,25 @@ export const useComments = (nftId?: number) => {
   []);
   const deleteComment = useCallback(
     async function deleteComment(commentId: number) {
-      mutateComments(
-        (d) => {
-          if (d) {
-            d.forEach(
-              (_, index) =>
-                (d[index].comments = d[index]?.comments.filter(
-                  (comment) => comment.id !== commentId
-                ))
-            );
-            return [...d];
-          }
-        },
-        { revalidate: false }
+      await trigger(
+        { commentId },
+        {
+          // @ts-ignore
+          optimisticData: (d) => {
+            if (d) {
+              d.forEach(
+                (_, index) =>
+                  (d[index].comments = d[index]?.comments.filter(
+                    (comment) => comment.id !== commentId
+                  ))
+              );
+              return [...d];
+            }
+          },
+        }
       );
-      await axios({
-        url: `/v1/deletecomment/${commentId}`,
-        method: "POST",
-        data: {},
-      });
     },
-    [mutateComments]
+    [trigger]
   );
 
   const newComment = useCallback(
