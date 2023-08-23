@@ -104,7 +104,7 @@ export function CheckoutClaimForm(props: {
     </Elements>
   ) : onRampInitData ? (
     <View tw="p-16">
-      <PayWithUPI onRampInitData={onRampInitData} />
+      <PayWithUPI onRampInitData={onRampInitData} edition={edition} />
     </View>
   ) : null;
 }
@@ -279,7 +279,7 @@ const CheckoutFormLayout = (props: {
         <View tw="h-6" />
         {onRampInitData ? (
           <View tw="pt-4">
-            <PayWithUPI onRampInitData={onRampInitData} />
+            <PayWithUPI onRampInitData={onRampInitData} edition={edition} />
             <Text tw="py-4 text-center text-lg font-semibold text-gray-900 dark:text-gray-50">
               or
             </Text>

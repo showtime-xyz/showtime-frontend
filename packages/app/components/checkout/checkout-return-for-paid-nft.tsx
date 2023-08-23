@@ -27,6 +27,7 @@ const { useParam } = createParam<{
   contractAddress: string;
   isPaid?: string;
   paymentIntentId?: string;
+  onRampMerchantId?: string;
 }>();
 
 export const CheckoutReturnForPaidNFT = () => {
@@ -56,19 +57,16 @@ const CheckoutReturn = memo(function CheckoutReturn({
 }) {
   const joinChannel = useJoinChannel();
   const [paymentIntentIdParam] = useParam("paymentIntentId");
+  const [onRampMerchantId] = useParam("onRampMerchantId");
 
   const { state } = useContext(ClaimContext);
 
   const router = useRouter();
   const { claimNFT } = useClaimNFT(edition?.creator_airdrop_edition);
-  const { paymentStatus, message, confirmPaymentStatus } = useConfirmPayment();
+  const { paymentStatus, message, confirmPaymentStatus, confirmOnRampStatus } =
+    useConfirmPayment();
   const myInfo = useMyInfo();
 
-  const removeQueryParam = useCallback(() => {
-    router.replace({ pathname: router.pathname }, undefined, {
-      shallow: true,
-    });
-  }, [router]);
   const closeModal = useCallback(
     async (channelId?: number) => {
       await myInfo.mutateLastCollectedStarDropCache({
@@ -108,82 +106,52 @@ const CheckoutReturn = memo(function CheckoutReturn({
   );
   const { setPaymentByDefault } = usePaymentsManage();
 
-  const handleStripePaymentSuccess = useCallback(async () => {
-    const setAsDefaultPaymentMethod = new URLSearchParams(
-      window.location.search
-    ).get("setAsDefaultPaymentMethod");
+  const handlePaymentSuccess = useCallback(async () => {
+    // Payment is of type onramp
+    if (onRampMerchantId) {
+      await confirmOnRampStatus(onRampMerchantId);
+    } else {
+      const setAsDefaultPaymentMethod = new URLSearchParams(
+        window.location.search
+      ).get("setAsDefaultPaymentMethod");
 
-    const stripe = await stripePromise();
+      const stripe = await stripePromise();
 
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
+      const clientSecret = new URLSearchParams(window.location.search).get(
+        "payment_intent_client_secret"
+      );
 
-    let paymentIntentId = paymentIntentIdParam;
-    if (stripe && clientSecret) {
-      const res = await stripe.retrievePaymentIntent(clientSecret);
-      if (typeof res.paymentIntent?.payment_method === "string") {
-        if (setAsDefaultPaymentMethod) {
-          setPaymentByDefault(res.paymentIntent.payment_method);
+      let paymentIntentId = paymentIntentIdParam;
+      if (stripe && clientSecret) {
+        const res = await stripe.retrievePaymentIntent(clientSecret);
+        if (typeof res.paymentIntent?.payment_method === "string") {
+          if (setAsDefaultPaymentMethod) {
+            setPaymentByDefault(res.paymentIntent.payment_method);
+          }
+        }
+        if (!paymentIntentId) {
+          paymentIntentId = res.paymentIntent?.id;
         }
       }
-      if (!paymentIntentId) {
-        paymentIntentId = res.paymentIntent?.id;
-      }
-    }
 
-    if (paymentIntentId) {
-      await confirmPaymentStatus(paymentIntentId);
+      if (paymentIntentId) {
+        await confirmPaymentStatus(paymentIntentId);
+      }
     }
 
     await claimNFT({ closeModal });
   }, [
-    setPaymentByDefault,
+    onRampMerchantId,
     claimNFT,
-    confirmPaymentStatus,
-    paymentIntentIdParam,
     closeModal,
-  ]);
-
-  const handleOnRampPaymentSuccess = useCallback(async () => {
-    const setAsDefaultPaymentMethod = new URLSearchParams(
-      window.location.search
-    ).get("setAsDefaultPaymentMethod");
-
-    const stripe = await stripePromise();
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
-
-    let paymentIntentId = paymentIntentIdParam;
-    if (stripe && clientSecret) {
-      const res = await stripe.retrievePaymentIntent(clientSecret);
-      if (typeof res.paymentIntent?.payment_method === "string") {
-        if (setAsDefaultPaymentMethod) {
-          setPaymentByDefault(res.paymentIntent.payment_method);
-        }
-      }
-      if (!paymentIntentId) {
-        paymentIntentId = res.paymentIntent?.id;
-      }
-    }
-
-    if (paymentIntentId) {
-      await confirmPaymentStatus(paymentIntentId);
-    }
-
-    await claimNFT({ closeModal });
-  }, [
+    confirmOnRampStatus,
+    paymentIntentIdParam,
     setPaymentByDefault,
-    claimNFT,
     confirmPaymentStatus,
-    paymentIntentIdParam,
-    closeModal,
   ]);
 
   useEffectOnce(() => {
-    handleStripePaymentSuccess();
+    handlePaymentSuccess();
   });
 
   if (state.status === "error") {
@@ -194,7 +162,7 @@ const CheckoutReturn = memo(function CheckoutReturn({
         >
           {state.error}
         </Text>
-        <Button tw="mt-4" onPress={removeQueryParam}>
+        <Button tw="mt-4" onPress={() => router.pop()}>
           Got it.
         </Button>
       </View>

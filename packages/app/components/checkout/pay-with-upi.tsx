@@ -2,9 +2,11 @@ import { OnrampWebSDK } from "@onramp.money/onramp-web-sdk";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Image } from "@showtime-xyz/universal.image";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { Logger } from "app/lib/logger";
 
 export type OnRampInitDataType = {
@@ -18,8 +20,13 @@ export type OnRampInitDataType = {
   wallet_address: string;
 };
 
-export const PayWithUPI = (props: { onRampInitData: OnRampInitDataType }) => {
-  const { onRampInitData } = props;
+export const PayWithUPI = (props: {
+  onRampInitData: OnRampInitDataType;
+  edition: CreatorEditionResponse;
+}) => {
+  const { onRampInitData, edition } = props;
+
+  const router = useRouter();
   const handleSubmit = () => {
     let req: any;
     if (process.env.NEXT_PUBLIC_STAGE === "development") {
@@ -48,18 +55,37 @@ export const PayWithUPI = (props: { onRampInitData: OnRampInitDataType }) => {
     onrampInstance.show();
 
     onrampInstance.on("TX_EVENTS", (e) => {
-      console.log("onrampInstance TX_EVENTS", e);
       if (e.type === "ONRAMP_WIDGET_TX_COMPLETED") {
-        console.log("onrampInstance TX_EVENTS", e);
-        // Success close the onramp modal. Start polling the server for the status of the onramp transaction and trigger claim if success
+        console.log("Transaction completed", e);
+        if (onrampInstance._isVisible) {
+          onrampInstance.close();
+        }
+        router.push(
+          {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              contractAddress:
+                edition?.creator_airdrop_edition.contract_address,
+              checkoutReturnForPaidNFTModal: true,
+              onRampMerchantId: onRampInitData.merchant_id,
+            },
+          },
+          router.asPath,
+          {
+            shallow: true,
+          }
+        );
       }
     });
+
     onrampInstance.on("WIDGET_EVENTS", (e) => {
       if (e.type === "ONRAMP_WIDGET_FAILED") {
         Logger.error("onrampInstance widget failed", e);
       }
     });
   };
+
   return (
     <Button
       size="regular"

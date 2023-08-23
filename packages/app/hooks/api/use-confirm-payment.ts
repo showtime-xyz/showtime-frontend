@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Platform } from "react-native";
 
+import { OnRampInitDataType } from "app/components/checkout/pay-with-upi";
 import { stripePromise } from "app/components/checkout/stripe";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
@@ -58,6 +59,48 @@ export const useConfirmPayment = () => {
     [mutate]
   );
 
+  const confirmOnRampStatus = async (
+    merchantId: OnRampInitDataType["merchant_id"]
+  ) => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        setMessage("Your payment is processing.");
+        setPaymentStatus("processing");
+        for (let i = 0; i < 20; i++) {
+          await delay(3000);
+          const res = await axios({
+            method: "GET",
+            url: "/v1/payments/status/onramp?merchant_id=" + merchantId,
+          });
+          if (res.success) {
+            setPaymentStatus("success");
+            setMessage("Your payment was successful.");
+            mutate();
+            resolve();
+            return;
+          } else if (res.current_status === "failed") {
+            setPaymentStatus("failed");
+            reject();
+            setMessage("Your payment was not successful, please try again.");
+            return;
+          }
+        }
+        reject();
+        setPaymentStatus("notSure");
+        setMessage(
+          "Please check back later to see if your payment went through."
+        );
+      } catch (error) {
+        Logger.error("Error confirming payment status", error);
+        setPaymentStatus("notSure");
+        setMessage(
+          "Please check back later to see if your payment went through."
+        );
+        reject();
+      }
+    });
+  };
+
   const confirmCardPaymentStatus = useCallback(
     async function confirmCardPaymentStatus(
       clientSecret: string,
@@ -109,5 +152,6 @@ export const useConfirmPayment = () => {
     message,
     confirmPaymentStatus,
     confirmCardPaymentStatus,
+    confirmOnRampStatus,
   };
 };
