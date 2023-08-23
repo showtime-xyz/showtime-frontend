@@ -1,10 +1,11 @@
-import { memo, useState } from "react";
+import { memo, useState, useMemo, useCallback, useContext } from "react";
 import { Platform } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { BorderlessButton } from "react-native-gesture-handler";
 import * as Tooltip from "universal-tooltip";
 
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime } from "@showtime-xyz/universal.icon";
@@ -18,6 +19,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { StarDropBadge } from "app/components/creator-channels/components/star-drop-badge";
 import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
+import { UserContext } from "app/context/user-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { fetcher } from "app/hooks/use-infinite-list-query";
 import { useRedirectToChannelUnlocked } from "app/hooks/use-redirect-to-channel-unlocked-screen";
@@ -28,6 +30,7 @@ import { getCurrencyPrice } from "app/utilities";
 import { LABEL_SIZE_TW } from "design-system/button/constants";
 
 import { ClaimStatus, getClaimStatus } from "./claim-status";
+import usePrimaryWalletAlert from "./util";
 
 export const fetchStripeAccountId = async (
   profileId: string | number | null | undefined
@@ -65,14 +68,27 @@ const GoldButton = memo(function GoldButton({
   const isClaimed = status === ClaimStatus.Claimed;
   const redirectToChannelUnlocked = useRedirectToChannelUnlocked();
   const { loginPromise } = useLogInPromise();
+  const profileData = useContext(UserContext);
+  const showPrimaryWalletAlert = usePrimaryWalletAlert();
 
-  const onHandlePayment = async () => {
+  const hasPrimaryWallet = useMemo(
+    () => profileData?.user?.data?.profile?.primary_wallet !== null,
+    [profileData]
+  );
+
+  const onHandlePayment = useCallback(async () => {
     if (isClaimed) {
       redirectToChannelUnlocked(
         edition?.creator_airdrop_edition.contract_address
       );
       return;
     }
+
+    if (!hasPrimaryWallet) {
+      showPrimaryWalletAlert();
+      return;
+    }
+
     await loginPromise();
     if (Platform.OS !== "web") {
       Logger.error("Purchase only for web.");
@@ -100,8 +116,20 @@ const GoldButton = memo(function GoldButton({
         { shallow: true }
       );
     }
-  };
+  }, [
+    contractAddress,
+    edition?.creator_airdrop_edition.contract_address,
+    editionId,
+    hasPrimaryWallet,
+    isClaimed,
+    loginPromise,
+    redirectToChannelUnlocked,
+    router,
+    showPrimaryWalletAlert,
+  ]);
+
   const priceText = price ? ` - ${price}` : "";
+
   if (type === "trending") {
     return (
       <PressableHover
