@@ -117,17 +117,17 @@ const CheckoutFormLayout = ({
   });
   const router = useRouter();
   const paymentMethods = usePaymentsManage();
-  const defaultPaymentMethod = useMemo(
-    () => paymentMethods.data?.find((method) => method.is_default),
-    [paymentMethods.data]
-  );
   const paymentMethodsList = useMemo(
     () => uniq(paymentMethods.data?.filter((f) => f.type == "card")),
     [paymentMethods.data]
   );
-  const [savedPaymentMethodId, setSavedPaymentMethodId] = useState(
-    defaultPaymentMethod?.id
+  const defaultPaymentMethod = useMemo(
+    () => paymentMethods.data?.find((method) => method.is_default),
+    [paymentMethods.data]
   );
+  const [savedPaymentMethodId, setSavedPaymentMethodId] = useState<
+    undefined | string
+  >();
   const [isUseSavedCard, setIsUseSavedCard] = useState(true);
   const stripe = useStripe();
   const elements = useElements();
@@ -271,7 +271,9 @@ const CheckoutFormLayout = ({
           </View>
         </View>
         <View tw="h-6" />
-        {paymentMethodsList && paymentMethodsList?.length > 0 ? (
+        {!paymentMethods.isLoading &&
+        paymentMethodsList &&
+        paymentMethodsList?.length > 0 ? (
           <>
             {paymentMethodsList?.map((method) => {
               return (
@@ -283,7 +285,9 @@ const CheckoutFormLayout = ({
                     }}
                     tw="flex-row items-center"
                   >
-                    {method.id === savedPaymentMethodId && isUseSavedCard ? (
+                    {method.id ===
+                      (savedPaymentMethodId ?? defaultPaymentMethod?.id) &&
+                    isUseSavedCard ? (
                       <CheckFilled
                         height={20}
                         width={20}
