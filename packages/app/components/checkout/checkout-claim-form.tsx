@@ -127,7 +127,7 @@ const CheckoutFormLayout = ({
   );
   const [savedPaymentMethodId, setSavedPaymentMethodId] = useState<
     undefined | string
-  >();
+  >(defaultPaymentMethod?.id);
   const [isUseSavedCard, setIsUseSavedCard] = useState(true);
   const stripe = useStripe();
   const elements = useElements();
@@ -285,9 +285,7 @@ const CheckoutFormLayout = ({
                     }}
                     tw="flex-row items-center"
                   >
-                    {method.id ===
-                      (savedPaymentMethodId ?? defaultPaymentMethod?.id) &&
-                    isUseSavedCard ? (
+                    {method.id === savedPaymentMethodId && isUseSavedCard ? (
                       <CheckFilled
                         height={20}
                         width={20}
