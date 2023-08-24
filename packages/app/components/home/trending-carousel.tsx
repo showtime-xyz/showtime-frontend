@@ -70,7 +70,7 @@ export const TrendingCarousel = memo(() => {
         >
           {data.length > 0 || isLoading ? (
             <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-              Trending
+              Trending (past 7 days)
             </Text>
           ) : null}
           {(isShowSeeAll || (__DEV__ && data.length > 0)) && (
