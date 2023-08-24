@@ -286,8 +286,7 @@ const CheckoutFormLayout = ({
                     tw="flex-row items-center"
                   >
                     {method.id ===
-                      (savedPaymentMethodId ?? defaultPaymentMethod?.id) &&
-                    isUseSavedCard ? (
+                    (savedPaymentMethodId ?? defaultPaymentMethod?.id) ? (
                       <CheckFilled
                         height={20}
                         width={20}
