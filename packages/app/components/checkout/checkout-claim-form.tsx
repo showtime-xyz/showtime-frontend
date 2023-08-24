@@ -208,7 +208,7 @@ const CheckoutFormLayout = ({
       setIsLoading(true);
       await stripe
         ?.confirmCardPayment(clientSecret, {
-          payment_method: savedPaymentMethodId,
+          payment_method: savedPaymentMethodId ?? defaultPaymentMethod?.id,
         })
         .then(async (res) => {
           router.push(
