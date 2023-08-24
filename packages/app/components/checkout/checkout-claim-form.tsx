@@ -117,17 +117,17 @@ const CheckoutFormLayout = ({
   });
   const router = useRouter();
   const paymentMethods = usePaymentsManage();
-  const paymentMethodsList = useMemo(
-    () => uniq(paymentMethods.data?.filter((f) => f.type == "card")),
-    [paymentMethods.data]
-  );
   const defaultPaymentMethod = useMemo(
     () => paymentMethods.data?.find((method) => method.is_default),
     [paymentMethods.data]
   );
-  const [savedPaymentMethodId, setSavedPaymentMethodId] = useState<
-    undefined | string
-  >();
+  const paymentMethodsList = useMemo(
+    () => uniq(paymentMethods.data?.filter((f) => f.type == "card")),
+    [paymentMethods.data]
+  );
+  const [savedPaymentMethodId, setSavedPaymentMethodId] = useState(
+    defaultPaymentMethod?.id
+  );
   const [isUseSavedCard, setIsUseSavedCard] = useState(true);
   const stripe = useStripe();
   const elements = useElements();
@@ -208,7 +208,7 @@ const CheckoutFormLayout = ({
       setIsLoading(true);
       await stripe
         ?.confirmCardPayment(clientSecret, {
-          payment_method: savedPaymentMethodId ?? defaultPaymentMethod?.id,
+          payment_method: savedPaymentMethodId,
         })
         .then(async (res) => {
           router.push(
@@ -271,9 +271,7 @@ const CheckoutFormLayout = ({
           </View>
         </View>
         <View tw="h-6" />
-        {!paymentMethods.isLoading &&
-        paymentMethodsList &&
-        paymentMethodsList?.length > 0 ? (
+        {paymentMethodsList && paymentMethodsList?.length > 0 ? (
           <>
             {paymentMethodsList?.map((method) => {
               return (
@@ -285,8 +283,7 @@ const CheckoutFormLayout = ({
                     }}
                     tw="flex-row items-center"
                   >
-                    {method.id ===
-                    (savedPaymentMethodId ?? defaultPaymentMethod?.id) ? (
+                    {method.id === savedPaymentMethodId && isUseSavedCard ? (
                       <CheckFilled
                         height={20}
                         width={20}
