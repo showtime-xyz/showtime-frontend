@@ -1,4 +1,4 @@
-import { ComponentProps } from "react";
+import { ComponentProps, forwardRef } from "react";
 import { Platform } from "react-native";
 
 import { Video as ExpoVideo, ResizeMode } from "expo-av";
@@ -18,7 +18,10 @@ type VideoProps = {
   loading?: "eager" | "lazy";
 } & ComponentProps<typeof ExpoVideo>;
 
-export function ListVideo({ posterSource, ...props }: VideoProps) {
+export const ListVideo = forwardRef(function ListVideo(
+  { resizeMode, posterSource, ...props }: VideoProps,
+  ref
+) {
   // const videoConfig = useVideoConfig();
   // const videoRef = useRef<ExpoVideo | null>(null);
   // const [muted] = useMuted();
@@ -81,4 +84,4 @@ export function ListVideo({ posterSource, ...props }: VideoProps) {
   //     ) : null}
   //   </>
   // );
-}
+});
