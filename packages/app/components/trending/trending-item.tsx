@@ -98,6 +98,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
               resizeMode={ResizeMode.COVER}
               optimizedWidth={500}
               loading={index > 0 ? "lazy" : "eager"}
+              isMuted
             />
             <NSFWGate show={nft.nsfw} nftId={nft.nft_id} variant="thumbnail" />
             <View tw="absolute left-0 top-0 h-7 w-7 items-center justify-center rounded-br-2xl rounded-tl-2xl bg-black/50">

@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useMemo } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 
 import {
@@ -8,6 +8,8 @@ import {
 import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
+import { VideoConfigContext } from "app/context/video-config-context";
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useFeed } from "app/hooks/use-feed";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -21,6 +23,9 @@ import { ListHeaderComponent } from "./header";
 import { HomeItem, HomeItemSketelon } from "./home-item";
 import { PopularCreators } from "./popular-creators";
 import { TrendingCarousel } from "./trending-carousel";
+
+const ViewabilityInfiniteScrollList =
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
 
 export const Home = () => {
   const bottomBarHeight = usePlatformBottomHeight();
@@ -106,41 +111,50 @@ export const Home = () => {
     },
     [feedItemLength]
   );
-
+  const videoConfig = useMemo(
+    () => ({
+      isMuted: true,
+      useNativeControls: false,
+      previewOnly: false,
+    }),
+    []
+  );
   return (
-    <View
-      tw="w-full flex-1 items-center bg-white dark:bg-black"
-      style={{
-        marginBottom: Platform.select({
-          native: bottomBarHeight,
-        }),
-      }}
-    >
-      <View tw="md:max-w-screen-content w-full">
-        <ErrorBoundary>
-          <InfiniteScrollList
-            data={data}
-            renderItem={renderItem}
-            estimatedItemSize={600}
-            drawDistance={Platform.OS === "android" ? height : undefined}
-            preserveScrollPosition
-            ListHeaderComponent={ListHeaderComponent}
-            contentContainerStyle={{
-              paddingTop: Platform.select({
-                android: 0,
-                default: headerHeight,
-              }),
-            }}
-            automaticallyAdjustContentInsets
-            automaticallyAdjustsScrollIndicatorInsets
-            ref={listRef}
-            getItemType={getItemType}
-            ListEmptyComponent={ListEmptyComponent}
-            useWindowScroll
-            style={{ flexGrow: 1 }}
-          />
-        </ErrorBoundary>
+    <VideoConfigContext.Provider value={videoConfig}>
+      <View
+        tw="w-full flex-1 items-center bg-white dark:bg-black"
+        style={{
+          marginBottom: Platform.select({
+            native: bottomBarHeight,
+          }),
+        }}
+      >
+        <View tw="md:max-w-screen-content w-full">
+          <ErrorBoundary>
+            <ViewabilityInfiniteScrollList
+              data={data}
+              renderItem={renderItem}
+              estimatedItemSize={600}
+              drawDistance={Platform.OS === "android" ? height : undefined}
+              preserveScrollPosition
+              ListHeaderComponent={ListHeaderComponent}
+              contentContainerStyle={{
+                paddingTop: Platform.select({
+                  android: 0,
+                  default: headerHeight,
+                }),
+              }}
+              automaticallyAdjustContentInsets
+              automaticallyAdjustsScrollIndicatorInsets
+              ref={listRef}
+              getItemType={getItemType}
+              ListEmptyComponent={ListEmptyComponent}
+              useWindowScroll
+              style={{ flexGrow: 1 }}
+            />
+          </ErrorBoundary>
+        </View>
       </View>
-    </View>
+    </VideoConfigContext.Provider>
   );
 };
