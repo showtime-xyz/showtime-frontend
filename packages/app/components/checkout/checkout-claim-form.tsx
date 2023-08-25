@@ -132,8 +132,6 @@ const CheckoutFormLayout = ({
     contractAddress: edition?.creator_airdrop_edition.contract_address,
   });
   const router = useRouter();
-  console.log(paymentMethodsList?.find((method) => method.is_default)?.id);
-
   const [savedPaymentMethodId, setSavedPaymentMethodId] = useState(
     paymentMethodsList?.find((method) => method.is_default)?.id
   );
