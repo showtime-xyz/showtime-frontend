@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import axios from "axios";
 import type { Method, AxiosRequestHeaders } from "axios";
 
@@ -39,11 +41,20 @@ const axiosAPI = async ({
   }
 
   const request = {
-    baseURL:
-      url.startsWith("http") || url.startsWith("/api/")
-        ? ""
-        : process.env.NEXT_PUBLIC_BACKEND_URL,
-    url,
+    // Add this proxy to solve the CORS issue when fetching the production API on the web.
+    ...(__DEV__ &&
+    Platform.OS === "web" &&
+    process.env.NEXT_PUBLIC_STAGE === "production"
+      ? {
+          baseURL: `/api/proxy?url=${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`,
+        }
+      : {
+          baseURL:
+            url.startsWith("http") || url.startsWith("/api/")
+              ? ""
+              : process.env.NEXT_PUBLIC_BACKEND_URL,
+          url,
+        }),
     method,
     data,
     signal: unmountSignal,
