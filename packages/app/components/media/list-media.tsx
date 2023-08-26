@@ -21,6 +21,7 @@ type Props = {
   videoRef?: RefObject<ExpoVideo>;
   optimizedWidth?: number;
   loading?: "eager" | "lazy";
+  shouldPlay?: boolean;
 };
 
 function ListMediaImpl({
@@ -29,6 +30,7 @@ function ListMediaImpl({
   optimizedWidth = 300,
   loading = "lazy",
   isMuted,
+  ...rest
 }: Props) {
   const resizeMode = propResizeMode ?? "cover";
 
@@ -67,6 +69,7 @@ function ListMediaImpl({
           style={{ height: "100%", width: "100%" }}
           loading={loading}
           transition={200}
+          {...rest}
         />
       ) : null}
       {item?.mime_type?.startsWith("video") ||
@@ -82,6 +85,7 @@ function ListMediaImpl({
           isMuted={isMuted}
           resizeMode={resizeMode as any}
           loading={loading}
+          {...rest}
         />
       ) : null}
     </>
