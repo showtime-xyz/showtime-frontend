@@ -169,7 +169,7 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
               >
                 {" "}
                 @{nft?.creator_username}{" "}
-                {Platform.OS === "web" ? (
+                {Platform.OS === "web" && nft?.creator_verified ? (
                   <>
                     <VerificationBadge
                       fillColor="#fff"
@@ -202,12 +202,14 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
                 ? `@${user?.data?.profile.username}`
                 : getProfileName(user?.data?.profile)}
             </Text>
-            <VerificationBadge
-              fillColor="#fff"
-              bgColor="#000"
-              style={{ marginLeft: 4 }}
-              size={14}
-            />
+            {user?.data?.profile.verified ? (
+              <VerificationBadge
+                fillColor="#fff"
+                bgColor="#000"
+                style={{ marginLeft: 4 }}
+                size={14}
+              />
+            ) : null}
             <View tw="ml-1">
               <StarDropBadge
                 size={16}
