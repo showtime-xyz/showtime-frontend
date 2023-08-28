@@ -108,6 +108,8 @@ const CheckoutReturn = memo(function CheckoutReturn({
 
   const handlePaymentSuccess = useCallback(async () => {
     // Payment is of type onramp
+    // Onramp does claim + payment confirmation in the webhook so we don't need to trigger claimNFT
+    // Currently, Stripe does not do claim so we need to trigger claimNFT
     if (onRampMerchantId) {
       await confirmOnRampStatus(onRampMerchantId);
     } else {
@@ -137,9 +139,8 @@ const CheckoutReturn = memo(function CheckoutReturn({
       if (paymentIntentId) {
         await confirmPaymentStatus(paymentIntentId);
       }
+      await claimNFT({ closeModal });
     }
-
-    await claimNFT({ closeModal });
   }, [
     onRampMerchantId,
     claimNFT,
