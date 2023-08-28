@@ -70,7 +70,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
       },
       style,
     ];
-  }, [width, style]);
+  }, [style, width]);
 
   return (
     <View tw={["h-full w-full", tw]} style={viewStyle} {...rest}>
@@ -126,7 +126,7 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
           {getCreatorUsernameFromNFT(nft)}
         </Text>
         <View tw="w-1" />
-        <VerificationBadge size={12} />
+        {nft?.creator_verified ? <VerificationBadge size={12} /> : null}
       </View>
       <RouteComponent
         as={getNFTSlug(nft)}
