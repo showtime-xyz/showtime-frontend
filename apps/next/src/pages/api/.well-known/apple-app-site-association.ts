@@ -11,7 +11,15 @@ const association = {
     details: [
       {
         appID: `${TEAM_ID}.${BUNDLE_ID}`,
-        paths: ["/wsegue", "/nft/*", "/t/*", "/@*", "/"],
+        paths: [
+          "/wsegue",
+          "/nft/*",
+          "/channel/*",
+          "/notifications",
+          "/t/*",
+          "/@*",
+          "/",
+        ],
       },
     ],
   },
