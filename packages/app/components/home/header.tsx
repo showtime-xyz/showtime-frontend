@@ -16,7 +16,7 @@ import { Carousel } from "app/lib/carousel";
 import { breakpoints } from "design-system/theme";
 
 import { Banner, useBanners } from "./hooks/use-banners";
-import { OnChainSummerCarousel } from "./onchainsummer-carousel";
+import { TrendingCarousel } from "./trending-carousel";
 
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
@@ -99,8 +99,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      {/* TODO: After Onchain summer, change against <TrendingCarousel />  */}
-      <OnChainSummerCarousel />
+      <TrendingCarousel />
     </View>
   );
 });
