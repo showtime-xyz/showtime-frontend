@@ -280,6 +280,7 @@ export type MyInfo = {
       stripe_connect_details: null | {
         details_submitted: boolean;
         charges_enabled: boolean;
+        tos_acceptance: string | null;
       };
     };
     likes_nft: number[];
