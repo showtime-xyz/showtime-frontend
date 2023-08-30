@@ -13,6 +13,7 @@ export const useOnboardingStatus = () => {
   const user = useUser();
   const queryState = useSWR<{
     can_charge: boolean;
+    onboarding_details?: any;
   }>("/v1/payments/nft/payouts/onboarding/status", fetcher, {
     revalidateOnFocus: true,
     // Refresh every 5 seconds if mounted
@@ -26,7 +27,9 @@ export const useOnboardingStatus = () => {
   } else if (queryState.data?.can_charge) {
     status = "onboarded";
   } else if (
-    user.user?.data.profile.stripe_connect_details?.details_submitted
+    user.user?.data.profile.stripe_connect_details?.details_submitted ||
+    user.user?.data.profile.stripe_connect_details?.tos_acceptance ||
+    queryState.data?.onboarding_details
   ) {
     status = "processing";
   }
