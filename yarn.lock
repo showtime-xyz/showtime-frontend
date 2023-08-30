@@ -6749,13 +6749,13 @@ __metadata:
     expo-location: ~16.1.0
     expo-mail-composer: ~12.3.0
     expo-media-library: ~15.4.1
-    expo-modules-core: ~1.5.8
+    expo-modules-core: ~1.5.10
     expo-navigation-bar: ~2.3.0
     expo-notifications: ~0.20.1
-    expo-splash-screen: ~0.20.4
+    expo-splash-screen: ~0.20.5
     expo-status-bar: ~1.6.0
     expo-system-ui: ~2.4.0
-    expo-updates: ~0.18.11
+    expo-updates: ~0.18.12
     expo-web-browser: ~12.3.2
     fastestsmallesttextencoderdecoder: ^1.0.22
     https-browserify: ~1.0.0
@@ -6806,6 +6806,7 @@ __metadata:
     react-native-volume-manager: ^1.10.0
     react-native-web: ~0.19.7
     react-native-webview: 13.3.0
+    react-native-z-view: ^0.2.1
     react-string-replace: 1.1.1
     react-test-renderer: 18.2.0
     readable-stream: 4.4.2
@@ -6820,7 +6821,7 @@ __metadata:
     ts-jest: ^29.1.1
     tty-browserify: 0.0.1
     typescript: ^5.1.6
-    universal-tooltip: ^0.7.0
+    universal-tooltip: next
     url: ~0.11.1
     use-timer: ^2.0.1
     use-unmount-signal: ^1.0.0
@@ -6829,7 +6830,7 @@ __metadata:
     valtio: 1.10.7
     vm-browserify: 1.1.2
     yup: ^1.2.0
-    zeego: ^1.6.2
+    zeego: ^1.7.0
     zx: ^7.2.3
   languageName: unknown
   linkType: soft
@@ -16201,13 +16202,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-modules-core@npm:1.5.8, expo-modules-core@npm:~1.5.8":
+"expo-modules-core@npm:1.5.8":
   version: 1.5.8
   resolution: "expo-modules-core@npm:1.5.8"
   dependencies:
     compare-versions: ^3.4.0
     invariant: ^2.2.4
   checksum: 4eedc1f1c4c57707ef1c1b9dc4add3b8ba09880fdc4c89d701ebd53c7dae4b62b2a2898770113c4912b3b073a4389020ec19895d2d3be196b0bbad2d9f15e935
+  languageName: node
+  linkType: hard
+
+"expo-modules-core@npm:~1.5.10":
+  version: 1.5.11
+  resolution: "expo-modules-core@npm:1.5.11"
+  dependencies:
+    compare-versions: ^3.4.0
+    invariant: ^2.2.4
+  checksum: 85a48a6d1983671458a37ddece9e151ff8179814dd368d67b39dcf34fcdc6b44419d045ac8efcdd8179848d826b67678ce706f5533314ff8ab84537befcf7915
   languageName: node
   linkType: hard
 
@@ -16242,14 +16253,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-splash-screen@npm:~0.20.4":
-  version: 0.20.4
-  resolution: "expo-splash-screen@npm:0.20.4"
+"expo-splash-screen@npm:~0.20.5":
+  version: 0.20.5
+  resolution: "expo-splash-screen@npm:0.20.5"
   dependencies:
     "@expo/prebuild-config": 6.2.6
   peerDependencies:
     expo: "*"
-  checksum: cbdeffd4493d715b7625fba060e70d647358d5cfea3120d6b8d52df5e721bc65f65d80987f9327ef61ac3f0f3cfe53935af11e009be74d1cc1dcf124822eece5
+  checksum: c4b0db3d0e8ab755a9f4afb1f20824229fa84ea2410528e4316a62e676e08f990157c9edd4af0978f79183d6b47cf3d4843b86f76c084274a40e07adfd697889
   languageName: node
   linkType: hard
 
@@ -16288,9 +16299,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-updates@npm:~0.18.11":
-  version: 0.18.11
-  resolution: "expo-updates@npm:0.18.11"
+"expo-updates@npm:~0.18.12":
+  version: 0.18.12
+  resolution: "expo-updates@npm:0.18.12"
   dependencies:
     "@expo/code-signing-certificates": 0.0.5
     "@expo/config": ~8.1.0
@@ -16307,7 +16318,7 @@ __metadata:
     expo: "*"
   bin:
     expo-updates: bin/cli.js
-  checksum: 0c01e7d0c9aca8c289255eb0e987ac0e3ff34bf2d294d5229a812cbd00cd0c732e2cc318646dbf4d7789d6ca3e7f35aa678b1e894c45187a2d37e3b74b5ad2f9
+  checksum: c0e3abdc4b807a5998f8b2c04910c2e3536b1ec7dc20ea337b986aa74496b961cebe054b0670a74bcea06fc9ac759982e6cd5a369fa94eafcfd94fbacc25797e
   languageName: node
   linkType: hard
 
@@ -24574,6 +24585,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-z-view@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "react-native-z-view@npm:0.2.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-screens: "*"
+  checksum: 1abd7834156197191dc9c3d68113926c6cd29d855626d6e5fd2d2f26b5e712a165a1f96ff5d47f760c042d32f2d40a9b2d119e74c35764c37bd813167442d022
+  languageName: node
+  linkType: hard
+
 "react-native@npm:0.72.3":
   version: 0.72.3
   resolution: "react-native@npm:0.72.3"
@@ -28104,16 +28126,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"universal-tooltip@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "universal-tooltip@npm:0.7.0"
+"universal-tooltip@npm:next":
+  version: 1.0.0-1
+  resolution: "universal-tooltip@npm:1.0.0-1"
   peerDependencies:
     "@radix-ui/react-popover": "*"
     "@radix-ui/react-tooltip": "*"
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 14c44c44aa9596a6ffe2e0ae292ffd465f25e811f20c6a8d9ee3c7b77eba3a1c428a57483fe81559ca1e99387d170980f00a21b7b18436a8e2e5d919d6a35e1f
+  checksum: c8858d6a3daf1840961424c44591d6f671094154b3f736aa97d42c5edab9ffa09f7db9077e0eb2f64e0f7620b86035701a7fd22e8a6e03a757271a3fb109265f
   languageName: node
   linkType: hard
 
@@ -29763,9 +29785,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zeego@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "zeego@npm:1.6.2"
+"zeego@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "zeego@npm:1.7.0"
   dependencies:
     "@radix-ui/react-context-menu": ^2.0.1
     "@radix-ui/react-dropdown-menu": ^2.0.1
@@ -29775,7 +29797,7 @@ __metadata:
     react: "*"
     react-native: "*"
     react-native-ios-context-menu: ^1.15.1
-  checksum: 96a813e95a4231f3a4815a9ea9b545f19d95bfd3769a774e691117bc2587a9e512ec1f73e1c082230f4c6c17f73b6dd7a8b875c142215645c1dc88b46acc386e
+  checksum: 32a6c2442552915e8b2b7fcb9bed166abbc35e28df9955fcc31591ff8367e3e2528245598712067795a7bcf6dfcf1ace25a71a42fdb7b1cce2aa7bcfe43d4fd5
   languageName: node
   linkType: hard
 

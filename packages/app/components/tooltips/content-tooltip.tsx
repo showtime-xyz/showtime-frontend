@@ -78,6 +78,7 @@ export const ContentTooltip = ({
           borderRadius={16}
         >
           {children}
+          <Tooltip.Arrow width={10} height={5} />
         </Tooltip.Content>
       </Tooltip.Portal>
     </Tooltip.Root>

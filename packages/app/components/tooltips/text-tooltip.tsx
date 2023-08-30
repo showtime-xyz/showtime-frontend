@@ -71,14 +71,17 @@ export const TextTooltip = ({
           side={side}
           presetAnimation="fadeIn"
           backgroundColor={isDark ? "#fff" : "#000"}
-          borderRadius={16}
+          borderRadius={12}
         >
           <Tooltip.Text
-            textSize={16}
-            fontWeight="bold"
-            textColor={isDark ? "#000" : "#fff"}
             text={text}
+            style={{
+              color: isDark ? "#000" : "#fff",
+              fontSize: 16,
+              fontWeight: "bold",
+            }}
           />
+          <Tooltip.Arrow width={12} height={6} />
         </Tooltip.Content>
       </Tooltip.Portal>
     </Tooltip.Root>

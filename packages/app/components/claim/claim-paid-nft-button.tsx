@@ -358,18 +358,21 @@ export const ClaimPaidNFTButton = memo(function ClaimPaidNFTButton({
           side={side}
           presetAnimation="fadeIn"
           backgroundColor={isDark ? "#fff" : colors.gray[900]}
-          borderRadius={16}
+          borderRadius={12}
         >
           <Tooltip.Text
-            textSize={16}
-            fontWeight="bold"
-            textColor={isDark ? colors.gray[900] : "#fff"}
             text={Platform.select({
               ios: "Unable to purchase on iOS",
               android: "Unable to purchase on Android",
               default: "Unable to purchase",
             })}
+            style={{
+              fontSize: 16,
+              fontWeight: "bold",
+              color: isDark ? colors.gray[900] : "#fff",
+            }}
           />
+          <Tooltip.Arrow width={12} height={6} />
         </Tooltip.Content>
       </Tooltip.Root>
     );
