@@ -6806,6 +6806,7 @@ __metadata:
     react-native-volume-manager: ^1.10.0
     react-native-web: ~0.19.7
     react-native-webview: 13.3.0
+    react-native-z-view: ^0.2.1
     react-string-replace: 1.1.1
     react-test-renderer: 18.2.0
     readable-stream: 4.4.2
@@ -24581,6 +24582,17 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 4be5236e682a4e80e4d52ed6ad515da1279ae8f9011990cc4dc78bc5012e719b94a91878d302e8fe96dbd0916ae85b74d8503d71a14b8a45c5996b3e4d57cb8d
+  languageName: node
+  linkType: hard
+
+"react-native-z-view@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "react-native-z-view@npm:0.2.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-screens: "*"
+  checksum: 1abd7834156197191dc9c3d68113926c6cd29d855626d6e5fd2d2f26b5e712a165a1f96ff5d47f760c042d32f2d40a9b2d119e74c35764c37bd813167442d022
   languageName: node
   linkType: hard
 
