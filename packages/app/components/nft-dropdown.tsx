@@ -162,31 +162,6 @@ function NFTDropdown({
             </DropdownMenuItem>
           ) : null}
 
-          {(edition?.gating_type === "spotify_presave" ||
-            edition?.gating_type === "music_presave" ||
-            edition?.gating_type === "multi_provider_music_presave") &&
-          isSelf ? (
-            <DropdownMenuItem
-              onSelect={() => {
-                router.push(
-                  "/drop/update/" +
-                    edition.creator_airdrop_edition.contract_address
-                );
-                // unhideNFT(nft.nft_id);
-              }}
-              key="update"
-            >
-              <MenuItemIcon
-                Icon={Edit}
-                ios={{
-                  name: "square.and.pencil",
-                }}
-              />
-              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                Update Song Link
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : null}
           {edition?.is_editable && isSelf ? (
             <DropdownMenuItem
               onSelect={() => {
