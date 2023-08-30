@@ -6820,7 +6820,7 @@ __metadata:
     ts-jest: ^29.1.1
     tty-browserify: 0.0.1
     typescript: ^5.1.6
-    universal-tooltip: ^0.7.0
+    universal-tooltip: next
     url: ~0.11.1
     use-timer: ^2.0.1
     use-unmount-signal: ^1.0.0
@@ -28104,16 +28104,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"universal-tooltip@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "universal-tooltip@npm:0.7.0"
+"universal-tooltip@npm:next":
+  version: 1.0.0-1
+  resolution: "universal-tooltip@npm:1.0.0-1"
   peerDependencies:
     "@radix-ui/react-popover": "*"
     "@radix-ui/react-tooltip": "*"
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 14c44c44aa9596a6ffe2e0ae292ffd465f25e811f20c6a8d9ee3c7b77eba3a1c428a57483fe81559ca1e99387d170980f00a21b7b18436a8e2e5d919d6a35e1f
+  checksum: c8858d6a3daf1840961424c44591d6f671094154b3f736aa97d42c5edab9ffa09f7db9077e0eb2f64e0f7620b86035701a7fd22e8a6e03a757271a3fb109265f
   languageName: node
   linkType: hard
 

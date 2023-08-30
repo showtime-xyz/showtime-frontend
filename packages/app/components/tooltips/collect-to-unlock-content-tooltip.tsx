@@ -69,9 +69,9 @@ export const CollectToUnlockContentTooltip = ({
           </View>
         </>
       }
-      sideOffset={Platform.OS === "ios" ? 180 : 3}
+      sideOffset={3}
     >
-      <View tw="web:shadow-light h-[200px] w-[350px] rounded-2xl bg-white p-4">
+      <View tw="web:shadow-light h-[208px] w-[350px] rounded-2xl bg-white p-4">
         <View tw="flex-row items-center">
           <View tw="mr-2 h-6 w-6 items-center justify-center overflow-hidden rounded-full">
             <ButtonGoldLinearGradient />

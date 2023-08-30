@@ -172,7 +172,7 @@
     "tinycolor2": "^1.6.0",
     "tldts": "^6.0.12",
     "tty-browserify": "0.0.1",
-    "universal-tooltip": "^0.7.0",
+    "universal-tooltip": "next",
     "url": "~0.11.1",
     "use-timer": "^2.0.1",
     "use-unmount-signal": "^1.0.0",

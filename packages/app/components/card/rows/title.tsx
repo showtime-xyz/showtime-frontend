@@ -51,7 +51,12 @@ export function Title({ title, disableTooltip = false, tw }: Props) {
           </Tooltip.Trigger>
           <Tooltip.Portal>
             <Tooltip.Content side="bottom">
-              <Tooltip.Text text={title} textColor={isDark ? "#000" : "#fff"} />
+              <Tooltip.Text
+                text={title}
+                style={{
+                  color: isDark ? "#000" : "#fff",
+                }}
+              />
             </Tooltip.Content>
           </Tooltip.Portal>
         </Tooltip.Root>
