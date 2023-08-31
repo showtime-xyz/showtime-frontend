@@ -104,7 +104,8 @@ function NFTDropdown({
   });
 
   const viewOnOpenSea = () => {
-    const link = `https://opensea.io/assets/${nft?.chain_name}/${nft.contract_address}`;
+    const chainName = nft?.chain_name === "polygon" ? "matic" : nft?.chain_name;
+    const link = `https://opensea.io/assets/${chainName}/${nft.contract_address}`;
     Linking.openURL(link);
   };
 
