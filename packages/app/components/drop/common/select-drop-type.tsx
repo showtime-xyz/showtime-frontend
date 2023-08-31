@@ -160,7 +160,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                   <Spotify color={"white"} width={22} height={22} />
                 </View>
               </View>
-              <Text tw="text-lg font-bold text-white">Pre-Save Drop</Text>
+              <Text tw="text-lg font-bold text-white">Pre-Save Airdrop</Text>
               <View tw="right-4 ml-auto">
                 <ChevronRight color={"white"} width={24} height={24} />
               </View>
