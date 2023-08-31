@@ -1,4 +1,8 @@
-import { formatDistanceToNowStrict } from "date-fns";
+import {
+  formatDistanceToNowStrict,
+  formatDuration,
+  intervalToDuration,
+} from "date-fns";
 
 import { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -30,6 +34,7 @@ type Props = {
   label?: string;
   size?: number;
   tw?: TW;
+  timeLimit: string | null | undefined;
 };
 
 export function Creator({
@@ -39,6 +44,7 @@ export function Creator({
   label = "Creator",
   size = 32,
   tw = "",
+  timeLimit,
 }: Props) {
   if (!nft) return null;
 
@@ -71,16 +77,29 @@ export function Creator({
               <VerificationBadge style={{ marginLeft: 4 }} size={12} />
             ) : null}
           </View>
-          {Boolean(shouldShowDateCreated && nft.token_created) && (
+
+          {Boolean(
+            shouldShowDateCreated && (nft.token_created || timeLimit)
+          ) && (
             <>
               <View tw="h-2" />
               <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
-                {formatDistanceToNowStrict(
-                  convertUTCDateToLocalDate(nft.token_created),
-                  {
-                    addSuffix: true,
-                  }
-                )}
+                {timeLimit
+                  ? `${formatDuration(
+                      intervalToDuration({
+                        start: new Date(),
+                        end: new Date(timeLimit),
+                      }),
+                      {
+                        format: ["days", "hours"],
+                      }
+                    )} left`
+                  : formatDistanceToNowStrict(
+                      convertUTCDateToLocalDate(nft.token_created),
+                      {
+                        addSuffix: true,
+                      }
+                    )}
               </Text>
             </>
           )}

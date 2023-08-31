@@ -154,6 +154,7 @@ const ListCardSmallScreen = ({
             shouldShowDateCreated={false}
             shouldShowCreatorIndicator={false}
             size={24}
+            timeLimit={edition?.time_limit}
             tw={"web:py-2 py-2"}
           />
           <View tw="items-center">
@@ -327,7 +328,11 @@ const ListCardLargeScreen = ({
         <View tw="flex-1 justify-between">
           <View tw="pr-6">
             <View tw="px-4">
-              <Creator nft={nft} shouldShowDateCreated={false} />
+              <Creator
+                nft={nft}
+                shouldShowDateCreated={false}
+                timeLimit={edition?.time_limit}
+              />
               <RouteComponent as={as} href={href!} onPress={handleOnPress}>
                 <View tw="inline flex-grow-0">
                   <Text

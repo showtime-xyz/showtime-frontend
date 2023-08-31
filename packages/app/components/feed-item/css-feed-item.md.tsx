@@ -209,7 +209,7 @@ export const CssFeedItemMD = memo<FeedItemProps>(function FeedItemMD({
             </Text>
 
             <View tw="mt-6 flex-row items-center justify-between">
-              <Creator nft={nft} />
+              <Creator nft={nft} timeLimit={edition?.time_limit} />
             </View>
 
             <View tw="mt mb-4 h-5">
