@@ -8,13 +8,17 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { Link } from "app/navigation/link";
 import { NFT } from "app/types";
-import { getCreatorUsernameFromNFT } from "app/utilities";
+import {
+  getClaimLimitLeftDuration,
+  getCreatorUsernameFromNFT,
+} from "app/utilities";
 
 export const CreatorOnFeed = memo<{
   nft: NFT;
   rightElement?: JSX.Element;
   dark?: boolean;
-}>(function HomeItem({ nft, rightElement, dark = false }) {
+  timeLimit?: string;
+}>(function HomeItem({ nft, rightElement, dark = false, timeLimit }) {
   return (
     <View tw="flex-row items-center">
       <AvatarHoverCard
@@ -55,7 +59,9 @@ export const CreatorOnFeed = memo<{
             dark ? "text-gray-200" : "text-gray-600 dark:text-gray-400",
           ]}
         >
-          {`${nft?.creator_followers_count?.toLocaleString()} Followers`}
+          {timeLimit
+            ? getClaimLimitLeftDuration(timeLimit)
+            : `${nft?.creator_followers_count?.toLocaleString()} Followers`}
         </Text>
       </View>
       {isValidElement(rightElement) ? (
