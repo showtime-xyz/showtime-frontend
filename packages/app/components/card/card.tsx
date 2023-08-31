@@ -187,7 +187,7 @@ const CardLargeScreen = ({
     >
       <View tw="pb-4">
         <View tw="flex-row items-center justify-between px-4">
-          <Creator nft={nft} shouldShowDateCreated={false} />
+          <Creator nft={nft} timeLimit={edition?.time_limit} />
           <ErrorBoundary renderFallback={() => null}>
             <Suspense fallback={<Skeleton width={24} height={24} />}>
               <NFTDropdown
