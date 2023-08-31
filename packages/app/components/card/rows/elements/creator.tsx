@@ -1,8 +1,4 @@
-import {
-  formatDistanceToNowStrict,
-  formatDuration,
-  intervalToDuration,
-} from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 
 import { TW } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -14,6 +10,7 @@ import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 import {
   convertUTCDateToLocalDate,
+  getClaimLimitLeftDuration,
   getCreatorUsernameFromNFT,
 } from "app/utilities";
 
@@ -85,15 +82,7 @@ export function Creator({
               <View tw="h-2" />
               <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
                 {timeLimit
-                  ? `${formatDuration(
-                      intervalToDuration({
-                        start: new Date(),
-                        end: new Date(timeLimit),
-                      }),
-                      {
-                        format: ["days", "hours"],
-                      }
-                    )} left`
+                  ? getClaimLimitLeftDuration(timeLimit)
                   : formatDistanceToNowStrict(
                       convertUTCDateToLocalDate(nft.token_created),
                       {

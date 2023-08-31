@@ -3,7 +3,11 @@ import { Platform } from "react-native";
 
 import axios, { AxiosError } from "axios";
 import getSymbolFromCurrency from "currency-symbol-map";
-import { formatDistanceToNowStrict } from "date-fns";
+import {
+  formatDistanceToNowStrict,
+  formatDuration,
+  intervalToDuration,
+} from "date-fns";
 import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { locale } from "expo-localization";
@@ -1114,3 +1118,16 @@ export function formatWalletNameToUpperCase(str?: string) {
   );
   return formattedParts.join(" ");
 }
+
+export const getClaimLimitLeftDuration = (timeLimit: string) => {
+  if (new Date() > new Date(timeLimit)) return "Airdrop completed";
+  return `${formatDuration(
+    intervalToDuration({
+      start: new Date(),
+      end: new Date(timeLimit),
+    }),
+    {
+      format: ["days", "hours"],
+    }
+  )} left`;
+};
