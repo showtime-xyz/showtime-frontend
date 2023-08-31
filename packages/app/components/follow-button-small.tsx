@@ -11,15 +11,29 @@ type ToggleFollowParams = ButtonProps & {
   name?: string;
   profileId: number;
   onToggleFollow?: () => void;
+  channelId?: number;
 };
 
 export const FollowButtonSmall = memo<ToggleFollowParams>(
-  function FollowButtonSmall({ profileId, name, tw = "", ...rest }) {
+  function FollowButtonSmall({ profileId, name, tw = "", channelId, ...rest }) {
     return (
       <FollowButton
         profileId={profileId}
         name={name}
-        renderButton={({ text, ...rest }) => {
+        renderButton={({ text, isFollowing, ...rest }) => {
+          if (channelId && isFollowing) {
+            return (
+              <Pressable
+                tw={[
+                  "h-[22px] items-center justify-center rounded-full bg-indigo-600 px-3.5",
+                  tw,
+                ]}
+                {...rest}
+              >
+                <Text tw="text-xs font-bold text-white">View Channel</Text>
+              </Pressable>
+            );
+          }
           return (
             <Pressable
               tw={[
