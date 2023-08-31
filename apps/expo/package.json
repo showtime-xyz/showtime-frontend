@@ -89,7 +89,7 @@
     "dotenv": "^16.3.1",
     "ethers": "5.7.2",
     "events": "^3.3.0",
-    "expo": "^49.0.5",
+    "expo": "^49.0.9",
     "expo-application": "~5.3.0",
     "expo-av": "~13.4.1",
     "expo-blur": "~12.4.1",
