@@ -104,9 +104,7 @@ function NFTDropdown({
   });
 
   const viewOnOpenSea = () => {
-    // Todo: maybe need to use token_id from backend.
-    const token_id = "1";
-    const link = `https://opensea.io/assets/${nft?.chain_name}/${nft.contract_address}/${token_id}`;
+    const link = `https://opensea.io/assets/${nft?.chain_name}/${nft.contract_address}`;
     Linking.openURL(link);
   };
 
