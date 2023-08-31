@@ -335,7 +335,7 @@ const CreateDropStepMedia = (
     <Layout onBackPress={handlePrevStep} title="Create">
       <View tw="px-4">
         <Text tw="px-8 text-center text-xl font-medium text-gray-900 dark:text-gray-50">
-          Upload an image or video for your paid unlockable.
+          Upload an image or video for your Pre-Save Airdrop
         </Text>
         <View tw="mt-8 self-center" style={{ maxWidth: mediaWidth }}>
           <Controller
@@ -401,7 +401,7 @@ const CreateDropStepTitle = (props: StepProps) => {
                 <Fieldset
                   ref={ref}
                   label="Song Title"
-                  placeholder="Give your drop a title"
+                  placeholder="Give your airdrop a title"
                   onBlur={onBlur}
                   errorText={errors.title?.message}
                   value={value}
@@ -423,7 +423,7 @@ const CreateDropStepTitle = (props: StepProps) => {
                   ref={ref}
                   label="Description"
                   tw="flex-1"
-                  placeholder="Why should people collect this drop? Raffle Automatically selects a winner once your song is live."
+                  placeholder="Why should people collect this airdrop? Raffle Automatically selects a winner once your song is live."
                   multiline
                   textAlignVertical="top"
                   numberOfLines={3}
@@ -435,7 +435,7 @@ const CreateDropStepTitle = (props: StepProps) => {
               );
             }}
           />
-          <View tw="absolute right-3 top-3 flex-row items-center">
+          {/* <View tw="absolute right-3 top-3 flex-row items-center">
             <Controller
               key="raffle"
               control={control}
@@ -452,7 +452,7 @@ const CreateDropStepTitle = (props: StepProps) => {
                 );
               }}
             />
-          </View>
+          </View> */}
         </View>
         <View>
           <Text tw="text-13 pt-4 text-gray-700 dark:text-gray-200">
@@ -531,236 +531,219 @@ const CreateDropStepSongURI = (
             {props.title}
           </Text>
         </View>
-        <View tw="mt-6">
-          <Text tw="text-sm font-semibold text-gray-900 dark:text-gray-50">
-            Music Details
-          </Text>
-          <Text tw="pt-1 text-gray-600 dark:text-gray-400">
-            Promote an unreleased or live song to Spotify and Apple Music by
-            pasting URLs below
-          </Text>
-          <View tw="z-10 mt-4 flex-row">
-            <Controller
-              key="releaseDate"
-              control={control}
-              name="releaseDate"
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => {
-                const dateValue =
-                  typeof value === "string"
-                    ? new Date(value)
-                    : value ?? getDefaultDate();
+        <View tw="z-10 mt-4 flex-row">
+          <Controller
+            key="releaseDate"
+            control={control}
+            name="releaseDate"
+            render={({ field: { onChange, value }, fieldState: { error } }) => {
+              const dateValue =
+                typeof value === "string"
+                  ? new Date(value)
+                  : value ?? getDefaultDate();
 
-                return (
-                  <View
-                    tw={`flex-1 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800 ${
-                      isSaveDrop ? "opacity-40" : ""
-                    }`}
-                  >
-                    {Platform.OS !== "web" ? (
-                      <Pressable
-                        onPress={() => {
-                          setShowDatePicker(!showDatePicker);
-                        }}
-                      >
-                        <Text tw="font-bold text-gray-900 dark:text-white">
-                          Streaming Services Release Date
-                        </Text>
-                        <Text tw="pt-4 text-base text-gray-900 dark:text-white">
-                          {(dateValue as Date).toDateString()}
-                        </Text>
-                      </Pressable>
-                    ) : (
+              return (
+                <View
+                  tw={`flex-1 rounded-xl bg-gray-100 px-4 py-4 dark:bg-gray-800 ${
+                    isSaveDrop ? "opacity-40" : ""
+                  }`}
+                >
+                  {Platform.OS !== "web" ? (
+                    <Pressable
+                      onPress={() => {
+                        setShowDatePicker(!showDatePicker);
+                      }}
+                    >
                       <Text tw="font-bold text-gray-900 dark:text-white">
                         Streaming Services Release Date
                       </Text>
-                    )}
-
-                    <View tw="t-0 l-0 w-full flex-row pt-2">
-                      <DateTimePicker
-                        disabled={isSaveDrop}
-                        onChange={(v) => {
-                          onChange(v);
-                          setShowDatePicker(false);
-                        }}
-                        minimumDate={getMinimumDate()}
-                        value={dateValue}
-                        type="datetime"
-                        open={showDatePicker}
-                      />
-                    </View>
-                    {error && !isSaveDrop ? (
-                      <Text tw="pt-3 font-bold leading-5 text-red-500">
-                        {error.message}
+                      <Text tw="pt-4 text-base text-gray-900 dark:text-white">
+                        {(dateValue as Date).toDateString()}
                       </Text>
-                    ) : null}
+                    </Pressable>
+                  ) : (
+                    <Text tw="font-bold text-gray-900 dark:text-white">
+                      Streaming Services Release Date
+                    </Text>
+                  )}
+
+                  <View tw="t-0 l-0 w-full flex-row pt-2">
+                    <DateTimePicker
+                      disabled={isSaveDrop}
+                      onChange={(v) => {
+                        onChange(v);
+                        setShowDatePicker(false);
+                      }}
+                      minimumDate={getMinimumDate()}
+                      value={dateValue}
+                      type="datetime"
+                      open={showDatePicker}
+                    />
                   </View>
-                );
+                  {error && !isSaveDrop ? (
+                    <Text tw="pt-3 font-bold leading-5 text-red-500">
+                      {error.message}
+                    </Text>
+                  ) : null}
+                </View>
+              );
+            }}
+          />
+          <View tw="absolute right-4 top-7 ml-4 flex-row items-center">
+            <Checkbox
+              checked={isSaveDrop}
+              onChange={() => {
+                setIsSaveDrop(!isSaveDrop);
               }}
+              aria-label="Live Now"
             />
-            <View tw="absolute right-4 top-7 ml-4 flex-row items-center">
-              <Checkbox
-                checked={isSaveDrop}
-                onChange={() => {
-                  setIsSaveDrop(!isSaveDrop);
-                }}
-                aria-label="Live Now"
-              />
-              <Text
-                tw="ml-2 font-bold text-black dark:text-white"
-                onPress={() => {
-                  setIsSaveDrop(!isSaveDrop);
-                }}
-              >
-                Live Now
-              </Text>
-            </View>
+            <Text
+              tw="ml-2 font-bold text-black dark:text-white"
+              onPress={() => {
+                setIsSaveDrop(!isSaveDrop);
+              }}
+            >
+              Live Now
+            </Text>
           </View>
+        </View>
+        <View tw="mt-4">
+          <Controller
+            control={control}
+            name="spotifyUrl"
+            render={({ field: { onChange, onBlur, value, ref } }) => {
+              return (
+                <Fieldset
+                  ref={ref}
+                  helperText={
+                    isSaveDrop ? (
+                      "Press the ⓘ button to learn how to get that link. Please note that providing a Playlist link is not allowed."
+                    ) : (
+                      <Text tw="text-sm leading-6 text-gray-700 dark:text-gray-300">
+                        <Text tw="text-sm font-bold leading-6 text-gray-700 dark:text-gray-300">
+                          {`Go to Spotify for Artists → Music → Upcoming. `}
+                        </Text>
+                        Click "Copy URI" and paste it here. Track URI also
+                        allowed.
+                      </Text>
+                    )
+                  }
+                  label={
+                    <View tw="flex-row items-center gap-1">
+                      <Spotify
+                        height={22}
+                        width={22}
+                        color={isDark ? "white" : "black"}
+                      />
+                      <Label tw="font-bold text-gray-900 dark:text-white">
+                        {isSaveDrop ? "Spotify Song Link" : "Spotify URI "}
+                      </Label>
+                      {isSaveDrop ? (
+                        <PressableHover
+                          onPress={() => {
+                            setShowCopySpotifyLinkTutorial(true);
+                          }}
+                        >
+                          <InformationCircle
+                            height={18}
+                            width={18}
+                            color={isDark ? colors.gray[400] : colors.gray[600]}
+                          />
+                        </PressableHover>
+                      ) : null}
+                    </View>
+                  }
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder={
+                    isSaveDrop
+                      ? "https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
+                      : "spotify:album:27ftYHLeunzcSzb33Wk1hf"
+                  }
+                  errorText={errors.spotifyUrl?.message || errors[""]?.message}
+                />
+              );
+            }}
+          />
+        </View>
+        {user.user?.data.profile.apple_music_artist_id ? (
           <View tw="mt-4">
             <Controller
               control={control}
-              name="spotifyUrl"
+              name="appleMusicTrackUrl"
               render={({ field: { onChange, onBlur, value, ref } }) => {
                 return (
                   <Fieldset
                     ref={ref}
-                    helperText={
-                      isSaveDrop ? (
-                        "Press the ⓘ button to learn how to get that link. Please note that providing a Playlist link is not allowed."
-                      ) : (
-                        <Text tw="text-sm leading-6 text-gray-700 dark:text-gray-300">
-                          <Text tw="text-sm font-bold leading-6 text-gray-700 dark:text-gray-300">
-                            {`Go to Spotify for Artists → Music → Upcoming. `}
-                          </Text>
-                          Click "Copy URI" and paste it here. Track URI also
-                          allowed.
-                        </Text>
-                      )
-                    }
                     label={
                       <View tw="flex-row items-center gap-1">
-                        <Spotify
-                          height={22}
-                          width={22}
+                        <AppleMusic
+                          height={20}
+                          width={20}
                           color={isDark ? "white" : "black"}
                         />
-                        <Label tw="font-bold text-gray-900 dark:text-white">
-                          {isSaveDrop ? "Spotify Song Link" : "Spotify URI "}
+                        <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
+                          Apple Music Song Link
                         </Label>
-                        {isSaveDrop ? (
-                          <PressableHover
-                            onPress={() => {
-                              setShowCopySpotifyLinkTutorial(true);
-                            }}
-                          >
-                            <InformationCircle
-                              height={18}
-                              width={18}
-                              color={
-                                isDark ? colors.gray[400] : colors.gray[600]
-                              }
-                            />
-                          </PressableHover>
-                        ) : null}
                       </View>
                     }
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
                     placeholder={
-                      isSaveDrop
-                        ? "https://open.spotify.com/track/5bwNy8QQgRsfoMKDImHsx9"
-                        : "spotify:album:27ftYHLeunzcSzb33Wk1hf"
+                      "https://music.apple.com/album/i-feel-it-coming-feat-daft-punk/1440870373?i=1440870397"
                     }
                     errorText={
-                      errors.spotifyUrl?.message || errors[""]?.message
+                      errors.appleMusicTrackUrl?.message || errors[""]?.message
                     }
                   />
                 );
               }}
             />
           </View>
-          {user.user?.data.profile.apple_music_artist_id ? (
-            <View tw="mt-4">
-              <Controller
-                control={control}
-                name="appleMusicTrackUrl"
-                render={({ field: { onChange, onBlur, value, ref } }) => {
-                  return (
-                    <Fieldset
-                      ref={ref}
-                      label={
-                        <View tw="flex-row items-center gap-1">
-                          <AppleMusic
-                            height={20}
-                            width={20}
-                            color={isDark ? "white" : "black"}
-                          />
-                          <Label tw="mr-1 font-bold text-gray-900 dark:text-white">
-                            Apple Music Song Link
-                          </Label>
-                        </View>
-                      }
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      value={value}
-                      placeholder={
-                        "https://music.apple.com/album/i-feel-it-coming-feat-daft-punk/1440870373?i=1440870397"
-                      }
-                      errorText={
-                        errors.appleMusicTrackUrl?.message ||
-                        errors[""]?.message
-                      }
-                    />
-                  );
-                }}
-              />
-            </View>
-          ) : null}
+        ) : null}
 
-          <Pressable
-            tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800"
-            onPress={props.handleMoreOptions}
-          >
-            <View tw="flex-row items-center justify-between">
-              <Text tw="text-sm font-semibold text-black dark:text-white">
-                More options
-              </Text>
-              <ChevronRight
-                color={isDark ? "white" : "black"}
-                width={24}
-                height={24}
+        <Pressable
+          tw="mt-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800"
+          onPress={props.handleMoreOptions}
+        >
+          <View tw="flex-row items-center justify-between">
+            <Text tw="text-sm font-semibold text-black dark:text-white">
+              More options
+            </Text>
+            <ChevronRight
+              color={isDark ? "white" : "black"}
+              width={24}
+              height={24}
+            />
+          </View>
+          <View tw="items-start">
+            <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
+              <DataPill
+                tw={isDark ? "bg-black" : "bg-white"}
+                label={
+                  isUnlimited
+                    ? `Open Edition`
+                    : `${getValues("editionSize")} ${
+                        getValues("editionSize") == 1 ? "Edition" : "Editions"
+                      }`
+                }
+                type="text"
+              />
+              <DataPill
+                tw={isDark ? "bg-black" : "bg-white"}
+                label={`${getValues("royalty")}% Royalties`}
+                type="text"
+              />
+              <DataPill
+                tw={isDark ? "bg-black" : "bg-white"}
+                label={selectedDurationLabel}
+                type="text"
               />
             </View>
-            <View tw="items-start">
-              <View tw="mt-2 flex-row flex-wrap" style={{ gap: 4 }}>
-                <DataPill
-                  tw={isDark ? "bg-black" : "bg-white"}
-                  label={
-                    isUnlimited
-                      ? `Open Edition`
-                      : `${getValues("editionSize")} ${
-                          getValues("editionSize") == 1 ? "Edition" : "Editions"
-                        }`
-                  }
-                  type="text"
-                />
-                <DataPill
-                  tw={isDark ? "bg-black" : "bg-white"}
-                  label={`${getValues("royalty")}% Royalties`}
-                  type="text"
-                />
-                <DataPill
-                  tw={isDark ? "bg-black" : "bg-white"}
-                  label={selectedDurationLabel}
-                  type="text"
-                />
-              </View>
-            </View>
-          </Pressable>
-        </View>
+          </View>
+        </Pressable>
         <Text tw="pt-4 text-sm text-gray-600 dark:text-gray-200">
           This drop will be owned by you
         </Text>
