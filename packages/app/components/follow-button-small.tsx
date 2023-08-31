@@ -3,6 +3,7 @@ import { useCallback, memo, useMemo } from "react";
 import { Button } from "@showtime-xyz/universal.button";
 import type { ButtonProps } from "@showtime-xyz/universal.button";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { FollowButton } from "./follow-button";
@@ -16,6 +17,7 @@ type ToggleFollowParams = ButtonProps & {
 
 export const FollowButtonSmall = memo<ToggleFollowParams>(
   function FollowButtonSmall({ profileId, name, tw = "", channelId, ...rest }) {
+    const router = useRouter();
     return (
       <FollowButton
         profileId={profileId}
@@ -28,7 +30,7 @@ export const FollowButtonSmall = memo<ToggleFollowParams>(
                   "h-[22px] items-center justify-center rounded-full bg-indigo-600 px-3.5",
                   tw,
                 ]}
-                {...rest}
+                onPress={() => router.push(`/channels/${channelId}`)}
               >
                 <Text tw="text-xs font-bold text-white">View Channel</Text>
               </Pressable>
