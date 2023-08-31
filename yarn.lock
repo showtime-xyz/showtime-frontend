@@ -6749,13 +6749,13 @@ __metadata:
     expo-location: ~16.1.0
     expo-mail-composer: ~12.3.0
     expo-media-library: ~15.4.1
-    expo-modules-core: ~1.5.10
+    expo-modules-core: ~1.5.8
     expo-navigation-bar: ~2.3.0
     expo-notifications: ~0.20.1
-    expo-splash-screen: ~0.20.5
+    expo-splash-screen: ~0.20.4
     expo-status-bar: ~1.6.0
     expo-system-ui: ~2.4.0
-    expo-updates: ~0.18.12
+    expo-updates: ~0.18.11
     expo-web-browser: ~12.3.2
     fastestsmallesttextencoderdecoder: ^1.0.22
     https-browserify: ~1.0.0
@@ -16212,7 +16212,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-modules-core@npm:~1.5.10":
+"expo-modules-core@npm:~1.5.8":
   version: 1.5.11
   resolution: "expo-modules-core@npm:1.5.11"
   dependencies:
@@ -16253,7 +16253,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-splash-screen@npm:~0.20.5":
+"expo-splash-screen@npm:~0.20.4":
   version: 0.20.5
   resolution: "expo-splash-screen@npm:0.20.5"
   dependencies:
@@ -16299,7 +16299,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-updates@npm:~0.18.12":
+"expo-updates@npm:~0.18.11":
   version: 0.18.12
   resolution: "expo-updates@npm:0.18.12"
   dependencies:
