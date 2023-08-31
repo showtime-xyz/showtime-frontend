@@ -56,8 +56,6 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       claimLimitExplanation: "claim/claim-limit-explanation",
       likers: "likers/:nftId",
       comments: "nft/:chainName/:contractAddress/:tokenId/comments",
-      activity: "nft/:chainName/:contractAddress/:tokenId/activity",
-      details: "nft/:chainName/:contractAddress/:tokenId/details",
       dropViewShareModal: "nft/:chainName/:contractAddress/:tokenId/share",
       search: "search",
       profile: "profile/:username",
