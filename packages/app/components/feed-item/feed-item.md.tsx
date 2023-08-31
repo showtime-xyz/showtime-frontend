@@ -200,7 +200,7 @@ export const FeedItemMD = memo<FeedItemProps>(function FeedItemMD({
               <RaffleTooltip edition={edition} tw="mr-1" />
             </View>
             <View tw="flex-row items-center justify-between">
-              <Creator nft={nft} />
+              <Creator nft={nft} timeLimit={edition?.time_limit} />
             </View>
             <View tw="mb-4 mr-4 flex-row items-center">
               <Text tw="text-lg font-bold text-black dark:text-white">

@@ -91,6 +91,7 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
                   <FollowButtonSmall
                     profileId={nft.creator_id}
                     name={nft.creator_username}
+                    channelId={detailData?.data.item?.creator_channel_id}
                     tw="mr-4"
                   />
                   <NFTDropdown
