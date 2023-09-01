@@ -10,7 +10,7 @@ import { delay } from "app/utilities";
 
 export const useConfirmPayment = () => {
   const [paymentStatus, setPaymentStatus] = useState<
-    "failed" | "success" | "processing" | null | "notSure"
+    "failed" | "success" | "processing" | "processingOnramp" | null | "notSure"
   >(null);
   const [message, setMessage] = useState<string | null>(null);
   const { mutate } = useUser();
@@ -64,9 +64,11 @@ export const useConfirmPayment = () => {
   ) => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-        setMessage("Your payment is processing.");
-        setPaymentStatus("processing");
-        for (let i = 0; i < 20; i++) {
+        setMessage(
+          "Your purchase is in progress. Please check back in 5 mins."
+        );
+        setPaymentStatus("processingOnramp");
+        for (let i = 0; i < 150; i++) {
           await delay(3000);
           const res = await axios({
             method: "GET",

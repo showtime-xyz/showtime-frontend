@@ -172,12 +172,23 @@ const CheckoutReturn = memo(function CheckoutReturn({
 
   return (
     <View tw="min-h-[200px] flex-1 items-center justify-center">
-      {paymentStatus === "processing" ? (
-        <>
+      {paymentStatus === "processingOnramp" ? (
+        <View tw="p-4">
+          <Text tw="text-center text-[48px]">🎉</Text>
           <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
             {message}
           </Text>
-        </>
+          <Button onPress={() => router.pop()}>Close</Button>
+        </View>
+      ) : null}
+
+      {paymentStatus === "processing" ? (
+        <View>
+          <Text tw="p-8 text-center text-base text-gray-900 dark:text-gray-50">
+            {message}
+          </Text>
+          <Spinner />
+        </View>
       ) : null}
 
       {paymentStatus === "failed" ? (
@@ -209,8 +220,6 @@ const CheckoutReturn = memo(function CheckoutReturn({
           </Text>
         </>
       ) : null}
-
-      <Spinner />
     </View>
   );
 });

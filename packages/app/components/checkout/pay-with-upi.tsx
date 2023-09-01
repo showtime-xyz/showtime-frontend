@@ -55,8 +55,11 @@ export const PayWithUPI = (props: {
     onrampInstance.show();
 
     onrampInstance.on("TX_EVENTS", (e) => {
-      if (e.type === "ONRAMP_WIDGET_TX_COMPLETED") {
-        console.log("Transaction completed", e);
+      console.log("on ramp tx status ", e);
+      if (
+        e.type === "ONRAMP_WIDGET_TX_FINDING" ||
+        e.type === "ONRAMP_WIDGET_TX_PURCHASING"
+      ) {
         if (onrampInstance._isVisible) {
           onrampInstance.close();
         }
