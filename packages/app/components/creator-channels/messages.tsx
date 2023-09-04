@@ -296,7 +296,8 @@ export const Messages = memo(() => {
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData, index }) => {
-      if (index % 2 === 0) {
+      const isOwnMessage = index % 2 === 0;
+      if (isOwnMessage) {
         return (
           <MessageItemBySelf
             item={item}
