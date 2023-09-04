@@ -1,4 +1,4 @@
-import { ViewProps } from "react-native";
+import { ViewProps, Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Copy, Twitter, Sendv2, Corner } from "@showtime-xyz/universal.icon";
@@ -36,7 +36,7 @@ export function NFTShareDropdown({
   ...rest
 }: Props) {
   const isDark = useIsDarkMode();
-  const { copyNFTLink } = useShareNFT();
+  const { shareNFT } = useShareNFT();
 
   const redirectToStarDropShareScreen = useRedirectDropImageShareScreen();
 
@@ -58,7 +58,16 @@ export function NFTShareDropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent loop sideOffset={8}>
-        <DropdownMenuItem onSelect={() => copyNFTLink(nft)} key="copy-link">
+        <DropdownMenuItem
+          onSelect={() => {
+            if (Platform.OS === "web") {
+              redirectToStarDropShareScreen(nft.contract_address);
+            } else {
+              shareNFT(nft);
+            }
+          }}
+          key="copy-link"
+        >
           <MenuItemIcon
             Icon={Copy}
             ios={{
@@ -71,10 +80,7 @@ export function NFTShareDropdown({
         </DropdownMenuItem>
 
         <ShareOnTwitterDropdownMenuItem nft={nft} />
-        <DropdownMenuItem
-          onSelect={() => redirectToStarDropShareScreen(nft.contract_address)}
-          key="share-twitter"
-        >
+        <DropdownMenuItem onSelect={() => shareNFT(nft)} key="share-twitter">
           <MenuItemIcon
             Icon={Corner}
             ios={{
