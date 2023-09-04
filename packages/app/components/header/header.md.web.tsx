@@ -516,7 +516,7 @@ export const HeaderMd = withColorScheme(() => {
               </Text>
             </>
           </Button>
-          <Divider tw="my-6" />
+          <Divider tw="my-5" />
           <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
             <View tw="flex-row items-center justify-center">
               <PhonePortraitOutline color={iconColor} width={18} height={18} />
@@ -556,8 +556,8 @@ export const HeaderMd = withColorScheme(() => {
         </View>
         <View
           tw={[
-            "absolute bottom-0 mt-6 inline-block",
-            !isAuthenticated || height > 880 ? "absolute" : "relative",
+            "bottom-0 mt-4 inline-block",
+            height > 840 ? "absolute" : "relative",
           ]}
           style={{}}
         >
