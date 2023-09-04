@@ -89,10 +89,6 @@ export const Home = () => {
         return "popularCreators";
       }
 
-      if (index === 1) {
-        return "onchainsummer";
-      }
-
       if (index % Math.floor(feedItemLength * 0.25) === 0 && index !== 0) {
         return "trendingCarousel";
       }
