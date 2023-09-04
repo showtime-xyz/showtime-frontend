@@ -60,7 +60,11 @@ import {
   CustomCellRenderer,
 } from "./components/animated-cell-container";
 import { MessageInput, ScrollToBottomButton } from "./components/message-input";
-import { MessageItem, MessageSkeleton } from "./components/message-item";
+import {
+  MessageItem,
+  MessageItemBySelf,
+  MessageSkeleton,
+} from "./components/message-item";
 import { MessagesHeader } from "./components/messages-header";
 import { useChannelById } from "./hooks/use-channel-detail";
 import {
@@ -291,7 +295,21 @@ export const Messages = memo(() => {
   }, [channelDetail.data?.owner, error, router, fresh]);
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
-    ({ item, extraData }) => {
+    ({ item, extraData, index }) => {
+      if (index % 2 === 0) {
+        return (
+          <MessageItemBySelf
+            item={item}
+            reactions={extraData.reactions}
+            channelId={extraData.channelId}
+            listRef={listRef}
+            setEditMessage={setEditMessage}
+            editMessageIdSharedValue={editMessageIdSharedValue}
+            editMessageItemDimension={editMessageItemDimension}
+            edition={edition}
+          />
+        );
+      }
       return (
         <MessageItem
           item={item}

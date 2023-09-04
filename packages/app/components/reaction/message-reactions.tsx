@@ -6,7 +6,7 @@ import Animated, { Layout, FadeIn, FadeOut } from "react-native-reanimated";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import { formatToUSNumber } from "app/utilities";
 
@@ -20,11 +20,15 @@ export const MessageReactions = ({
   messageId,
   reactionGroup,
   channelReactions,
+  tw = "",
+  ...rest
 }: {
   channelId: string;
   reactionGroup: ReactionGroup[];
   messageId: number;
   channelReactions: ChannelReactionResponse;
+  tw?: string;
+  style?: ViewProps["style"];
 }) => {
   const router = useRouter();
 
@@ -57,7 +61,7 @@ export const MessageReactions = ({
   );
 
   return (
-    <View tw="-ml-0.5 w-full flex-1 flex-row items-center">
+    <View tw={["-ml-0.5 w-full flex-1 flex-row items-center", tw]} {...rest}>
       {channelReactions.map((item, index) => {
         const userReaction = reactionGroup.find(
           (r) => r.reaction_id === item.id
