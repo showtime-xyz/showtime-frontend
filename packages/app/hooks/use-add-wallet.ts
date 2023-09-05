@@ -12,7 +12,19 @@ import { addWalletToBackend } from "app/lib/add-wallet/add-wallet";
 import { Logger } from "app/lib/logger";
 import { fetchNonce } from "app/lib/nonce";
 import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+import { WalletAddressesV2 } from "app/types";
 import { isMobileWeb } from "app/utilities";
+
+const getWalletDefalutNickname = (
+  walletName: string | undefined,
+  userWallets: WalletAddressesV2[] | undefined
+) => {
+  const index = userWallets?.findIndex((item) => item.nickname === walletName);
+  if (!index || index === -1) {
+    return walletName;
+  }
+  return `${walletName} ${(userWallets?.length ?? 0) + 1}`;
+};
 
 const useAddWallet = () => {
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
@@ -27,6 +39,10 @@ const useAddWallet = () => {
   const userWallets = user?.user?.data.profile.wallet_addresses_v2;
 
   const addWallet = async () => {
+    let signature: string | undefined;
+    let address: string | undefined;
+    let walletName: string | undefined;
+
     try {
       setStatus("loading");
 
@@ -36,19 +52,10 @@ const useAddWallet = () => {
 
       const res = await wallet.connect();
 
-      const getWalletDefalutNickname = () => {
-        const walletName = res?.walletName;
-        const index = userWallets?.findIndex(
-          (item) => item.nickname === walletName
-        );
-        if (!index || index === -1) {
-          return res?.walletName;
-        }
-        return `${res?.walletName} ${(userWallets?.length ?? 0) + 1}`;
-      };
-
       if (res) {
-        const nonce = await fetchNonce(res.address);
+        address = res.address;
+        walletName = res.walletName;
+        const nonce = await fetchNonce(address);
         const message = process.env.NEXT_PUBLIC_SIGNING_MESSAGE + " " + nonce;
         if (isMobileWeb()) {
           Alert.alert(
@@ -61,13 +68,17 @@ const useAddWallet = () => {
               {
                 text: "Sign",
                 onPress: async () => {
-                  const signature = await wallet.signMessageAsync({
+                  signature = await wallet.signMessageAsync({
                     message,
                   });
-                  if (signature) {
+                  if (signature && address) {
                     const addedWallet = await addWalletToBackend({
-                      address: res.address,
+                      address,
                       signature,
+                      nickname: getWalletDefalutNickname(
+                        walletName,
+                        userWallets
+                      ),
                     });
 
                     mutate(MY_INFO_ENDPOINT);
@@ -82,12 +93,12 @@ const useAddWallet = () => {
             ]
           );
         } else {
-          const signature = await wallet.signMessageAsync({ message });
-          if (signature) {
+          signature = await wallet.signMessageAsync({ message });
+          if (signature && address) {
             const addedWallet = await addWalletToBackend({
-              address: res.address,
+              address,
               signature,
-              nickname: getWalletDefalutNickname(),
+              nickname: getWalletDefalutNickname(walletName, userWallets),
             });
 
             mutate(MY_INFO_ENDPOINT);
@@ -103,8 +114,38 @@ const useAddWallet = () => {
       setStatus("idle");
     } catch (e: any) {
       setStatus("error");
-      Alert.alert("Something went wrong", e.message);
-      Logger.error("failed adding wallet", e);
+      if (e?.response?.data?.error?.code === 409) {
+        Alert.alert(
+          `This wallet is already linked to another Showtime account`,
+          e.message,
+          [
+            { text: "Cancel" },
+            {
+              text: "Confirm",
+              onPress: async () => {
+                if (signature && address) {
+                  const addedWallet = await addWalletToBackend({
+                    address,
+                    signature,
+                    nickname: getWalletDefalutNickname(walletName, userWallets),
+                    reassignWallet: true,
+                  });
+
+                  mutate(MY_INFO_ENDPOINT);
+
+                  // automatically set the primary wallet on add wallet if user doesn't have one
+                  if (hasNoPrimaryWallet) {
+                    setPrimaryWallet(addedWallet);
+                  }
+                }
+              },
+            },
+          ]
+        );
+      } else {
+        Logger.error("failed adding wallet", e);
+        Alert.alert("Something went wrong", e.message);
+      }
     }
   };
 
