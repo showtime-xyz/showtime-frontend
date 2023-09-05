@@ -162,7 +162,7 @@ export const MessageItem = memo(
                 <Text tw={["text-xs text-gray-700 dark:text-gray-200"]}>
                   {formatDateRelativeWithIntl(
                     channel_message.created_at,
-                    !isMobileWeb()
+                    Platform.OS === "web" && !isMobileWeb()
                   )}
                 </Text>
                 {isStarDrop ? (
@@ -305,7 +305,7 @@ export const MessageItemBySelf = memo(
     }
 
     return (
-      <AnimatedView ref={animatedViewRef}>
+      <AnimatedView tw="my-2" ref={animatedViewRef}>
         <View
           tw="mb-2 mr-2 self-end rounded-bl-3xl rounded-br rounded-tl-2xl rounded-tr-3xl bg-indigo-200/80 px-3 pb-4 pt-6 dark:bg-indigo-500/80"
           style={{
@@ -364,12 +364,13 @@ export const MessageItemBySelf = memo(
             editMessageItemDimension={editMessageItemDimension}
           />
         </View>
-        <View tw="self-end">
+
+        <View tw="flex-row items-center self-end">
           <PlatformAnimateHeight
             initialHeight={item.reaction_group.length > 0 ? 29 : 0}
           >
             {item.reaction_group.length > 0 ? (
-              <AnimatedView tw="pt-1" layout={Layout}>
+              <AnimatedView layout={Layout}>
                 <MessageReactions
                   key={channel_message.id}
                   reactionGroup={item.reaction_group}
@@ -382,15 +383,12 @@ export const MessageItemBySelf = memo(
               </AnimatedView>
             ) : null}
           </PlatformAnimateHeight>
+          <View tw="ml-2 mr-4 mt-1 flex-row items-center justify-end">
+            <Text tw={["text-xs text-gray-700 dark:text-gray-200"]}>
+              {formatDateRelativeWithIntl(channel_message.created_at)}
+            </Text>
+          </View>
         </View>
-        {/* <View tw="mb-4 mr-2 mt-2 flex-row items-center justify-end">
-          <Text tw={["text-xs text-gray-700 dark:text-gray-200"]}>
-            {formatDateRelativeWithIntl(
-              channel_message.created_at,
-              !isMobileWeb()
-            )}
-          </Text>
-        </View> */}
       </AnimatedView>
     );
   }
