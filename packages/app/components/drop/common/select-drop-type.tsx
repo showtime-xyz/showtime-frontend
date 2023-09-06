@@ -180,11 +180,10 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                 Boost streams before release
               </Text>
               <Text tw="text-13 pt-2 text-gray-900 dark:text-gray-100">
-                Give a free collectible for fans who Pre-Save your song to their{" "}
-                <Text tw="font-semibold">
-                  Spotify and/or Apple Music library.
-                </Text>{" "}
-                It auto-adds the song on its release day.
+                Airdrop a collectible to fans who Pre-Save your song on{" "}
+                <Text tw="font-semibold">Spotify & Apple Music</Text>. Your song
+                will auto-save to their library on release day. It auto-adds the
+                song on its release day.
               </Text>
             </View>
           </View>

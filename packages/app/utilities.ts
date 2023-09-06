@@ -1120,7 +1120,7 @@ export function formatWalletNameToUpperCase(str?: string) {
 }
 
 export const getClaimLimitLeftDuration = (timeLimit: string) => {
-  if (new Date() > new Date(timeLimit)) return "Airdrop completed";
+  if (new Date() > new Date(timeLimit)) return "Pre-Save airdrop completed";
   return `${formatDuration(
     intervalToDuration({
       start: new Date(),
