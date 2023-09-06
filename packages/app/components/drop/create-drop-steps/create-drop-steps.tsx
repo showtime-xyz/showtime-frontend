@@ -423,7 +423,7 @@ const CreateDropStepTitle = (props: StepProps) => {
                   ref={ref}
                   label="Description"
                   tw="flex-1"
-                  placeholder="Why should people collect this airdrop? Raffle Automatically selects a winner once your song is live."
+                  placeholder="Pro-tip: setup a raffle by typing a prize here, then download your collector list at the end of this airdrop to contact a lucky winner!"
                   multiline
                   textAlignVertical="top"
                   numberOfLines={3}
@@ -456,8 +456,9 @@ const CreateDropStepTitle = (props: StepProps) => {
         </View>
         <View>
           <Text tw="text-13 pt-4 text-gray-700 dark:text-gray-200">
-            Promote a collectible, raffle or allow-list to attract more
-            collectors. You can edit up to 30 minutes after creating.
+            To add perks like raffles, download your collector list to reach out
+            to your collectors. You can also create NFT-gated experiences once
+            your airdrop is complete.
           </Text>
         </View>
       </ScrollView>
