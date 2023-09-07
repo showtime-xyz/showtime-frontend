@@ -74,7 +74,7 @@ export const NFTDetails = ({
       <View tw="px-4 pb-4 pt-6" style={{ paddingBottom: bottomPadding }}>
         <View tw="flex-row justify-between">
           <View tw="flex-1">
-            <CreatorOnFeed nft={nft} dark />
+            <CreatorOnFeed nft={nft} dark timeLimit={edition?.time_limit} />
             <View tw="mb-2.5 mt-3 flex flex-row items-center justify-between">
               <Text
                 tw="flex-1 text-base font-bold leading-6 text-white dark:text-white md:text-gray-900"

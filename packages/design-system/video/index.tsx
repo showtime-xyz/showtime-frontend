@@ -14,8 +14,8 @@ import { useMuted } from "app/providers/mute-provider";
 type VideoProps = {
   tw?: TW;
   blurhash?: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   loading?: "eager" | "lazy";
   withVideoBackdrop?: boolean;
 } & ComponentProps<typeof ExpoVideo>;

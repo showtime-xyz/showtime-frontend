@@ -25,6 +25,7 @@ export async function getServerSideProps(context) {
           title: `Showtime - Creator Channel`,
           description: `Join @${username} channel on Showtime!`,
           image,
+          deeplinkUrl: `/channels/${channelId}`,
         },
       },
     };

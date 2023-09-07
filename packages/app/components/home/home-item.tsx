@@ -24,7 +24,9 @@ import { ClaimedBy } from "../feed-item/claimed-by";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 import { FollowButtonSmall } from "../follow-button-small";
 import { ListMedia } from "../media";
+import { MuteButton } from "../mute-button";
 import { NFTDropdown } from "../nft-dropdown";
+import { ItemKeyContext } from "../viewability-tracker-flatlist";
 import { ContentType } from "./content-type";
 import { FeedEngagementIcons } from "./engagement-icons";
 
@@ -75,96 +77,106 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
     );
 
     return (
-      <NativeRouteComponent
-        href={`${getNFTSlug(nft)}?initialScrollItemId=${nft.nft_id}&type=feed`}
-      >
-        <View tw="mb-2 mt-6 px-4 md:px-0">
-          <CreatorOnFeed
-            nft={nft}
-            rightElement={
-              <>
-                <FollowButtonSmall
-                  profileId={nft.creator_id}
-                  name={nft.creator_username}
-                  tw="mr-4"
-                />
-                <NFTDropdown
-                  nft={nft}
-                  edition={edition}
-                  iconSize={20}
-                  iconColor={isDark ? colors.gray[100] : colors.gray[900]}
-                  shouldEnableSharing={false}
-                />
-              </>
-            }
-          />
-          <View
-            tw="mt-3"
-            style={{ maxWidth: isMdWidth ? mediaSize : undefined }}
-          >
-            <RouteComponent
-              as={getNFTSlug(nft)}
-              href={`${getNFTSlug(nft)}?initialScrollItemId=${
-                nft.nft_id
-              }&type=feed`}
+      <ItemKeyContext.Provider value={index}>
+        <NativeRouteComponent
+          href={`${getNFTSlug(nft)}?initialScrollItemId=${
+            nft.nft_id
+          }&type=feed`}
+        >
+          <View tw="mb-2 mt-6 px-4 md:px-0">
+            <CreatorOnFeed
+              nft={nft}
+              rightElement={
+                <>
+                  <FollowButtonSmall
+                    profileId={nft.creator_id}
+                    name={nft.creator_username}
+                    channelId={detailData?.data.item?.creator_channel_id}
+                    tw="mr-4"
+                  />
+                  <NFTDropdown
+                    nft={nft}
+                    edition={edition}
+                    iconSize={20}
+                    iconColor={isDark ? colors.gray[100] : colors.gray[900]}
+                    shouldEnableSharing={false}
+                  />
+                </>
+              }
+            />
+            <View
+              tw="mt-3"
+              style={{ maxWidth: isMdWidth ? mediaSize : undefined }}
             >
-              <Text tw="text-15 font-bold text-gray-900 dark:text-white">
-                {nft?.token_name}
-              </Text>
-
-              <View tw="h-3" />
-              <Text
-                tw="text-sm text-gray-600 dark:text-gray-400"
-                numberOfLines={5}
-              >
-                {description}
-              </Text>
-            </RouteComponent>
-            <View tw="mt-3 min-h-[20px]">
-              <ClaimedBy
-                claimersList={detailData?.data.item?.multiple_owners_list}
-                avatarSize={18}
-                nft={nft}
-              />
-            </View>
-            <View tw="mt-3 flex-row items-center">
               <RouteComponent
                 as={getNFTSlug(nft)}
                 href={`${getNFTSlug(nft)}?initialScrollItemId=${
                   nft.nft_id
                 }&type=feed`}
               >
-                <View
-                  tw="overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-900"
-                  style={mediaViewStyle}
+                <Text tw="text-15 font-bold text-gray-900 dark:text-white">
+                  {nft?.token_name}
+                </Text>
+
+                <View tw="h-3" />
+                <Text
+                  tw="text-sm text-gray-600 dark:text-gray-400"
+                  numberOfLines={5}
+                >
+                  {description}
+                </Text>
+              </RouteComponent>
+              <View tw="mt-3 min-h-[20px]">
+                <ClaimedBy
+                  claimersList={detailData?.data.item?.multiple_owners_list}
+                  avatarSize={18}
+                  nft={nft}
+                />
+              </View>
+              <View tw="mt-3 flex-row items-center">
+                <RouteComponent
+                  as={getNFTSlug(nft)}
+                  href={`${getNFTSlug(nft)}?initialScrollItemId=${
+                    nft.nft_id
+                  }&type=feed`}
                 >
                   <View
-                    style={{
-                      width: mediaSize,
-                      height: mediaSize,
-                    }}
+                    tw="overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-900"
+                    style={mediaViewStyle}
                   >
-                    <ListMedia
-                      item={nft}
-                      optimizedWidth={1000}
-                      loading={index > 0 ? "lazy" : "eager"}
-                    />
-                    <View tw="absolute right-1.5 top-1.5">
-                      <ContentType edition={edition} theme="light" />
+                    <View
+                      style={{
+                        width: mediaSize,
+                        height: mediaSize,
+                      }}
+                    >
+                      <ListMedia
+                        item={nft}
+                        optimizedWidth={1000}
+                        loading={index > 0 ? "lazy" : "eager"}
+                      />
+                      <View tw="absolute right-1.5 top-1.5">
+                        <ContentType edition={edition} theme="light" />
+                      </View>
+                      <NSFWGate
+                        show={nft.nsfw}
+                        nftId={nft.nft_id}
+                        variant="thumbnail"
+                      />
+                      {nft?.mime_type?.includes("video") ? (
+                        <View tw="z-9 absolute bottom-2 right-2">
+                          <MuteButton size={16} />
+                        </View>
+                      ) : null}
                     </View>
-                    <NSFWGate
-                      show={nft.nsfw}
-                      nftId={nft.nft_id}
-                      variant="thumbnail"
-                    />
                   </View>
-                </View>
-              </RouteComponent>
-              <FeedEngagementIcons nft={nft} edition={edition} />
+                </RouteComponent>
+                <FeedEngagementIcons nft={nft} edition={edition} />
+              </View>
             </View>
           </View>
-        </View>
-      </NativeRouteComponent>
+        </NativeRouteComponent>
+      </ItemKeyContext.Provider>
     );
   }
 );

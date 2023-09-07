@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { StyleSheet } from "react-native";
 
 import {
@@ -8,7 +9,9 @@ import {
 
 import { ResizeMode } from "@showtime-xyz/universal.image";
 import type { TW } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
+
+import { useItemVisible } from "app/hooks/use-viewability-mount";
+import { useMuted } from "app/providers/mute-provider";
 
 type VideoProps = Omit<AVVideoProps, "resizeMode"> & {
   tw?: TW;
@@ -30,20 +33,26 @@ const contentFitToresizeMode = (resizeMode: ResizeMode) => {
 };
 
 export function ListVideo({ resizeMode, posterSource, ...props }: VideoProps) {
+  const videoRef = useRef<ExpoVideo | null>(null);
+  const { id } = useItemVisible({ videoRef });
+  const [muted] = useMuted();
+  const isMuted = props.isMuted ?? muted;
+
   return (
-    <View style={{ height: "inherit", width: "inherit" }}>
+    <div style={{ height: "inherit", width: "inherit" }}>
       <ExpoVideo
         style={[StyleSheet.absoluteFill, { justifyContent: "center" }]}
         useNativeControls={false}
         resizeMode={contentFitToresizeMode(resizeMode)}
         posterSource={posterSource}
         source={props.source}
-        shouldPlay={true}
+        shouldPlay={typeof id === "undefined"}
         isLooping
-        isMuted={true}
         videoStyle={{ position: "relative" }}
         {...props}
+        ref={videoRef}
+        isMuted={isMuted}
       />
-    </View>
+    </div>
   );
 }

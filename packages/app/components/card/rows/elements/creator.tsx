@@ -10,6 +10,7 @@ import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 import {
   convertUTCDateToLocalDate,
+  getClaimLimitLeftDuration,
   getCreatorUsernameFromNFT,
 } from "app/utilities";
 
@@ -30,6 +31,7 @@ type Props = {
   label?: string;
   size?: number;
   tw?: TW;
+  timeLimit: string | null | undefined;
 };
 
 export function Creator({
@@ -39,6 +41,7 @@ export function Creator({
   label = "Creator",
   size = 32,
   tw = "",
+  timeLimit,
 }: Props) {
   if (!nft) return null;
 
@@ -71,16 +74,21 @@ export function Creator({
               <VerificationBadge style={{ marginLeft: 4 }} size={12} />
             ) : null}
           </View>
-          {Boolean(shouldShowDateCreated && nft.token_created) && (
+
+          {Boolean(
+            shouldShowDateCreated && (nft.token_created || timeLimit)
+          ) && (
             <>
               <View tw="h-2" />
               <Text tw="text-xs font-semibold text-gray-900 dark:text-white">
-                {formatDistanceToNowStrict(
-                  convertUTCDateToLocalDate(nft.token_created),
-                  {
-                    addSuffix: true,
-                  }
-                )}
+                {timeLimit
+                  ? getClaimLimitLeftDuration(timeLimit)
+                  : formatDistanceToNowStrict(
+                      convertUTCDateToLocalDate(nft.token_created),
+                      {
+                        addSuffix: true,
+                      }
+                    )}
               </Text>
             </>
           )}

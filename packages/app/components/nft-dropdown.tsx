@@ -104,9 +104,8 @@ function NFTDropdown({
   });
 
   const viewOnOpenSea = () => {
-    // Todo: maybe need to use token_id from backend.
-    const token_id = "1";
-    const link = `https://opensea.io/assets/${nft?.chain_name}/${nft.contract_address}/${token_id}`;
+    const chainName = nft?.chain_name === "polygon" ? "matic" : nft?.chain_name;
+    const link = `https://opensea.io/assets/${chainName}/${nft.contract_address}`;
     Linking.openURL(link);
   };
 
@@ -162,31 +161,6 @@ function NFTDropdown({
             </DropdownMenuItem>
           ) : null}
 
-          {(edition?.gating_type === "spotify_presave" ||
-            edition?.gating_type === "music_presave" ||
-            edition?.gating_type === "multi_provider_music_presave") &&
-          isSelf ? (
-            <DropdownMenuItem
-              onSelect={() => {
-                router.push(
-                  "/drop/update/" +
-                    edition.creator_airdrop_edition.contract_address
-                );
-                // unhideNFT(nft.nft_id);
-              }}
-              key="update"
-            >
-              <MenuItemIcon
-                Icon={Edit}
-                ios={{
-                  name: "square.and.pencil",
-                }}
-              />
-              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                Update Song Link
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : null}
           {edition?.is_editable && isSelf ? (
             <DropdownMenuItem
               onSelect={() => {

@@ -160,7 +160,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                   <Spotify color={"white"} width={22} height={22} />
                 </View>
               </View>
-              <Text tw="text-lg font-bold text-white">Pre-Save Drop</Text>
+              <Text tw="text-lg font-bold text-white">Pre-Save Airdrop</Text>
               <View tw="right-4 ml-auto">
                 <ChevronRight color={"white"} width={24} height={24} />
               </View>
@@ -180,11 +180,10 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
                 Boost streams before release
               </Text>
               <Text tw="text-13 pt-2 text-gray-900 dark:text-gray-100">
-                Give a free collectible for fans who Pre-Save your song to their{" "}
-                <Text tw="font-semibold">
-                  Spotify and/or Apple Music library.
-                </Text>{" "}
-                It auto-adds the song on its release day.
+                Airdrop a collectible to fans who Pre-Save your song on{" "}
+                <Text tw="font-semibold">Spotify & Apple Music</Text>. Your song
+                will auto-save to their library on release day. It auto-adds the
+                song on its release day.
               </Text>
             </View>
           </View>

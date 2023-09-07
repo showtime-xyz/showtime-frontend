@@ -9,13 +9,18 @@ const hitSlop = { top: 10, bottom: 10, left: 10, right: 10 };
 type MuteButtonProps = {
   onPress?: (state: boolean) => void;
   variant?: "default" | "mobile-web";
+  size?: number;
 };
 export const MuteButton = memo(function MuteButton({
   onPress,
   variant,
+  size: propSize,
 }: MuteButtonProps) {
   const [muted, setMuted] = useMuted();
-  const size = useMemo(() => (variant === "mobile-web" ? 22 : 18), [variant]);
+  const size = useMemo(
+    () => (variant === "mobile-web" ? 22 : propSize ? propSize : 18),
+    [variant, propSize]
+  );
 
   if (Platform.OS !== "web" || (Platform.OS !== "web" && !muted)) return null;
 
