@@ -99,34 +99,11 @@ export const ProfileTop = ({
   const additionalCoverheight = top > 55 ? 20 : 0;
   // banner ratio: w:h=3:1
   const coverHeight =
-    (coverWidth < 768 ? coverWidth / 3 : 180) + additionalCoverheight;
+    (coverWidth < 768 ? coverWidth / 1.5 : 180) + additionalCoverheight;
   const avatarBorder = isMdWidth
     ? AVATAR_BORDER_SIZE_LARGE
     : AVATAR_BORDER_SIZE_SMALL;
   const avatarSize = isMdWidth ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL;
-  const onPressClaimLimit = useCallback(
-    () =>
-      router.push(
-        Platform.select({
-          native: `/claim/claim-limit-explanation`,
-          web: {
-            pathname: router.pathname,
-            query: {
-              ...router.query,
-              claimLimitExplanationModal: true,
-            },
-          } as any,
-        }),
-        Platform.select({
-          native: `/claim/claim-limit-explanation`,
-          web: router.asPath,
-        }),
-        {
-          scroll: false,
-        }
-      ),
-    [router]
-  );
   const avatarStyle = useAnimatedStyle(() => {
     if (!animationHeaderHeight || !animationHeaderPosition) {
       return {};
@@ -191,7 +168,7 @@ export const ProfileTop = ({
       <View tw="mx-2 md:mx-4">
         <View tw="flex-row justify-between">
           <View
-            tw="flex-row items-end"
+            tw="flex-row items-center"
             style={{
               marginTop: -avatarSize / 2,
             }}
