@@ -162,6 +162,7 @@ export interface Profile {
   has_spotify_token: boolean;
   spotify_artist_id?: string;
   apple_music_artist_id?: string;
+  bypass_track_ownership_validation?: boolean;
   captcha_completed_at: Date | null;
   has_social_login: boolean;
   social_login_connections: SocialLoginConnections;
