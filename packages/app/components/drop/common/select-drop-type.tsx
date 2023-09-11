@@ -27,9 +27,12 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
     redirectTo: "/login",
     redirectIfProfileIncomplete: true,
   });
+
   const canCreateMusicDrop =
+    !!user.user?.data.profile.bypass_track_ownership_validation ||
     !!user.user?.data.profile.spotify_artist_id ||
     !!user.user?.data.profile.apple_music_artist_id;
+
   const isDark = useIsDarkMode();
   const router = useRouter();
   const onboardingStatus = useOnboardingStatus();

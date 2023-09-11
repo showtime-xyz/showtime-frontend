@@ -20,15 +20,18 @@ import { useUser } from "app/hooks/use-user";
 
 export const DropSelect = () => {
   const modalScreenContext = useModalScreenContext();
-
   const router = useRouter();
+
   const user = useUser({
     redirectTo: "/login",
     redirectIfProfileIncomplete: true,
   });
+
   const canCreateMusicDrop =
+    !!user.user?.data.profile.bypass_track_ownership_validation ||
     !!user.user?.data.profile.spotify_artist_id ||
     !!user.user?.data.profile.apple_music_artist_id;
+
   const isDark = useIsDarkMode();
 
   if (user.isIncompletedProfile) {
