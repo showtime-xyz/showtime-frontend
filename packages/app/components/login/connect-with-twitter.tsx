@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Button, Platform } from "react-native";
+import { Button } from "react-native";
 
-import Constants, { ExecutionEnvironment } from "expo-constants";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 
@@ -9,40 +8,10 @@ const apiUrl = __DEV__
   ? "http://localhost:3000"
   : "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
 
-function makeRedirectUri({
-  native,
-  scheme,
-  isTripleSlashed,
-  queryParams,
-  path,
-  preferLocalhost,
-}: any) {
-  if (
-    Platform.OS !== "web" &&
-    native &&
-    [ExecutionEnvironment.Standalone, ExecutionEnvironment.Bare].includes(
-      Constants.executionEnvironment
-    )
-  ) {
-    // Should use the user-defined native scheme in standalone builds
-    return native;
-  }
-  const url = Linking.createURL(path || "", {
-    isTripleSlashed,
+function makeRedirectUri({ scheme }: any) {
+  const url = Linking.createURL("", {
     scheme,
-    queryParams,
   });
-
-  if (preferLocalhost) {
-    const ipAddress = url.match(
-      /\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/
-    );
-    // Only replace if an IP address exists
-    if (ipAddress?.length) {
-      const [protocol, path] = url.split(ipAddress[0]);
-      return `${protocol}localhost${path}`;
-    }
-  }
 
   return url;
 }
