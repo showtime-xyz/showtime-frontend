@@ -1,56 +1,15 @@
 import * as React from "react";
 import { Button } from "react-native";
 
-import * as Linking from "expo-linking";
-import * as WebBrowser from "expo-web-browser";
-
-const apiUrl = __DEV__
-  ? "http://localhost:3000"
-  : "https://" + process.env.NEXT_PUBLIC_WEBSITE_DOMAIN;
-
-function makeRedirectUri({ scheme }: any) {
-  const url = Linking.createURL("", {
-    scheme,
-  });
-
-  return url;
-}
-
-async function authenticateWithTwitter() {
-  const redirectUri =
-    makeRedirectUri({
-      scheme: `io.showtime${__DEV__ ? ".development" : ""}:/`,
-    }) + "/twitter-oauth-redirect";
-
-  const stateValue = encodeURI(redirectUri);
-  const proxyRedirectUri = `${apiUrl}/api/twitter-auth/success-redirect?state=${stateValue}`;
-  const response = await fetch(
-    `${apiUrl}/api/twitter-auth/request-token?callback_url=${proxyRedirectUri}`
-  );
-  const res = await response.json();
-
-  const authUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=${res.oauth_token}`;
-  const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUri);
-  if (result.type === "success") {
-    const params = new URLSearchParams(result.url.split("?")[1]);
-    const oauthVerifier = params.get("oauth_verifier");
-    const oauthToken = params.get("oauth_token");
-    if (oauthVerifier && oauthToken) {
-      const accessTokenResponse = await fetch(
-        `${apiUrl}/api/twitter-auth/access-token?oauth_verifier=${oauthVerifier}&oauth_token=${oauthToken}&oauth_token_secret=${res.oauth_token_secret}`
-      );
-      const tokenRes = await accessTokenResponse.json();
-      return tokenRes;
-    }
-  }
-}
+import { authenticateWithTwitter } from "app/lib/social-logins/twitter-auth";
 
 export function ConnectWithTwitter() {
   return (
     <Button
       title="Login"
       onPress={async () => {
-        authenticateWithTwitter();
+        const token = await authenticateWithTwitter();
+        console.log("token ", token);
       }}
     />
   );
