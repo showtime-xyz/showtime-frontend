@@ -197,16 +197,15 @@ const handleInstagramAccountAdd = async (Alert: any, mutate: any) => {
 const handleTwitterAccountAdd = async (Alert: any, mutate: any) => {
   const res = await authenticateWithTwitter();
   if (res) {
-    const { token, redirectUri, scope } = res;
+    const { token, redirectUri } = res;
     try {
       const apiRes = await axios({
         url: `/v1/profile/accounts/token`,
         method: "POST",
         data: {
           provider: "twitter",
-          code: token,
+          access_token: token,
           redirect_uri: redirectUri,
-          scope: [scope],
         },
       });
       mutate(MY_INFO_ENDPOINT);
@@ -216,7 +215,7 @@ const handleTwitterAccountAdd = async (Alert: any, mutate: any) => {
     } catch (error: any) {
       Logger.error("Add social error", error);
 
-      if (error?.response.status === 420) {
+      if (error?.response.status === 420 || error?.response.status === 400) {
         Alert.alert(
           `This account is already linked to another Showtime account`,
           `Would you like to link it to this account? \n\n By doing so, you will lose your access to the previous account`,
@@ -230,10 +229,9 @@ const handleTwitterAccountAdd = async (Alert: any, mutate: any) => {
                   method: "POST",
                   data: {
                     provider: "twitter",
-                    code: token,
+                    access_token: token,
                     redirect_uri: redirectUri,
-                    scope: [scope],
-                    reassign_wallet: true,
+                    reassign_token: true,
                   },
                 });
                 mutate(MY_INFO_ENDPOINT);

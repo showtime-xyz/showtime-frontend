@@ -24,9 +24,8 @@ export async function authenticateWithTwitter() {
       );
       const tokenRes = await accessTokenResponse.json();
       return {
-        token: tokenRes.oauth_token,
+        token: tokenRes.oauth_token + "+" + tokenRes.oauth_token_secret,
         redirectUri: proxyRedirectUri,
-        scope: "",
       };
     }
   }
