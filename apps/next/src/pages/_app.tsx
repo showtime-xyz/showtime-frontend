@@ -131,6 +131,22 @@ function App({ Component, pageProps, router }: AppProps) {
           }
         />
       )}
+      {meta.nftCollection && (
+        <meta name="eth:nft:collection" content={meta.nftCollection} />
+      )}
+      {meta.nftContractAddress && (
+        <meta
+          name="eth:nft:contract_address"
+          content={meta.nftContractAddress}
+        />
+      )}
+      {meta.nftCreatorAddress && (
+        <meta name="eth:nft:creator_address" content={meta.nftCreatorAddress} />
+      )}
+      {meta.nftSchema && (
+        <meta name="eth:nft:schema" content={meta.nftSchema} />
+      )}
+      {meta.nftChain && <meta name="eth:nft:chain" content={meta.nftChain} />}
     </>
   ) : (
     <>
