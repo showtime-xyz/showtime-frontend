@@ -53,6 +53,11 @@ export async function getServerSideProps(context) {
             description: nft.token_description,
             image: nft?.nsfw ? fallbackImage : image,
             deeplinkUrl: `nft/${chainName}/${contractAddress}/${tokenId}`,
+            "eth:nft:collection": nft.token_name,
+            "eth:nft:contract_address": nft.contract_address,
+            "eth:nft:creator_address": nft.creator_address,
+            "eth:nft:schema": "erc721",
+            "eth:nft:chain": nft.chain_name,
           },
         },
       };
