@@ -22,6 +22,7 @@ import { useConnectSpotify } from "app/hooks/use-connect-spotify";
 import { useDisconnectAppleMusic } from "app/hooks/use-disconnect-apple-music";
 import { useDisconnectInstagram } from "app/hooks/use-disconnect-instagram";
 import { useDisconnectSpotify } from "app/hooks/use-disconnect-spotify";
+import { useDisconnectTwitter } from "app/hooks/use-disconnect-twitter";
 import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useUser } from "app/hooks/use-user";
@@ -38,8 +39,11 @@ export type AccountTabProps = {
 
 export const AccountTab = ({ index = 0 }: AccountTabProps) => {
   const accounts = useListSocialAccounts();
-  const instagramProviderId = accounts.data?.find(
+  const instagramProviderId = accounts.data?.find?.(
     (v) => v.provider === "instagram"
+  )?.provider_account_id;
+  const twitterProviderId = accounts.data?.find?.(
+    (v) => v.provider === "twitter"
   )?.provider_account_id;
   return (
     <SettingScrollComponent index={index}>
@@ -53,6 +57,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
         <ConnectAppleMusic />
         <WalletSocialAccounts />
         <ConnectInstagram providerId={instagramProviderId} />
+        <ConnectTwitter providerId={twitterProviderId} />
       </View>
     </SettingScrollComponent>
   );
@@ -139,7 +144,6 @@ const ConnectAppleMusic = () => {
 };
 
 export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
-  const user = useUser();
   const isDark = useIsDarkMode();
 
   const { trigger: disconnectInstagram, isMutating: isDisconnecting } =
@@ -160,16 +164,9 @@ export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
         </Text>
       </View>
       <Button
-        variant={
-          user.user?.data.profile.social_login_connections.instagram
-            ? "danger"
-            : "tertiary"
-        }
+        variant={providerId ? "danger" : "tertiary"}
         onPress={() => {
-          if (
-            user.user?.data.profile.social_login_connections.instagram &&
-            providerId
-          ) {
+          if (providerId) {
             disconnectInstagram({
               provider: "instagram",
               providerId,
@@ -181,7 +178,45 @@ export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
       >
         {isDisconnecting || isConnecting
           ? "Loading..."
-          : user.user?.data.profile.social_login_connections.instagram
+          : providerId
+          ? "Disconnect"
+          : "Connect"}
+      </Button>
+    </View>
+  );
+};
+
+export const ConnectTwitter = ({ providerId }: { providerId?: string }) => {
+  const isDark = useIsDarkMode();
+
+  const { trigger: disconnectTwitter, isMutating: isDisconnecting } =
+    useDisconnectTwitter();
+  const { trigger: addSocial, isMutating: isConnecting } =
+    useAddMagicSocialAccount();
+
+  return (
+    <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
+      <View tw="flex-row items-center">
+        <Twitter height={25} width={25} color={isDark ? "#fff" : "#000"} />
+        <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
+          Twitter
+        </Text>
+      </View>
+      <Button
+        variant={providerId ? "danger" : "tertiary"}
+        onPress={() => {
+          if (providerId) {
+            disconnectTwitter({
+              providerId,
+            }).catch(() => {});
+          } else {
+            addSocial({ type: "twitter" }).catch(() => {});
+          }
+        }}
+      >
+        {isDisconnecting || isConnecting
+          ? "Loading..."
+          : providerId
           ? "Disconnect"
           : "Connect"}
       </Button>
@@ -199,12 +234,6 @@ const socialAccounts = [
     Icon: GoogleOriginal,
     type: "google",
     name: "Google",
-  },
-  {
-    Icon: Twitter,
-    type: "twitter",
-    name: "Twitter",
-    color: colors.twitter,
   },
 ];
 
@@ -267,11 +296,10 @@ const WalletSocialAccounts = () => {
 
 type SocialConnectButtonProps = {
   connected: {
-    twitter: { address: string };
     google: { address: string };
     apple: { address: string };
   };
-  type: "twitter" | "google" | "apple";
+  type: "google" | "apple";
 };
 
 const SocialConnectButton = ({ connected, type }: SocialConnectButtonProps) => {

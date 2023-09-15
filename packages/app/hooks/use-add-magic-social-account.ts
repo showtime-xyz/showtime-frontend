@@ -6,6 +6,7 @@ import useSWRMutation from "swr/mutation";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
+import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useMagicSocialAuth } from "app/lib/social-logins";
@@ -21,19 +22,20 @@ type AddSocialType = {
 export const useAddMagicSocialAccount = () => {
   const { mutate } = useSWRConfig();
   const Alert = useAlert();
-  const {
-    performMagicAuthWithGoogle,
-    performMagicAuthWithApple,
-    performMagicAuthWithTwitter,
-  } = useMagicSocialAuth();
-
+  const { performMagicAuthWithGoogle, performMagicAuthWithApple } =
+    useMagicSocialAuth();
+  const socialAccounts = useListSocialAccounts();
+  const updateLocalCache = () => {
+    mutate(MY_INFO_ENDPOINT);
+    socialAccounts.mutate();
+  };
   const state = useSWRMutation(
     MY_INFO_ENDPOINT,
     async (_key: string, values: { arg: AddSocialType }) => {
       if (values.arg.type === "instagram") {
-        return handleInstagramAccountAdd(Alert, mutate);
+        return handleInstagramAccountAdd(Alert, updateLocalCache);
       } else if (values.arg.type === "twitter") {
-        return handleTwitterAccountAdd(Alert, mutate);
+        return handleTwitterAccountAdd(Alert, updateLocalCache);
       } else {
         let res;
         try {
@@ -142,14 +144,14 @@ const handleInstagramAccountAdd = async (Alert: any, mutate: any) => {
           scope: [scope],
         },
       });
-      mutate(MY_INFO_ENDPOINT);
+      mutate();
 
       toast.success("Social account added");
       return apiRes;
     } catch (error: any) {
       Logger.error("Add social error", error);
 
-      if (error?.response.status === 420) {
+      if (error?.response.status === 420 || error?.response.status === 400) {
         Alert.alert(
           `This account is already linked to another Showtime account`,
           `Would you like to link it to this account? \n\n By doing so, you will lose your access to the previous account`,
@@ -166,10 +168,10 @@ const handleInstagramAccountAdd = async (Alert: any, mutate: any) => {
                     code,
                     redirect_uri: redirectAPIHandler,
                     scope: [scope],
-                    reassign_wallet: true,
+                    reassign_token: true,
                   },
                 });
-                mutate(MY_INFO_ENDPOINT);
+                mutate();
 
                 toast.success("Social account added");
 
@@ -208,7 +210,7 @@ const handleTwitterAccountAdd = async (Alert: any, mutate: any) => {
           redirect_uri: redirectUri,
         },
       });
-      mutate(MY_INFO_ENDPOINT);
+      mutate();
 
       toast.success("Social account added");
       return apiRes;
@@ -234,7 +236,7 @@ const handleTwitterAccountAdd = async (Alert: any, mutate: any) => {
                     reassign_token: true,
                   },
                 });
-                mutate(MY_INFO_ENDPOINT);
+                mutate();
 
                 toast.success("Social account added");
 
