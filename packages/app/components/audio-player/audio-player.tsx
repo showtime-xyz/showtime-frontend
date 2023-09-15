@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useState, useRef } from "react";
 import { Platform } from "react-native";
 
 import { Slider } from "@miblanchard/react-native-slider";
@@ -10,10 +10,21 @@ import TrackPlayer, { State } from "design-system/track-player";
 
 import { useTrackProgress } from "./hooks/use-track-progress";
 import { setupPlayer } from "./service";
-import { pauseAllActiveTracks, setTrackInfo } from "./store";
+import {
+  pauseAllActiveTracks,
+  progressState,
+  setIsDragging,
+  setTrackInfo,
+} from "./store";
 import { formatTime } from "./utils";
 
 export const AudioPlayer = ({ id }: { id: number }) => {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [tempScrubPosition, setTempScrubPosition] = useState<number | null>(
+    null
+  );
+
   const [localScrubPosition, setLocalScrubPosition] = useState<number | null>(
     null
   );
@@ -32,14 +43,29 @@ export const AudioPlayer = ({ id }: { id: number }) => {
     ]);
   }, [id]);
 
-  const prepare = useCallback(async () => {
-    pauseAllActiveTracks();
-    await TrackPlayer.reset().catch(() => {});
-    await addTrack();
-    if (trackInfo?.position && trackInfo.position > 0) {
-      await TrackPlayer.seekTo(trackInfo.position);
-    }
-  }, [addTrack, trackInfo.position]);
+  const prepare = useCallback(
+    async (delay = 0) => {
+      const currentTrackId = await TrackPlayer.getActiveTrack();
+
+      if (currentTrackId?.id !== id) {
+        // Speichern Sie die aktuelle Position des Scrubbers
+        setTempScrubPosition(trackInfo?.position || 0);
+
+        await pauseAllActiveTracks();
+        await TrackPlayer.reset().catch(() => {});
+        await addTrack();
+
+        setTimeout(() => {
+          setTempScrubPosition(null);
+        }, delay);
+      }
+
+      if (trackInfo?.position && trackInfo.position > 0) {
+        await TrackPlayer.seekTo(trackInfo.position);
+      }
+    },
+    [addTrack, id, trackInfo.position]
+  );
 
   const play = useCallback(async () => {
     await prepare();
@@ -53,7 +79,6 @@ export const AudioPlayer = ({ id }: { id: number }) => {
   useEffect(() => {
     async function setup() {
       const isSetup = await setupPlayer();
-
       if (isSetup) {
         setIsPlayerReady(true);
       }
@@ -63,22 +88,27 @@ export const AudioPlayer = ({ id }: { id: number }) => {
     return function unmount() {
       if (Platform.OS !== "web") {
         pauseAllActiveTracks();
-        TrackPlayer.pause();
         TrackPlayer.reset();
       }
     };
   }, []);
 
   const togglePlay = useCallback(async () => {
-    if (trackInfo.state === State.Playing) {
+    const currentTrackId = await TrackPlayer.getActiveTrack();
+    const currentState = (await TrackPlayer.getPlaybackState()).state;
+
+    // Wenn der aktuell ausgewählte Track bereits spielt
+    if (currentState === State.Playing && currentTrackId?.id === id) {
       await pause();
       setTrackInfo(id.toFixed(), {
         state: State.Paused,
       });
     } else {
-      await play();
+      // Wenn ein anderer Track spielt oder der Player pausiert ist
+      await prepare(1000);
+      await TrackPlayer.play().catch(() => {});
     }
-  }, [id, pause, play, trackInfo.state]);
+  }, [id, pause, prepare]);
 
   return (
     <View tw="mx-3 my-4 overflow-hidden rounded-xl bg-slate-200 p-4">
@@ -88,45 +118,62 @@ export const AudioPlayer = ({ id }: { id: number }) => {
       <View tw="flex-row items-center">
         <View tw="mr-2 w-8 items-center justify-center text-center">
           <Text>
-            {formatTime(localScrubPosition || trackInfo.position || 0)}
+            {formatTime(
+              tempScrubPosition !== null
+                ? tempScrubPosition
+                : localScrubPosition || trackInfo.position || 0
+            )}
           </Text>
         </View>
         <View tw="flex-1">
           <Slider
             minimumValue={0}
-            maximumValue={trackInfo.duration || 0}
+            maximumValue={trackInfo.duration || 147} // change 90 against  duration from api
             minimumTrackTintColor="#000"
             maximumTrackTintColor="#ff0"
             step={1}
             thumbStyle={{ height: 10, width: 10 }}
             value={
-              localScrubPosition ? localScrubPosition : trackInfo.position || 0
+              progressState.isDragging
+                ? localScrubPosition || trackInfo.position || 0
+                : tempScrubPosition !== null
+                ? tempScrubPosition
+                : localScrubPosition
+                ? localScrubPosition
+                : trackInfo.position || 0
             }
             animateTransitions={false}
             onValueChange={(value) => {
               setLocalScrubPosition(value[0]);
             }}
             onSlidingStart={async (value) => {
+              if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+              }
+              setIsDragging(true);
               setLocalScrubPosition(value[0]);
+              const currentTrackId = await TrackPlayer.getActiveTrack();
 
-              if (isPlayerReady && trackInfo.state === State.Playing) {
-                await TrackPlayer.pause();
-              } else {
+              if (currentTrackId?.id !== id) {
+                // Wenn ein anderer Track spielt oder der Player pausiert ist
                 await prepare();
+              } else {
+                // Wenn der aktuelle Track der ausgewählte Track ist
+                await TrackPlayer.pause();
               }
             }}
             onSlidingComplete={async (value) => {
-              if (isPlayerReady) {
-                setLocalScrubPosition(value[0]);
-                setTrackInfo(id.toFixed(), {
-                  position: value[0],
-                });
-                await TrackPlayer.seekTo(value[0]);
-                await TrackPlayer.play();
-                setTimeout(() => {
-                  setLocalScrubPosition(null);
-                }, 1000);
-              }
+              setLocalScrubPosition(value[0]);
+              setTrackInfo(id.toFixed(), {
+                position: value[0],
+              });
+              await TrackPlayer.seekTo(value[0]);
+              await TrackPlayer.play();
+
+              timeoutRef.current = setTimeout(() => {
+                setLocalScrubPosition(null);
+                setIsDragging(false);
+              }, 1000);
             }}
           />
         </View>
