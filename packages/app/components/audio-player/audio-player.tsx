@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 
 import { Slider } from "@miblanchard/react-native-slider";
 
-import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -88,7 +87,9 @@ export const AudioPlayer = ({ id }: { id: number }) => {
       </View>
       <View tw="flex-row items-center">
         <View tw="mr-2 w-8 items-center justify-center text-center">
-          <Text>{formatTime(trackInfo.position || 0)}</Text>
+          <Text>
+            {formatTime(localScrubPosition || trackInfo.position || 0)}
+          </Text>
         </View>
         <View tw="flex-1">
           <Slider
@@ -102,6 +103,9 @@ export const AudioPlayer = ({ id }: { id: number }) => {
               localScrubPosition ? localScrubPosition : trackInfo.position || 0
             }
             animateTransitions={false}
+            onValueChange={(value) => {
+              setLocalScrubPosition(value[0]);
+            }}
             onSlidingStart={async (value) => {
               setLocalScrubPosition(value[0]);
 

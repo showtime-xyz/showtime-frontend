@@ -6951,7 +6951,7 @@ __metadata:
     react-native-share: ^9.2.3
     react-native-svg: 13.10.0
     react-native-tab-view: ^3.5.2
-    react-native-track-player: ^3.2.0
+    react-native-track-player: v4.0.0-rc08
     react-native-view-shot: 3.7.0
     react-native-volume-manager: ^1.10.0
     react-native-web: ~0.19.7
@@ -24690,9 +24690,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-track-player@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "react-native-track-player@npm:3.2.0"
+"react-native-track-player@npm:v4.0.0-rc08":
+  version: 4.0.0-rc08
+  resolution: "react-native-track-player@npm:4.0.0-rc08"
   peerDependencies:
     react: ">=16.8.6"
     react-native: ">=0.60.0-rc.2"
@@ -24700,7 +24700,7 @@ __metadata:
   peerDependenciesMeta:
     react-native-windows:
       optional: true
-  checksum: df64fdc7a25632ae26a35983dbeb906b7875fd97d1eea804dd1fb80b6f0033d3a81e37885c6201e4a02e6263e1273b1f44c6d6fb0e19560a5f62c98e7c510b9d
+  checksum: e1d60ddc77f66d08e573743482dcbce784c7ec958dcfeef75dd62fa3cfd873b019c45d4e906612f2aa888b2671722fe3f41d7d5497ce4aab134c3518e00adc12
   languageName: node
   linkType: hard
 
