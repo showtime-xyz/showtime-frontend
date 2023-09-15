@@ -3,6 +3,9 @@ import { Platform } from "react-native";
 
 import { Slider } from "@miblanchard/react-native-slider";
 
+import { PauseOutline, Play } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -111,13 +114,39 @@ export const AudioPlayer = ({ id }: { id: number }) => {
   }, [id, pause, prepare]);
 
   return (
-    <View tw="mx-3 my-4 overflow-hidden rounded-xl bg-slate-200 p-4">
-      <View tw="items-center justify-center">
-        <Text>Title</Text>
-      </View>
+    <View tw="mx-3 my-4 overflow-hidden rounded-full bg-black p-4">
       <View tw="flex-row items-center">
+        <View tw="mr-4 items-center justify-center">
+          <View tw="h-10 w-10 items-center justify-center rounded-full bg-white">
+            <Pressable
+              onPress={togglePlay}
+              tw="w-full flex-1 items-center justify-center text-black"
+            >
+              {trackInfo.state === State.Buffering ||
+              trackInfo.state === State.Loading ? (
+                <Spinner size="small" />
+              ) : trackInfo.state === State.Playing ? (
+                <PauseOutline
+                  color={"black"}
+                  stroke={"black"}
+                  strokeWidth={3}
+                  width={30}
+                />
+              ) : (
+                <View tw="ml-0.5">
+                  <Play
+                    color="black"
+                    stroke={"black"}
+                    strokeWidth={3}
+                    width={40}
+                  />
+                </View>
+              )}
+            </Pressable>
+          </View>
+        </View>
         <View tw="mr-2 w-8 items-center justify-center text-center">
-          <Text>
+          <Text tw="text-[#959595]">
             {formatTime(
               tempScrubPosition !== null
                 ? tempScrubPosition
@@ -129,10 +158,11 @@ export const AudioPlayer = ({ id }: { id: number }) => {
           <Slider
             minimumValue={0}
             maximumValue={trackInfo.duration || 147} // change 90 against  duration from api
-            minimumTrackTintColor="#000"
-            maximumTrackTintColor="#ff0"
+            minimumTrackTintColor="#fff"
+            maximumTrackTintColor="#555"
             step={1}
             thumbStyle={{ height: 10, width: 10 }}
+            thumbTintColor="#fff"
             value={
               progressState.isDragging
                 ? localScrubPosition || trackInfo.position || 0
@@ -166,6 +196,7 @@ export const AudioPlayer = ({ id }: { id: number }) => {
               setLocalScrubPosition(value[0]);
               setTrackInfo(id.toFixed(), {
                 position: value[0],
+                state: State.Playing,
               });
               await TrackPlayer.seekTo(value[0]);
               await TrackPlayer.play();
@@ -178,22 +209,10 @@ export const AudioPlayer = ({ id }: { id: number }) => {
           />
         </View>
         <View tw="ml-2 w-8 items-center justify-center text-center">
-          <Text>
+          <Text tw="text-[#959595]">
             {trackInfo.duration ? formatTime(trackInfo.duration || 0) : "-:--"}
           </Text>
         </View>
-      </View>
-      <View tw="items-center justify-center">
-        {isPlayerReady && (
-          <Text onPress={togglePlay}>
-            {trackInfo.state === State.Buffering ||
-            trackInfo.state === State.Loading
-              ? "Loading..."
-              : trackInfo.state === State.Playing
-              ? "Pause " + id
-              : "Play " + id}
-          </Text>
-        )}
       </View>
     </View>
   );
