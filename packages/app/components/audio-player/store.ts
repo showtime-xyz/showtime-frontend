@@ -1,6 +1,6 @@
 import { proxy } from "valtio";
 
-import { State } from "design-system/track-player";
+import TrackPlayer, { State } from "design-system/track-player";
 
 type PlaybackState = State; // ... add other states as needed
 
@@ -34,12 +34,13 @@ export const setTrackInfo = (id: string, info: Partial<TrackPlaybackInfo>) => {
   }
 };
 
-export const pauseAllActiveTracks = () => {
+export const pauseAllActiveTracks = async () => {
   for (const [_id, trackInfo] of Object.entries(progressState.tracks)) {
     if (trackInfo.position && trackInfo.position > 0) {
       trackInfo.state = State.Paused;
     }
   }
+  await TrackPlayer.pause().catch(() => {});
 };
 
 export const stopAllActiveTracks = () => {
