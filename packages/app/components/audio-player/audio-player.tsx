@@ -15,6 +15,9 @@ import { pauseAllActiveTracks, setTrackInfo } from "./store";
 import { formatTime } from "./utils";
 
 export const AudioPlayer = ({ id }: { id: number }) => {
+  const [localScrubPosition, setLocalScrubPosition] = useState<number | null>(
+    null
+  );
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const trackInfo = useTrackProgress(id);
 
@@ -95,9 +98,13 @@ export const AudioPlayer = ({ id }: { id: number }) => {
             maximumTrackTintColor="#ff0"
             step={1}
             thumbStyle={{ height: 10, width: 10 }}
-            value={trackInfo.position || 0}
+            value={
+              localScrubPosition ? localScrubPosition : trackInfo.position || 0
+            }
             animateTransitions={false}
-            onSlidingStart={async () => {
+            onSlidingStart={async (value) => {
+              setLocalScrubPosition(value[0]);
+
               if (isPlayerReady && trackInfo.state === State.Playing) {
                 await TrackPlayer.pause();
               } else {
@@ -106,8 +113,15 @@ export const AudioPlayer = ({ id }: { id: number }) => {
             }}
             onSlidingComplete={async (value) => {
               if (isPlayerReady) {
+                setLocalScrubPosition(value[0]);
+                setTrackInfo(id.toFixed(), {
+                  position: value[0],
+                });
                 await TrackPlayer.seekTo(value[0]);
                 await TrackPlayer.play();
+                setTimeout(() => {
+                  setLocalScrubPosition(null);
+                }, 1000);
               }
             }}
           />
@@ -122,7 +136,7 @@ export const AudioPlayer = ({ id }: { id: number }) => {
         {isPlayerReady && (
           <Text onPress={togglePlay}>
             {trackInfo.state === State.Buffering ||
-            trackInfo.state === State.Connecting
+            trackInfo.state === State.Loading
               ? "Loading..."
               : trackInfo.state === State.Playing
               ? "Pause " + id
