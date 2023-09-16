@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { Platform } from "react-native";
 
 import { useRouter } from "@showtime-xyz/universal.router";
-import { StockText } from "@showtime-xyz/universal.stock-text";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 

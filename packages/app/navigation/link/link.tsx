@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { Platform, TextProps, ViewProps } from "react-native";
 
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { StockText } from "@showtime-xyz/universal.stock-text";
 import type { TW } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { LinkCore, Props } from "app/navigation/link/link-core";
@@ -64,7 +64,7 @@ function TextLink({
   return (
     <LinkCore
       {...rest}
-      Component={StockText}
+      Component={Text}
       componentProps={useMemo(
         () => ({
           ...textProps,
