@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { Platform, TextProps, ViewProps } from "react-native";
 
+import { BaseButton } from "react-native-gesture-handler";
+
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { StockText } from "@showtime-xyz/universal.stock-text";
 import type { TW } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -64,17 +65,22 @@ function TextLink({
   return (
     <LinkCore
       {...rest}
-      Component={StockText}
-      componentProps={useMemo(
+      Component={BaseButton}
+      textProps={useMemo(
         () => ({
           ...textProps,
           variant,
           tw,
-          role: "link",
           userSelect: false,
+        }),
+        [variant, tw, textProps]
+      )}
+      componentProps={useMemo(
+        () => ({
+          role: "link",
           onPress,
         }),
-        [variant, tw, textProps, onPress]
+        [onPress]
       )}
       {...Platform.select({
         web: {

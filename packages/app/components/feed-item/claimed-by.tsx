@@ -1,6 +1,9 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
+import { BorderlessButton } from "react-native-gesture-handler";
+
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -70,50 +73,63 @@ export const ClaimedBy = ({
             </View>
           );
         })}
-        <Text
-          tw="ml-1 text-xs text-gray-900 dark:text-white md:text-sm"
-          style={textColor ? { color: textColor } : {}}
+
+        <Pressable
+          onPress={() => {
+            router.push(
+              `/@${firstClaimer.username ?? firstClaimer.wallet_address}`
+            );
+          }}
+          tw="ml-1 text-xs font-bold"
         >
-          <TextLink
-            href={`/@${firstClaimer.username ?? firstClaimer.wallet_address}`}
-            tw="font-bold"
+          <Text
+            tw="text-xs font-bold"
+            style={textColor ? { color: textColor } : {}}
           >
             {firstClaimer.name}
-          </TextLink>
-          {claimersList?.length && claimersList?.length >= 2 && (
-            <>
-              {` & `}
-              <StockText
-                tw="font-bold"
-                onPress={() => {
-                  const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
-                  router.push(
-                    Platform.select({
-                      native: as,
-                      web: {
-                        pathname: router.pathname,
-                        query: {
-                          ...router.query,
-                          contractAddress: nft?.contract_address,
-                          tokenId: nft?.token_id,
-                          chainName: nft?.chain_name,
-                          collectorsModal: true,
-                        },
-                      } as any,
-                    }),
-                    Platform.select({
-                      native: as,
-                      web: router.asPath,
-                    }),
-                    { shallow: true }
-                  );
-                }}
+          </Text>
+        </Pressable>
+        {claimersList?.length && claimersList?.length >= 2 && (
+          <>
+            <Text
+              tw="text-xs font-bold"
+              style={textColor ? { color: textColor } : {}}
+            >{` & `}</Text>
+            <Pressable
+              hitSlop={15}
+              onPress={() => {
+                const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
+                router.push(
+                  Platform.select({
+                    native: as,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        contractAddress: nft?.contract_address,
+                        tokenId: nft?.token_id,
+                        chainName: nft?.chain_name,
+                        collectorsModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: as,
+                    web: router.asPath,
+                  }),
+                  { shallow: true }
+                );
+              }}
+            >
+              <Text
+                tw="text-xs font-bold"
+                style={textColor ? { color: textColor } : {}}
               >
                 {`${claimersList?.length - 1} collected`}
-              </StockText>
-            </>
-          )}
-        </Text>
+              </Text>
+            </Pressable>
+          </>
+        )}
       </>
     </View>
   );
