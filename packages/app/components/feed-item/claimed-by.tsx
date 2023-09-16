@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { Platform } from "react-native";
 
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { StockText } from "@showtime-xyz/universal.stock-text";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -82,7 +82,8 @@ export const ClaimedBy = ({
           {claimersList?.length && claimersList?.length >= 2 && (
             <>
               {` & `}
-              <Pressable
+              <StockText
+                tw="font-bold"
                 onPress={() => {
                   const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
                   router.push(
@@ -107,10 +108,8 @@ export const ClaimedBy = ({
                   );
                 }}
               >
-                <Text tw="font-bold">
-                  {`${claimersList?.length - 1} collected`}
-                </Text>
-              </Pressable>
+                {`${claimersList?.length - 1} collected`}
+              </StockText>
             </>
           )}
         </Text>
@@ -162,7 +161,7 @@ export const ClaimedByReduced = ({
         <Text tw="ml-1.5 flex-1 text-sm text-gray-900 dark:text-white">
           <>
             {isShowAndSymbol ? `& ` : ""}
-            <Pressable
+            <Text
               onPress={() => {
                 const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
                 router.push(
@@ -186,11 +185,10 @@ export const ClaimedByReduced = ({
                   { shallow: true }
                 );
               }}
+              tw="font-bold"
             >
-              <Text tw="font-bold">
-                {`${remainingClaimers > 0 ? remainingClaimers : ""} collected`}
-              </Text>
-            </Pressable>
+              {`${remainingClaimers > 0 ? remainingClaimers : ""} collected`}
+            </Text>
           </>
         </Text>
       </>

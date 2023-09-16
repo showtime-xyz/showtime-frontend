@@ -181,11 +181,43 @@ export function ClaimButtonIconic({
           side="left"
         />
         <View tw="mt-2" style={textViewStyle}>
-          <Text
-            tw={[
-              "text-center text-xs font-semibold text-gray-900 dark:text-white",
-            ]}
-          >
+          <Pressable onPress={viewCollecters}>
+            <Text
+              tw={[
+                "text-center text-xs font-semibold text-gray-900 dark:text-white",
+              ]}
+            >
+              <Text
+                tw={[
+                  "text-center text-xs font-semibold",
+                  edition.creator_airdrop_edition.edition_size -
+                    edition.total_claimed_count <=
+                    10 &&
+                  edition.creator_airdrop_edition.edition_size -
+                    edition.total_claimed_count >
+                    0
+                    ? "text-orange-500"
+                    : "text-gray-900 dark:text-white",
+                ]}
+              >
+                {formatClaimNumber(edition.total_claimed_count)}
+                {edition.creator_airdrop_edition.edition_size > 0
+                  ? `/${edition.creator_airdrop_edition.edition_size}`
+                  : ""}
+              </Text>
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <FeedSocialButton
+      onPress={() => handleClaimNFT()}
+      text={
+        <>
+          <Pressable onPress={viewCollecters}>
             <Text
               tw={[
                 "text-center text-xs font-semibold",
@@ -198,43 +230,13 @@ export function ClaimButtonIconic({
                   ? "text-orange-500"
                   : "text-gray-900 dark:text-white",
               ]}
-              onPress={viewCollecters}
             >
               {formatClaimNumber(edition.total_claimed_count)}
               {edition.creator_airdrop_edition.edition_size > 0
                 ? `/${edition.creator_airdrop_edition.edition_size}`
                 : ""}
             </Text>
-          </Text>
-        </View>
-      </View>
-    );
-  }
-
-  return (
-    <FeedSocialButton
-      onPress={() => handleClaimNFT()}
-      text={
-        <>
-          <Text
-            tw={[
-              "text-center text-xs font-semibold",
-              edition.creator_airdrop_edition.edition_size -
-                edition.total_claimed_count <=
-                10 &&
-              edition.creator_airdrop_edition.edition_size -
-                edition.total_claimed_count >
-                0
-                ? "text-orange-500"
-                : "text-gray-900 dark:text-white",
-            ]}
-            onPress={viewCollecters}
-          >
-            {formatClaimNumber(edition.total_claimed_count)}
-            {edition.creator_airdrop_edition.edition_size > 0
-              ? `/${edition.creator_airdrop_edition.edition_size}`
-              : ""}
-          </Text>
+          </Pressable>
         </>
       }
       buttonColor={isDark ? "#fff" : colors.gray[900]}
