@@ -5,64 +5,147 @@
     "module": "esnext",
     "noUnusedLocals": true,
     "paths": {
-      "@showtime-xyz/universal": ["./design-system"],
-      "@showtime-xyz/universal.tailwind": ["./design-system/tailwind"],
-      "@showtime-xyz/universal.view": ["./design-system/view"],
-      "@showtime-xyz/universal.text": ["./design-system/text"],
-      "@showtime-xyz/universal.accordion": ["./design-system/accordion"],
-      "@showtime-xyz/universal.alert": ["./design-system/alert"],
-      "@showtime-xyz/universal.avatar": ["./design-system/avatar"],
-      "@showtime-xyz/universal.bottom-sheet": ["./design-system/bottom-sheet"],
-      "@showtime-xyz/universal.button": ["./design-system/button"],
-      "@showtime-xyz/universal.checkbox": ["./design-system/checkbox"],
-      "@showtime-xyz/universal.chip": ["./design-system/chip"],
-      "@showtime-xyz/universal.clamp-text": ["./design-system/clamp-text"],
+      "@showtime-xyz/universal": [
+        "./design-system"
+      ],
+      "@showtime-xyz/universal.tailwind": [
+        "./design-system/tailwind"
+      ],
+      "@showtime-xyz/universal.view": [
+        "./design-system/view"
+      ],
+      "@showtime-xyz/universal.text": [
+        "./design-system/text"
+      ],
+      "@showtime-xyz/universal.stock-text": [
+        "./design-system/stock-text"
+      ],
+      "@showtime-xyz/universal.accordion": [
+        "./design-system/accordion"
+      ],
+      "@showtime-xyz/universal.alert": [
+        "./design-system/alert"
+      ],
+      "@showtime-xyz/universal.avatar": [
+        "./design-system/avatar"
+      ],
+      "@showtime-xyz/universal.bottom-sheet": [
+        "./design-system/bottom-sheet"
+      ],
+      "@showtime-xyz/universal.button": [
+        "./design-system/button"
+      ],
+      "@showtime-xyz/universal.checkbox": [
+        "./design-system/checkbox"
+      ],
+      "@showtime-xyz/universal.chip": [
+        "./design-system/chip"
+      ],
+      "@showtime-xyz/universal.clamp-text": [
+        "./design-system/clamp-text"
+      ],
       "@showtime-xyz/universal.collapsible-tab-view": [
         "./design-system/collapsible-tab-view"
       ],
       "@showtime-xyz/universal.country-code-picker": [
         "./design-system/country-code-picker"
       ],
-      "@showtime-xyz/universal.color-scheme": ["./design-system/color-scheme"],
-      "@showtime-xyz/universal.data-pill": ["./design-system/data-pill"],
-      "@showtime-xyz/universal.divider": ["./design-system/divider"],
-      "@showtime-xyz/universal.fieldset": ["./design-system/fieldset"],
-      "@showtime-xyz/universal.haptics": ["./design-system/haptics"],
-      "@showtime-xyz/universal.hooks": ["./design-system/hooks"],
-      "@showtime-xyz/universal.icon": ["./design-system/icon"],
+      "@showtime-xyz/universal.color-scheme": [
+        "./design-system/color-scheme"
+      ],
+      "@showtime-xyz/universal.data-pill": [
+        "./design-system/data-pill"
+      ],
+      "@showtime-xyz/universal.divider": [
+        "./design-system/divider"
+      ],
+      "@showtime-xyz/universal.fieldset": [
+        "./design-system/fieldset"
+      ],
+      "@showtime-xyz/universal.haptics": [
+        "./design-system/haptics"
+      ],
+      "@showtime-xyz/universal.hooks": [
+        "./design-system/hooks"
+      ],
+      "@showtime-xyz/universal.icon": [
+        "./design-system/icon"
+      ],
       "@showtime-xyz/universal.infinite-scroll-list": [
         "./design-system/infinite-scroll-list"
       ],
-      "@showtime-xyz/universal.image": ["./design-system/image"],
-      "@showtime-xyz/universal.input": ["./design-system/input"],
-      "@showtime-xyz/universal.label": ["./design-system/label"],
-      "@showtime-xyz/universal.light-box": ["./design-system/light-box"],
-      "@showtime-xyz/universal.modal": ["./design-system/modal"],
-      "@showtime-xyz/universal.modal-screen": ["./design-system/modal-screen"],
-      "@showtime-xyz/universal.modal-sheet": ["./design-system/modal-sheet"],
-      "@showtime-xyz/universal.pan-to-close": ["./design-system/pan-to-close"],
+      "@showtime-xyz/universal.image": [
+        "./design-system/image"
+      ],
+      "@showtime-xyz/universal.input": [
+        "./design-system/input"
+      ],
+      "@showtime-xyz/universal.label": [
+        "./design-system/label"
+      ],
+      "@showtime-xyz/universal.light-box": [
+        "./design-system/light-box"
+      ],
+      "@showtime-xyz/universal.modal": [
+        "./design-system/modal"
+      ],
+      "@showtime-xyz/universal.modal-screen": [
+        "./design-system/modal-screen"
+      ],
+      "@showtime-xyz/universal.modal-sheet": [
+        "./design-system/modal-sheet"
+      ],
+      "@showtime-xyz/universal.pan-to-close": [
+        "./design-system/pan-to-close"
+      ],
       "@showtime-xyz/universal.pinch-to-zoom": [
         "./design-system/pinch-to-zoom"
       ],
-      "@showtime-xyz/universal.pressable": ["./design-system/pressable"],
+      "@showtime-xyz/universal.pressable": [
+        "./design-system/pressable"
+      ],
       "@showtime-xyz/universal.pressable-hover": [
         "./design-system/pressable-hover"
       ],
       "@showtime-xyz/universal.pressable-scale": [
         "./design-system/pressable-scale"
       ],
-      "@showtime-xyz/universal.router": ["./design-system/router"],
-      "@showtime-xyz/universal.safe-area": ["./design-system/safe-area"],
-      "@showtime-xyz/universal.scroll-view": ["./design-system/scroll-view"],
-      "@showtime-xyz/universal.select": ["./design-system/select"],
-      "@showtime-xyz/universal.skeleton": ["./design-system/skeleton"],
-      "@showtime-xyz/universal.snackbar": ["./design-system/snackbar"],
-      "@showtime-xyz/universal.spinner": ["./design-system/spinner"],
-      "@showtime-xyz/universal.switch": ["./design-system/switch"],
-      "@showtime-xyz/universal.text-input": ["./design-system/text-input"],
-      "@showtime-xyz/universal.tab-view": ["./design-system/tab-view"],
-      "@showtime-xyz/universal.tooltip": ["./design-system/tooltip"],
-      "@showtime-xyz/universal.utils": ["./design-system/utils"],
+      "@showtime-xyz/universal.router": [
+        "./design-system/router"
+      ],
+      "@showtime-xyz/universal.safe-area": [
+        "./design-system/safe-area"
+      ],
+      "@showtime-xyz/universal.scroll-view": [
+        "./design-system/scroll-view"
+      ],
+      "@showtime-xyz/universal.select": [
+        "./design-system/select"
+      ],
+      "@showtime-xyz/universal.skeleton": [
+        "./design-system/skeleton"
+      ],
+      "@showtime-xyz/universal.snackbar": [
+        "./design-system/snackbar"
+      ],
+      "@showtime-xyz/universal.spinner": [
+        "./design-system/spinner"
+      ],
+      "@showtime-xyz/universal.switch": [
+        "./design-system/switch"
+      ],
+      "@showtime-xyz/universal.text-input": [
+        "./design-system/text-input"
+      ],
+      "@showtime-xyz/universal.tab-view": [
+        "./design-system/tab-view"
+      ],
+      "@showtime-xyz/universal.tooltip": [
+        "./design-system/tooltip"
+      ],
+      "@showtime-xyz/universal.utils": [
+        "./design-system/utils"
+      ],
       "@showtime-xyz/universal.verification-badge": [
         "./design-system/verification-badge"
       ],

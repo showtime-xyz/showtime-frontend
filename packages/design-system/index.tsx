@@ -12,6 +12,7 @@ export { Select } from "@showtime-xyz/universal.select";
 export { Skeleton } from "@showtime-xyz/universal.skeleton";
 export { Spinner } from "@showtime-xyz/universal.spinner";
 export { Text } from "@showtime-xyz/universal.text";
+export { StockText } from "@showtime-xyz/universal.stock-text";
 export { TextInput } from "@showtime-xyz/universal.text-input";
 export { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 export { View } from "@showtime-xyz/universal.view";
