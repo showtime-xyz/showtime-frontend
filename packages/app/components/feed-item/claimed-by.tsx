@@ -82,7 +82,7 @@ export const ClaimedBy = ({
           {claimersList?.length && claimersList?.length >= 2 && (
             <>
               {` & `}
-              <StockText
+              <Text
                 tw="font-bold"
                 onPress={() => {
                   const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
@@ -109,7 +109,7 @@ export const ClaimedBy = ({
                 }}
               >
                 {`${claimersList?.length - 1} collected`}
-              </StockText>
+              </Text>
             </>
           )}
         </Text>
@@ -161,7 +161,7 @@ export const ClaimedByReduced = ({
         <Text tw="ml-1.5 flex-1 text-sm text-gray-900 dark:text-white">
           <>
             {isShowAndSymbol ? `& ` : ""}
-            <StockText
+            <Text
               onPress={() => {
                 const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
                 router.push(
@@ -188,7 +188,7 @@ export const ClaimedByReduced = ({
               tw="font-bold"
             >
               {`${remainingClaimers > 0 ? remainingClaimers : ""} collected`}
-            </StockText>
+            </Text>
           </>
         </Text>
       </>

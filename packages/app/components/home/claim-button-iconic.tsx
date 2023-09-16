@@ -82,7 +82,7 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <StockText
+            <Text
               onPress={viewCollecters}
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
@@ -92,7 +92,7 @@ export function ClaimButtonIconic({
               {edition.creator_airdrop_edition.edition_size > 0
                 ? `/${edition.creator_airdrop_edition.edition_size}`
                 : ""}
-            </StockText>
+            </Text>
           </>
         }
         {...rest}
@@ -108,7 +108,7 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <StockText
+            <Text
               onPress={viewCollecters}
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
@@ -118,7 +118,7 @@ export function ClaimButtonIconic({
               {edition.creator_airdrop_edition.edition_size > 0
                 ? `/${edition.creator_airdrop_edition.edition_size}`
                 : ""}
-            </StockText>
+            </Text>
           </>
         }
         {...rest}
@@ -132,7 +132,7 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <StockText
+            <Text
               onPress={viewCollecters}
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
@@ -142,7 +142,7 @@ export function ClaimButtonIconic({
               {edition.creator_airdrop_edition.edition_size > 0
                 ? `/${edition.creator_airdrop_edition.edition_size}`
                 : ""}
-            </StockText>
+            </Text>
           </>
         }
         onPress={() =>
@@ -215,7 +215,7 @@ export function ClaimButtonIconic({
       onPress={() => handleClaimNFT()}
       text={
         <>
-          <StockText
+          <Text
             tw={[
               "text-center text-xs font-semibold",
               edition.creator_airdrop_edition.edition_size -
@@ -233,7 +233,7 @@ export function ClaimButtonIconic({
             {edition.creator_airdrop_edition.edition_size > 0
               ? `/${edition.creator_airdrop_edition.edition_size}`
               : ""}
-          </StockText>
+          </Text>
         </>
       }
       buttonColor={isDark ? "#fff" : colors.gray[900]}

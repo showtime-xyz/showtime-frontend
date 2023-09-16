@@ -8,102 +8,100 @@ export default {
 };
 
 export const TextXS = () => (
-  <StockText tw="text-xs text-black dark:text-white">Hello World!</StockText>
+  <Text tw="text-xs text-black dark:text-white">Hello World!</Text>
 );
 
 export const TextXSCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-xs text-black dark:text-white">Hello World!</StockText>
-    <StockText tw="text-xs text-black dark:text-white">Hello World!</StockText>
+    <Text tw="text-xs text-black dark:text-white">Hello World!</Text>
+    <Text tw="text-xs text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
 export const TextXSBoldAndPurple = () => (
-  <StockText tw="text-xs font-bold text-black dark:text-white">
-    Hello <StockText tw="text-xs text-purple-800">World</StockText>
-  </StockText>
+  <Text tw="text-xs font-bold text-black dark:text-white">
+    Hello <Text tw="text-xs text-purple-800">World</Text>
+  </Text>
 );
 
 export const TextXSBoldAndPurpleCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-xs font-bold text-black dark:text-white">
-      Hello <StockText tw="text-xs text-purple-800">World</StockText>
-    </StockText>
-    <StockText tw="text-xs font-bold text-black dark:text-white">
-      Hello <StockText tw="text-xs text-purple-800">World</StockText>
-    </StockText>
+    <Text tw="text-xs font-bold text-black dark:text-white">
+      Hello <Text tw="text-xs text-purple-800">World</Text>
+    </Text>
+    <Text tw="text-xs font-bold text-black dark:text-white">
+      Hello <Text tw="text-xs text-purple-800">World</Text>
+    </Text>
   </View>
 );
 
 export const TextSM = () => (
-  <StockText tw="text-sm text-black dark:text-white">Hello World!</StockText>
+  <Text tw="text-sm text-black dark:text-white">Hello World!</Text>
 );
 
 export const TextSMCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-sm text-black dark:text-white">Hello World!</StockText>
+    <Text tw="text-sm text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
 export const TextBase = () => (
-  <StockText tw="text-base text-black dark:text-white">Hello World!</StockText>
+  <Text tw="text-base text-black dark:text-white">Hello World!</Text>
 );
 
 export const TextBaseCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-base text-black dark:text-white">
-      Hello World!
-    </StockText>
+    <Text tw="text-base text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
 export const TextLG = () => (
-  <StockText tw="text-lg text-black dark:text-white">Hello World!</StockText>
+  <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
 );
 
 export const TextLGCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-lg text-black dark:text-white">Hello World!</StockText>
-    <StockText tw="text-lg text-black dark:text-white">Hello World!</StockText>
+    <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
+    <Text tw="text-lg text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
 export const TextXL = () => (
-  <StockText tw="text-xl text-black dark:text-white">Hello World!</StockText>
+  <Text tw="text-xl text-black dark:text-white">Hello World!</Text>
 );
 
 export const TextXLCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-xl text-black dark:text-white">Hello World!</StockText>
+    <Text tw="text-xl text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
 export const Text2XL = () => (
-  <StockText tw="text-2xl text-black dark:text-white">Hello World!</StockText>
+  <Text tw="text-2xl text-black dark:text-white">Hello World!</Text>
 );
 
 export const Text2XLCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-2xl text-black dark:text-white">Hello World!</StockText>
+    <Text tw="text-2xl text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
 export const Text3XL = () => (
-  <StockText tw="text-3xl text-black dark:text-white">Hello World!</StockText>
+  <Text tw="text-3xl text-black dark:text-white">Hello World!</Text>
 );
 
 export const Text3XLCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-3xl text-black dark:text-white">Hello World!</StockText>
+    <Text tw="text-3xl text-black dark:text-white">Hello World!</Text>
   </View>
 );
 
 export const Text4XL = () => (
-  <StockText tw="text-4xl text-black dark:text-white">Hello World!</StockText>
+  <Text tw="text-4xl text-black dark:text-white">Hello World!</Text>
 );
 
 export const Text4XLCapsize = () => (
   <View tw="bg-black">
-    <StockText tw="text-4xl text-black dark:text-white">Hello World!</StockText>
+    <Text tw="text-4xl text-black dark:text-white">Hello World!</Text>
   </View>
 );

@@ -14,6 +14,7 @@ export type Props = {
   pointerEvents?: ViewProps["pointerEvents"];
 } & Pick<
   TextProps,
+  | "onPress"
   | "onLayout"
   | "onTextLayout"
   | "children"
@@ -32,6 +33,7 @@ export type Props = {
 export const Text = forwardRef<TextType, Props>(
   (
     {
+      onPress,
       onLayout,
       onTextLayout,
       children,
@@ -52,6 +54,7 @@ export const Text = forwardRef<TextType, Props>(
         tw={Array.isArray(tw) ? tw.join(" ") : tw}
         id={id}
         ref={ref}
+        onPress={onPress}
         selectable={selectable}
         onLayout={onLayout}
         onTextLayout={onTextLayout}
