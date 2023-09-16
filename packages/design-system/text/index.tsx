@@ -22,7 +22,6 @@ export type Props = {
   | "role"
   | "numberOfLines"
   | "ellipsizeMode"
-  | "onPress"
   | "style"
 >;
 
@@ -44,7 +43,6 @@ export const Text = forwardRef<TextType, Props>(
       numberOfLines,
       ellipsizeMode,
       pointerEvents,
-      onPress,
       ...props
     },
     ref
@@ -60,7 +58,6 @@ export const Text = forwardRef<TextType, Props>(
         role={role}
         numberOfLines={numberOfLines}
         ellipsizeMode={ellipsizeMode}
-        onPress={onPress}
         // @ts-ignore - this prop will only work on web. Refer text.web.tsx
         htmlFor={htmlFor}
         pointerEvents={pointerEvents}

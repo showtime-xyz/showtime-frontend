@@ -244,14 +244,15 @@ export const DropUpdate = ({
                 }}
                 aria-label="Live Now"
               />
-              <Text
-                tw="ml-2 font-bold text-black dark:text-white"
+              <Pressable
                 onPress={() => {
                   setIsLive(!isLive);
                 }}
               >
-                Live Now
-              </Text>
+                <Text tw="ml-2 font-bold text-black dark:text-white">
+                  Live Now
+                </Text>
+              </Pressable>
             </View>
           </View>
 

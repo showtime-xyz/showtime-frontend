@@ -1,3 +1,4 @@
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -20,28 +21,31 @@ export const NFTSDisplayName = ({ nfts }: NotificationDescriptionProps) => {
   if (nfts.length === 1) {
     const nft = nfts[0];
     return (
-      <Text
+      <Pressable
         onPress={() => {
           router.push(getNFTLink(nft));
         }}
-        tw="text-13 font-bold text-black dark:text-white"
       >
-        {nft.display_name}
-      </Text>
+        <Text tw="text-13 font-bold text-black dark:text-white">
+          {nft.display_name}
+        </Text>
+      </Pressable>
     );
   }
 
   const nft = nfts[0];
   return (
     <>
-      <Text
+      <Pressable
         onPress={() => {
           router.push(getNFTLink(nft));
         }}
-        tw="text-13 font-bold text-black dark:text-white"
       >
-        {nft.display_name}
-      </Text>
+        <Text tw="text-13 font-bold text-black dark:text-white">
+          {nft.display_name}
+        </Text>
+      </Pressable>
+
       <TextLink
         href={`/@${
           nft.creator.username || nft.creator.wallet_address

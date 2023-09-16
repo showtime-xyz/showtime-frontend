@@ -148,12 +148,12 @@ export const SelectPlan = ({ setClientSecret }: { setClientSecret: any }) => {
               onChange={() => setSelectDefault(!selectDefault)}
               aria-label="Select default payment method"
             />
-            <Text
-              tw="ml-2 text-gray-900 dark:text-gray-50"
-              onPress={() => setSelectDefault(!selectDefault)}
-            >
-              Use my default payment method.
-            </Text>
+            <Pressable onPress={() => setSelectDefault(!selectDefault)}>
+              <Text tw="ml-2 text-gray-900 dark:text-gray-50">
+                Use my default payment method.
+              </Text>
+            </Pressable>
+
             <Pressable
               tw="flex-row items-center pl-2"
               onPress={() => setSelectDefault(!selectDefault)}

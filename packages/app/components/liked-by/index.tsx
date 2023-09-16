@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Platform } from "react-native";
 
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -54,7 +55,7 @@ export function LikedBy({ nft, max = 2, tw = "" }: Props) {
         ))}
         {` `}
         {(data?.likers.length ?? 0) > 2 && (
-          <Text
+          <Pressable
             onPress={() => {
               const as = `/likers/${nft?.nft_id}`;
               router.push(
@@ -77,15 +78,17 @@ export function LikedBy({ nft, max = 2, tw = "" }: Props) {
               );
             }}
           >
-            <Text tw="text-sm">{`& `}</Text>
-            <Text tw="text-sm font-bold text-black dark:text-white">
-              {data?.likers
-                ? `${data.likers.length - 2} ${
-                    data.likers.length - 2 === 1 ? "other" : "others"
-                  }`
-                : 0}
+            <Text>
+              <Text tw="text-sm">{`& `}</Text>
+              <Text tw="text-sm font-bold text-black dark:text-white">
+                {data?.likers
+                  ? `${data.likers.length - 2} ${
+                      data.likers.length - 2 === 1 ? "other" : "others"
+                    }`
+                  : 0}
+              </Text>
             </Text>
-          </Text>
+          </Pressable>
         )}
       </Text>
     </View>

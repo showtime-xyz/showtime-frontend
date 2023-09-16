@@ -8,6 +8,7 @@ import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -163,21 +164,22 @@ export const SelectUsername = () => {
                   validate(v);
                 }}
                 leftElement={
-                  <Text
-                    onPress={() => usernameRef.current?.focus()}
-                    tw="text-gray-600 dark:text-gray-400"
-                    style={{
-                      fontSize: 16,
-                      marginTop: Platform.select({
-                        android: -8,
-                        default: 0,
-                      }),
-                      marginRight: 1,
-                    }}
-                  >
-                    showtime.xyz/
-                    <Text tw="font-bold text-black dark:text-white">@</Text>
-                  </Text>
+                  <Pressable onPress={() => usernameRef.current?.focus()}>
+                    <Text
+                      tw="text-gray-600 dark:text-gray-400"
+                      style={{
+                        fontSize: 16,
+                        marginTop: Platform.select({
+                          android: -8,
+                          default: 0,
+                        }),
+                        marginRight: 1,
+                      }}
+                    >
+                      showtime.xyz/
+                      <Text tw="font-bold text-black dark:text-white">@</Text>
+                    </Text>
+                  </Pressable>
                 }
               />
             )}

@@ -3,6 +3,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { ResizeMode } from "expo-av";
 
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Text } from "@showtime-xyz/universal.text";
@@ -111,15 +112,18 @@ export const TrendingItem = memo<TrendingItemProps>(function TrendingItem({
           size={30}
         />
         <View tw="w-2" />
-        <Text
+        <Pressable
           onPress={() =>
             router.push(`/@${nft.creator_username ?? nft.creator_address}`)
           }
-          numberOfLines={1}
-          tw="text-13 inline-block max-w-[114px] font-medium text-gray-900 dark:text-white"
         >
-          {getCreatorUsernameFromNFT(nft)}
-        </Text>
+          <Text
+            numberOfLines={1}
+            tw="text-13 inline-block max-w-[114px] font-medium text-gray-900 dark:text-white"
+          >
+            {getCreatorUsernameFromNFT(nft)}
+          </Text>
+        </Pressable>
         <View tw="w-1" />
         {nft?.creator_verified ? <VerificationBadge size={12} /> : null}
       </View>

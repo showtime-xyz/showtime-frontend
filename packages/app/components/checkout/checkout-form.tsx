@@ -14,6 +14,7 @@ import type { StripeError } from "@stripe/stripe-js";
 import { Button } from "@showtime-xyz/universal.button";
 import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -129,14 +130,21 @@ const CheckoutFormStripe = () => {
               }
               aria-label="Set as default payment method"
             />
-            <Text
-              tw="ml-2 text-gray-900 dark:text-gray-50"
+            <Pressable
               onPress={() =>
                 setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
               }
             >
-              Set as default payment method
-            </Text>
+              <Pressable
+                onPress={() =>
+                  setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
+                }
+              >
+                <Text tw="ml-2 text-gray-900 dark:text-gray-50">
+                  Set as default payment method
+                </Text>
+              </Pressable>
+            </Pressable>
           </View>
           {isLoading && (
             <View tw="animate-fade-in-250 absolute inset-0 items-center justify-center bg-black/30">

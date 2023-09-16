@@ -163,31 +163,33 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
             <View tw="h-4" />
             <Text tw="px-12 text-center text-sm text-gray-900">
               You just unlocked exclusive content from
-              <Text
-                tw="font-medium"
+              <Pressable
                 onPress={() => router.push(`/@${nft?.creator_username}`)}
               >
-                {" "}
-                @{nft?.creator_username}{" "}
-                {Platform.OS === "web" && nft?.creator_verified ? (
-                  <>
-                    <VerificationBadge
-                      fillColor="#fff"
-                      bgColor="#000"
-                      style={{ marginTop: -2 }}
-                      size={14}
-                      className="inline-block"
-                    />
-                  </>
-                ) : null}
-              </Text>{" "}
-              and a star badge!{"\n\n"}
-              Your NFT will be sent to your wallet in 7 days.
+                <Text tw="font-medium">
+                  {" "}
+                  @{nft?.creator_username}{" "}
+                  {Platform.OS === "web" && nft?.creator_verified ? (
+                    <>
+                      <VerificationBadge
+                        fillColor="#fff"
+                        bgColor="#000"
+                        style={{ marginTop: -2 }}
+                        size={14}
+                        className="inline-block"
+                      />
+                    </>
+                  ) : null}
+                  P
+                </Text>{" "}
+                and a star badge!{"\n\n"}
+                Your NFT will be sent to your wallet in 7 days.
+              </Pressable>
             </Text>
           </View>
           <View tw="mt-6 flex-row items-center justify-center rounded-2xl bg-white px-6 py-2.5 shadow-md">
             <Avatar url={user?.data?.profile?.img_url} tw="mr-2" size={38} />
-            <Text
+            <Pressable
               onPress={() =>
                 router.push(
                   `/@${
@@ -196,12 +198,14 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
                   }`
                 )
               }
-              tw="text-base text-gray-900"
             >
-              {user?.data?.profile.username
-                ? `@${user?.data?.profile.username}`
-                : getProfileName(user?.data?.profile)}
-            </Text>
+              <Text tw="text-base text-gray-900">
+                {user?.data?.profile.username
+                  ? `@${user?.data?.profile.username}`
+                  : getProfileName(user?.data?.profile)}
+              </Text>
+            </Pressable>
+
             {user?.data?.profile.verified ? (
               <VerificationBadge
                 fillColor="#fff"

@@ -70,18 +70,16 @@ export const MessagesHeader = (props: HeaderProps) => {
       {props.channelId ? (
         <>
           <View tw="flex-1" style={{ rowGap: 8 }}>
-            <Text
-              onPress={() => router.push(`/@${props.username}`)}
-              tw="text-sm font-bold text-gray-900 dark:text-gray-100"
-            >
-              {props.title ?? "Loading..."}
-            </Text>
-            <Text
-              onPress={viewMembersList}
-              tw="text-xs text-indigo-600 dark:text-blue-400"
-            >
-              {props.members ?? 0} members
-            </Text>
+            <Pressable onPress={() => router.push(`/@${props.username}`)}>
+              <Text tw="text-sm font-bold text-gray-900 dark:text-gray-100">
+                {props.title ?? "Loading..."}
+              </Text>
+            </Pressable>
+            <Pressable onPress={viewMembersList}>
+              <Text tw="text-xs text-indigo-600 dark:text-blue-400">
+                {props.members ?? 0} members
+              </Text>
+            </Pressable>
           </View>
           <View tw="flex-row">
             <Pressable onPress={props.onPressShare} tw="p-2 md:hidden">

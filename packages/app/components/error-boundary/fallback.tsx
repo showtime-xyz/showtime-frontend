@@ -1,3 +1,4 @@
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -13,9 +14,9 @@ export function Fallback({ error, resetErrorBoundary }: FallbackProps) {
         hideLoginBtn
       />
       <View tw="h-2" />
-      <Text onPress={resetErrorBoundary} tw="text-indigo-500">
-        Try again
-      </Text>
+      <Pressable onPress={resetErrorBoundary}>
+        <Text tw="text-indigo-500">Try again</Text>
+      </Pressable>
     </View>
   );
 }

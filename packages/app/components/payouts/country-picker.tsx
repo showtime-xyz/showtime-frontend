@@ -27,6 +27,7 @@ import {
 import { Check } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Input } from "@showtime-xyz/universal.input";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { SafeAreaView } from "@showtime-xyz/universal.safe-area";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -198,12 +199,11 @@ export function Header({ title, close, onSearchSubmit, twCenter = "" }: Props) {
         {showSearch ? (
           <Input placeholder="Search" autoFocus onChangeText={handleSearch} />
         ) : (
-          <Text
-            onPress={onPressTitle}
-            tw="px-4 py-3.5 text-lg font-bold dark:text-white"
-          >
-            {title}
-          </Text>
+          <Pressable onPress={onPressTitle}>
+            <Text tw="px-4 py-3.5 text-lg font-bold dark:text-white">
+              {title}
+            </Text>
+          </Pressable>
         )}
       </View>
       <View tw="h-12 w-12 items-center justify-center">

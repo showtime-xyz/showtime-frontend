@@ -598,14 +598,15 @@ const CreateDropStepSongURI = (
               }}
               aria-label="Live Now"
             />
-            <Text
-              tw="ml-2 font-bold text-black dark:text-white"
+            <Pressable
               onPress={() => {
                 setIsSaveDrop(!isSaveDrop);
               }}
             >
-              Live Now
-            </Text>
+              <Text tw="ml-2 font-bold text-black dark:text-white">
+                Live Now
+              </Text>
+            </Pressable>
           </View>
         </View>
         <View tw="mt-4">

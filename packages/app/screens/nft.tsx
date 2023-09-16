@@ -4,6 +4,7 @@ import { Dimensions, Platform, useWindowDimensions } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { SWRConfig } from "swr";
 
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
   useSafeAreaFrame,
@@ -109,12 +110,11 @@ const NFTDetail = () => {
             </View>
             <View tw="flex-row items-center justify-center gap-4">
               <View tw="md:hidden">
-                <Text
-                  onPress={() => router.pop()}
-                  tw="text-center text-xl font-semibold text-indigo-400 "
-                >
-                  Go back
-                </Text>
+                <Pressable onPress={() => router.pop()}>
+                  <Text tw="text-center text-xl font-semibold text-indigo-400 ">
+                    Go back
+                  </Text>
+                </Pressable>
               </View>
               <View>
                 <TextLink

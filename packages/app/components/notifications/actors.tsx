@@ -1,3 +1,4 @@
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 
@@ -36,13 +37,12 @@ export const Actors = ({ actors, setUsers }: ActorsProps) => {
     return (
       <>
         <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />, and{" "}
-        <Text
-          tw="text-13 font-bold text-black dark:text-white"
-          onPress={() => setUsers(actors.slice(2, actors.length))}
-        >
-          {actors.length - 2} other{" "}
-          {actors.length - 2 == 1 ? "person " : "people "}
-        </Text>
+        <Pressable onPress={() => setUsers(actors.slice(2, actors.length))}>
+          <Text tw="text-13 font-bold text-black dark:text-white">
+            {actors.length - 2} other{" "}
+            {actors.length - 2 == 1 ? "person " : "people "}
+          </Text>
+        </Pressable>
       </>
     );
   }
@@ -56,17 +56,18 @@ export const ActorLink = ({
 }) => {
   const router = useRouter();
   return (
-    <Text
-      tw="text-13 font-bold text-black dark:text-white"
+    <Pressable
       onPress={() => {
         router.push(`/@${actor.username ?? actor.wallet_address}`);
       }}
     >
-      {actor.username ? (
-        <>@{actor.username}</>
-      ) : (
-        <>{formatAddressShort(actor.wallet_address)}</>
-      )}
-    </Text>
+      <Text tw="text-13 font-bold text-black dark:text-white">
+        {actor.username ? (
+          <>@{actor.username}</>
+        ) : (
+          <>{formatAddressShort(actor.wallet_address)}</>
+        )}
+      </Text>
+    </Pressable>
   );
 };

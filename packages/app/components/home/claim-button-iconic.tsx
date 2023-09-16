@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime, Check2 } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -80,17 +81,18 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Text
-              tw={[
-                "text-center text-xs font-semibold text-gray-900 dark:text-white",
-              ]}
-              onPress={viewCollecters}
-            >
-              {formatClaimNumber(edition.total_claimed_count)}
-              {edition.creator_airdrop_edition.edition_size > 0
-                ? `/${edition.creator_airdrop_edition.edition_size}`
-                : ""}
-            </Text>
+            <Pressable onPress={viewCollecters}>
+              <Text
+                tw={[
+                  "text-center text-xs font-semibold text-gray-900 dark:text-white",
+                ]}
+              >
+                {formatClaimNumber(edition.total_claimed_count)}
+                {edition.creator_airdrop_edition.edition_size > 0
+                  ? `/${edition.creator_airdrop_edition.edition_size}`
+                  : ""}
+              </Text>
+            </Pressable>
           </>
         }
         {...rest}
@@ -106,17 +108,18 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Text
-              tw={[
-                "text-center text-xs font-semibold text-gray-900 dark:text-white",
-              ]}
-              onPress={viewCollecters}
-            >
-              {formatClaimNumber(edition.total_claimed_count)}
-              {edition.creator_airdrop_edition.edition_size > 0
-                ? `/${edition.creator_airdrop_edition.edition_size}`
-                : ""}
-            </Text>
+            <Pressable onPress={viewCollecters}>
+              <Text
+                tw={[
+                  "text-center text-xs font-semibold text-gray-900 dark:text-white",
+                ]}
+              >
+                {formatClaimNumber(edition.total_claimed_count)}
+                {edition.creator_airdrop_edition.edition_size > 0
+                  ? `/${edition.creator_airdrop_edition.edition_size}`
+                  : ""}
+              </Text>
+            </Pressable>
           </>
         }
         {...rest}
@@ -130,17 +133,18 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Text
-              tw={[
-                "text-center text-xs font-semibold text-gray-900 dark:text-white",
-              ]}
-              onPress={viewCollecters}
-            >
-              {formatClaimNumber(edition.total_claimed_count)}
-              {edition.creator_airdrop_edition.edition_size > 0
-                ? `/${edition.creator_airdrop_edition.edition_size}`
-                : ""}
-            </Text>
+            <Pressable onPress={viewCollecters}>
+              <Text
+                tw={[
+                  "text-center text-xs font-semibold text-gray-900 dark:text-white",
+                ]}
+              >
+                {formatClaimNumber(edition.total_claimed_count)}
+                {edition.creator_airdrop_edition.edition_size > 0
+                  ? `/${edition.creator_airdrop_edition.edition_size}`
+                  : ""}
+              </Text>
+            </Pressable>
           </>
         }
         onPress={() =>

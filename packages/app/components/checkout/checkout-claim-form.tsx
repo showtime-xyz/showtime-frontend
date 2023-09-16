@@ -18,6 +18,7 @@ import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { CreditCard, CheckFilled } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -451,14 +452,15 @@ const PaymentCustomPaymentForm = ({
           }
           aria-label="Set as default payment method"
         />
-        <Text
-          tw="ml-2 text-gray-900 dark:text-gray-50"
+        <Pressable
           onPress={() =>
             setSetAsDefaultPaymentMethod(!setAsDefaultPaymentMethod)
           }
         >
-          Set as default payment method
-        </Text>
+          <Text tw="ml-2 text-gray-900 dark:text-gray-50">
+            Set as default payment method
+          </Text>
+        </Pressable>
       </View>
     </View>
   );

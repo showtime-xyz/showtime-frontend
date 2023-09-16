@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { Text } from "@showtime-xyz/universal.text";
 
+import { Pressable } from "..";
 import { useClampText } from "./use-clamp-text";
 
 export type ClampTextProps = {
@@ -64,12 +65,11 @@ export const ClampText = ({
     >
       {innerText}
       {(showMore || showLess) && (isPureText || Platform.OS !== "web") && (
-        <Text
-          onPress={showMore ? onShowMore : onShowLess}
-          tw="text-sm font-bold text-gray-900 dark:text-white"
-        >
-          {` ${showMore ? expandText : foldText}`}
-        </Text>
+        <Pressable onPress={showMore ? onShowMore : onShowLess}>
+          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+            {` ${showMore ? expandText : foldText}`}
+          </Text>
+        </Pressable>
       )}
     </Text>
   );

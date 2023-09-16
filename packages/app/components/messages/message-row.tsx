@@ -243,12 +243,11 @@ function MessageRowComponent({
           <Text tw="web:pr-12 pr-7 text-sm text-gray-900 dark:text-gray-100">
             <Link href={`/@${username || address}`}>
               <View tw="mr-3 flex-row items-center">
-                <Text
-                  tw="text-sm font-bold text-gray-900 dark:text-white"
-                  onPress={handleOnPressUser}
-                >
-                  {userNameText}
-                </Text>
+                <Pressable onPress={handleOnPressUser}>
+                  <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+                    {userNameText}
+                  </Text>
+                </Pressable>
                 {userVerified ? (
                   <VerificationBadge
                     style={{
