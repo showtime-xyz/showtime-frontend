@@ -1,10 +1,9 @@
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { StockText } from "@showtime-xyz/universal.stock-text";
 import { Text } from "@showtime-xyz/universal.text";
 
 import type { NotificationItemProp } from "app/components/notifications/notification-item";
 import { Actor } from "app/hooks/use-notifications";
-import { TextLink } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 export type ActorsProps = {
@@ -37,12 +36,13 @@ export const Actors = ({ actors, setUsers }: ActorsProps) => {
     return (
       <>
         <ActorLink actor={actors[0]} />, <ActorLink actor={actors[1]} />, and{" "}
-        <Pressable onPress={() => setUsers(actors.slice(2, actors.length))}>
-          <Text tw="text-13 font-bold text-black dark:text-white">
-            {actors.length - 2} other{" "}
-            {actors.length - 2 == 1 ? "person " : "people "}
-          </Text>
-        </Pressable>
+        <StockText
+          tw="text-13 font-bold text-black dark:text-white"
+          onPress={() => setUsers(actors.slice(2, actors.length))}
+        >
+          {actors.length - 2} other{" "}
+          {actors.length - 2 == 1 ? "person " : "people "}
+        </StockText>
       </>
     );
   }
@@ -56,18 +56,17 @@ export const ActorLink = ({
 }) => {
   const router = useRouter();
   return (
-    <Pressable
+    <StockText
+      tw="text-13 font-bold text-black dark:text-white"
       onPress={() => {
         router.push(`/@${actor.username ?? actor.wallet_address}`);
       }}
     >
-      <Text tw="text-13 font-bold text-black dark:text-white">
-        {actor.username ? (
-          <>@{actor.username}</>
-        ) : (
-          <>{formatAddressShort(actor.wallet_address)}</>
-        )}
-      </Text>
-    </Pressable>
+      {actor.username ? (
+        <>@{actor.username}</>
+      ) : (
+        <>{formatAddressShort(actor.wallet_address)}</>
+      )}
+    </StockText>
   );
 };

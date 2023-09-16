@@ -52,11 +52,9 @@ const keyExtractor = (item: NotificationType) => {
   return item.id.toString();
 };
 
-/*
 const getItemType = (item: NotificationType) => {
   return item.type_name;
 };
-*/
 
 export const Notifications = memo(
   ({ hideHeader = false, useWindowScroll = true }: NotificationsProps) => {
@@ -168,6 +166,7 @@ export const Notifications = memo(
           ListFooterComponent={ListFooterComponent}
           ref={listRef}
           estimatedItemSize={53}
+          getItemType={getItemType}
         />
 
         <ModalSheet

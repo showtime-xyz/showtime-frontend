@@ -32,6 +32,22 @@ function LinkCore({
       role="link"
       hitSlop={hitSlop}
       {...componentProps}
+      onClick={async (e?: any) => {
+        componentProps?.onPress?.(e);
+        if (!e?.defaultPrevented) {
+          if (typeof href === "string" && href.startsWith("http")) {
+            const isCanOpen = await Linking.canOpenURL(href);
+            if (isCanOpen) {
+              Linking.openURL(href);
+              return;
+            } else {
+              Logger.error(`Can't open href: ${href}`);
+            }
+          }
+
+          linkTo(parseNextPath(as || href));
+        }
+      }}
       onPress={async (e?: any) => {
         componentProps?.onPress?.(e);
         if (!e?.defaultPrevented) {

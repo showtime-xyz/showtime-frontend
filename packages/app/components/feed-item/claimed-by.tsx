@@ -9,6 +9,8 @@ import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { TextLink } from "app/navigation/link";
 import type { NFT } from "app/types";
 
+import { StockText } from "design-system/stock-text/stock-text";
+
 type NFTDetailsProps = {
   nft: NFT | undefined;
   claimersList: NFT["multiple_owners_list"] | undefined;
@@ -81,7 +83,7 @@ export const ClaimedBy = ({
           {claimersList?.length && claimersList?.length >= 2 && (
             <>
               {` & `}
-              <Text
+              <StockText
                 tw="font-bold"
                 onPress={() => {
                   const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
@@ -108,7 +110,7 @@ export const ClaimedBy = ({
                 }}
               >
                 {`${claimersList?.length - 1} collected`}
-              </Text>
+              </StockText>
             </>
           )}
         </Text>
@@ -160,7 +162,7 @@ export const ClaimedByReduced = ({
         <Text tw="ml-1.5 flex-1 text-sm text-gray-900 dark:text-white">
           <>
             {isShowAndSymbol ? `& ` : ""}
-            <Text
+            <StockText
               onPress={() => {
                 const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
                 router.push(
@@ -187,7 +189,7 @@ export const ClaimedByReduced = ({
               tw="font-bold"
             >
               {`${remainingClaimers > 0 ? remainingClaimers : ""} collected`}
-            </Text>
+            </StockText>
           </>
         </Text>
       </>

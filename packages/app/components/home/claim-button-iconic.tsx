@@ -19,6 +19,8 @@ import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-
 import { NFT } from "app/types";
 import { formatClaimNumber } from "app/utilities";
 
+import { StockText } from "design-system/stock-text/stock-text";
+
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 
 export function ClaimButtonIconic({
@@ -81,7 +83,7 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Text
+            <StockText
               onPress={viewCollecters}
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
@@ -91,7 +93,7 @@ export function ClaimButtonIconic({
               {edition.creator_airdrop_edition.edition_size > 0
                 ? `/${edition.creator_airdrop_edition.edition_size}`
                 : ""}
-            </Text>
+            </StockText>
           </>
         }
         {...rest}
@@ -107,7 +109,7 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Text
+            <StockText
               onPress={viewCollecters}
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
@@ -117,7 +119,7 @@ export function ClaimButtonIconic({
               {edition.creator_airdrop_edition.edition_size > 0
                 ? `/${edition.creator_airdrop_edition.edition_size}`
                 : ""}
-            </Text>
+            </StockText>
           </>
         }
         {...rest}
@@ -131,7 +133,7 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Text
+            <StockText
               onPress={viewCollecters}
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
@@ -141,7 +143,7 @@ export function ClaimButtonIconic({
               {edition.creator_airdrop_edition.edition_size > 0
                 ? `/${edition.creator_airdrop_edition.edition_size}`
                 : ""}
-            </Text>
+            </StockText>
           </>
         }
         onPress={() =>
