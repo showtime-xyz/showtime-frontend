@@ -6,6 +6,7 @@ import { Showtime, Check2 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { StockText } from "@showtime-xyz/universal.stock-text";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
@@ -81,18 +82,17 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Pressable onPress={viewCollecters}>
-              <Text
-                tw={[
-                  "text-center text-xs font-semibold text-gray-900 dark:text-white",
-                ]}
-              >
-                {formatClaimNumber(edition.total_claimed_count)}
-                {edition.creator_airdrop_edition.edition_size > 0
-                  ? `/${edition.creator_airdrop_edition.edition_size}`
-                  : ""}
-              </Text>
-            </Pressable>
+            <StockText
+              onPress={viewCollecters}
+              tw={[
+                "text-center text-xs font-semibold text-gray-900 dark:text-white",
+              ]}
+            >
+              {formatClaimNumber(edition.total_claimed_count)}
+              {edition.creator_airdrop_edition.edition_size > 0
+                ? `/${edition.creator_airdrop_edition.edition_size}`
+                : ""}
+            </StockText>
           </>
         }
         {...rest}
@@ -108,18 +108,17 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Pressable onPress={viewCollecters}>
-              <Text
-                tw={[
-                  "text-center text-xs font-semibold text-gray-900 dark:text-white",
-                ]}
-              >
-                {formatClaimNumber(edition.total_claimed_count)}
-                {edition.creator_airdrop_edition.edition_size > 0
-                  ? `/${edition.creator_airdrop_edition.edition_size}`
-                  : ""}
-              </Text>
-            </Pressable>
+            <StockText
+              onPress={viewCollecters}
+              tw={[
+                "text-center text-xs font-semibold text-gray-900 dark:text-white",
+              ]}
+            >
+              {formatClaimNumber(edition.total_claimed_count)}
+              {edition.creator_airdrop_edition.edition_size > 0
+                ? `/${edition.creator_airdrop_edition.edition_size}`
+                : ""}
+            </StockText>
           </>
         }
         {...rest}
@@ -133,18 +132,17 @@ export function ClaimButtonIconic({
       <FeedSocialButton
         text={
           <>
-            <Pressable onPress={viewCollecters}>
-              <Text
-                tw={[
-                  "text-center text-xs font-semibold text-gray-900 dark:text-white",
-                ]}
-              >
-                {formatClaimNumber(edition.total_claimed_count)}
-                {edition.creator_airdrop_edition.edition_size > 0
-                  ? `/${edition.creator_airdrop_edition.edition_size}`
-                  : ""}
-              </Text>
-            </Pressable>
+            <StockText
+              onPress={viewCollecters}
+              tw={[
+                "text-center text-xs font-semibold text-gray-900 dark:text-white",
+              ]}
+            >
+              {formatClaimNumber(edition.total_claimed_count)}
+              {edition.creator_airdrop_edition.edition_size > 0
+                ? `/${edition.creator_airdrop_edition.edition_size}`
+                : ""}
+            </StockText>
           </>
         }
         onPress={() =>
@@ -217,26 +215,25 @@ export function ClaimButtonIconic({
       onPress={() => handleClaimNFT()}
       text={
         <>
-          <Pressable onPress={viewCollecters}>
-            <Text
-              tw={[
-                "text-center text-xs font-semibold",
-                edition.creator_airdrop_edition.edition_size -
-                  edition.total_claimed_count <=
-                  10 &&
-                edition.creator_airdrop_edition.edition_size -
-                  edition.total_claimed_count >
-                  0
-                  ? "text-orange-500"
-                  : "text-gray-900 dark:text-white",
-              ]}
-            >
-              {formatClaimNumber(edition.total_claimed_count)}
-              {edition.creator_airdrop_edition.edition_size > 0
-                ? `/${edition.creator_airdrop_edition.edition_size}`
-                : ""}
-            </Text>
-          </Pressable>
+          <StockText
+            tw={[
+              "text-center text-xs font-semibold",
+              edition.creator_airdrop_edition.edition_size -
+                edition.total_claimed_count <=
+                10 &&
+              edition.creator_airdrop_edition.edition_size -
+                edition.total_claimed_count >
+                0
+                ? "text-orange-500"
+                : "text-gray-900 dark:text-white",
+            ]}
+            onPress={viewCollecters}
+          >
+            {formatClaimNumber(edition.total_claimed_count)}
+            {edition.creator_airdrop_edition.edition_size > 0
+              ? `/${edition.creator_airdrop_edition.edition_size}`
+              : ""}
+          </StockText>
         </>
       }
       buttonColor={isDark ? "#fff" : colors.gray[900]}
