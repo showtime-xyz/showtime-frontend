@@ -67,14 +67,14 @@
     "react-dom": "18.2.0",
     "@jest/create-cache-key-function": "29.2.1",
     "jest-runtime": "29.5.0",
-    "react-native-reanimated": "3.4.1",
+    "react-native-reanimated": "3.5.2",
     "@types/react": "~18.2.14",
     "@ethersproject/bignumber": "5.7.0",
     "@ethersproject/signing-key": "5.7.0",
     "next": "13.4.1",
-    "react-native-mmkv": "2.10.1",
-    "react-native-screens": "3.23.0",
-    "react-native-svg": "13.10.0"
+    "react-native-mmkv": "2.10.2",
+    "react-native-screens": "3.25.0",
+    "react-native-svg": "13.13.0"
   },
   "react-native": {
     "zlib": "browserify-zlib",

@@ -76,7 +76,7 @@
         "moti": "*",
         "next": "*",
         "react-native-gesture-handler": ">=2.0.0",
-        "react-native-reanimated": ">=3.4.1",
+        "react-native-reanimated": ">=3.5.2",
         "react-native-web": "*"
       }
     },
