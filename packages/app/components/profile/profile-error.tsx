@@ -4,11 +4,12 @@ import * as Clipboard from "expo-clipboard";
 
 import { Alert } from "@showtime-xyz/universal.alert";
 import { Button, ButtonProps } from "@showtime-xyz/universal.button";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Link, TextLink } from "app/navigation/link";
 
-import { View } from "design-system";
+import { Pressable, View } from "design-system";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
 
@@ -20,17 +21,25 @@ const ContactBtn = (props: ButtonProps) => {
   );
 };
 const Profile404 = () => {
+  const router = useRouter();
   return (
     <View tw="items-center justify-center px-4 pt-8">
       <EmptyPlaceholder
         title="This user does not exist."
         text={
-          <Text tw="text-center">
-            Try searching for another one or check the link.&nbsp;
-            <TextLink href={`/`} tw="text-indigo-500">
-              Go Home
-            </TextLink>
-          </Text>
+          <Pressable
+            onPress={() => (router.canGoBack() ? router.back() : router.pop())}
+            tw="items-center justify-center text-center"
+          >
+            <Text tw="text-center text-base">
+              Try searching for another one or check the link.&nbsp;{"\n"}
+            </Text>
+            <View tw="web:mt-6 mt-2">
+              <Text tw="text-base font-semibold text-indigo-500">
+                {router.canGoBack() ? "Go back" : "Go Home"}
+              </Text>
+            </View>
+          </Pressable>
         }
         hideLoginBtn
       />

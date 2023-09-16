@@ -109,20 +109,16 @@ const NFTDetail = () => {
               </Text>
             </View>
             <View tw="flex-row items-center justify-center gap-4">
-              <View tw="md:hidden">
-                <Pressable onPress={() => router.pop()}>
+              <View>
+                <Pressable
+                  onPress={() =>
+                    router.canGoBack() ? router.back() : router.pop()
+                  }
+                >
                   <Text tw="text-center text-xl font-semibold text-indigo-400 ">
-                    Go back
+                    {router.canGoBack() ? "Go back" : "Go home"}
                   </Text>
                 </Pressable>
-              </View>
-              <View>
-                <TextLink
-                  href={`/`}
-                  tw="text-center text-xl font-semibold text-indigo-400"
-                >
-                  Go Home
-                </TextLink>
               </View>
             </View>
           </View>
