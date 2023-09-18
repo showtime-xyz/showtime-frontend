@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { Slider } from "@miblanchard/react-native-slider";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { PauseOutline, Play } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import Spinner from "@showtime-xyz/universal.spinner";
@@ -22,16 +23,30 @@ import {
 import { formatTime } from "./utils";
 
 export const AudioPlayer = ({ id }: { id: number }) => {
+  const isDark = useIsDarkMode();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
+  const timeoutRef2 = useRef<NodeJS.Timeout | null>(null);
   const [tempScrubPosition, setTempScrubPosition] = useState<number | null>(
     null
   );
-
   const [localScrubPosition, setLocalScrubPosition] = useState<number | null>(
     null
   );
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
+
+  useEffect(() => {
+    async function setup() {
+      await setupPlayer();
+    }
+    setup();
+
+    return function unmount() {
+      if (Platform.OS !== "web") {
+        pauseAllActiveTracks();
+        TrackPlayer.reset();
+      }
+    };
+  }, []);
+
   const trackInfo = useTrackProgress(id);
 
   const addTrack = useCallback(async () => {
@@ -48,6 +63,9 @@ export const AudioPlayer = ({ id }: { id: number }) => {
 
   const prepare = useCallback(
     async (delay = 0) => {
+      if (timeoutRef2.current) {
+        clearTimeout(timeoutRef2.current);
+      }
       const currentTrackId = await TrackPlayer.getActiveTrack();
 
       if (currentTrackId?.id !== id) {
@@ -58,43 +76,17 @@ export const AudioPlayer = ({ id }: { id: number }) => {
         await TrackPlayer.reset().catch(() => {});
         await addTrack();
 
-        setTimeout(() => {
+        if (trackInfo?.position && trackInfo?.position > 0) {
+          await TrackPlayer.seekTo(trackInfo?.position);
+        }
+
+        timeoutRef2.current = setTimeout(async () => {
           setTempScrubPosition(null);
         }, delay);
-      }
-
-      if (trackInfo?.position && trackInfo.position > 0) {
-        await TrackPlayer.seekTo(trackInfo.position);
       }
     },
     [addTrack, id, trackInfo.position]
   );
-
-  const play = useCallback(async () => {
-    await prepare();
-    await TrackPlayer.play().catch(() => {});
-  }, [prepare]);
-
-  const pause = useCallback(async () => {
-    await TrackPlayer.pause().catch(() => {});
-  }, []);
-
-  useEffect(() => {
-    async function setup() {
-      const isSetup = await setupPlayer();
-      if (isSetup) {
-        setIsPlayerReady(true);
-      }
-    }
-    setup();
-
-    return function unmount() {
-      if (Platform.OS !== "web") {
-        pauseAllActiveTracks();
-        TrackPlayer.reset();
-      }
-    };
-  }, []);
 
   const togglePlay = useCallback(async () => {
     const currentTrackId = await TrackPlayer.getActiveTrack();
@@ -102,7 +94,7 @@ export const AudioPlayer = ({ id }: { id: number }) => {
 
     // Wenn der aktuell ausgewählte Track bereits spielt
     if (currentState === State.Playing && currentTrackId?.id === id) {
-      await pause();
+      await TrackPlayer.pause().catch(() => {});
       setTrackInfo(id.toFixed(), {
         state: State.Paused,
       });
@@ -111,32 +103,34 @@ export const AudioPlayer = ({ id }: { id: number }) => {
       await prepare(1000);
       await TrackPlayer.play().catch(() => {});
     }
-  }, [id, pause, prepare]);
+  }, [id, prepare]);
 
   return (
-    <View tw="mx-3 my-4 overflow-hidden rounded-full bg-black p-4">
+    <View tw="web:max-w-sm mx-3 my-4 overflow-hidden rounded-full bg-black p-4 dark:bg-white">
       <View tw="flex-row items-center">
         <View tw="mr-4 items-center justify-center">
-          <View tw="h-10 w-10 items-center justify-center rounded-full bg-white">
+          <View tw="h-10 w-10 items-center justify-center rounded-full bg-white dark:bg-black">
             <Pressable
               onPress={togglePlay}
-              tw="w-full flex-1 items-center justify-center text-black"
+              tw="w-full flex-1 items-center justify-center text-black dark:text-white"
             >
-              {trackInfo.state === State.Buffering ||
-              trackInfo.state === State.Loading ? (
-                <Spinner size="small" />
+              {trackInfo.state === State.Loading ? (
+                <Spinner
+                  size="small"
+                  secondaryColor={isDark ? "white" : "black"}
+                />
               ) : trackInfo.state === State.Playing ? (
                 <PauseOutline
-                  color={"black"}
-                  stroke={"black"}
+                  color={isDark ? "white" : "black"}
+                  stroke={isDark ? "white" : "black"}
                   strokeWidth={3}
                   width={30}
                 />
               ) : (
                 <View tw="ml-0.5">
                   <Play
-                    color="black"
-                    stroke={"black"}
+                    color={isDark ? "white" : "black"}
+                    stroke={isDark ? "white" : "black"}
                     strokeWidth={3}
                     width={40}
                   />
@@ -146,7 +140,7 @@ export const AudioPlayer = ({ id }: { id: number }) => {
           </View>
         </View>
         <View tw="mr-2 w-8 items-center justify-center text-center">
-          <Text tw="text-[#959595]">
+          <Text tw="text-[#959595] dark:text-[#707070]">
             {formatTime(
               tempScrubPosition !== null
                 ? tempScrubPosition
@@ -158,11 +152,11 @@ export const AudioPlayer = ({ id }: { id: number }) => {
           <Slider
             minimumValue={0}
             maximumValue={trackInfo.duration || 147} // change 90 against  duration from api
-            minimumTrackTintColor="#fff"
-            maximumTrackTintColor="#555"
+            minimumTrackTintColor={isDark ? "#000" : "#fff"}
+            maximumTrackTintColor={isDark ? "#bababa" : "#555"}
             step={1}
             thumbStyle={{ height: 10, width: 10 }}
-            thumbTintColor="#fff"
+            thumbTintColor={isDark ? "#000" : "#fff"}
             value={
               progressState.isDragging
                 ? localScrubPosition || trackInfo.position || 0
@@ -182,13 +176,14 @@ export const AudioPlayer = ({ id }: { id: number }) => {
               }
               setIsDragging(true);
               setLocalScrubPosition(value[0]);
+
               const currentTrackId = await TrackPlayer.getActiveTrack();
 
               if (currentTrackId?.id !== id) {
-                // Wenn ein anderer Track spielt oder der Player pausiert ist
+                // If another track is playing, pause it and play the selected track
                 await prepare();
               } else {
-                // Wenn der aktuelle Track der ausgewählte Track ist
+                // If the same track is playing, pause it
                 await TrackPlayer.pause();
               }
             }}
@@ -196,20 +191,20 @@ export const AudioPlayer = ({ id }: { id: number }) => {
               setLocalScrubPosition(value[0]);
               setTrackInfo(id.toFixed(), {
                 position: value[0],
-                state: State.Playing,
+                //state: State.Playing,
               });
-              await TrackPlayer.seekTo(value[0]);
-              await TrackPlayer.play();
 
-              timeoutRef.current = setTimeout(() => {
+              timeoutRef.current = setTimeout(async () => {
+                await TrackPlayer.play();
+                await TrackPlayer.seekTo(value[0]);
                 setLocalScrubPosition(null);
                 setIsDragging(false);
-              }, 1000);
+              }, 300);
             }}
           />
         </View>
         <View tw="ml-2 w-8 items-center justify-center text-center">
-          <Text tw="text-[#959595]">
+          <Text tw="text-[#959595] dark:text-[#707070]">
             {trackInfo.duration ? formatTime(trackInfo.duration || 0) : "-:--"}
           </Text>
         </View>
