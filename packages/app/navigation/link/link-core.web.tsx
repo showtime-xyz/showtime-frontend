@@ -14,10 +14,12 @@ function LinkCore({
   as,
   componentProps,
   Component,
+  textProps,
   ...props
 }: Props & {
   Component: ComponentType<any>;
   componentProps?: any;
+  textProps?: any;
 }) {
   return (
     <NextLink
@@ -27,7 +29,11 @@ function LinkCore({
       passHref
       prefetch={props.prefetch ?? false}
     >
-      <Component {...componentProps} onClick={componentProps?.onPress}>
+      <Component
+        {...componentProps}
+        {...textProps}
+        onClick={componentProps?.onPress}
+      >
         {children}
       </Component>
     </NextLink>

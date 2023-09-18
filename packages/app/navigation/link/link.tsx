@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import { Platform, TextProps, ViewProps } from "react-native";
 
-import { BaseButton } from "react-native-gesture-handler";
+import { BaseButton, RectButton } from "react-native-gesture-handler";
 
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import type { TW } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { LinkCore, Props } from "app/navigation/link/link-core";
@@ -28,7 +29,7 @@ function Link({ viewProps, tw, hrefAttrs, onPress, ...rest }: LinkProps) {
       {...rest}
       Component={Platform.select({
         web: View,
-        default: Pressable as any,
+        default: RectButton as any,
       })}
       {...hrefAttrs}
       componentProps={{
@@ -65,7 +66,10 @@ function TextLink({
   return (
     <LinkCore
       {...rest}
-      Component={BaseButton}
+      Component={Platform.select({
+        web: Text,
+        default: BaseButton as any,
+      })}
       textProps={useMemo(
         () => ({
           ...textProps,

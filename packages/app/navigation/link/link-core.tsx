@@ -1,10 +1,11 @@
-import type { ComponentProps, ComponentType } from "react";
+import { ComponentProps, ComponentType, useCallback, memo } from "react";
 import { Linking } from "react-native";
 
 import NextLink from "next/link";
 import { parseNextPath } from "solito/router";
 
 import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useLinkTo } from "app/lib/react-navigation/native";
 
@@ -16,28 +17,26 @@ type Props = {
   onPress?: (e: any) => void;
 } & Omit<ComponentProps<typeof NextLink>, "passHref">;
 
-function LinkCore({
-  children,
-  href,
-  as,
-  hitSlop,
-  componentProps,
-  textProps,
-  Component,
-}: Props & {
-  Component: ComponentType<any>;
-  componentProps?: any;
-  textProps?: any;
-}) {
-  const linkTo = useLinkTo();
+const LinkCore = memo(
+  ({
+    children,
+    href,
+    as,
+    hitSlop = { top: 20, bottom: 20, left: 20, right: 20 },
+    componentProps = {},
+    textProps,
+    Component,
+  }: Props & {
+    Component: ComponentType<any>;
+    componentProps?: any;
+    textProps?: any;
+  }) => {
+    const { onPress: componentOnPress } = componentProps;
+    const linkTo = useLinkTo();
 
-  return (
-    <Component
-      role="link"
-      hitSlop={hitSlop || 20}
-      {...componentProps}
-      onPress={async (e?: any) => {
-        componentProps?.onPress?.(e);
+    const onPress = useCallback(
+      async (e?: any) => {
+        componentOnPress?.(e);
         if (!e?.defaultPrevented) {
           if (typeof href === "string" && href.startsWith("http")) {
             const isCanOpen = await Linking.canOpenURL(href);
@@ -48,15 +47,23 @@ function LinkCore({
               Logger.error(`Can't open href: ${href}`);
             }
           }
-
           linkTo(parseNextPath(as || href));
         }
-      }}
-    >
-      <Text {...textProps}>{children}</Text>
-    </Component>
-  );
-}
+      },
+      [as, componentOnPress, href, linkTo]
+    );
+
+    return (
+      <Component role="link" hitSlop={hitSlop} onPress={onPress}>
+        <View {...componentProps}>
+          {textProps ? <Text {...textProps}>{children}</Text> : children}
+        </View>
+      </Component>
+    );
+  }
+);
+
+LinkCore.displayName = "LinkCore";
 
 export type { Props };
 export { LinkCore };

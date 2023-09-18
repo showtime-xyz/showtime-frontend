@@ -89,7 +89,7 @@ export const UserList = ({
       ListEmptyComponent={listEmptyComponent}
       ListHeaderComponent={ListHeaderComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
-      {...modalListProps}
+      {...(modalListProps as any)}
       {...rest}
     />
   );
@@ -103,16 +103,12 @@ const FollowingListUser = memo(
       username: data?.data.profile.username,
     });
     return (
-      <View
-        tw={`flex-row items-center justify-between overflow-hidden px-4`}
-        style={{ height: ITEM_HEIGHT }}
-      >
-        <Link
-          href={`/@${item.username ?? item.wallet_address}`}
-          tw="flex-1"
-          viewProps={{ style: { flex: 1 } }}
+      <Link href={`/@${item.username ?? item.wallet_address}`}>
+        <View
+          tw={`flex-1 flex-row items-center justify-between overflow-hidden px-4`}
+          style={{ height: ITEM_HEIGHT }}
         >
-          <View tw="flex-row">
+          <View tw="flex-1 flex-row">
             <View tw="mr-2 h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
               {item?.img_url && (
                 <Image
@@ -159,15 +155,15 @@ const FollowingListUser = memo(
               </View>
             </View>
           </View>
-        </Link>
-        <View tw="max-w-[120px]">
-          <FollowButton
-            profileId={item.profile_id}
-            name={item.name}
-            onToggleFollow={onToggleFollow}
-          />
+          <View tw="max-w-[120px]">
+            <FollowButton
+              profileId={item.profile_id}
+              name={item.name}
+              onToggleFollow={onToggleFollow}
+            />
+          </View>
         </View>
-      </View>
+      </Link>
     );
   }
 );

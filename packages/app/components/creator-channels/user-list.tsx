@@ -101,7 +101,7 @@ export const CreatorChannelUserList = ({
       ListHeaderComponent={ListHeaderComponent}
       ListFooterComponent={ListFooterComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
-      {...modalListProps}
+      {...(modalListProps as any)}
       {...rest}
     />
   );
@@ -115,17 +115,12 @@ const CCUserListItem = memo(
       username: data?.data.profile.username,
     });
     return (
-      <View
-        tw={`flex-row items-center justify-between overflow-hidden px-4`}
-        style={{ height: ITEM_HEIGHT }}
-      >
-        <Link
-          href={`/@${item.profile.username ?? item.profile.wallet_address}`}
-          tw="flex-1"
-          viewProps={{ style: { flex: 1 } }}
-          className="w-full"
+      <Link href={`/@${item.profile.username ?? item.profile.wallet_address}`}>
+        <View
+          tw={`flex-row items-center justify-between overflow-hidden px-4`}
+          style={{ height: ITEM_HEIGHT }}
         >
-          <View tw="flex-row items-center">
+          <View tw="flex-1 flex-row items-center">
             <View tw="mr-2 h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200">
               {item?.profile.img_url && (
                 <Image
@@ -186,15 +181,15 @@ const CCUserListItem = memo(
               </View>
             </View>
           </View>
-        </Link>
-        <View tw="max-w-[120px]">
-          <FollowButton
-            profileId={item?.profile.profile_id}
-            name={item?.profile.name}
-            onToggleFollow={onToggleFollow}
-          />
+          <View tw="max-w-[120px]">
+            <FollowButton
+              profileId={item?.profile.profile_id}
+              name={item?.profile.name}
+              onToggleFollow={onToggleFollow}
+            />
+          </View>
         </View>
-      </View>
+      </Link>
     );
   }
 );
