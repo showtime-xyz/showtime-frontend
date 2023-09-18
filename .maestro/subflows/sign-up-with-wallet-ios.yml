@@ -4,7 +4,7 @@ appId: io.showtime.development
 # - tapOn: "Showtime on Nishans-MacBook-Pro.local"
 - assertVisible: "Sign In"
 - tapOn: "Sign In"
-- tapOn: "Connect Wallet"
+- tapOn: "Connect"
 - assertNotVisible: "Sign In"
 - tapOn:
     point: "50%,94%"

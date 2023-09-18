@@ -32,7 +32,7 @@ const BUTTON_TEXT = {
   facebook: "Continue with Facebook",
   twitter: "Continue with Twitter",
   email: "Continue with Email",
-  wallet: "Connect Wallet",
+  wallet: "Connect",
   social: "Back to social login",
 };
 const BUTTON_ICON = {
