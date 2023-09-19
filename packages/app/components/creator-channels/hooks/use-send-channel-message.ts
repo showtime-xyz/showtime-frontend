@@ -1,4 +1,5 @@
 import useSWRMutation from "swr/mutation";
+import { v4 as uuidv4 } from "uuid";
 
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
@@ -17,12 +18,14 @@ async function postMessage(
     method: "POST",
     data: {
       body: arg.message,
-      is_payment_gated: true,
     },
   });
 }
 
-export const useSendChannelMessage = (channelId?: string) => {
+export const useSendChannelMessage = (
+  channelId?: string,
+  isAdmin?: boolean
+) => {
   const { trigger, isMutating, error } = useSWRMutation(
     `/v1/channels/${channelId}/messages/send`,
     postMessage
@@ -40,19 +43,18 @@ export const useSendChannelMessage = (channelId?: string) => {
     message: string;
     callback?: () => void;
   }) => {
-    const optimisticObjectId = Math.random();
+    const optimisticObjectId = Math.random() + new Date().getTime();
     channelMessages.mutate(
       (d) => {
         if (user.user && d) {
           const optimisticObject = {
             channel_message: {
               body: message,
-              is_payment_gated: true,
               id: optimisticObjectId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
               sent_by: {
-                admin: true,
+                admin: isAdmin || false,
                 created_at: new Date().toISOString(),
                 id: user.user.data.profile.profile_id,
                 profile: user.user?.data.profile,
