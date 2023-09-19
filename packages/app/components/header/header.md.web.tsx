@@ -43,13 +43,13 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { Search } from "app/components/search";
 import { useAuth } from "app/hooks/auth/use-auth";
+import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useFooter } from "app/hooks/use-footer";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
-import { downloadCollectorList } from "app/utilities";
 
 import {
   DropdownMenuContent,
@@ -325,7 +325,7 @@ export const HeaderMd = withColorScheme(() => {
         <Link href="/" tw="flex-row items-center pt-8">
           <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
         </Link>
-        <View tw="-ml-4 mt-5 w-48 justify-center">
+        <View tw="-ml-4 mt-5 w-52 justify-center">
           {HOME_ROUTES.map((item) => {
             if (item.key === "Notifications") {
               return <NotificationsInHeader key={item.key} />;

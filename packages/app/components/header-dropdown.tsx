@@ -20,9 +20,9 @@ import { View } from "@showtime-xyz/universal.view";
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useUser } from "app/hooks/use-user";
 import { Profile } from "app/types";
-import { downloadCollectorList } from "app/utilities";
 
 import {
   DropdownMenuContent,

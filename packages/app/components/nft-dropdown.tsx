@@ -24,6 +24,7 @@ import { useProfileTabType } from "app/context/profile-tabs-nft-context";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
+import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useHideNFT } from "app/hooks/use-hide-nft";
 import { useRedirectDropImageShareScreen } from "app/hooks/use-redirect-to-drop-image-share-screen";
 import { useRefreshMedadata } from "app/hooks/use-refresh-metadata";
@@ -34,7 +35,7 @@ import { useUser } from "app/hooks/use-user";
 import { scheme } from "app/lib/scheme";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
-import { isMobileWeb, isAndroid, downloadCollectorList } from "app/utilities";
+import { isMobileWeb, isAndroid } from "app/utilities";
 
 import {
   DropdownMenuContent,
