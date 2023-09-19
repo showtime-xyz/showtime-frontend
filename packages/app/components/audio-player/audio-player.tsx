@@ -26,6 +26,7 @@ export const AudioPlayer = ({ id }: { id: number }) => {
   const isDark = useIsDarkMode();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const timeoutRef2 = useRef<NodeJS.Timeout | null>(null);
+  const playerControlTimer = useRef<NodeJS.Timeout | null>(null);
   const [tempScrubPosition, setTempScrubPosition] = useState<number | null>(
     null
   );
@@ -92,14 +93,9 @@ export const AudioPlayer = ({ id }: { id: number }) => {
     const currentTrackId = await TrackPlayer.getActiveTrack();
     const currentState = (await TrackPlayer.getPlaybackState()).state;
 
-    // Wenn der aktuell ausgewählte Track bereits spielt
     if (currentState === State.Playing && currentTrackId?.id === id) {
       await TrackPlayer.pause().catch(() => {});
-      setTrackInfo(id.toFixed(), {
-        state: State.Paused,
-      });
     } else {
-      // Wenn ein anderer Track spielt oder der Player pausiert ist
       await prepare(1000);
       await TrackPlayer.play().catch(() => {});
     }
@@ -155,7 +151,7 @@ export const AudioPlayer = ({ id }: { id: number }) => {
             minimumTrackTintColor={isDark ? "#000" : "#fff"}
             maximumTrackTintColor={isDark ? "#bababa" : "#555"}
             step={1}
-            thumbStyle={{ height: 10, width: 10 }}
+            thumbStyle={{ height: 15, width: 15 }}
             thumbTintColor={isDark ? "#000" : "#fff"}
             value={
               progressState.isDragging
@@ -171,6 +167,9 @@ export const AudioPlayer = ({ id }: { id: number }) => {
               setLocalScrubPosition(value[0]);
             }}
             onSlidingStart={async (value) => {
+              if (playerControlTimer.current) {
+                clearTimeout(playerControlTimer.current);
+              }
               if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
               }
@@ -191,15 +190,20 @@ export const AudioPlayer = ({ id }: { id: number }) => {
               setLocalScrubPosition(value[0]);
               setTrackInfo(id.toFixed(), {
                 position: value[0],
-                //state: State.Playing,
+                state: State.Playing,
               });
 
-              timeoutRef.current = setTimeout(async () => {
-                await TrackPlayer.play();
-                await TrackPlayer.seekTo(value[0]);
-                setLocalScrubPosition(null);
-                setIsDragging(false);
-              }, 300);
+              playerControlTimer.current = setTimeout(
+                async () => {
+                  await TrackPlayer.play();
+                  await TrackPlayer.seekTo(value[0]);
+                  timeoutRef.current = setTimeout(() => {
+                    setLocalScrubPosition(null);
+                    setIsDragging(false);
+                  }, 300);
+                },
+                Platform.OS === "web" ? 100 : 30
+              );
             }}
           />
         </View>
