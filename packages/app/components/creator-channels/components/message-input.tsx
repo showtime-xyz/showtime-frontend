@@ -229,7 +229,6 @@ export const MessageInput = memo(
               ref={inputRef}
               placeholder="Send an update..."
               textInputProps={{
-                nativeID: "aa",
                 maxLength: 2000,
               }}
               onSubmit={
