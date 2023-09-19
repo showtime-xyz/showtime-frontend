@@ -140,7 +140,11 @@ function NFTDropdown({
       },
       {
         title: "Download collector list",
-        show: true,
+        show:
+          nft.multiple_owners_list &&
+          nft.multiple_owners_list.length > 0 &&
+          nft.contract_address &&
+          edition?.is_onchain,
         icon: Download2,
         iosIconName: "arrow.down.doc",
         onSelect: () =>
@@ -148,7 +152,11 @@ function NFTDropdown({
       },
       {
         title: "View on OpenSea",
-        show: true,
+        show:
+          nft.multiple_owners_list &&
+          nft.multiple_owners_list.length > 0 &&
+          nft.contract_address &&
+          edition?.is_onchain,
         icon: OpenSea,
         iosIconName: "arrow.right",
         onSelect: viewOnOpenSea,
@@ -302,6 +310,7 @@ function NFTDropdown({
     ];
   }, [
     edition?.is_editable,
+    edition?.is_onchain,
     hasOwnership,
     hideNFT,
     isAuthenticated,
@@ -361,287 +370,6 @@ function NFTDropdown({
               </DropdownMenuItem>
             ) : null;
           })}
-          {/* {tabType && tabType !== "hidden" ? (
-            <DropdownMenuItem
-              onSelect={() => {
-                hideNFT(nft.nft_id);
-              }}
-              key="hide"
-            >
-              <MenuItemIcon
-                Icon={EyeOff}
-                ios={{
-                  name: "eye.slash",
-                }}
-              />
-
-              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                Hide
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : null} */}
-
-          {/* {tabType && tabType === "hidden" && isSelf ? (
-            <DropdownMenuItem
-              onSelect={() => {
-                unhideNFT(nft.nft_id);
-              }}
-              key="unhide"
-            >
-              <MenuItemIcon Icon={EyeOff} ios={{ name: "eye" }} />
-              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                Unhide
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : null}
-
-          {edition?.is_editable && isSelf ? (
-            <DropdownMenuItem
-              onSelect={() => {
-                const contractAddress = nft?.contract_address;
-                const tokenId = nft?.token_id;
-                const chainName = nft?.chain_name;
-
-                const as = `/drop/edit-details/${chainName}/${contractAddress}/${tokenId}`;
-                router.push(
-                  Platform.select({
-                    native: as,
-                    web: {
-                      pathname: router.pathname,
-                      query: {
-                        ...router.query,
-                        contractAddress,
-                        tokenId,
-                        chainName,
-                        dropEditDetailsModal: true,
-                      },
-                    } as any,
-                  }),
-                  Platform.select({
-                    native: as,
-                    web: router.asPath,
-                  }),
-                  { shallow: true }
-                );
-              }}
-              key="edit details"
-            >
-              <MenuItemIcon
-                Icon={Edit}
-                ios={{
-                  name: "square.and.pencil",
-                }}
-              />
-              <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-neutral-300">
-                Edit Drop Details
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : null}
-          {isMobileWeb() ? (
-            <DropdownMenuItem
-              onSelect={() => {
-                window.location.replace(`${scheme}://${getNFTSlug(nft)}`);
-
-                setTimeout(function () {
-                  window.open(
-                    isAndroid()
-                      ? "https://play.google.com/store/apps/details?id=io.showtime"
-                      : "https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688",
-                    "_blank"
-                  );
-                }, 2000);
-              }}
-              key="open-in-app"
-            >
-              <MenuItemIcon Icon={Showtime} />
-
-              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                Open in app
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          ) : null}
-
-          {nft.multiple_owners_list &&
-            nft.multiple_owners_list.length > 0 &&
-            nft.contract_address &&
-            edition?.is_onchain && (
-              <DropdownMenuItem onSelect={viewOnOpenSea} key="opensea">
-                <MenuItemIcon
-                  Icon={OpenSea}
-                  ios={{
-                    name: "arrow.right",
-                  }}
-                />
-                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                  View on OpenSea
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-            )}
-          <DropdownMenuItem
-            onSelect={() => {
-              const as = `/qr-code-share/${nft?.contract_address}`;
-              router.push(
-                Platform.select({
-                  native: as,
-                  web: {
-                    pathname: router.pathname,
-                    query: {
-                      ...router.query,
-                      contractAddress: nft?.contract_address,
-                      qrCodeShareModal: true,
-                    },
-                  } as any,
-                }),
-                Platform.select({
-                  native: as,
-                  web: router.asPath,
-                }),
-                { shallow: true }
-              );
-            }}
-            key="qr-code"
-          >
-            <MenuItemIcon
-              Icon={QrCode}
-              ios={{
-                name: "qrcode",
-              }}
-            />
-            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-              QR Code
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() =>
-              redirectToStarDropShareScreen(nft?.contract_address)
-            }
-            key="drop-image-share"
-          >
-            <MenuItemIcon
-              Icon={Sendv2}
-              ios={{
-                name: "paperplane",
-              }}
-            />
-            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-              Share to Social
-            </DropdownMenuItemTitle>
-          </DropdownMenuItem>
-          {shouldEnableSharing && (
-            <>
-              {!isShareAPIAvailable && (
-                <ShareOnTwitterDropdownMenuItem nft={nft} />
-              )}
-              <DropdownMenuItem onSelect={() => shareNFT(nft)} key="copy-link">
-                <MenuItemIcon
-                  Icon={Copy}
-                  ios={{
-                    name: "square.and.arrow.up",
-                  }}
-                />
-                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                  {isShareAPIAvailable ? "Share" : "Copy Link"}
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-            </>
-          )}
-
-          {!isCreatorDrop && (
-            <DropdownMenuItem
-              onSelect={() => refreshMetadata(nft)}
-              key="refresh-metadata"
-            >
-              <MenuItemIcon
-                Icon={Refresh}
-                ios={{
-                  name: "arrow.triangle.2.circlepath",
-                }}
-              />
-
-              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                Refresh Metadata
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          )}
-
-          {!hasOwnership && isFollowingUser && !isSelf && (
-            <DropdownMenuItem
-              onSelect={async () => {
-                if (isAuthenticated) {
-                  await unfollow(nft.creator_id);
-                  // refresh();
-                } else {
-                  navigateToLogin();
-                }
-              }}
-              key="unfollow"
-            >
-              <MenuItemIcon
-                Icon={UserMinus}
-                ios={{
-                  name: "person.fill.badge.plus",
-                }}
-              />
-
-              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                Unfollow User
-              </DropdownMenuItemTitle>
-            </DropdownMenuItem>
-          )}
-
-          {!hasOwnership && !isSelf ? (
-            <>
-              <DropdownMenuItem
-                className="danger"
-                key="block"
-                onSelect={() =>
-                  toggleBlock({
-                    isBlocked,
-                    creatorId: nft.creator_id,
-                    name: nft.creator_name,
-                  })
-                }
-              >
-                <MenuItemIcon
-                  Icon={Slash}
-                  ios={{
-                    name: isBlocked ? "circle" : ("circle.slash" as any),
-                  }}
-                />
-                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                  {isBlocked ? "Unblock User" : "Block User"}
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                onSelect={async () => {
-                  router.push(
-                    {
-                      pathname:
-                        Platform.OS === "web" ? router.pathname : "/report",
-                      query: {
-                        ...router.query,
-                        reportModal: true,
-                        nftId: nft.nft_id,
-                      },
-                    },
-                    Platform.OS === "web" ? router.asPath : undefined
-                  );
-                }}
-                key="report"
-              >
-                <MenuItemIcon
-                  Icon={Flag}
-                  ios={{
-                    name: "flag",
-                  }}
-                />
-                <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                  Report
-                </DropdownMenuItemTitle>
-              </DropdownMenuItem>
-            </>
-          ) : null} */}
         </DropdownMenuContent>
       </DropdownMenuRoot>
     </>
