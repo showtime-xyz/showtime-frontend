@@ -51,6 +51,7 @@ import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { MessageItemProps } from "../types";
+import { CreatorBadge } from "./creator-badge";
 import { StarDropBadge } from "./star-drop-badge";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
@@ -138,6 +139,7 @@ export const MessageItem = memo(
       return false;
     }, [channel_message.created_at]);
 
+    const isByCreator = channel_message.sent_by.admin;
     const isStarDrop = channel_message.is_payment_gated;
     const isUnlockedStarDrop = isStarDrop && channel_message.body;
 
@@ -182,9 +184,9 @@ export const MessageItem = memo(
                     !isMobileWeb()
                   )}
                 </Text>
-                {isStarDrop ? (
+                {isByCreator ? (
                   <View tw="ml-2">
-                    <StarDropBadge />
+                    <CreatorBadge />
                   </View>
                 ) : null}
               </View>
