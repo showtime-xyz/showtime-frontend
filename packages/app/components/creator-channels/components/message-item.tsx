@@ -52,7 +52,6 @@ import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { MessageItemProps } from "../types";
 import { CreatorBadge } from "./creator-badge";
-import { StarDropBadge } from "./star-drop-badge";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
