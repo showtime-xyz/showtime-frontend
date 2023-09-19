@@ -766,7 +766,7 @@ const CreateDropStepSongURI = (
 
                   <Text tw="px-4 text-gray-600 dark:text-gray-400">
                     I have the rights to publish this content, and understand it
-                    will be minted on the Polygon network.
+                    will be minted on the Base network.
                   </Text>
                 </Pressable>
               </>
