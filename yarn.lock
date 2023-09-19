@@ -6930,7 +6930,7 @@ __metadata:
     react-native-bignumber: ^0.2.1
     react-native-blob-jsi-helper: ^0.3.1
     react-native-blurhash: ^1.1.10
-    react-native-gesture-handler: 2.12.0
+    react-native-gesture-handler: 2.13.1
     react-native-get-random-values: ~1.9.0
     react-native-image-colors: ^2.3.0
     react-native-ios-context-menu: ^1.15.3
@@ -6944,7 +6944,7 @@ __metadata:
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.7
     react-native-quick-crypto: ^0.6.1
-    react-native-reanimated: 3.4.1
+    react-native-reanimated: 3.5.2
     react-native-reanimated-carousel: ^3.5.1
     react-native-safe-area-context: 4.7.1
     react-native-screens: ^3.23.0
@@ -24415,9 +24415,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:2.12.0":
-  version: 2.12.0
-  resolution: "react-native-gesture-handler@npm:2.12.0"
+"react-native-gesture-handler@npm:2.13.1":
+  version: 2.13.1
+  resolution: "react-native-gesture-handler@npm:2.13.1"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -24427,7 +24427,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 5147357b3212e269d0b8003e1be9e0993d0770f4880f1a8f52d2d61512c4569c48ec7b866d0a9ee44038785c29e0f84fbb99fd18a8e09552a25910c71602d788
+  checksum: c89504c52a2f4940a5cb56862f0676422ff30ad111fb015e37d2b4d3b736e708e6301da9027f003565bd23d8a3f4e8641eb5810f7da9ed848f81b3063df64e98
   languageName: node
   linkType: hard
 
@@ -24613,9 +24613,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:3.4.1":
-  version: 3.4.1
-  resolution: "react-native-reanimated@npm:3.4.1"
+"react-native-reanimated@npm:3.5.2":
+  version: 3.5.2
+  resolution: "react-native-reanimated@npm:3.5.2"
   dependencies:
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
@@ -24630,7 +24630,7 @@ __metadata:
     "@babel/plugin-transform-template-literals": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 2462cd9a1166688fb74da1586a7700df04484d5c18d3b8385e80bc195ffad7b7a780230431435696780b601549a4f7b652a9b4380ff9231bdb61a6a3d7ecfce1
+  checksum: ae754153feeb38ea73ab347388e3e4f4a4a145d64d17d63f52106f376a630ff793ffc436ebc134601ba20d72368618f284a50e8b4091d2e1c067b72109654fa3
   languageName: node
   linkType: hard
 
