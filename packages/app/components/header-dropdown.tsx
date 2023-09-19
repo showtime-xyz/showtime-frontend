@@ -11,6 +11,7 @@ import {
   Sun,
   LogOut,
   DarkMode,
+  Download2,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -19,6 +20,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
+import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useUser } from "app/hooks/use-user";
 import { Profile } from "app/types";
 
@@ -163,7 +165,23 @@ function HeaderDropdown({
             Edit Profile
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            downloadCollectorList();
+          }}
+          key="download-collector-list"
+        >
+          <MenuItemIcon
+            Icon={Download2}
+            ios={{
+              name: "arrow.down.doc",
+            }}
+          />
 
+          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+            Download collector list
+          </DropdownMenuItemTitle>
+        </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger key="nested-group-trigger">
             <MenuItemIcon
