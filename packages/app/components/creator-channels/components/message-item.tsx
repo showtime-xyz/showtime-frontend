@@ -230,7 +230,8 @@ export const MessageItem = memo(
 
                     <DropdownMenuContent loop sideOffset={8}>
                       {item.channel_message.sent_by.profile.profile_id ===
-                      user.user?.data.profile.profile_id ? (
+                        user.user?.data.profile.profile_id ||
+                      item.channel_message.sent_by.admin ? (
                         <DropdownMenuItem
                           onSelect={() => {
                             Alert.alert(
