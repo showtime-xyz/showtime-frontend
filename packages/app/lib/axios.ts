@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Method, AxiosRequestHeaders } from "axios";
+import type { Method, AxiosRequestHeaders, ResponseType } from "axios";
 
 import { getAccessToken } from "app/lib/access-token";
 import { Logger } from "app/lib/logger";
@@ -15,6 +15,7 @@ export type AxiosParams = {
   unmountSignal?: AbortSignal;
   overrides?: AxiosOverrides;
   headers?: AxiosRequestHeaders;
+  responseType?: ResponseType;
 };
 
 const axiosAPI = async ({
@@ -24,6 +25,7 @@ const axiosAPI = async ({
   unmountSignal,
   headers,
   overrides,
+  ...rest
 }: AxiosParams) => {
   const accessToken = getAccessToken();
   const forceAccessTokenAuthorization =
@@ -57,6 +59,7 @@ const axiosAPI = async ({
       : headers
       ? { headers }
       : {}),
+    ...rest,
   };
 
   try {
