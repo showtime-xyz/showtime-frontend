@@ -29,6 +29,7 @@ import {
   LogOut,
   ChevronRight,
   SearchFilled,
+  Download2,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -48,6 +49,7 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
+import { downloadCollectorList } from "app/utilities";
 
 import {
   DropdownMenuContent,
@@ -422,7 +424,25 @@ export const HeaderMd = withColorScheme(() => {
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
               )}
+              {isAuthenticated && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    downloadCollectorList();
+                  }}
+                  key="download-collector-list"
+                >
+                  <MenuItemIcon
+                    Icon={Download2}
+                    ios={{
+                      name: "arrow.down.doc",
+                    }}
+                  />
 
+                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                    Download collector list
+                  </DropdownMenuItemTitle>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger key="nested-group-trigger">
                   <MenuItemIcon

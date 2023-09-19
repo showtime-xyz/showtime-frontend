@@ -34,11 +34,7 @@ import { useUser } from "app/hooks/use-user";
 import { scheme } from "app/lib/scheme";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
-import {
-  isMobileWeb,
-  isAndroid,
-  downloadCollectorListByContractAddress,
-} from "app/utilities";
+import { isMobileWeb, isAndroid, downloadCollectorList } from "app/utilities";
 
 import {
   DropdownMenuContent,
@@ -147,8 +143,7 @@ function NFTDropdown({
           edition?.is_onchain,
         icon: Download2,
         iosIconName: "arrow.down.doc",
-        onSelect: () =>
-          downloadCollectorListByContractAddress(nft?.contract_address),
+        onSelect: () => downloadCollectorList(nft?.contract_address),
       },
       {
         title: "View on OpenSea",

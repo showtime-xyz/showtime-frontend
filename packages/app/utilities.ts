@@ -1136,10 +1136,10 @@ export const getClaimLimitLeftDuration = (timeLimit: string) => {
   )} left`;
 };
 
-export const downloadCollectorListByContractAddress = async (
-  contractAddress?: string
-) => {
-  const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile/collectors/csv/${contractAddress}`;
+export const downloadCollectorList = async (contractAddress?: string) => {
+  const url = contractAddress
+    ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile/collectors/csv/${contractAddress}`
+    : `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/profile/collectors/csv/all`;
   const accessToken = getAccessToken();
   const headers = {
     Authorization: `Bearer ${accessToken}`,
