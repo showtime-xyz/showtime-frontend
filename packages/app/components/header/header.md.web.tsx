@@ -325,7 +325,7 @@ export const HeaderMd = withColorScheme(() => {
         <Link href="/" tw="flex-row items-center pt-8">
           <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
         </Link>
-        <View tw="-ml-4 mt-5 w-52 justify-center">
+        <View tw="-ml-4 mt-5 w-48 justify-center">
           {HOME_ROUTES.map((item) => {
             if (item.key === "Notifications") {
               return <NotificationsInHeader key={item.key} />;
@@ -372,7 +372,7 @@ export const HeaderMd = withColorScheme(() => {
 
             <DropdownMenuContent
               align="center"
-              tw="w-48"
+              tw="w-50"
               disableBlurEffect
               side="bottom"
               sideOffset={0}
