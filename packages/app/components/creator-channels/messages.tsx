@@ -326,8 +326,10 @@ export const Messages = memo(() => {
             editMessageItemDimension={editMessageItemDimension}
             edition={edition}
           />
-          {/* just a demo */}
+
+          {/*
           <AudioPlayer id={item.channel_message.id} />
+           */}
         </>
       );
     },
@@ -573,6 +575,7 @@ export const Messages = memo(() => {
           keyboard={keyboard}
           edition={edition}
           hasUnlockedMessages={hasUnlockedMessage}
+          permissions={channelDetail.data?.permissions}
         />
         <AnimatedView style={fakeView} />
 
