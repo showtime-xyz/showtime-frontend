@@ -35,7 +35,11 @@ import { useUser } from "app/hooks/use-user";
 import { scheme } from "app/lib/scheme";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 import type { NFT } from "app/types";
-import { isMobileWeb, isAndroid } from "app/utilities";
+import {
+  isMobileWeb,
+  isAndroid,
+  downloadCollectorListByContractAddress,
+} from "app/utilities";
 
 import {
   DropdownMenuContent,
