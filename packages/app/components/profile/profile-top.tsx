@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
+import { BlurView } from "expo-blur";
 import Animated, {
   useAnimatedStyle,
   interpolate,
@@ -99,7 +100,7 @@ export const ProfileTop = ({
   const additionalCoverheight = top > 55 ? 20 : 0;
   // banner ratio: w:h=3:1
   const coverHeight =
-    (coverWidth < 768 ? coverWidth / 1.5 : 180) + additionalCoverheight;
+    (coverWidth < 768 ? coverWidth / 3 : 1) + additionalCoverheight;
   const avatarBorder = isMdWidth
     ? AVATAR_BORDER_SIZE_LARGE
     : AVATAR_BORDER_SIZE_SMALL;
@@ -138,34 +139,34 @@ export const ProfileTop = ({
   return (
     <>
       <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800 xl:rounded-b-[32px] 2xl:-mx-20">
-        <Skeleton height={coverHeight} width="100%" show={isLoading} radius={0}>
-          <>
-            {profileData?.profile.cover_url && (
-              <LightBox
-                width={"100%"}
-                height={coverHeight}
-                imgLayout={{ width: "100%", height: coverHeight }}
-                tapToClose
-                containerStyle={{ width: coverWidth, height: coverHeight }}
-              >
-                <Image
-                  source={{
-                    uri: getFullSizeCover(profileData?.profile.cover_url),
-                  }}
-                  alt="Cover image"
-                  resizeMode="cover"
-                  style={{ ...StyleSheet.absoluteFillObject }}
-                />
-              </LightBox>
-            )}
-            <View
-              tw="absolute inset-0 bg-black/10 dark:bg-black/30"
-              pointerEvents="none"
-            />
-          </>
-        </Skeleton>
+        <View
+          style={{
+            height: coverHeight,
+          }}
+        >
+          <Image
+            source={{
+              uri: getProfileImage(profileData?.profile),
+            }}
+            alt="Cover image"
+            resizeMode="cover"
+            style={{ ...StyleSheet.absoluteFillObject }}
+          />
+          <BlurView
+            tint="dark"
+            intensity={35}
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              top: 0,
+              left: 0,
+              overflow: "hidden",
+            }}
+          />
+        </View>
       </View>
-      <View tw="mx-2 md:mx-4">
+      <View tw="-mt-20 bg-white">
         <View tw="flex-row justify-between">
           <View
             tw="flex-row items-center"
@@ -225,117 +226,6 @@ export const ProfileTop = ({
               </Skeleton>
             </Animated.View>
           </View>
-
-          {address && !isError ? (
-            <View tw="flex-row items-center">
-              {isBlocked ? (
-                <Button
-                  size={width < 768 ? "small" : "regular"}
-                  onPress={() => {
-                    unblock(profileId);
-                  }}
-                >
-                  Unblock
-                </Button>
-              ) : (
-                <>
-                  <Hidden until="md">
-                    <ProfileFollows
-                      followersCount={profileData?.followers_count}
-                      followingCount={profileData?.following_count}
-                      profileId={profileId}
-                      tw="mr-8"
-                    />
-                  </Hidden>
-                  {profileId && !isSelf ? (
-                    <>
-                      <ProfileDropdown user={profileData?.profile} />
-                      <View tw="w-2" />
-                      <NotificationsFollowButton
-                        username={username}
-                        profileId={profileId}
-                      />
-                      <View tw="w-2" />
-                      {showChannelButton ? (
-                        <Button
-                          size={width < 768 ? "small" : "regular"}
-                          style={{
-                            backgroundColor: colors.indigo[600],
-                          }}
-                          onPress={async () => {
-                            if (userChannel?.self_is_member) {
-                              router.push(
-                                `/channels/${userChannel.id}?fresh=profile`
-                              );
-                            } else {
-                              mutateUserProfile(
-                                (d) => {
-                                  if (d && d.data && d.data.profile) {
-                                    d.data.profile.channels[0].self_is_member =
-                                      true;
-                                    return {
-                                      ...d,
-                                    };
-                                  }
-                                  return d;
-                                },
-                                { revalidate: false }
-                              );
-                              await joinChannel.trigger({
-                                channelId: userChannel.id,
-                              });
-                              mutateUserProfile();
-                              router.push(
-                                `/channels/${userChannel.id}?fresh=profile`
-                              );
-                            }
-                          }}
-                          disabled={joinChannel.isMutating}
-                          tw={`opacity-${
-                            joinChannel.isMutating ? "50" : "100"
-                          }`}
-                        >
-                          <Text tw="font-semibold" style={{ color: "white" }}>
-                            {userChannel.self_is_member
-                              ? "View Channel"
-                              : "Join Channel"}
-                          </Text>
-                        </Button>
-                      ) : (
-                        <FollowButton
-                          size={width < 768 ? "small" : "regular"}
-                          name={username}
-                          profileId={profileId}
-                          onToggleFollow={onToggleFollow}
-                        />
-                      )}
-                      <View tw="w-2" />
-                    </>
-                  ) : null}
-                  {isSelf && !isIncompletedProfile ? (
-                    <Button size="small" onPress={redirectToCreateDrop}>
-                      Create
-                    </Button>
-                  ) : null}
-                  {isSelf && isIncompletedProfile ? (
-                    <GradientButton
-                      size="small"
-                      onPress={redirectToCreateDrop}
-                      labelTW={"color-white"}
-                      gradientProps={{
-                        colors: ["#ED0A25", "#ED0ABB"],
-                        locations: [0, 1],
-                        start: { x: 1.0263092128417304, y: 0.5294252532614323 },
-                        end: { x: -0.02630921284173038, y: 0.4705747467385677 },
-                      }}
-                    >
-                      Complete profile
-                    </GradientButton>
-                  ) : null}
-                </>
-              )}
-            </View>
-          ) : null}
         </View>
 
         <View tw="px-2 py-3">
