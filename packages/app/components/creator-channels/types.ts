@@ -97,6 +97,12 @@ export type Channel = {
 export type ChannelById = {
   viewer_has_unlocked_messages: boolean;
   latest_paid_nft_slug?: string;
+  permissions: {
+    can_send_messages: boolean;
+    can_upload_media: boolean;
+    can_view_creator_messages: boolean;
+    can_view_public_messages: boolean;
+  };
 } & Channel;
 
 export type ChannelSetting = {
