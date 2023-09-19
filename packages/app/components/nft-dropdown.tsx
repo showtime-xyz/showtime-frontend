@@ -14,7 +14,7 @@ import {
   Edit,
   QrCode,
   Sendv2,
-  Download2,
+  Download3,
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -142,7 +142,7 @@ function NFTDropdown({
           nft.multiple_owners_list.length > 0 &&
           nft.contract_address &&
           edition?.is_onchain,
-        icon: Download2,
+        icon: Download3,
         iosIconName: "arrow.down.doc",
         onSelect: () => downloadCollectorList(nft?.contract_address),
       },
