@@ -11,7 +11,7 @@ import {
   Sun,
   LogOut,
   DarkMode,
-  Download2,
+  Download3,
 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
@@ -172,7 +172,7 @@ function HeaderDropdown({
           key="download-collector-list"
         >
           <MenuItemIcon
-            Icon={Download2}
+            Icon={Download3}
             ios={{
               name: "arrow.down.doc",
             }}
