@@ -29,7 +29,7 @@ import {
   LogOut,
   ChevronRight,
   SearchFilled,
-  Download2,
+  Download3,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -432,7 +432,7 @@ export const HeaderMd = withColorScheme(() => {
                   key="download-collector-list"
                 >
                   <MenuItemIcon
-                    Icon={Download2}
+                    Icon={Download3}
                     ios={{
                       name: "arrow.down.doc",
                     }}
