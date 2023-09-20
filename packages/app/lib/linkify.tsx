@@ -87,9 +87,11 @@ export const containsURL = (text?: string) => {
     /\b(https?:\/\/[^\s]+|ftps?:\/\/|wss?:\/\/www\.[^\s]+|[A-Za-z0-9-]+\.[A-Za-z0-9-]+(?:\/[^\s]+)?(?:\?[^\s]*)?)\b/gi,
     (match) => {
       const parsed = parse(match);
-      if (parsed.isIcann || match.startsWith("http:")) {
-        foundURL = true;
-      } else if (
+      if (
+        parsed.isIcann ||
+        match.startsWith("www.") ||
+        match.startsWith("http:") ||
+        match.startsWith("sftp:") ||
         match.startsWith("ftp:") ||
         match.startsWith("ftps:") ||
         match.startsWith("ws:") ||
