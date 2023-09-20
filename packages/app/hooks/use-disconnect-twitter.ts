@@ -1,7 +1,8 @@
 import useSWRMutation from "swr/mutation";
 
+import { MY_INFO_ENDPOINT } from "app/providers/user-provider";
+
 import { axios } from "../lib/axios";
-import { LIST_SOCIAL_ACCOUNT_CACHE_KEY } from "./use-list-social-accounts";
 
 type AddSocialType = {
   providerId: string;
@@ -9,7 +10,7 @@ type AddSocialType = {
 
 export const useDisconnectTwitter = () => {
   const state = useSWRMutation(
-    LIST_SOCIAL_ACCOUNT_CACHE_KEY,
+    MY_INFO_ENDPOINT,
     async (key: string, values: { arg: AddSocialType }) => {
       await axios({
         url: `/v1/profile/accounts/token/twitter/${values.arg.providerId}`,

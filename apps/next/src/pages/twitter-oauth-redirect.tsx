@@ -7,8 +7,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 const MagicOauthRedirect = () => {
   useEffect(() => {
-    const res = WebBrowser.maybeCompleteAuthSession();
-    console.log("efijefjiefjifejfeifei ", res);
+    WebBrowser.maybeCompleteAuthSession();
   }, []);
   return (
     <View tw="flex-1 items-center justify-center">

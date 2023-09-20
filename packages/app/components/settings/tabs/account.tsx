@@ -145,6 +145,7 @@ const ConnectAppleMusic = () => {
 
 export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
   const isDark = useIsDarkMode();
+  const user = useUser();
 
   const { trigger: disconnectInstagram, isMutating: isDisconnecting } =
     useDisconnectInstagram();
@@ -164,9 +165,16 @@ export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
         </Text>
       </View>
       <Button
-        variant={providerId ? "danger" : "tertiary"}
+        variant={
+          user.user?.data.profile.social_login_connections.instagram
+            ? "danger"
+            : "tertiary"
+        }
         onPress={() => {
-          if (providerId) {
+          if (
+            user.user?.data.profile.social_login_connections.instagram &&
+            providerId
+          ) {
             disconnectInstagram({
               provider: "instagram",
               providerId,
@@ -178,7 +186,7 @@ export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
       >
         {isDisconnecting || isConnecting
           ? "Loading..."
-          : providerId
+          : user.user?.data.profile.social_login_connections.instagram
           ? "Disconnect"
           : "Connect"}
       </Button>
@@ -188,6 +196,7 @@ export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
 
 export const ConnectTwitter = ({ providerId }: { providerId?: string }) => {
   const isDark = useIsDarkMode();
+  const user = useUser();
 
   const { trigger: disconnectTwitter, isMutating: isDisconnecting } =
     useDisconnectTwitter();
@@ -203,9 +212,16 @@ export const ConnectTwitter = ({ providerId }: { providerId?: string }) => {
         </Text>
       </View>
       <Button
-        variant={providerId ? "danger" : "tertiary"}
+        variant={
+          user.user?.data.profile.social_login_connections.twitter
+            ? "danger"
+            : "tertiary"
+        }
         onPress={() => {
-          if (providerId) {
+          if (
+            user.user?.data.profile.social_login_connections.twitter &&
+            providerId
+          ) {
             disconnectTwitter({
               providerId,
             }).catch(() => {});
@@ -216,7 +232,7 @@ export const ConnectTwitter = ({ providerId }: { providerId?: string }) => {
       >
         {isDisconnecting || isConnecting
           ? "Loading..."
-          : providerId
+          : user.user?.data.profile.social_login_connections.twitter
           ? "Disconnect"
           : "Connect"}
       </Button>
