@@ -325,6 +325,7 @@ export const Messages = memo(() => {
             editMessageIdSharedValue={editMessageIdSharedValue}
             editMessageItemDimension={editMessageItemDimension}
             edition={edition}
+            isUserAdmin={isUserAdmin}
           />
 
           {/*
@@ -333,7 +334,7 @@ export const Messages = memo(() => {
         </>
       );
     },
-    [editMessageIdSharedValue, editMessageItemDimension, edition]
+    [editMessageIdSharedValue, editMessageItemDimension, edition, isUserAdmin]
   );
 
   // TODO: add back to keyboard controller?

@@ -66,8 +66,10 @@ export const MessageItem = memo(
     editMessageIdSharedValue,
     editMessageItemDimension,
     edition,
+    isUserAdmin,
   }: MessageItemProps & {
     edition?: CreatorEditionResponse;
+    isUserAdmin?: boolean;
     listRef: RefObject<FlashList<any>>;
     editMessageIdSharedValue: Animated.SharedValue<number | undefined>;
     editMessageItemDimension: Animated.SharedValue<{
@@ -229,8 +231,7 @@ export const MessageItem = memo(
 
                     <DropdownMenuContent loop sideOffset={8}>
                       {item.channel_message.sent_by.profile.profile_id ===
-                        user.user?.data.profile.profile_id ||
-                      item.channel_message.sent_by.admin ? (
+                        user.user?.data.profile.profile_id || isUserAdmin ? (
                         <DropdownMenuItem
                           onSelect={() => {
                             Alert.alert(
