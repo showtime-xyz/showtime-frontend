@@ -122,6 +122,8 @@ export { default as ScanOutline } from "./ScanOutline";
 export { default as Location } from "./Location";
 export { default as Lock } from "./Lock";
 export { default as Download } from "./Download";
+export { default as Download2 } from "./Download2";
+export { default as Download3 } from "./Download3";
 export { default as BellPlus } from "./BellPlus";
 export { default as BellRinging } from "./BellRinging";
 export { default as BellMinus } from "./BellMinus";
