@@ -51,6 +51,7 @@ const nextConfig = {
     "expo-blur",
     "expo-clipboard",
     "expo-constants",
+    "expo-linking",
     "expo-dev-client",
     "expo-device",
     "expo-modules-core",

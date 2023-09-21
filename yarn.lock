@@ -7062,6 +7062,7 @@ __metadata:
     swiper: ^10.0.4
     swr: ^2.2.0
     tailwindcss: 3.3.2
+    twitter-lite: ^1.1.0
     viem: ^1.6.0
     wagmi: ^1.3.10
   languageName: unknown
@@ -13779,7 +13780,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-fetch@npm:^3.1.4, cross-fetch@npm:^3.1.5":
+"cross-fetch@npm:^3.0.0, cross-fetch@npm:^3.1.4, cross-fetch@npm:^3.1.5":
   version: 3.1.8
   resolution: "cross-fetch@npm:3.1.8"
   dependencies:
@@ -22360,6 +22361,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"oauth-1.0a@npm:^2.2.4":
+  version: 2.2.6
+  resolution: "oauth-1.0a@npm:2.2.6"
+  checksum: d791da3dd44aa0f19cea262a9f8ff5154fc9c831e219f820ec8a72bb7d4993edf1f1240bade6e5c5b4878c1f2644c0813090f71f10fb6ddff41eb9c5d16893c6
+  languageName: node
+  linkType: hard
+
 "ob1@npm:0.76.7":
   version: 0.76.7
   resolution: "ob1@npm:0.76.7"
@@ -27971,6 +27979,16 @@ __metadata:
   bin:
     turbo: bin/turbo
   checksum: 266b70404e149b92cd64051fcdd03c56b474ed22f6bd11cf4cf1b70f55c72f9a2aaa90109b19b95e43d68e53a6be54485f0cc0135c8d5b505db09fd126a34052
+  languageName: node
+  linkType: hard
+
+"twitter-lite@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "twitter-lite@npm:1.1.0"
+  dependencies:
+    cross-fetch: ^3.0.0
+    oauth-1.0a: ^2.2.4
+  checksum: ade8820292090f5530cc5cccf9394f3c969c2675895a446c951d39162a4a43e2f048e84c435a09b4f1c4086040cb4689b3c4742a660e9bb6e0622f8043378f4b
   languageName: node
   linkType: hard
 
