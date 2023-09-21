@@ -100,7 +100,8 @@ export const ProfileTop = ({
   const additionalCoverheight = top > 55 ? 20 : 0;
   // banner ratio: w:h=3:1
   const coverHeight =
-    (coverWidth < 768 ? coverWidth / 4 : 1) + additionalCoverheight;
+    (coverWidth < 768 ? coverWidth / 4 : coverWidth / 5) +
+    additionalCoverheight;
   const avatarBorder = isMdWidth
     ? AVATAR_BORDER_SIZE_LARGE
     : AVATAR_BORDER_SIZE_SMALL;
@@ -115,21 +116,7 @@ export const ProfileTop = ({
           scale: interpolate(
             Math.min(animationHeaderPosition.value, 0),
             [0, animationHeaderHeight.value],
-            [1, 1.5]
-          ),
-        },
-        {
-          translateY: interpolate(
-            Math.min(animationHeaderPosition.value, 0),
-            [0, animationHeaderHeight.value],
-            [0, -40]
-          ),
-        },
-        {
-          translateX: interpolate(
-            Math.min(animationHeaderPosition.value, 0),
-            [0, animationHeaderHeight.value],
-            [0, 16]
+            [1, 1.15]
           ),
         },
       ],
@@ -138,7 +125,7 @@ export const ProfileTop = ({
 
   return (
     <>
-      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800 xl:rounded-b-[32px] 2xl:-mx-20">
+      <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
         <View
           style={{
             height: coverHeight,
@@ -167,110 +154,100 @@ export const ProfileTop = ({
         </View>
       </View>
       <View tw="bg-white px-7">
-        <View tw="flex-row justify-between">
-          <View tw="-mt-4 flex-row items-center">
-            <Animated.View
-              style={[
-                {
-                  width: avatarSize + avatarBorder * 2,
-                  height: avatarSize + avatarBorder * 2,
-                  borderRadius: 9999,
-                  overflow: "hidden",
-                  borderWidth: avatarBorder,
-                  borderColor: isDark ? "#000" : "#FFF",
-                  backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
-                  margin: -avatarBorder,
-                },
-                avatarStyle,
-              ]}
+        <View
+          tw="flex-row items-center"
+          style={{ marginTop: -coverHeight / 10 }}
+        >
+          <Animated.View
+            style={[
+              {
+                width: avatarSize + avatarBorder * 2,
+                height: avatarSize + avatarBorder * 2,
+                borderRadius: 9999,
+                overflow: "hidden",
+                borderWidth: avatarBorder,
+                borderColor: isDark ? "#000" : "#FFF",
+                backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
+                margin: -avatarBorder,
+              },
+              avatarStyle,
+            ]}
+          >
+            <Skeleton
+              height={avatarSize}
+              width={avatarSize}
+              show={isLoading}
+              radius={0}
             >
-              <Skeleton
-                height={avatarSize}
-                width={avatarSize}
-                show={isLoading}
-                radius={0}
+              {profileData && (
+                <LightBox
+                  width={avatarSize}
+                  height={avatarSize}
+                  imgLayout={{ width: coverWidth, height: width }}
+                  borderRadius={999}
+                  tapToClose
+                >
+                  <Image
+                    source={{
+                      uri: getProfileImage(profileData?.profile),
+                    }}
+                    width={Platform.select({
+                      web: screenHeight * 0.82,
+                      default: undefined,
+                    })}
+                    height={Platform.select({
+                      web: screenHeight * 0.82,
+                      default: undefined,
+                    })}
+                    style={Platform.select({
+                      web: {},
+                      default: { ...StyleSheet.absoluteFillObject },
+                    })}
+                    alt={profileData?.profile.name ?? ""}
+                  />
+                </LightBox>
+              )}
+            </Skeleton>
+          </Animated.View>
+          <View tw="ml-4 flex-row items-start justify-between">
+            <View tw="flex-1">
+              <Text
+                tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
+                numberOfLines={2}
               >
-                {profileData && (
-                  <LightBox
-                    width={avatarSize}
-                    height={avatarSize}
-                    imgLayout={{ width: coverWidth, height: width }}
-                    borderRadius={999}
-                    tapToClose
-                  >
-                    <Image
-                      source={{
-                        uri: getProfileImage(profileData?.profile),
-                      }}
-                      width={Platform.select({
-                        web: screenHeight * 0.82,
-                        default: undefined,
-                      })}
-                      height={Platform.select({
-                        web: screenHeight * 0.82,
-                        default: undefined,
-                      })}
-                      style={Platform.select({
-                        web: {},
-                        default: { ...StyleSheet.absoluteFillObject },
-                      })}
-                      alt={profileData?.profile.name ?? ""}
-                    />
-                  </LightBox>
+                {name}
+              </Text>
+              <View tw="h-2 md:h-3" />
+              <View tw="flex-row items-center">
+                {Boolean(username) && (
+                  <>
+                    <Text tw="text-xl text-gray-900 dark:text-gray-400 md:text-lg">
+                      {`@${username}`}
+                    </Text>
+                  </>
                 )}
-              </Skeleton>
-            </Animated.View>
+
+                {profileData?.profile.verified ? (
+                  <View tw="ml-1">
+                    <VerificationBadge size={16} />
+                  </View>
+                ) : null}
+                <View tw="ml-1">
+                  <StarDropBadge
+                    size={16}
+                    data={profileData?.profile.latest_star_drop_collected}
+                  />
+                </View>
+                {profileData?.follows_you && !isSelf ? (
+                  <Chip label="Follows You" tw="ml-2" />
+                ) : null}
+              </View>
+            </View>
           </View>
         </View>
-
-        <View tw="px-2 py-3">
-          {isLoading ? (
-            <>
-              <Skeleton height={24} width={150} show={true} />
-              <View tw="h-2" />
-              <Skeleton height={12} width={100} show={true} />
-            </>
-          ) : (
-            <View tw="flex-row items-start justify-between">
-              <View tw="flex-1">
-                <Text
-                  tw="max-w-45 text-2xl font-extrabold text-gray-900 dark:text-white"
-                  numberOfLines={2}
-                >
-                  {name}
-                </Text>
-                <View tw="h-2 md:h-3" />
-                <View tw="flex-row items-center">
-                  {Boolean(username) && (
-                    <>
-                      <Text tw="text-base text-gray-600 dark:text-gray-400 md:text-lg">
-                        {`@${username}`}
-                      </Text>
-                    </>
-                  )}
-
-                  {profileData?.profile.verified ? (
-                    <View tw="ml-1">
-                      <VerificationBadge size={16} />
-                    </View>
-                  ) : null}
-                  <View tw="ml-1">
-                    <StarDropBadge
-                      size={16}
-                      data={profileData?.profile.latest_star_drop_collected}
-                    />
-                  </View>
-                  {profileData?.follows_you && !isSelf ? (
-                    <Chip label="Follows You" tw="ml-2" />
-                  ) : null}
-                </View>
-              </View>
-              <ProfileSocial profile={profileData?.profile} />
-            </View>
-          )}
-
+        <View tw="py-2.5">
           {bio ? (
-            <View tw="mt-4 items-baseline">
+            <View tw="items-baseline">
               <ClampText
                 text={bioWithMentions}
                 maxLines={3}
@@ -278,15 +255,8 @@ export const ProfileTop = ({
               />
             </View>
           ) : null}
-          <Hidden from="md">
-            <ProfileFollows
-              profileId={profileId}
-              followersCount={profileData?.followers_count}
-              followingCount={profileData?.following_count}
-              tw="mt-4"
-            />
-          </Hidden>
         </View>
+        <ProfileSocial profile={profileData?.profile} />
       </View>
     </>
   );
