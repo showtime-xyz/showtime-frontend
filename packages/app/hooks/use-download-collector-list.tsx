@@ -5,6 +5,7 @@ import * as FileSystem from "expo-file-system";
 
 import { getAccessToken } from "app/lib/access-token";
 import { Logger } from "app/lib/logger";
+import Share from "app/lib/react-native-share";
 
 import { toast } from "design-system/toast";
 
@@ -17,7 +18,7 @@ export const downloadCollectorList = async (contractAddress?: string) => {
     Authorization: `Bearer ${accessToken}`,
   };
   if (Platform.OS === "web") {
-    return await axios
+    const fetch = axios
       .get(url, {
         responseType: "blob",
         headers,
@@ -27,28 +28,37 @@ export const downloadCollectorList = async (contractAddress?: string) => {
         const link = document.createElement("a");
 
         link.href = URL.createObjectURL(blob);
-        link.download = "download.csv";
+        link.download = "Showtime_xyz_Collector_List.csv";
         link.click();
 
         URL.revokeObjectURL(link.href);
-
-        toast.success("Downloaded successfully!");
-      })
-      .catch(() => {
-        toast.error("Download failed, please try again");
       });
+
+    toast.promise(fetch, {
+      loading: contractAddress
+        ? "Downloading..."
+        : "Downloading your allow-list…",
+      success: "Downloaded successfully!",
+      error: "Download failed, please try again",
+    });
   } else {
-    const localFilePath = `${FileSystem.documentDirectory}download.csv`;
+    const localFilePath = `${FileSystem.documentDirectory}Showtime_xyz_Collector_List.csv`;
 
-    try {
-      await FileSystem.downloadAsync(url, localFilePath, {
-        headers,
-      }).then(async ({ uri }) => {
-        toast.success("Saved on your device!");
-        Logger.log("CSV downloaded to:", uri);
-      });
-    } catch (error) {
-      toast.error("Download failed, please try again");
-    }
+    const fetch = FileSystem.downloadAsync(url, localFilePath, {
+      headers,
+    }).then(async ({ uri }) => {
+      Logger.log("CSV downloaded to:", uri);
+      setTimeout(() => {
+        Share.open({ url: uri });
+      }, 800);
+    });
+
+    toast.promise(fetch, {
+      loading: contractAddress
+        ? "Downloading..."
+        : "Downloading your allow-list…",
+      success: "Saved on your device!",
+      error: "Download failed, please try again",
+    });
   }
 };
