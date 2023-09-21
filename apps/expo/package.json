@@ -152,7 +152,7 @@
     "react-native-popper": "^0.3.2",
     "react-native-quick-base64": "^2.0.7",
     "react-native-quick-crypto": "^0.6.1",
-    "react-native-reanimated": "3.5.2",
+    "react-native-reanimated": "3.5.4",
     "react-native-reanimated-carousel": "^3.5.1",
     "react-native-safe-area-context": "4.7.1",
     "react-native-screens": "^3.23.0",
