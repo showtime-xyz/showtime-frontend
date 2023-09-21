@@ -83,43 +83,23 @@ export const MessagesHeader = (props: HeaderProps) => {
               {props.members ?? 0} members
             </Text>
           </View>
-          <View tw="flex-row">
-            <Pressable onPress={props.onPressShare} tw="p-2 md:hidden">
-              <Share
-                height={20}
-                width={20}
-                color={isDark ? colors.gray["100"] : colors.gray[800]}
-              />
-            </Pressable>
+          <View tw="flex-row items-center justify-center gap-3">
             {!props.isCurrentUserOwner ? (
-              <Pressable onPress={props.onPressSettings} tw="p-2 md:hidden">
+              <Pressable onPress={props.onPressSettings}>
                 <Settings
-                  height={20}
-                  width={20}
-                  color={isDark ? colors.gray["100"] : colors.gray[800]}
+                  height={Platform.OS === "web" ? 20 : 24}
+                  width={Platform.OS === "web" ? 20 : 24}
+                  color={isDark ? colors.gray["100"] : colors.gray[500]}
                 />
               </Pressable>
             ) : null}
-
-            <Pressable onPress={props.onPressShare} tw="hidden md:flex">
-              <Share
-                height={24}
-                width={24}
-                color={isDark ? colors.gray["100"] : colors.gray[800]}
-              />
+            <Pressable onPress={props.onPressShare}>
+              <View tw="items-center justify-center overflow-hidden rounded-full text-center">
+                <Text tw="web:text-xs bg-indigo-600 px-3 py-2 text-sm font-bold text-white">
+                  Share
+                </Text>
+              </View>
             </Pressable>
-            {!props.isCurrentUserOwner ? (
-              <Pressable
-                onPress={props.onPressSettings}
-                tw="ml-4 hidden md:flex"
-              >
-                <MoreHorizontal
-                  height={24}
-                  width={24}
-                  color={isDark ? colors.gray["100"] : colors.gray[800]}
-                />
-              </Pressable>
-            ) : null}
           </View>
         </>
       ) : null}
