@@ -2,8 +2,7 @@ import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Settings, Share } from "@showtime-xyz/universal.icon";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+import { ArrowLeft, Settings } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -51,6 +50,7 @@ export const MessagesHeader = (props: HeaderProps) => {
             router.back();
           }}
           tw="lg:hidden"
+          hitSlop={15}
         >
           <ArrowLeft
             height={24}
