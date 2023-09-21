@@ -99,6 +99,7 @@
     "expo-constants": "~14.4.2",
     "expo-dev-client": "~2.4.7",
     "expo-device": "~5.4.0",
+    "expo-document-picker": "~11.5.4",
     "expo-font": "~11.4.0",
     "expo-gl": "~13.0.1",
     "expo-haptics": "~12.4.0",

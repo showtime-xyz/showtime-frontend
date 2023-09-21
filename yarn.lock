@@ -6886,6 +6886,7 @@ __metadata:
     expo-constants: ~14.4.2
     expo-dev-client: ~2.4.7
     expo-device: ~5.4.0
+    expo-document-picker: ~11.5.4
     expo-font: ~11.4.0
     expo-gl: ~13.0.1
     expo-haptics: ~12.4.0
@@ -6944,7 +6945,7 @@ __metadata:
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.7
     react-native-quick-crypto: ^0.6.1
-    react-native-reanimated: 3.5.2
+    react-native-reanimated: 3.5.4
     react-native-reanimated-carousel: ^3.5.1
     react-native-safe-area-context: 4.7.1
     react-native-screens: ^3.23.0
@@ -16168,6 +16169,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-document-picker@npm:~11.5.4":
+  version: 11.5.4
+  resolution: "expo-document-picker@npm:11.5.4"
+  peerDependencies:
+    expo: "*"
+  checksum: a59571a356830b698ebeeb29cf1b33e42dcd05b348fe1125c5c52f0ef0bae410d9e6e57d62b7f9e9a699b38d824e90f787282d80b3feeddb35dcc319a389e546
+  languageName: node
+  linkType: hard
+
 "expo-eas-client@npm:~0.6.0":
   version: 0.6.0
   resolution: "expo-eas-client@npm:0.6.0"
@@ -24613,9 +24623,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:3.5.2":
-  version: 3.5.2
-  resolution: "react-native-reanimated@npm:3.5.2"
+"react-native-reanimated@npm:3.5.4":
+  version: 3.5.4
+  resolution: "react-native-reanimated@npm:3.5.4"
   dependencies:
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
@@ -24630,7 +24640,7 @@ __metadata:
     "@babel/plugin-transform-template-literals": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: ae754153feeb38ea73ab347388e3e4f4a4a145d64d17d63f52106f376a630ff793ffc436ebc134601ba20d72368618f284a50e8b4091d2e1c067b72109654fa3
+  checksum: 885449b11324f0399128d665c90e7179a095dfa603dd251e8b1d14df2efe73411acd724562837e114366769e69b8aac2b0a2ffc1f63d2b7dbf1a35024f074604
   languageName: node
   linkType: hard
 

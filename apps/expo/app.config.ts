@@ -67,6 +67,7 @@ const expoConfig: ExpoConfig = {
   ios: {
     bundleIdentifier: config.scheme,
     buildNumber: majorVersion.toString(),
+    usesIcloudStorage: true,
     supportsTablet: false, // TODO:
     jsEngine: "hermes",
     backgroundColor: "#FFFFFF",
@@ -153,6 +154,13 @@ const expoConfig: ExpoConfig = {
         photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
         savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
         isAccessMediaLocationEnabled: true,
+      },
+    ],
+    [
+      "expo-document-picker",
+      {
+        iCloudContainerEnvironment:
+          STAGE === "production" ? "Production" : "Development",
       },
     ],
     "expo-localization",
