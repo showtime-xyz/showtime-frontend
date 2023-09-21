@@ -46,7 +46,7 @@ import { FollowButton } from "../follow-button";
 import { ProfileFollows } from "./profile-follows";
 import { ProfileSocial } from "./profile-social";
 
-const AVATAR_SIZE_SMALL = 86;
+const AVATAR_SIZE_SMALL = 82;
 const AVATAR_SIZE_LARGE = 144;
 
 const AVATAR_BORDER_SIZE_SMALL = 4;
@@ -100,7 +100,7 @@ export const ProfileTop = ({
   const additionalCoverheight = top > 55 ? 20 : 0;
   // banner ratio: w:h=3:1
   const coverHeight =
-    (coverWidth < 768 ? coverWidth / 3 : 1) + additionalCoverheight;
+    (coverWidth < 768 ? coverWidth / 4 : 1) + additionalCoverheight;
   const avatarBorder = isMdWidth
     ? AVATAR_BORDER_SIZE_LARGE
     : AVATAR_BORDER_SIZE_SMALL;
@@ -166,14 +166,9 @@ export const ProfileTop = ({
           />
         </View>
       </View>
-      <View tw="-mt-20 bg-white">
+      <View tw="bg-white px-7">
         <View tw="flex-row justify-between">
-          <View
-            tw="flex-row items-center"
-            style={{
-              marginTop: -avatarSize / 2,
-            }}
-          >
+          <View tw="-mt-4 flex-row items-center">
             <Animated.View
               style={[
                 {
