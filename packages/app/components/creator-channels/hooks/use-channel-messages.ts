@@ -36,6 +36,18 @@ export type ChannelMessage = {
     id: number;
     profile: Profile;
   };
+  attachments: [
+    {
+      description: string;
+      height: number | null;
+      width: number | null;
+      media_upload: string;
+      mime: string;
+      size: number;
+      url: string;
+      duration: number | null;
+    }
+  ];
 };
 
 export type ReactionGroup = {
