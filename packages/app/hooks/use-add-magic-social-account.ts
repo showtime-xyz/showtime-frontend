@@ -146,7 +146,7 @@ const handleInstagramAccountAdd = async (Alert: any, mutate: any) => {
       });
       mutate();
 
-      toast.success("Social account added");
+      toast.success("Instagram account added");
       return apiRes;
     } catch (error: any) {
       Logger.error("Add social error", error);
@@ -173,7 +173,7 @@ const handleInstagramAccountAdd = async (Alert: any, mutate: any) => {
                 });
                 mutate();
 
-                toast.success("Social account added");
+                toast.success("Instagram account added");
 
                 return apiRes;
               },
@@ -212,7 +212,7 @@ const handleTwitterAccountAdd = async (Alert: any, mutate: any) => {
       });
       mutate();
 
-      toast.success("Social account added");
+      toast.success("Twitter account added");
       return apiRes;
     } catch (error: any) {
       Logger.error("Add social error", error);
@@ -238,7 +238,7 @@ const handleTwitterAccountAdd = async (Alert: any, mutate: any) => {
                 });
                 mutate();
 
-                toast.success("Social account added");
+                toast.success("Twitter account added");
 
                 return apiRes;
               },

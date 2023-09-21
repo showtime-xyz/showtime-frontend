@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-const Twitter = require("twitter-lite");
+import Twitter from "twitter-lite";
 
 const twitter = new Twitter({
   consumer_key: process.env.TWITTER_CONSUMER_KEY,

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useContext } from "react";
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -16,6 +16,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { UserContext } from "app/context/user-context";
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
 import { useConnectAppleMusic } from "app/hooks/use-connect-apple-music";
 import { useConnectSpotify } from "app/hooks/use-connect-spotify";
@@ -64,7 +65,7 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
 };
 
 const ConnectSpotify = () => {
-  const user = useUser();
+  const user = useContext(UserContext);
 
   const { disconnectSpotify } = useDisconnectSpotify();
   const { connectSpotify } = useConnectSpotify();
@@ -79,10 +80,10 @@ const ConnectSpotify = () => {
       </View>
       <Button
         variant={
-          user.user?.data.profile.has_spotify_token ? "danger" : "tertiary"
+          user?.user?.data.profile.has_spotify_token ? "danger" : "tertiary"
         }
         onPress={async () => {
-          if (user.user?.data.profile.has_spotify_token) {
+          if (user?.user?.data.profile.has_spotify_token) {
             disconnectSpotify();
           } else {
             const res = await connectSpotify();
@@ -92,14 +93,14 @@ const ConnectSpotify = () => {
           }
         }}
       >
-        {user.user?.data.profile.has_spotify_token ? "Disconnect" : "Connect"}
+        {user?.user?.data.profile.has_spotify_token ? "Disconnect" : "Connect"}
       </Button>
     </View>
   );
 };
 
 const ConnectAppleMusic = () => {
-  const user = useUser();
+  const user = useContext(UserContext);
   const isDark = useIsDarkMode();
 
   const { disconnectAppleMusic, isMutating: isDisconnecting } =
@@ -119,11 +120,11 @@ const ConnectAppleMusic = () => {
       </View>
       <Button
         variant={
-          user.user?.data.profile.has_apple_music_token ? "danger" : "tertiary"
+          user?.user?.data.profile.has_apple_music_token ? "danger" : "tertiary"
         }
         disabled={isLoading}
         onPress={async () => {
-          if (user.user?.data.profile.has_apple_music_token) {
+          if (user?.user?.data.profile.has_apple_music_token) {
             disconnectAppleMusic();
           } else {
             const res = await connectAppleMusic();
@@ -135,7 +136,7 @@ const ConnectAppleMusic = () => {
       >
         {isLoading
           ? "Loading..."
-          : user.user?.data.profile.has_apple_music_token
+          : user?.user?.data.profile.has_apple_music_token
           ? "Disconnect"
           : "Connect"}
       </Button>
