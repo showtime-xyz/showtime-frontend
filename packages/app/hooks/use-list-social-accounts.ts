@@ -10,8 +10,10 @@ type Response = {
   provider: "instagram" | "twitter";
   provider_account_id: string;
 };
+export const LIST_SOCIAL_ACCOUNT_CACHE_KEY = "/v1/profile/accounts/token";
+
 export const useListSocialAccounts = () => {
-  const state = useSWR<Response[]>("/v1/profile/accounts/token", () => {
+  const state = useSWR<Response[]>(LIST_SOCIAL_ACCOUNT_CACHE_KEY, () => {
     return axios({
       url: "/v1/profile/accounts",
       method: "GET",
