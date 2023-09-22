@@ -1,4 +1,4 @@
-import { memo, useMemo, RefObject } from "react";
+import { memo, useMemo, RefObject, useContext } from "react";
 import { Platform } from "react-native";
 
 import { BlurView } from "expo-blur";
@@ -27,8 +27,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { AudioPlayer } from "app/components/audio-player/audio-player";
 import { Reaction } from "app/components/reaction";
+import { UserContext } from "app/context/user-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
-import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import {
@@ -83,7 +83,7 @@ export const MessageItem = memo(
     const deleteMessage = useDeleteMessage(channelId);
     const Alert = useAlert();
     const isDark = useIsDarkMode();
-    const user = useUser();
+    const user = useContext(UserContext);
     const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
     const linkifiedMessage = useMemo(
@@ -235,7 +235,7 @@ export const MessageItem = memo(
 
                   <DropdownMenuContent loop sideOffset={8}>
                     {item.channel_message.sent_by.profile.profile_id ===
-                      user.user?.data.profile.profile_id || isUserAdmin ? (
+                      user?.user?.data.profile.profile_id || isUserAdmin ? (
                       <DropdownMenuItem
                         onSelect={() => {
                           Alert.alert(
@@ -282,7 +282,7 @@ export const MessageItem = memo(
                     {
                       // edit message only if message is not older than 2 hours and it belongs to the user
                       item.channel_message.sent_by.profile.profile_id ===
-                        user.user?.data.profile.profile_id &&
+                        user?.user?.data.profile.profile_id &&
                       allowMessageEditing ? (
                         <DropdownMenuItem
                           onSelect={() => {
@@ -316,7 +316,7 @@ export const MessageItem = memo(
                       ) : null
                     }
                     {item.channel_message.sent_by.profile.profile_id !==
-                    user.user?.data.profile.profile_id ? (
+                    user?.user?.data.profile.profile_id ? (
                       <DropdownMenuItem
                         onSelect={() => {
                           router.push(
@@ -393,19 +393,19 @@ export const MessageItem = memo(
                   }
                 >
                   {linkifiedMessage}
+                  {messageWasEdited && (
+                    <Text
+                      tw="text-xs text-gray-500 dark:text-gray-200"
+                      selectable
+                    >
+                      {` • edited`}
+                    </Text>
+                  )}
                 </Text>
-                {messageWasEdited && (
-                  <Text
-                    tw="text-xs text-gray-500 dark:text-gray-200"
-                    selectable
-                  >
-                    {` • edited`}
-                  </Text>
-                )}
               </>
             )}
 
-            {item.channel_message.attachments.length > 0 ? (
+            {item.channel_message?.attachments?.length > 0 ? (
               <AudioPlayer
                 id={item.channel_message.id}
                 url={item.channel_message.attachments[0]?.url}

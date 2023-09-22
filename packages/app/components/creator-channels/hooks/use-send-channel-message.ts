@@ -1,7 +1,8 @@
-import useSWRMutation from "swr/mutation";
-import { v4 as uuidv4 } from "uuid";
+import { useContext } from "react";
 
-import { useUser } from "app/hooks/use-user";
+import useSWRMutation from "swr/mutation";
+
+import { UserContext } from "app/context/user-context";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -33,7 +34,7 @@ export const useSendChannelMessage = (
   const channelMessages = useChannelMessages(channelId);
   const joinedChannelsList = useOwnedChannelsList();
 
-  const user = useUser();
+  const user = useContext(UserContext);
   const handleSubmit = async ({
     message,
     channelId,
@@ -46,10 +47,11 @@ export const useSendChannelMessage = (
     const optimisticObjectId = Math.random() + new Date().getTime();
     channelMessages.mutate(
       (d) => {
-        if (user.user && d) {
+        if (user?.user && d) {
           const optimisticObject = {
             channel_message: {
               body: message,
+              body_text_length: 0,
               id: optimisticObjectId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
@@ -59,6 +61,7 @@ export const useSendChannelMessage = (
                 id: user.user.data.profile.profile_id,
                 profile: user.user?.data.profile,
               },
+              attachments: [],
             },
             reaction_group: [],
           };

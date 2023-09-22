@@ -24,6 +24,17 @@ const PAGE_SIZE = 20;
 //     }
 // ]
 
+export type ChannelMessageAttachment = {
+  description: string;
+  height: number | null;
+  width: number | null;
+  media_upload: string;
+  mime: string;
+  size: number;
+  url: string;
+  duration: number | null;
+};
+
 export type ChannelMessage = {
   body: string;
   body_text_length: number;
@@ -37,18 +48,7 @@ export type ChannelMessage = {
     id: number;
     profile: Profile;
   };
-  attachments: [
-    {
-      description: string;
-      height: number | null;
-      width: number | null;
-      media_upload: string;
-      mime: string;
-      size: number;
-      url: string;
-      duration: number | null;
-    }
-  ];
+  attachments: ChannelMessageAttachment[];
 };
 
 export type ReactionGroup = {
