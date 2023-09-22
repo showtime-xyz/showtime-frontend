@@ -3,13 +3,6 @@ import { Platform, StatusBar } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 
-import {
-  Music,
-  CloseLarge,
-  SongsTab,
-  SavedTab,
-  TokensTab,
-} from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
@@ -49,6 +42,7 @@ import { ProfileError } from "./profile-error";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
+import { TokensTab } from "./tokens-tab";
 
 export type ProfileScreenProps = {
   username: string;
@@ -134,10 +128,22 @@ const Profile = ({ username }: ProfileScreenProps) => {
 
   const renderScene = useCallback(
     ({
-      route: { index: routeIndex },
+      route: { index: routeIndex, key },
     }: SceneRendererProps & {
       route: Route;
     }) => {
+      if (key === "tokens") {
+        return (
+          <TokensTab
+            username={profileData?.data?.profile.username}
+            profileId={profileData?.data?.profile.profile_id}
+            isBlocked={isBlocked}
+            list={data?.tabs[routeIndex]}
+            index={routeIndex}
+            ref={(ref) => (tabRefs.current[routeIndex] = ref)}
+          />
+        );
+      }
       return (
         <ErrorBoundary
           renderFallback={(props) => (
@@ -206,7 +212,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         navigationState: NavigationState<Route>;
       }
     ) => (
-      <View tw="bg-white px-6  dark:bg-black">
+      <View tw="bg-white dark:bg-black">
         <ProfileTabBar {...props} />
       </View>
     ),

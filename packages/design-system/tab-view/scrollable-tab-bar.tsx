@@ -23,7 +23,6 @@ export const ScollableTabBar = ({
   return (
     <View tw="web:border-b-0 border-b border-gray-200 bg-white px-4 dark:border-gray-800 dark:bg-black">
       <TabBar
-        {...rest}
         contentContainerStyle={{
           alignItems: "center",
         }}
@@ -41,13 +40,14 @@ export const ScollableTabBar = ({
           fontWeight: "bold",
           fontSize: 14,
           textTransform: "none",
+          marginHorizontal: 0,
         }}
         indicatorStyle={{ backgroundColor: isDark ? "#FFF" : colors.gray[900] }}
         tabStyle={{
           paddingVertical: 8,
           flexDirection: "row",
-          justifyContent: "center",
         }}
+        {...rest}
       />
     </View>
   );

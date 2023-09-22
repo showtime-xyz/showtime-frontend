@@ -32,8 +32,21 @@ export const ProfileTabBar = (props: any) => {
   );
 
   return (
-    <View tw="bg-white dark:bg-black">
-      <ScollableTabBar {...props} renderIcon={renderIcon} />
+    <View tw="bg-white px-12 dark:bg-black">
+      <ScollableTabBar
+        {...props}
+        gap={10}
+        renderIcon={renderIcon}
+        tabStyle={{
+          paddingVertical: 8,
+          flexDirection: "row",
+          paddingHorizontal: 0,
+        }}
+        contentContainerStyle={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
     </View>
   );
 };
