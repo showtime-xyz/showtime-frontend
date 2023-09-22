@@ -8,10 +8,14 @@ import TrackPlayer, {
 import { progressState, setTrackInfo } from "./store";
 
 export async function setupPlayer() {
-  let isSetup = false;
+  if (progressState.isSetup) {
+    return true;
+  }
+
+  progressState.isSetup = false;
   try {
     await TrackPlayer.getActiveTrackIndex();
-    isSetup = true;
+    progressState.isSetup = true;
   } catch {
     await TrackPlayer.setupPlayer().catch(() => {});
     await TrackPlayer.updateOptions({
@@ -25,10 +29,10 @@ export async function setupPlayer() {
       progressUpdateEventInterval: 1,
     });
 
-    isSetup = true;
+    progressState.isSetup = true;
   }
 
-  return isSetup;
+  return progressState.isSetup;
 }
 
 export async function PlaybackService() {

@@ -13,12 +13,18 @@ type TrackPlaybackInfo = {
 type ProgressStateStore = {
   tracks: Record<string, TrackPlaybackInfo>;
   isDragging: boolean;
+  isSetup: boolean;
 };
 
 export const progressState = proxy<ProgressStateStore>({
   tracks: {},
   isDragging: false,
+  isSetup: false,
 });
+
+export const setIsSetup = (value: boolean) => {
+  progressState.isSetup = value;
+};
 
 export const setIsDragging = (dragging: boolean) => {
   progressState.isDragging = dragging;
