@@ -29,6 +29,7 @@ import {
   LogOut,
   ChevronRight,
   SearchFilled,
+  Download3,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -42,6 +43,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { Notifications } from "app/components/notifications";
 import { Search } from "app/components/search";
 import { useAuth } from "app/hooks/auth/use-auth";
+import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useFooter } from "app/hooks/use-footer";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
@@ -370,7 +372,7 @@ export const HeaderMd = withColorScheme(() => {
 
             <DropdownMenuContent
               align="center"
-              tw="w-48"
+              tw="w-50"
               disableBlurEffect
               side="bottom"
               sideOffset={0}
@@ -422,7 +424,25 @@ export const HeaderMd = withColorScheme(() => {
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
               )}
+              {isAuthenticated && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    downloadCollectorList();
+                  }}
+                  key="download-collector-list"
+                >
+                  <MenuItemIcon
+                    Icon={Download3}
+                    ios={{
+                      name: "arrow.down.doc",
+                    }}
+                  />
 
+                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                    Download collector list
+                  </DropdownMenuItemTitle>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger key="nested-group-trigger">
                   <MenuItemIcon
