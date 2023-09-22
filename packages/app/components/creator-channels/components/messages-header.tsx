@@ -94,10 +94,8 @@ export const MessagesHeader = (props: HeaderProps) => {
               </Pressable>
             ) : null}
             <Pressable onPress={props.onPressShare}>
-              <View tw="items-center justify-center overflow-hidden rounded-full text-center">
-                <Text tw="web:text-xs bg-indigo-600 px-3 py-2 text-sm font-bold text-white">
-                  Share
-                </Text>
+              <View tw="items-center justify-center overflow-hidden rounded-full bg-indigo-600 px-3 py-1.5 text-center ">
+                <Text tw="web:text-xs text-sm font-bold text-white">Share</Text>
               </View>
             </Pressable>
           </View>
