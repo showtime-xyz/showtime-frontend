@@ -6935,7 +6935,7 @@ __metadata:
     react-native-get-random-values: ~1.9.0
     react-native-image-colors: ^2.3.0
     react-native-ios-context-menu: ^1.15.3
-    react-native-keyboard-controller: ^1.5.8
+    react-native-keyboard-controller: ^1.7.0
     react-native-level-fs: ^3.0.1
     react-native-localhost: ^1.0.0
     react-native-mmkv: 2.10.1
@@ -24485,14 +24485,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-keyboard-controller@npm:^1.5.8":
-  version: 1.5.8
-  resolution: "react-native-keyboard-controller@npm:1.5.8"
+"react-native-keyboard-controller@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "react-native-keyboard-controller@npm:1.7.0"
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-reanimated: ">=2.3.0"
-  checksum: be159dbcd0b375a408b874d202175399b5e99b40fabb04cce5e0167586798b48c0e547f544a612b61ec5e1238620961e3315cb5d9d9583035a3009033774cbf7
+  checksum: 69a4f4e6120d0d3e15a47de4d00f9372a54e9c22b7baabe43300964076994add97edc79bf5da2297c701d31386b5781bd3a31de6fb066bab3519644a4a1f9e75
   languageName: node
   linkType: hard
 
