@@ -111,10 +111,6 @@ const getItemType = (item: ChannelMessageItem) => {
     return "message-unlocked";
   }
 
-  if (item.reaction_group.length > 0) {
-    return "reaction-message";
-  }
-
   return "message";
 };
 
@@ -530,11 +526,12 @@ export const Messages = memo(() => {
                 data={data}
                 onEndReached={onLoadMore}
                 inverted
+                getItemType={getItemType}
                 scrollEnabled={data.length > 0}
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
-                estimatedItemSize={400}
+                estimatedItemSize={300}
                 // android > 12 flips the scrollbar to the left, FlashList bug
                 showsVerticalScrollIndicator={Platform.OS !== "android"}
                 keyboardDismissMode={
