@@ -20,9 +20,9 @@ export const useDisconnectTwitter = () => {
   const state = useSWRMutation(
     MY_INFO_ENDPOINT,
     async (key: string, values: { arg: AddSocialType }) => {
-      const twitterMagicWalletIndex = wallet?.findIndex((w) => w.is_twitter);
-      if (twitterMagicWalletIndex && twitterMagicWalletIndex !== -1 && wallet) {
-        await removeAccount(wallet[twitterMagicWalletIndex].address);
+      const twitterAddress = wallet?.find((w) => w.is_twitter)?.address;
+      if (twitterAddress) {
+        await removeAccount(twitterAddress);
       } else {
         await axios({
           url: `/v1/profile/accounts/token/twitter/${values.arg.providerId}`,
