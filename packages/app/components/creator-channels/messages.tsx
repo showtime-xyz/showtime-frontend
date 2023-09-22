@@ -57,7 +57,6 @@ import { createParam } from "app/navigation/use-param";
 
 import TrackPlayer from "design-system/track-player";
 
-import { AudioPlayer } from "../audio-player/audio-player";
 import { setupPlayer } from "../audio-player/service";
 import { pauseAllActiveTracks } from "../audio-player/store";
 import {
@@ -315,23 +314,17 @@ export const Messages = memo(() => {
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
       return (
-        <>
-          <MessageItem
-            item={item}
-            reactions={extraData.reactions}
-            channelId={extraData.channelId}
-            listRef={listRef}
-            setEditMessage={setEditMessage}
-            editMessageIdSharedValue={editMessageIdSharedValue}
-            editMessageItemDimension={editMessageItemDimension}
-            edition={edition}
-            isUserAdmin={isUserAdmin}
-          />
-
-          {/*
-          <AudioPlayer id={item.channel_message.id} />
-           */}
-        </>
+        <MessageItem
+          item={item}
+          reactions={extraData.reactions}
+          channelId={extraData.channelId}
+          listRef={listRef}
+          setEditMessage={setEditMessage}
+          editMessageIdSharedValue={editMessageIdSharedValue}
+          editMessageItemDimension={editMessageItemDimension}
+          edition={edition}
+          isUserAdmin={isUserAdmin}
+        />
       );
     },
     [editMessageIdSharedValue, editMessageItemDimension, edition, isUserAdmin]
