@@ -180,10 +180,7 @@ export const MessageItem = memo(
 
               <View tw="flex-row items-center">
                 <Text tw={["text-xs text-gray-700 dark:text-gray-200"]}>
-                  {formatDateRelativeWithIntl(
-                    channel_message.created_at,
-                    !isMobileWeb()
-                  )}
+                  {formatDateRelativeWithIntl(channel_message.created_at)}
                 </Text>
                 {isByCreator ? (
                   <View tw="ml-2">
