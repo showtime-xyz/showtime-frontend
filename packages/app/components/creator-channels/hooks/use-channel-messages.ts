@@ -26,6 +26,7 @@ const PAGE_SIZE = 20;
 
 export type ChannelMessage = {
   body: string;
+  body_text_length: number;
   created_at: string;
   updated_at: string;
   id: number;
