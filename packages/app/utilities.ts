@@ -708,8 +708,8 @@ export const obfuscatePhoneNumber = (phoneNumber: string) => {
 
 //#region format profile routers
 const ProfileTabNameMap = new Map([
-  ["owned", "collected"],
-  ["created", "drops"],
+  ["owned", "Saved"],
+  ["created", "Songs"],
 ]);
 
 const getProfileTitle = (name: string) => {
@@ -721,12 +721,22 @@ export const formatProfileRoutes = (
   tabs: ProfileTabsAPI["tabs"] | undefined
 ) => {
   if (!tabs) return [];
-  return tabs.map((item, index) => ({
-    title: getProfileTitle(item.name),
-    key: item?.name,
-    index,
-    subtitle: item.displayed_count,
-  }));
+  return [
+    {
+      title: "Tokens",
+      key: "tokens",
+      index: 0,
+      subtitle: 0,
+    },
+    ...tabs
+      .filter((item) => item.type !== "hidden" && item.type !== "liked")
+      .map((item, index) => ({
+        title: getProfileTitle(item.name),
+        key: item?.name,
+        index: index + 1,
+        subtitle: item.displayed_count,
+      })),
+  ];
 };
 //#endregion
 

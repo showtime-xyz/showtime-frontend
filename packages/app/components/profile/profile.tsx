@@ -3,6 +3,13 @@ import { Platform, StatusBar } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 
+import {
+  Music,
+  CloseLarge,
+  SongsTab,
+  SavedTab,
+  TokensTab,
+} from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
@@ -12,6 +19,7 @@ import {
   TabSpinner,
   ScollableAutoWidthTabBar,
   NavigationState,
+  ScollableTabBar,
 } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -38,6 +46,7 @@ import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
 import { FilterContext } from "./fillter-context";
 import { ProfileError } from "./profile-error";
+import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 
@@ -65,7 +74,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
   });
-
+  const savedSongs = useMemo(() => {
+    return (
+      data?.tabs.find((item) => item.type === "created")?.displayed_count || 0
+    );
+  }, [data?.tabs]);
   const router = useRouter();
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
@@ -171,6 +184,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             profileData={profileData?.data}
             isLoading={isLoading}
             isError={isError}
+            savedSongs={savedSongs}
           />
         </View>
       </View>
@@ -184,6 +198,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     profileData?.data,
     isLoading,
     isError,
+    savedSongs,
   ]);
   const renderTabBar = useCallback(
     (
@@ -191,10 +206,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
         navigationState: NavigationState<Route>;
       }
     ) => (
-      <View tw="bg-white dark:bg-black">
-        <View tw="mx-auto w-full max-w-screen-xl">
-          <ScollableAutoWidthTabBar {...props} />
-        </View>
+      <View tw="bg-white px-6  dark:bg-black">
+        <ProfileTabBar {...props} />
       </View>
     ),
     []

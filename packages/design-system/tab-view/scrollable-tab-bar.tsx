@@ -1,13 +1,8 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 
-import {
-  NavigationState,
-  SceneRendererProps,
-  TabBar,
-} from "react-native-tab-view";
+import { NavigationState, TabBar, TabBarProps } from "react-native-tab-view";
 
-import { Haptics } from "@showtime-xyz/universal.haptics";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -15,7 +10,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { Route } from "./index";
 
 type State = NavigationState<Route>;
-interface Props extends SceneRendererProps {
+interface Props extends TabBarProps<any> {
   style?: StyleProp<ViewStyle>;
 }
 
@@ -48,7 +43,11 @@ export const ScollableTabBar = ({
           textTransform: "none",
         }}
         indicatorStyle={{ backgroundColor: isDark ? "#FFF" : colors.gray[900] }}
-        tabStyle={{ paddingVertical: 8 }}
+        tabStyle={{
+          paddingVertical: 8,
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
       />
     </View>
   );

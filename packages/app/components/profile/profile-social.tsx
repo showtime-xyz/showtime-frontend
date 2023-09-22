@@ -20,10 +20,12 @@ import { getDomainName, formatLink } from "app/utilities";
 
 type ProfileSocialProps = {
   profile?: Profile;
+  savedSongs?: number;
 };
 
 export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   profile,
+  savedSongs = 0,
 }) {
   const isDark = useIsDarkMode();
 
@@ -66,7 +68,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
 
       <View tw="mt-2 w-full flex-row items-center sm:mt-0">
         <Text tw="text-13 text-gray-900 dark:text-white">
-          <Text tw="font-bold">{`${1231}`}</Text> Song saves
+          <Text tw="font-bold">{savedSongs?.toLocaleString()}</Text> Song saves
         </Text>
         {spotifyUrl && (
           <PressableScale

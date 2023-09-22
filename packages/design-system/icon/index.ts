@@ -151,7 +151,9 @@ export { default as Messagev2 } from "./Messagev2";
 export { default as MusicBadge } from "./MusicBadge";
 export { default as RaffleBadge } from "./RaffleBadge";
 export { default as LockBadge } from "./LockBadge";
-
+export { default as SongsTab } from "./SongsTab";
+export { default as SavedTab } from "./SavedTab";
+export { default as TokensTab } from "./TokensTab";
 //#region social icons
 export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";

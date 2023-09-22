@@ -198,6 +198,9 @@ export const Default = () => {
           <IconItem icon={Icon.RaffleBadge} title="RaffleBadge" />
           <IconItem icon={Icon.MusicBadge} title="MusicBadge" />
           <IconItem icon={Icon.LockBadge} title="LockBadge" />
+          <IconItem icon={Icon.SongsTab} title="SongsTab" />
+          <IconItem icon={Icon.SavedTab} title="SavedTab" />
+          <IconItem icon={Icon.TokensTab} title="TokensTab" />
         </View>
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>

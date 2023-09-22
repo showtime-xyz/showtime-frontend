@@ -60,6 +60,7 @@ type ProfileTopProps = {
   profileData: UserProfile | undefined;
   isError: boolean;
   isLoading: boolean;
+  savedSongs?: number;
 };
 export const ProfileTop = ({
   address,
@@ -69,6 +70,7 @@ export const ProfileTop = ({
   profileData,
   isError,
   isLoading,
+  savedSongs,
 }: ProfileTopProps) => {
   const { mutate: mutateUserProfile } = useUserProfile({ address });
   const isDark = useIsDarkMode();
@@ -77,23 +79,13 @@ export const ProfileTop = ({
   const name = getProfileName(profileData?.profile);
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
-  const { user, isIncompletedProfile } = useUser();
   const { width, height: screenHeight } = useWindowDimensions();
   const coverWidth = useContentWidth();
   const isMdWidth = width >= breakpoints["md"];
   const profileId = profileData?.profile.profile_id;
-  const redirectToCreateDrop = useRedirectToCreateDrop();
   const isSelf = userId === profileId;
-  const { unblock } = useBlock();
-  const joinChannel = useJoinChannel();
-  const userChannel = profileData?.profile.channels?.[0];
-  const { onToggleFollow } = useFollow({
-    username,
-  });
 
   const { top } = useSafeAreaInsets();
-
-  const showChannelButton = typeof userChannel?.id !== "undefined";
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+
@@ -153,7 +145,7 @@ export const ProfileTop = ({
           />
         </View>
       </View>
-      <View tw="bg-white px-7">
+      <View tw="px-7">
         <View
           tw="flex-row items-center"
           style={{ marginTop: -coverHeight / 10 }}
@@ -256,7 +248,7 @@ export const ProfileTop = ({
             </View>
           ) : null}
         </View>
-        <ProfileSocial profile={profileData?.profile} />
+        <ProfileSocial profile={profileData?.profile} savedSongs={savedSongs} />
       </View>
     </>
   );
