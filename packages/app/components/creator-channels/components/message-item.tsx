@@ -26,7 +26,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AudioPlayer } from "app/components/audio-player/audio-player";
-import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
 import { Reaction } from "app/components/reaction";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useUser } from "app/hooks/use-user";
@@ -149,12 +148,11 @@ export const MessageItem = memo(
 
     const loremText = useMemo(
       () =>
-        messageNotViewable
+        messageNotViewable && item.channel_message.body_text_length > 0
           ? generateLoremIpsum(item.channel_message.body_text_length)
           : "",
       [item.channel_message.body_text_length, messageNotViewable]
     );
-    console.log(channel_message);
 
     return (
       <AnimatedView tw="my-2 px-3" style={style} ref={animatedViewRef}>
@@ -355,18 +353,30 @@ export const MessageItem = memo(
             </View>
 
             {messageNotViewable ? (
-              <View>
-                <Text>{loremText}</Text>
-                <BlurView
-                  intensity={10}
-                  collapsable={false}
-                  style={{
-                    left: -100,
-                    height: "200%",
-                    width: "200%",
-                    position: "absolute",
-                  }}
-                />
+              <View tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
+                {Platform.OS === "web" ? (
+                  // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
+                  <View tw="blur-sm">
+                    <Text tw="text-sm text-gray-900 dark:text-gray-100">
+                      {loremText}
+                    </Text>
+                  </View>
+                ) : (
+                  <>
+                    <Text tw="text-sm text-gray-900  dark:text-gray-100">
+                      {loremText}
+                    </Text>
+                    <BlurView
+                      intensity={10}
+                      style={{
+                        left: 0,
+                        height: "200%",
+                        width: "200%",
+                        position: "absolute",
+                      }}
+                    />
+                  </>
+                )}
               </View>
             ) : (
               <>
@@ -408,25 +418,29 @@ export const MessageItem = memo(
             >
               {item.reaction_group.length > 0 ? (
                 <AnimatedView tw="pt-1" layout={Layout}>
-                  <MessageReactions
-                    key={channel_message.id}
-                    reactionGroup={item.reaction_group}
-                    channelId={channelId}
-                    channelReactions={reactions}
-                    messageId={channel_message.id}
-                  />
+                  <View tw={messageNotViewable ? "blur-sm" : ""}>
+                    <MessageReactions
+                      key={channel_message.id}
+                      reactionGroup={item.reaction_group}
+                      channelId={channelId}
+                      channelReactions={reactions}
+                      messageId={channel_message.id}
+                    />
+                  </View>
+                  {Platform.OS !== "web" && messageNotViewable ? (
+                    <BlurView
+                      intensity={10}
+                      style={{
+                        left: 0,
+                        height: "100%",
+                        width: "100%",
+                        position: "absolute",
+                        backgroundColor: "transparent",
+                      }}
+                    />
+                  ) : null}
                 </AnimatedView>
               ) : null}
-              <BlurView
-                intensity={10}
-                collapsable={false}
-                style={{
-                  left: 0,
-                  height: "100%",
-                  width: "100%",
-                  position: "absolute",
-                }}
-              />
             </PlatformAnimateHeight>
           </View>
         </View>
