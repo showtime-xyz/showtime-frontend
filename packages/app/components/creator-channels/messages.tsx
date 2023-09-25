@@ -19,6 +19,7 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
   enableLayoutAnimations,
+  withSpring,
 } from "react-native-reanimated";
 import { useSWRConfig } from "swr";
 
@@ -418,9 +419,14 @@ export const Messages = memo(() => {
 
   const fakeView = useAnimatedStyle(
     () => ({
-      height: Math.abs(keyboard.height.value),
+      height: Math.max(Math.abs(keyboard.height.value), 0),
     }),
     [keyboard]
+  );
+
+  const renderListHeader = useCallback(
+    () => <AnimatedView style={fakeView} />,
+    [fakeView]
   );
 
   if (!channelId) {
@@ -492,7 +498,7 @@ export const Messages = memo(() => {
           tw={[
             "flex-1 overflow-hidden",
             //isUserAdmin ? "android:pb-12 ios:pb-8 web:pb-12" : "",
-            showCollectToUnlock ? "pb-2" : "android:pb-12 ios:pb-10 web:pb-12", // since we always show the input, leave the padding
+            showCollectToUnlock ? "pb-2" : "", // since we always show the input, leave the padding
           ]}
         >
           {isLoading ||
@@ -520,8 +526,8 @@ export const Messages = memo(() => {
                   Platform.OS === "ios" ? "interactive" : "on-drag"
                 }
                 renderItem={renderItem}
-                contentContainerStyle={{ paddingTop: insets.bottom }}
                 extraData={extraData}
+                ListHeaderComponent={renderListHeader}
                 CellRendererComponent={CustomCellRenderer}
                 ListEmptyComponent={listEmptyComponent}
                 ListFooterComponent={
@@ -548,11 +554,10 @@ export const Messages = memo(() => {
           edition={edition}
           hasUnlockedMessages={hasUnlockedMessage}
         />
-        <AnimatedView style={fakeView} />
 
         {showScrollToBottom ? (
           <Animated.View entering={SlideInDown} exiting={SlideOutDown}>
-            <View tw="absolute bottom-[80px] right-4">
+            <View tw="absolute bottom-[130px] right-4">
               <ScrollToBottomButton
                 onPress={() => {
                   listRef.current?.scrollToOffset({

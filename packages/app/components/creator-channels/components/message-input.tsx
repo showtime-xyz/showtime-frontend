@@ -110,20 +110,19 @@ export const MessageInput = ({
     }, 600);
   }, []);
 
-  const style = useAnimatedStyle(() => {
-    return {
-      paddingBottom: bottom,
-      bottom: 0,
-      backgroundColor: isDark ? "black" : "white",
-      transform: [
-        {
-          translateY:
-            keyboard.height.value -
-            (keyboard.height.value ? -(insets.bottom / 2) : 0),
-        },
-      ],
-    };
-  }, [keyboard, bottom]);
+    const style = useAnimatedStyle(() => {
+      return {
+        paddingBottom: bottom,
+        backgroundColor: isDark ? "black" : "white",
+        transform: [
+          {
+            translateY:
+              keyboard.height.value -
+              (keyboard.height.value ? -(insets.bottom / 2) : 0),
+          },
+        ],
+      };
+    }, [keyboard, bottom]);
 
   useEffect(() => {
     if (editMessage) {
@@ -198,64 +197,74 @@ export const MessageInput = ({
     );
   }
 
-  return (
-    <>
-      <Animated.View style={[{ position: "absolute", width: "100%" }, style]}>
-        {isUserAdmin ? (
-          <MessageBox
-            ref={inputRef}
-            placeholder="Send an update..."
-            textInputProps={{
-              maxLength: 2000,
-            }}
-            onSubmit={
-              !edition
-                ? async () => {
-                    setShouldShowMissingStarDropModal(true);
-                  }
-                : editMessage
-                ? handleEditMessage
-                : handleSubmit
-            }
-            submitting={editMessages.isMutating || sendMessage.isMutating}
-            tw="bg-white dark:bg-black"
-            submitButton={
-              editMessage ? (
-                <Animated.View entering={FadeIn} exiting={FadeOut}>
-                  <View tw="flex-row" style={{ gap: 8 }}>
-                    <Button
-                      variant="secondary"
-                      style={{ backgroundColor: colors.red[500] }}
-                      iconOnly
-                      onPress={() => {
-                        setEditMessage(undefined);
-                        inputRef.current?.reset();
-                      }}
-                    >
-                      <Close width={20} height={20} color="white" />
-                    </Button>
-                    <Button
-                      disabled={editMessages.isMutating || !editMessage}
-                      iconOnly
-                      onPress={handleEditMessage}
-                    >
-                      <Check width={20} height={20} />
-                    </Button>
-                  </View>
-                </Animated.View>
-              ) : null
-            }
-          />
-        ) : (
-          <MessageBoxUnavailable />
-        )}
-      </Animated.View>
-      <MissingStarDropModal
-        isOpen={shouldShowMissingStarDropModal}
-        close={() => {
-          setShouldShowMissingStarDropModal(false);
-        }}
-      />
-    </>
-  );
-};
+    return (
+      <>
+        <Animated.View style={style}>
+          {permissions?.can_send_messages ? (
+            <>
+              <View tw="h-10 flex-row items-center justify-around">
+                <Text>Dadada</Text>
+                <Text>Dadada</Text>
+                <Text>Dadada</Text>
+              </View>
+              <MessageBox
+                ref={inputRef}
+                placeholder="Send an update..."
+                textInputProps={{
+                  maxLength: 2000,
+                }}
+                onSubmit={
+                  !edition
+                    ? async () => {
+                        setShouldShowMissingStarDropModal(true);
+                      }
+                    : editMessage
+                    ? handleEditMessage
+                    : handleSubmit
+                }
+                submitting={editMessages.isMutating || sendMessage.isMutating}
+                tw="bg-white dark:bg-black"
+                submitButton={
+                  editMessage ? (
+                    <Animated.View entering={FadeIn} exiting={FadeOut}>
+                      <View tw="flex-row" style={{ gap: 8 }}>
+                        <Button
+                          variant="secondary"
+                          style={{ backgroundColor: colors.red[500] }}
+                          iconOnly
+                          onPress={() => {
+                            setEditMessage(undefined);
+                            inputRef.current?.reset();
+                          }}
+                        >
+                          <Close width={20} height={20} color="white" />
+                        </Button>
+                        <Button
+                          disabled={editMessages.isMutating || !editMessage}
+                          iconOnly
+                          onPress={handleEditMessage}
+                        >
+                          <Check width={20} height={20} />
+                        </Button>
+                      </View>
+                    </Animated.View>
+                  ) : null
+                }
+              />
+            </>
+          ) : (
+            <MessageBoxUnavailable />
+          )}
+        </Animated.View>
+        <MissingStarDropModal
+          isOpen={shouldShowMissingStarDropModal}
+          close={() => {
+            setShouldShowMissingStarDropModal(false);
+          }}
+        />
+      </>
+    );
+  }
+);
+
+MessageInput.displayName = "MessageInput";
