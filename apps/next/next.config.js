@@ -141,6 +141,7 @@ const nextConfig = {
       "storage.googleapis.com",
       "testingservice-dot-showtimenft.wl.r.appspot.com",
       "media.showtime.xyz",
+      "media-stage.showtime.xyz",
     ],
   },
   async headers() {
