@@ -206,7 +206,7 @@ export const MessageItem = memo(
               <View
                 tw="mr-2 flex-1 flex-row items-center justify-end"
                 style={{
-                  gap: 8,
+                  gap: 12,
                   display:
                     messageNotViewable && !isUserAdmin ? "none" : undefined,
                 }}
