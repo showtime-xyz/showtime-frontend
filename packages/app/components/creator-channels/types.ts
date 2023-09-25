@@ -80,6 +80,7 @@ export type ChannelLatestMessage = {
     updated_at: string;
     profile: ChannelProfile;
   };
+  attachments: ChannelMessageAttachment[];
 };
 
 export type MessageItemProps = {
