@@ -66,11 +66,9 @@ export const AudioPlayer = memo(
       await TrackPlayer.add([
         {
           id: id,
-          url:
-            url ||
-            "https://showtime-media-stage.b-cdn.net/hirbod-test/AUDIO-2023-07-17-20-38-40.mp3",
+          url,
           title: "Showtime",
-          artist: "Creator channels",
+          artist: "Creator Channels",
           artwork: "https://media.showtime.xyz/assets/st-logo.png",
         },
       ]);
@@ -89,6 +87,7 @@ export const AudioPlayer = memo(
 
           await pauseAllActiveTracks();
           await TrackPlayer.reset().catch(() => {});
+
           await addTrack();
 
           if (trackInfo?.position && trackInfo?.position > 0) {
@@ -98,6 +97,8 @@ export const AudioPlayer = memo(
           timeoutRef2.current = setTimeout(async () => {
             setTempScrubPosition(null);
           }, delay);
+        } else {
+          await TrackPlayer.seekTo(trackInfo?.position || 0);
         }
       },
       [addTrack, id, trackInfo.position]
@@ -111,6 +112,7 @@ export const AudioPlayer = memo(
         await TrackPlayer.pause().catch(() => {});
       } else {
         await prepare(1000);
+
         await TrackPlayer.play().catch(() => {});
       }
     }, [id, prepare]);
@@ -124,7 +126,8 @@ export const AudioPlayer = memo(
                 onPress={togglePlay}
                 tw="w-full flex-1 items-center justify-center text-black dark:text-white"
               >
-                {trackInfo.state === State.Loading ? (
+                {trackInfo.state === State.Loading ||
+                trackInfo.state === State.Buffering ? (
                   <Spinner
                     size="small"
                     secondaryColor={isDark ? "white" : "black"}
@@ -161,12 +164,13 @@ export const AudioPlayer = memo(
           <View tw="flex-1">
             <Slider
               minimumValue={0}
-              maximumValue={duration || trackInfo.duration || 147} // change 90 against  duration from api
+              maximumValue={trackInfo.duration || duration || 60} // 60 is fallback
               minimumTrackTintColor={isDark ? "#000" : "#fff"}
               maximumTrackTintColor={isDark ? "#bababa" : "#555"}
               step={1}
               thumbStyle={{ height: 12, width: 12 }}
               thumbTintColor={isDark ? "#000" : "#fff"}
+              trackClickable={trackInfo.duration || duration ? true : false}
               value={
                 progressState.isDragging
                   ? localScrubPosition || trackInfo.position || 0
