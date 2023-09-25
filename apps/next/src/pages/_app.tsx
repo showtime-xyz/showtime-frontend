@@ -36,6 +36,7 @@ import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-membe
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
+import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
@@ -226,6 +227,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <FollowingScreen />
         <DropScreen />
         <DropExplanationScreen />
+        <CreatorTokensExplanationScreen />
         <ClaimScreen />
         <RaffleScreen />
         <CollectorsScreen />

@@ -108,6 +108,7 @@ type RootStackNavigatorParams = {
   addEmail: undefined;
   verifyPhoneNumber: undefined;
   dropExplanation: undefined;
+  creatorTokensExplanation: undefined;
   drop: undefined;
   qrCodeShare: undefined;
   dropImageShare: undefined;

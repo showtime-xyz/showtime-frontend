@@ -1,5 +1,5 @@
 import { useCallback, useReducer, Suspense, useMemo } from "react";
-import { Platform, StatusBar } from "react-native";
+import { Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 
@@ -10,9 +10,7 @@ import {
   HeaderTabView,
   Route,
   TabSpinner,
-  ScollableAutoWidthTabBar,
   NavigationState,
-  ScollableTabBar,
 } from "@showtime-xyz/universal.tab-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";

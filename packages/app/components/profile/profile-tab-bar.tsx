@@ -32,7 +32,7 @@ export const ProfileTabBar = (props: any) => {
   );
 
   return (
-    <View tw="bg-white px-12 dark:bg-black">
+    <View tw="border-b border-gray-200 bg-white px-12 dark:border-gray-800 dark:bg-black">
       <ScollableTabBar
         {...props}
         gap={10}

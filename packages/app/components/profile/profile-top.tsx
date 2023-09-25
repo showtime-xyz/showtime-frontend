@@ -7,8 +7,7 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 
-import { Alert } from "@showtime-xyz/universal.alert";
-import { Button, GradientButton } from "@showtime-xyz/universal.button";
+import { Button } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -25,28 +24,14 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { StarDropBadge } from "app/components/badge/star-drop-badge";
-import { useJoinChannel } from "app/components/creator-channels/hooks/use-join-channel";
-import { NotificationsFollowButton } from "app/components/notifications-follow-button";
-import { ProfileDropdown } from "app/components/profile-dropdown";
 import { UserProfile, useUserProfile } from "app/hooks/api-hooks";
-import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { useFollow } from "app/hooks/use-follow";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
-import {
-  getFullSizeCover,
-  getProfileImage,
-  getProfileName,
-} from "app/utilities";
+import { getProfileImage, getProfileName } from "app/utilities";
 
-import { Hidden } from "design-system/hidden";
 import { breakpoints } from "design-system/theme";
 
-import { FollowButton } from "../follow-button";
-import { ProfileFollows } from "./profile-follows";
 import { ProfileSocial } from "./profile-social";
 
 const AVATAR_SIZE_SMALL = 82;
@@ -287,8 +272,26 @@ export const ProfileTop = ({
             <PressableScale
               tw="absolute -right-7 top-1 h-4 w-4"
               onPress={() => {
-                // router.push("/profile/tokens");
-                Alert.alert("WIP");
+                router.push(
+                  Platform.select({
+                    native: "/creatorTokensExplanation",
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        creatorTokensExplanationModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: "/creatorTokensExplanation",
+                    web:
+                      router.asPath === "/"
+                        ? "/creatorTokensExplanation"
+                        : router.asPath,
+                  }),
+                  { shallow: true }
+                );
               }}
               hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}
             >

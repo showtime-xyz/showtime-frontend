@@ -23,6 +23,7 @@ import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-membe
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
+import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
@@ -284,6 +285,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="channelsSettings"
           component={CreatorChannelsSettingsScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensExplanation"
+          component={CreatorTokensExplanationScreen}
         />
       </Stack.Group>
     </Stack.Navigator>
