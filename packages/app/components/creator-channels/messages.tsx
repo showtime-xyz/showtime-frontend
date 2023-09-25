@@ -67,11 +67,9 @@ import { MessageInput, ScrollToBottomButton } from "./components/message-input";
 import { MessageItem, MessageSkeleton } from "./components/message-item";
 import { MessagesHeader } from "./components/messages-header";
 import { useChannelById } from "./hooks/use-channel-detail";
-import {
-  ChannelMessageItem,
-  useChannelMessages,
-} from "./hooks/use-channel-messages";
+import { useChannelMessages } from "./hooks/use-channel-messages";
 import { UNREAD_MESSAGES_KEY } from "./hooks/use-channels-unread-messages";
+import { ChannelMessageItem } from "./types";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 

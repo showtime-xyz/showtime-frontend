@@ -14,7 +14,7 @@ import { createParam } from "app/navigation/use-param";
 import { UserList } from "../user-list";
 import { useChannelById } from "./hooks/use-channel-detail";
 import { useChannelMessages } from "./hooks/use-channel-messages";
-import { ChannelMessageItem } from "./hooks/use-channel-messages";
+import { ChannelMessageItem } from "./types";
 import { useReactionsUserList } from "./use-reactions-user-list";
 
 type Query = {

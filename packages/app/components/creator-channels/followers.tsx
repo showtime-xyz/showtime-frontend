@@ -93,6 +93,7 @@ export const CreatorChannelFollowers = ({
       ListHeaderComponent={ListHeaderComponent}
       contentContainerStyle={{ paddingBottom: bottom }}
       {...modalListProps}
+      // @ts-ignore
       {...rest}
     />
   );

@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useRef } from "react";
 
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
-import { Profile } from "app/types";
+
+import { ChannelMessageResponse } from "../types";
 
 const PAGE_SIZE = 20;
 
@@ -23,46 +24,6 @@ const PAGE_SIZE = 20;
 //         "member_count": 650
 //     }
 // ]
-
-export type ChannelMessageAttachment = {
-  description: string;
-  height: number | null;
-  width: number | null;
-  media_upload: string;
-  mime: string;
-  size: number;
-  url: string;
-  duration: number | null;
-};
-
-export type ChannelMessage = {
-  body: string;
-  body_text_length: number;
-  created_at: string;
-  updated_at: string;
-  id: number;
-  is_payment_gated?: boolean;
-  sent_by: {
-    admin: boolean;
-    created_at: string;
-    id: number;
-    profile: Profile;
-  };
-  attachments: ChannelMessageAttachment[];
-};
-
-export type ReactionGroup = {
-  count: number;
-  reaction_id: number;
-  self_reacted: boolean;
-};
-
-export type ChannelMessageItem = {
-  channel_message: ChannelMessage;
-  reaction_group: ReactionGroup[];
-};
-
-type ChannelMessageResponse = Array<ChannelMessageItem>;
 
 export const getChannelMessageKey = (channelId: string | number) => {
   return `/v1/channels/${channelId}/messages`;

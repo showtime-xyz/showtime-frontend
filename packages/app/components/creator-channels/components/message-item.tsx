@@ -10,6 +10,7 @@ import Animated, {
   useAnimatedRef,
   Layout,
   enableLayoutAnimations,
+  SharedValue,
 } from "react-native-reanimated";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
@@ -18,6 +19,7 @@ import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Edit, Trash, Flag } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -50,7 +52,7 @@ import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
-import { MessageItemProps } from "../types";
+import { ImageAttachment, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
 
@@ -72,8 +74,8 @@ export const MessageItem = memo(
     edition?: CreatorEditionResponse;
     isUserAdmin?: boolean;
     listRef: RefObject<FlashList<any>>;
-    editMessageIdSharedValue: Animated.SharedValue<number | undefined>;
-    editMessageItemDimension: Animated.SharedValue<{
+    editMessageIdSharedValue: SharedValue<number | undefined>;
+    editMessageItemDimension: SharedValue<{
       height: number;
       pageY: number;
     }>;
@@ -153,6 +155,13 @@ export const MessageItem = memo(
           : "",
       [item.channel_message.body_text_length, messageNotViewable]
     );
+
+    // TODO: remove and support video
+    if (
+      item.channel_message?.attachments?.length > 0 &&
+      item.channel_message?.attachments[0].mime.includes("video")
+    )
+      return null;
 
     return (
       <AnimatedView tw="my-2 px-3" style={style} ref={animatedViewRef}>
@@ -407,6 +416,44 @@ export const MessageItem = memo(
                 ) : null}
               </>
             )}
+
+            {/* ADD LETER
+            {item.channel_message?.attachments?.length > 0 &&
+            item.channel_message?.attachments[0].mime.includes("video") ? (
+              <Video
+                shouldPlay
+                source={{ uri: item.channel_message.attachments[0]?.url }}
+                useNativeControls
+                style={{ width: 300, height: 250 }}
+                resizeMode={ResizeMode.COVER}
+              />
+            ) : null}
+            */}
+
+            {item.channel_message?.attachments?.length > 0 &&
+            item.channel_message?.attachments[0].mime.includes("image") ? (
+              <Image
+                transition={300}
+                source={
+                  item.channel_message.attachments[0]?.url +
+                  "?optimizer=image&width=500&quality=70"
+                }
+                contentFit="cover"
+                style={{
+                  backgroundColor: "#333",
+                  aspectRatio:
+                    (item.channel_message.attachments[0] as ImageAttachment)
+                      .height >
+                    (item.channel_message.attachments[0] as ImageAttachment)
+                      .width
+                      ? 9 / 16
+                      : 16 / 9,
+                  maxHeight: 320,
+                  maxWidth: 320,
+                }}
+                tw="rounded-xl"
+              />
+            ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("audio") ? (

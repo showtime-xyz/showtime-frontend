@@ -3,9 +3,68 @@ import {
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 
+import { Profile } from "app/types";
+
 import { AnimatedInfiniteScrollList } from "./components/animated-cell-container";
-import { ChannelMessageItem } from "./hooks/use-channel-messages";
 import { ChannelReactionResponse } from "./hooks/use-channel-reactions";
+
+export type BaseAttachment = {
+  description: string;
+  media_upload: string;
+  mime: string;
+  size: number;
+  url: string;
+  duration?: number;
+};
+
+export type ImageAttachment = BaseAttachment & {
+  mime:
+    | "image/jpeg"
+    | "image/png"
+    | "image/gif"
+    | "image/webp"
+    | "image/jpg"
+    | "image/avif";
+  height: number;
+  width: number;
+};
+
+export type NonImageAttachment = BaseAttachment & {
+  height?: null;
+  width?: null;
+  duration?: number | null;
+};
+
+export type ChannelMessageAttachment = ImageAttachment | NonImageAttachment;
+
+export type ChannelMessage = {
+  body: string;
+  body_text_length: number;
+  created_at: string;
+  updated_at: string;
+  id: number;
+  is_payment_gated?: boolean;
+  sent_by: {
+    admin: boolean;
+    created_at: string;
+    id: number;
+    profile: Profile;
+  };
+  attachments: ChannelMessageAttachment[];
+};
+
+export type ReactionGroup = {
+  count: number;
+  reaction_id: number;
+  self_reacted: boolean;
+};
+
+export type ChannelMessageItem = {
+  channel_message: ChannelMessage;
+  reaction_group: ReactionGroup[];
+};
+
+export type ChannelMessageResponse = Array<ChannelMessageItem>;
 
 export type ChannelLatestMessage = {
   id: number;
