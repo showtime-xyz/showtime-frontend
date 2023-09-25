@@ -131,6 +131,20 @@ const CreatorChannelsListItem = memo(
         );
       }
 
+      if (item?.latest_message?.attachments.length > 0) {
+        // switch statement that returns image, video, audio, or file based on item?.latest_message?.attachments.mime
+        if (item?.latest_message?.attachments[0].mime.includes("image"))
+          return "🖼️ Image";
+
+        if (item?.latest_message?.attachments[0].mime.includes("video"))
+          return "🎥 Video";
+
+        if (item?.latest_message?.attachments[0].mime.includes("audio"))
+          return "🔊 Audio";
+
+        return "No preview available";
+      }
+
       // output the latest message if it exists
       if (item?.latest_message?.body) {
         return item?.latest_message?.body.trim();
@@ -150,9 +164,10 @@ const CreatorChannelsListItem = memo(
     }, [
       isDark,
       item.itemType,
+      item?.latest_message?.attachments,
       item?.latest_message?.body,
       item?.latest_message?.is_payment_gated,
-      item?.read,
+      item.read,
     ]);
 
     return (
