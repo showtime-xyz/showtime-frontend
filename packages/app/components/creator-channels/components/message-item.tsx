@@ -418,27 +418,13 @@ export const MessageItem = memo(
             >
               {item.reaction_group.length > 0 ? (
                 <AnimatedView tw="pt-1" layout={Layout}>
-                  <View tw={messageNotViewable ? "blur-sm" : ""}>
-                    <MessageReactions
-                      key={channel_message.id}
-                      reactionGroup={item.reaction_group}
-                      channelId={channelId}
-                      channelReactions={reactions}
-                      messageId={channel_message.id}
-                    />
-                  </View>
-                  {Platform.OS !== "web" && messageNotViewable ? (
-                    <BlurView
-                      intensity={10}
-                      style={{
-                        left: 0,
-                        height: "100%",
-                        width: "100%",
-                        position: "absolute",
-                        backgroundColor: "transparent",
-                      }}
-                    />
-                  ) : null}
+                  <MessageReactions
+                    key={channel_message.id}
+                    reactionGroup={item.reaction_group}
+                    channelId={channelId}
+                    channelReactions={reactions}
+                    messageId={channel_message.id}
+                  />
                 </AnimatedView>
               ) : null}
             </PlatformAnimateHeight>
