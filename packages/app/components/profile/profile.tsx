@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
@@ -28,6 +29,7 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { useShare } from "app/hooks/use-share";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
@@ -62,6 +64,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     error,
   } = useUserProfile({ address: username });
   const [type] = useParam("type");
+  const { share } = useShare();
+
   const contentWidth = useContentWidth();
   const { data } = useProfileNftTabs({
     profileId: profileData?.data?.profile.profile_id,
@@ -226,6 +230,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
     );
   }, [profileData?.data?.profile]);
 
+  const onShare = useCallback(async () => {
+    await share({
+      url: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${username}`,
+    });
+  }, [share, username]);
+
   return (
     <>
       <FilterContext.Provider value={{ filter, dispatch }}>
@@ -239,11 +249,21 @@ const Profile = ({ username }: ProfileScreenProps) => {
               )
             }
             headerRight={
-              <HeaderDropdown
-                type="settings"
-                withBackground
-                user={profileData?.data?.profile}
-              />
+              <View tw="flex-row">
+                <HeaderDropdown
+                  type="settings"
+                  withBackground
+                  user={profileData?.data?.profile}
+                />
+                <Button
+                  tw="ml-2"
+                  onPress={onShare}
+                  style={{ height: 30 }}
+                  size="small"
+                >
+                  Share
+                </Button>
+              </View>
             }
             headerCenter={headerCenter}
             translateYValue={animationHeaderPosition}
