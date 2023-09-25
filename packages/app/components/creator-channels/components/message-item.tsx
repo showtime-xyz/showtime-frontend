@@ -198,7 +198,8 @@ export const MessageItem = memo(
                 tw="mr-2 flex-1 flex-row items-center justify-end"
                 style={{
                   gap: 8,
-                  display: messageNotViewable ? "none" : undefined,
+                  display:
+                    messageNotViewable && !isUserAdmin ? "none" : undefined,
                 }}
               >
                 <Reaction
@@ -352,7 +353,7 @@ export const MessageItem = memo(
               </View>
             </View>
 
-            {messageNotViewable ? (
+            {messageNotViewable && !isUserAdmin ? (
               <View tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
                 {Platform.OS === "web" ? (
                   // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
@@ -380,32 +381,35 @@ export const MessageItem = memo(
               </View>
             ) : (
               <>
-                <Text
-                  selectable
-                  tw={["text-sm text-gray-900 dark:text-gray-100"]}
-                  style={
-                    Platform.OS === "web"
-                      ? {
-                          // @ts-ignore
-                          wordBreak: "break-word",
-                        }
-                      : {}
-                  }
-                >
-                  {linkifiedMessage}
-                  {messageWasEdited && (
-                    <Text
-                      tw="text-xs text-gray-500 dark:text-gray-200"
-                      selectable
-                    >
-                      {` • edited`}
-                    </Text>
-                  )}
-                </Text>
+                {item.channel_message.body_text_length > 0 ? (
+                  <Text
+                    selectable
+                    tw={["text-sm text-gray-900 dark:text-gray-100"]}
+                    style={
+                      Platform.OS === "web"
+                        ? {
+                            // @ts-ignore
+                            wordBreak: "break-word",
+                          }
+                        : {}
+                    }
+                  >
+                    {linkifiedMessage}
+                    {messageWasEdited && (
+                      <Text
+                        tw="text-xs text-gray-500 dark:text-gray-200"
+                        selectable
+                      >
+                        {` • edited`}
+                      </Text>
+                    )}
+                  </Text>
+                ) : null}
               </>
             )}
 
-            {item.channel_message?.attachments?.length > 0 ? (
+            {item.channel_message?.attachments?.length > 0 &&
+            item.channel_message?.attachments[0].mime.includes("audio") ? (
               <AudioPlayer
                 id={item.channel_message.id}
                 url={item.channel_message.attachments[0]?.url}
