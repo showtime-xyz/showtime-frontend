@@ -51,7 +51,7 @@ export const useSendChannelMessage = (
           const optimisticObject = {
             channel_message: {
               body: message,
-              body_text_length: 0,
+              body_text_length: message.length,
               id: optimisticObjectId,
               created_at: new Date().toISOString(),
               updated_at: new Date().toISOString(),
