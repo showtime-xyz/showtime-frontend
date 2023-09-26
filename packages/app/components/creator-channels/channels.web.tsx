@@ -95,7 +95,6 @@ const CreatorChannelsListItem = memo(
       if (
         item?.latest_message?.is_payment_gated &&
         !item?.latest_message?.body &&
-        !item?.latest_message &&
         !item?.latest_message?.attachments.length
       ) {
         return (
