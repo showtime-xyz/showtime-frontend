@@ -1,5 +1,5 @@
 import { memo, useMemo, RefObject, useContext } from "react";
-import { Platform, StyleSheet, useWindowDimensions } from "react-native";
+import { Platform, StyleSheet, Dimensions } from "react-native";
 
 import { BlurView } from "expo-blur";
 import Animated, {
@@ -57,6 +57,9 @@ import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { ImageAttachment, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
+
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -172,9 +175,10 @@ export const MessageItem = memo(
       ) {
         return 0;
       }
-      return theFirstAttachment.height > theFirstAttachment?.width
-        ? Math.min(320, 320 * (16 / 9))
-        : Math.min(320, 320 * (9 / 16));
+      return Math.min(
+        320 * (theFirstAttachment.height / theFirstAttachment.width),
+        320
+      );
     }, [item.channel_message.attachments]);
 
     // TODO: remove and support video
@@ -459,15 +463,31 @@ export const MessageItem = memo(
                   height={imageAttachmentHeight}
                   imgLayout={{
                     width: "100%",
-                    height: imageAttachmentHeight,
+                    height:
+                      Platform.OS === "web"
+                        ? imageAttachmentHeight
+                        : width *
+                          (item.channel_message?.attachments.length &&
+                          item.channel_message?.attachments[0].height &&
+                          item.channel_message?.attachments[0]?.width
+                            ? item.channel_message?.attachments[0]?.height /
+                              item.channel_message?.attachments[0].width
+                            : 320),
                   }}
                   tapToClose
                   borderRadius={12}
                   containerStyle={
                     Platform.OS === "web"
                       ? {
-                          width: 320,
-                          height: 320,
+                          width: Math.max(380, Math.min(width, height * 0.7)),
+                          height:
+                            item.channel_message?.attachments.length &&
+                            item.channel_message?.attachments[0].height &&
+                            item.channel_message?.attachments[0]?.width
+                              ? (Math.max(380, Math.min(width, height * 0.7)) *
+                                  item.channel_message?.attachments[0].height) /
+                                item.channel_message?.attachments[0].width
+                              : 320,
                         }
                       : null
                   }
