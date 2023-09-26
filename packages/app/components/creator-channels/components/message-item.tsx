@@ -1,5 +1,5 @@
 import { memo, useMemo, RefObject, useContext } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { BlurView } from "expo-blur";
 import Animated, {
@@ -48,6 +48,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
@@ -89,6 +90,10 @@ export const MessageItem = memo(
     const user = useContext(UserContext);
     const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
+
+    const { width } = useWindowDimensions();
+    const isMdWidth = width >= breakpoints["md"];
+
     const linkifiedMessage = useMemo(
       () =>
         channel_message.body
@@ -448,55 +453,41 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              // <Image
-              //   transition={300}
-              //   source={
-              //     item.channel_message.attachments[0]?.url +
-              //     "?optimizer=image&width=500&quality=70"
-              //   }
-              //   contentFit="cover"
-              //   style={{
-              //     backgroundColor: "#333",
-              //     aspectRatio:
-              //       (item.channel_message.attachments[0] as ImageAttachment)
-              //         .height >
-              //       (item.channel_message.attachments[0] as ImageAttachment)
-              //         .width
-              //         ? 9 / 16
-              //         : 16 / 9,
-              //     maxHeight: 320,
-              //     maxWidth: 320,
-              //   }}
-              //   tw="rounded-xl"
-              // />
-              <LightBox
-                width={"100%"}
-                height={imageAttachmentHeight}
-                imgLayout={{
-                  width: "100%",
-                  height: imageAttachmentHeight,
-                }}
-                tapToClose
-                borderRadius={12}
-                containerStyle={{
-                  width: 320,
-                  height: imageAttachmentHeight,
-                  borderRadius: 12,
-                  overflow: "hidden",
-                }}
-              >
-                <Image
-                  transition={300}
-                  source={{
-                    uri:
-                      item.channel_message.attachments[0]?.url +
-                      "?optimizer=image&width=500&quality=70",
+              <View tw="overflow-hidden rounded-xl" style={{ maxWidth: 320 }}>
+                <LightBox
+                  width={Math.min(320, width - 400)}
+                  height={imageAttachmentHeight}
+                  imgLayout={{
+                    width: "100%",
+                    height: imageAttachmentHeight,
                   }}
-                  alt="Cover image"
-                  resizeMode="cover"
-                  style={{ ...StyleSheet.absoluteFillObject }}
-                />
-              </LightBox>
+                  tapToClose
+                  borderRadius={12}
+                  containerStyle={{
+                    width: Math.max(320, width - 200),
+                    height:
+                      (item.channel_message.attachments[0] as ImageAttachment)
+                        .height >
+                      (item.channel_message.attachments[0] as ImageAttachment)
+                        ?.width
+                        ? Math.max(320, width - 200) * (16 / 9)
+                        : Math.max(320, width - 200) * (9 / 16),
+                    overflow: "hidden",
+                  }}
+                >
+                  <Image
+                    transition={300}
+                    source={{
+                      uri:
+                        item.channel_message.attachments[0]?.url +
+                        "?optimizer=image&width=500&quality=70",
+                    }}
+                    alt="Cover image"
+                    resizeMode="cover"
+                    style={{ ...StyleSheet.absoluteFillObject }}
+                  />
+                </LightBox>
+              </View>
             ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&
