@@ -4254,6 +4254,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@miblanchard/react-native-slider@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "@miblanchard/react-native-slider@npm:2.3.1"
+  peerDependencies:
+    react: ">=16.8"
+    react-native: ">=0.59"
+  checksum: 0f66becdd3ef9dc238b6c816b143fc36927d140ff453e46033451a5799177a30f864f91d5d307b7424b49d07e3dac3ca2517e16777c1b34fd99d140cc56e16bc
+  languageName: node
+  linkType: hard
+
 "@motionone/animation@npm:^10.12.0, @motionone/animation@npm:^10.15.1":
   version: 10.15.1
   resolution: "@motionone/animation@npm:10.15.1"
@@ -6822,6 +6832,7 @@ __metadata:
     "@hookform/resolvers": ^3.1.1
     "@magic-ext/react-native-expo-oauth": ^8.1.0
     "@magic-sdk/react-native-expo": ^14.1.0
+    "@miblanchard/react-native-slider": ^2.3.1
     "@react-native-async-storage/async-storage": ~1.19.1
     "@react-native-community/blur": ^4.3.2
     "@react-native-community/datetimepicker": 7.4.1
@@ -6875,6 +6886,7 @@ __metadata:
     expo-constants: ~14.4.2
     expo-dev-client: ~2.4.7
     expo-device: ~5.4.0
+    expo-document-picker: ~11.5.4
     expo-font: ~11.4.0
     expo-gl: ~13.0.1
     expo-haptics: ~12.4.0
@@ -6919,11 +6931,11 @@ __metadata:
     react-native-bignumber: ^0.2.1
     react-native-blob-jsi-helper: ^0.3.1
     react-native-blurhash: ^1.1.10
-    react-native-gesture-handler: 2.12.0
+    react-native-gesture-handler: 2.13.1
     react-native-get-random-values: ~1.9.0
     react-native-image-colors: ^2.3.0
     react-native-ios-context-menu: ^1.15.3
-    react-native-keyboard-controller: ^1.5.8
+    react-native-keyboard-controller: ^1.7.0
     react-native-level-fs: ^3.0.1
     react-native-localhost: ^1.0.0
     react-native-mmkv: 2.10.1
@@ -6933,13 +6945,14 @@ __metadata:
     react-native-popper: ^0.3.2
     react-native-quick-base64: ^2.0.7
     react-native-quick-crypto: ^0.6.1
-    react-native-reanimated: 3.4.1
+    react-native-reanimated: 3.5.4
     react-native-reanimated-carousel: ^3.5.1
     react-native-safe-area-context: 4.7.1
     react-native-screens: ^3.23.0
     react-native-share: ^9.2.3
     react-native-svg: 13.10.0
     react-native-tab-view: ^3.5.2
+    react-native-track-player: v4.0.0-rc08
     react-native-view-shot: 3.7.0
     react-native-volume-manager: ^1.10.0
     react-native-web: ~0.19.7
@@ -7045,6 +7058,7 @@ __metadata:
     resize-observer-polyfill: ^1.5.1
     screenfull: ^6.0.2
     setimmediate: ^1.0.5
+    shaka-player: ^4.3.8
     swiper: ^10.0.4
     swr: ^2.2.0
     tailwindcss: 3.3.2
@@ -14743,6 +14757,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eme-encryption-scheme-polyfill@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "eme-encryption-scheme-polyfill@npm:2.1.1"
+  checksum: 5d67fac0f95cc7e2066c68a15d8ecfb508d0c3774d3b8a37013da1a3a6a25ce86d6f8e185d885aa802c1fca48a3348f13dd310e54966fb96faba833a1e62000b
+  languageName: node
+  linkType: hard
+
 "emittery@npm:^0.13.1":
   version: 0.13.1
   resolution: "emittery@npm:0.13.1"
@@ -16146,6 +16167,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 47b74658925d9cacfb2b6dd298c4809d4c993414719c085594867a2ea8f5609c62a33e4dc2a629f5e0c55c9b797ced3c05ce4908690325ca4e8bae44136fae99
+  languageName: node
+  linkType: hard
+
+"expo-document-picker@npm:~11.5.4":
+  version: 11.5.4
+  resolution: "expo-document-picker@npm:11.5.4"
+  peerDependencies:
+    expo: "*"
+  checksum: a59571a356830b698ebeeb29cf1b33e42dcd05b348fe1125c5c52f0ef0bae410d9e6e57d62b7f9e9a699b38d824e90f787282d80b3feeddb35dcc319a389e546
   languageName: node
   linkType: hard
 
@@ -24403,9 +24433,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:2.12.0":
-  version: 2.12.0
-  resolution: "react-native-gesture-handler@npm:2.12.0"
+"react-native-gesture-handler@npm:2.13.1":
+  version: 2.13.1
+  resolution: "react-native-gesture-handler@npm:2.13.1"
   dependencies:
     "@egjs/hammerjs": ^2.0.17
     hoist-non-react-statics: ^3.3.0
@@ -24415,7 +24445,7 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 5147357b3212e269d0b8003e1be9e0993d0770f4880f1a8f52d2d61512c4569c48ec7b866d0a9ee44038785c29e0f84fbb99fd18a8e09552a25910c71602d788
+  checksum: c89504c52a2f4940a5cb56862f0676422ff30ad111fb015e37d2b4d3b736e708e6301da9027f003565bd23d8a3f4e8641eb5810f7da9ed848f81b3063df64e98
   languageName: node
   linkType: hard
 
@@ -24455,14 +24485,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-keyboard-controller@npm:^1.5.8":
-  version: 1.5.8
-  resolution: "react-native-keyboard-controller@npm:1.5.8"
+"react-native-keyboard-controller@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "react-native-keyboard-controller@npm:1.7.0"
   peerDependencies:
     react: "*"
     react-native: "*"
     react-native-reanimated: ">=2.3.0"
-  checksum: be159dbcd0b375a408b874d202175399b5e99b40fabb04cce5e0167586798b48c0e547f544a612b61ec5e1238620961e3315cb5d9d9583035a3009033774cbf7
+  checksum: 69a4f4e6120d0d3e15a47de4d00f9372a54e9c22b7baabe43300964076994add97edc79bf5da2297c701d31386b5781bd3a31de6fb066bab3519644a4a1f9e75
   languageName: node
   linkType: hard
 
@@ -24601,9 +24631,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-reanimated@npm:3.4.1":
-  version: 3.4.1
-  resolution: "react-native-reanimated@npm:3.4.1"
+"react-native-reanimated@npm:3.5.4":
+  version: 3.5.4
+  resolution: "react-native-reanimated@npm:3.5.4"
   dependencies:
     "@babel/plugin-transform-object-assign": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
@@ -24618,7 +24648,7 @@ __metadata:
     "@babel/plugin-transform-template-literals": ^7.0.0-0
     react: "*"
     react-native: "*"
-  checksum: 2462cd9a1166688fb74da1586a7700df04484d5c18d3b8385e80bc195ffad7b7a780230431435696780b601549a4f7b652a9b4380ff9231bdb61a6a3d7ecfce1
+  checksum: 885449b11324f0399128d665c90e7179a095dfa603dd251e8b1d14df2efe73411acd724562837e114366769e69b8aac2b0a2ffc1f63d2b7dbf1a35024f074604
   languageName: node
   linkType: hard
 
@@ -24675,6 +24705,20 @@ __metadata:
     react-native: "*"
     react-native-pager-view: "*"
   checksum: bd287e5543881aa662ee55418a3bd5dacb25033425a9fcb0fff21c3a3b96f956af1a77cd9bab4e7a8e94590080a5d8e3cb99cfa8613b19bf6da24bfc9b4942d4
+  languageName: node
+  linkType: hard
+
+"react-native-track-player@npm:v4.0.0-rc08":
+  version: 4.0.0-rc08
+  resolution: "react-native-track-player@npm:4.0.0-rc08"
+  peerDependencies:
+    react: ">=16.8.6"
+    react-native: ">=0.60.0-rc.2"
+    react-native-windows: ">=0.63.0"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: e1d60ddc77f66d08e573743482dcbce784c7ec958dcfeef75dd62fa3cfd873b019c45d4e906612f2aa888b2671722fe3f41d7d5497ce4aab134c3518e00adc12
   languageName: node
   linkType: hard
 
@@ -26081,6 +26125,15 @@ __metadata:
   bin:
     sha.js: ./bin.js
   checksum: ebd3f59d4b799000699097dadb831c8e3da3eb579144fd7eb7a19484cbcbb7aca3c68ba2bb362242eb09e33217de3b4ea56e4678184c334323eca24a58e3ad07
+  languageName: node
+  linkType: hard
+
+"shaka-player@npm:^4.3.8":
+  version: 4.3.8
+  resolution: "shaka-player@npm:4.3.8"
+  dependencies:
+    eme-encryption-scheme-polyfill: ^2.1.1
+  checksum: 37267f485ffba6d22bc6996859784909c8749b8653fd8a20b6f0f65b4822a9cce2ab5bee00e6cc1b9522c1a8e66e98e2d4e78a04eeef0b042369e2128d450399
   languageName: node
   linkType: hard
 

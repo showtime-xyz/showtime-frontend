@@ -112,6 +112,23 @@ const CreatorChannelsListItem = memo(
         );
       }
 
+      if (
+        item?.latest_message &&
+        item?.latest_message?.attachments.length > 0
+      ) {
+        // switch statement that returns image, video, audio, or file based on item?.latest_message?.attachments.mime
+        if (item?.latest_message?.attachments[0].mime.includes("image"))
+          return "🖼️ Image";
+
+        if (item?.latest_message?.attachments[0].mime.includes("video"))
+          return "🎥 Video";
+
+        if (item?.latest_message?.attachments[0].mime.includes("audio"))
+          return "🔊 Audio";
+
+        return "No preview available";
+      }
+
       // output the latest message if it exists
       if (item?.latest_message?.body) {
         return item?.latest_message?.body.trim();
@@ -128,12 +145,7 @@ const CreatorChannelsListItem = memo(
       }
 
       return "";
-    }, [
-      isDark,
-      item.itemType,
-      item?.latest_message?.body,
-      item?.latest_message?.is_payment_gated,
-    ]);
+    }, [isDark, item.itemType, item?.latest_message]);
 
     return (
       <Pressable
@@ -188,6 +200,16 @@ const CreatorChannelsListItem = memo(
                   ]}
                   numberOfLines={2}
                 >
+                  {item.latest_message?.sent_by.profile.profile_id !==
+                    item.owner.profile_id &&
+                  (item.latest_message?.sent_by.profile.name ||
+                    item.latest_message?.sent_by.profile.username) ? (
+                    <Text tw="font-semibold">
+                      {item.latest_message?.sent_by.profile.name ||
+                        item.latest_message?.sent_by.profile.username}
+                      {": "}
+                    </Text>
+                  ) : null}
                   {getPreviewText()}
                 </Text>
               </View>

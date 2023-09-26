@@ -1,6 +1,7 @@
-import { memo, useMemo, RefObject } from "react";
-import { Platform } from "react-native";
+import { memo, useMemo, RefObject, useContext } from "react";
+import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
+import { BlurView } from "expo-blur";
 import Animated, {
   useAnimatedStyle,
   runOnJS,
@@ -9,6 +10,7 @@ import Animated, {
   useAnimatedRef,
   Layout,
   enableLayoutAnimations,
+  SharedValue,
 } from "react-native-reanimated";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
@@ -17,23 +19,24 @@ import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Edit, Trash, Flag } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { LightBox } from "@showtime-xyz/universal.light-box";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
+import { AudioPlayer } from "app/components/audio-player/audio-player";
 import { Reaction } from "app/components/reaction";
+import { UserContext } from "app/context/user-context";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
-import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import { Link } from "app/navigation/link";
 import {
   cleanUserTextInput,
   formatDateRelativeWithIntl,
-  isMobileWeb,
   limitLineBreaks,
   removeTags,
 } from "app/utilities";
@@ -45,13 +48,15 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
-import { MessageItemProps } from "../types";
-import { StarDropBadge } from "./star-drop-badge";
+import { ImageAttachment, MessageItemProps } from "../types";
+import { generateLoremIpsum } from "../utils";
+import { CreatorBadge } from "./creator-badge";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -66,11 +71,13 @@ export const MessageItem = memo(
     editMessageIdSharedValue,
     editMessageItemDimension,
     edition,
+    isUserAdmin,
   }: MessageItemProps & {
     edition?: CreatorEditionResponse;
+    isUserAdmin?: boolean;
     listRef: RefObject<FlashList<any>>;
-    editMessageIdSharedValue: Animated.SharedValue<number | undefined>;
-    editMessageItemDimension: Animated.SharedValue<{
+    editMessageIdSharedValue: SharedValue<number | undefined>;
+    editMessageItemDimension: SharedValue<{
       height: number;
       pageY: number;
     }>;
@@ -80,9 +87,13 @@ export const MessageItem = memo(
     const deleteMessage = useDeleteMessage(channelId);
     const Alert = useAlert();
     const isDark = useIsDarkMode();
-    const user = useUser();
+    const user = useContext(UserContext);
     const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
+
+    const { width } = useWindowDimensions();
+    const isMdWidth = width >= breakpoints["md"];
+
     const linkifiedMessage = useMemo(
       () =>
         channel_message.body
@@ -138,13 +149,40 @@ export const MessageItem = memo(
       return false;
     }, [channel_message.created_at]);
 
+    const isByCreator = channel_message.sent_by.admin;
     const isStarDrop = channel_message.is_payment_gated;
     const isUnlockedStarDrop = isStarDrop && channel_message.body;
+    const messageNotViewable = isStarDrop && !isUnlockedStarDrop && edition;
 
-    if (isStarDrop && !isUnlockedStarDrop && edition) {
-      // StarDrop but not unlocked
-      return <ClaimPaidNFTButton edition={edition} type="messageItem" />;
-    }
+    const loremText = useMemo(
+      () =>
+        messageNotViewable && item.channel_message.body_text_length > 0
+          ? generateLoremIpsum(item.channel_message.body_text_length)
+          : "",
+      [item.channel_message.body_text_length, messageNotViewable]
+    );
+    const imageAttachmentHeight = useMemo(() => {
+      const theFirstAttachment = item.channel_message.attachments[0];
+
+      if (
+        !item.channel_message?.attachments?.length ||
+        !theFirstAttachment ||
+        !theFirstAttachment.height ||
+        !theFirstAttachment.width
+      ) {
+        return 0;
+      }
+      return theFirstAttachment.height > theFirstAttachment?.width
+        ? Math.min(320, 320 * (16 / 9))
+        : Math.min(320, 320 * (9 / 16));
+    }, [item.channel_message.attachments]);
+
+    // TODO: remove and support video
+    if (
+      item.channel_message?.attachments?.length > 0 &&
+      item.channel_message?.attachments[0].mime.includes("video")
+    )
+      return null;
 
     return (
       <AnimatedView tw="my-2 px-3" style={style} ref={animatedViewRef}>
@@ -177,21 +215,22 @@ export const MessageItem = memo(
 
               <View tw="flex-row items-center">
                 <Text tw={["text-xs text-gray-700 dark:text-gray-200"]}>
-                  {formatDateRelativeWithIntl(
-                    channel_message.created_at,
-                    !isMobileWeb()
-                  )}
+                  {formatDateRelativeWithIntl(channel_message.created_at)}
                 </Text>
-                {isStarDrop ? (
+                {isByCreator ? (
                   <View tw="ml-2">
-                    <StarDropBadge />
+                    <CreatorBadge />
                   </View>
                 ) : null}
               </View>
 
               <View
                 tw="mr-2 flex-1 flex-row items-center justify-end"
-                style={{ gap: 8 }}
+                style={{
+                  gap: 12,
+                  display:
+                    messageNotViewable && !isUserAdmin ? "none" : undefined,
+                }}
               >
                 <Reaction
                   reactions={reactions}
@@ -209,164 +248,257 @@ export const MessageItem = memo(
                     });
                   }}
                 />
-                <View>
-                  <DropdownMenuRoot>
-                    <DropdownMenuTrigger
-                      // @ts-expect-error - RNW
-                      style={Platform.select({
-                        web: {
-                          cursor: "pointer",
-                        },
-                      })}
-                    >
-                      <MoreHorizontal
-                        color={isDark ? colors.gray[400] : colors.gray[700]}
-                        width={20}
-                        height={20}
-                      />
-                    </DropdownMenuTrigger>
+                <DropdownMenuRoot>
+                  <DropdownMenuTrigger
+                    // @ts-expect-error - RNW
+                    style={Platform.select({
+                      web: {
+                        cursor: "pointer",
+                      },
+                    })}
+                  >
+                    <MoreHorizontal
+                      color={isDark ? colors.gray[400] : colors.gray[700]}
+                      width={20}
+                      height={20}
+                    />
+                  </DropdownMenuTrigger>
 
-                    <DropdownMenuContent loop sideOffset={8}>
-                      {item.channel_message.sent_by.profile.profile_id ===
-                      user.user?.data.profile.profile_id ? (
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            Alert.alert(
-                              "Are you sure you want to delete this message?",
-                              "",
-                              [
-                                {
-                                  text: "Cancel",
-                                },
-                                {
-                                  text: "Delete",
-                                  style: "destructive",
-                                  onPress: () => {
-                                    enableLayoutAnimations(true);
-                                    requestAnimationFrame(async () => {
-                                      listRef.current?.prepareForLayoutAnimationRender();
-                                      await deleteMessage.trigger({
-                                        messageId: item.channel_message.id,
-                                      });
-                                      requestAnimationFrame(() => {
-                                        enableLayoutAnimations(false);
-                                      });
-                                    });
-                                  },
-                                },
-                              ]
-                            );
-                          }}
-                          key="delete"
-                        >
-                          <MenuItemIcon
-                            Icon={Trash}
-                            ios={{
-                              paletteColors: ["red"],
-                              name: "trash",
-                            }}
-                          />
-                          <DropdownMenuItemTitle tw="font-semibold text-red-500">
-                            Delete
-                          </DropdownMenuItemTitle>
-                        </DropdownMenuItem>
-                      ) : null}
-
-                      {
-                        // edit message only if message is not older than 2 hours and it belongs to the user
-                        item.channel_message.sent_by.profile.profile_id ===
-                          user.user?.data.profile.profile_id &&
-                        allowMessageEditing ? (
-                          <DropdownMenuItem
-                            onSelect={() => {
-                              runOnUI(() => {
-                                "worklet";
-                                const values = measure(animatedViewRef);
-                                if (values) {
-                                  editMessageItemDimension.value = {
-                                    height: values.height,
-                                    pageY: values.pageY,
-                                  };
-                                }
-                                runOnJS(setEditMessage)({
-                                  text: item.channel_message.body,
-                                  id: item.channel_message.id,
-                                });
-                              })();
-                            }}
-                            key="edit"
-                          >
-                            <MenuItemIcon
-                              Icon={Edit}
-                              ios={{
-                                name: "pencil",
-                              }}
-                            />
-                            <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                              Edit
-                            </DropdownMenuItemTitle>
-                          </DropdownMenuItem>
-                        ) : null
-                      }
-                      {item.channel_message.sent_by.profile.profile_id !==
-                      user.user?.data.profile.profile_id ? (
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            router.push(
+                  <DropdownMenuContent loop sideOffset={8}>
+                    {item.channel_message.sent_by.profile.profile_id ===
+                      user?.user?.data.profile.profile_id || isUserAdmin ? (
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          Alert.alert(
+                            "Are you sure you want to delete this message?",
+                            "",
+                            [
                               {
-                                pathname:
-                                  Platform.OS === "web"
-                                    ? router.pathname
-                                    : "/report",
-                                query: {
-                                  ...router.query,
-                                  reportModal: true,
-                                  channelMessageId: item.channel_message.id,
+                                text: "Cancel",
+                              },
+                              {
+                                text: "Delete",
+                                style: "destructive",
+                                onPress: () => {
+                                  enableLayoutAnimations(true);
+                                  requestAnimationFrame(async () => {
+                                    listRef.current?.prepareForLayoutAnimationRender();
+                                    await deleteMessage.trigger({
+                                      messageId: item.channel_message.id,
+                                    });
+                                    requestAnimationFrame(() => {
+                                      enableLayoutAnimations(false);
+                                    });
+                                  });
                                 },
                               },
-                              Platform.OS === "web" ? router.asPath : undefined
-                            );
+                            ]
+                          );
+                        }}
+                        key="delete"
+                      >
+                        <MenuItemIcon
+                          Icon={Trash}
+                          ios={{
+                            paletteColors: ["red"],
+                            name: "trash",
                           }}
-                          key="report"
+                        />
+                        <DropdownMenuItemTitle tw="font-semibold text-red-500">
+                          Delete
+                        </DropdownMenuItemTitle>
+                      </DropdownMenuItem>
+                    ) : null}
+
+                    {
+                      // edit message only if message is not older than 2 hours and it belongs to the user
+                      item.channel_message.sent_by.profile.profile_id ===
+                        user?.user?.data.profile.profile_id &&
+                      allowMessageEditing ? (
+                        <DropdownMenuItem
+                          onSelect={() => {
+                            runOnUI(() => {
+                              "worklet";
+                              const values = measure(animatedViewRef);
+                              if (values) {
+                                editMessageItemDimension.value = {
+                                  height: values.height,
+                                  pageY: values.pageY,
+                                };
+                              }
+                              runOnJS(setEditMessage)({
+                                text: item.channel_message.body,
+                                id: item.channel_message.id,
+                              });
+                            })();
+                          }}
+                          key="edit"
                         >
                           <MenuItemIcon
-                            Icon={Flag}
+                            Icon={Edit}
                             ios={{
-                              name: "flag",
+                              name: "pencil",
                             }}
                           />
                           <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                            Report
+                            Edit
                           </DropdownMenuItemTitle>
                         </DropdownMenuItem>
-                      ) : null}
-                    </DropdownMenuContent>
-                  </DropdownMenuRoot>
-                </View>
+                      ) : null
+                    }
+                    {item.channel_message.sent_by.profile.profile_id !==
+                    user?.user?.data.profile.profile_id ? (
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          router.push(
+                            {
+                              pathname:
+                                Platform.OS === "web"
+                                  ? router.pathname
+                                  : "/report",
+                              query: {
+                                ...router.query,
+                                reportModal: true,
+                                channelMessageId: item.channel_message.id,
+                              },
+                            },
+                            Platform.OS === "web" ? router.asPath : undefined
+                          );
+                        }}
+                        key="report"
+                      >
+                        <MenuItemIcon
+                          Icon={Flag}
+                          ios={{
+                            name: "flag",
+                          }}
+                        />
+                        <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
+                          Report
+                        </DropdownMenuItemTitle>
+                      </DropdownMenuItem>
+                    ) : null}
+                  </DropdownMenuContent>
+                </DropdownMenuRoot>
               </View>
             </View>
 
-            <Text>
-              <Text
-                selectable
-                tw={["text-sm text-gray-900 dark:text-gray-100"]}
-                style={
-                  Platform.OS === "web"
-                    ? {
-                        // @ts-ignore
-                        wordBreak: "break-word",
-                      }
-                    : {}
-                }
-              >
-                {linkifiedMessage}
-              </Text>
-              {messageWasEdited && (
-                <Text tw="text-xs text-gray-500 dark:text-gray-200" selectable>
-                  {` • edited`}
-                </Text>
-              )}
-            </Text>
+            {messageNotViewable && !isUserAdmin ? (
+              <View tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
+                {Platform.OS === "web" ? (
+                  // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
+                  <View tw="blur-sm">
+                    <Text tw="text-sm text-gray-900 dark:text-gray-100">
+                      {loremText}
+                    </Text>
+                  </View>
+                ) : (
+                  <>
+                    <Text tw="text-sm text-gray-900  dark:text-gray-100">
+                      {loremText}
+                    </Text>
+                    <BlurView
+                      intensity={10}
+                      style={{
+                        left: 0,
+                        height: "200%",
+                        width: "200%",
+                        position: "absolute",
+                      }}
+                    />
+                  </>
+                )}
+              </View>
+            ) : (
+              <>
+                {item.channel_message.body_text_length > 0 ? (
+                  <Text
+                    selectable
+                    tw={["text-sm text-gray-900 dark:text-gray-100"]}
+                    style={
+                      Platform.OS === "web"
+                        ? {
+                            // @ts-ignore
+                            wordBreak: "break-word",
+                          }
+                        : {}
+                    }
+                  >
+                    {linkifiedMessage}
+                    {messageWasEdited && (
+                      <Text
+                        tw="text-xs text-gray-500 dark:text-gray-200"
+                        selectable
+                      >
+                        {` • edited`}
+                      </Text>
+                    )}
+                  </Text>
+                ) : null}
+              </>
+            )}
+
+            {/* ADD LETER
+            {item.channel_message?.attachments?.length > 0 &&
+            item.channel_message?.attachments[0].mime.includes("video") ? (
+              <Video
+                shouldPlay
+                source={{ uri: item.channel_message.attachments[0]?.url }}
+                useNativeControls
+                style={{ width: 300, height: 250 }}
+                resizeMode={ResizeMode.COVER}
+              />
+            ) : null}
+            */}
+
+            {item.channel_message?.attachments?.length > 0 &&
+            item.channel_message?.attachments[0].mime.includes("image") ? (
+              <View tw="overflow-hidden rounded-xl" style={{ maxWidth: 320 }}>
+                <LightBox
+                  width={Math.min(320, width - 400)}
+                  height={imageAttachmentHeight}
+                  imgLayout={{
+                    width: "100%",
+                    height: imageAttachmentHeight,
+                  }}
+                  tapToClose
+                  borderRadius={12}
+                  containerStyle={{
+                    width: Math.max(320, width - 200),
+                    height:
+                      (item.channel_message.attachments[0] as ImageAttachment)
+                        .height >
+                      (item.channel_message.attachments[0] as ImageAttachment)
+                        ?.width
+                        ? Math.max(320, width - 200) * (16 / 9)
+                        : Math.max(320, width - 200) * (9 / 16),
+                    overflow: "hidden",
+                  }}
+                >
+                  <Image
+                    transition={300}
+                    source={{
+                      uri:
+                        item.channel_message.attachments[0]?.url +
+                        "?optimizer=image&width=500&quality=70",
+                    }}
+                    alt="Cover image"
+                    resizeMode="cover"
+                    style={{ ...StyleSheet.absoluteFillObject }}
+                  />
+                </LightBox>
+              </View>
+            ) : null}
+
+            {item.channel_message?.attachments?.length > 0 &&
+            item.channel_message?.attachments[0].mime.includes("audio") ? (
+              <AudioPlayer
+                id={item.channel_message.id}
+                url={item.channel_message.attachments[0]?.url}
+                duration={item.channel_message.attachments[0]?.duration}
+              />
+            ) : null}
+
             <PlatformAnimateHeight
               initialHeight={item.reaction_group.length > 0 ? 29 : 0}
             >

@@ -5,6 +5,7 @@ import {
   useMemo,
   RefObject,
   useState,
+  memo,
 } from "react";
 import { Platform } from "react-native";
 
@@ -15,13 +16,12 @@ import Animated, {
   enableLayoutAnimations,
 } from "react-native-reanimated";
 
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check, Close, ChevronDown } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -31,10 +31,12 @@ import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
 import { MessageBox } from "app/components/messages";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { containsURL } from "app/lib/linkify";
 
 import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
 import { MissingStarDropModal } from "../missing-star-drop-modal";
+import { ChannelById } from "../types";
 
 export const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
   return (
@@ -60,55 +62,66 @@ export const MessageBoxUnavailable = () => {
   );
 };
 
-export const MessageInput = ({
-  listRef,
-  channelId,
-  sendMessageCallback,
-  editMessage,
-  setEditMessage,
-  isUserAdmin,
-  keyboard,
-  edition,
-  hasUnlockedMessages,
-}: {
-  listRef: RefObject<FlashList<any>>;
-  channelId: string;
-  keyboard: any;
-  sendMessageCallback?: () => void;
-  editMessage?: undefined | { id: number; text: string };
-  setEditMessage: (v: undefined | { id: number; text: string }) => void;
-  isUserAdmin?: boolean;
-  edition?: CreatorEditionResponse;
-  hasUnlockedMessages?: boolean;
-}) => {
-  const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
-    useState(false);
-  const insets = useSafeAreaInsets();
-  const bottomHeight = usePlatformBottomHeight();
-  const sendMessage = useSendChannelMessage(channelId);
-  const inputRef = useRef<any>(null);
-  const editMessages = useEditChannelMessage(channelId);
-  const isDark = useIsDarkMode();
-  const router = useRouter();
-  const bottom = useMemo(
-    () =>
-      Platform.select({
-        web: bottomHeight,
-        ios: insets.bottom / 2,
-        android: 0,
-      }),
-    [bottomHeight, insets.bottom]
-  );
+const triggerNoUrlAlert = () => {
+  Alert.alert(`Error`, "Only the channel creator can post links.", [
+    {
+      text: "Ok",
+      style: "cancel",
+    },
+  ]);
+};
 
-  useEffect(() => {
-    // autofocus with ref is more stable than autoFocus prop
-    setTimeout(() => {
-      // prevent some UI jank on android
-      requestAnimationFrame(() => {
-        inputRef.current?.focus();
-      });
-    }, 600);
-  }, []);
+export const MessageInput = memo(
+  ({
+    listRef,
+    channelId,
+    sendMessageCallback,
+    editMessage,
+    setEditMessage,
+    isUserAdmin,
+    keyboard,
+    edition,
+    hasUnlockedMessages,
+    permissions,
+  }: {
+    listRef: RefObject<FlashList<any>>;
+    channelId: string;
+    keyboard: any;
+    sendMessageCallback?: () => void;
+    editMessage?: undefined | { id: number; text: string };
+    setEditMessage: (v: undefined | { id: number; text: string }) => void;
+    isUserAdmin?: boolean;
+    edition?: CreatorEditionResponse;
+    hasUnlockedMessages?: boolean;
+    permissions?: ChannelById["permissions"];
+  }) => {
+    const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
+      useState(false);
+    const insets = useSafeAreaInsets();
+    const bottomHeight = usePlatformBottomHeight();
+    const sendMessage = useSendChannelMessage(channelId, isUserAdmin);
+    const inputRef = useRef<any>(null);
+    const editMessages = useEditChannelMessage(channelId);
+    const isDark = useIsDarkMode();
+    const bottom = useMemo(
+      () =>
+        Platform.select({
+          web: bottomHeight,
+          ios: insets.bottom / 2,
+          android: 0,
+        }),
+      [bottomHeight, insets.bottom]
+    );
+
+    useEffect(() => {
+      // autofocus with ref is more stable than autoFocus prop
+      setTimeout(() => {
+        // prevent some UI jank on android
+        requestAnimationFrame(() => {
+          inputRef.current?.focus();
+        });
+      }, 600);
+    }, []);
 
     const style = useAnimatedStyle(() => {
       return {
@@ -124,78 +137,88 @@ export const MessageInput = ({
       };
     }, [keyboard, bottom]);
 
-  useEffect(() => {
-    if (editMessage) {
-      inputRef.current?.setValue(editMessage.text);
-      inputRef.current?.focus();
-    } else {
-      inputRef.current?.setValue("");
-    }
-  }, [editMessage]);
+    useEffect(() => {
+      if (editMessage) {
+        inputRef.current?.setValue(editMessage.text);
+        inputRef.current?.focus();
+      } else {
+        inputRef.current?.setValue("");
+      }
+    }, [editMessage]);
 
-  const handleSubmit = useCallback(
-    async (text: string) => {
-      if (channelId) {
-        inputRef.current?.reset();
-        enableLayoutAnimations(false);
-        listRef.current?.prepareForLayoutAnimationRender();
-        await sendMessage.trigger({
-          channelId,
-          message: text,
-          callback: sendMessageCallback,
-        });
-        requestAnimationFrame(() => {
-          enableLayoutAnimations(true);
+    const handleSubmit = useCallback(
+      async (text: string) => {
+        if (!isUserAdmin && containsURL(text)) {
+          triggerNoUrlAlert();
+          return;
+        }
 
-          listRef.current?.scrollToIndex({
-            index: 0,
-            animated: true,
-            viewOffset: 1000,
+        if (channelId) {
+          inputRef.current?.reset();
+          enableLayoutAnimations(false);
+          listRef.current?.prepareForLayoutAnimationRender();
+          await sendMessage.trigger({
+            channelId,
+            message: text,
+            callback: sendMessageCallback,
           });
-        });
+          requestAnimationFrame(() => {
+            enableLayoutAnimations(true);
+
+            listRef.current?.scrollToIndex({
+              index: 0,
+              animated: true,
+              viewOffset: 1000,
+            });
+          });
+        }
+
+        return Promise.resolve();
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [channelId, sendMessage, sendMessageCallback, isUserAdmin]
+    );
+
+    const handleEditMessage = useCallback(async () => {
+      if (!editMessage) return;
+
+      if (!isUserAdmin && containsURL(inputRef.current?.value)) {
+        triggerNoUrlAlert();
+        return;
       }
 
-      return Promise.resolve();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [channelId, sendMessage, sendMessageCallback]
-  );
-
-  const handleEditMessage = useCallback(async () => {
-    if (!editMessage) return;
-
-    const newMessage = inputRef.current?.value;
-    if (newMessage.trim().length === 0) return;
-    inputRef.current?.reset();
-    enableLayoutAnimations(true);
-    requestAnimationFrame(() => {
-      editMessages.trigger({
-        messageId: editMessage.id,
-        message: newMessage,
-        channelId,
+      const newMessage = inputRef.current?.value;
+      if (newMessage.trim().length === 0) return;
+      inputRef.current?.reset();
+      enableLayoutAnimations(true);
+      requestAnimationFrame(() => {
+        editMessages.trigger({
+          messageId: editMessage.id,
+          message: newMessage,
+          channelId,
+        });
+        setEditMessage(undefined);
       });
-      setEditMessage(undefined);
-    });
-  }, [channelId, editMessage, editMessages, setEditMessage]);
+    }, [channelId, editMessage, editMessages, setEditMessage, isUserAdmin]);
 
-  if (!isUserAdmin && edition && !hasUnlockedMessages) {
-    return (
-      <View
-        tw="justify-center px-3"
-        style={{
-          paddingBottom: bottom,
-        }}
-      >
-        <ClaimPaidNFTButton edition={edition} type="messageInput" />
-        <View tw="mt-3 pb-4">
-          <Text tw="text-center text-xs text-gray-500 dark:text-gray-300">
-            Collecting a Star Drop unlocks privileges with this artist like
-            exclusive channel content, a Star Badge, and more
-          </Text>
+    if (!isUserAdmin && edition && !hasUnlockedMessages) {
+      return (
+        <View
+          tw="justify-center px-3"
+          style={{
+            paddingBottom: bottom,
+          }}
+        >
+          <ClaimPaidNFTButton edition={edition} type="messageInput" />
+          <View tw="mt-3 pb-4">
+            <Text tw="text-center text-xs text-gray-500 dark:text-gray-300">
+              Collecting a Star Drop unlocks privileges with this artist like
+              exclusive channel content, a Star Badge, and more
+            </Text>
+          </View>
         </View>
-      </View>
-    );
-  }
+      );
+    }
 
     return (
       <>

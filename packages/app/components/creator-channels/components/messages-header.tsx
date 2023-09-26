@@ -2,8 +2,7 @@ import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Settings, Share } from "@showtime-xyz/universal.icon";
-import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+import { ArrowLeft, Settings } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -42,19 +41,20 @@ export const MessagesHeader = (props: HeaderProps) => {
 
   return (
     <View
-      tw="web:pt-2 web:md:py-5 android:pt-4 flex-row items-center border-gray-200 px-4 pb-2 dark:border-gray-800 md:border-b"
+      tw="web:pt-2 web:md:py-5 android:pt-4 flex-row items-center border-gray-200 px-2.5 pb-2 dark:border-gray-800 md:border-b"
       style={{ columnGap: 8 }}
     >
-      <View tw="flex-row items-center" style={{ columnGap: 8 }}>
+      <View tw="flex-row items-center" style={{ columnGap: 10 }}>
         <Pressable
           onPress={() => {
             router.back();
           }}
           tw="lg:hidden"
+          hitSlop={15}
         >
           <ArrowLeft
-            height={24}
-            width={24}
+            height={26}
+            width={26}
             color={isDark ? "white" : "black"}
           />
         </Pressable>
@@ -83,43 +83,21 @@ export const MessagesHeader = (props: HeaderProps) => {
               {props.members ?? 0} members
             </Text>
           </View>
-          <View tw="flex-row">
-            <Pressable onPress={props.onPressShare} tw="p-2 md:hidden">
-              <Share
-                height={20}
-                width={20}
-                color={isDark ? colors.gray["100"] : colors.gray[800]}
-              />
-            </Pressable>
+          <View tw="flex-row items-center justify-center gap-3">
             {!props.isCurrentUserOwner ? (
-              <Pressable onPress={props.onPressSettings} tw="p-2 md:hidden">
+              <Pressable onPress={props.onPressSettings}>
                 <Settings
-                  height={20}
-                  width={20}
-                  color={isDark ? colors.gray["100"] : colors.gray[800]}
+                  height={Platform.OS === "web" ? 20 : 24}
+                  width={Platform.OS === "web" ? 20 : 24}
+                  color={isDark ? colors.gray["100"] : colors.gray[500]}
                 />
               </Pressable>
             ) : null}
-
-            <Pressable onPress={props.onPressShare} tw="hidden md:flex">
-              <Share
-                height={24}
-                width={24}
-                color={isDark ? colors.gray["100"] : colors.gray[800]}
-              />
+            <Pressable onPress={props.onPressShare}>
+              <View tw="items-center justify-center overflow-hidden rounded-full bg-indigo-600 px-3 py-1.5 text-center ">
+                <Text tw="web:text-xs text-sm font-bold text-white">Share</Text>
+              </View>
             </Pressable>
-            {!props.isCurrentUserOwner ? (
-              <Pressable
-                onPress={props.onPressSettings}
-                tw="ml-4 hidden md:flex"
-              >
-                <MoreHorizontal
-                  height={24}
-                  width={24}
-                  color={isDark ? colors.gray["100"] : colors.gray[800]}
-                />
-              </Pressable>
-            ) : null}
           </View>
         </>
       ) : null}

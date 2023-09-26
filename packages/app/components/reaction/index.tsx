@@ -101,7 +101,7 @@ export const Reaction = (props: Props) => {
 
   function handlePress() {
     "worklet";
-    const dim = measure(positionRef);
+    const dim = measure(positionRef) || { pageX: 0, pageY: 0 };
     runOnJS(setPositions)(dim.pageX, dim.pageY);
   }
 

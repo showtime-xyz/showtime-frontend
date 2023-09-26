@@ -56,6 +56,10 @@ import {
 } from "app/lib/keyboard-controller";
 import { createParam } from "app/navigation/use-param";
 
+import TrackPlayer from "design-system/track-player";
+
+import { setupPlayer } from "../audio-player/service";
+import { pauseAllActiveTracks } from "../audio-player/store";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
@@ -64,11 +68,9 @@ import { MessageInput, ScrollToBottomButton } from "./components/message-input";
 import { MessageItem, MessageSkeleton } from "./components/message-item";
 import { MessagesHeader } from "./components/messages-header";
 import { useChannelById } from "./hooks/use-channel-detail";
-import {
-  ChannelMessageItem,
-  useChannelMessages,
-} from "./hooks/use-channel-messages";
+import { useChannelMessages } from "./hooks/use-channel-messages";
 import { UNREAD_MESSAGES_KEY } from "./hooks/use-channels-unread-messages";
+import { ChannelMessageItem } from "./types";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -108,10 +110,6 @@ const getItemType = (item: ChannelMessageItem) => {
     return "message-unlocked";
   }
 
-  if (item.reaction_group.length > 0) {
-    return "reaction-message";
-  }
-
   return "message";
 };
 
@@ -146,6 +144,23 @@ export const Messages = memo(() => {
       : { height: { value: 0 }, state: {} };
 
   const editMessageItemDimension = useSharedValue({ pageY: 0, height: 0 });
+
+  // when component unmounts, reset all running player instances
+  useLayoutEffect(() => {
+    queueMicrotask(async () => {
+      await setupPlayer();
+      await TrackPlayer.reset();
+      pauseAllActiveTracks();
+    });
+
+    // yes, this is weird but we need it to run on unmount as well
+    return () => {
+      queueMicrotask(() => {
+        TrackPlayer.reset();
+        pauseAllActiveTracks();
+      });
+    };
+  }, [channelId]);
 
   useEffect(() => {
     editMessageIdSharedValue.value = editMessage?.id;
@@ -303,10 +318,11 @@ export const Messages = memo(() => {
           editMessageIdSharedValue={editMessageIdSharedValue}
           editMessageItemDimension={editMessageItemDimension}
           edition={edition}
+          isUserAdmin={isUserAdmin}
         />
       );
     },
-    [editMessageIdSharedValue, editMessageItemDimension, edition]
+    [editMessageIdSharedValue, editMessageItemDimension, edition, isUserAdmin]
   );
 
   // TODO: add back to keyboard controller?
@@ -519,7 +535,7 @@ export const Messages = memo(() => {
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
-                estimatedItemSize={400}
+                estimatedItemSize={300}
                 // android > 12 flips the scrollbar to the left, FlashList bug
                 showsVerticalScrollIndicator={Platform.OS !== "android"}
                 keyboardDismissMode={
@@ -553,6 +569,7 @@ export const Messages = memo(() => {
           keyboard={keyboard}
           edition={edition}
           hasUnlockedMessages={hasUnlockedMessage}
+          permissions={channelDetail.data?.permissions}
         />
 
         {showScrollToBottom ? (

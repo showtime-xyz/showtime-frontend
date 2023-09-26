@@ -75,6 +75,8 @@ const nextConfig = {
     "universal-tooltip",
     "react-native-image-colors",
     "react-native-reanimated-carousel",
+    "@miblanchard/react-native-slider",
+    "react-native-track-player",
   ],
   webpack: (config, options) => {
     if (!options.isServer) {
@@ -139,6 +141,7 @@ const nextConfig = {
       "storage.googleapis.com",
       "testingservice-dot-showtimenft.wl.r.appspot.com",
       "media.showtime.xyz",
+      "media-stage.showtime.xyz",
     ],
   },
   async headers() {

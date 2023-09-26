@@ -911,7 +911,7 @@ export const generateFakeData = (
 };
 
 export function formatDateRelativeWithIntl(
-  isoDateString: string,
+  isoDateString: string | number | Date,
   isDisplayCompleteUnit = false
 ): string {
   const date = new Date(isoDateString);
@@ -943,13 +943,13 @@ export function formatDateRelativeWithIntl(
     } else if (diffInMonths < 1) {
       return `${diffInWeeks}${isDisplayCompleteUnit ? " weeks ago" : "w"}`;
     } else if (diffInMonths === 1) {
-      return `${diffInMonths}${isDisplayCompleteUnit ? " month ago" : "w"}`;
+      return `${diffInMonths}${isDisplayCompleteUnit ? " month ago" : "mo"}`;
     } else if (diffInMonths < 12) {
-      return `${diffInMonths}${isDisplayCompleteUnit ? " months ago" : "w"}`;
+      return `${diffInMonths}${isDisplayCompleteUnit ? " months ago" : "mo"}`;
     } else if (diffInYears === 1) {
-      return `${diffInYears}${isDisplayCompleteUnit ? " year ago" : "w"}`;
+      return `${diffInYears}${isDisplayCompleteUnit ? " year ago" : "yr"}`;
     } else {
-      return `${diffInYears}${isDisplayCompleteUnit ? " years ago" : "w"}`;
+      return `${diffInYears}${isDisplayCompleteUnit ? " years ago" : "yr"}`;
     }
   }
 }
