@@ -241,6 +241,7 @@ const expoConfig: ExpoConfig = {
         },
       },
     ],
+    ["react-native-compressor"],
   ],
   hooks: {
     postPublish: [

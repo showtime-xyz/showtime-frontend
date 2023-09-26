@@ -91,8 +91,8 @@ export const MessageItem = memo(
     const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
 
-    const { width } = useWindowDimensions();
-    const isMdWidth = width >= breakpoints["md"];
+    // const { width, height: screenHeight } = useWindowDimensions();
+    // const isMdWidth = width >= breakpoints["md"];
 
     const linkifiedMessage = useMemo(
       () =>
@@ -455,7 +455,7 @@ export const MessageItem = memo(
             item.channel_message?.attachments[0].mime.includes("image") ? (
               <View tw="overflow-hidden rounded-xl" style={{ maxWidth: 320 }}>
                 <LightBox
-                  width={Math.min(320, width - 400)}
+                  width={320}
                   height={imageAttachmentHeight}
                   imgLayout={{
                     width: "100%",
@@ -463,17 +463,14 @@ export const MessageItem = memo(
                   }}
                   tapToClose
                   borderRadius={12}
-                  containerStyle={{
-                    width: Math.max(320, width - 200),
-                    height:
-                      (item.channel_message.attachments[0] as ImageAttachment)
-                        .height >
-                      (item.channel_message.attachments[0] as ImageAttachment)
-                        ?.width
-                        ? Math.max(320, width - 200) * (16 / 9)
-                        : Math.max(320, width - 200) * (9 / 16),
-                    overflow: "hidden",
-                  }}
+                  containerStyle={
+                    Platform.OS === "web"
+                      ? {
+                          width: 320,
+                          height: 320,
+                        }
+                      : null
+                  }
                 >
                   <Image
                     transition={300}

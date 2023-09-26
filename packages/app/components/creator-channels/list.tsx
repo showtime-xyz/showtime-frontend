@@ -107,7 +107,9 @@ const CreatorChannelsListItem = memo(
       // check if its a payment gated message and not paid already, so we output a generic message
       if (
         item?.latest_message?.is_payment_gated &&
-        !item?.latest_message?.body
+        !item?.latest_message?.body &&
+        !item?.latest_message &&
+        !item?.latest_message?.attachments.length
       ) {
         return (
           <View tw="flex-row items-center">
