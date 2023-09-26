@@ -48,13 +48,12 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
-import { breakpoints } from "design-system/theme";
 
 import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
-import { ImageAttachment, MessageItemProps } from "../types";
+import { MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
 
@@ -93,9 +92,6 @@ export const MessageItem = memo(
     const user = useContext(UserContext);
     const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
-
-    // const { width, height: screenHeight } = useWindowDimensions();
-    // const isMdWidth = width >= breakpoints["md"];
 
     const linkifiedMessage = useMemo(
       () =>
