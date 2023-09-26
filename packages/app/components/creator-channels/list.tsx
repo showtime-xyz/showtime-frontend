@@ -104,32 +104,12 @@ const CreatorChannelsListItem = memo(
     const forceUpdate = useReducer((x) => x + 1, 0)[1];
 
     const getPreviewText = useCallback(() => {
-      if (
-        item?.latest_message &&
-        item?.latest_message?.attachments.length > 0
-      ) {
-        // switch statement that returns image, video, audio, or file based on item?.latest_message?.attachments.mime
-        if (item?.latest_message?.attachments[0].mime.includes("image"))
-          return "🖼️ Image";
-
-        if (item?.latest_message?.attachments[0].mime.includes("video"))
-          return "🎥 Video";
-
-        if (item?.latest_message?.attachments[0].mime.includes("audio"))
-          return "🔊 Audio";
-
-        return "No preview available";
-      }
-
-      // output the latest message if it exists
-      if (item?.latest_message?.body) {
-        return item?.latest_message?.body.trim();
-      }
-
       // check if its a payment gated message and not paid already, so we output a generic message
       if (
         item?.latest_message?.is_payment_gated &&
-        !item?.latest_message?.body
+        !item?.latest_message?.body &&
+        !item?.latest_message &&
+        !item?.latest_message?.attachments.length
       ) {
         return (
           <View tw="flex-row items-center">
@@ -151,6 +131,28 @@ const CreatorChannelsListItem = memo(
             </Text>
           </View>
         );
+      }
+
+      if (
+        item?.latest_message &&
+        item?.latest_message?.attachments.length > 0
+      ) {
+        // switch statement that returns image, video, audio, or file based on item?.latest_message?.attachments.mime
+        if (item?.latest_message?.attachments[0].mime.includes("image"))
+          return "🖼️ Image";
+
+        if (item?.latest_message?.attachments[0].mime.includes("video"))
+          return "🎥 Video";
+
+        if (item?.latest_message?.attachments[0].mime.includes("audio"))
+          return "🔊 Audio";
+
+        return "No preview available";
+      }
+
+      // output the latest message if it exists
+      if (item?.latest_message?.body) {
+        return item?.latest_message?.body.trim();
       }
 
       // if we don't have a latest message, we're going to output a default message when owned
