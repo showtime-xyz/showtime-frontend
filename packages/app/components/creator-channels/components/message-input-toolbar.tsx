@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
-import { Audio, clearCache } from "react-native-compressor";
+import { Audio, Image } from "react-native-compressor";
 
 import { Gallery, MusicBadge, Photo } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -78,7 +78,10 @@ export const MessageInputToolbar = memo(
       });
 
       if (!result.canceled) {
-        uploadFile(result.assets[0].uri);
+        const compressedImage = await Image.compress(result.assets[0].uri, {
+          quality: 0.8,
+        });
+        uploadFile(compressedImage);
       }
     }, [uploadFile]);
 
@@ -103,7 +106,10 @@ export const MessageInputToolbar = memo(
         });
 
         if (!result.canceled) {
-          uploadFile(result.assets[0].uri);
+          const compressedImage = await Image.compress(result.assets[0].uri, {
+            quality: 0.8,
+          });
+          uploadFile(compressedImage);
         }
       } catch (error: any) {
         toast.error(
