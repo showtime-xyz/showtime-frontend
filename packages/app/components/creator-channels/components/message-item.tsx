@@ -1,5 +1,5 @@
 import { memo, useMemo, RefObject, useContext } from "react";
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 import { BlurView } from "expo-blur";
 import Animated, {
@@ -21,6 +21,7 @@ import { Edit, Trash, Flag } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { LightBox } from "@showtime-xyz/universal.light-box";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -155,6 +156,21 @@ export const MessageItem = memo(
           : "",
       [item.channel_message.body_text_length, messageNotViewable]
     );
+    const imageAttachmentHeight = useMemo(() => {
+      const theFirstAttachment = item.channel_message.attachments[0];
+
+      if (
+        !item.channel_message?.attachments?.length ||
+        !theFirstAttachment ||
+        !theFirstAttachment.height ||
+        !theFirstAttachment.width
+      ) {
+        return 0;
+      }
+      return theFirstAttachment.height > theFirstAttachment?.width
+        ? Math.min(320, 320 * (16 / 9))
+        : Math.min(320, 320 * (9 / 16));
+    }, [item.channel_message.attachments]);
 
     // TODO: remove and support video
     if (
@@ -432,27 +448,55 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              <Image
-                transition={300}
-                source={
-                  item.channel_message.attachments[0]?.url +
-                  "?optimizer=image&width=500&quality=70"
-                }
-                contentFit="cover"
-                style={{
-                  backgroundColor: "#333",
-                  aspectRatio:
-                    (item.channel_message.attachments[0] as ImageAttachment)
-                      .height >
-                    (item.channel_message.attachments[0] as ImageAttachment)
-                      .width
-                      ? 9 / 16
-                      : 16 / 9,
-                  maxHeight: 320,
-                  maxWidth: 320,
+              // <Image
+              //   transition={300}
+              //   source={
+              //     item.channel_message.attachments[0]?.url +
+              //     "?optimizer=image&width=500&quality=70"
+              //   }
+              //   contentFit="cover"
+              //   style={{
+              //     backgroundColor: "#333",
+              //     aspectRatio:
+              //       (item.channel_message.attachments[0] as ImageAttachment)
+              //         .height >
+              //       (item.channel_message.attachments[0] as ImageAttachment)
+              //         .width
+              //         ? 9 / 16
+              //         : 16 / 9,
+              //     maxHeight: 320,
+              //     maxWidth: 320,
+              //   }}
+              //   tw="rounded-xl"
+              // />
+              <LightBox
+                width={"100%"}
+                height={imageAttachmentHeight}
+                imgLayout={{
+                  width: "100%",
+                  height: imageAttachmentHeight,
                 }}
-                tw="rounded-xl"
-              />
+                tapToClose
+                borderRadius={12}
+                containerStyle={{
+                  width: 320,
+                  height: imageAttachmentHeight,
+                  borderRadius: 12,
+                  overflow: "hidden",
+                }}
+              >
+                <Image
+                  transition={300}
+                  source={{
+                    uri:
+                      item.channel_message.attachments[0]?.url +
+                      "?optimizer=image&width=500&quality=70",
+                  }}
+                  alt="Cover image"
+                  resizeMode="cover"
+                  style={{ ...StyleSheet.absoluteFillObject }}
+                />
+              </LightBox>
             ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&
