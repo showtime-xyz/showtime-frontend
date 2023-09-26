@@ -77,6 +77,8 @@ const nextConfig = {
     "react-native-reanimated-carousel",
     "@miblanchard/react-native-slider",
     "react-native-track-player",
+    "expo-document-picker",
+    "react-native-compressor",
   ],
   webpack: (config, options) => {
     if (!options.isServer) {
