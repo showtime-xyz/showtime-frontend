@@ -131,7 +131,10 @@ const CreatorChannelsListItem = memo(
         );
       }
 
-      if (item?.latest_message?.attachments.length > 0) {
+      if (
+        item?.latest_message &&
+        item?.latest_message?.attachments.length > 0
+      ) {
         // switch statement that returns image, video, audio, or file based on item?.latest_message?.attachments.mime
         if (item?.latest_message?.attachments[0].mime.includes("image"))
           return "🖼️ Image";
@@ -161,14 +164,7 @@ const CreatorChannelsListItem = memo(
       }
 
       return "";
-    }, [
-      isDark,
-      item.itemType,
-      item?.latest_message?.attachments,
-      item?.latest_message?.body,
-      item?.latest_message?.is_payment_gated,
-      item.read,
-    ]);
+    }, [isDark, item.itemType, item?.latest_message, item.read]);
 
     return (
       <PlatformPressable
@@ -227,10 +223,10 @@ const CreatorChannelsListItem = memo(
                   ]}
                   numberOfLines={2}
                 >
-                  {item.latest_message.sent_by.profile.profile_id !==
+                  {item.latest_message?.sent_by.profile.profile_id !==
                     item.owner.profile_id &&
-                  (item.latest_message.sent_by.profile.name ||
-                    item.latest_message.sent_by.profile.username) ? (
+                  (item.latest_message?.sent_by.profile.name ||
+                    item.latest_message?.sent_by.profile.username) ? (
                     <Text tw="font-semibold">
                       {item.latest_message.sent_by.profile.name ||
                         item.latest_message.sent_by.profile.username}

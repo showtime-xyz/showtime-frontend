@@ -911,7 +911,7 @@ export const generateFakeData = (
 };
 
 export function formatDateRelativeWithIntl(
-  isoDateString: string,
+  isoDateString: string | number | Date,
   isDisplayCompleteUnit = false
 ): string {
   const date = new Date(isoDateString);

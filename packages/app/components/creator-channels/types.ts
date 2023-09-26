@@ -122,7 +122,7 @@ export type CreatorChannelsListItemProps = {
   name: string;
   created_at: string;
   updated_at: string;
-  latest_message: ChannelLatestMessage;
+  latest_message: ChannelLatestMessage | null;
   read: boolean;
   owner: ChannelProfile;
   member_count: number;
