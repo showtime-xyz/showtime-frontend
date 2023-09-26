@@ -11,10 +11,13 @@ export const LightBox: React.FC<LightBoxProps> = ({
   children,
 }) => {
   const lightBox = useLightBox();
-
   const onPress = useCallback(() => {
     lightBox?.show({
-      imageElement: <View style={containerStyle}>{children}</View>,
+      imageElement: containerStyle ? (
+        <View style={containerStyle}>{children}</View>
+      ) : (
+        children
+      ),
     });
   }, [children, containerStyle, lightBox]);
 
