@@ -37,6 +37,7 @@ import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
 import { MissingStarDropModal } from "../missing-star-drop-modal";
 import { ChannelById } from "../types";
+import { MessageInputToolbar } from "./message-input-toolbar";
 
 export const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
   return (
@@ -225,11 +226,7 @@ export const MessageInput = memo(
         <Animated.View style={style}>
           {permissions?.can_send_messages ? (
             <>
-              <View tw="h-10 flex-row items-center justify-around">
-                <Text>Dadada</Text>
-                <Text>Dadada</Text>
-                <Text>Dadada</Text>
-              </View>
+              <MessageInputToolbar />
               <MessageBox
                 ref={inputRef}
                 placeholder="Send an update..."
