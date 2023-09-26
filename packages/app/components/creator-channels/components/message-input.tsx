@@ -226,7 +226,7 @@ export const MessageInput = memo(
         <Animated.View style={style}>
           {permissions?.can_send_messages ? (
             <>
-              <MessageInputToolbar />
+              <MessageInputToolbar channelId={channelId} />
               <MessageBox
                 ref={inputRef}
                 placeholder="Send an update..."
