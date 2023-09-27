@@ -76,6 +76,7 @@ export const AudioPlayer = memo(
 
     const prepare = useCallback(
       async (delay = 0) => {
+        if (!url) return;
         if (timeoutRef2.current) {
           clearTimeout(timeoutRef2.current);
         }
@@ -101,10 +102,11 @@ export const AudioPlayer = memo(
           await TrackPlayer.seekTo(trackInfo?.position || 0);
         }
       },
-      [addTrack, id, trackInfo.position]
+      [addTrack, id, trackInfo?.position, url]
     );
 
     const togglePlay = useCallback(async () => {
+      if (!url) return;
       const currentTrackId = await TrackPlayer.getActiveTrack();
       const currentState = (await TrackPlayer.getPlaybackState()).state;
 
@@ -117,7 +119,7 @@ export const AudioPlayer = memo(
 
         await TrackPlayer.play().catch(() => {});
       }
-    }, [id, prepare]);
+    }, [id, prepare, url]);
 
     return (
       <View tw="web:max-w-sm web:p-2 overflow-hidden rounded-full bg-black p-4 dark:bg-white">

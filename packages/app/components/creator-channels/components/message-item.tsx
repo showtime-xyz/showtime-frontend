@@ -530,7 +530,11 @@ export const MessageItem = memo(
                     recyclingKey={
                       item.channel_message.attachments[0]?.media_upload
                     }
-                    source={`${item.channel_message.attachments[0]?.url}?optimizer=image&width=600`}
+                    source={
+                      item.channel_message.attachments[0]?.url
+                        ? `${item.channel_message.attachments[0]?.url}?optimizer=image&width=600`
+                        : undefined
+                    }
                     alt=""
                     resizeMode="cover"
                     style={{
