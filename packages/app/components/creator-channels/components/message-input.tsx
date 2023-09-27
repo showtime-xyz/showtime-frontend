@@ -24,7 +24,6 @@ import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
@@ -37,6 +36,7 @@ import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
 import { MissingStarDropModal } from "../missing-star-drop-modal";
 import { ChannelById } from "../types";
+import { LeanText } from "./lean-text";
 import { MessageInputToolbar } from "./message-input-toolbar";
 
 export const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
@@ -215,10 +215,10 @@ export const MessageInput = memo(
         >
           <ClaimPaidNFTButton edition={edition} type="messageInput" />
           <View tw="mt-3 pb-4">
-            <Text tw="text-center text-xs text-gray-500 dark:text-gray-300">
+            <LeanText tw="text-center text-xs text-gray-500 dark:text-gray-300">
               Collecting a Star Drop unlocks privileges with this artist like
               exclusive channel content, a Star Badge, and more
-            </Text>
+            </LeanText>
           </View>
         </View>
       );

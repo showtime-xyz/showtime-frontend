@@ -1,5 +1,5 @@
 import { forwardRef, createElement, ComponentType } from "react";
-import { TextProps } from "react-native";
+import { TextProps, ViewProps } from "react-native";
 
 import { styled } from "@showtime-xyz/universal.tailwind";
 
@@ -10,6 +10,14 @@ const Component = forwardRef((props, ref) => {
 Component.displayName = "RCTText";
 
 export const LeanText = styled(Component);
+
+const ComponentView = forwardRef((props, ref) => {
+  return createElement("RCTView", { ...props, ref });
+}) as ComponentType<ViewProps>;
+
+ComponentView.displayName = "RCTView";
+
+export const LeanView = styled(Component);
 
 /*
 export const LeanText = ({ tw, ...rest }) => {

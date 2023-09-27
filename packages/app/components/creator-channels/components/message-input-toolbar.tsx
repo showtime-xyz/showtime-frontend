@@ -14,6 +14,7 @@ import { Logger } from "app/lib/logger";
 import { toast } from "design-system/toast";
 
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
+import { LeanText } from "./lean-text";
 
 export const MessageInputToolbar = memo(
   ({
@@ -148,21 +149,21 @@ export const MessageInputToolbar = memo(
           onPress={pickAudio}
         >
           <MusicBadge height={20} width={20} color={"black"} />
-          <Text tw="pl-1">Music</Text>
+          <LeanText tw="pl-1">Music</LeanText>
         </Pressable>
         <Pressable
           tw="web:py-1 flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2 "
           onPress={pickImage}
         >
           <Gallery height={20} width={20} color={"black"} />
-          <Text tw="pl-1">Photo</Text>
+          <LeanText tw="pl-1">Photo</LeanText>
         </Pressable>
         <Pressable
           tw="web:hidden web:py-1 flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2 "
           onPress={takePicture}
         >
           <Photo height={20} width={20} color={"black"} />
-          <Text tw="pl-1">Camera</Text>
+          <LeanText tw="pl-1">Camera</LeanText>
         </Pressable>
       </View>
     );

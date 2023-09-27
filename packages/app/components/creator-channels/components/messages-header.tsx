@@ -12,6 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 
 import { HeaderProps } from "../types";
+import { LeanText } from "./lean-text";
 
 export const MessagesHeader = (props: HeaderProps) => {
   const router = useRouter();
@@ -95,7 +96,9 @@ export const MessagesHeader = (props: HeaderProps) => {
             ) : null}
             <Pressable onPress={props.onPressShare}>
               <View tw="items-center justify-center overflow-hidden rounded-full bg-indigo-600 px-3 py-1.5 text-center ">
-                <Text tw="web:text-xs text-sm font-bold text-white">Share</Text>
+                <LeanText tw="web:text-xs text-sm font-bold text-white">
+                  Share
+                </LeanText>
               </View>
             </Pressable>
           </View>
