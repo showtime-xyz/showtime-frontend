@@ -23,7 +23,16 @@ import { useOwnedChannelsList } from "./use-channels-list";
 
 async function postMessage(
   url: string,
-  { arg }: { arg: { channelId: string; message: string; attachment: string } }
+  {
+    arg,
+  }: {
+    arg: {
+      channelId: string;
+      message: string;
+      attachment: string;
+      mimeType: string;
+    };
+  }
 ) {
   return axios({
     url,
@@ -36,7 +45,16 @@ async function postMessage(
 
 async function uploadMediaNative(
   url: string,
-  { arg }: { arg: { channelId: string; message: string; attachment: string } }
+  {
+    arg,
+  }: {
+    arg: {
+      channelId: string;
+      message: string;
+      attachment: string;
+      mimeType: string;
+    };
+  }
 ) {
   const accessToken = getAccessToken();
   const headers = {
@@ -45,15 +63,18 @@ async function uploadMediaNative(
 
   let result = arg.attachment;
 
-  if (arg.attachment.includes("audio")) {
+  // TODO: video compression
+
+  if (arg?.mimeType?.includes("audio")) {
     result = await Audio.compress(arg.attachment, {
-      quality: "high",
+      quality: "medium",
     });
   }
 
-  if (arg.attachment.includes("image")) {
+  if (arg?.mimeType?.includes("image")) {
     result = await Image.compress(arg.attachment, {
       quality: 0.8,
+      maxWidth: 1200,
     });
   }
 
@@ -181,6 +202,7 @@ export const useSendChannelMessage = (
             message: message || "",
             channelId,
             attachment: attachment || "",
+            mimeType: mimeType || "",
           },
           {
             revalidate: false,
