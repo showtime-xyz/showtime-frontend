@@ -203,16 +203,16 @@ export const defaultFilters = {
 export const PROFILE_NFTS_QUERY_KEY = "v2/profile-tabs/nfts";
 
 export const useProfileNFTs = (params: UserProfileNFTs) => {
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 15;
   const {
     profileId,
-    tabType,
+    tabType: type,
     sortType = defaultFilters.sortType,
     showHidden = defaultFilters.showHidden,
     collectionId = defaultFilters.collectionId,
     refreshInterval,
   } = params;
-
+  const tabType = type === "tokens" ? "drops" : "drops";
   const trendingCreatorsUrlFn = useCallback(
     (index: number) => {
       const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${

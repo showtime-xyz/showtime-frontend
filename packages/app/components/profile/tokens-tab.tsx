@@ -27,7 +27,7 @@ import {
 } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
@@ -58,7 +58,91 @@ const NUM_COLUMNS = 3;
 export type ProfileTabListRef = {
   refresh: () => void;
 };
+export const TokensTabHeader = () => {
+  const isDark = useIsDarkMode();
 
+  return (
+    <View tw="w-full px-4">
+      <View tw="flex-row items-center justify-between py-4">
+        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+          19 Channel messages
+        </Text>
+        <ChevronRight width={20} height={20} color={colors.gray[500]} />
+      </View>
+      <View tw="overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600">
+        <View tw="mx-4 flex-row items-center pt-4">
+          <Avatar
+            url={
+              "https://lh3.googleusercontent.com/3uRH_HyktnOwLhkI9NAKegoACTmcIroFg1CWNhuYCwFDdgpceYUVTRu4WvURevYxfOguKYIMTvvEwKAuarbRopJvbuireVxv8G8"
+            }
+            size={20}
+          />
+          <Text tw="text-13 ml-2 font-bold text-gray-900 dark:text-gray-50">
+            Valentia Cy
+          </Text>
+          <Text tw="ml-2 text-xs text-gray-500">1d</Text>
+        </View>
+        <View tw="pb-4">
+          <View tw="ml-11 mt-2">
+            <Text tw="text-sm text-gray-900 dark:text-gray-50">{`sadsaddasdkljklfgsjlkasj; d
+      asdsadsa`}</Text>
+          </View>
+          <PlatformBlurView
+            // tw="web:bg-black/30 android:bg-gray-800 backdrop-blur-3xl"
+            tint={isDark ? "dark" : "light"}
+            intensity={20}
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              overflow: "hidden",
+            }}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};
+export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
+  const isDark = useIsDarkMode();
+
+  return (
+    <View {...rest}>
+      <View tw="flex-row items-center justify-between py-4">
+        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+          Alan collected
+        </Text>
+        <Text tw="text-xs text-gray-900 dark:text-gray-50">Show all</Text>
+      </View>
+      <View tw="flex-row gap-2.5">
+        {new Array(3).fill(0).map((_, i) => {
+          return (
+            <View
+              key={i}
+              tw="flex-1 items-center overflow-hidden rounded-md border border-gray-300 px-1 py-4 dark:border-gray-600"
+            >
+              <View tw="mb-2">
+                <View tw="absolute -left-1 top-0">
+                  <Showtime
+                    width={8}
+                    height={8}
+                    color={isDark ? colors.white : colors.gray[900]}
+                  />
+                </View>
+                <Avatar url={item.creator_img_url} size={44} />
+              </View>
+              <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
+                @{item.creator_username}
+              </Text>
+              <View tw="h-2" />
+              <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+                $2.60
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+    </View>
+  );
+};
 export const TokensTab = forwardRef<ProfileTabListRef, TabListProps>(
   function ProfileTabList(
     { username, profileId, isBlocked, list, index },
@@ -100,102 +184,14 @@ export const TokensTab = forwardRef<ProfileTabListRef, TabListProps>(
       [isLoadingMore]
     );
 
-    const ListHeaderComponent = useCallback(
-      () => (
-        <View tw="w-full px-4">
-          <View tw="flex-row items-center justify-between py-4">
-            <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-              19 Channel messages
-            </Text>
-            <ChevronRight width={20} height={20} color={colors.gray[500]} />
-          </View>
-          <View tw="overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600">
-            <View tw="mx-4 flex-row items-center pt-4">
-              <Avatar url={user?.data.profile.img_url} size={20} />
-              <Text tw="text-13 ml-2 font-bold text-gray-900 dark:text-gray-50">
-                Valentia Cy
-              </Text>
-              <Text tw="ml-2 text-xs text-gray-500">1d</Text>
-            </View>
-            <View tw="pb-4">
-              <View tw="ml-11 mt-2">
-                <Text tw="text-sm text-gray-900 dark:text-gray-50">{`sadsaddasdkljklfgsjlkasj; d
-              asdsadsa`}</Text>
-                {/* {item.reaction_group.length > 0 ? (
-                <AnimatedView tw="pt-1" layout={Layout}>
-                  <MessageReactions
-                    key={channel_message.id}
-                    reactionGroup={item.reaction_group}
-                    channelId={channelId}
-                    channelReactions={reactions}
-                    messageId={channel_message.id}
-                  />
-                </AnimatedView>
-              ) : null} */}
-              </View>
-              <PlatformBlurView
-                // tw="web:bg-black/30 android:bg-gray-800 backdrop-blur-3xl"
-                tint={isDark ? "dark" : "light"}
-                intensity={20}
-                style={{
-                  ...StyleSheet.absoluteFillObject,
-                  overflow: "hidden",
-                }}
-              ></PlatformBlurView>
-            </View>
-          </View>
-        </View>
-      ),
-      [isDark, user?.data.profile.img_url]
-    );
+    const ListHeaderComponent = useCallback(() => <TokensTabHeader />, []);
     const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
 
     const renderItem = useCallback(
-      ({
-        item,
-        index: itemIndex,
-      }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-        return (
-          <View tw="px-6">
-            <View tw="flex-row items-center justify-between py-4">
-              <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-                {user?.data.profile.name ?? user?.data.profile.username}{" "}
-                collected
-              </Text>
-              <Text tw="text-xs text-gray-900 dark:text-gray-50">Show all</Text>
-            </View>
-            <View tw="flex-row gap-2.5">
-              {new Array(3).fill(0).map((_) => {
-                return (
-                  <View
-                    key={_}
-                    tw="flex-1 items-center overflow-hidden rounded-md border border-gray-300 px-1 py-4 dark:border-gray-600"
-                  >
-                    <View tw="mb-2">
-                      <View tw="absolute -left-1 top-0">
-                        <Showtime
-                          width={8}
-                          height={8}
-                          color={isDark ? colors.white : colors.gray[900]}
-                        />
-                      </View>
-                      <Avatar url={item.creator_img_url} size={44} />
-                    </View>
-                    <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
-                      @{item.creator_username}
-                    </Text>
-                    <View tw="h-2" />
-                    <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-                      $2.60
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-          </View>
-        );
+      ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
+        return <TokensTabItem item={item} tw="px-6" />;
       },
-      [isDark, user?.data.profile.name, user?.data.profile.username]
+      []
     );
 
     if (isBlocked) {

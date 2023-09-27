@@ -1,16 +1,21 @@
 import { useCallback } from "react";
+import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { SongsTab, SavedTab, TokensTab } from "@showtime-xyz/universal.icon";
-import { ScollableTabBar } from "@showtime-xyz/universal.tab-view";
+import {
+  ScollableTabBar,
+  TabBarSingle,
+} from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
+const TabBar = Platform.OS === "web" ? TabBarSingle : ScollableTabBar;
 export const ProfileTabBar = (props: any) => {
   const isDark = useIsDarkMode();
 
   const renderIcon = useCallback(
-    ({ route, focused, color }: any) => {
+    ({ route, focused }: any) => {
       const iconColor = focused
         ? isDark
           ? colors.gray[100]
@@ -30,10 +35,9 @@ export const ProfileTabBar = (props: any) => {
     },
     [isDark]
   );
-
   return (
     <View tw="border-b border-gray-200 bg-white px-12 dark:border-gray-800 dark:bg-black">
-      <ScollableTabBar
+      <TabBar
         {...props}
         gap={10}
         renderIcon={renderIcon}

@@ -131,14 +131,15 @@ function InfiniteScrollListImpl<Item>(
 
   useEffect(() => {
     const lastItem = renderedItems[renderedItems.length - 1];
+
     if (!lastItem) {
       return;
     }
 
-    if (data && data?.length > 0 && lastItem.index >= data.length - 1) {
+    if (count > 0 && lastItem.index >= count - 1) {
       onEndReached?.();
     }
-  }, [data, onEndReached, renderedItems]);
+  }, [count, onEndReached, renderedItems]);
 
   const saveScrollPosition = useStableCallback(() => {
     sessionStorage.setItem(key, rowVirtualizer.scrollOffset.toString());
