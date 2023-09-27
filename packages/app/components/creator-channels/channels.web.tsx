@@ -18,7 +18,7 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Link } from "app/navigation/link";
-import { formatDateRelativeWithIntl } from "app/utilities";
+import { formatDateRelativeWithIntl, globalTimeFormatter } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
@@ -229,14 +229,12 @@ const CreatorChannelsListItem = memo(
 
 CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
-const timeFormatter = new Intl.NumberFormat();
-
 const CreatorChannelsListCreator = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
     const joinChannel = useJoinChannel();
     const router = useRouter();
 
-    const memberCount = timeFormatter.format(item.member_count);
+    const memberCount = globalTimeFormatter.format(item.member_count);
     return (
       <View tw="flex-1 px-4 py-3">
         <View tw="flex-row items-start">

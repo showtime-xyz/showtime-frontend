@@ -28,7 +28,7 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { formatDateRelativeWithIntl } from "app/utilities";
+import { formatDateRelativeWithIntl, globalTimeFormatter } from "app/utilities";
 
 import {
   AnimatedInfiniteScrollListWithRef,
@@ -254,7 +254,6 @@ const CreatorChannelsListItem = memo(
 
 CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
-const timeFormatter = new Intl.NumberFormat();
 const CreatorChannelsListCreator = memo(
   ({
     item,
@@ -266,7 +265,7 @@ const CreatorChannelsListCreator = memo(
     const joinChannel = useJoinChannel();
     const router = useRouter();
     const time = formatDateRelativeWithIntl(item.updated_at);
-    const memberCount = timeFormatter.format(item.member_count);
+    const memberCount = globalTimeFormatter.format(item.member_count);
     return (
       <View tw="flex-1 px-4 py-2.5">
         <View tw="flex-row items-center">

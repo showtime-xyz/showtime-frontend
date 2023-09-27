@@ -62,6 +62,8 @@ export const getProfileName = (profile?: Profile) => {
   return "Unnamed";
 };
 
+export const globalTimeFormatter = new Intl.NumberFormat();
+
 export const DEFAULT_PROFILE_PIC =
   "https://cdn.tryshowtime.com/profile_placeholder2.jpg";
 
@@ -953,7 +955,7 @@ export const generateFakeData = (
   }));
 };
 
-const timeFormatter = new Intl.DateTimeFormat("en-US", {
+const twoDigitTimeFormatter = new Intl.DateTimeFormat("en-US", {
   hour: "2-digit",
   minute: "2-digit",
   hour12: true,
@@ -967,34 +969,41 @@ export function formatDateRelativeWithIntl(
   const now = new Date();
   const diffInSeconds = (now.getTime() - date.getTime()) / 1000;
   const diffInMinutes = diffInSeconds / 60;
-  const diffInHours = diffInMinutes / 60;
-  const diffInDays = Math.floor(diffInHours / 24);
 
   if (diffInMinutes < 1) {
     return "now";
-  } else if (diffInDays < 1) {
-    return timeFormatter.format(date);
-  } else if (diffInDays >= 1 && diffInDays < 7) {
+  }
+
+  const diffInHours = diffInMinutes / 60;
+  const diffInDays = Math.floor(diffInHours / 24);
+
+  if (diffInDays < 1) {
+    return twoDigitTimeFormatter.format(date);
+  }
+
+  if (diffInDays >= 1 && diffInDays < 7) {
     return `${diffInDays}${isDisplayCompleteUnit ? " days ago" : "d"}`;
+  }
+
+  const diffInWeeks = Math.floor(diffInDays / 7);
+  if (diffInWeeks === 1) {
+    return `${diffInWeeks}${isDisplayCompleteUnit ? " week ago" : "w"}`;
+  } else if (diffInWeeks < 4) {
+    return `${diffInWeeks}${isDisplayCompleteUnit ? " weeks ago" : "w"}`;
+  }
+
+  const diffInMonths = Math.floor(diffInDays / 30.44);
+  if (diffInMonths === 1) {
+    return `${diffInMonths}${isDisplayCompleteUnit ? " month ago" : "mo"}`;
+  } else if (diffInMonths < 12) {
+    return `${diffInMonths}${isDisplayCompleteUnit ? " months ago" : "mo"}`;
+  }
+
+  const diffInYears = Math.floor(diffInDays / 365.25);
+  if (diffInYears === 1) {
+    return `${diffInYears}${isDisplayCompleteUnit ? " year ago" : "yr"}`;
   } else {
-    const diffInWeeks = Math.floor(diffInDays / 7);
-    const diffInMonths = Math.floor(diffInDays / 30.44);
-    const diffInYears = Math.floor(diffInDays / 365.25);
-    if (diffInWeeks === 1) {
-      return `${diffInWeeks}${isDisplayCompleteUnit ? " week ago" : "w"}`;
-    } else if (diffInWeeks < 4) {
-      return `${diffInWeeks}${isDisplayCompleteUnit ? " weeks ago" : "w"}`;
-    } else if (diffInMonths < 1) {
-      return `${diffInWeeks}${isDisplayCompleteUnit ? " weeks ago" : "w"}`;
-    } else if (diffInMonths === 1) {
-      return `${diffInMonths}${isDisplayCompleteUnit ? " month ago" : "mo"}`;
-    } else if (diffInMonths < 12) {
-      return `${diffInMonths}${isDisplayCompleteUnit ? " months ago" : "mo"}`;
-    } else if (diffInYears === 1) {
-      return `${diffInYears}${isDisplayCompleteUnit ? " year ago" : "yr"}`;
-    } else {
-      return `${diffInYears}${isDisplayCompleteUnit ? " years ago" : "yr"}`;
-    }
+    return `${diffInYears}${isDisplayCompleteUnit ? " years ago" : "yr"}`;
   }
 }
 
