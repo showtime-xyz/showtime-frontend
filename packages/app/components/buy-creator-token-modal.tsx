@@ -1,3 +1,5 @@
+import { useContext } from "react";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import {
@@ -11,7 +13,43 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
+import { UserContext } from "app/context/user-context";
+import { useWallet } from "app/hooks/use-wallet";
+import { useWalletBalance } from "app/hooks/use-wallet-balance";
+import { useWeb3 } from "app/hooks/use-web3";
+
 export const BuyCreatorTokenModal = () => {
+  const user = useContext(UserContext);
+  const wallet = useWallet();
+  const isWeb3Wallet = useWeb3();
+  const renderBuyButton = () => {
+    if (wallet.isMagicWallet) {
+      return (
+        <Button
+          onPress={() => {
+            wallet.connect();
+          }}
+        >
+          Connect
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          onPress={() => {
+            if (wallet.address) {
+              wallet.getBalance(wallet.address).then((balance) => {
+                console.log("balance ", balance);
+              });
+            }
+          }}
+        >
+          Buy
+        </Button>
+      );
+    }
+  };
+
   return (
     <View tw="bg-gray-100 p-4 dark:bg-gray-900">
       <View tw="flex-row items-center" style={{ columnGap: 8 }}>
@@ -71,15 +109,17 @@ export const BuyCreatorTokenModal = () => {
         <View tw="flex-row items-center">
           <Text tw="flex-2 text-gray-700">Quantity to buy:</Text>
           <View tw="w-4" />
-          <View tw="flex-1 items-center rounded-sm border-[1px] border-gray-200 p-4 text-center">
-            <Text>0</Text>
+          <View tw="flex-1 flex-row rounded-sm border-[1px] border-gray-200">
+            <View tw="flex-1 items-center border-gray-200 p-4 text-center">
+              <Text>0</Text>
+            </View>
+            <Pressable tw="flex-1 items-center border-[1px] border-transparent border-l-gray-200 border-r-gray-200 bg-blue-50 p-4">
+              <Text tw="text-2xl font-normal">-</Text>
+            </Pressable>
+            <Pressable tw="flex-1 items-center bg-blue-50 p-4">
+              <Text tw="text-2xl font-normal">+</Text>
+            </Pressable>
           </View>
-          <Pressable tw="flex-1 items-center rounded-sm border-[1px] border-gray-200 bg-blue-50 p-4">
-            <Text tw="text-3xl">-</Text>
-          </Pressable>
-          <Pressable tw="flex-1 items-center rounded-sm border-[1px] border-gray-200 bg-blue-50 p-4">
-            <Text tw="text-3xl">+</Text>
-          </Pressable>
         </View>
         <View tw="flex-row justify-between">
           <Text tw="text-gray-700">Estimated transaction fee:</Text>
@@ -90,9 +130,7 @@ export const BuyCreatorTokenModal = () => {
           <Text tw="text-gray-700">$4.00</Text>
         </View>
       </View>
-      <Button tw="mt-8" size="regular">
-        Connect
-      </Button>
+      {renderBuyButton()}
     </View>
   );
 };

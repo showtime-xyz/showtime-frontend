@@ -20,4 +20,6 @@ export type UseWalletReturnType = {
   connect: () => ConnectResult;
   name?: string;
   signMessageAsync: (args: SignMessageArgs) => Promise<string | undefined>;
+  isMagicWallet?: boolean;
+  getBalance: (address: string) => Promise<bigint | undefined>;
 };
