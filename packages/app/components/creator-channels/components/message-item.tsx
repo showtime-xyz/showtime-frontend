@@ -25,7 +25,6 @@ import { LightBox } from "@showtime-xyz/universal.light-box";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AudioPlayer } from "app/components/audio-player/audio-player";
@@ -56,6 +55,7 @@ import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { ChannelMessageItem, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
+import { LeanText } from "./lean-text";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -237,17 +237,17 @@ export const MessageItem = memo(
                   item.channel_message.sent_by.profile.wallet_addresses
                 }`}
               >
-                <Text
-                  tw={["text-sm font-bold text-gray-900 dark:text-gray-100"]}
+                <LeanText
+                  tw={"text-sm font-bold text-gray-900 dark:text-gray-100"}
                 >
                   {channel_message.sent_by.profile.name}
-                </Text>
+                </LeanText>
               </Link>
 
               <View tw="flex-row items-center">
-                <Text tw={["text-xs text-gray-700 dark:text-gray-200"]}>
+                <LeanText tw={"text-xs text-gray-700 dark:text-gray-200"}>
                   {formatDateRelativeWithIntl(channel_message.created_at)}
-                </Text>
+                </LeanText>
                 {isByCreator ? (
                   <View tw="ml-2">
                     <CreatorBadge />
@@ -419,15 +419,15 @@ export const MessageItem = memo(
                 {Platform.OS === "web" ? (
                   // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
                   <View tw="blur-sm">
-                    <Text tw="text-sm text-gray-900 dark:text-gray-100">
+                    <LeanText tw="text-sm text-gray-900 dark:text-gray-100">
                       {loremText}
-                    </Text>
+                    </LeanText>
                   </View>
                 ) : (
                   <>
-                    <Text tw="text-sm text-gray-900  dark:text-gray-100">
+                    <LeanText tw="text-sm text-gray-900  dark:text-gray-100">
                       {loremText}
-                    </Text>
+                    </LeanText>
                     <BlurView
                       intensity={10}
                       style={{
@@ -443,9 +443,9 @@ export const MessageItem = memo(
             ) : (
               <>
                 {item.channel_message.body_text_length > 0 ? (
-                  <Text
+                  <LeanText
                     selectable
-                    tw={["text-sm text-gray-900 dark:text-gray-100"]}
+                    tw={"text-sm text-gray-900 dark:text-gray-100"}
                     style={
                       Platform.OS === "web"
                         ? {
@@ -457,14 +457,14 @@ export const MessageItem = memo(
                   >
                     {linkifiedMessage}
                     {messageWasEdited && (
-                      <Text
+                      <LeanText
                         tw="text-xs text-gray-500 dark:text-gray-200"
                         selectable
                       >
                         {` • edited`}
-                      </Text>
+                      </LeanText>
                     )}
-                  </Text>
+                  </LeanText>
                 ) : null}
               </>
             )}
