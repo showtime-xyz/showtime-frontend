@@ -34,6 +34,7 @@ import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
 } from "./components/animated-cell-container";
+import { LeanText } from "./components/lean-text";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,
@@ -157,10 +158,10 @@ const CreatorChannelsListItem = memo(
       // if we don't have a latest message, we're going to output a default message when owned
       if (item.itemType === "owned") {
         return (
-          <Text tw="font-semibold">
+          <LeanText tw="font-semibold">
             Blast exclusive updates to all your fans at once like Music NFT
             presale access, raffles, unreleased content & more.
-          </Text>
+          </LeanText>
         );
       }
 
@@ -203,16 +204,16 @@ const CreatorChannelsListItem = memo(
                 </Text>
 
                 {item.itemType === "owned" ? (
-                  <Text
+                  <LeanText
                     tw="web:max-w-[80%] web:text-base ml-3 overflow-ellipsis whitespace-nowrap text-lg font-medium text-gray-500 dark:text-slate-300"
                     numberOfLines={1}
                   >
                     you
-                  </Text>
+                  </LeanText>
                 ) : null}
-                <Text tw="ml-2 text-xs text-gray-500">
+                <LeanText tw="ml-2 text-xs text-gray-500">
                   {item?.latest_message?.updated_at ? time : ""}
-                </Text>
+                </LeanText>
               </View>
               <View tw="mt-2">
                 <Text
@@ -228,11 +229,11 @@ const CreatorChannelsListItem = memo(
                     item.owner.profile_id &&
                   (item.latest_message?.sent_by.profile.name ||
                     item.latest_message?.sent_by.profile.username) ? (
-                    <Text tw="font-semibold">
+                    <LeanText tw="font-semibold">
                       {item.latest_message.sent_by.profile.name ||
                         item.latest_message.sent_by.profile.username}
                       {": "}
-                    </Text>
+                    </LeanText>
                   ) : null}
                   {getPreviewText()}
                 </Text>
