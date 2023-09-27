@@ -1095,7 +1095,7 @@ export const getCurrencySymbol = (currency: string | null | undefined) => {
   return "$";
 };
 
-const formattersCache: Record<string, Record<string, Intl.NumberFormat>> = {};
+const formattersCache: Map<string, Intl.NumberFormat> = new Map();
 
 export const getCurrencyPrice = (
   currency: string | null | undefined,
@@ -1108,21 +1108,19 @@ export const getCurrencyPrice = (
 
   const numberValue = typeof price === "string" ? parseFloat(price) : price;
   const currentCurrency = currency ?? "USD";
+  const cacheKey = `${locale}-${currentCurrency}`;
 
-  if (!formattersCache[locale]) {
-    formattersCache[locale] = {};
-  }
-
-  if (!formattersCache[locale][currentCurrency]) {
-    formattersCache[locale][currentCurrency] = new Intl.NumberFormat(locale, {
+  if (!formattersCache.has(cacheKey)) {
+    const formatter = new Intl.NumberFormat(locale, {
       style: "currency",
       minimumFractionDigits: 0,
       maximumFractionDigits: 2,
       currency: currentCurrency,
     });
+    formattersCache.set(cacheKey, formatter);
   }
 
-  return formattersCache[locale][currentCurrency].format(numberValue);
+  return formattersCache.get(cacheKey)!.format(numberValue);
 };
 
 export const getCreatorEarnedMoney = (
