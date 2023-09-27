@@ -490,15 +490,13 @@ export const MessageItem = memo(
                 >
                   <Image
                     recyclingKey={item.channel_message.attachments[0]?.url}
-                    transition={300}
-                    source={{
-                      uri:
-                        item.channel_message.attachments[0]?.url +
-                        "?optimizer=image&width=500&quality=70",
-                    }}
-                    alt="Cover image"
+                    source={item.channel_message.attachments[0]?.url}
+                    alt=""
                     resizeMode="cover"
-                    style={{ ...StyleSheet.absoluteFillObject }}
+                    style={{
+                      ...StyleSheet.absoluteFillObject,
+                      backgroundColor: "#333",
+                    }}
                   />
                 </LightBox>
               </View>
