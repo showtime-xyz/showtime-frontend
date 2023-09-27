@@ -52,7 +52,7 @@ import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
-import { ChannelMessageItem, MessageItemProps } from "../types";
+import { ChannelById, ChannelMessageItem, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
 import { LeanText, LeanView } from "./lean-text";
@@ -109,11 +109,12 @@ export const MessageItem = memo(
     setEditMessage,
     editMessageIdSharedValue,
     editMessageItemDimension,
-    edition,
+    permissions,
     isUserAdmin,
   }: MessageItemProps & {
     edition?: CreatorEditionResponse;
     isUserAdmin?: boolean;
+    permissions?: ChannelById["permissions"];
     listRef: RefObject<FlashList<any>>;
     editMessageIdSharedValue: SharedValue<number | undefined>;
     editMessageItemDimension: SharedValue<{
@@ -196,16 +197,13 @@ export const MessageItem = memo(
     }, [channel_message.created_at]);
 
     const isByCreator = channel_message.sent_by.admin;
-    const isStarDrop = channel_message.is_payment_gated;
-    const isUnlockedStarDrop = isStarDrop && channel_message.body;
-    const messageNotViewable = isStarDrop && !isUnlockedStarDrop && edition;
 
     const loremText = useMemo(
       () =>
-        messageNotViewable && item.channel_message.body_text_length > 0
+        item.channel_message.body_text_length > 0
           ? generateLoremIpsum(item.channel_message.body_text_length)
           : "",
-      [item.channel_message.body_text_length, messageNotViewable]
+      [item.channel_message.body_text_length]
     );
 
     // TODO: remove and support video
@@ -260,7 +258,9 @@ export const MessageItem = memo(
                 style={{
                   gap: 12,
                   display:
-                    messageNotViewable && !isUserAdmin ? "none" : undefined,
+                    isByCreator && !permissions?.can_view_creator_messages
+                      ? "none"
+                      : undefined,
                 }}
               >
                 <Reaction
@@ -414,7 +414,7 @@ export const MessageItem = memo(
               </LeanView>
             </LeanView>
 
-            {messageNotViewable && !isUserAdmin ? (
+            {isByCreator && !permissions?.can_view_creator_messages ? (
               <LeanView tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
                 {Platform.OS === "web" ? (
                   // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix

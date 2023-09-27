@@ -355,10 +355,17 @@ export const Messages = memo(() => {
           editMessageItemDimension={editMessageItemDimension}
           edition={edition}
           isUserAdmin={isUserAdmin}
+          permissions={channelDetail.data?.permissions}
         />
       );
     },
-    [editMessageIdSharedValue, editMessageItemDimension, edition, isUserAdmin]
+    [
+      channelDetail.data?.permissions,
+      editMessageIdSharedValue,
+      editMessageItemDimension,
+      edition,
+      isUserAdmin,
+    ]
   );
 
   // TODO: add back to keyboard controller?
