@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Platform } from "react-native";
 
 import * as FileSystem from "expo-file-system";
+import { Audio, Image } from "react-native-compressor";
 import useSWRMutation from "swr/mutation";
 
 import { UserContext } from "app/context/user-context";
@@ -42,7 +43,21 @@ async function uploadMediaNative(
     Authorization: `Bearer ${accessToken}`,
   };
 
-  return FileSystem.uploadAsync(url, arg.attachment, {
+  let result = arg.attachment;
+
+  if (arg.attachment.includes("audio")) {
+    result = await Audio.compress(arg.attachment, {
+      quality: "high",
+    });
+  }
+
+  if (arg.attachment.includes("image")) {
+    result = await Image.compress(arg.attachment, {
+      quality: 0.8,
+    });
+  }
+
+  return FileSystem.uploadAsync(url, result, {
     uploadType: FileSystem.FileSystemUploadType.MULTIPART,
     sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
     fieldName: "file",
@@ -101,6 +116,8 @@ export const useSendChannelMessage = (
       channelId,
       isUserAdmin,
       callback,
+      width,
+      height,
     }: {
       channelId: string;
       attachment?: string;
@@ -108,6 +125,8 @@ export const useSendChannelMessage = (
       mimeType?: string;
       isUserAdmin?: boolean;
       callback?: () => void;
+      width?: number;
+      height?: number;
     }) => {
       const optimisticObjectId = Math.random() + new Date().getTime();
       channelMessages.mutate(
@@ -132,8 +151,8 @@ export const useSendChannelMessage = (
                         url: attachment,
                         description: "",
                         mime: mimeType,
-                        width: 500,
-                        height: 500,
+                        width,
+                        height,
                         duration: 0,
                       } as ImageAttachment | BaseAttachment,
                     ]
