@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { useCallback } from "react";
+import { Platform } from "react-native";
 
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
@@ -47,17 +48,31 @@ export const MessageInputToolbar = memo(
     const pickAudio = useCallback(async () => {
       try {
         const file = await DocumentPicker.getDocumentAsync({
-          type: ["audio/*"],
+          type: [
+            "audio/mp3",
+            "audio/x-m4a",
+            "audio/wav",
+            "audio/m4a",
+            "audio/mpeg",
+          ],
           copyToCacheDirectory: true,
           multiple: false,
         });
 
         if (file.canceled === false) {
-          const result = await Audio.compress(file.assets[0].uri, {
-            quality: "high",
-          });
+          const result =
+            Platform.OS === "web"
+              ? file.assets[0].uri
+              : await Audio.compress(file.assets[0].uri, {
+                  quality: "high",
+                });
 
-          uploadFile({ file: result, mimeType: file.assets[0].mimeType });
+          console.log(file);
+
+          uploadFile({
+            file: result,
+            mimeType: file.assets[0].mimeType,
+          });
         }
       } catch (error) {
         toast.error("Failed to upload audio file");
@@ -72,12 +87,16 @@ export const MessageInputToolbar = memo(
         allowsEditing: false,
         allowsMultipleSelection: false,
         quality: 1,
+        base64: false,
       });
 
       if (!file.canceled) {
-        const compressedImage = await Image.compress(file.assets[0].uri, {
-          quality: 0.8,
-        });
+        const compressedImage =
+          Platform.OS === "web"
+            ? file.assets[0].uri
+            : await Image.compress(file.assets[0].uri, {
+                quality: 0.8,
+              });
         uploadFile({
           file: compressedImage,
           // expo-image-picker doesn't return mimeType but fake it as jpeg
@@ -122,23 +141,23 @@ export const MessageInputToolbar = memo(
     }, [uploadFile]);
 
     return (
-      <View tw="h-12 flex-row items-center justify-around">
+      <View tw="web:justify-start web:gap-4 flex-row items-center justify-around px-8 pt-2">
         <Pressable
-          tw="flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2"
+          tw="web:py-1 flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2"
           onPress={pickAudio}
         >
           <MusicBadge height={20} width={20} color={"black"} />
           <Text tw="pl-1">Music</Text>
         </Pressable>
         <Pressable
-          tw="flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2"
+          tw="web:py-1 flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2 "
           onPress={pickImage}
         >
           <Gallery height={20} width={20} color={"black"} />
           <Text tw="pl-1">Photo</Text>
         </Pressable>
         <Pressable
-          tw="flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2"
+          tw="web:hidden web:py-1 flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2 "
           onPress={takePicture}
         >
           <Photo height={20} width={20} color={"black"} />

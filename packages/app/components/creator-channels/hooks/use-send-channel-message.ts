@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Platform } from "react-native";
 
 import * as FileSystem from "expo-file-system";
 import useSWRMutation from "swr/mutation";
@@ -9,6 +10,11 @@ import { getAccessToken } from "app/lib/access-token";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
+import {
+  extractMimeType,
+  generateRandomFilename,
+  getFileFormData,
+} from "app/utilities";
 
 import { BaseAttachment, ImageAttachment } from "../types";
 import { useChannelMessages } from "./use-channel-messages";
@@ -27,7 +33,7 @@ async function postMessage(
   });
 }
 
-async function uploadMedia(
+async function uploadMediaNative(
   url: string,
   { arg }: { arg: { channelId: string; message: string; attachment: string } }
 ) {
@@ -45,6 +51,30 @@ async function uploadMedia(
   });
 }
 
+async function uploadMediaWeb(
+  url: string,
+  { arg }: { arg: { channelId: string; message: string; attachment: string } }
+) {
+  const attachmentFormData = await getFileFormData(arg.attachment);
+  const formData = new FormData();
+  if (attachmentFormData) {
+    formData.append(
+      "file",
+      attachmentFormData,
+      generateRandomFilename(extractMimeType(arg.attachment))
+    );
+
+    return axios({
+      url,
+      method: "POST",
+      headers: {
+        "Content-Type": `multipart/form-data`,
+      },
+      data: formData,
+    });
+  }
+}
+
 export const useSendChannelMessage = (
   channelId?: string,
   hasAttachment?: boolean
@@ -53,7 +83,11 @@ export const useSendChannelMessage = (
     hasAttachment
       ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channels/${channelId}/attachment/upload`
       : `/v1/channels/${channelId}/messages/send`,
-    hasAttachment ? uploadMedia : postMessage
+    hasAttachment
+      ? Platform.OS === "web"
+        ? uploadMediaWeb
+        : uploadMediaNative
+      : postMessage
   );
   const channelMessages = useChannelMessages(channelId);
   const joinedChannelsList = useOwnedChannelsList();
@@ -140,7 +174,11 @@ export const useSendChannelMessage = (
               d[0] = d[0].map((v) => {
                 if (v.channel_message.id === optimisticObjectId) {
                   return {
-                    channel_message: hasAttachment ? JSON.parse(res.body) : res,
+                    channel_message: hasAttachment
+                      ? Platform.OS === "web"
+                        ? res
+                        : JSON.parse(res.body)
+                      : res,
                     reaction_group: [],
                   };
                 }

@@ -417,6 +417,49 @@ export const MATIC_CHAIN_DETAILS = {
   ],
 };
 
+export function extractMimeType(dataUri: string) {
+  const match = dataUri.match(/^data:([^;]+);/);
+  if (!match) {
+    throw new Error(`Unsupported data URI`);
+  }
+  return match[1];
+}
+
+export function generateRandomFilename(mimeType: string): string {
+  const mimeToExtension: { [key: string]: string } = {
+    "image/png": "png",
+    "image/jpeg": "jpg",
+    "image/jpg": "jpg",
+    "image/webp": "webp",
+    "image/gif": "gif",
+    "video/mp4": "mp4",
+    "video/mpeg": "mp4",
+    "video/ogg": "ogg",
+    "video/quicktime": "mov",
+    "video/x-m4v": "m4v",
+    "video/x-matroska": "mkv",
+    "audio/x-m4a": "m4a",
+    "audio/mp4": "m4a",
+    "audio/mpeg": "mp3",
+    "audio/wav": "wav",
+    "audio/x-wav": "wav",
+    "audio/x-pn-wav": "wav",
+    "audio/ogg": "ogg",
+    "audio/x-ogg": "ogg",
+    // Add more mappings if needed
+  };
+
+  const extension = mimeToExtension[mimeType];
+  if (!extension) {
+    throw new Error(`Unsupported MIME type: ${mimeType}`);
+  }
+
+  // Generate a random string for the filename (you can adjust the length as needed)
+  const randomString = Math.random().toString(36).substring(2, 10);
+
+  return `${randomString}.${extension}`;
+}
+
 export const getFileFormData = async (
   file: string | File
 ): Promise<Blob | undefined> => {
