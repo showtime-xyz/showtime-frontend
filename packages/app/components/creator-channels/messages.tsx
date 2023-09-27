@@ -19,7 +19,6 @@ import Animated, {
   SlideInDown,
   SlideOutDown,
   enableLayoutAnimations,
-  withSpring,
 } from "react-native-reanimated";
 import { useSWRConfig } from "swr";
 
