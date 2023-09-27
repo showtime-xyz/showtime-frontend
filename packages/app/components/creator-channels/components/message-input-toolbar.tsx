@@ -1,10 +1,8 @@
 import { memo } from "react";
 import { useCallback } from "react";
-import { Platform } from "react-native";
 
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
-import { Audio, Image } from "react-native-compressor";
 
 import { Gallery, MusicBadge, Photo } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -28,7 +26,17 @@ export const MessageInputToolbar = memo(
     const sendMessage = useSendChannelMessage(channelId, true);
 
     const uploadFile = useCallback(
-      async ({ file, mimeType }: { file: string; mimeType?: string }) => {
+      async ({
+        file,
+        mimeType,
+        width,
+        height,
+      }: {
+        file: string;
+        mimeType?: string;
+        width?: number;
+        height?: number;
+      }) => {
         try {
           await sendMessage.trigger({
             channelId,
@@ -36,6 +44,8 @@ export const MessageInputToolbar = memo(
             message: "",
             attachment: file,
             mimeType,
+            width,
+            height,
           });
         } catch (error) {
           toast.error("Failed to send media file");
@@ -60,17 +70,8 @@ export const MessageInputToolbar = memo(
         });
 
         if (file.canceled === false) {
-          const result =
-            Platform.OS === "web"
-              ? file.assets[0].uri
-              : await Audio.compress(file.assets[0].uri, {
-                  quality: "high",
-                });
-
-          console.log(file);
-
           uploadFile({
-            file: result,
+            file: file.assets[0].uri,
             mimeType: file.assets[0].mimeType,
           });
         }
@@ -91,16 +92,13 @@ export const MessageInputToolbar = memo(
       });
 
       if (!file.canceled) {
-        const compressedImage =
-          Platform.OS === "web"
-            ? file.assets[0].uri
-            : await Image.compress(file.assets[0].uri, {
-                quality: 0.8,
-              });
         uploadFile({
-          file: compressedImage,
+          file: file.assets[0].uri,
           // expo-image-picker doesn't return mimeType but fake it as jpeg
+          // we detect it on web though, this is only used for native
           mimeType: "image/jpeg",
+          width: file.assets[0].width,
+          height: file.assets[0].height,
         });
       }
     }, [uploadFile]);
@@ -123,13 +121,16 @@ export const MessageInputToolbar = memo(
           allowsEditing: false,
           allowsMultipleSelection: false,
           quality: 1,
+          base64: false,
         });
 
         if (!file.canceled) {
-          const compressedImage = await Image.compress(file.assets[0].uri, {
-            quality: 0.8,
+          uploadFile({
+            file: file.assets[0].uri,
+            mimeType: "image/jpeg",
+            width: file.assets[0].width,
+            height: file.assets[0].height,
           });
-          uploadFile({ file: compressedImage, mimeType: "image/jpeg" });
         }
       } catch (error: any) {
         toast.error(
