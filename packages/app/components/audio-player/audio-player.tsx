@@ -109,6 +109,8 @@ export const AudioPlayer = memo(
       const currentState = (await TrackPlayer.getPlaybackState()).state;
 
       if (currentState === State.Playing && currentTrackId?.id === id) {
+        // android does not emit the pause state correctly, so we manually call it
+        pauseAllActiveTracks();
         await TrackPlayer.pause().catch(() => {});
       } else {
         await prepare(1000);
