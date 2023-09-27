@@ -100,7 +100,7 @@ export const MessageInput = memo(
       useState(false);
     const insets = useSafeAreaInsets();
     const bottomHeight = usePlatformBottomHeight();
-    const sendMessage = useSendChannelMessage(channelId, isUserAdmin);
+    const sendMessage = useSendChannelMessage(channelId);
     const inputRef = useRef<any>(null);
     const editMessages = useEditChannelMessage(channelId);
     const isDark = useIsDarkMode();
@@ -160,6 +160,7 @@ export const MessageInput = memo(
           listRef.current?.prepareForLayoutAnimationRender();
           await sendMessage.trigger({
             channelId,
+            isUserAdmin,
             message: text,
             callback: sendMessageCallback,
           });
@@ -226,7 +227,10 @@ export const MessageInput = memo(
         <Animated.View style={style}>
           {permissions?.can_send_messages ? (
             <>
-              <MessageInputToolbar channelId={channelId} />
+              <MessageInputToolbar
+                channelId={channelId}
+                isUserAdmin={isUserAdmin}
+              />
               <MessageBox
                 ref={inputRef}
                 placeholder="Send an update..."

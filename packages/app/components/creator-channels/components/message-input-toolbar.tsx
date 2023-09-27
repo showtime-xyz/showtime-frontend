@@ -2,7 +2,6 @@ import { memo } from "react";
 import { useCallback } from "react";
 
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { Audio, Image } from "react-native-compressor";
 
@@ -11,40 +10,38 @@ import { Pressable } from "@showtime-xyz/universal.pressable";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { getAccessToken } from "app/lib/access-token";
 import { Logger } from "app/lib/logger";
 
 import { toast } from "design-system/toast";
 
-const accessToken = getAccessToken();
-const headers = {
-  Authorization: `Bearer ${accessToken}`,
-};
+import { useSendChannelMessage } from "../hooks/use-send-channel-message";
 
 export const MessageInputToolbar = memo(
-  ({ channelId }: { channelId: string | number }) => {
-    const uploadFile = useCallback(
-      async (file: any) => {
-        try {
-          const uploadResult = await FileSystem.uploadAsync(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/channels/${channelId}/attachment/upload`,
-            file,
-            {
-              uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-              sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
-              fieldName: "file",
-              httpMethod: "POST",
-              headers,
-            }
-          );
+  ({
+    channelId,
+    isUserAdmin,
+  }: {
+    channelId: string;
+    isUserAdmin?: boolean;
+  }) => {
+    const sendMessage = useSendChannelMessage(channelId, true);
 
-          console.log(uploadResult);
+    const uploadFile = useCallback(
+      async ({ file, mimeType }: { file: string; mimeType?: string }) => {
+        try {
+          await sendMessage.trigger({
+            channelId,
+            isUserAdmin,
+            message: "",
+            attachment: file,
+            mimeType,
+          });
         } catch (error) {
           toast.error("Failed to send media file");
           Logger.error("Failed upload", error);
         }
       },
-      [channelId]
+      [channelId, isUserAdmin, sendMessage]
     );
 
     const pickAudio = useCallback(async () => {
@@ -60,7 +57,7 @@ export const MessageInputToolbar = memo(
             quality: "high",
           });
 
-          uploadFile(result);
+          uploadFile({ file: result, mimeType: file.assets[0].mimeType });
         }
       } catch (error) {
         toast.error("Failed to upload audio file");
@@ -70,18 +67,22 @@ export const MessageInputToolbar = memo(
 
     const pickImage = useCallback(async () => {
       // No permissions request is necessary for launching the image library
-      let result = await ImagePicker.launchImageLibraryAsync({
+      const file = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         allowsMultipleSelection: false,
         quality: 1,
       });
 
-      if (!result.canceled) {
-        const compressedImage = await Image.compress(result.assets[0].uri, {
+      if (!file.canceled) {
+        const compressedImage = await Image.compress(file.assets[0].uri, {
           quality: 0.8,
         });
-        uploadFile(compressedImage);
+        uploadFile({
+          file: compressedImage,
+          // expo-image-picker doesn't return mimeType but fake it as jpeg
+          mimeType: "image/jpeg",
+        });
       }
     }, [uploadFile]);
 
@@ -98,18 +99,18 @@ export const MessageInputToolbar = memo(
             return;
           }
         }
-        let result = await ImagePicker.launchCameraAsync({
+        const file = await ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: false,
           allowsMultipleSelection: false,
           quality: 1,
         });
 
-        if (!result.canceled) {
-          const compressedImage = await Image.compress(result.assets[0].uri, {
+        if (!file.canceled) {
+          const compressedImage = await Image.compress(file.assets[0].uri, {
             quality: 0.8,
           });
-          uploadFile(compressedImage);
+          uploadFile({ file: compressedImage, mimeType: "image/jpeg" });
         }
       } catch (error: any) {
         toast.error(

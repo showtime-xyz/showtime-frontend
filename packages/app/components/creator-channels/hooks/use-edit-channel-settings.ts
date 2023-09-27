@@ -2,6 +2,7 @@ import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
 import { fetcher } from "app/hooks/use-infinite-list-query";
+import { useStableCallback } from "app/hooks/use-stable-callback";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -36,23 +37,19 @@ export const useEditChannelSettings = (channelId?: string) => {
     editSettings
   );
 
-  const handleSubmit = async ({
-    muted,
-    channelId,
-  }: {
-    channelId: string;
-    muted: boolean;
-  }) => {
-    try {
-      await trigger(
-        { muted, channelId },
-        { optimisticData: (current) => ({ ...current, muted }) }
-      );
-    } catch (e) {
-      captureException(e);
-      Logger.error(e);
+  const handleSubmit = useStableCallback(
+    async ({ muted, channelId }: { channelId: string; muted: boolean }) => {
+      try {
+        await trigger(
+          { muted, channelId },
+          { optimisticData: (current) => ({ ...current, muted }) }
+        );
+      } catch (e) {
+        captureException(e);
+        Logger.error(e);
+      }
     }
-  };
+  );
 
   return {
     trigger: handleSubmit,

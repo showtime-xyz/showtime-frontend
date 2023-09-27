@@ -110,6 +110,42 @@ const getItemType = (item: ChannelMessageItem) => {
     return "message-unlocked";
   }
 
+  if (
+    item.channel_message?.attachments &&
+    item.channel_message?.attachments[0]?.mime
+  ) {
+    if (item.channel_message?.attachments[0].mime.includes("video")) {
+      return "video";
+    }
+    if (item.channel_message?.attachments[0].mime.includes("audio")) {
+      return "audio";
+    }
+    if (item.channel_message?.attachments[0].mime.includes("image")) {
+      if (
+        item.channel_message?.attachments[0].height! >
+        item.channel_message?.attachments[0].width!
+      ) {
+        return "image-portrait";
+      }
+
+      if (
+        item.channel_message?.attachments[0].height! <
+        item.channel_message?.attachments[0].width!
+      ) {
+        return "image-landscape";
+      }
+
+      if (
+        item.channel_message?.attachments[0].height ===
+        item.channel_message?.attachments[0].width
+      ) {
+        return "image-square";
+      }
+
+      return "image";
+    }
+  }
+
   return "message";
 };
 
@@ -530,12 +566,13 @@ export const Messages = memo(() => {
                 data={data}
                 onEndReached={onLoadMore}
                 inverted
+                drawDistance={100}
                 getItemType={getItemType}
                 scrollEnabled={data.length > 0}
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
-                estimatedItemSize={300}
+                estimatedItemSize={400}
                 // android > 12 flips the scrollbar to the left, FlashList bug
                 showsVerticalScrollIndicator={Platform.OS !== "android"}
                 keyboardDismissMode={

@@ -489,6 +489,7 @@ export const MessageItem = memo(
                   }
                 >
                   <Image
+                    recyclingKey={item.channel_message.attachments[0]?.url}
                     transition={300}
                     source={{
                       uri:
