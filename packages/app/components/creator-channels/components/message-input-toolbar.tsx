@@ -6,15 +6,13 @@ import * as ImagePicker from "expo-image-picker";
 
 import { Gallery, MusicBadge, Photo } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
 import { Logger } from "app/lib/logger";
 
 import { toast } from "design-system/toast";
 
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
-import { LeanText } from "./lean-text";
+import { LeanText, LeanView } from "./lean-text";
 
 export const MessageInputToolbar = memo(
   ({
@@ -143,7 +141,7 @@ export const MessageInputToolbar = memo(
     }, [uploadFile]);
 
     return (
-      <View tw="web:justify-start web:gap-4 flex-row items-center justify-around px-8 pt-2">
+      <LeanView tw="web:justify-start web:gap-4 flex-row items-center justify-around px-8 pt-2">
         <Pressable
           tw="web:py-1 flex-row items-center justify-center rounded-full bg-gray-100 px-4 py-2"
           onPress={pickAudio}
@@ -165,7 +163,7 @@ export const MessageInputToolbar = memo(
           <Photo height={20} width={20} color={"black"} />
           <LeanText tw="pl-1">Camera</LeanText>
         </Pressable>
-      </View>
+      </LeanView>
     );
   }
 );

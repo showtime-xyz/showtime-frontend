@@ -254,6 +254,7 @@ const CreatorChannelsListItem = memo(
 
 CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
+const timeFormatter = new Intl.NumberFormat();
 const CreatorChannelsListCreator = memo(
   ({
     item,
@@ -265,7 +266,7 @@ const CreatorChannelsListCreator = memo(
     const joinChannel = useJoinChannel();
     const router = useRouter();
     const time = formatDateRelativeWithIntl(item.updated_at);
-    const memberCount = new Intl.NumberFormat().format(item.member_count);
+    const memberCount = timeFormatter.format(item.member_count);
     return (
       <View tw="flex-1 px-4 py-2.5">
         <View tw="flex-row items-center">

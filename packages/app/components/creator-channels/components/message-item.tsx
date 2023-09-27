@@ -55,7 +55,7 @@ import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { ChannelMessageItem, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
-import { LeanText } from "./lean-text";
+import { LeanText, LeanView } from "./lean-text";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -217,20 +217,20 @@ export const MessageItem = memo(
 
     return (
       <AnimatedView tw="my-2 px-3" style={style} ref={animatedViewRef}>
-        <View tw="flex-row" style={{ columnGap: 8 }}>
+        <LeanView tw="flex-row" style={{ columnGap: 8 }}>
           <Link
             href={`/@${
               item.channel_message.sent_by.profile.username ??
               item.channel_message.sent_by.profile.wallet_addresses
             }`}
           >
-            <View tw="h-6 w-6">
+            <LeanView tw="h-6 w-6">
               <Avatar size={24} url={channel_message.sent_by.profile.img_url} />
               <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
-            </View>
+            </LeanView>
           </Link>
-          <View tw="flex-1" style={{ rowGap: 8 }}>
-            <View tw="flex-row items-center" style={{ columnGap: 8 }}>
+          <LeanView tw="flex-1" style={{ rowGap: 8 }}>
+            <LeanView tw="flex-row items-center" style={{ columnGap: 8 }}>
               <Link
                 href={`/@${
                   item.channel_message.sent_by.profile.username ??
@@ -244,7 +244,7 @@ export const MessageItem = memo(
                 </LeanText>
               </Link>
 
-              <View tw="flex-row items-center">
+              <LeanView tw="flex-row items-center">
                 <LeanText tw={"text-xs text-gray-700 dark:text-gray-200"}>
                   {formatDateRelativeWithIntl(channel_message.created_at)}
                 </LeanText>
@@ -253,9 +253,9 @@ export const MessageItem = memo(
                     <CreatorBadge />
                   </View>
                 ) : null}
-              </View>
+              </LeanView>
 
-              <View
+              <LeanView
                 tw="mr-2 flex-1 flex-row items-center justify-end"
                 style={{
                   gap: 12,
@@ -411,18 +411,18 @@ export const MessageItem = memo(
                     ) : null}
                   </DropdownMenuContent>
                 </DropdownMenuRoot>
-              </View>
-            </View>
+              </LeanView>
+            </LeanView>
 
             {messageNotViewable && !isUserAdmin ? (
-              <View tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
+              <LeanView tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
                 {Platform.OS === "web" ? (
                   // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
-                  <View tw="blur-sm">
+                  <LeanView tw="blur-sm">
                     <LeanText tw="text-sm text-gray-900 dark:text-gray-100">
                       {loremText}
                     </LeanText>
-                  </View>
+                  </LeanView>
                 ) : (
                   <>
                     <LeanText tw="text-sm text-gray-900  dark:text-gray-100">
@@ -439,7 +439,7 @@ export const MessageItem = memo(
                     />
                   </>
                 )}
-              </View>
+              </LeanView>
             ) : (
               <>
                 {item.channel_message.body_text_length > 0 ? (
@@ -484,7 +484,7 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              <View
+              <LeanView
                 tw="overflow-hidden rounded-xl"
                 style={{
                   width: imageAttachmentWidth,
@@ -543,7 +543,7 @@ export const MessageItem = memo(
                     }}
                   />
                 </LightBox>
-              </View>
+              </LeanView>
             ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&
@@ -570,8 +570,8 @@ export const MessageItem = memo(
                 </AnimatedView>
               ) : null}
             </PlatformAnimateHeight>
-          </View>
-        </View>
+          </LeanView>
+        </LeanView>
       </AnimatedView>
     );
   }
@@ -581,23 +581,23 @@ MessageItem.displayName = "MessageItem";
 
 export const MessageSkeleton = () => {
   return (
-    <View tw="web:pb-4 h-full w-full flex-1 pb-14">
-      <View tw="h-full flex-1 justify-end px-4">
+    <LeanView tw="web:pb-4 h-full w-full flex-1 pb-14">
+      <LeanView tw="h-full flex-1 justify-end px-4">
         {new Array(8).fill(0).map((_, i) => {
           return (
-            <View tw="flex-row pt-4" key={`${i}`}>
-              <View tw="mr-2 overflow-hidden rounded-full">
+            <LeanView tw="flex-row pt-4" key={`${i}`}>
+              <LeanView tw="mr-2 overflow-hidden rounded-full">
                 <Skeleton width={28} height={28} show />
-              </View>
-              <View>
+              </LeanView>
+              <LeanView>
                 <Skeleton width={140} height={10} show />
-                <View tw="h-1" />
+                <LeanView tw="h-1" />
                 <Skeleton width={90} height={10} show />
-              </View>
-            </View>
+              </LeanView>
+            </LeanView>
           );
         })}
-      </View>
-    </View>
+      </LeanView>
+    </LeanView>
   );
 };

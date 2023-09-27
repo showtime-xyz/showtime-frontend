@@ -7,11 +7,10 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { PauseOutline, Play } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import Spinner from "@showtime-xyz/universal.spinner";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
 import TrackPlayer, { State } from "design-system/track-player";
 
+import { LeanText, LeanView } from "../creator-channels/components/lean-text";
 import { useTrackProgress } from "./hooks/use-track-progress";
 import { setupPlayer } from "./service";
 import {
@@ -122,10 +121,10 @@ export const AudioPlayer = memo(
     }, [id, prepare, url]);
 
     return (
-      <View tw="web:max-w-sm web:p-2 overflow-hidden rounded-full bg-black p-4 dark:bg-white">
-        <View tw="flex-row items-center">
-          <View tw="mr-4 items-center justify-center">
-            <View tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black">
+      <LeanView tw="web:max-w-sm web:p-2 overflow-hidden rounded-full bg-black p-4 dark:bg-white">
+        <LeanView tw="flex-row items-center">
+          <LeanView tw="mr-4 items-center justify-center">
+            <LeanView tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black">
               <Pressable
                 onPress={togglePlay}
                 tw="w-full flex-1 items-center justify-center text-black dark:text-white"
@@ -144,28 +143,28 @@ export const AudioPlayer = memo(
                     width={30}
                   />
                 ) : (
-                  <View tw="ml-0.5">
+                  <LeanView tw="ml-0.5">
                     <Play
                       color={isDark ? "white" : "black"}
                       stroke={isDark ? "white" : "black"}
                       strokeWidth={3}
                       width={40}
                     />
-                  </View>
+                  </LeanView>
                 )}
               </Pressable>
-            </View>
-          </View>
-          <View tw="mr-2 w-8 items-center justify-center text-center">
-            <Text tw="text-[#959595] dark:text-[#707070]">
+            </LeanView>
+          </LeanView>
+          <LeanView tw="mr-2 w-8 items-center justify-center text-center">
+            <LeanText tw="text-[#959595] dark:text-[#707070]">
               {formatTime(
                 tempScrubPosition !== null
                   ? tempScrubPosition
                   : localScrubPosition || trackInfo.position || 0
               )}
-            </Text>
-          </View>
-          <View tw="flex-1">
+            </LeanText>
+          </LeanView>
+          <LeanView tw="flex-1">
             <Slider
               minimumValue={0}
               maximumValue={trackInfo.duration || duration || 60} // 60 is fallback
@@ -228,16 +227,16 @@ export const AudioPlayer = memo(
                 );
               }}
             />
-          </View>
-          <View tw="ml-2 w-8 items-center justify-center text-center">
-            <Text tw="text-[#959595] dark:text-[#707070]">
+          </LeanView>
+          <LeanView tw="ml-2 w-8 items-center justify-center text-center">
+            <LeanText tw="text-[#959595] dark:text-[#707070]">
               {duration || trackInfo.duration
                 ? formatTime(duration || trackInfo.duration || 0)
                 : "-:--"}
-            </Text>
-          </View>
-        </View>
-      </View>
+            </LeanText>
+          </LeanView>
+        </LeanView>
+      </LeanView>
     );
   }
 );

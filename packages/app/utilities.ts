@@ -953,6 +953,12 @@ export const generateFakeData = (
   }));
 };
 
+const timeFormatter = new Intl.DateTimeFormat("en-US", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: true,
+});
+
 export function formatDateRelativeWithIntl(
   isoDateString: string | number | Date,
   isDisplayCompleteUnit = false
@@ -967,11 +973,6 @@ export function formatDateRelativeWithIntl(
   if (diffInMinutes < 1) {
     return "now";
   } else if (diffInDays < 1) {
-    const timeFormatter = new Intl.DateTimeFormat("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
     return timeFormatter.format(date);
   } else if (diffInDays >= 1 && diffInDays < 7) {
     return `${diffInDays}${isDisplayCompleteUnit ? " days ago" : "d"}`;
@@ -1094,9 +1095,10 @@ export const getCurrencySymbol = (currency: string | null | undefined) => {
   return "$";
 };
 
+const formattersCache: Record<string, Record<string, Intl.NumberFormat>> = {};
+
 export const getCurrencyPrice = (
   currency: string | null | undefined,
-  // TODO: Fix price type, ensure safetey of this function (CC @alan, @jorge, @maxime)
   price: number | null | undefined | string
 ): string => {
   // Handle null, undefined, or non-numeric strings
@@ -1105,13 +1107,22 @@ export const getCurrencyPrice = (
   }
 
   const numberValue = typeof price === "string" ? parseFloat(price) : price;
+  const currentCurrency = currency ?? "USD";
 
-  return new Intl.NumberFormat(locale ?? "en-US", {
-    style: "currency",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-    currency: currency ?? "USD",
-  }).format(numberValue);
+  if (!formattersCache[locale]) {
+    formattersCache[locale] = {};
+  }
+
+  if (!formattersCache[locale][currentCurrency]) {
+    formattersCache[locale][currentCurrency] = new Intl.NumberFormat(locale, {
+      style: "currency",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+      currency: currentCurrency,
+    });
+  }
+
+  return formattersCache[locale][currentCurrency].format(numberValue);
 };
 
 export const getCreatorEarnedMoney = (

@@ -17,7 +17,7 @@ const ComponentView = forwardRef((props, ref) => {
 
 ComponentView.displayName = "RCTView";
 
-export const LeanView = styled(Component);
+export const LeanView = styled(ComponentView);
 
 /*
 export const LeanText = ({ tw, ...rest }) => {

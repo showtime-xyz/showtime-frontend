@@ -229,12 +229,14 @@ const CreatorChannelsListItem = memo(
 
 CreatorChannelsListItem.displayName = "CreatorChannelsListItem";
 
+const timeFormatter = new Intl.NumberFormat();
+
 const CreatorChannelsListCreator = memo(
   ({ item }: { item: CreatorChannelsListItemProps }) => {
     const joinChannel = useJoinChannel();
     const router = useRouter();
 
-    const memberCount = new Intl.NumberFormat().format(item.member_count);
+    const memberCount = timeFormatter.format(item.member_count);
     return (
       <View tw="flex-1 px-4 py-3">
         <View tw="flex-row items-start">

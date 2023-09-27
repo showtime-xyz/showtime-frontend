@@ -36,7 +36,7 @@ import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
 import { MissingStarDropModal } from "../missing-star-drop-modal";
 import { ChannelById } from "../types";
-import { LeanText } from "./lean-text";
+import { LeanText, LeanView } from "./lean-text";
 import { MessageInputToolbar } from "./message-input-toolbar";
 
 export const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
@@ -207,20 +207,20 @@ export const MessageInput = memo(
 
     if (!isUserAdmin && edition && !hasUnlockedMessages) {
       return (
-        <View
+        <LeanView
           tw="justify-center px-3"
           style={{
             paddingBottom: bottom,
           }}
         >
           <ClaimPaidNFTButton edition={edition} type="messageInput" />
-          <View tw="mt-3 pb-4">
+          <LeanView tw="mt-3 pb-4">
             <LeanText tw="text-center text-xs text-gray-500 dark:text-gray-300">
               Collecting a Star Drop unlocks privileges with this artist like
               exclusive channel content, a Star Badge, and more
             </LeanText>
-          </View>
-        </View>
+          </LeanView>
+        </LeanView>
       );
     }
 
@@ -229,10 +229,13 @@ export const MessageInput = memo(
         <Animated.View style={style}>
           {permissions?.can_send_messages ? (
             <>
-              <MessageInputToolbar
-                channelId={channelId}
-                isUserAdmin={isUserAdmin}
-              />
+              {permissions?.can_upload_media ? (
+                <MessageInputToolbar
+                  channelId={channelId}
+                  isUserAdmin={isUserAdmin}
+                />
+              ) : null}
+
               <MessageBox
                 ref={inputRef}
                 placeholder="Send an update..."
@@ -253,7 +256,7 @@ export const MessageInput = memo(
                 submitButton={
                   editMessage ? (
                     <Animated.View entering={FadeIn} exiting={FadeOut}>
-                      <View tw="flex-row" style={{ gap: 8 }}>
+                      <LeanView tw="flex-row" style={{ gap: 8 }}>
                         <Button
                           variant="secondary"
                           style={{ backgroundColor: colors.red[500] }}
@@ -272,7 +275,7 @@ export const MessageInput = memo(
                         >
                           <Check width={20} height={20} />
                         </Button>
-                      </View>
+                      </LeanView>
                     </Animated.View>
                   ) : null
                 }

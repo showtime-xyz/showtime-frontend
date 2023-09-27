@@ -12,7 +12,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 
 import { HeaderProps } from "../types";
-import { LeanText } from "./lean-text";
+import { LeanText, LeanView } from "./lean-text";
 
 export const MessagesHeader = (props: HeaderProps) => {
   const router = useRouter();
@@ -41,11 +41,11 @@ export const MessagesHeader = (props: HeaderProps) => {
   }, [props.channelId, router]);
 
   return (
-    <View
+    <LeanView
       tw="web:pt-2 web:md:py-5 android:pt-4 flex-row items-center border-gray-200 px-2.5 pb-2 dark:border-gray-800 md:border-b"
       style={{ columnGap: 8 }}
     >
-      <View tw="flex-row items-center" style={{ columnGap: 10 }}>
+      <LeanView tw="flex-row items-center" style={{ columnGap: 10 }}>
         <Pressable
           onPress={() => {
             router.back();
@@ -59,18 +59,18 @@ export const MessagesHeader = (props: HeaderProps) => {
             color={isDark ? "white" : "black"}
           />
         </Pressable>
-        <View>
+        <LeanView>
           <AvatarHoverCard
             username={props.username}
             url={props.picture}
             size={34}
             alt="Channels Avatar"
           />
-        </View>
-      </View>
+        </LeanView>
+      </LeanView>
       {props.channelId ? (
         <>
-          <View tw="flex-1" style={{ rowGap: 8 }}>
+          <LeanView tw="flex-1" style={{ rowGap: 8 }}>
             <Text
               onPress={() => router.push(`/@${props.username}`)}
               tw="text-sm font-bold text-gray-900 dark:text-gray-100"
@@ -83,8 +83,8 @@ export const MessagesHeader = (props: HeaderProps) => {
             >
               {props.members ?? 0} members
             </Text>
-          </View>
-          <View tw="flex-row items-center justify-center gap-3">
+          </LeanView>
+          <LeanView tw="flex-row items-center justify-center gap-3">
             {!props.isCurrentUserOwner ? (
               <Pressable onPress={props.onPressSettings}>
                 <Settings
@@ -101,9 +101,9 @@ export const MessagesHeader = (props: HeaderProps) => {
                 </LeanText>
               </View>
             </Pressable>
-          </View>
+          </LeanView>
         </>
       ) : null}
-    </View>
+    </LeanView>
   );
 };
