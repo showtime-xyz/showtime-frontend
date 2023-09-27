@@ -74,6 +74,8 @@ export const MessageItem = memo(
     editMessageItemDimension,
     edition,
     isUserAdmin,
+    imageAttachmentWidth,
+    imageAttachmentHeight,
   }: MessageItemProps & {
     edition?: CreatorEditionResponse;
     isUserAdmin?: boolean;
@@ -83,6 +85,8 @@ export const MessageItem = memo(
       height: number;
       pageY: number;
     }>;
+    imageAttachmentWidth: number;
+    imageAttachmentHeight: number;
   }) => {
     const { channel_message } = item;
     const reactOnMessage = useReactOnMessage(channelId);
@@ -160,22 +164,6 @@ export const MessageItem = memo(
           : "",
       [item.channel_message.body_text_length, messageNotViewable]
     );
-    const imageAttachmentHeight = useMemo(() => {
-      const theFirstAttachment = item.channel_message.attachments[0];
-
-      if (
-        !item.channel_message?.attachments?.length ||
-        !theFirstAttachment ||
-        !theFirstAttachment.height ||
-        !theFirstAttachment.width
-      ) {
-        return 0;
-      }
-      return Math.min(
-        320 * (theFirstAttachment.height / theFirstAttachment.width),
-        320
-      );
-    }, [item.channel_message.attachments]);
 
     // TODO: remove and support video
     if (
@@ -453,9 +441,15 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              <View tw="overflow-hidden rounded-xl" style={{ maxWidth: 320 }}>
+              <View
+                tw="overflow-hidden rounded-xl"
+                style={{
+                  width: imageAttachmentWidth,
+                  height: imageAttachmentHeight,
+                }}
+              >
                 <LightBox
-                  width={320}
+                  width={imageAttachmentWidth}
                   height={imageAttachmentHeight}
                   imgLayout={{
                     width: "100%",

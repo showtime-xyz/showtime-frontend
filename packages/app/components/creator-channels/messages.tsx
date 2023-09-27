@@ -97,7 +97,42 @@ const benefits = [
     text: "Unreleased content or news",
   },
 ];
+const getImageAttachmentWidth = (item: ChannelMessageItem) => {
+  const theFirstAttachment = item.channel_message?.attachments[0];
 
+  if (
+    !theFirstAttachment ||
+    !theFirstAttachment.height ||
+    !theFirstAttachment.width
+  ) {
+    return 0;
+  }
+  if (theFirstAttachment.height > theFirstAttachment.width) {
+    return 160;
+  } else if (theFirstAttachment.height < theFirstAttachment.width) {
+    return 320;
+  } else {
+    return 320;
+  }
+};
+const getImageAttachmentHeight = (item: ChannelMessageItem) => {
+  const theFirstAttachment = item.channel_message?.attachments[0];
+
+  if (
+    !theFirstAttachment ||
+    !theFirstAttachment.height ||
+    !theFirstAttachment.width
+  ) {
+    return 0;
+  }
+  if (theFirstAttachment.height > theFirstAttachment.width) {
+    return 284;
+  } else if (theFirstAttachment.height < theFirstAttachment.width) {
+    return 180;
+  } else {
+    return 320;
+  }
+};
 const keyExtractor = (item: ChannelMessageItem) =>
   item.channel_message.id.toString();
 
@@ -348,6 +383,8 @@ export const Messages = memo(() => {
         <MessageItem
           item={item}
           reactions={extraData.reactions}
+          imageAttachmentWidth={getImageAttachmentWidth(item)}
+          imageAttachmentHeight={getImageAttachmentHeight(item)}
           channelId={extraData.channelId}
           listRef={listRef}
           setEditMessage={setEditMessage}
