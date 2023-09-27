@@ -114,6 +114,7 @@ export const MessageInput = memo(
       [bottomHeight, insets.bottom]
     );
 
+    /*
     useEffect(() => {
       // autofocus with ref is more stable than autoFocus prop
       setTimeout(() => {
@@ -123,6 +124,7 @@ export const MessageInput = memo(
         });
       }, 600);
     }, []);
+    */
 
     const style = useAnimatedStyle(() => {
       return {
