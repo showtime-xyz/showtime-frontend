@@ -53,7 +53,7 @@ import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
-import { MessageItemProps } from "../types";
+import { ChannelMessageItem, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
 
@@ -62,6 +62,43 @@ const height = Dimensions.get("window").height;
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
+
+const getImageAttachmentWidth = (item: ChannelMessageItem) => {
+  const theFirstAttachment = item.channel_message?.attachments[0];
+
+  if (
+    !theFirstAttachment ||
+    !theFirstAttachment.height ||
+    !theFirstAttachment.width
+  ) {
+    return 0;
+  }
+  if (theFirstAttachment.height > theFirstAttachment.width) {
+    return 160;
+  } else if (theFirstAttachment.height < theFirstAttachment.width) {
+    return 320;
+  } else {
+    return 320;
+  }
+};
+const getImageAttachmentHeight = (item: ChannelMessageItem) => {
+  const theFirstAttachment = item.channel_message?.attachments[0];
+
+  if (
+    !theFirstAttachment ||
+    !theFirstAttachment.height ||
+    !theFirstAttachment.width
+  ) {
+    return 0;
+  }
+  if (theFirstAttachment.height > theFirstAttachment.width) {
+    return 284;
+  } else if (theFirstAttachment.height < theFirstAttachment.width) {
+    return 180;
+  } else {
+    return 320;
+  }
+};
 
 export const MessageItem = memo(
   ({
@@ -74,8 +111,6 @@ export const MessageItem = memo(
     editMessageItemDimension,
     edition,
     isUserAdmin,
-    imageAttachmentWidth,
-    imageAttachmentHeight,
   }: MessageItemProps & {
     edition?: CreatorEditionResponse;
     isUserAdmin?: boolean;
@@ -85,8 +120,6 @@ export const MessageItem = memo(
       height: number;
       pageY: number;
     }>;
-    imageAttachmentWidth: number;
-    imageAttachmentHeight: number;
   }) => {
     const { channel_message } = item;
     const reactOnMessage = useReactOnMessage(channelId);
@@ -96,6 +129,16 @@ export const MessageItem = memo(
     const user = useContext(UserContext);
     const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
+
+    const imageAttachmentWidth = useMemo(
+      () => getImageAttachmentWidth(item),
+      [item]
+    );
+
+    const imageAttachmentHeight = useMemo(
+      () => getImageAttachmentHeight(item),
+      [item]
+    );
 
     const linkifiedMessage = useMemo(
       () =>
@@ -483,8 +526,11 @@ export const MessageItem = memo(
                   }
                 >
                   <Image
-                    recyclingKey={item.channel_message.attachments[0]?.url}
-                    source={item.channel_message.attachments[0]?.url}
+                    transition={100}
+                    recyclingKey={
+                      item.channel_message.attachments[0]?.media_upload
+                    }
+                    source={`${item.channel_message.attachments[0]?.url}?optimizer=image&width=600`}
                     alt=""
                     resizeMode="cover"
                     style={{
@@ -509,7 +555,7 @@ export const MessageItem = memo(
               initialHeight={item.reaction_group.length > 0 ? 29 : 0}
             >
               {item.reaction_group.length > 0 ? (
-                <AnimatedView tw="pt-1" layout={Layout}>
+                <AnimatedView layout={Layout}>
                   <MessageReactions
                     key={channel_message.id}
                     reactionGroup={item.reaction_group}

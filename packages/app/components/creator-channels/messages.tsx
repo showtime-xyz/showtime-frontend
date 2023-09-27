@@ -97,53 +97,20 @@ const benefits = [
     text: "Unreleased content or news",
   },
 ];
-const getImageAttachmentWidth = (item: ChannelMessageItem) => {
-  const theFirstAttachment = item.channel_message?.attachments[0];
 
-  if (
-    !theFirstAttachment ||
-    !theFirstAttachment.height ||
-    !theFirstAttachment.width
-  ) {
-    return 0;
-  }
-  if (theFirstAttachment.height > theFirstAttachment.width) {
-    return 160;
-  } else if (theFirstAttachment.height < theFirstAttachment.width) {
-    return 320;
-  } else {
-    return 320;
-  }
-};
-const getImageAttachmentHeight = (item: ChannelMessageItem) => {
-  const theFirstAttachment = item.channel_message?.attachments[0];
-
-  if (
-    !theFirstAttachment ||
-    !theFirstAttachment.height ||
-    !theFirstAttachment.width
-  ) {
-    return 0;
-  }
-  if (theFirstAttachment.height > theFirstAttachment.width) {
-    return 284;
-  } else if (theFirstAttachment.height < theFirstAttachment.width) {
-    return 180;
-  } else {
-    return 320;
-  }
-};
 const keyExtractor = (item: ChannelMessageItem) =>
   item.channel_message.id.toString();
 
 const getItemType = (item: ChannelMessageItem) => {
-  if (item.channel_message.is_payment_gated && !item.channel_message.body) {
+  /*
+  if (
+    item.channel_message.is_payment_gated &&
+    !item.channel_message.body &&
+    !item.channel_message?.attachments
+  ) {
     return "payment-gate";
   }
-
-  if (item.channel_message.is_payment_gated && item.channel_message.body) {
-    return "message-unlocked";
-  }
+  */
 
   if (
     item.channel_message?.attachments &&
@@ -176,8 +143,6 @@ const getItemType = (item: ChannelMessageItem) => {
       ) {
         return "image-square";
       }
-
-      return "image";
     }
   }
 
@@ -383,8 +348,6 @@ export const Messages = memo(() => {
         <MessageItem
           item={item}
           reactions={extraData.reactions}
-          imageAttachmentWidth={getImageAttachmentWidth(item)}
-          imageAttachmentHeight={getImageAttachmentHeight(item)}
           channelId={extraData.channelId}
           listRef={listRef}
           setEditMessage={setEditMessage}
@@ -603,13 +566,12 @@ export const Messages = memo(() => {
                 data={data}
                 onEndReached={onLoadMore}
                 inverted
-                drawDistance={100}
                 getItemType={getItemType}
                 scrollEnabled={data.length > 0}
                 overscan={4}
                 onScroll={scrollhandler}
                 useWindowScroll={false}
-                estimatedItemSize={400}
+                estimatedItemSize={300}
                 // android > 12 flips the scrollbar to the left, FlashList bug
                 showsVerticalScrollIndicator={Platform.OS !== "android"}
                 keyboardDismissMode={

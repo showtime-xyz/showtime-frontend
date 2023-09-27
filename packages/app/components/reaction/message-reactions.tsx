@@ -10,8 +10,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { formatToUSNumber } from "app/utilities";
 
-import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
 import { ChannelReactionResponse } from "../creator-channels/hooks/use-channel-reactions";
+import { ReactionGroup } from "../creator-channels/types";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
