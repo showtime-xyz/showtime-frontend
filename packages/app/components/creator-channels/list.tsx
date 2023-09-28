@@ -28,12 +28,13 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { formatDateRelativeWithIntl } from "app/utilities";
+import { formatDateRelativeWithIntl, globalTimeFormatter } from "app/utilities";
 
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
 } from "./components/animated-cell-container";
+import { LeanText } from "./components/lean-text";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,
@@ -107,7 +108,8 @@ const CreatorChannelsListItem = memo(
       // check if its a payment gated message and not paid already, so we output a generic message
       if (
         item?.latest_message?.is_payment_gated &&
-        !item?.latest_message?.body
+        !item?.latest_message?.body &&
+        !item?.latest_message?.attachments.length
       ) {
         return (
           <View tw="flex-row items-center">
@@ -131,6 +133,23 @@ const CreatorChannelsListItem = memo(
         );
       }
 
+      if (
+        item?.latest_message &&
+        item?.latest_message?.attachments.length > 0
+      ) {
+        // switch statement that returns image, video, audio, or file based on item?.latest_message?.attachments.mime
+        if (item?.latest_message?.attachments[0].mime.includes("image"))
+          return "🖼️ Image";
+
+        if (item?.latest_message?.attachments[0].mime.includes("video"))
+          return "🎥 Video";
+
+        if (item?.latest_message?.attachments[0].mime.includes("audio"))
+          return "🔊 Audio";
+
+        return "No preview available";
+      }
+
       // output the latest message if it exists
       if (item?.latest_message?.body) {
         return item?.latest_message?.body.trim();
@@ -139,21 +158,15 @@ const CreatorChannelsListItem = memo(
       // if we don't have a latest message, we're going to output a default message when owned
       if (item.itemType === "owned") {
         return (
-          <Text tw="font-semibold">
+          <LeanText tw="font-semibold">
             Blast exclusive updates to all your fans at once like Music NFT
             presale access, raffles, unreleased content & more.
-          </Text>
+          </LeanText>
         );
       }
 
       return "";
-    }, [
-      isDark,
-      item.itemType,
-      item?.latest_message?.body,
-      item?.latest_message?.is_payment_gated,
-      item?.read,
-    ]);
+    }, [isDark, item.itemType, item?.latest_message, item.read]);
 
     return (
       <PlatformPressable
@@ -191,16 +204,16 @@ const CreatorChannelsListItem = memo(
                 </Text>
 
                 {item.itemType === "owned" ? (
-                  <Text
+                  <LeanText
                     tw="web:max-w-[80%] web:text-base ml-3 overflow-ellipsis whitespace-nowrap text-lg font-medium text-gray-500 dark:text-slate-300"
                     numberOfLines={1}
                   >
                     you
-                  </Text>
+                  </LeanText>
                 ) : null}
-                <Text tw="ml-2 text-xs text-gray-500">
+                <LeanText tw="ml-2 text-xs text-gray-500">
                   {item?.latest_message?.updated_at ? time : ""}
-                </Text>
+                </LeanText>
               </View>
               <View tw="mt-2">
                 <Text
@@ -212,6 +225,16 @@ const CreatorChannelsListItem = memo(
                   ]}
                   numberOfLines={2}
                 >
+                  {item.latest_message?.sent_by.profile.profile_id !==
+                    item.owner.profile_id &&
+                  (item.latest_message?.sent_by.profile.name ||
+                    item.latest_message?.sent_by.profile.username) ? (
+                    <LeanText tw="font-semibold">
+                      {item.latest_message.sent_by.profile.name ||
+                        item.latest_message.sent_by.profile.username}
+                      {": "}
+                    </LeanText>
+                  ) : null}
                   {getPreviewText()}
                 </Text>
               </View>
@@ -242,7 +265,7 @@ const CreatorChannelsListCreator = memo(
     const joinChannel = useJoinChannel();
     const router = useRouter();
     const time = formatDateRelativeWithIntl(item.updated_at);
-    const memberCount = new Intl.NumberFormat().format(item.member_count);
+    const memberCount = globalTimeFormatter.format(item.member_count);
     return (
       <View tw="flex-1 px-4 py-2.5">
         <View tw="flex-row items-center">

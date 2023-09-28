@@ -62,13 +62,13 @@ export const LightBoxProvider: React.FC<{ children: JSX.Element }> = ({
         <View tw="flex-1 items-center justify-center">
           <div
             onClick={onClose}
-            className="absolute bottom-0 left-0 right-0 top-0 bg-white bg-opacity-80 dark:bg-black"
+            className="absolute bottom-0 left-0 right-0 top-0 bg-black bg-opacity-80"
           />
 
           {imageElement}
         </View>
         <Pressable onPress={onClose} tw="absolute left-8 top-8">
-          <Close color={colors.gray[400]} width={24} height={24} />
+          <Close color={colors.white} width={24} height={24} />
         </Pressable>
       </Modal>
     </LightBoxContext.Provider>

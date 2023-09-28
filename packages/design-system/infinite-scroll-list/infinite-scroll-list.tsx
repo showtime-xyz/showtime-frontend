@@ -83,7 +83,11 @@ function FlashListComponent<T>(
   }
 }
 
-export const InfiniteScrollList = React.forwardRef(FlashListComponent) as <T>(
+const FlashListComponentWithRef = React.forwardRef(FlashListComponent);
+
+const MemoizedFlashListComponentWithRef = React.memo(FlashListComponentWithRef);
+
+export const InfiniteScrollList = MemoizedFlashListComponentWithRef as <T>(
   props: InfiniteScrollListProps<T> & {
     ref?: React.Ref<FlashList<T>>;
     useWindowScroll?: boolean;

@@ -7,8 +7,6 @@ import { TextLink } from "app/navigation/link";
 import { shortenLongWords } from "app/utilities";
 
 // This function replaces mention tags (@showtime) and URL (http://) with Link components
-
-// This function replaces mention tags (@showtime) and URL (http://) with Link components
 export const linkifyDescription = (text?: string, tw?: TW) => {
   if (!text) {
     return "";
@@ -75,4 +73,35 @@ export const linkifyDescription = (text?: string, tw?: TW) => {
   ));
 
   return replacedText;
+};
+
+export const containsURL = (text?: string) => {
+  if (!text) {
+    return false;
+  }
+
+  let foundURL = false;
+
+  reactStringReplace(
+    text,
+    /\b(https?:\/\/[^\s]+|ftps?:\/\/|wss?:\/\/www\.[^\s]+|[A-Za-z0-9-]+\.[A-Za-z0-9-]+(?:\/[^\s]+)?(?:\?[^\s]*)?)\b/gi,
+    (match) => {
+      const parsed = parse(match);
+      if (
+        parsed.isIcann ||
+        match.startsWith("www.") ||
+        match.startsWith("http:") ||
+        match.startsWith("sftp:") ||
+        match.startsWith("ftp:") ||
+        match.startsWith("ftps:") ||
+        match.startsWith("ws:") ||
+        match.startsWith("wss:")
+      ) {
+        foundURL = true;
+      }
+      return match;
+    }
+  );
+
+  return foundURL;
 };

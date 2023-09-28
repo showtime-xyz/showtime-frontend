@@ -8,8 +8,10 @@ import {
   InfiniteScrollListProps,
 } from "@showtime-xyz/universal.infinite-scroll-list";
 
-import { ChannelMessageItem } from "../hooks/use-channel-messages";
-import { IAnimatedInfiniteScrollListWithRef } from "../types";
+import {
+  ChannelMessageItem,
+  IAnimatedInfiniteScrollListWithRef,
+} from "../types";
 
 const ReanimatedCellContainer = Animated.createAnimatedComponent(CellContainer);
 export const AnimatedInfiniteScrollList = memo(

@@ -18,7 +18,7 @@ import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Link } from "app/navigation/link";
-import { formatDateRelativeWithIntl } from "app/utilities";
+import { formatDateRelativeWithIntl, globalTimeFormatter } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
@@ -94,7 +94,8 @@ const CreatorChannelsListItem = memo(
       // check if its a payment gated message and not paid already, so we output a generic message
       if (
         item?.latest_message?.is_payment_gated &&
-        !item?.latest_message?.body
+        !item?.latest_message?.body &&
+        !item?.latest_message?.attachments.length
       ) {
         return (
           <View tw="flex-row items-center">
@@ -110,6 +111,23 @@ const CreatorChannelsListItem = memo(
             </Text>
           </View>
         );
+      }
+
+      if (
+        item?.latest_message &&
+        item?.latest_message?.attachments.length > 0
+      ) {
+        // switch statement that returns image, video, audio, or file based on item?.latest_message?.attachments.mime
+        if (item?.latest_message?.attachments[0].mime.includes("image"))
+          return "🖼️ Image";
+
+        if (item?.latest_message?.attachments[0].mime.includes("video"))
+          return "🎥 Video";
+
+        if (item?.latest_message?.attachments[0].mime.includes("audio"))
+          return "🔊 Audio";
+
+        return "No preview available";
       }
 
       // output the latest message if it exists
@@ -128,12 +146,7 @@ const CreatorChannelsListItem = memo(
       }
 
       return "";
-    }, [
-      isDark,
-      item.itemType,
-      item?.latest_message?.body,
-      item?.latest_message?.is_payment_gated,
-    ]);
+    }, [isDark, item.itemType, item?.latest_message]);
 
     return (
       <Pressable
@@ -188,6 +201,16 @@ const CreatorChannelsListItem = memo(
                   ]}
                   numberOfLines={2}
                 >
+                  {item.latest_message?.sent_by.profile.profile_id !==
+                    item.owner.profile_id &&
+                  (item.latest_message?.sent_by.profile.name ||
+                    item.latest_message?.sent_by.profile.username) ? (
+                    <Text tw="font-semibold">
+                      {item.latest_message?.sent_by.profile.name ||
+                        item.latest_message?.sent_by.profile.username}
+                      {": "}
+                    </Text>
+                  ) : null}
                   {getPreviewText()}
                 </Text>
               </View>
@@ -211,7 +234,7 @@ const CreatorChannelsListCreator = memo(
     const joinChannel = useJoinChannel();
     const router = useRouter();
 
-    const memberCount = new Intl.NumberFormat().format(item.member_count);
+    const memberCount = globalTimeFormatter.format(item.member_count);
     return (
       <View tw="flex-1 px-4 py-3">
         <View tw="flex-row items-start">

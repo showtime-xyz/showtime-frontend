@@ -1,5 +1,6 @@
 import useSWRMutation from "swr/mutation";
 
+import { useStableCallback } from "app/hooks/use-stable-callback";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -27,17 +28,19 @@ export const useLeaveChannel = () => {
   const joinedChannels = useJoinedChannelsList();
   const suggestedChannels = useSuggestedChannelsList();
 
-  const handleSubmit = async ({ channelId }: { channelId: string }) => {
-    try {
-      await trigger({ channelId });
-    } catch (e) {
-      captureException(e);
-      Logger.error(e);
-    } finally {
-      joinedChannels.mutate();
-      suggestedChannels.mutate();
+  const handleSubmit = useStableCallback(
+    async ({ channelId }: { channelId: string }) => {
+      try {
+        await trigger({ channelId });
+      } catch (e) {
+        captureException(e);
+        Logger.error(e);
+      } finally {
+        joinedChannels.mutate();
+        suggestedChannels.mutate();
+      }
     }
-  };
+  );
 
   return {
     trigger: handleSubmit,

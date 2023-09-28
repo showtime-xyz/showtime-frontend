@@ -13,6 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { View } from "@showtime-xyz/universal.view";
 
+import { PlaybackService } from "app/components/audio-player/service";
 import Footer from "app/components/footer";
 import Header from "app/components/header";
 import { withColorScheme } from "app/components/memo-with-theme";
@@ -58,6 +59,7 @@ import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-numbe
 import { prevRouteRef } from "app/utilities";
 
 import { Toaster } from "design-system/toast";
+import TrackPlayer from "design-system/track-player";
 
 import "../styles/styles.css";
 
@@ -65,6 +67,8 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.STAGE,
 });
+
+TrackPlayer.registerPlaybackService(() => PlaybackService);
 
 function App({ Component, pageProps, router }: AppProps) {
   const meta = pageProps.meta;
