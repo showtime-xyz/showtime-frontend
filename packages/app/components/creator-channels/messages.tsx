@@ -64,7 +64,8 @@ import {
   CustomCellRenderer,
 } from "./components/animated-cell-container";
 import { MessageInput, ScrollToBottomButton } from "./components/message-input";
-import { MessageItem, MessageSkeleton } from "./components/message-item";
+import { MessageItem } from "./components/message-item";
+import { MessageSkeleton } from "./components/message-skeleton";
 import { MessagesHeader } from "./components/messages-header";
 import { useChannelById } from "./hooks/use-channel-detail";
 import { useChannelMessages } from "./hooks/use-channel-messages";

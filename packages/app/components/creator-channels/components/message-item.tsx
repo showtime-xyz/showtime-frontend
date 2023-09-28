@@ -1,5 +1,5 @@
 import { memo, useMemo, RefObject, useContext } from "react";
-import { Platform, StyleSheet, Dimensions } from "react-native";
+import { Platform } from "react-native";
 
 import { BlurView } from "expo-blur";
 import Animated, {
@@ -19,11 +19,8 @@ import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Edit, Trash, Flag } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { LightBox } from "@showtime-xyz/universal.light-box";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -52,47 +49,14 @@ import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
-import {
-  ChannelById,
-  ChannelMessageAttachment,
-  ChannelMessageItem,
-  MessageItemProps,
-} from "../types";
+import { ChannelById, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
+import { ImagePreview } from "./image-preview";
 import { LeanText, LeanView } from "./lean-text";
-
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
-
-const getImageAttachmentWidth = (attachment: ChannelMessageAttachment) => {
-  if (!attachment || !attachment.height || !attachment.width) {
-    return 0;
-  }
-  if (attachment?.height > attachment?.width) {
-    return 160;
-  } else if (attachment?.height < attachment?.width) {
-    return 320;
-  } else {
-    return 320;
-  }
-};
-
-const getImageAttachmentHeight = (attachment: ChannelMessageAttachment) => {
-  if (!attachment || !attachment.height || !attachment.width) {
-    return 0;
-  }
-  if (attachment.height > attachment.width) {
-    return 284;
-  } else if (attachment.height < attachment.width) {
-    return 180;
-  } else {
-    return 320;
-  }
-};
 
 export const MessageItem = memo(
   ({
@@ -503,107 +467,3 @@ export const MessageItem = memo(
 );
 
 MessageItem.displayName = "MessageItem";
-
-export const MessageSkeleton = () => {
-  return (
-    <LeanView tw="web:pb-4 h-full w-full flex-1 pb-14">
-      <LeanView tw="h-full flex-1 justify-end px-4">
-        {new Array(8).fill(0).map((_, i) => {
-          return (
-            <LeanView tw="flex-row pt-4" key={`${i}`}>
-              <LeanView tw="mr-2 overflow-hidden rounded-full">
-                <Skeleton width={28} height={28} show />
-              </LeanView>
-              <LeanView>
-                <Skeleton width={140} height={10} show />
-                <LeanView tw="h-1" />
-                <Skeleton width={90} height={10} show />
-              </LeanView>
-            </LeanView>
-          );
-        })}
-      </LeanView>
-    </LeanView>
-  );
-};
-
-const ImagePreview = ({
-  attachment,
-}: {
-  attachment: ChannelMessageAttachment;
-}) => {
-  const imageAttachmentWidth = useMemo(
-    () => getImageAttachmentWidth(attachment),
-    [attachment]
-  );
-
-  const imageAttachmentHeight = useMemo(
-    () => getImageAttachmentHeight(attachment),
-    [attachment]
-  );
-  const isLandscape =
-    attachment.width && attachment.height
-      ? attachment.width > attachment.height
-      : false;
-
-  const imageWidth = isLandscape
-    ? Math.max(380, Math.min(width, height * 0.7))
-    : Math.min(width, height * 0.7);
-
-  const imageHeight =
-    attachment.height && attachment?.width
-      ? isLandscape
-        ? imageWidth * (attachment.height / attachment.width)
-        : Math.min(height, imageWidth * (attachment.height / attachment.width))
-      : 320;
-
-  return (
-    <LeanView
-      tw="overflow-hidden rounded-xl bg-gray-600"
-      style={{
-        width: imageAttachmentWidth,
-        height: imageAttachmentHeight,
-      }}
-    >
-      <LightBox
-        width={imageAttachmentWidth}
-        height={imageAttachmentHeight}
-        imgLayout={{
-          width: "100%",
-          height:
-            Platform.OS === "web"
-              ? imageAttachmentHeight
-              : width *
-                (attachment.height && attachment?.width
-                  ? attachment?.height / attachment.width
-                  : 320),
-        }}
-        tapToClose
-        borderRadius={12}
-        containerStyle={
-          Platform.OS === "web"
-            ? {
-                width: imageWidth,
-                height: imageHeight,
-              }
-            : null
-        }
-      >
-        <Image
-          transition={100}
-          recyclingKey={attachment?.media_upload}
-          source={
-            attachment?.url
-              ? `${attachment?.url}?optimizer=image&width=600`
-              : undefined
-          }
-          alt=""
-          resizeMode="cover"
-          style={{
-            ...StyleSheet.absoluteFillObject,
-          }}
-        />
-      </LightBox>
-    </LeanView>
-  );
-};
