@@ -151,8 +151,8 @@ const expoConfig: ExpoConfig = {
     [
       "expo-media-library",
       {
-        photosPermission: "Allow $(PRODUCT_NAME) to access your photos.",
-        savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
+        savePhotosPermission:
+          "Allow $(PRODUCT_NAME) to save photos to your media library.",
         isAccessMediaLocationEnabled: true,
       },
     ],
@@ -168,7 +168,11 @@ const expoConfig: ExpoConfig = {
       "expo-image-picker",
       {
         photosPermission:
-          "$(PRODUCT_NAME) needs to access your camera roll so that you can upload photos on Showtime.",
+          "$(PRODUCT_NAME) accesses your photos to allow you to share them with your audience and to personalize your profile.",
+        cameraPermission:
+          "$(PRODUCT_NAME) requires access to your camera to capture photos and videos, allowing you to share moments with your audience and enhance your creator channel.",
+        microphonePermission:
+          "$(PRODUCT_NAME) requires access to your microphone to record voice messages. This also ensures that when you record videos, they aren't muted, providing a richer interactive experience for your audience.",
       },
     ],
     [
