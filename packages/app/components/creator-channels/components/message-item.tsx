@@ -52,7 +52,12 @@ import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
 import { useDeleteMessage } from "../hooks/use-delete-message";
 import { useReactOnMessage } from "../hooks/use-react-on-message";
-import { ChannelById, ChannelMessageItem, MessageItemProps } from "../types";
+import {
+  ChannelById,
+  ChannelMessageAttachment,
+  ChannelMessageItem,
+  MessageItemProps,
+} from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
 import { LeanText, LeanView } from "./lean-text";
@@ -63,37 +68,26 @@ const height = Dimensions.get("window").height;
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-const getImageAttachmentWidth = (item: ChannelMessageItem) => {
-  const theFirstAttachment = item.channel_message?.attachments[0];
-
-  if (
-    !theFirstAttachment ||
-    !theFirstAttachment.height ||
-    !theFirstAttachment.width
-  ) {
+const getImageAttachmentWidth = (attachment: ChannelMessageAttachment) => {
+  if (!attachment || !attachment.height || !attachment.width) {
     return 0;
   }
-  if (theFirstAttachment.height > theFirstAttachment.width) {
+  if (attachment?.height > attachment?.width) {
     return 160;
-  } else if (theFirstAttachment.height < theFirstAttachment.width) {
+  } else if (attachment?.height < attachment?.width) {
     return 320;
   } else {
     return 320;
   }
 };
-const getImageAttachmentHeight = (item: ChannelMessageItem) => {
-  const theFirstAttachment = item.channel_message?.attachments[0];
 
-  if (
-    !theFirstAttachment ||
-    !theFirstAttachment.height ||
-    !theFirstAttachment.width
-  ) {
+const getImageAttachmentHeight = (attachment: ChannelMessageAttachment) => {
+  if (!attachment || !attachment.height || !attachment.width) {
     return 0;
   }
-  if (theFirstAttachment.height > theFirstAttachment.width) {
+  if (attachment.height > attachment.width) {
     return 284;
-  } else if (theFirstAttachment.height < theFirstAttachment.width) {
+  } else if (attachment.height < attachment.width) {
     return 180;
   } else {
     return 320;
@@ -130,16 +124,6 @@ export const MessageItem = memo(
     const user = useContext(UserContext);
     const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
-
-    const imageAttachmentWidth = useMemo(
-      () => getImageAttachmentWidth(item),
-      [item]
-    );
-
-    const imageAttachmentHeight = useMemo(
-      () => getImageAttachmentHeight(item),
-      [item]
-    );
 
     const linkifiedMessage = useMemo(
       () =>
@@ -484,70 +468,7 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              <LeanView
-                tw="overflow-hidden rounded-xl"
-                style={{
-                  width: imageAttachmentWidth,
-                  height: imageAttachmentHeight,
-                }}
-              >
-                <LightBox
-                  width={imageAttachmentWidth}
-                  height={imageAttachmentHeight}
-                  imgLayout={{
-                    width: "100%",
-                    height:
-                      Platform.OS === "web"
-                        ? imageAttachmentHeight
-                        : width *
-                          (item.channel_message?.attachments.length &&
-                          item.channel_message?.attachments[0].height &&
-                          item.channel_message?.attachments[0]?.width
-                            ? item.channel_message?.attachments[0]?.height /
-                              item.channel_message?.attachments[0].width
-                            : 320),
-                  }}
-                  tapToClose
-                  borderRadius={12}
-                  containerStyle={
-                    Platform.OS === "web"
-                      ? {
-                          width: Math.max(380, Math.min(width, height * 0.7)),
-                          height:
-                            item.channel_message?.attachments.length &&
-                            item.channel_message?.attachments[0].height &&
-                            item.channel_message?.attachments[0]?.width
-                              ? (Math.max(380, Math.min(width, height * 0.7)) *
-                                  item.channel_message?.attachments[0].height) /
-                                item.channel_message?.attachments[0].width
-                              : 320,
-                        }
-                      : null
-                  }
-                >
-                  <Image
-                    transition={100}
-                    recyclingKey={
-                      item.channel_message.attachments[0]?.media_upload
-                    }
-                    source={
-                      item.channel_message.attachments[0]?.url
-                        ? item.channel_message.attachments[0].url.startsWith(
-                            "data:image"
-                          )
-                          ? item.channel_message.attachments[0].url
-                          : `${item.channel_message.attachments[0].url}?optimizer=image&width=600`
-                        : undefined
-                    }
-                    alt=""
-                    resizeMode="cover"
-                    style={{
-                      ...StyleSheet.absoluteFillObject,
-                      backgroundColor: "#333",
-                    }}
-                  />
-                </LightBox>
-              </LeanView>
+              <ImagePreview attachment={item.channel_message?.attachments[0]} />
             ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&
@@ -602,6 +523,87 @@ export const MessageSkeleton = () => {
           );
         })}
       </LeanView>
+    </LeanView>
+  );
+};
+
+const ImagePreview = ({
+  attachment,
+}: {
+  attachment: ChannelMessageAttachment;
+}) => {
+  const imageAttachmentWidth = useMemo(
+    () => getImageAttachmentWidth(attachment),
+    [attachment]
+  );
+
+  const imageAttachmentHeight = useMemo(
+    () => getImageAttachmentHeight(attachment),
+    [attachment]
+  );
+  const isLandscape =
+    attachment.width && attachment.height
+      ? attachment.width > attachment.height
+      : false;
+
+  const imageWidth = isLandscape
+    ? Math.max(380, Math.min(width, height * 0.7))
+    : Math.min(width, height * 0.7);
+
+  const imageHeight =
+    attachment.height && attachment?.width
+      ? isLandscape
+        ? imageWidth * (attachment.height / attachment.width)
+        : Math.min(height, imageWidth * (attachment.height / attachment.width))
+      : 320;
+
+  return (
+    <LeanView
+      tw="overflow-hidden rounded-xl bg-gray-600"
+      style={{
+        width: imageAttachmentWidth,
+        height: imageAttachmentHeight,
+      }}
+    >
+      <LightBox
+        width={imageAttachmentWidth}
+        height={imageAttachmentHeight}
+        imgLayout={{
+          width: "100%",
+          height:
+            Platform.OS === "web"
+              ? imageAttachmentHeight
+              : width *
+                (attachment.height && attachment?.width
+                  ? attachment?.height / attachment.width
+                  : 320),
+        }}
+        tapToClose
+        borderRadius={12}
+        containerStyle={
+          Platform.OS === "web"
+            ? {
+                width: imageWidth,
+                height: imageHeight,
+              }
+            : null
+        }
+      >
+        <Image
+          transition={100}
+          recyclingKey={attachment?.media_upload}
+          source={
+            attachment?.url
+              ? `${attachment?.url}?optimizer=image&width=600`
+              : undefined
+          }
+          alt=""
+          resizeMode="cover"
+          style={{
+            ...StyleSheet.absoluteFillObject,
+          }}
+        />
+      </LightBox>
     </LeanView>
   );
 };
