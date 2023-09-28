@@ -68,7 +68,7 @@ export const LightBoxProvider: React.FC<{ children: JSX.Element }> = ({
           {imageElement}
         </View>
         <Pressable onPress={onClose} tw="absolute left-8 top-8">
-          <Close color={colors.gray[200]} width={24} height={24} />
+          <Close color={colors.white} width={24} height={24} />
         </Pressable>
       </Modal>
     </LightBoxContext.Provider>
