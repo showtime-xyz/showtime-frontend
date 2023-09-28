@@ -68,7 +68,7 @@ export const ImagePreview = memo(
 
     return (
       <LeanView
-        tw="overflow-hidden rounded-xl bg-gray-600"
+        tw="web:cursor-pointer overflow-hidden rounded-xl bg-gray-600"
         style={{
           width: imageAttachmentWidth,
           height: imageAttachmentHeight,

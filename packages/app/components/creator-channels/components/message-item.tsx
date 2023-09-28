@@ -443,22 +443,17 @@ export const MessageItem = memo(
                 duration={item.channel_message.attachments[0]?.duration}
               />
             ) : null}
-
-            <PlatformAnimateHeight
-              initialHeight={item.reaction_group.length > 0 ? 29 : 0}
-            >
-              {item.reaction_group.length > 0 ? (
-                <AnimatedView layout={Layout}>
-                  <MessageReactions
-                    key={channel_message.id}
-                    reactionGroup={item.reaction_group}
-                    channelId={channelId}
-                    channelReactions={reactions}
-                    messageId={channel_message.id}
-                  />
-                </AnimatedView>
-              ) : null}
-            </PlatformAnimateHeight>
+            {item.reaction_group.length > 0 ? (
+              <AnimatedView layout={Layout}>
+                <MessageReactions
+                  key={channel_message.id}
+                  reactionGroup={item.reaction_group}
+                  channelId={channelId}
+                  channelReactions={reactions}
+                  messageId={channel_message.id}
+                />
+              </AnimatedView>
+            ) : null}
           </LeanView>
         </LeanView>
       </AnimatedView>
