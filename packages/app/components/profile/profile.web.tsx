@@ -104,7 +104,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
 
-  const numColumns = 3;
   const isSelf = user?.data?.profile?.profile_id === profileId;
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
@@ -113,6 +112,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     initial: data?.default_tab_type,
   });
   const [type, setType] = useState(queryTab);
+  const numColumns = type === "tokens" ? 1 : 3;
+
   useEffect(() => {
     if (!data?.default_tab_type || type) return;
     setType(data?.default_tab_type);
