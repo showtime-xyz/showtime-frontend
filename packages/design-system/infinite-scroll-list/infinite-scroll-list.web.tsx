@@ -7,6 +7,7 @@ import {
   isValidElement,
   forwardRef,
   Fragment,
+  memo,
 } from "react";
 
 import type { FlashListProps, ViewToken } from "@shopify/flash-list";
@@ -426,6 +427,6 @@ const ViewabilityTracker = ({
   );
 };
 
-const InfiniteScrollList = forwardRef(InfiniteScrollListImpl);
+const InfiniteScrollList = memo(forwardRef(InfiniteScrollListImpl));
 
 export { InfiniteScrollList };

@@ -487,6 +487,17 @@ export const Messages = memo(() => {
     [fakeView]
   );
 
+  const renderListFooter = useCallback(() => {
+    if (isLoadingMore) {
+      return (
+        <View tw="w-full items-center py-4">
+          <Spinner size="small" />
+        </View>
+      );
+    }
+    return null;
+  }, [isLoadingMore]);
+
   if (!channelId) {
     return (
       <View tw="animate-fade-in-250 h-full w-full flex-1 items-center justify-center">
@@ -589,15 +600,7 @@ export const Messages = memo(() => {
                 ListHeaderComponent={renderListHeader}
                 CellRendererComponent={CustomCellRenderer}
                 ListEmptyComponent={listEmptyComponent}
-                ListFooterComponent={
-                  isLoadingMore
-                    ? () => (
-                        <View tw="w-full items-center py-4">
-                          <Spinner size="small" />
-                        </View>
-                      )
-                    : () => null
-                }
+                ListFooterComponent={renderListFooter}
               />
             </>
           )}
