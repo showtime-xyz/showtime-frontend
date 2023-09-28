@@ -532,7 +532,11 @@ export const MessageItem = memo(
                     }
                     source={
                       item.channel_message.attachments[0]?.url
-                        ? `${item.channel_message.attachments[0]?.url}?optimizer=image&width=600`
+                        ? item.channel_message.attachments[0].url.startsWith(
+                            "data:image"
+                          )
+                          ? item.channel_message.attachments[0].url
+                          : `${item.channel_message.attachments[0].url}?optimizer=image&width=600`
                         : undefined
                     }
                     alt=""
