@@ -32,6 +32,7 @@ import {
   TwitterButton,
   InstagramButton,
   CopyLinkButton,
+  AccessChannelButton,
 } from "app/components/social-buttons";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
@@ -164,9 +165,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
             <InstagramButton onPress={shareSingleImage} />
           ) : null}
           <CopyLinkButton theme="dark" onPress={onCopyLink} />
-          <Button theme="light" size="regular" onPress={viewChannel}>
-            View Channel
-          </Button>
+          <AccessChannelButton theme="dark" onPress={viewChannel} />
         </View>
       </SafeAreaView>
       <View
