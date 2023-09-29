@@ -392,7 +392,6 @@ export const MessageItem = memo(
               <>
                 {item.channel_message.body_text_length > 0 ? (
                   <LeanText
-                    selectable
                     tw={"text-sm text-gray-900 dark:text-gray-100"}
                     style={
                       Platform.OS === "web"
@@ -405,10 +404,7 @@ export const MessageItem = memo(
                   >
                     {linkifiedMessage}
                     {messageWasEdited && (
-                      <LeanText
-                        tw="text-xs text-gray-500 dark:text-gray-200"
-                        selectable
-                      >
+                      <LeanText tw="text-xs text-gray-500 dark:text-gray-200">
                         {` • edited`}
                       </LeanText>
                     )}
@@ -432,7 +428,10 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              <ImagePreview attachment={item.channel_message?.attachments[0]} />
+              <ImagePreview
+                attachment={item.channel_message?.attachments[0]}
+                isViewable={permissions?.can_view_creator_messages}
+              />
             ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&
@@ -441,6 +440,7 @@ export const MessageItem = memo(
                 id={item.channel_message.id}
                 url={item.channel_message.attachments[0]?.url}
                 duration={item.channel_message.attachments[0]?.duration}
+                isViewable={permissions?.can_view_creator_messages}
               />
             ) : null}
             {item.reaction_group.length > 0 ? (

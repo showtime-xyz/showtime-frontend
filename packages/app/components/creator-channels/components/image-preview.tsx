@@ -5,7 +5,7 @@ import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 
 import { ChannelMessageAttachment } from "../types";
-import { LeanView } from "./lean-text";
+import { LeanText, LeanView } from "./lean-text";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -37,7 +37,13 @@ const getImageAttachmentHeight = (attachment: ChannelMessageAttachment) => {
 };
 
 export const ImagePreview = memo(
-  ({ attachment }: { attachment: ChannelMessageAttachment }) => {
+  ({
+    attachment,
+    isViewable,
+  }: {
+    attachment: ChannelMessageAttachment;
+    isViewable?: boolean;
+  }) => {
     const imageAttachmentWidth = useMemo(
       () => getImageAttachmentWidth(attachment),
       [attachment]
@@ -68,11 +74,12 @@ export const ImagePreview = memo(
 
     return (
       <LeanView
-        tw="web:cursor-pointer overflow-hidden rounded-xl bg-gray-600"
+        tw="overflow-hidden rounded-xl bg-gray-600"
         style={{
           width: imageAttachmentWidth,
           height: imageAttachmentHeight,
         }}
+        pointerEvents={isViewable ? "auto" : "none"}
       >
         <LightBox
           width={imageAttachmentWidth}
@@ -99,6 +106,7 @@ export const ImagePreview = memo(
           }
         >
           <Image
+            tw="web:cursor-pointer"
             transition={100}
             recyclingKey={attachment?.media_upload}
             source={
@@ -113,6 +121,13 @@ export const ImagePreview = memo(
             }}
           />
         </LightBox>
+        {!isViewable ? (
+          <LeanView tw="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-gray-800 bg-opacity-90">
+            <LeanText tw="text-center text-lg text-white dark:text-gray-300">
+              Unlock to view
+            </LeanText>
+          </LeanView>
+        ) : null}
       </LeanView>
     );
   }

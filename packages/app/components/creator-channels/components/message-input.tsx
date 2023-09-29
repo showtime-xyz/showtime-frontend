@@ -238,7 +238,9 @@ export const MessageInput = memo(
 
               <MessageBox
                 ref={inputRef}
-                placeholder="Send an update..."
+                placeholder={
+                  isUserAdmin ? "Send an update..." : "Write a message..."
+                }
                 textInputProps={{
                   maxLength: 2000,
                 }}
