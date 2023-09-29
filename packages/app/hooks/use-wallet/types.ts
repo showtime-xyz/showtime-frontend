@@ -1,4 +1,5 @@
 import type { GetAccountResult, SignMessageArgs } from "@wagmi/core";
+import type { WalletClient } from "viem";
 
 export type ConnectResult = Promise<
   | {
@@ -22,4 +23,5 @@ export type UseWalletReturnType = {
   signMessageAsync: (args: SignMessageArgs) => Promise<string | undefined>;
   isMagicWallet?: boolean;
   getBalance: (address: string) => Promise<bigint | undefined>;
+  walletClient?: WalletClient | null;
 };

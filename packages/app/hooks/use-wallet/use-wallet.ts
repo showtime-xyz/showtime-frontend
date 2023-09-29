@@ -129,6 +129,7 @@ const useWallet = (): UseWalletReturnType => {
       isMagicWallet: isMagic,
       networkChanged: undefined,
       getBalance,
+      walletClient: web3,
       signMessageAsync: async (args: { message: string }) => {
         if (
           walletConnectInstanceRef.current.isConnected &&
@@ -169,6 +170,7 @@ const useWallet = (): UseWalletReturnType => {
     getBalance,
     walletConnectInstanceRef,
     coinbaseMobileSDKInstanceRef,
+    web3,
   ]);
 
   if (process.env.E2E) {
