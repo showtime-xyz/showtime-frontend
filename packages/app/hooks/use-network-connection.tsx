@@ -9,6 +9,8 @@ import { useIsOnline } from "./use-is-online";
 
 export const useNetWorkConnection = () => {
   const connectionWasLost = useRef(false);
+  const ignoreNextNetworkChange = useRef(false);
+  const wasBackgrounded = useRef(false);
 
   // Check if app is in foreground
   const isForeground = useIsForeground();
@@ -16,16 +18,38 @@ export const useNetWorkConnection = () => {
   const { isOnline } = useIsOnline();
 
   useEffect(() => {
+    if (!isForeground) {
+      wasBackgrounded.current = true;
+      ignoreNextNetworkChange.current = true;
+      setTimeout(() => {
+        ignoreNextNetworkChange.current = false;
+      }, 1000); // Ignore for 1 second after coming to foreground
+    } else {
+      wasBackgrounded.current = false;
+    }
+  }, [isForeground]);
+
+  useEffect(() => {
     const getNetwork = async () => {
+      // If we're set to ignore this network change, just return
+      if (ignoreNextNetworkChange.current) {
+        return;
+      }
+
       // Show error message if app is in foreground and device is offline
       if (isForeground && !isOnline && !connectionWasLost.current) {
         toast.error("No network connection");
         connectionWasLost.current = true;
-        return;
       }
 
       // Show success message if app is in foreground and device is back online
-      if (isForeground && isOnline && connectionWasLost.current) {
+      // But only if the app wasn't backgrounded
+      if (
+        isForeground &&
+        isOnline &&
+        connectionWasLost.current &&
+        !wasBackgrounded.current
+      ) {
         toast.success("Network connected");
         connectionWasLost.current = false;
       }

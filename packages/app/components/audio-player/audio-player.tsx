@@ -26,10 +26,12 @@ export const AudioPlayer = memo(
     id,
     url,
     duration,
+    isViewable = true,
   }: {
     id: number;
     url: string;
     duration?: number | null;
+    isViewable?: boolean;
   }) => {
     const isDark = useIsDarkMode();
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -236,6 +238,13 @@ export const AudioPlayer = memo(
             </LeanText>
           </LeanView>
         </LeanView>
+        {!isViewable ? (
+          <LeanView tw="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-gray-800 bg-opacity-90">
+            <LeanText tw="select-none text-center text-lg text-white dark:text-gray-300">
+              Unlock to listen
+            </LeanText>
+          </LeanView>
+        ) : null}
       </LeanView>
     );
   }
