@@ -373,7 +373,7 @@ export const MessageItem = memo(
                   </LeanView>
                 ) : (
                   <>
-                    <LeanText tw="text-sm text-gray-900  dark:text-gray-100">
+                    <LeanText tw="py-1.5 text-sm  text-gray-900 dark:text-gray-100">
                       {loremText}
                     </LeanText>
                     <BlurView
