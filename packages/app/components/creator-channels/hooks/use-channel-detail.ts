@@ -11,7 +11,12 @@ export const getChannelByIdCacheKey = (channelId: string | number) => {
 export const useChannelById = (channelId?: string | number) => {
   const queryState = useSWR<ChannelById>(
     channelId ? getChannelByIdCacheKey(channelId) : null,
-    fetcher
+    fetcher,
+    {
+      focusThrottleInterval: 5000,
+      dedupingInterval: 5000,
+      revalidateIfStale: false,
+    }
   );
 
   return queryState;

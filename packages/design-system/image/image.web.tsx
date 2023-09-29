@@ -1,4 +1,4 @@
-import { ComponentProps, CSSProperties, useCallback } from "react";
+import { ComponentProps, CSSProperties, useCallback, useMemo } from "react";
 import { ImageURISource } from "react-native";
 
 // @ts-ignore
@@ -73,18 +73,37 @@ function Img({
     },
     [onLoad, onLoadingCompleteProps]
   );
+
+  const newProps = useMemo(() => {
+    return {
+      style: {
+        objectFit: (contentFit ?? resizeMode) as any,
+        ...style,
+      },
+      alt: alt ?? "",
+      width,
+      height,
+      fill: !hasHeightOrWidth,
+      loading,
+      priority: loading === "eager",
+      ...props,
+    };
+  }, [
+    alt,
+    contentFit,
+    hasHeightOrWidth,
+    height,
+    loading,
+    props,
+    resizeMode,
+    style,
+    width,
+  ]);
+
   if (source?.uri && typeof source?.uri === "string") {
     return (
       <Image
         src={source.uri}
-        style={{
-          objectFit: (contentFit ?? resizeMode) as any,
-          ...style,
-        }}
-        loading={loading}
-        priority={loading === "eager"}
-        width={width}
-        height={height}
         onLoadingComplete={onLoad ? onLoadingComplete : noop}
         placeholder={width > 40 && props.blurhash ? "blur" : "empty"}
         blurDataURL={
@@ -92,27 +111,14 @@ function Img({
             ? getBase64Blurhash(props.blurhash)
             : undefined
         }
-        alt={alt ?? ""}
-        fill={!hasHeightOrWidth}
         unoptimized // We already optimize the images with our CDN
-        {...props}
+        {...newProps}
       />
     );
   }
 
   if (typeof source === "string") {
-    return (
-      <Image
-        src={source}
-        loading={loading}
-        priority={loading === "eager"}
-        width={width}
-        height={height}
-        fill={!hasHeightOrWidth}
-        alt={alt ?? ""}
-        {...props}
-      />
-    );
+    return <Image src={source} {...newProps} />;
   }
 
   return null;
@@ -124,11 +130,12 @@ function StyledImage({ borderRadius = 0, tw = "", ...props }: ImageProps) {
   return (
     <View
       style={{
-        width: "inherit",
-        height: "inherit",
+        width: "inherit" as any,
+        height: "inherit" as any,
         borderRadius,
         overflow: "hidden",
       }}
+      tw="w-in"
     >
       <Img {...props} className={Array.isArray(tw) ? tw.join(" ") : tw} />
     </View>

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useContext } from "react";
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -16,12 +16,14 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { UserContext } from "app/context/user-context";
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
 import { useConnectAppleMusic } from "app/hooks/use-connect-apple-music";
 import { useConnectSpotify } from "app/hooks/use-connect-spotify";
 import { useDisconnectAppleMusic } from "app/hooks/use-disconnect-apple-music";
 import { useDisconnectInstagram } from "app/hooks/use-disconnect-instagram";
 import { useDisconnectSpotify } from "app/hooks/use-disconnect-spotify";
+import { useDisconnectTwitter } from "app/hooks/use-disconnect-twitter";
 import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
 import { useManageAccount } from "app/hooks/use-manage-account";
 import { useUser } from "app/hooks/use-user";
@@ -38,8 +40,11 @@ export type AccountTabProps = {
 
 export const AccountTab = ({ index = 0 }: AccountTabProps) => {
   const accounts = useListSocialAccounts();
-  const instagramProviderId = accounts.data?.find(
+  const instagramProviderId = accounts.data?.find?.(
     (v) => v.provider === "instagram"
+  )?.provider_account_id;
+  const twitterProviderId = accounts.data?.find?.(
+    (v) => v.provider === "twitter"
   )?.provider_account_id;
   return (
     <SettingScrollComponent index={index}>
@@ -53,13 +58,14 @@ export const AccountTab = ({ index = 0 }: AccountTabProps) => {
         <ConnectAppleMusic />
         <WalletSocialAccounts />
         <ConnectInstagram providerId={instagramProviderId} />
+        <ConnectTwitter providerId={twitterProviderId} />
       </View>
     </SettingScrollComponent>
   );
 };
 
 const ConnectSpotify = () => {
-  const user = useUser();
+  const user = useContext(UserContext);
 
   const { disconnectSpotify } = useDisconnectSpotify();
   const { connectSpotify } = useConnectSpotify();
@@ -74,10 +80,10 @@ const ConnectSpotify = () => {
       </View>
       <Button
         variant={
-          user.user?.data.profile.has_spotify_token ? "danger" : "tertiary"
+          user?.user?.data.profile.has_spotify_token ? "danger" : "tertiary"
         }
         onPress={async () => {
-          if (user.user?.data.profile.has_spotify_token) {
+          if (user?.user?.data.profile.has_spotify_token) {
             disconnectSpotify();
           } else {
             const res = await connectSpotify();
@@ -87,14 +93,14 @@ const ConnectSpotify = () => {
           }
         }}
       >
-        {user.user?.data.profile.has_spotify_token ? "Disconnect" : "Connect"}
+        {user?.user?.data.profile.has_spotify_token ? "Disconnect" : "Connect"}
       </Button>
     </View>
   );
 };
 
 const ConnectAppleMusic = () => {
-  const user = useUser();
+  const user = useContext(UserContext);
   const isDark = useIsDarkMode();
 
   const { disconnectAppleMusic, isMutating: isDisconnecting } =
@@ -114,11 +120,11 @@ const ConnectAppleMusic = () => {
       </View>
       <Button
         variant={
-          user.user?.data.profile.has_apple_music_token ? "danger" : "tertiary"
+          user?.user?.data.profile.has_apple_music_token ? "danger" : "tertiary"
         }
         disabled={isLoading}
         onPress={async () => {
-          if (user.user?.data.profile.has_apple_music_token) {
+          if (user?.user?.data.profile.has_apple_music_token) {
             disconnectAppleMusic();
           } else {
             const res = await connectAppleMusic();
@@ -130,7 +136,7 @@ const ConnectAppleMusic = () => {
       >
         {isLoading
           ? "Loading..."
-          : user.user?.data.profile.has_apple_music_token
+          : user?.user?.data.profile.has_apple_music_token
           ? "Disconnect"
           : "Connect"}
       </Button>
@@ -139,8 +145,8 @@ const ConnectAppleMusic = () => {
 };
 
 export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
-  const user = useUser();
   const isDark = useIsDarkMode();
+  const user = useUser();
 
   const { trigger: disconnectInstagram, isMutating: isDisconnecting } =
     useDisconnectInstagram();
@@ -189,6 +195,52 @@ export const ConnectInstagram = ({ providerId }: { providerId?: string }) => {
   );
 };
 
+export const ConnectTwitter = ({ providerId }: { providerId?: string }) => {
+  const isDark = useIsDarkMode();
+  const user = useUser();
+
+  const { trigger: disconnectTwitter, isMutating: isDisconnecting } =
+    useDisconnectTwitter();
+  const { trigger: addSocial, isMutating: isConnecting } =
+    useAddMagicSocialAccount();
+
+  return (
+    <View tw="space-between flex-row items-center justify-between py-2 md:py-3.5">
+      <View tw="flex-row items-center">
+        <Twitter height={25} width={25} color={isDark ? "#fff" : "#000"} />
+        <Text tw="ml-2.5 text-base font-medium text-gray-900 dark:text-gray-100">
+          Twitter
+        </Text>
+      </View>
+      <Button
+        variant={
+          user.user?.data.profile.social_login_connections.twitter
+            ? "danger"
+            : "tertiary"
+        }
+        onPress={() => {
+          if (
+            user.user?.data.profile.social_login_connections.twitter &&
+            providerId
+          ) {
+            disconnectTwitter({
+              providerId,
+            }).catch(() => {});
+          } else {
+            addSocial({ type: "twitter" }).catch(() => {});
+          }
+        }}
+      >
+        {isDisconnecting || isConnecting
+          ? "Loading..."
+          : user.user?.data.profile.social_login_connections.twitter
+          ? "Disconnect"
+          : "Connect"}
+      </Button>
+    </View>
+  );
+};
+
 const socialAccounts = [
   {
     Icon: Apple,
@@ -199,12 +251,6 @@ const socialAccounts = [
     Icon: GoogleOriginal,
     type: "google",
     name: "Google",
-  },
-  {
-    Icon: Twitter,
-    type: "twitter",
-    name: "Twitter",
-    color: colors.twitter,
   },
 ];
 
@@ -267,11 +313,10 @@ const WalletSocialAccounts = () => {
 
 type SocialConnectButtonProps = {
   connected: {
-    twitter: { address: string };
     google: { address: string };
     apple: { address: string };
   };
-  type: "twitter" | "google" | "apple";
+  type: "google" | "apple";
 };
 
 const SocialConnectButton = ({ connected, type }: SocialConnectButtonProps) => {

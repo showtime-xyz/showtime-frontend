@@ -58,27 +58,6 @@ export const useMagicSocialAuth = () => {
     }
   };
 
-  const performMagicAuthWithTwitter = async () => {
-    setError(null);
-    setLoading("twitter");
-
-    const scope = ["email"];
-    const redirectUri = OAUTH_REDIRECT_URI;
-    return magic.oauth
-      .loginWithPopup({
-        provider: "twitter",
-        scope,
-        redirectURI: redirectUri,
-      })
-      .catch((err) => {
-        Logger.error(err);
-        setError(err);
-      })
-      .finally(() => {
-        setLoading(null);
-      });
-  };
-
   const performMagicAuthWithGoogle = async () => {
     const scope = ["email"];
     const redirectUri = OAUTH_REDIRECT_URI;
@@ -124,7 +103,6 @@ export const useMagicSocialAuth = () => {
   return {
     performMagicAuthWithApple,
     performMagicAuthWithGoogle,
-    performMagicAuthWithTwitter,
     getInstagramToken,
     loading,
     error,

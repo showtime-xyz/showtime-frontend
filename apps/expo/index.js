@@ -7,6 +7,10 @@ import "expo-dev-launcher";
 import "expo/build/Expo.fx";
 import "react-native-gesture-handler";
 
+import { PlaybackService } from "app/components/audio-player/service";
+
+import TrackPlayer from "design-system/track-player";
+
 import App from "./App";
 
 // if (__DEV__) {
@@ -14,3 +18,6 @@ import App from "./App";
 // }
 
 registerRootComponent(App);
+
+// register audio service
+TrackPlayer.registerPlaybackService(() => PlaybackService);

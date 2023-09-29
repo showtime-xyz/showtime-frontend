@@ -15,8 +15,8 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { ReactionGroup } from "../creator-channels/hooks/use-channel-messages";
 import { ChannelReactionResponse } from "../creator-channels/hooks/use-channel-reactions";
+import { ReactionGroup } from "../creator-channels/types";
 import {
   emojiButtonWidth,
   reactionButtonSize,
@@ -101,7 +101,7 @@ export const Reaction = (props: Props) => {
 
   function handlePress() {
     "worklet";
-    const dim = measure(positionRef);
+    const dim = measure(positionRef) || { pageX: 0, pageY: 0 };
     runOnJS(setPositions)(dim.pageX, dim.pageY);
   }
 

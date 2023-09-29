@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import { Dimensions, StyleProp, ViewStyle } from "react-native";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -8,16 +8,17 @@ import Animated, {
   useAnimatedRef,
   useAnimatedStyle,
   useSharedValue,
+  SharedValue,
 } from "react-native-reanimated";
 
 import { AnimationParams, useLightBox } from "./provider";
 
 export type ImageBoundingClientRect = {
-  x: Animated.SharedValue<number>;
-  y: Animated.SharedValue<number>;
-  width: Animated.SharedValue<number>;
-  height: Animated.SharedValue<number>;
-  imageOpacity: Animated.SharedValue<number>;
+  x: SharedValue<number>;
+  y: SharedValue<number>;
+  width: SharedValue<number>;
+  height: SharedValue<number>;
+  imageOpacity: SharedValue<number>;
 };
 export type TargetImageInfo = {
   width: number | string;
@@ -41,81 +42,110 @@ export type LightBoxProps = TargetImageInfo & {
   nativeHeaderHeight?: number;
 };
 
-export const LightBox: React.FC<LightBoxProps> = ({
-  width: imgWidth,
-  height: imgHeight,
-  containerStyle,
-  imgLayout,
-  children,
-  onLongPress,
-  tapToClose = true,
-  onTap,
-  nativeHeaderHeight = 0,
-  borderRadius,
-}) => {
-  // Todo: add lightboxImage component.
-  const [targetLayout] = useState<AnimationParams["layout"] | null>(null);
+export const LightBox = memo<LightBoxProps>(
+  ({
+    width: imgWidth,
+    height: imgHeight,
+    containerStyle,
+    imgLayout,
+    children,
+    onLongPress,
+    tapToClose = true,
+    onTap,
+    nativeHeaderHeight = 0,
+    borderRadius,
+  }) => {
+    // Todo: add lightboxImage component.
+    const [targetLayout] = useState<AnimationParams["layout"] | null>(null);
 
-  const animatedRef = useAnimatedRef<Animated.View>();
-  const opacity = useSharedValue(1);
-  const lightBox = useLightBox();
+    const animatedRef = useAnimatedRef<Animated.View>();
+    const opacity = useSharedValue(1);
+    const lightBox = useLightBox();
 
-  const styles = useAnimatedStyle(() => {
-    return {
-      width: typeof imgWidth === "number" ? imgWidth : "100%",
-      height: typeof imgHeight === "number" ? imgHeight : "100%",
-      opacity: opacity.value,
-    };
-  });
-  const width = useSharedValue(0);
-  const height = useSharedValue(0);
-  const x = useSharedValue(0);
-  const y = useSharedValue(0);
+    const styles = useAnimatedStyle(() => {
+      return {
+        width: typeof imgWidth === "number" ? imgWidth : "100%",
+        height: typeof imgHeight === "number" ? imgHeight : "100%",
+        opacity: opacity.value,
+      };
+    }, []);
+    const width = useSharedValue(0);
+    const height = useSharedValue(0);
+    const x = useSharedValue(0);
+    const y = useSharedValue(0);
 
-  const handlePress = () => {
-    if (!targetLayout && !imgLayout) return;
-    const position = { imageOpacity: opacity, width, height, x, y };
+    const handlePress = useCallback(() => {
+      if (!targetLayout && !imgLayout) return;
+      const position = { imageOpacity: opacity, width, height, x, y };
 
-    lightBox?.show({
-      position,
-      layout: targetLayout ??
-        imgLayout ?? {
-          width: Dimensions.get("window").width,
-          height: Dimensions.get("window").width,
-        },
-      imageElement: children,
-      tapToClose,
-      onTap,
+      lightBox?.show({
+        position,
+        layout: targetLayout ??
+          imgLayout ?? {
+            width: Dimensions.get("window").width,
+            height: Dimensions.get("window").width,
+          },
+        imageElement: children,
+        tapToClose,
+        onTap,
+        borderRadius,
+      });
+    }, [
       borderRadius,
-    });
-  };
+      children,
+      height,
+      imgLayout,
+      lightBox,
+      onTap,
+      opacity,
+      tapToClose,
+      targetLayout,
+      width,
+      x,
+      y,
+    ]);
 
-  const tapGesture = Gesture.Tap().onEnd((_, success) => {
-    if (!success) return;
-    const measurements = measure(animatedRef);
-    width.value = measurements!.width;
-    height.value = measurements!.height;
-    x.value = measurements!.pageX;
-    y.value = measurements!.pageY - nativeHeaderHeight;
-    runOnJS(handlePress)();
-  });
-  const longPressGesture = Gesture.LongPress()
-    .enabled(!!onLongPress)
-    .maxDistance(10)
-    .onStart(() => {
-      "worklet";
-      if (onLongPress) {
-        runOnJS(onLongPress)();
-      }
-    });
-  return (
-    //@ts-ignore
-    <GestureDetector gesture={Gesture.Race(longPressGesture, tapGesture)}>
-      <Animated.View style={containerStyle}>
-        <Animated.View ref={animatedRef} style={styles}>
-          {children}
+    const tapGesture = useMemo(
+      () =>
+        Gesture.Tap().onEnd((_, success) => {
+          if (!success) return;
+          const measurements = measure(animatedRef);
+          width.value = measurements!.width;
+          height.value = measurements!.height;
+          x.value = measurements!.pageX;
+          y.value = measurements!.pageY - nativeHeaderHeight;
+          runOnJS(handlePress)();
+        }),
+      [animatedRef, handlePress, height, nativeHeaderHeight, width, x, y]
+    );
+    const longPressGesture = useMemo(
+      () =>
+        Gesture.LongPress()
+          .enabled(!!onLongPress)
+          .maxDistance(10)
+          .onStart(() => {
+            "worklet";
+            if (onLongPress) {
+              runOnJS(onLongPress)();
+            }
+          }),
+      [onLongPress]
+    );
+    const gesture = useMemo(
+      () => Gesture.Race(longPressGesture, tapGesture),
+      [longPressGesture, tapGesture]
+    );
+
+    return (
+      //@ts-ignore
+      <GestureDetector gesture={gesture}>
+        <Animated.View style={containerStyle}>
+          <Animated.View ref={animatedRef} style={styles}>
+            {children}
+          </Animated.View>
         </Animated.View>
-      </Animated.View>
-    </GestureDetector>
-  );
-};
+      </GestureDetector>
+    );
+  }
+);
+LightBox.displayName = "LightBox";

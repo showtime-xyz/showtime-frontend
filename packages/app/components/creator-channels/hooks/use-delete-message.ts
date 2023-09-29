@@ -1,5 +1,6 @@
 import useSWRMutation from "swr/mutation";
 
+import { useStableCallback } from "app/hooks/use-stable-callback";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
@@ -25,32 +26,34 @@ export const useDeleteMessage = (channelId?: string) => {
   const channelMessages = useChannelMessages(channelId);
   const joinedChannelsList = useOwnedChannelsList();
 
-  const handleSubmit = async ({ messageId }: { messageId: number }) => {
-    channelMessages.mutate(
-      (d) => {
-        if (d) {
-          d.forEach(
-            (m, index) =>
-              (d[index] = d[index].filter(
-                (message) => message.channel_message.id !== messageId
-              ))
-          );
-          return [...d];
-        }
-      },
-      { revalidate: false }
-    );
+  const handleSubmit = useStableCallback(
+    async ({ messageId }: { messageId: number }) => {
+      channelMessages.mutate(
+        (d) => {
+          if (d) {
+            d.forEach(
+              (m, index) =>
+                (d[index] = d[index].filter(
+                  (message) => message.channel_message.id !== messageId
+                ))
+            );
+            return [...d];
+          }
+        },
+        { revalidate: false }
+      );
 
-    try {
-      await trigger({ messageId });
-    } catch (e) {
-      captureException(e);
-      Logger.error(e);
-    } finally {
-      channelMessages.mutate();
-      joinedChannelsList.refresh();
+      try {
+        await trigger({ messageId });
+      } catch (e) {
+        captureException(e);
+        Logger.error(e);
+      } finally {
+        channelMessages.mutate();
+        joinedChannelsList.refresh();
+      }
     }
-  };
+  );
 
   return {
     trigger: handleSubmit,

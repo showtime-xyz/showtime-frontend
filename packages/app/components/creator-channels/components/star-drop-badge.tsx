@@ -1,6 +1,7 @@
 import { Showtime } from "@showtime-xyz/universal.icon";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { LeanText } from "./lean-text";
 
 export const StarDropBadge = () => {
   return (
@@ -16,9 +17,12 @@ export const StarDropBadge = () => {
           />
         </View>
 
-        <Text tw="text-xs font-medium text-white" style={{ lineHeight: 14 }}>
+        <LeanText
+          tw="text-xs font-medium text-white"
+          style={{ lineHeight: 14 }}
+        >
           Star drop
-        </Text>
+        </LeanText>
       </View>
     </View>
   );

@@ -140,13 +140,13 @@ export const LightImageModal = ({
       ],
       borderRadius: borderRadius ? interpolateProgress([borderRadius, 0]) : 0,
     };
-  });
+  }, []);
 
   const backdropStyles = useAnimatedStyle(() => {
     return {
       opacity: backdropOpacity.value,
     };
-  });
+  }, []);
   const closeModal = useCallback(() => {
     "worklet";
     animationProgress.value = withTiming(0, timingConfig, () => {

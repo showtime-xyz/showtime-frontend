@@ -11,12 +11,18 @@ export const LightBox: React.FC<LightBoxProps> = ({
   children,
 }) => {
   const lightBox = useLightBox();
-
+  const newChildren = React.cloneElement(children, {
+    resizeMode: "contain",
+  });
   const onPress = useCallback(() => {
     lightBox?.show({
-      imageElement: <View style={containerStyle}>{children}</View>,
+      imageElement: containerStyle ? (
+        <View style={containerStyle}>{newChildren}</View>
+      ) : (
+        children
+      ),
     });
-  }, [children, containerStyle, lightBox]);
+  }, [children, containerStyle, lightBox, newChildren]);
 
   return (
     <div

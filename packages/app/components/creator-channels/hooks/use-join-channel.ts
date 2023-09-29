@@ -1,6 +1,7 @@
 import useSWRMutation from "swr/mutation";
 
 import { useOnboardingPromise } from "app/components/onboarding";
+import { useStableCallback } from "app/hooks/use-stable-callback";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
@@ -36,23 +37,21 @@ export const useJoinChannel = () => {
   const suggestedChannels = useSuggestedChannelsList();
   const { onboardingPromise } = useOnboardingPromise();
 
-  const handleSubmit = async ({
-    channelId,
-  }: {
-    channelId: number | null | undefined;
-  }) => {
-    try {
-      await loginPromise();
-      await onboardingPromise();
-      await trigger({ channelId });
-    } catch (e) {
-      captureException(e);
-      Logger.error(e);
-    } finally {
-      suggestedChannels.mutate();
-      joinedChannels.mutate();
+  const handleSubmit = useStableCallback(
+    async ({ channelId }: { channelId: number | null | undefined }) => {
+      try {
+        await loginPromise();
+        await onboardingPromise();
+        await trigger({ channelId });
+      } catch (e) {
+        captureException(e);
+        Logger.error(e);
+      } finally {
+        suggestedChannels.mutate();
+        joinedChannels.mutate();
+      }
     }
-  };
+  );
 
   return {
     trigger: handleSubmit,
