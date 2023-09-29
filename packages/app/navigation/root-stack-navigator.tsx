@@ -24,6 +24,7 @@ import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-chann
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
+import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
@@ -131,6 +132,18 @@ export function RootStackNavigator() {
             animationDuration: 200,
           }}
         />
+        <Stack.Screen
+          name="creatorTokensShare"
+          component={CreatorTokensShareModalScreen}
+          options={{
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
+            animationDuration: 200,
+          }}
+        />
+
         <Stack.Screen
           name="dropViewShareModal"
           component={DropViewShareScreen}
