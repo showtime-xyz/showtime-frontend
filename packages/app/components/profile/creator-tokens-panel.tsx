@@ -10,11 +10,98 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-type CreatorTokensPanelProps = {};
-export const CreatorTokensPanel = () => {
+type CreatorTokensPanelProps = { isSelf?: boolean };
+export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
-
+  if (isSelf) {
+    return (
+      <View tw="rounded-4xl mb-2 mt-4 border border-gray-200 px-10 py-4">
+        <View tw="items-center gap-2">
+          <View tw="w-full flex-row items-center justify-between">
+            <View tw="flex-row items-center">
+              <Text tw="mr-2 text-xs text-gray-500">Wallet balance</Text>
+              <PressableScale
+                tw="h-4 w-4"
+                onPress={() => {
+                  router.push(
+                    Platform.select({
+                      native: "/creatorTokensExplanation",
+                      web: {
+                        pathname: router.pathname,
+                        query: {
+                          ...router.query,
+                          creatorTokensExplanationModal: true,
+                        },
+                      } as any,
+                    }),
+                    Platform.select({
+                      native: "/creatorTokensExplanation",
+                      web:
+                        router.asPath === "/"
+                          ? "/creatorTokensExplanation"
+                          : router.asPath,
+                    }),
+                    { shallow: true }
+                  );
+                }}
+                hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}
+              >
+                <InformationCircle
+                  width={16}
+                  height={16}
+                  color={colors.gray[500]}
+                />
+              </PressableScale>
+            </View>
+            <Text tw="text-base font-bold text-gray-900 dark:text-white">
+              $21.67
+            </Text>
+          </View>
+          <View tw="w-full flex-row items-center justify-between">
+            <View tw="flex-row items-center">
+              <Text tw="mr-2 text-xs text-gray-500">Token earnings </Text>
+              <PressableScale
+                tw="h-4 w-4"
+                onPress={() => {
+                  router.push(
+                    Platform.select({
+                      native: "/creatorTokensExplanation",
+                      web: {
+                        pathname: router.pathname,
+                        query: {
+                          ...router.query,
+                          creatorTokensExplanationModal: true,
+                        },
+                      } as any,
+                    }),
+                    Platform.select({
+                      native: "/creatorTokensExplanation",
+                      web:
+                        router.asPath === "/"
+                          ? "/creatorTokensExplanation"
+                          : router.asPath,
+                    }),
+                    { shallow: true }
+                  );
+                }}
+                hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}
+              >
+                <InformationCircle
+                  width={16}
+                  height={16}
+                  color={colors.gray[500]}
+                />
+              </PressableScale>
+            </View>
+            <Text tw="text-base font-bold text-gray-900 dark:text-white">
+              $21.67
+            </Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
   return (
     <View tw="rounded-4xl mb-2 mt-4 border border-gray-200 px-10 py-4">
       <View tw="flex-row items-center justify-between gap-4">
