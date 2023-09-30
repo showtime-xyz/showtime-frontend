@@ -6,9 +6,9 @@ import {
   RefObject,
   useReducer,
 } from "react";
-import { Platform, RefreshControl, useWindowDimensions } from "react-native";
+import { Platform, useWindowDimensions } from "react-native";
 
-import { RectButton } from "react-native-gesture-handler";
+import { RectButton, RefreshControl } from "react-native-gesture-handler";
 import Animated, { FadeIn, FadeOut, Layout } from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
