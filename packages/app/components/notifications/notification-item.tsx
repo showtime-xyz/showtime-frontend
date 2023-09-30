@@ -16,14 +16,13 @@ import {
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors, styled } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { Actors } from "app/components/notifications/actors";
 import { Actor, NotificationType } from "app/hooks/use-notifications";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
+import { LeanText, LeanView } from "../creator-channels/components/lean-text";
 import {
   NFTSDisplayName,
   NFTSDisplayNameText,
@@ -131,7 +130,7 @@ export const NotificationItem = memo(
     }
 
     return (
-      <View tw="web:md:hover:bg-gray-100 web:md:dark:hover:bg-gray-800 web:rounded-md select-none flex-row items-center overflow-hidden md:mx-2">
+      <LeanView tw="web:md:hover:bg-gray-100 web:md:dark:hover:bg-gray-800 web:rounded-md select-none flex-row items-center overflow-hidden md:mx-2">
         <PlatformButton
           onPress={notificationPressHandler}
           tw={"web:px-2 flex w-full flex-row justify-between px-4 py-3.5"}
@@ -139,7 +138,7 @@ export const NotificationItem = memo(
           rippleColor={isDark ? colors.gray[100] : colors.gray[800]}
         >
           {icon}
-          <View tw="mx-2">
+          <LeanView tw="mx-2">
             <AvatarHoverCard
               url={notification.img_url}
               size={24}
@@ -149,13 +148,13 @@ export const NotificationItem = memo(
               }
               alt="Notification Avatar"
             />
-          </View>
+          </LeanView>
           <NotificationDescription
             notification={notification}
             setUsers={setUsers}
           />
         </PlatformButton>
-      </View>
+      </LeanView>
     );
   }
 );
@@ -175,41 +174,41 @@ const NotificationDescription = memo(
 
     if (notification.type_name === "MISSING_MUSIC_RELEASE_METADATA") {
       return (
-        <View tw="flex-1 flex-row justify-between">
-          <Text
+        <LeanView tw="flex-1 flex-row justify-between">
+          <LeanText
             tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
             ellipsizeMode="tail"
             numberOfLines={2}
           >
             Tap here to enter <NFTSDisplayNameText nfts={notification.nfts} />{" "}
             {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
-          </Text>
+          </LeanText>
           {Boolean(formatDistance) && (
-            <View tw="items-end">
-              <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
-            </View>
+            <LeanView tw="items-end">
+              <LeanText tw="text-13 text-gray-500">{`${formatDistance}`}</LeanText>
+            </LeanView>
           )}
-        </View>
+        </LeanView>
       );
     }
 
     if (notification.type_name === "RELEASE_SAVED_TO_SPOTIFY") {
       return (
-        <View tw="flex-1 flex-row justify-between">
-          <Text
+        <LeanView tw="flex-1 flex-row justify-between">
+          <LeanText
             tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
             ellipsizeMode="tail"
             numberOfLines={2}
           >
             <NFTSDisplayName nfts={notification.nfts} />{" "}
             {NOTIFICATION_TYPE_COPY.get("RELEASE_SAVED_TO_SPOTIFY")}
-          </Text>
+          </LeanText>
           {Boolean(formatDistance) && (
-            <View tw="items-end">
-              <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
-            </View>
+            <LeanView tw="items-end">
+              <LeanText tw="text-13 text-gray-500">{`${formatDistance}`}</LeanText>
+            </LeanView>
           )}
-        </View>
+        </LeanView>
       );
     }
 
@@ -218,8 +217,8 @@ const NotificationDescription = memo(
       notification.type_name === "CHANNEL_FIRST_MESSAGE"
     ) {
       return (
-        <View tw="flex-1 flex-row justify-between">
-          <Text
+        <LeanView tw="flex-1 flex-row justify-between">
+          <LeanText
             tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
             ellipsizeMode="tail"
             numberOfLines={2}
@@ -227,19 +226,19 @@ const NotificationDescription = memo(
             <Actors actors={notification.actors} setUsers={setUsers} />
             {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
             {notification.description?.trim()}
-          </Text>
+          </LeanText>
           {Boolean(formatDistance) && (
-            <View tw="items-end">
-              <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
-            </View>
+            <LeanView tw="items-end">
+              <LeanText tw="text-13 text-gray-500">{`${formatDistance}`}</LeanText>
+            </LeanView>
           )}
-        </View>
+        </LeanView>
       );
     }
 
     return (
-      <View tw="flex-1 flex-row justify-between">
-        <Text
+      <LeanView tw="flex-1 flex-row justify-between">
+        <LeanText
           tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
           ellipsizeMode="tail"
           numberOfLines={2}
@@ -247,13 +246,13 @@ const NotificationDescription = memo(
           <Actors actors={notification.actors} setUsers={setUsers} />
           {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
           <NFTSDisplayName nfts={notification.nfts} />
-        </Text>
+        </LeanText>
         {Boolean(formatDistance) && (
-          <View tw="items-end">
-            <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
-          </View>
+          <LeanView tw="items-end">
+            <LeanText tw="text-13 text-gray-500">{`${formatDistance}`}</LeanText>
+          </LeanView>
         )}
-      </View>
+      </LeanView>
     );
   }
 );

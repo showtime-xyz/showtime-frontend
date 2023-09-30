@@ -23,6 +23,8 @@ import {
   limitLineBreaks,
 } from "app/utilities";
 
+import { LeanText } from "../creator-channels/components/lean-text";
+
 interface MessageRowProps {
   /**
    * Defines the address of the message owner.
@@ -240,7 +242,7 @@ function MessageRowComponent({
           </View>
         </View>
         <View tw={["ml-2 flex-1", isLastReply ? "mb-1" : "-mb-0.5"]}>
-          <Text tw="web:pr-12 pr-7 text-sm text-gray-900 dark:text-gray-100">
+          <LeanText tw="web:pr-12 pr-7 text-sm text-gray-900 dark:text-gray-100">
             <Link href={`/@${username || address}`}>
               <View tw="mr-3 flex-row items-center">
                 <Text
@@ -263,17 +265,17 @@ function MessageRowComponent({
             </Link>
             {userVerified ? <View tw="w-3" /> : null}
             {contentWithTags}
-          </Text>
+          </LeanText>
 
           <View tw={"flex-row space-x-3"}>
             <View tw="justify-center py-0">
               {createdAtText && (
-                <Text tw="text-[10px] text-gray-500">{`${createdAtText}`}</Text>
+                <LeanText tw="text-[10px] text-gray-500">{`${createdAtText}`}</LeanText>
               )}
             </View>
             <View tw="justify-center py-0">
               <Pressable onPress={onReplyPress} hitSlop={5}>
-                <Text tw="px-0 text-[10px] text-gray-500">Reply</Text>
+                <LeanText tw="px-0 text-[10px] text-gray-500">Reply</LeanText>
               </Pressable>
             </View>
 

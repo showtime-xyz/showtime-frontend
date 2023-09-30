@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useRef, useState, memo } from "react";
-import { Platform, RefreshControl, useWindowDimensions } from "react-native";
+import { useCallback, useEffect, useRef, useState, memo, useMemo } from "react";
+import { Platform, useWindowDimensions } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
+import { RefreshControl } from "react-native-gesture-handler";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -25,6 +26,7 @@ import { axios } from "app/lib/axios";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
+import { LeanView } from "../creator-channels/components/lean-text";
 import { EmptyPlaceholder } from "../empty-placeholder";
 
 const Header = () => {
@@ -83,9 +85,9 @@ export const Notifications = memo(
     const ListFooterComponent = useCallback(() => {
       if (isLoadingMore && data.length > 0 && !isLoading)
         return (
-          <View tw="web:pt-2 items-center pb-2">
+          <LeanView tw="web:pt-2 items-center pb-2">
             <Spinner size="small" />
-          </View>
+          </LeanView>
         );
       return null;
     }, [isLoadingMore, isLoading, data.length]);
@@ -100,6 +102,52 @@ export const Notifications = memo(
         refetchMyInfo();
       })();
     }, [refetchMyInfo]);
+
+    const style = useMemo(
+      () => ({
+        height: Platform.select({
+          default: windowHeight - bottomBarHeight,
+          web: useWindowScroll ? windowHeight - bottomBarHeight : undefined,
+          ios: windowHeight,
+        }),
+      }),
+      [bottomBarHeight, useWindowScroll, windowHeight]
+    );
+
+    const containerStyle = useMemo(
+      () =>
+        Platform.select({
+          ios: {
+            paddingTop: headerHeight,
+            paddingBottom: bottomBarHeight,
+          },
+          android: {
+            paddingBottom: bottomBarHeight,
+          },
+          default: {},
+        }),
+      [bottomBarHeight, headerHeight]
+    );
+
+    const headerComponent = useMemo(() => {
+      return Platform.select({
+        web: hideHeader ? undefined : Header,
+        default: undefined,
+      });
+    }, [hideHeader]);
+
+    const refreshControlComponent = useMemo(() => {
+      return (
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={refresh}
+          progressViewOffset={Platform.OS === "android" ? 0 : headerHeight}
+          tintColor={isDark ? colors.gray[200] : colors.gray[700]}
+          colors={[colors.violet[500]]}
+          progressBackgroundColor={isDark ? colors.gray[200] : colors.gray[100]}
+        />
+      );
+    }, [isRefreshing, refresh, headerHeight, isDark]);
 
     if (!isLoading && data.length === 0) {
       return (
@@ -123,42 +171,13 @@ export const Notifications = memo(
         <InfiniteScrollList
           useWindowScroll={useWindowScroll}
           data={data}
-          ListHeaderComponent={Platform.select({
-            web: hideHeader ? undefined : Header,
-            default: undefined,
-          })}
+          ListHeaderComponent={headerComponent}
           // for blur header effect on iOS
-          style={{
-            height: Platform.select({
-              default: windowHeight - bottomBarHeight,
-              web: useWindowScroll ? windowHeight - bottomBarHeight : undefined,
-              ios: windowHeight,
-            }),
-          }}
+          style={style}
           // for blur effect on Native
-          contentContainerStyle={Platform.select({
-            ios: {
-              paddingTop: headerHeight,
-              paddingBottom: bottomBarHeight,
-            },
-            android: {
-              paddingBottom: bottomBarHeight,
-            },
-            default: {},
-          })}
+          contentContainerStyle={containerStyle}
           // Todo: unity refresh control same as tab view
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={refresh}
-              progressViewOffset={headerHeight}
-              tintColor={isDark ? colors.gray[200] : colors.gray[700]}
-              colors={[colors.violet[500]]}
-              progressBackgroundColor={
-                isDark ? colors.gray[200] : colors.gray[100]
-              }
-            />
-          }
+          refreshControl={refreshControlComponent}
           containerTw="pretty-scrollbar"
           renderItem={renderItem}
           keyExtractor={keyExtractor}

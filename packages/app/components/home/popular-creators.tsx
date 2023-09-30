@@ -26,6 +26,7 @@ import { DESKTOP_CONTENT_WIDTH } from "app/constants/layout";
 
 import { breakpoints } from "design-system/theme";
 
+import { LeanText, LeanView } from "../creator-channels/components/lean-text";
 import { useJoinChannel } from "../creator-channels/hooks/use-join-channel";
 import { HomeSlider } from "./home-slider";
 
@@ -161,11 +162,11 @@ export const PopularCreators = memo(function PopularCreators() {
   );
   if (data.length === 0) return null;
   return (
-    <View tw="mt-2 w-full md:pl-0">
-      <View tw="w-full flex-row items-center justify-between px-4 py-4 md:px-0">
-        <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+    <LeanView tw="mt-2 w-full md:pl-0">
+      <LeanView tw="w-full flex-row items-center justify-between px-4 py-4 md:px-0">
+        <LeanText tw="text-sm font-bold text-gray-900 dark:text-white">
           Popular artists
-        </Text>
+        </LeanText>
         {isShowSeeAll && (
           <PlatformPressable
             onPress={() => {
@@ -174,23 +175,28 @@ export const PopularCreators = memo(function PopularCreators() {
             shouldActivateOnStart
             hitSlop={10}
           >
-            <View
+            <LeanView
               tw="-mt-1 p-1"
               hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
             >
-              <Text tw="text-sm font-semibold text-indigo-600">see all</Text>
-            </View>
+              <LeanText tw="text-sm font-semibold text-indigo-600">
+                see all
+              </LeanText>
+            </LeanView>
           </PlatformPressable>
         )}
-      </View>
-      <View tw="mb-2 w-full rounded-2xl">
+      </LeanView>
+      <LeanView tw="mb-2 w-full rounded-2xl">
         {isLoading ? (
-          <View style={{ height: INFO_HEIGTH }} tw="flex-row overflow-hidden">
+          <LeanView
+            style={{ height: INFO_HEIGTH }}
+            tw="flex-row overflow-hidden"
+          >
             <PopularCreatorSkeletonItem width={itemWidth} tw="ml-4 md:ml-0" />
             <PopularCreatorSkeletonItem width={itemWidth} />
             <PopularCreatorSkeletonItem width={itemWidth} />
             <PopularCreatorSkeletonItem width={itemWidth} />
-          </View>
+          </LeanView>
         ) : (
           <HomeSlider
             data={data}
@@ -198,7 +204,7 @@ export const PopularCreators = memo(function PopularCreators() {
             renderItem={renderItem}
           />
         )}
-      </View>
-    </View>
+      </LeanView>
+    </LeanView>
   );
 });

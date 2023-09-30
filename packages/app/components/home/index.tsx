@@ -1,11 +1,10 @@
 import { useCallback, useRef, useMemo } from "react";
-import { useWindowDimensions, Platform } from "react-native";
+import { useWindowDimensions, Platform, StyleSheet } from "react-native";
 
 import {
   InfiniteScrollList,
   ListRenderItemInfo,
 } from "@showtime-xyz/universal.infinite-scroll-list";
-import { View } from "@showtime-xyz/universal.view";
 
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
@@ -18,6 +17,7 @@ import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
 
+import { LeanView } from "../creator-channels/components/lean-text";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { ListHeaderComponent } from "./header";
 import { HomeItem, HomeItemSketelon } from "./home-item";
@@ -66,7 +66,7 @@ export const Home = () => {
 
   const ListEmptyComponent = useCallback(() => {
     return (
-      <View tw="mt-6 px-4 md:px-0" style={{ height: height - 200 }}>
+      <LeanView tw="mt-6 px-4 md:px-0" style={{ height: height - 200 }}>
         {isLoading ? (
           <>
             <HomeItemSketelon mediaSize={mediaSize} />
@@ -79,7 +79,7 @@ export const Home = () => {
             hideLoginBtn
           />
         )}
-      </View>
+      </LeanView>
     );
   }, [height, isLoading, mediaSize]);
 
@@ -105,17 +105,32 @@ export const Home = () => {
     }),
     []
   );
+
+  const homeStyle = useMemo(
+    () => ({
+      paddingTop: Platform.select({
+        android: 0,
+        default: headerHeight,
+      }),
+    }),
+    [headerHeight]
+  );
+
+  const bottomOffsetStyle = useMemo(
+    () => ({
+      marginBottom: Platform.select({
+        native: bottomBarHeight,
+      }),
+    }),
+    [bottomBarHeight]
+  );
   return (
     <VideoConfigContext.Provider value={videoConfig}>
-      <View
+      <LeanView
         tw="w-full flex-1 items-center bg-white dark:bg-black"
-        style={{
-          marginBottom: Platform.select({
-            native: bottomBarHeight,
-          }),
-        }}
+        style={bottomOffsetStyle}
       >
-        <View tw="md:max-w-screen-content w-full">
+        <LeanView tw="md:max-w-screen-content w-full">
           <ErrorBoundary>
             <ViewabilityInfiniteScrollList
               data={data}
@@ -124,23 +139,24 @@ export const Home = () => {
               drawDistance={Platform.OS === "android" ? height : undefined}
               preserveScrollPosition
               ListHeaderComponent={ListHeaderComponent}
-              contentContainerStyle={{
-                paddingTop: Platform.select({
-                  android: 0,
-                  default: headerHeight,
-                }),
-              }}
+              contentContainerStyle={homeStyle}
               automaticallyAdjustContentInsets
               automaticallyAdjustsScrollIndicatorInsets
               ref={listRef}
               getItemType={getItemType}
               ListEmptyComponent={ListEmptyComponent}
               useWindowScroll
-              style={{ flexGrow: 1 }}
+              style={styles.fg}
             />
           </ErrorBoundary>
-        </View>
-      </View>
+        </LeanView>
+      </LeanView>
     </VideoConfigContext.Provider>
   );
 };
+
+const styles = StyleSheet.create({
+  fg: {
+    flexGrow: 1,
+  },
+});

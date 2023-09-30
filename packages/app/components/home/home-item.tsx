@@ -20,6 +20,7 @@ import { removeTags } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
+import { LeanText, LeanView } from "../creator-channels/components/lean-text";
 import { ClaimedBy } from "../feed-item/claimed-by";
 import { NSFWGate } from "../feed-item/nsfw-gate";
 import { FollowButtonSmall } from "../follow-button-small";
@@ -83,7 +84,7 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
             nft.nft_id
           }&type=feed`}
         >
-          <View tw="mb-2 mt-6 px-4 md:px-0">
+          <LeanView tw="mb-2 mt-6 px-4 md:px-0">
             <CreatorOnFeed
               nft={nft}
               rightElement={
@@ -104,7 +105,7 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
                 </>
               }
             />
-            <View
+            <LeanView
               tw="mt-3"
               style={{ maxWidth: isMdWidth ? mediaSize : undefined }}
             >
@@ -114,37 +115,37 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
                   nft.nft_id
                 }&type=feed`}
               >
-                <Text tw="text-15 font-bold text-gray-900 dark:text-white">
+                <LeanText tw="text-15 font-bold text-gray-900 dark:text-white">
                   {nft?.token_name}
-                </Text>
+                </LeanText>
 
-                <View tw="h-3" />
-                <Text
+                <LeanView tw="h-3" />
+                <LeanText
                   tw="text-sm text-gray-600 dark:text-gray-400"
                   numberOfLines={5}
                 >
                   {description}
-                </Text>
+                </LeanText>
               </RouteComponent>
-              <View tw="mt-3 min-h-[20px]">
+              <LeanView tw="mt-3 min-h-[20px]">
                 <ClaimedBy
                   claimersList={detailData?.data.item?.multiple_owners_list}
                   avatarSize={18}
                   nft={nft}
                 />
-              </View>
-              <View tw="mt-3 flex-row items-center">
+              </LeanView>
+              <LeanView tw="mt-3 flex-row items-center">
                 <RouteComponent
                   as={getNFTSlug(nft)}
                   href={`${getNFTSlug(nft)}?initialScrollItemId=${
                     nft.nft_id
                   }&type=feed`}
                 >
-                  <View
+                  <LeanView
                     tw="overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-900"
                     style={mediaViewStyle}
                   >
-                    <View
+                    <LeanView
                       style={{
                         width: mediaSize,
                         height: mediaSize,
@@ -155,26 +156,26 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
                         optimizedWidth={1000}
                         loading={index > 0 ? "lazy" : "eager"}
                       />
-                      <View tw="absolute right-1.5 top-1.5">
+                      <LeanView tw="absolute right-1.5 top-1.5">
                         <ContentType edition={edition} theme="light" />
-                      </View>
+                      </LeanView>
                       <NSFWGate
                         show={nft.nsfw}
                         nftId={nft.nft_id}
                         variant="thumbnail"
                       />
                       {nft?.mime_type?.includes("video") ? (
-                        <View tw="z-9 absolute bottom-2 right-2">
+                        <LeanView tw="z-9 absolute bottom-2 right-2">
                           <MuteButton size={16} />
-                        </View>
+                        </LeanView>
                       ) : null}
-                    </View>
-                  </View>
+                    </LeanView>
+                  </LeanView>
                 </RouteComponent>
                 <FeedEngagementIcons nft={nft} edition={edition} />
-              </View>
-            </View>
-          </View>
+              </LeanView>
+            </LeanView>
+          </LeanView>
         </NativeRouteComponent>
       </ItemKeyContext.Provider>
     );
@@ -183,52 +184,52 @@ export const HomeItem = memo<{ nft: NFT; index: number; mediaSize: number }>(
 
 export const HomeItemSketelon = ({ mediaSize = 500 }) => {
   return (
-    <View tw="mb-8">
-      <View tw="mb-3 flex-row items-center">
+    <LeanView tw="mb-8">
+      <LeanView tw="mb-3 flex-row items-center">
         <Skeleton width={40} height={40} radius={999} show />
-        <View tw="ml-2 justify-center">
+        <LeanView tw="ml-2 justify-center">
           <Skeleton width={110} height={14} radius={4} show />
-          <View tw="h-2" />
+          <LeanView tw="h-2" />
           <Skeleton width={60} height={12} radius={4} show />
-        </View>
-        <View tw="ml-auto flex-row items-center justify-center">
+        </LeanView>
+        <LeanView tw="ml-auto flex-row items-center justify-center">
           <Skeleton width={80} height={22} radius={999} show />
-          <View tw="w-2" />
+          <LeanView tw="w-2" />
           <Skeleton width={22} height={22} radius={999} show />
-        </View>
-      </View>
+        </LeanView>
+      </LeanView>
       <Skeleton width={200} height={20} radius={4} show />
-      <View tw="h-3" />
+      <LeanView tw="h-3" />
       <Skeleton width={mediaSize} height={16} radius={4} show />
-      <View tw="h-3" />
+      <LeanView tw="h-3" />
       <Skeleton width={300} height={16} radius={4} show />
-      <View tw="h-3" />
+      <LeanView tw="h-3" />
       <Skeleton width={160} height={20} radius={4} show />
-      <View tw="h-3" />
+      <LeanView tw="h-3" />
 
-      <View tw="flex-row items-center">
+      <LeanView tw="flex-row items-center">
         <Skeleton width={mediaSize} height={mediaSize} radius={16} show />
-        <View tw="ml-4">
-          <View tw="mb-4">
+        <LeanView tw="ml-4">
+          <LeanView tw="mb-4">
             <Skeleton height={56} width={56} radius={999} show />
-            <View tw="mt-2 items-center">
+            <LeanView tw="mt-2 items-center">
               <Skeleton height={8} width={24} radius={6} show />
-            </View>
-          </View>
-          <View tw="mb-4">
+            </LeanView>
+          </LeanView>
+          <LeanView tw="mb-4">
             <Skeleton height={56} width={56} radius={999} show />
-            <View tw="mt-2 items-center">
+            <LeanView tw="mt-2 items-center">
               <Skeleton height={8} width={24} radius={6} show />
-            </View>
-          </View>
-          <View>
+            </LeanView>
+          </LeanView>
+          <LeanView>
             <Skeleton height={56} width={56} radius={999} show />
-            <View tw="mt-2 items-center">
+            <LeanView tw="mt-2 items-center">
               <Skeleton height={8} width={24} radius={6} show />
-            </View>
-          </View>
-        </View>
-      </View>
-    </View>
+            </LeanView>
+          </LeanView>
+        </LeanView>
+      </LeanView>
+    </LeanView>
   );
 };
