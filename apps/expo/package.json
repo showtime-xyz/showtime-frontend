@@ -139,7 +139,7 @@
     "react-native-bignumber": "^0.2.1",
     "react-native-blob-jsi-helper": "^0.3.1",
     "react-native-blurhash": "^1.1.10",
-    "react-native-compressor": "^1.8.4",
+    "react-native-compressor": "^1.8.11",
     "react-native-gesture-handler": "2.13.1",
     "react-native-get-random-values": "~1.9.0",
     "react-native-image-colors": "^2.3.0",
