@@ -164,6 +164,8 @@ export const Default = () => {
           <IconItem icon={Icon.EyeOffV2} title="EyeOffV2" />
           <IconItem icon={Icon.Location} title="Location" />
           <IconItem icon={Icon.Lock} title="Lock" />
+          <IconItem icon={Icon.UnLocked} title="UnLocked" />
+
           <IconItem icon={Icon.Download} title="Download" />
           <IconItem icon={Icon.Download2} title="Download2" />
           <IconItem icon={Icon.Download3} title="Download3" />

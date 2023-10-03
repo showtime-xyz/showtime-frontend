@@ -10,22 +10,17 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
-import { Button } from "@showtime-xyz/universal.button";
-import { LockBadge, Showtime } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
-import { Pressable } from "@showtime-xyz/universal.pressable";
+import { UnLocked, Showtime } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "@showtime-xyz/universal.safe-area";
-import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { StarDropBadge } from "app/components/badge/star-drop-badge";
 import { BgGoldLinearGradient } from "app/components/gold-gradient";
 import { useShareImage } from "app/components/share/use-share-image";
 import {
@@ -35,17 +30,8 @@ import {
   AccessChannelButton,
 } from "app/components/social-buttons";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
-import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
-import { useNFTDetailByTokenId } from "app/hooks/use-nft-detail-by-token-id";
-import { getNFTSlug } from "app/hooks/use-share-nft";
 import { createParam } from "app/navigation/use-param";
-import { NFT } from "app/types";
-import {
-  getProfileName,
-  getShowtimeUsernameOnTwitter,
-  getTwitterIntent,
-  getWebBaseURL,
-} from "app/utilities";
+import { getShowtimeUsernameOnTwitter, getTwitterIntent } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -131,7 +117,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
               You just collected 2 tokens!
             </Text>
             <View tw="mt-4 flex-row items-center justify-center px-8">
-              <LockBadge width={14} height={14} color="#000" />
+              <UnLocked width={14} height={14} color="#000" />
               <Text tw="ml-1 text-gray-900">Unlocked</Text>
               <Text
                 tw="mx-1 font-medium"
@@ -165,7 +151,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
             <InstagramButton onPress={shareSingleImage} />
           ) : null}
           <CopyLinkButton theme="dark" onPress={onCopyLink} />
-          <AccessChannelButton theme="dark" onPress={viewChannel} />
+          <AccessChannelButton theme="light" tw="mt-4" onPress={viewChannel} />
         </View>
       </SafeAreaView>
       <View
