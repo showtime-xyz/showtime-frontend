@@ -54,6 +54,7 @@ import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
+import { ReviewCreatorTokenScreen } from "app/screens/review-creator-token";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { prevRouteRef } from "app/utilities";
@@ -253,6 +254,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropEditDetailsScreen />
         <EditProfileScreen />
         <OnboardingScreen />
+        <ReviewCreatorTokenScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
         <UnlockedChannelScreen />
