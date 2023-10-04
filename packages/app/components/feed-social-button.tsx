@@ -24,7 +24,7 @@ export function FeedSocialButton({
   const isDark = useIsDarkMode();
 
   return (
-    <Pressable {...rest}>
+    <Pressable tw="flex-1 flex-grow bg-slate-800" {...rest}>
       <View
         tw={"h-14 w-14 items-center justify-center rounded-full"}
         style={{

@@ -50,6 +50,7 @@ export const useChannelMessages = (channelId?: string | number) => {
     messagesUrl,
     {
       pageSize: PAGE_SIZE,
+      refreshInterval: 30000,
     }
   );
   const newData = useMemo(() => {

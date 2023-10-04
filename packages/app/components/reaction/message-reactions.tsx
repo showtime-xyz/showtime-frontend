@@ -5,11 +5,11 @@ import Animated, { Layout, FadeIn, FadeOut } from "react-native-reanimated";
 
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { formatToUSNumber } from "app/utilities";
 
+import { LeanText, LeanView } from "../creator-channels/components/lean-text";
 import { ChannelReactionResponse } from "../creator-channels/hooks/use-channel-reactions";
 import { ReactionGroup } from "../creator-channels/types";
 
@@ -57,7 +57,7 @@ export const MessageReactions = ({
   );
 
   return (
-    <View tw="-ml-0.5 w-full flex-1 flex-row items-center">
+    <LeanView tw="-ml-0.5 w-full flex-1 flex-row items-center">
       {channelReactions.map((item, index) => {
         const userReaction = reactionGroup.find(
           (r) => r.reaction_id === item.id
@@ -80,7 +80,7 @@ export const MessageReactions = ({
                     : "",
                 ]}
               >
-                <Text
+                <LeanText
                   tw="text-gray-700 dark:text-gray-200"
                   style={{
                     fontSize: 12,
@@ -92,12 +92,12 @@ export const MessageReactions = ({
                   }}
                 >
                   {item.reaction} {formatToUSNumber(userReaction.count)}
-                </Text>
+                </LeanText>
               </Pressable>
             </AnimatedView>
           );
         }
       })}
-    </View>
+    </LeanView>
   );
 };

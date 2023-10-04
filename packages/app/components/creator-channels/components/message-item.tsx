@@ -444,9 +444,9 @@ export const MessageItem = memo(
               />
             ) : null}
             {item.reaction_group.length > 0 ? (
-              <AnimatedView layout={Layout}>
+              <AnimatedView>
                 <MessageReactions
-                  key={channel_message.id}
+                  //key={channel_message.id}
                   reactionGroup={item.reaction_group}
                   channelId={channelId}
                   channelReactions={reactions}

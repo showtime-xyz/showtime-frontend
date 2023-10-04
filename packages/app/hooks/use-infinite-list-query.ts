@@ -5,6 +5,8 @@ import useSWRInfinite from "swr/infinite";
 
 import { axios } from "app/lib/axios";
 
+import { useStableCallback } from "./use-stable-callback";
+
 export const fetcher = (url: string) => {
   return axios({ url, method: "GET" });
 };
@@ -66,22 +68,24 @@ export const useInfiniteListQuerySWR = <T>(
     }
   }, [isRefreshingSWR]);
 
-  const fetchMore = () => {
+  const fetchMore = useStableCallback(() => {
     if (isLoadingMore || isReachingEnd) return;
     setSize((size) => size + 1);
-  };
+  });
+
+  const refresh = useStableCallback(() => {
+    setRefreshing(true);
+    mutate();
+    // hide refresh indicator in max 4 seconds due to above reason
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 4000);
+  });
 
   return {
     data,
     error,
-    refresh: () => {
-      setRefreshing(true);
-      mutate();
-      // hide refresh indicator in max 4 seconds due to above reason
-      setTimeout(() => {
-        setRefreshing(false);
-      }, 4000);
-    },
+    refresh,
     fetchMore,
     retry: mutate,
     isLoading,
