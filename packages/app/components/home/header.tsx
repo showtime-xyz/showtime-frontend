@@ -16,6 +16,7 @@ import { Carousel } from "app/lib/carousel";
 import { breakpoints } from "design-system/theme";
 
 import { Banner, useBanners } from "./hooks/use-banners";
+import { TopPartCreatorTokens } from "./top-part-creator-tokens";
 import { TrendingCarousel } from "./trending-carousel";
 
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
@@ -100,6 +101,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
         )}
       </View>
       <TrendingCarousel />
+      <TopPartCreatorTokens />
     </View>
   );
 });

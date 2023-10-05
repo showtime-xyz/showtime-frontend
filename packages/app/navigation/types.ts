@@ -109,7 +109,7 @@ type RootStackNavigatorParams = {
   verifyPhoneNumber: undefined;
   dropExplanation: undefined;
   creatorTokensExplanation: undefined;
-  enterInviteCodeModal: undefined;
+  enterInviteCode: undefined;
   drop: undefined;
   qrCodeShare: undefined;
   dropImageShare: undefined;
@@ -122,6 +122,7 @@ type RootStackNavigatorParams = {
   channelsSettings: undefined;
   channelUnlocked: undefined;
   creatorTokensShare: undefined;
+  topCreatorTokens: undefined;
   likers: undefined;
   appleMusicAuthNativeWebView: undefined;
   report: {

@@ -50,6 +50,7 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { TopCreatorTokensScreen } from "app/screens/top-creator-tokens";
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
@@ -230,6 +231,11 @@ export function RootStackNavigator() {
           name="trending"
           options={{ headerTitle: "Trending" }}
           component={TrendingScreen}
+        />
+        <Stack.Screen
+          name="topCreatorTokens"
+          options={{ headerTitle: "Top Creator Tokens" }}
+          component={TopCreatorTokensScreen}
         />
       </Stack.Group>
 

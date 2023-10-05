@@ -88,6 +88,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
         "channels/:channelId/messages/:messageId/reactions",
       channelUnlocked: "channels/:contractAddress/unlocked",
       creatorTokensShare: "creator-tokens/:username/share",
+      topCreatorTokens: "topCreatorTokens",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {
