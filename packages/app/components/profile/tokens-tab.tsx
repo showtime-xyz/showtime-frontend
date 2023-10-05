@@ -19,6 +19,7 @@ import {
   ChevronRight,
   Showtime,
 } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
   TabScrollView,
@@ -63,6 +64,16 @@ export const TokensTabHeader = () => {
 
   return (
     <View tw="w-full px-4">
+      <View tw="mt-6 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-3 py-5">
+        <Text tw="flex-1 text-sm text-gray-500">
+          Create your token to access your channel.
+        </Text>
+        <Pressable tw="rounded-3xl border border-gray-900 px-3 py-2">
+          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+            Enter invite code
+          </Text>
+        </Pressable>
+      </View>
       <View tw="flex-row items-center justify-between py-4">
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           19 Channel messages

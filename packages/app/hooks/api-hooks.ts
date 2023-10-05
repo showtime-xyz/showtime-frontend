@@ -212,7 +212,8 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     collectionId = defaultFilters.collectionId,
     refreshInterval,
   } = params;
-  const tabType = type === "tokens" ? "drops" : "drops";
+  const tabType = type === "tokens" ? "drops" : type;
+
   const trendingCreatorsUrlFn = useCallback(
     (index: number) => {
       const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
@@ -277,13 +278,13 @@ export type Collection = {
 };
 
 export type List = {
-  collections: Array<Collection>;
+  collections?: Array<Collection>;
   displayed_count: number;
-  has_custom_sort: boolean;
+  has_custom_sort?: boolean;
   name: string;
-  sort_type: string;
+  sort_type?: string;
   type: string;
-  user_has_hidden_items: boolean;
+  user_has_hidden_items?: boolean;
 };
 
 export type ProfileTabsAPI = {
@@ -292,11 +293,34 @@ export type ProfileTabsAPI = {
 };
 
 export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
-  const { data, error, isLoading } = useSWR<ProfileTabsAPI>(
-    profileId ? "/v2/profile-tabs/tabs?profile_id=" + profileId : null,
-    fetcher
-  );
-  return { data, isLoading, error };
+  // const { data, error, isLoading } = useSWR<ProfileTabsAPI>(
+  //   profileId ? "/v2/profile-tabs/tabs?profile_id=" + profileId : null,
+  //   fetcher
+  // );
+  return {
+    data: {
+      default_tab_type: "tokens",
+      tabs: [
+        {
+          type: "tokens",
+          name: "Tokens",
+          displayed_count: 0,
+        },
+        {
+          type: "song_drops_created",
+          name: "Songs",
+          displayed_count: 0,
+        },
+        {
+          type: "song_drops_collected",
+          name: "Saved",
+          displayed_count: 0,
+        },
+      ],
+    },
+    isLoading: false,
+    error: null,
+  };
 };
 
 export const useMyInfo = () => {

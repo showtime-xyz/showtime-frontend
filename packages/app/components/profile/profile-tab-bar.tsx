@@ -23,9 +23,9 @@ export const ProfileTabBar = (props: any) => {
         : colors.gray[500];
 
       switch (route.key) {
-        case "created":
+        case "song_drops_created":
           return <SongsTab height={16} color={iconColor} />;
-        case "owned":
+        case "song_drops_collected":
           return <SavedTab height={16} color={iconColor} />;
         case "tokens":
           return <TokensTab height={16} color={iconColor} />;

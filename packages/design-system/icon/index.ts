@@ -158,6 +158,9 @@ export { default as SavedTab } from "./SavedTab";
 export { default as TokensTab } from "./TokensTab";
 export { default as Photo } from "./Photo";
 export { default as Gallery } from "./Gallery";
+export { default as GrowthArrow } from "./GrowthArrow";
+export { default as PieChart } from "./PieChart";
+
 //#region social icons
 export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";

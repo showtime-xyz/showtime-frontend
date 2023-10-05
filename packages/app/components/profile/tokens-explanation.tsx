@@ -1,16 +1,13 @@
-import { useEffect } from "react";
-import { Platform, useWindowDimensions } from "react-native";
-
-import { Button } from "@showtime-xyz/universal.button";
-import { Image } from "@showtime-xyz/universal.image";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
-import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { GrowthArrow, PieChart, UnLocked } from "@showtime-xyz/universal.icon";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 
 export const CreatorTokensExplanation = () => {
+  const isDark = useIsDarkMode();
   return (
     <View tw="relative flex-1 px-8">
       <BottomSheetScrollView>
@@ -18,8 +15,12 @@ export const CreatorTokensExplanation = () => {
           What are Creator Tokens?
         </Text>
         <View tw="mt-7 flex-row items-center">
-          <Text style={{ fontSize: 30 }}>⭐️</Text>
-          <Text tw="ml-2 text-sm text-gray-900 dark:text-gray-50">
+          <GrowthArrow
+            width={24}
+            height={24}
+            color={isDark ? colors.gray[50] : colors.gray[900]}
+          />
+          <Text tw="ml-2 flex-1 text-sm text-gray-900 dark:text-gray-50">
             <Text tw="text-sm font-bold text-gray-900 dark:text-gray-50">
               Supporting early pays off.{" "}
             </Text>
@@ -28,8 +29,12 @@ export const CreatorTokensExplanation = () => {
           </Text>
         </View>
         <View tw="mt-7 flex-row items-center">
-          <Text style={{ fontSize: 30 }}>💬</Text>
-          <Text tw="ml-2 text-sm text-gray-900 dark:text-gray-50">
+          <UnLocked
+            width={24}
+            height={24}
+            color={isDark ? colors.gray[50] : colors.gray[900]}
+          />
+          <Text tw="ml-2 flex-1 text-sm text-gray-900 dark:text-gray-50">
             <Text tw="text-sm font-bold text-gray-900 dark:text-gray-50">
               Collect to unlock a channel.{" "}
             </Text>
@@ -38,8 +43,13 @@ export const CreatorTokensExplanation = () => {
           </Text>
         </View>
         <View tw="mt-7 flex-row items-center">
-          <Text style={{ fontSize: 30 }}>🪙</Text>
-          <Text tw="ml-2 text-sm text-gray-900 dark:text-gray-50">
+          <PieChart
+            width={24}
+            height={24}
+            color={isDark ? colors.gray[50] : colors.gray[900]}
+          />
+
+          <Text tw="ml-2 flex-1 text-sm text-gray-900 dark:text-gray-50">
             <Text tw="text-sm font-bold text-gray-900 dark:text-gray-50">
               Earn every trade.{" "}
             </Text>

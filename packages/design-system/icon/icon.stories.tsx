@@ -205,6 +205,8 @@ export const Default = () => {
           <IconItem icon={Icon.TokensTab} title="TokensTab" />
           <IconItem icon={Icon.Photo} title="Photo" />
           <IconItem icon={Icon.Gallery} title="Gallery" />
+          <IconItem icon={Icon.PieChart} title="PieChart" />
+          <IconItem icon={Icon.GrowthArrow} title="GrowthArrow" />
         </View>
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>

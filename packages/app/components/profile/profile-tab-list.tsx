@@ -47,6 +47,8 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     { username, profileId, isBlocked, list, index },
     ref
   ) {
+    console.log(list.type);
+
     const router = useRouter();
     const { filter } = useContext(FilterContext);
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
@@ -56,6 +58,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         collectionId: filter.collectionId,
         sortType: filter.sortType,
       });
+
     const contentWidth = useContentWidth();
 
     const { user } = useUser();

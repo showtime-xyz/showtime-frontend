@@ -62,7 +62,6 @@ const ProfileScreen = ({ username }: ProfileScreenProps) => {
   return <Profile username={username} />;
 };
 
-type Filter = typeof defaultFilters;
 const { useParam } = createParam();
 
 const ProfileHeaderContext = createContext<{

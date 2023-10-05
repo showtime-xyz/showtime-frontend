@@ -22,11 +22,7 @@ import {
   HeaderLeft,
 } from "app/components/header";
 import { HeaderDropdown } from "app/components/header-dropdown";
-import {
-  defaultFilters,
-  useProfileNftTabs,
-  useUserProfile,
-} from "app/hooks/api-hooks";
+import { useProfileNftTabs, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
@@ -38,7 +34,6 @@ import { formatProfileRoutes, getProfileName } from "app/utilities";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
-import { FilterContext } from "./fillter-context";
 import { ProfileError } from "./profile-error";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
@@ -53,7 +48,6 @@ const ProfileScreen = ({ username }: ProfileScreenProps) => {
   return <Profile username={username} />;
 };
 
-type Filter = typeof defaultFilters;
 const { useParam } = createParam();
 
 const Profile = ({ username }: ProfileScreenProps) => {
@@ -98,20 +92,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
   const { top } = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
-
-  const [filter, dispatch] = useReducer(
-    (state: Filter, action: any): Filter => {
-      switch (action.type) {
-        case "collection_change":
-          return { ...state, collectionId: action.payload };
-        case "sort_change":
-          return { ...state, sortType: action.payload };
-        default:
-          return state;
-      }
-    },
-    { ...defaultFilters }
-  );
 
   const emptyBodyComponent = useMemo(() => {
     if (!isError) return null;
@@ -243,62 +223,58 @@ const Profile = ({ username }: ProfileScreenProps) => {
 
   return (
     <>
-      <FilterContext.Provider value={{ filter, dispatch }}>
-        <>
-          <Header
-            headerLeft={
-              router.asPath === "/" ? (
-                <></>
-              ) : (
-                <HeaderLeft canGoBack={true} withBackground />
-              )
-            }
-            headerRight={
-              <View tw="flex-row">
-                <HeaderDropdown
-                  type="settings"
-                  withBackground
-                  user={profileData?.data?.profile}
-                />
-                <Button
-                  tw="ml-2"
-                  onPress={onShare}
-                  style={{ height: 30 }}
-                  size="small"
-                >
-                  Share
-                </Button>
-              </View>
-            }
-            headerCenter={headerCenter}
-            translateYValue={animationHeaderPosition}
-          />
-          <HeaderTabView
-            onStartRefresh={onStartRefresh}
-            isRefreshing={isRefreshing}
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            renderScrollHeader={renderHeader}
-            minHeaderHeight={Platform.select({
-              default: headerHeight ? headerHeight : DEFAULT_HADER_HEIGHT + top,
-              android: headerHeight ? 0 : DEFAULT_HADER_HEIGHT + top,
-            })}
-            refreshControlTop={Platform.select({
-              ios: headerHeight ? headerHeight : 20,
-              default: 0,
-            })}
-            refreshHeight={top + DEFAULT_HADER_HEIGHT}
-            initialLayout={{
-              width: contentWidth,
-            }}
-            emptyBodyComponent={emptyBodyComponent}
-            animationHeaderPosition={animationHeaderPosition}
-            animationHeaderHeight={animationHeaderHeight}
-            renderTabBar={renderTabBar}
-          />
-        </>
-      </FilterContext.Provider>
+      <Header
+        headerLeft={
+          router.asPath === "/" ? (
+            <></>
+          ) : (
+            <HeaderLeft canGoBack={true} withBackground />
+          )
+        }
+        headerRight={
+          <View tw="flex-row">
+            <HeaderDropdown
+              type="settings"
+              withBackground
+              user={profileData?.data?.profile}
+            />
+            <Button
+              tw="ml-2"
+              onPress={onShare}
+              style={{ height: 30 }}
+              size="small"
+            >
+              Share
+            </Button>
+          </View>
+        }
+        headerCenter={headerCenter}
+        translateYValue={animationHeaderPosition}
+      />
+      <HeaderTabView
+        onStartRefresh={onStartRefresh}
+        isRefreshing={isRefreshing}
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        renderScrollHeader={renderHeader}
+        minHeaderHeight={Platform.select({
+          default: headerHeight ? headerHeight : DEFAULT_HADER_HEIGHT + top,
+          android: headerHeight ? 0 : DEFAULT_HADER_HEIGHT + top,
+        })}
+        refreshControlTop={Platform.select({
+          ios: headerHeight ? headerHeight : 20,
+          default: 0,
+        })}
+        refreshHeight={top + DEFAULT_HADER_HEIGHT}
+        initialLayout={{
+          width: contentWidth,
+        }}
+        emptyBodyComponent={emptyBodyComponent}
+        animationHeaderPosition={animationHeaderPosition}
+        animationHeaderHeight={animationHeaderHeight}
+        renderTabBar={renderTabBar}
+      />
     </>
   );
 };

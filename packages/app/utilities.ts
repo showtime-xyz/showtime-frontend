@@ -766,22 +766,13 @@ export const formatProfileRoutes = (
   tabs: ProfileTabsAPI["tabs"] | undefined
 ) => {
   if (!tabs) return [];
-  return [
-    {
-      title: "Tokens",
-      key: "tokens",
-      index: 0,
-      subtitle: 0,
-    },
-    ...tabs
-      .filter((item) => item.type !== "hidden" && item.type !== "liked")
-      .map((item, index) => ({
-        title: getProfileTitle(item.name),
-        key: item?.name,
-        index: index + 1,
-        subtitle: item.displayed_count,
-      })),
-  ];
+
+  return tabs.map((item, index) => ({
+    title: item.name,
+    key: item?.type,
+    index: index,
+    subtitle: 0,
+  }));
 };
 //#endregion
 
