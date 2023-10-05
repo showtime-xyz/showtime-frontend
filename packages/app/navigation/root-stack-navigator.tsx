@@ -25,6 +25,7 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
+import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
@@ -302,6 +303,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="creatorTokensExplanation"
           component={CreatorTokensExplanationScreen}
+        />
+        <Stack.Screen
+          name="enterInviteCode"
+          component={EnterInviteCodeModalScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

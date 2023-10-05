@@ -109,6 +109,7 @@ type RootStackNavigatorParams = {
   verifyPhoneNumber: undefined;
   dropExplanation: undefined;
   creatorTokensExplanation: undefined;
+  enterInviteCodeModal: undefined;
   drop: undefined;
   qrCodeShare: undefined;
   dropImageShare: undefined;

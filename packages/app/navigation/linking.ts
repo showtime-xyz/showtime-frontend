@@ -72,6 +72,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       verifyPhoneNumber: "settings/verify-phone-number",
       dropExplanation: "dropExplanation",
       creatorTokensExplanation: "creatorTokensExplanation",
+      enterInviteCode: "enterInviteCode",
       privacySecuritySettings: "settings/privacy-and-security",
       notificationSettings: "settings/notifications",
       blockedList: "settings/blocked-list",

@@ -8,7 +8,7 @@ export const CreatorTokensExplanationScreen = withModalScreen(
     title: "",
     matchingPathname: "/creatorTokensExplanation",
     matchingQueryParam: "creatorTokensExplanationModal",
-    tw: "w-full lg:w-[800px] web:lg:pb-8",
+    tw: "w-full md:w-[420px] web:lg:pb-8",
     snapPoints: [400],
     useNativeModal: false,
   }
