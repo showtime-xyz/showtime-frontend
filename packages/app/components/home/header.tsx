@@ -100,8 +100,8 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      <TrendingCarousel />
       <TopPartCreatorTokens />
+      <TrendingCarousel />
     </View>
   );
 });
