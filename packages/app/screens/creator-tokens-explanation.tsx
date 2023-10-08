@@ -6,7 +6,7 @@ export const CreatorTokensExplanationScreen = withModalScreen(
   CreatorTokensExplanation,
   {
     title: "",
-    matchingPathname: "/creatorTokensExplanation",
+    matchingPathname: "/creator-tokens/explanation",
     matchingQueryParam: "creatorTokensExplanationModal",
     tw: "w-full md:w-[420px] web:lg:pb-8",
     snapPoints: [400],

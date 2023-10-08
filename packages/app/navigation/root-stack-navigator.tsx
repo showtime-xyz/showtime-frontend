@@ -24,6 +24,7 @@ import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-chann
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
+import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
 import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
 import { DetailsScreen } from "app/screens/details";
@@ -236,6 +237,10 @@ export function RootStackNavigator() {
           name="topCreatorTokens"
           options={{ headerTitle: "Top Creator Tokens" }}
           component={TopCreatorTokensScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensSelfServeExplainer"
+          component={CreatorTokensSelfServeExplainerScreen}
         />
       </Stack.Group>
 

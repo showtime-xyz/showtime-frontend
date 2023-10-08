@@ -1,10 +1,13 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 import { useWindowDimensions, Platform, Linking } from "react-native";
 
+import { Close, Showtime } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import { colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import {
@@ -15,10 +18,41 @@ import { Carousel } from "app/lib/carousel";
 
 import { breakpoints } from "design-system/theme";
 
+import { BgGoldLinearGradient } from "../gold-gradient";
 import { Banner, useBanners } from "./hooks/use-banners";
 import { TopPartCreatorTokens } from "./top-part-creator-tokens";
 import { TrendingCarousel } from "./trending-carousel";
 
+const CreatorTokensBanner = () => {
+  const [isShow, setIsShow] = useState(true);
+  const router = useRouter();
+  if (!isShow) return null;
+  return (
+    <View tw="w-full flex-row items-center px-4 py-2.5">
+      <BgGoldLinearGradient />
+      <View tw="rounded-full border border-gray-900 p-1">
+        <Showtime color={colors.gray[900]} width={12} height={12} />
+      </View>
+      <Text
+        onPress={() => {
+          router.push("/creator-tokens/self-serve-explainer");
+        }}
+        tw="text-13 ml-2 font-bold text-gray-900 underline"
+      >
+        Be the first to create your Token
+      </Text>
+      <Pressable
+        tw="ml-auto"
+        onPress={() => {
+          setIsShow(false);
+        }}
+        hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
+      >
+        <Close color={colors.gray[900]} width={24} height={24} />
+      </Pressable>
+    </View>
+  );
+};
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
@@ -47,6 +81,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
 
   return (
     <View tw="w-full">
+      <CreatorTokensBanner />
       <View tw="mt-2 px-4 md:px-0">
         {isLoadingBanner ? (
           <Skeleton
