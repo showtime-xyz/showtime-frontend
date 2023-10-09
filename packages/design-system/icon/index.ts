@@ -160,6 +160,7 @@ export { default as Photo } from "./Photo";
 export { default as Gallery } from "./Gallery";
 export { default as GrowthArrow } from "./GrowthArrow";
 export { default as PieChart } from "./PieChart";
+export { default as ShowtimeRounded } from "./ShowtimeRounded";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";
