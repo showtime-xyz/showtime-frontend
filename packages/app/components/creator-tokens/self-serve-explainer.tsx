@@ -1,23 +1,28 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Flip, ShowtimeRounded } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useContentWidth } from "app/hooks/use-content-width";
+import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useUser } from "app/hooks/use-user";
 
 export const SelfServeExplainer = () => {
   const isDark = useIsDarkMode();
   const width = useContentWidth();
   const { user } = useUser();
+  const { top } = useSafeAreaInsets();
+  const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
   return (
-    <SafeAreaView style={{ paddingTop: 48, paddingHorizontal: 20 }}>
+    <View
+      tw="md:max-w-screen-content min-h-screen px-5"
+      style={{ paddingTop: 48 + top, paddingHorizontal: 20 }}
+    >
       <Text tw="text-2xl font-bold text-gray-900 dark:text-white">
         You're invited to be first.
       </Text>
@@ -63,7 +68,15 @@ export const SelfServeExplainer = () => {
             be its image. You can update this later.
           </Text>
         </View>
-        <Button size="regular" tw="w-full">
+        <Button
+          size="regular"
+          tw="w-full"
+          onPress={() => {
+            if (user?.data.profile.username) {
+              redirectToCreatorTokensShare(user?.data.profile.username);
+            }
+          }}
+        >
           <>
             <ShowtimeRounded
               color={isDark ? colors.gray[900] : colors.white}
@@ -76,6 +89,6 @@ export const SelfServeExplainer = () => {
           </>
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };

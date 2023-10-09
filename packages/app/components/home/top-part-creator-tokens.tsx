@@ -20,7 +20,7 @@ export const TopPartCreatorTokens = () => {
         </Text>
         <Text
           onPress={() => {
-            router.push("/topCreatorTokens");
+            router.push("/creator-tokens/top");
           }}
           tw="text-xs font-semibold text-gray-500"
         >

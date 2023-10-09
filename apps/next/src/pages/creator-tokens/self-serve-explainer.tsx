@@ -1,1 +1,1 @@
-export { default } from "app/pages/creator-channels/self-serve-explainer";
+export { default } from "app/pages/creator-tokens/self-serve-explainer";
