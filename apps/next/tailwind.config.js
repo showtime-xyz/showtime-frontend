@@ -89,6 +89,10 @@ module.exports = {
         "zoom-in": "zoom-in 250ms",
       },
     },
+    letterSpacing: {
+      "extra-wide": "0.2em",
+      "ultra-wide": "0.3em",
+    },
   },
   plugins: [
     require("nativewind/tailwind/css"),

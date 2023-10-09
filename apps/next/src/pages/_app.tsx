@@ -37,6 +37,8 @@ import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-membe
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
+import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
+import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
@@ -54,7 +56,6 @@ import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
-import { ReviewCreatorTokenScreen } from "app/screens/review-creator-token";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
 import { prevRouteRef } from "app/utilities";
@@ -255,6 +256,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <EditProfileScreen />
         <OnboardingScreen />
         <ReviewCreatorTokenScreen />
+        <InviteCreatorTokenScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
         <UnlockedChannelScreen />
