@@ -6953,6 +6953,7 @@ __metadata:
     expo-modules-core: ~1.5.10
     expo-navigation-bar: ~2.3.0
     expo-notifications: ~0.20.1
+    expo-sharing: ~11.5.0
     expo-splash-screen: ~0.20.5
     expo-status-bar: ~1.6.0
     expo-system-ui: ~2.4.0
@@ -16471,6 +16472,15 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: a935b1f06a102f8749d69f1b3f7583a156388f04deff55703789ab0258e3710a50629ea951dea7d1e5119b74ec0c142ec8fb6206f84ddb60ebe94a1b45a026bd
+  languageName: node
+  linkType: hard
+
+"expo-sharing@npm:~11.5.0":
+  version: 11.5.0
+  resolution: "expo-sharing@npm:11.5.0"
+  peerDependencies:
+    expo: "*"
+  checksum: aab2ab61a6e60a642fffec1c8a45a763d802a440a4f8c04785e6d3a1009b0055378d3ae7f1d49d24362d78718c476980a5f0292ec3df7a2a387b44fb3f7b3882
   languageName: node
   linkType: hard
 
