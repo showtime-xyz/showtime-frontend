@@ -1,3 +1,9 @@
+import { useCallback } from "react";
+import { Platform } from "react-native";
+
+import * as Clipboard from "expo-clipboard";
+import * as Sharing from "expo-sharing";
+
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronRight } from "@showtime-xyz/universal.icon";
@@ -7,6 +13,8 @@ import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { toast } from "design-system/toast";
 
 import InviteCreatorTokenHeader from "./assets/invite";
 
@@ -41,6 +49,25 @@ const claimedData = [
 
 const InviteCreatorTokenItem = ({ code }: { code: string }) => {
   const isDark = useIsDarkMode();
+  const copyCode = useCallback(async () => {
+    await Clipboard.setStringAsync(code);
+    toast.success("Copied to clipboard");
+  }, [code]);
+
+  const shareInvite = useCallback(async () => {
+    const nativeSharingIsAvailable = await Sharing.isAvailableAsync();
+
+    if (Platform.OS === "web" && nativeSharingIsAvailable) {
+      Sharing.shareAsync("aaa", {
+        dialogTitle: "Share your invite",
+        mimeType: "text/plain",
+        UTI: "public.plain-text",
+      });
+    } else {
+      await Clipboard.setStringAsync(code);
+      toast.success("Copied to clipboard");
+    }
+  }, [code]);
 
   return (
     <View tw="mt-2 rounded-2xl border border-gray-500 p-4">
@@ -51,12 +78,14 @@ const InviteCreatorTokenItem = ({ code }: { code: string }) => {
           </Text>
         </View>
         <View tw="flex-1 items-center justify-center">
-          <Text tw="font-semibold text-indigo-400">Copy code</Text>
+          <Pressable onPress={copyCode}>
+            <Text tw="font-semibold text-indigo-400">Copy code</Text>
+          </Pressable>
         </View>
       </View>
       <Button
         tw="mt-4"
-        onPress={() => {}}
+        onPress={shareInvite}
         variant={isDark ? "primary" : "secondary"}
       >
         Share invite
