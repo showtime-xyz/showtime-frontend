@@ -26,7 +26,7 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                 onPress={() => {
                   router.push(
                     Platform.select({
-                      native: "/creator-tokens/explanation",
+                      native: "/creator-token/explanation",
                       web: {
                         pathname: router.pathname,
                         query: {
@@ -36,10 +36,10 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                       } as any,
                     }),
                     Platform.select({
-                      native: "/creator-tokens/explanation",
+                      native: "/creator-token/explanation",
                       web:
                         router.asPath === "/"
-                          ? "/creator-tokens/explanation"
+                          ? "/creator-token/explanation"
                           : router.asPath,
                     }),
                     { shallow: true }
@@ -66,7 +66,7 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                 onPress={() => {
                   router.push(
                     Platform.select({
-                      native: "/creator-tokens/explanation",
+                      native: "/creator-token/explanation",
                       web: {
                         pathname: router.pathname,
                         query: {
@@ -76,10 +76,10 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                       } as any,
                     }),
                     Platform.select({
-                      native: "/creator-tokens/explanation",
+                      native: "/creator-token/explanation",
                       web:
                         router.asPath === "/"
-                          ? "/creator-tokens/explanation"
+                          ? "/creator-token/explanation"
                           : router.asPath,
                     }),
                     { shallow: true }
@@ -140,7 +140,7 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
           onPress={() => {
             router.push(
               Platform.select({
-                native: "/creator-tokens/explanation",
+                native: "/creator-token/explanation",
                 web: {
                   pathname: router.pathname,
                   query: {
@@ -150,10 +150,10 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                 } as any,
               }),
               Platform.select({
-                native: "/creator-tokens/explanation",
+                native: "/creator-token/explanation",
                 web:
                   router.asPath === "/"
-                    ? "/creator-tokens/explanation"
+                    ? "/creator-token/explanation"
                     : router.asPath,
               }),
               { shallow: true }

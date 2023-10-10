@@ -7,7 +7,7 @@ export const useRedirectToCreatorTokensShare = () => {
   const router = useRouter();
   const redirectToCreatorTokensShare = useCallback(
     async (username: string) => {
-      const as = `/creator-tokens/${username}/share`;
+      const as = `/creator-token/${username}/share`;
       router.push(
         Platform.select({
           native: as,

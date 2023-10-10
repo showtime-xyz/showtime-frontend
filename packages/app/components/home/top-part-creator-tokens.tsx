@@ -6,7 +6,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { TopCreatorTokensItem } from "../creator-tokens/top-creator-tokens";
+import { TopCreatorTokensItem } from "../creator-token/top-creator-tokens";
 
 export const TopPartCreatorTokens = () => {
   const isDark = useIsDarkMode();
@@ -20,7 +20,7 @@ export const TopPartCreatorTokens = () => {
         </Text>
         <Text
           onPress={() => {
-            router.push("/creator-tokens/top");
+            router.push("/creator-token/top");
           }}
           tw="text-xs font-semibold text-gray-500"
         >
