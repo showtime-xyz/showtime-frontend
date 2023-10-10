@@ -114,6 +114,28 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
           <Button
             tw="mt-2.5"
             style={{ backgroundColor: "#08F6CC", width: "100%" }}
+            onPress={() => {
+              router.push(
+                Platform.select({
+                  native: "/creator-token/buy",
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenBuyModal: true,
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: "/creator-token/buy",
+                  web:
+                    router.asPath === "/"
+                      ? "/creator-token/buy"
+                      : router.asPath,
+                }),
+                { shallow: true }
+              );
+            }}
           >
             <>
               <Text tw="text-base font-bold text-gray-900">Buy</Text>
@@ -129,6 +151,28 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
           <Button
             tw="mt-2.5"
             style={{ backgroundColor: "#FD749D", width: "100%" }}
+            onPress={() => {
+              router.push(
+                Platform.select({
+                  native: "/creator-token/buy",
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenBuyModal: true,
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: "/creator-token/buy",
+                  web:
+                    router.asPath === "/"
+                      ? "/creator-token/buy"
+                      : router.asPath,
+                }),
+                { shallow: true }
+              );
+            }}
           >
             <>
               <Text tw="text-base font-bold text-gray-900">Sell</Text>
