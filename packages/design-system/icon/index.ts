@@ -160,12 +160,13 @@ export { default as Photo } from "./Photo";
 export { default as Gallery } from "./Gallery";
 export { default as GrowthArrow } from "./GrowthArrow";
 export { default as PieChart } from "./PieChart";
-export { default as ShowtimeRounded } from "./ShowtimeRounded";
+export { default as AccessTicket } from "./AccessTicket";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";
 export { default as SpotifyPure } from "./SpotifyPure";
+export { default as ShowtimeRounded } from "./ShowtimeRounded";
 
 export { default as Facebook } from "./Facebook";
 export { default as GoogleOriginal } from "./GoogleOriginal";

@@ -23,6 +23,7 @@ import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-membe
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
+import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
@@ -241,6 +242,11 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="creatorTokensSelfServeExplainer"
           component={CreatorTokensSelfServeExplainerScreen}
+        />
+
+        <Stack.Screen
+          name="inviteCreatorToken"
+          component={InviteCreatorTokenScreen}
         />
       </Stack.Group>
 

@@ -30,6 +30,7 @@ import {
   ChevronRight,
   SearchFilled,
   Download3,
+  AccessTicket,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -440,6 +441,25 @@ export const HeaderMd = withColorScheme(() => {
 
                   <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
                     Download collector list
+                  </DropdownMenuItemTitle>
+                </DropdownMenuItem>
+              )}
+              {isAuthenticated && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    downloadCollectorList();
+                  }}
+                  key="import-allowlist"
+                >
+                  <MenuItemIcon
+                    Icon={AccessTicket}
+                    ios={{
+                      name: "ticket",
+                    }}
+                  />
+
+                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                    Import allowlist to channel
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
               )}
