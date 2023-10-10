@@ -164,6 +164,8 @@ export const Default = () => {
           <IconItem icon={Icon.EyeOffV2} title="EyeOffV2" />
           <IconItem icon={Icon.Location} title="Location" />
           <IconItem icon={Icon.Lock} title="Lock" />
+          <IconItem icon={Icon.UnLocked} title="UnLocked" />
+
           <IconItem icon={Icon.Download} title="Download" />
           <IconItem icon={Icon.Download2} title="Download2" />
           <IconItem icon={Icon.Download3} title="Download3" />
@@ -198,8 +200,14 @@ export const Default = () => {
           <IconItem icon={Icon.RaffleBadge} title="RaffleBadge" />
           <IconItem icon={Icon.MusicBadge} title="MusicBadge" />
           <IconItem icon={Icon.LockBadge} title="LockBadge" />
+          <IconItem icon={Icon.SongsTab} title="SongsTab" />
+          <IconItem icon={Icon.SavedTab} title="SavedTab" />
+          <IconItem icon={Icon.TokensTab} title="TokensTab" />
           <IconItem icon={Icon.Photo} title="Photo" />
           <IconItem icon={Icon.Gallery} title="Gallery" />
+          <IconItem icon={Icon.PieChart} title="PieChart" />
+          <IconItem icon={Icon.GrowthArrow} title="GrowthArrow" />
+          <IconItem icon={Icon.ShowtimeRounded} title="ShowtimeRounded" />
         </View>
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>

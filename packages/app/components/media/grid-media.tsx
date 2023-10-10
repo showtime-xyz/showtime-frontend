@@ -19,10 +19,6 @@ type Props = {
   item?: NFT & { loading?: boolean };
   numColumns?: number;
   tw?: string;
-  sizeStyle?: {
-    width?: number;
-    height?: number;
-  };
   resizeMode?: ResizeMode;
   onPinchStart?: () => void;
   onPinchEnd?: () => void;
@@ -36,7 +32,6 @@ type Props = {
 function GridMediaImpl({
   item,
   numColumns = 1,
-  sizeStyle = {},
   resizeMode: propResizeMode,
   edition,
   optimizedWidth = 300,
@@ -56,22 +51,9 @@ function GridMediaImpl({
       }),
     [item]
   );
-  const contentWidth = useContentWidth();
-
-  const size = useMemo(() => {
-    if (sizeStyle?.width) return +sizeStyle?.width;
-    return contentWidth / (numColumns ?? 1);
-  }, [contentWidth, numColumns, sizeStyle?.width]);
-
-  const width = sizeStyle?.width ? +sizeStyle?.width : size;
-  const height = sizeStyle?.height ? +sizeStyle?.height : size;
 
   return (
-    <View
-      style={{
-        opacity: item?.loading ? 0.5 : 1,
-      }}
-    >
+    <>
       {Boolean(edition) && (
         <View tw="absolute bottom-2.5 left-2 z-10">
           <ContentTypeIcon edition={edition} />
@@ -86,15 +68,12 @@ function GridMediaImpl({
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}
           data-test-id={Platform.select({ web: "nft-card-media" })}
-          width={width}
-          height={height}
-          style={sizeStyle}
           resizeMode={resizeMode}
           alt={item?.token_name}
+          style={{ height: "100%", width: "100%" }}
           transition={200}
         />
       ) : null}
-
       {item?.mime_type?.startsWith("video") ||
       item?.mime_type === "image/gif" ? (
         <>
@@ -109,9 +88,7 @@ function GridMediaImpl({
             }}
             recyclingKey={mediaUri}
             data-test-id={Platform.select({ web: "nft-card-media" })}
-            width={width}
-            height={height}
-            style={sizeStyle}
+            style={{ height: "100%", width: "100%" }}
             resizeMode={resizeMode}
             alt={item?.token_name}
             transition={200}
@@ -121,7 +98,6 @@ function GridMediaImpl({
 
       {item?.mime_type?.startsWith("model") ? (
         // This is a legacy 3D model, we don't support it anymore and fallback to image
-
         <Image
           source={{
             uri: item?.still_preview_url,
@@ -129,15 +105,13 @@ function GridMediaImpl({
           recyclingKey={mediaUri}
           blurhash={item?.blurhash}
           data-test-id={Platform.select({ web: "nft-card-media-model" })}
-          width={width}
-          height={height}
-          style={sizeStyle}
+          style={{ height: "100%", width: "100%" }}
           resizeMode={resizeMode}
           alt={item?.token_name}
           transition={200}
         />
       ) : null}
-    </View>
+    </>
   );
 }
 

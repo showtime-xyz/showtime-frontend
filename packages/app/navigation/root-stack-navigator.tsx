@@ -23,6 +23,10 @@ import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-membe
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
+import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
+import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
+import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
+import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
@@ -47,6 +51,7 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { TopCreatorTokensScreen } from "app/screens/top-creator-tokens";
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
@@ -130,6 +135,18 @@ export function RootStackNavigator() {
             animationDuration: 200,
           }}
         />
+        <Stack.Screen
+          name="creatorTokensShare"
+          component={CreatorTokensShareModalScreen}
+          options={{
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
+            animationDuration: 200,
+          }}
+        />
+
         <Stack.Screen
           name="dropViewShareModal"
           component={DropViewShareScreen}
@@ -216,6 +233,15 @@ export function RootStackNavigator() {
           options={{ headerTitle: "Trending" }}
           component={TrendingScreen}
         />
+        <Stack.Screen
+          name="topCreatorTokens"
+          options={{ headerTitle: "Top Creator Tokens" }}
+          component={TopCreatorTokensScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensSelfServeExplainer"
+          component={CreatorTokensSelfServeExplainerScreen}
+        />
       </Stack.Group>
 
       {/* Modals */}
@@ -284,6 +310,14 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="channelsSettings"
           component={CreatorChannelsSettingsScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensExplanation"
+          component={CreatorTokensExplanationScreen}
+        />
+        <Stack.Screen
+          name="enterInviteCode"
+          component={EnterInviteCodeModalScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

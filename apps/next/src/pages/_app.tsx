@@ -39,6 +39,9 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
+import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
+import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
+import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
@@ -232,6 +235,8 @@ function App({ Component, pageProps, router }: AppProps) {
         <FollowingScreen />
         <DropScreen />
         <DropExplanationScreen />
+        <CreatorTokensExplanationScreen />
+        <EnterInviteCodeModalScreen />
         <ClaimScreen />
         <RaffleScreen />
         <CollectorsScreen />
@@ -260,6 +265,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
         <UnlockedChannelScreen />
+        <CreatorTokensShareModalScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />
