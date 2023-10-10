@@ -34,7 +34,7 @@ const Header = () => {
       />
       <View tw="hidden flex-row justify-between bg-white pb-4 pt-6 dark:bg-black md:flex">
         <Text tw="font-bold text-gray-900 dark:text-white md:text-xl">
-          Trending (past 7 days)
+          Top Creator Tokens
         </Text>
       </View>
     </>
