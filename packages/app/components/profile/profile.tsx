@@ -4,6 +4,8 @@ import { Platform } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { GiftSolid } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import {
@@ -13,6 +15,7 @@ import {
   TabSpinner,
   NavigationState,
 } from "@showtime-xyz/universal.tab-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -34,6 +37,7 @@ import { formatProfileRoutes, getProfileName } from "app/utilities";
 
 import { ErrorBoundary } from "../error-boundary";
 import { TabFallback } from "../error-boundary/tab-fallback";
+import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { ProfileError } from "./profile-error";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
@@ -238,6 +242,34 @@ const Profile = ({ username }: ProfileScreenProps) => {
               withBackground
               user={profileData?.data?.profile}
             />
+            <Pressable
+              tw={[
+                "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+              ]}
+              onPress={() => {
+                router.push(
+                  Platform.select({
+                    native: `/profile/invite-creator-token`,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        inviteCreatorTokenModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({
+                    native: `/profile/invite-creator-token`,
+                    web: router.asPath,
+                  }),
+                  { scroll: false }
+                );
+              }}
+            >
+              <ButtonGoldLinearGradient />
+              <GiftSolid width={26} height={26} color={colors.gray[900]} />
+            </Pressable>
+
             <Button
               tw="ml-2"
               onPress={onShare}
