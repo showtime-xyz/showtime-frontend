@@ -17,9 +17,11 @@ import { UserContext } from "app/context/user-context";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletBalance } from "app/hooks/use-wallet-balance";
 import { useWeb3 } from "app/hooks/use-web3";
+import { useNavigateToBuy } from "app/navigation/use-navigate-to";
 
-export const BuyCreatorTokenModal = () => {
+export const BuyCreatorToken = () => {
   const user = useContext(UserContext);
+  const navigateToBuy = useNavigateToBuy();
   const wallet = useWallet();
   const isWeb3Wallet = useWeb3();
   const renderBuyButton = () => {
@@ -51,7 +53,7 @@ export const BuyCreatorTokenModal = () => {
   };
 
   return (
-    <View tw="bg-gray-100 p-4 dark:bg-gray-900">
+    <View tw="p-4">
       <View tw="flex-row items-center" style={{ columnGap: 8 }}>
         <View tw="flex-row items-center" style={{ columnGap: 2 }}>
           <Text tw="text-2xl font-semibold">Buy @itsvalentinacy</Text>
@@ -130,6 +132,7 @@ export const BuyCreatorTokenModal = () => {
           <Text tw="text-gray-700">$4.00</Text>
         </View>
       </View>
+      <View tw="h-8" />
       {renderBuyButton()}
     </View>
   );

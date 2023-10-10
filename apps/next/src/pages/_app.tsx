@@ -37,6 +37,7 @@ import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-membe
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
+import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
@@ -265,6 +266,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
         <UnlockedChannelScreen />
+        <CreatorTokenBuyScreen />
         <CreatorTokensShareModalScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />

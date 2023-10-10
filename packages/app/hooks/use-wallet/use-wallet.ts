@@ -19,7 +19,7 @@ const useWallet = (): UseWalletReturnType => {
   const { web3, isMagic, magicWalletAddress } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
   const { getBalance } = useWalletBalance();
-  const [address, setAddress] = useState<string | undefined>();
+  const [address, setAddress] = useState<`0x${string}` | undefined>();
 
   // we use this hook to prevent stale values in closures
   const walletConnectInstanceRef = useLatestValueRef(web3Modal);
@@ -29,11 +29,11 @@ const useWallet = (): UseWalletReturnType => {
   useEffect(() => {
     (async function fetchUserAddress() {
       if (web3Modal.address) {
-        setAddress(web3Modal.address);
+        setAddress(web3Modal.address as `0x${string}`);
       } else if (magicWalletAddress) {
-        setAddress(magicWalletAddress);
+        setAddress(magicWalletAddress as `0x${string}`);
       } else if (mobileSDK.address) {
-        setAddress(mobileSDK.address);
+        setAddress(mobileSDK.address as `0x${string}`);
       } else if (web3) {
         const address = web3.account?.address;
         setAddress(address);

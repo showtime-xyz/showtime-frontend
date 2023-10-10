@@ -1,4 +1,3 @@
-import { useMemo, useCallback } from "react";
 import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
@@ -26,7 +25,7 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                 onPress={() => {
                   router.push(
                     Platform.select({
-                      native: "/creator-tokens/explanation",
+                      native: "/creator-token/explanation",
                       web: {
                         pathname: router.pathname,
                         query: {
@@ -36,10 +35,10 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                       } as any,
                     }),
                     Platform.select({
-                      native: "/creator-tokens/explanation",
+                      native: "/creator-token/explanation",
                       web:
                         router.asPath === "/"
-                          ? "/creator-tokens/explanation"
+                          ? "/creator-token/explanation"
                           : router.asPath,
                     }),
                     { shallow: true }
@@ -66,7 +65,7 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                 onPress={() => {
                   router.push(
                     Platform.select({
-                      native: "/creator-tokens/explanation",
+                      native: "/creator-token/explanation",
                       web: {
                         pathname: router.pathname,
                         query: {
@@ -76,10 +75,10 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                       } as any,
                     }),
                     Platform.select({
-                      native: "/creator-tokens/explanation",
+                      native: "/creator-token/explanation",
                       web:
                         router.asPath === "/"
-                          ? "/creator-tokens/explanation"
+                          ? "/creator-token/explanation"
                           : router.asPath,
                     }),
                     { shallow: true }
@@ -114,6 +113,28 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
           <Button
             tw="mt-2.5"
             style={{ backgroundColor: "#08F6CC", width: "100%" }}
+            onPress={() => {
+              router.push(
+                Platform.select({
+                  native: "/creator-token/buy",
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenBuyModal: true,
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: "/creator-token/buy",
+                  web:
+                    router.asPath === "/"
+                      ? "/creator-token/buy"
+                      : router.asPath,
+                }),
+                { shallow: true }
+              );
+            }}
           >
             <>
               <Text tw="text-base font-bold text-gray-900">Buy</Text>
@@ -129,6 +150,28 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
           <Button
             tw="mt-2.5"
             style={{ backgroundColor: "#FD749D", width: "100%" }}
+            onPress={() => {
+              router.push(
+                Platform.select({
+                  native: "/creator-token/buy",
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenBuyModal: true,
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: "/creator-token/buy",
+                  web:
+                    router.asPath === "/"
+                      ? "/creator-token/buy"
+                      : router.asPath,
+                }),
+                { shallow: true }
+              );
+            }}
           >
             <>
               <Text tw="text-base font-bold text-gray-900">Sell</Text>
@@ -140,7 +183,7 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
           onPress={() => {
             router.push(
               Platform.select({
-                native: "/creator-tokens/explanation",
+                native: "/creator-token/explanation",
                 web: {
                   pathname: router.pathname,
                   query: {
@@ -150,10 +193,10 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
                 } as any,
               }),
               Platform.select({
-                native: "/creator-tokens/explanation",
+                native: "/creator-token/explanation",
                 web:
                   router.asPath === "/"
-                    ? "/creator-tokens/explanation"
+                    ? "/creator-token/explanation"
                     : router.asPath,
               }),
               { shallow: true }

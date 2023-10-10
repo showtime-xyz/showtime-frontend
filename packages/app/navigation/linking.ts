@@ -73,9 +73,10 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       addEmail: "settings/add-email",
       verifyPhoneNumber: "settings/verify-phone-number",
       dropExplanation: "dropExplanation",
-      creatorTokensExplanation: "creator-tokens/explanation",
+      creatorTokensExplanation: "creator-token/explanation",
+      creatorTokenBuy: "creator-token/buy",
       enterInviteCode: "enterInviteCode",
-      creatorTokensSelfServeExplainer: "creator-tokens/self-serve-explainer",
+      creatorTokensSelfServeExplainer: "creator-token/self-serve-explainer",
       privacySecuritySettings: "settings/privacy-and-security",
       notificationSettings: "settings/notifications",
       blockedList: "settings/blocked-list",
@@ -90,8 +91,8 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       channelsMessageReactions:
         "channels/:channelId/messages/:messageId/reactions",
       channelUnlocked: "channels/:contractAddress/unlocked",
-      creatorTokensShare: "creator-tokens/:username/share",
-      topCreatorTokens: "creator-tokens/top",
+      creatorTokensShare: "creator-token/:username/share",
+      topCreatorTokens: "creator-token/top",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {

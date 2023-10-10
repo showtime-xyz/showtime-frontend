@@ -35,7 +35,7 @@ const CreatorTokensBanner = () => {
       </View>
       <Text
         onPress={() => {
-          router.push("/creator-tokens/self-serve-explainer");
+          router.push("/creator-token/self-serve-explainer");
         }}
         tw="text-13 ml-2 font-bold text-gray-900 underline"
       >
