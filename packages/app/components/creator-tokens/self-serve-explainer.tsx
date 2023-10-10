@@ -49,7 +49,7 @@ export const SelfServeExplainer = () => {
       </View>
       <Image
         source={{
-          uri: "https://showtime-media.b-cdn.net/assets/creator-profile-example.png",
+          uri: "https://media.showtime.xyz/assets/creator-profile-example.png",
         }}
         tw="-mx-5"
         width={width}
