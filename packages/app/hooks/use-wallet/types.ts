@@ -14,7 +14,7 @@ export type ConnectResult = Promise<
   | undefined
 >;
 export type UseWalletReturnType = {
-  address?: string;
+  address?: `0x${string}`;
   disconnect: () => ConnectResult;
   connected?: boolean;
   networkChanged?: boolean;
