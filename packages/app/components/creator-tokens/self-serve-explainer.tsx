@@ -3,6 +3,7 @@ import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Flip, ShowtimeRounded } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -55,13 +56,13 @@ export const SelfServeExplainer = () => {
         height={width * (203 / 284)}
       />
       <View tw="items-center rounded-3xl border border-gray-200 px-4 py-6">
-        <View tw="">
+        <Pressable tw="">
           <Avatar url={user?.data.profile.img_url} size={112} />
           <View tw="absolute bottom-0 left-0 right-0 top-0 flex-row items-center justify-center rounded-full bg-black/30">
             <Flip color="#fff" width={20} height={20} />
             <Text tw="ml-1 text-base font-bold text-white">Replace</Text>
           </View>
-        </View>
+        </Pressable>
         <View tw="pb-6 pt-4">
           <Text tw="text-13 text-gray-900 dark:text-white">
             Your Creator Token is a collectible, and your profile picture will
