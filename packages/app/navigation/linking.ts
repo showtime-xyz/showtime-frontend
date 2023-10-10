@@ -66,6 +66,8 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       onboarding: "profile/onboarding",
       followers: "profile/followers",
       following: "profile/following",
+      reviewCreatorToken: "profile/review-creator-token",
+      inviteCreatorToken: "profile/invite-creator-token",
       settings: "settings",
       spotifyAuth: "spotifyAuth",
       addEmail: "settings/add-email",

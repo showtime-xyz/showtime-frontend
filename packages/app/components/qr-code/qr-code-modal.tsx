@@ -372,7 +372,7 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
                         ) : (
                           <Image
                             source={{
-                              uri: `${mediaUri}?optimizer=image&width=${size}&quality=80`,
+                              uri: `${mediaUri}?optimizer=image&width=${600}&quality=80`,
                             }}
                             recyclingKey={mediaUri}
                             resizeMode={"cover"}
