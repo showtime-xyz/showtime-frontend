@@ -73,6 +73,7 @@ const NotificationsInHeader = () => {
   const isDark = useIsDarkMode();
   const prevPath = useRef(router.pathname);
   const prevQuery = useRef(router.query);
+  const { height } = useWindowDimensions();
 
   useEffect(() => {
     if (
@@ -91,9 +92,8 @@ const NotificationsInHeader = () => {
     <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger>
         <View
-          tw={[
-            "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
-          ].join(" ")}
+          tw="mt-2 flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
+          style={{ height: height > 840 ? 50 : 40 }}
         >
           <View>
             <Icon color={isDark ? "#fff" : "#000"} width={24} height={24} />
