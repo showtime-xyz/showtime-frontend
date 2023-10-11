@@ -372,7 +372,7 @@ export const HeaderMd = withColorScheme(() => {
 
             <DropdownMenuContent
               align="center"
-              tw="w-50"
+              style={{ minWidth: 200 }}
               disableBlurEffect
               side="bottom"
               sideOffset={0}
