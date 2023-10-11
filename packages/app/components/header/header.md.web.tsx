@@ -73,7 +73,6 @@ const NotificationsInHeader = () => {
   const isDark = useIsDarkMode();
   const prevPath = useRef(router.pathname);
   const prevQuery = useRef(router.query);
-  const { height } = useWindowDimensions();
 
   useEffect(() => {
     if (
@@ -91,10 +90,7 @@ const NotificationsInHeader = () => {
   return (
     <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger>
-        <View
-          tw="mt-2 flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
-          style={{ height: height > 840 ? 50 : 40 }}
-        >
+        <View tw="mt-2 h-12 flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900">
           <View>
             <Icon color={isDark ? "#fff" : "#000"} width={24} height={24} />
             <View
@@ -158,11 +154,7 @@ const SearchInHeader = () => {
   return (
     <Popover.Root modal={true} open={isOpen} onOpenChange={setIsOpen}>
       <Popover.Trigger>
-        <View
-          tw={[
-            "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
-          ].join(" ")}
-        >
+        <View tw="mt-2 h-12 flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900">
           <Icon color={isDark ? "#fff" : "#000"} width={24} height={24} />
           <Text tw={["ml-4 text-lg text-black dark:text-white"]}>Search</Text>
         </View>
@@ -249,7 +241,7 @@ export const HeaderMd = withColorScheme(() => {
   const iconColor = isDark ? "#fff" : "#000";
   const { setColorScheme } = useColorScheme();
   const { logout } = useAuth();
-  const { height } = useWindowDimensions();
+  const { height: screenHeight } = useWindowDimensions();
   const HOME_ROUTES = useMemo(
     () =>
       [
@@ -322,7 +314,13 @@ export const HeaderMd = withColorScheme(() => {
   return (
     <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
       <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
-        <Link href="/" tw="flex-row items-center pt-8">
+        <Link
+          href="/"
+          tw="flex-row items-center"
+          style={{
+            paddingTop: screenHeight > 860 ? 40 : 24,
+          }}
+        >
           <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
         </Link>
         <View tw="-ml-4 mt-5 w-48 justify-center">
@@ -360,7 +358,7 @@ export const HeaderMd = withColorScheme(() => {
             <DropdownMenuTrigger>
               <View
                 tw={[
-                  "mt-2 h-[50px] cursor-pointer flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
+                  "mt-2 h-12 cursor-pointer flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
                 ]}
               >
                 <Menu width={24} height={24} color={iconColor} />
@@ -577,7 +575,7 @@ export const HeaderMd = withColorScheme(() => {
         <View
           tw={[
             "bottom-0 mt-4 inline-block",
-            height > 840 ? "absolute" : "relative",
+            screenHeight > 840 ? "absolute" : "relative",
           ]}
           style={{}}
         >
