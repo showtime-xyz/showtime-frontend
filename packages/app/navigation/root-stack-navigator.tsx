@@ -25,6 +25,7 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
+import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
@@ -161,6 +162,10 @@ export function RootStackNavigator() {
             statusBarStyle: "dark",
           }}
         />
+        <Stack.Screen
+          name="reviewCreatorToken"
+          component={ReviewCreatorTokenScreen}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -244,9 +249,9 @@ export function RootStackNavigator() {
           name="creatorTokensSelfServeExplainer"
           component={CreatorTokensSelfServeExplainerScreen}
         />
-
         <Stack.Screen
           name="inviteCreatorToken"
+          options={{ headerTitle: "Invite friends" }}
           component={InviteCreatorTokenScreen}
         />
       </Stack.Group>

@@ -9,6 +9,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronRight } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -129,8 +130,11 @@ const InviteCreatorTokenClaimedItem = ({
 };
 
 export const InviteCreatorToken = () => {
+  const { top, bottom } = useSafeAreaInsets();
   return (
-    <ScrollView>
+    <ScrollView
+      contentContainerStyle={{ paddingTop: top + 40, paddingBottom: bottom }}
+    >
       <View tw="p-4">
         <View tw="items-center">
           <InviteCreatorTokenHeader />

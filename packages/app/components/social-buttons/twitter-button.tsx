@@ -5,7 +5,7 @@ import { Twitter } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 
 export const TwitterButton = memo(function TwitterButton({
-  ctaCopy = "Tweet",
+  ctaCopy = "Post to X",
   ...rest
 }: { ctaCopy?: string } & ButtonProps) {
   return (

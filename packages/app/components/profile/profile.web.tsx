@@ -34,6 +34,7 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
@@ -94,16 +95,14 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const profileId = profileData?.data?.profile.profile_id;
   const { getIsBlocked } = useBlock();
   const router = useRouter();
-
+  const userId = useCurrentUserId();
+  const isSelf = userId === profileId;
   const isBlocked = getIsBlocked(profileId);
-  const { user } = useUser();
   const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
     profileId: profileId,
   });
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
-
-  const isSelf = user?.data?.profile?.profile_id === profileId;
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
@@ -259,6 +258,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                     profileData={profileData?.data}
                     isLoading={isLoading}
                     isError={isError}
+                    isSelf={isSelf}
                   />
                   <ProfileTabBar
                     onPress={onChangeTabBar}

@@ -28,7 +28,7 @@ import { HeaderDropdown } from "app/components/header-dropdown";
 import { useProfileNftTabs, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useShare } from "app/hooks/use-share";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -64,12 +64,14 @@ const Profile = ({ username }: ProfileScreenProps) => {
   } = useUserProfile({ address: username });
   const [type] = useParam("type");
   const { share } = useShare();
-  const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
-
+  const userId = useCurrentUserId();
+  const profileId = profileData?.data?.profile.profile_id;
+  const isSelf = userId === profileId;
   const contentWidth = useContentWidth();
   const { data } = useProfileNftTabs({
-    profileId: profileData?.data?.profile.profile_id,
+    profileId: profileId,
   });
+
   const savedSongs = useMemo(() => {
     return (
       data?.tabs.find((item) => item.type === "created")?.displayed_count || 0
@@ -93,7 +95,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const animationHeaderPosition = useSharedValue(0);
   const animationHeaderHeight = useSharedValue(0);
   const { getIsBlocked } = useBlock();
-  const isBlocked = getIsBlocked(profileData?.data?.profile.profile_id);
+  const isBlocked = getIsBlocked(profileId);
   const { top } = useSafeAreaInsets();
   const headerHeight = useHeaderHeight();
 
@@ -124,7 +126,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         return (
           <TokensTab
             username={profileData?.data?.profile.username}
-            profileId={profileData?.data?.profile.profile_id}
+            profileId={profileId}
             isBlocked={isBlocked}
             list={data?.tabs[routeIndex]}
             index={routeIndex}
@@ -143,7 +145,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             {data?.tabs[routeIndex] && (
               <ProfileTabList
                 username={profileData?.data?.profile.username}
-                profileId={profileData?.data?.profile.profile_id}
+                profileId={profileId}
                 isBlocked={isBlocked}
                 list={data?.tabs[routeIndex]}
                 index={routeIndex}
@@ -157,7 +159,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     [
       data?.tabs,
       isBlocked,
-      profileData?.data?.profile.profile_id,
+      profileId,
       profileData?.data?.profile.username,
       tabRefs,
     ]
@@ -179,6 +181,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             isLoading={isLoading}
             isError={isError}
             savedSongs={savedSongs}
+            isSelf={isSelf}
           />
         </View>
       </View>
@@ -193,6 +196,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isLoading,
     isError,
     savedSongs,
+    isSelf,
   ]);
   const renderTabBar = useCallback(
     (
@@ -207,6 +211,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
     []
   );
   const headerCenter = useCallback(() => {
+    if (isSelf) {
+      return null;
+    }
     return (
       <View tw="h-full justify-center">
         <Text numberOfLines={1} tw="text-lg font-bold text-white">
@@ -214,16 +221,13 @@ const Profile = ({ username }: ProfileScreenProps) => {
         </Text>
       </View>
     );
-  }, [profileData?.data?.profile]);
+  }, [isSelf, profileData?.data?.profile]);
+
   const onShare = useCallback(async () => {
-    if (Platform.OS !== "web") {
-      redirectToCreatorTokensShare(username);
-      return;
-    }
     await share({
       url: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${username}`,
     });
-  }, [redirectToCreatorTokensShare, share, username]);
+  }, [share, username]);
 
   return (
     <>
@@ -242,33 +246,19 @@ const Profile = ({ username }: ProfileScreenProps) => {
               withBackground
               user={profileData?.data?.profile}
             />
-            <Pressable
-              tw={[
-                "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
-              ]}
-              onPress={() => {
-                router.push(
-                  Platform.select({
-                    native: `/profile/invite-creator-token`,
-                    web: {
-                      pathname: router.pathname,
-                      query: {
-                        ...router.query,
-                        inviteCreatorTokenModal: true,
-                      },
-                    } as any,
-                  }),
-                  Platform.select({
-                    native: `/profile/invite-creator-token`,
-                    web: router.asPath,
-                  }),
-                  { scroll: false }
-                );
-              }}
-            >
-              <ButtonGoldLinearGradient />
-              <GiftSolid width={26} height={26} color={colors.gray[900]} />
-            </Pressable>
+            {isSelf && (
+              <Pressable
+                tw={[
+                  "ml-2 w-8 items-center justify-center rounded-full bg-black/60",
+                ]}
+                onPress={() => {
+                  router.push("/profile/invite-creator-token");
+                }}
+              >
+                <ButtonGoldLinearGradient />
+                <GiftSolid width={26} height={26} color={colors.gray[900]} />
+              </Pressable>
+            )}
 
             <Button
               tw="ml-2"

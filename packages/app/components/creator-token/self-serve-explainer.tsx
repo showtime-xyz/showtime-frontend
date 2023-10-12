@@ -74,7 +74,10 @@ export const SelfServeExplainer = () => {
           tw="w-full"
           onPress={() => {
             if (user?.data.profile.username) {
-              redirectToCreatorTokensShare(user?.data.profile.username);
+              redirectToCreatorTokensShare(
+                user?.data.profile.username,
+                "launched"
+              );
             }
           }}
         >

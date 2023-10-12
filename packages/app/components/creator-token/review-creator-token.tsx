@@ -6,10 +6,14 @@ import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { AddPhoto } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
+import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
+import { useUser } from "app/hooks/use-user";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { useFilePicker } from "app/lib/file-picker";
 
@@ -25,11 +29,20 @@ export const ReviewCreatorToken = () => {
     reValidateMode: "onChange",
     shouldFocusError: true,
   });
+  const router = useRouter();
   const pickFile = useFilePicker();
   const isDark = useIsDarkMode();
-  const handleSubmitForm = () => {};
+  const { user } = useUser();
+  const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
+  const handleSubmitForm = () => {
+    if (user?.data.profile.username) {
+      redirectToCreatorTokensShare(user?.data.profile.username, "launched");
+    }
+  };
+  const { top } = useSafeAreaInsets();
+
   return (
-    <View tw="p-4">
+    <View tw="p-4" style={{ paddingTop: top + 20 }}>
       <Text tw="text-2xl font-bold">Review your Token</Text>
       <View tw="h-4" />
       <Text>

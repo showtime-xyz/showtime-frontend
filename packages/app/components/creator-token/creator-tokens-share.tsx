@@ -10,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { Button } from "@showtime-xyz/universal.button";
 import { UnLocked, Showtime } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -37,13 +38,17 @@ import { toast } from "design-system/toast";
 
 import { CloseButton } from "../close-button";
 
+export type TokenShareType = "collected" | "launched" | "channel";
 const { useParam } = createParam<{
   username: string;
+  type: TokenShareType;
 }>();
 
 export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const linearOpaticy = useSharedValue(0);
   const [username] = useParam("username");
+  const [type] = useParam("type");
+
   const { data: userInfo } = useUserProfile({ address: username });
   const profileData = userInfo?.data?.profile;
   const { top } = useSafeAreaInsets();
@@ -52,6 +57,8 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const viewRef = useRef<any>(null);
   const url = useMemo(() => "", []);
   const { shareImageToIG } = useShareImage(viewRef);
+  console.log(type);
+
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
       getTwitterIntent({
@@ -114,34 +121,61 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
           </View>
           <View tw="mt-6">
             <Text tw="text-center text-2xl font-bold text-gray-900">
-              You just collected 2 tokens!
+              {type === "launched"
+                ? "You just launched your Creator Token!"
+                : type === "collected"
+                ? `You just collected 1 token!`
+                : "Share your Creator Token to grow your channel"}
             </Text>
             <View tw="mt-4 flex-row items-center justify-center px-8">
-              <UnLocked width={14} height={14} color="#000" />
-              <Text tw="ml-1 text-gray-900">Unlocked</Text>
-              <Text
-                tw="mx-1 font-medium"
-                onPress={() => router.push(`/@${profileData?.username}`)}
-              >
-                @{profileData?.username}
-              </Text>
-              {profileData?.verified ? (
+              {type === "launched" ? (
                 <>
-                  <VerificationBadge
-                    fillColor="#fff"
-                    bgColor="#000"
-                    style={{ marginTop: -2 }}
-                    size={14}
-                    className="inline-block"
-                  />
+                  <Text
+                    tw="text-gray-900"
+                    onPress={() => router.push(`/@${profileData?.username}`)}
+                  >
+                    Share with your fans to kickstart your channel. Plus, you've
+                    got
+                    <Text
+                      tw="mx-1 font-medium"
+                      onPress={() => router.push(`/@${profileData?.username}`)}
+                    >
+                      {` 3 invites `}
+                    </Text>
+                    for creator friends!
+                  </Text>
                 </>
-              ) : null}
-              <Text
-                tw="ml-1 font-medium"
-                onPress={() => router.push(`/@${profileData?.username}`)}
-              >
-                channel!
-              </Text>
+              ) : type === "collected" ? (
+                <>
+                  <UnLocked width={14} height={14} color="#000" />
+                  <Text tw="ml-1 text-gray-900">Unlocked</Text>
+                  <Text
+                    tw="mx-1 font-medium"
+                    onPress={() => router.push(`/@${profileData?.username}`)}
+                  >
+                    @{profileData?.username}
+                  </Text>
+                  {profileData?.verified ? (
+                    <>
+                      <VerificationBadge
+                        fillColor="#fff"
+                        bgColor="#000"
+                        style={{ marginTop: -2 }}
+                        size={14}
+                        className="inline-block"
+                      />
+                    </>
+                  ) : null}
+                  <Text
+                    tw="ml-1 font-medium text-gray-900"
+                    onPress={() => router.push(`/@${profileData?.username}`)}
+                  >
+                    channel!
+                  </Text>
+                </>
+              ) : (
+                <></>
+              )}
             </View>
           </View>
         </View>
@@ -151,7 +185,29 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
             <InstagramButton onPress={shareSingleImage} />
           ) : null}
           <CopyLinkButton theme="dark" onPress={onCopyLink} />
-          <AccessChannelButton theme="light" tw="mt-4" onPress={viewChannel} />
+          {type === "collected" ? (
+            <AccessChannelButton
+              theme="light"
+              tw="mt-4"
+              onPress={viewChannel}
+            />
+          ) : (
+            <Button
+              theme="light"
+              tw="mt-4"
+              size="regular"
+              onPress={() => {
+                if (Platform.OS === "web") {
+                  router.replace(`/profile/@${username}`);
+                } else {
+                  router.pop();
+                  router.push(`/profile/@${username}`);
+                }
+              }}
+            >
+              View Profile
+            </Button>
+          )}
         </View>
       </SafeAreaView>
       <View

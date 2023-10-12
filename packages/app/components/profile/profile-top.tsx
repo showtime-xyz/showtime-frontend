@@ -51,6 +51,7 @@ type ProfileTopProps = {
   isError: boolean;
   isLoading: boolean;
   savedSongs?: number;
+  isSelf: boolean;
 };
 export const ProfileCover = ({
   uri,
@@ -109,20 +110,16 @@ export const ProfileTop = ({
   isError,
   isLoading,
   savedSongs,
+  isSelf = false,
 }: ProfileTopProps) => {
-  const { mutate: mutateUserProfile } = useUserProfile({ address });
   const isDark = useIsDarkMode();
   const router = useRouter();
-  const userId = useCurrentUserId();
   const name = getProfileName(profileData?.profile);
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
   const { width, height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
-
-  const profileId = profileData?.profile.profile_id;
-  const isSelf = userId === profileId;
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+

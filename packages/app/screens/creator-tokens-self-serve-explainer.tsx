@@ -1,4 +1,4 @@
-import { SelfServeExplainer } from "app/components/creator-tokens/self-serve-explainer";
+import { SelfServeExplainer } from "app/components/creator-token/self-serve-explainer";
 import { withColorScheme } from "app/components/memo-with-theme";
 import { useUser } from "app/hooks/use-user";
 import { useTrackPageViewed } from "app/lib/analytics";
