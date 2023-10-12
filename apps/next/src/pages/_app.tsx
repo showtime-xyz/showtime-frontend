@@ -39,7 +39,6 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
-import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
 import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
@@ -261,7 +260,6 @@ function App({ Component, pageProps, router }: AppProps) {
         <DropEditDetailsScreen />
         <EditProfileScreen />
         <OnboardingScreen />
-        <ReviewCreatorTokenScreen />
         <AddEmailScreen />
         <VerifyPhoneNumberScreen />
         <UnlockedChannelScreen />
