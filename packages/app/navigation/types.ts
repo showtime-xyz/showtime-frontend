@@ -110,6 +110,7 @@ type RootStackNavigatorParams = {
   dropExplanation: undefined;
   creatorTokensExplanation: undefined;
   enterInviteCode: undefined;
+  creatorTokenInviteSignIn: undefined;
   creatorTokensSelfServeExplainer: undefined;
   inviteCreatorToken: undefined;
   drop: undefined;

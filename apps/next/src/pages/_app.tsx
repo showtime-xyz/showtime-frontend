@@ -39,6 +39,7 @@ import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-sett
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
+import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
@@ -268,6 +269,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <UnlockedChannelScreen />
         <CreatorTokenBuyScreen />
         <CreatorTokensShareModalScreen />
+        <CreatorTokenInviteSignInScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />

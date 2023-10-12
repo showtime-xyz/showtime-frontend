@@ -24,6 +24,7 @@ import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-chann
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
+import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
@@ -324,6 +325,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="enterInviteCode"
           component={EnterInviteCodeModalScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenInviteSignIn"
+          component={CreatorTokenInviteSignInScreen}
         />
       </Stack.Group>
     </Stack.Navigator>
