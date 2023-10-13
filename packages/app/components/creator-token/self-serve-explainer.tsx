@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -9,6 +11,8 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useCreatorTokenDeployStatus } from "app/hooks/creator-token/use-creator-token-deploy-status";
+import { useCreatorTokenOptIn } from "app/hooks/creator-token/use-creator-token-opt-in";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useUser } from "app/hooks/use-user";
@@ -18,7 +22,22 @@ export const SelfServeExplainer = () => {
   const width = useContentWidth();
   const { user } = useUser();
   const { top } = useSafeAreaInsets();
+  const { trigger: deployContract } = useCreatorTokenOptIn();
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
+  const creatorTokenDeployStatus = useCreatorTokenDeployStatus({
+    onSuccess: () => {
+      if (user?.data.profile.username) {
+        redirectToCreatorTokensShare(user?.data.profile.username, "launched");
+      }
+    },
+  });
+
+  useEffect(() => {
+    creatorTokenDeployStatus.pollDeployStatus();
+  }, [creatorTokenDeployStatus]);
+
+  console.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
+
   return (
     <View
       tw="md:max-w-screen-content min-h-screen px-5"
@@ -72,13 +91,9 @@ export const SelfServeExplainer = () => {
         <Button
           size="regular"
           tw="w-full"
+          disabled={creatorTokenDeployStatus.status === "loading"}
           onPress={() => {
-            if (user?.data.profile.username) {
-              redirectToCreatorTokensShare(
-                user?.data.profile.username,
-                "launched"
-              );
-            }
+            deployContract();
           }}
         >
           <>
@@ -88,7 +103,9 @@ export const SelfServeExplainer = () => {
               height={20}
             />
             <Text tw="ml-1 text-base font-bold text-white dark:text-gray-900">
-              Create your Token
+              {creatorTokenDeployStatus.status === "loading"
+                ? "Creating your Token..."
+                : "Create your Token"}
             </Text>
           </>
         </Button>
