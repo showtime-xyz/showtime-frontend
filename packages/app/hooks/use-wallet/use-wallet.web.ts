@@ -73,6 +73,7 @@ const useWallet = (): UseWalletReturnType => {
       address,
       getBalance,
       isMagicWallet: isMagic,
+      walletClient: web3,
       connect: async () => {
         if (openConnectModalRef.current) {
           openConnectModalRef.current();
@@ -105,6 +106,7 @@ const useWallet = (): UseWalletReturnType => {
     getBalance,
     isMagic,
     connected,
+    web3,
     networkChanged,
     signMessageAsync,
     openConnectModalRef,

@@ -1193,3 +1193,6 @@ export const getClaimLimitLeftDuration = (timeLimit: string) => {
     }
   )} left`;
 };
+
+export const isDEV =
+  process.env.NEXT_PUBLIC_STAGE === "development" ? true : false;
