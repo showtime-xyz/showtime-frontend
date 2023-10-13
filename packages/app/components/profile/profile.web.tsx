@@ -288,7 +288,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 </>
               ) : null}
               <View tw="w-full flex-row">
-                <View tw="-mt-4 flex-1">
+                <View tw="-mt-3 flex-1">
                   <ProfileTop
                     address={username}
                     isBlocked={isBlocked}

@@ -202,7 +202,7 @@ export const ProfileTop = ({
               )}
             </Skeleton>
           </Animated.View>
-          <View tw="ml-4 flex-row items-start justify-between">
+          <View tw="ml-4 flex-1 flex-row items-start justify-between">
             <View tw="flex-1">
               <Text
                 tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
@@ -240,7 +240,7 @@ export const ProfileTop = ({
                   <View tw="items-baseline">
                     <ClampText
                       text={bioWithMentions}
-                      maxLines={3}
+                      maxLines={2}
                       tw="text-sm text-gray-900 dark:text-white"
                     />
                   </View>
