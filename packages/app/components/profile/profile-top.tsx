@@ -149,7 +149,7 @@ export const ProfileTop = ({
   }, []);
   if (isProfileMdScreen) {
     return (
-      <View tw="px-7">
+      <View tw="pl-7">
         <View tw="flex-row items-center">
           <Animated.View
             style={[
