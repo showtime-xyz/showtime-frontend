@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { Platform } from "react-native";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -32,11 +35,17 @@ export const SelfServeExplainer = () => {
 
   const loading = creatorTokenDeployStatus.status === "loading" || isMutating;
   console.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
+  useEffect(() => {
+    creatorTokenDeployStatus.pollDeployStatus();
+  }, [creatorTokenDeployStatus]);
 
   return (
     <View
-      tw="md:max-w-screen-content min-h-screen px-5"
-      style={{ paddingTop: 48 + top, paddingHorizontal: 20 }}
+      tw="md:max-w-screen-content px-5"
+      style={{
+        paddingTop: Platform.select({ web: 0, default: top + 48 }),
+        paddingHorizontal: 20,
+      }}
     >
       <Text tw="text-2xl font-bold text-gray-900 dark:text-white">
         You're invited to be first.
