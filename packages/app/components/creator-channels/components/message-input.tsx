@@ -53,7 +53,7 @@ export const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
 export const MessageBoxUnavailable = () => {
   return (
     <MessageBox
-      placeholder="Coming soon..."
+      placeholder="..."
       tw="bg-white text-center dark:bg-black"
       textInputProps={{
         editable: false,
