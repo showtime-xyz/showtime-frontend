@@ -22,14 +22,16 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSWRConfig } from "swr";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
-  EyeOffV2,
   GiftV2,
   LockRounded,
   Music,
   Shopping,
   CreatorChannelFilled,
+  BellFilled,
+  ShowtimeRounded,
 } from "@showtime-xyz/universal.icon";
 import {
   ListRenderItem,
@@ -59,6 +61,7 @@ import TrackPlayer from "design-system/track-player";
 
 import { setupPlayer } from "../audio-player/service";
 import { pauseAllActiveTracks } from "../audio-player/store";
+import { CloseButton } from "../close-button";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
@@ -268,7 +271,7 @@ export const Messages = memo(() => {
     };
   }, []);
 
-  const shareLink = async () => {
+  const shareLink = useCallback(async () => {
     const as = `/channels/${channelId}/share`;
     router.push(
       Platform.select({
@@ -287,7 +290,8 @@ export const Messages = memo(() => {
       }),
       { shallow: true }
     );
-  };
+  }, [channelId, router]);
+
   const { data, isLoading, fetchMore, isLoadingMore, error } =
     useChannelMessages(channelId);
 
@@ -390,14 +394,6 @@ export const Messages = memo(() => {
     [keyboard]
   );
 
-  const introFooterCompensation = useAnimatedStyle(
-    () => ({
-      bottom:
-        keyboard.height.value === 0 ? 16 : -(keyboard.height.value / 2) + 16,
-    }),
-    [keyboard]
-  );
-
   const listEmptyComponent = useCallback(() => {
     const iconColor = isDark ? colors.white : colors.gray[900];
     return (
@@ -412,57 +408,65 @@ export const Messages = memo(() => {
       >
         <View tw="mt-6 w-full items-center justify-center">
           {isUserAdmin && (
-            <View tw="w-full max-w-[357px] rounded-2xl bg-gray-100 pb-3 pt-3 dark:bg-gray-900">
-              <View tw="px-6 pt-1">
-                <Text tw="text-sm font-bold text-black dark:text-white">
-                  Welcome! Now send your first update.
-                </Text>
-                <View tw="h-2" />
-                <Text tw="text-sm text-gray-900 dark:text-white">
-                  All your collectors will join automatically after your first
-                  update. We recommend at least 2 updates a week on:
-                </Text>
-                <View tw="h-1" />
-                {benefits.map((item, i) => (
-                  <View tw="mt-1 flex-row items-center" key={i.toString()}>
-                    {item.icon({ width: 20, height: 20, color: iconColor })}
-                    <Text tw="ml-3 text-sm font-semibold text-black dark:text-white">
-                      {item.text}
+            <>
+              <View tw="w-full max-w-[357px] rounded-2xl border border-gray-300 bg-gray-100 pb-3 pt-3 dark:border-gray-800 dark:bg-gray-900">
+                <View tw="px-6 pt-1">
+                  <View tw="flex-row items-center">
+                    <View tw="mr-4 h-10 w-10 items-center justify-center rounded-full bg-white">
+                      <CreatorChannelFilled
+                        width={22}
+                        height={22}
+                        color={"black"}
+                      />{" "}
+                    </View>
+                    <Text tw="text-sm font-bold text-black dark:text-white">
+                      Welcome! Let's get this party started.{" "}
+                      <Text tw="font-normal">
+                        A groupchat for your community where you can share
+                        audio, pictures & more.
+                      </Text>
                     </Text>
                   </View>
-                ))}
+
+                  <Button tw="mt-5" onPress={shareLink}>
+                    Share
+                  </Button>
+                </View>
               </View>
-            </View>
+              <View tw="mt-5 w-full max-w-[357px] rounded-2xl border border-gray-300 bg-gray-100 pb-3 pt-3 dark:border-gray-800 dark:bg-gray-900">
+                <View tw="px-6 pt-1">
+                  <View tw="flex-row items-center">
+                    <View tw="mr-4 h-10 w-10 items-center justify-center rounded-full bg-white">
+                      <ShowtimeRounded width={26} height={26} color={"black"} />
+                    </View>
+                    <Text tw="text-sm font-bold text-black dark:text-white">
+                      Invite a creator, earn their token for free.{" "}
+                      <Text tw="font-normal">
+                        3 invites left to send your friends.
+                      </Text>
+                    </Text>
+                  </View>
+                  <Button
+                    tw="mt-5"
+                    onPress={() => {
+                      router.push("/profile/invite-creator-token");
+                    }}
+                  >
+                    Invite
+                  </Button>
+                </View>
+              </View>
+            </>
           )}
         </View>
-        {isUserAdmin && (
-          <AnimatedView
-            tw="web:mb-4 absolute bottom-4 mt-auto w-full items-center justify-center"
-            style={introFooterCompensation}
-          >
-            <View tw="my-3 max-w-[300px] flex-row items-start justify-start">
-              <View tw="absolute -top-1.5">
-                <EyeOffV2
-                  width={18}
-                  height={18}
-                  color={isDark ? colors.gray[200] : colors.gray[600]}
-                />
-              </View>
-              <Text tw="ml-6 text-center text-xs text-gray-600 dark:text-gray-400">
-                This channel is hidden until your first message.
-              </Text>
-            </View>
-            <Text tw="text-center text-xs text-indigo-700 dark:text-violet-400">{`${membersCount.toLocaleString()} members will be notified`}</Text>
-          </AnimatedView>
-        )}
       </AnimatedView>
     );
   }, [
     introCompensation,
-    introFooterCompensation,
     isDark,
     isUserAdmin,
-    membersCount,
+    router,
+    shareLink,
     windowDimension.height,
   ]);
 
@@ -581,7 +585,7 @@ export const Messages = memo(() => {
               <AnimatedInfiniteScrollListWithRef
                 ref={listRef}
                 keyExtractor={keyExtractor}
-                data={data}
+                data={[]}
                 onEndReached={onLoadMore}
                 inverted
                 getItemType={getItemType}
