@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -31,10 +29,6 @@ export const SelfServeExplainer = () => {
       }
     },
   });
-
-  useEffect(() => {
-    creatorTokenDeployStatus.pollDeployStatus();
-  }, [creatorTokenDeployStatus]);
 
   console.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
 
@@ -92,8 +86,9 @@ export const SelfServeExplainer = () => {
           size="regular"
           tw="w-full"
           disabled={creatorTokenDeployStatus.status === "loading"}
-          onPress={() => {
-            deployContract();
+          onPress={async () => {
+            await deployContract();
+            creatorTokenDeployStatus.pollDeployStatus();
           }}
         >
           <>
