@@ -38,6 +38,7 @@ import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-chann
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
+import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
@@ -57,6 +58,8 @@ import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { OnboardingScreen } from "app/screens/onboarding";
 import { PayoutsSetupScreen } from "app/screens/payouts/setup";
+import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
+import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
@@ -267,7 +270,10 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorTokenBuyScreen />
         <CreatorTokensShareModalScreen />
         <CreatorTokenInviteSignInScreen />
+        <InviteCreatorTokenScreen />
         <CreatorTokensSelfServeExplainerScreen />
+        <CreatorTokensImportAllowlistScreen />
+        <CreatorTokensImportAllowlistSuccessScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />

@@ -23,7 +23,7 @@ export const SelfServeExplainer = () => {
   const width = useContentWidth();
   const { user } = useUser();
   const { top } = useSafeAreaInsets();
-  const { trigger: deployContract } = useCreatorTokenOptIn();
+  const { trigger: deployContract, isMutating } = useCreatorTokenOptIn();
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
   const creatorTokenDeployStatus = useCreatorTokenDeployStatus({
     onSuccess: () => {
@@ -36,6 +36,8 @@ export const SelfServeExplainer = () => {
   useEffect(() => {
     creatorTokenDeployStatus.pollDeployStatus();
   }, [creatorTokenDeployStatus]);
+  const loading = creatorTokenDeployStatus.status === "loading" || isMutating;
+  console.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
 
   return (
     <View
@@ -92,8 +94,8 @@ export const SelfServeExplainer = () => {
         </View>
         <Button
           size="regular"
-          tw="w-full"
-          disabled={creatorTokenDeployStatus.status === "loading"}
+          tw={`w-full ${loading ? "opacity-50" : ""}`}
+          disabled={loading}
           onPress={async () => {
             await deployContract();
             creatorTokenDeployStatus.pollDeployStatus();
@@ -106,9 +108,7 @@ export const SelfServeExplainer = () => {
               height={20}
             />
             <Text tw="ml-1 text-base font-bold text-white dark:text-gray-900">
-              {creatorTokenDeployStatus.status === "loading"
-                ? "Creating your Token..."
-                : "Create your Token"}
+              {loading ? "Creating your Token..." : "Create your Token"}
             </Text>
           </>
         </Button>

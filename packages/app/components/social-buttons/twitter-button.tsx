@@ -9,7 +9,7 @@ export const TwitterButton = memo(function TwitterButton({
   ...rest
 }: { ctaCopy?: string } & ButtonProps) {
   return (
-    <Button size="regular" {...rest} theme="dark">
+    <Button size="regular" {...rest}>
       <Twitter color={colors.twitter} width={20} height={20} />
       {` ${ctaCopy}`}
     </Button>
