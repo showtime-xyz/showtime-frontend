@@ -38,6 +38,8 @@ export const SelfServeExplainer = () => {
   useEffect(() => {
     creatorTokenDeployStatus.pollDeployStatus();
   }, [creatorTokenDeployStatus]);
+  const loading = creatorTokenDeployStatus.status === "loading" || isMutating;
+  console.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
 
   return (
     <View

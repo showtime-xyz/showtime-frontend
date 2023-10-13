@@ -2,7 +2,7 @@ import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { createStackNavigator } from "app/navigation/create-stack-navigator";
 import { ProfileStackParams } from "app/navigation/types";
-import { ProfileScreen } from "app/screens/profile";
+import { ProfileScreen } from "app/screens/profile/profile";
 
 const ProfileStack = createStackNavigator<ProfileStackParams>();
 

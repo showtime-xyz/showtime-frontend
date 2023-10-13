@@ -99,7 +99,7 @@ export const DropViewShare = memo(function DropViewShare({
             paddingBottom: Math.max(bottom + 8, 12),
           }}
         >
-          <TwitterButton onPress={shareWithTwitterIntent} />
+          <TwitterButton theme="dark" onPress={shareWithTwitterIntent} />
 
           <InstagramButton
             tw="mt-4"

@@ -259,7 +259,23 @@ const Profile = ({ username }: ProfileScreenProps) => {
                       "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
                     ]}
                     onPress={() => {
-                      router.push("/profile/invite-creator-token");
+                      const as = "/creator-token/invite-creator-token";
+                      router.push(
+                        Platform.select({
+                          native: as,
+                          web: {
+                            pathname: router.pathname,
+                            query: {
+                              ...router.query,
+                              inviteCreatorTokenModal: true,
+                            },
+                          } as any,
+                        }),
+                        Platform.select({ native: as, web: router.asPath }),
+                        {
+                          shallow: true,
+                        }
+                      );
                     }}
                   >
                     <ButtonGoldLinearGradient />
@@ -327,7 +343,23 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
               ]}
               onPress={() => {
-                router.push("/profile/invite-creator-token");
+                const as = "/creator-token/invite-creator-token";
+                router.push(
+                  Platform.select({
+                    native: as,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        inviteCreatorTokenModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({ native: as, web: router.asPath }),
+                  {
+                    shallow: true,
+                  }
+                );
               }}
             >
               <ButtonGoldLinearGradient />

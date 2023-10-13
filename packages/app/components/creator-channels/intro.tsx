@@ -60,7 +60,9 @@ export const CreatorChannelsIntro = () => {
             tw="absolute -top-24 self-center"
           >
             <Image
-              source={require("./assets/channel-graphic.png")}
+              source={{
+                uri: "https://media.showtime.xyz/assets/channel-graphic.png",
+              }}
               width={imageSize}
               height={imageSize}
             />

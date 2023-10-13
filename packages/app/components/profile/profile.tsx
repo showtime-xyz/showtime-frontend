@@ -252,7 +252,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   "ml-2 w-8 items-center justify-center rounded-full bg-black/60",
                 ]}
                 onPress={() => {
-                  router.push("/profile/invite-creator-token");
+                  // Due to the fact that this page is only for native we can simply use a URL.
+                  router.push("/creator-token/invite-creator-token");
                 }}
               >
                 <ButtonGoldLinearGradient />

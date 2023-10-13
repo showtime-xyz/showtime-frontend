@@ -4,7 +4,7 @@ import { SWRConfig } from "swr";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import ProfileScreen from "app/screens/profile";
+import ProfileScreen from "app/screens/profile/profile";
 
 function ProfileRouter({ fallback = {} }: { fallback?: object }) {
   const router = useRouter();

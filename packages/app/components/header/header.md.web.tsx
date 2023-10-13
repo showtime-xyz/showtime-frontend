@@ -445,7 +445,23 @@ export const HeaderMd = withColorScheme(() => {
               {isAuthenticated && (
                 <DropdownMenuItem
                   onSelect={() => {
-                    downloadCollectorList();
+                    const as = "/creator-token/import-allowlist";
+                    router.push(
+                      Platform.select({
+                        native: as,
+                        web: {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            creatorTokensImportAllowlistModal: true,
+                          },
+                        } as any,
+                      }),
+                      Platform.select({ native: as, web: router.asPath }),
+                      {
+                        shallow: true,
+                      }
+                    );
                   }}
                   key="import-allowlist"
                 >

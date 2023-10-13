@@ -178,7 +178,9 @@ export const ChannelsPromote = () => {
                   >
                     <View tw="absolute inset-0">
                       <Image
-                        source={require("./assets/channel-promo.png")}
+                        source={{
+                          uri: "https://media.showtime.xyz/assets/channel-promo.png",
+                        }}
                         width={imageWidth}
                         height={imageHeight}
                       />
@@ -228,7 +230,9 @@ export const ChannelsPromote = () => {
                     </View>
                     <View tw="absolute bottom-6">
                       <Image
-                        source={require("./download-app.png")}
+                        source={{
+                          uri: "https://media.showtime.xyz/assets/download-app.png",
+                        }}
                         width={244}
                         height={38}
                       />

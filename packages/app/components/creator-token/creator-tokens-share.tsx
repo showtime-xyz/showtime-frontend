@@ -180,7 +180,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
           </View>
         </View>
         <View tw="mt-10 w-full px-6" style={{ rowGap: 16 }}>
-          <TwitterButton onPress={shareWithTwitterIntent} />
+          <TwitterButton theme="dark" onPress={shareWithTwitterIntent} />
           {Platform.OS !== "web" ? (
             <InstagramButton onPress={shareSingleImage} />
           ) : null}
