@@ -200,9 +200,9 @@ export const Default = () => {
           <IconItem icon={Icon.RaffleBadge} title="RaffleBadge" />
           <IconItem icon={Icon.MusicBadge} title="MusicBadge" />
           <IconItem icon={Icon.LockBadge} title="LockBadge" />
-          <IconItem icon={Icon.SongsTab} title="SongsTab" />
-          <IconItem icon={Icon.SavedTab} title="SavedTab" />
-          <IconItem icon={Icon.TokensTab} title="TokensTab" />
+          <IconItem icon={Icon.Songs} title="Songs" />
+          <IconItem icon={Icon.Saved} title="Saved" />
+          <IconItem icon={Icon.Tokens} title="Tokens" />
           <IconItem icon={Icon.Photo} title="Photo" />
           <IconItem icon={Icon.Gallery} title="Gallery" />
           <IconItem icon={Icon.PieChart} title="PieChart" />

@@ -11,9 +11,14 @@ import { Button } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InformationCircle, Lock } from "@showtime-xyz/universal.icon";
+import {
+  GiftSolid,
+  InformationCircle,
+  Lock,
+} from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
@@ -34,6 +39,7 @@ import { getProfileImage, getProfileName } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
+import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { ProfileSocial } from "./profile-social";
 

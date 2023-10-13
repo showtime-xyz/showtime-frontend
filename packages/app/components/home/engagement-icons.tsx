@@ -6,8 +6,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import type { NFT } from "app/types";
 
+import { ClaimButtonIconic } from "../claim/claim-button-iconic";
 import { NFTShareDropdown } from "../nft-share-dropdown";
-import { ClaimButtonIconic } from "./claim-button-iconic";
 import { FeedCommentButton } from "./feed-comment-button";
 
 export type EngagementIconsProps = {
