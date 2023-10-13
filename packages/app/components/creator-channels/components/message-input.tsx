@@ -213,7 +213,12 @@ export const MessageInput = memo(
             paddingBottom: Math.max(bottom || 0, 8),
           }}
         >
-          <Pressable tw="web:min-w-[200px] mr-4 min-w-[180px] items-center  rounded-full bg-[#08F6CC] px-4 py-3">
+          <Pressable
+            tw="web:min-w-[200px] mr-4 min-w-[180px] items-center  rounded-full bg-[#08F6CC] px-4 py-3"
+            onPress={() => {
+              alert("not implemented");
+            }}
+          >
             <LeanText tw="text-center text-lg font-bold">Buy - $21.67</LeanText>
           </Pressable>
           <LeanView tw="flex-1">
