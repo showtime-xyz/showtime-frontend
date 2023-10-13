@@ -71,6 +71,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const { data } = useProfileNftTabs({
     profileId: profileId,
   });
+  const channelId = useMemo(() => {
+    if (profileData?.data?.profile.channels) {
+      return profileData?.data?.profile.channels[0].id;
+    }
+    return null;
+  }, [profileData?.data?.profile.channels]);
 
   const savedSongs = useMemo(() => {
     return (
@@ -131,6 +137,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
             list={data?.tabs[routeIndex]}
             index={routeIndex}
             ref={(ref) => (tabRefs.current[routeIndex] = ref)}
+            channelId={channelId}
+            isSelf={isSelf}
           />
         );
       }
@@ -158,9 +166,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
     },
     [
       data?.tabs,
-      isBlocked,
-      profileId,
       profileData?.data?.profile.username,
+      profileId,
+      isBlocked,
+      channelId,
+      isSelf,
       tabRefs,
     ]
   );

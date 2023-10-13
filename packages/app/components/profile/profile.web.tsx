@@ -107,6 +107,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
+  const channelId = useMemo(() => {
+    if (profileData?.data?.profile.channels) {
+      return profileData?.data?.profile.channels[0].id;
+    }
+    return null;
+  }, [profileData?.data?.profile.channels]);
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
@@ -145,7 +151,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       index: itemIndex,
     }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
       if (type === "tokens") {
-        return <TokensTabHeader />;
+        return <TokensTabHeader channelId={channelId} isSelf={isSelf} />;
       }
       return (
         <Card
@@ -160,7 +166,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         />
       );
     },
-    [numColumns, profileId, type]
+    [channelId, isSelf, numColumns, profileId, type]
   );
   const ListFooterComponent = useCallback(() => {
     if ((isLoadingMore || profileIsLoading) && !error) {

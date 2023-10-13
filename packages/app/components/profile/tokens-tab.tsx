@@ -13,6 +13,7 @@ import Animated from "react-native-reanimated";
 
 import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { Avatar } from "@showtime-xyz/universal.avatar";
+import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   ChevronLeft,
@@ -59,11 +60,34 @@ const NUM_COLUMNS = 3;
 export type ProfileTabListRef = {
   refresh: () => void;
 };
-export const TokensTabHeader = () => {
+export const TokensTabHeader = ({
+  channelId,
+  isSelf,
+}: {
+  channelId: number | null | undefined;
+  isSelf: boolean;
+}) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
+
   return (
     <View tw="w-full px-4">
+      {channelId && isSelf ? (
+        <View tw="mt-6 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5">
+          <Text tw="flex-1 text-sm text-white">
+            Share updates, audio, and photos to token collectors
+          </Text>
+          <Button
+            onPress={() => {
+              router.push(`/channels/${channelId}`);
+            }}
+            theme="dark"
+            tw="ml-2"
+          >
+            {`   Channel   `}
+          </Button>
+        </View>
+      ) : null}
       <View tw="mt-6 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-3 py-5">
         <Text tw="flex-1 text-sm text-gray-500">
           Create your token to access your channel.
@@ -175,113 +199,118 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
     </View>
   );
 };
-export const TokensTab = forwardRef<ProfileTabListRef, TabListProps>(
-  function ProfileTabList(
-    { username, profileId, isBlocked, list, index },
-    ref
-  ) {
-    const isDark = useIsDarkMode();
-    const router = useRouter();
-    const { filter } = useContext(FilterContext);
-    const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
-      useProfileNFTs({
-        tabType: list.type,
-        profileId,
-        collectionId: filter.collectionId,
-        sortType: filter.sortType,
-      });
-    const contentWidth = useContentWidth();
+export const TokensTab = forwardRef<
+  ProfileTabListRef,
+  TabListProps & {
+    channelId: number | null | undefined;
+    isSelf: boolean;
+  }
+>(function ProfileTabList(
+  { username, profileId, isBlocked, list, index, channelId, isSelf },
+  ref
+) {
+  const isDark = useIsDarkMode();
+  const router = useRouter();
+  const { filter } = useContext(FilterContext);
+  const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
+    useProfileNFTs({
+      tabType: list.type,
+      profileId,
+      collectionId: filter.collectionId,
+      sortType: filter.sortType,
+    });
+  const contentWidth = useContentWidth();
 
-    const { user } = useUser();
-    const listRef = useRef(null);
-    useScrollToTop(listRef);
-    useImperativeHandle(ref, () => ({
-      refresh,
-    }));
-    const onItemPress = useCallback(
-      (item: NFT) => {
-        router.push(
-          `${getNFTSlug(item)}?initialScrollItemId=${item.nft_id}&tabType=${
-            list.type
-          }&profileId=${profileId}&collectionId=${
-            filter.collectionId
-          }&sortType=${filter.sortType}&type=profile`
-        );
-      },
-      [list.type, profileId, filter.collectionId, filter.sortType, router]
-    );
-
-    const ListFooterComponent = useCallback(
-      () => <ProfileFooter isLoading={isLoadingMore} />,
-      [isLoadingMore]
-    );
-
-    const ListHeaderComponent = useCallback(() => <TokensTabHeader />, []);
-    const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
-
-    const renderItem = useCallback(
-      ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-        return <TokensTabItem item={item} tw="px-6" />;
-      },
-      []
-    );
-
-    if (isBlocked) {
-      return (
-        <TabScrollView
-          contentContainerStyle={{ marginTop: 48, alignItems: "center" }}
-          index={index}
-          ref={listRef}
-        >
-          <EmptyPlaceholder
-            title={
-              <Text tw="text-gray-900 dark:text-white">
-                <Text tw="font-bold">@{username}</Text> is blocked
-              </Text>
-            }
-            hideLoginBtn
-          />
-        </TabScrollView>
+  const { user } = useUser();
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
+  useImperativeHandle(ref, () => ({
+    refresh,
+  }));
+  const onItemPress = useCallback(
+    (item: NFT) => {
+      router.push(
+        `${getNFTSlug(item)}?initialScrollItemId=${item.nft_id}&tabType=${
+          list.type
+        }&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${
+          filter.sortType
+        }&type=profile`
       );
-    }
+    },
+    [list.type, profileId, filter.collectionId, filter.sortType, router]
+  );
 
-    if (isLoading) {
-      return <TabSpinner index={index} />;
-    }
-    if (data.length === 0 && !isLoading) {
-      return (
-        <TabScrollView
-          contentContainerStyle={{ marginTop: 48, alignItems: "center" }}
-          index={index}
-          ref={listRef}
-        >
-          <EmptyPlaceholder title="No drops, yet." hideLoginBtn />
-        </TabScrollView>
-      );
-    }
+  const ListFooterComponent = useCallback(
+    () => <ProfileFooter isLoading={isLoadingMore} />,
+    [isLoadingMore]
+  );
 
+  const ListHeaderComponent = useCallback(
+    () => <TokensTabHeader channelId={channelId} isSelf={isSelf} />,
+    [channelId, isSelf]
+  );
+  const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
+
+  const renderItem = useCallback(
+    ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
+      return <TokensTabItem item={item} tw="px-6" />;
+    },
+    []
+  );
+
+  if (isBlocked) {
     return (
-      <MutateProvider mutate={updateItem}>
-        <ProfileTabsNFTProvider
-          tabType={
-            user?.data?.profile?.profile_id === profileId
-              ? list.type
-              : undefined
+      <TabScrollView
+        contentContainerStyle={{ marginTop: 48, alignItems: "center" }}
+        index={index}
+        ref={listRef}
+      >
+        <EmptyPlaceholder
+          title={
+            <Text tw="text-gray-900 dark:text-white">
+              <Text tw="font-bold">@{username}</Text> is blocked
+            </Text>
           }
-        >
-          <TabInfiniteScrollList
-            data={data}
-            ref={listRef}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-            ListHeaderComponent={ListHeaderComponent}
-            estimatedItemSize={contentWidth / NUM_COLUMNS}
-            ListFooterComponent={ListFooterComponent}
-            onEndReached={fetchMore}
-            index={index}
-          />
-        </ProfileTabsNFTProvider>
-      </MutateProvider>
+          hideLoginBtn
+        />
+      </TabScrollView>
     );
   }
-);
+
+  if (isLoading) {
+    return <TabSpinner index={index} />;
+  }
+  if (data.length === 0 && !isLoading) {
+    return (
+      <TabScrollView
+        contentContainerStyle={{ marginTop: 48, alignItems: "center" }}
+        index={index}
+        ref={listRef}
+      >
+        <EmptyPlaceholder title="No drops, yet." hideLoginBtn />
+      </TabScrollView>
+    );
+  }
+
+  return (
+    <MutateProvider mutate={updateItem}>
+      <ProfileTabsNFTProvider
+        tabType={
+          user?.data?.profile?.profile_id === profileId ? list.type : undefined
+        }
+      >
+        <TabInfiniteScrollList
+          data={data}
+          ref={listRef}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          ListHeaderComponent={ListHeaderComponent}
+          estimatedItemSize={contentWidth / NUM_COLUMNS}
+          ListFooterComponent={ListFooterComponent}
+          onEndReached={fetchMore}
+          index={index}
+        />
+      </ProfileTabsNFTProvider>
+    </MutateProvider>
+  );
+});
