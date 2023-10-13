@@ -49,7 +49,7 @@ export const SelfServeExplainer = () => {
       <Text tw="text-2xl font-bold text-gray-900 dark:text-white">
         You're invited to be first.
       </Text>
-      <View tw="py-4">
+      <View tw="web:py-0 py-4">
         <View tw="flex-row items-center py-2">
           <Text tw="text-sm text-gray-900 dark:text-white">
             Introducing{" "}
@@ -73,7 +73,7 @@ export const SelfServeExplainer = () => {
         source={{
           uri: "https://showtime-media.b-cdn.net/assets/creator-profile-example.png",
         }}
-        tw="-mx-5"
+        tw="ios:-mx-5 android:-mx-5"
         width={width}
         height={width * (203 / 284)}
       />

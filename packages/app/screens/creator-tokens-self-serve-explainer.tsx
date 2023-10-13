@@ -23,6 +23,7 @@ const CreatorTokensSelfServeExplainerModal = withModalScreen(
     matchingPathname: "/creator-token/self-serve-explainer",
     matchingQueryParam: "creatorTokensSelfServeExplainerModal",
     disableBackdropPress: true,
+    tw: "md:max-h-[100vh]",
   }
 );
 export const CreatorTokensSelfServeExplainerScreen =
