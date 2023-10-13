@@ -2,6 +2,7 @@ import { Platform, useWindowDimensions } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { TabScrollView } from "@showtime-xyz/universal.tab-view";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useAddWallet } from "app/hooks/use-add-wallet";
@@ -38,7 +39,14 @@ export const WalletsTab = ({
     <SettingScrollComponent index={index}>
       <SettingsTitle
         title="Your Wallets"
-        desc="Your Primary Wallet will be the Polygon address that automatically receives your drops on Showtime."
+        desc={
+          <>
+            Connect your own wallet, or our embedded wallet feature using the
+            various sign in options. Your Creator Token and its earnings will be
+            sent to your
+            <Text tw="font-bold">{` Primary Wallet.`}</Text>
+          </>
+        }
         buttonText={walletCTA}
         onPress={addWallet}
       />
