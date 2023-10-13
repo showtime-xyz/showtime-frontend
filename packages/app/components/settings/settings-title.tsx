@@ -6,7 +6,7 @@ type Props = {
   title: string;
   titleTw?: string;
   descTw?: string;
-  desc?: string;
+  desc?: string | JSX.Element;
   buttonText?: string;
   buttonProps?: ButtonProps;
   onPress?: () => void;
