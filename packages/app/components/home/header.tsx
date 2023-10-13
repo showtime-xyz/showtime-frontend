@@ -35,8 +35,6 @@ const CreatorTokensBanner = () => {
       </View>
       <Text
         onPress={() => {
-          console.log(123);
-
           const as = `/creator-token/self-serve-explainer`;
           router.push(
             Platform.select({
