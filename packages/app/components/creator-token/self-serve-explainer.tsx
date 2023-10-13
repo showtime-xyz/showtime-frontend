@@ -94,8 +94,9 @@ export const SelfServeExplainer = () => {
           size="regular"
           tw="w-full"
           disabled={creatorTokenDeployStatus.status === "loading"}
-          onPress={() => {
-            deployContract();
+          onPress={async () => {
+            await deployContract();
+            creatorTokenDeployStatus.pollDeployStatus();
           }}
         >
           <>
