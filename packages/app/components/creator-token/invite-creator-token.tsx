@@ -84,11 +84,7 @@ const InviteCreatorTokenItem = ({ code }: { code: string }) => {
           </Pressable>
         </View>
       </View>
-      <Button
-        tw="mt-4"
-        onPress={shareInvite}
-        variant={isDark ? "primary" : "secondary"}
-      >
+      <Button tw="mt-4" onPress={shareInvite}>
         Share invite
       </Button>
     </View>
