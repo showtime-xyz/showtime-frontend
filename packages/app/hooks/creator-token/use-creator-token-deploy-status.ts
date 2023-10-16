@@ -28,11 +28,11 @@ export const useCreatorTokenDeployStatus = (param?: {
           method: "GET",
         });
 
-        if (res.data.is_complete) {
+        if (res.is_complete) {
           setStatus("success");
           param?.onSuccess();
           break;
-        } else if (res.data.status === "failed") {
+        } else if (res.status === "failed") {
           setStatus("failure");
           Logger.error("Creator token deployment failure", res.data);
           Alert.alert("Creator token deployment failed");
