@@ -22,22 +22,24 @@ export const useCreatorTokenDeployStatus = (param?: {
     for (let attempts = 0; attempts < 100; attempts++) {
       await delay(intervalMs);
       Logger.log(`Checking deploy status... (${attempts + 1} / 100)`);
-      const res = await axios({
-        url: "/v1/creator-token/deploy/status",
-        method: "GET",
-      });
+      try {
+        const res = await axios({
+          url: "/v1/creator-token/deploy/status",
+          method: "GET",
+        });
 
-      if (res.data.status === "pending") {
-        setStatus("pending");
-      } else if (res.data.status === "success") {
-        setStatus("success");
-        param?.onSuccess();
-        break;
-      } else if (res.data.status === "failure") {
-        setStatus("failure");
-        Logger.error("Creator token deployment failure", res.data);
-        Alert.alert("Creator token deployment failed");
-        break;
+        if (res.data.is_complete) {
+          setStatus("success");
+          param?.onSuccess();
+          break;
+        } else if (res.data.status === "failed") {
+          setStatus("failure");
+          Logger.error("Creator token deployment failure", res.data);
+          Alert.alert("Creator token deployment failed");
+          break;
+        }
+      } catch (e) {
+        // TODO: handle error. This is a workaround for now to handle 500 errors when the server doesnt have transaction hash
       }
     }
   });
