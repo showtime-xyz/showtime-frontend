@@ -1,6 +1,7 @@
 import useSWRMutation from "swr/mutation";
 
 import { creatorTokenAbi } from "app/abi/CreatorTokenAbi";
+import { Logger } from "app/lib/logger";
 import { publicClient } from "app/lib/wallet-public-client";
 
 import { useWallet } from "../use-wallet";
@@ -22,7 +23,17 @@ export const useContractBuyToken = () => {
           args: [arg.maxPrice],
         });
 
-        return wallet.walletClient?.writeContract?.(request);
+        Logger.log("simulate ", request);
+        const hash = await wallet.walletClient?.writeContract?.(request);
+        Logger.log("Buy transaction hash ", hash);
+        if (hash) {
+          await publicClient.waitForTransactionReceipt({
+            hash,
+            pollingInterval: 2000,
+          });
+
+          return hash;
+        }
       }
     }
   );

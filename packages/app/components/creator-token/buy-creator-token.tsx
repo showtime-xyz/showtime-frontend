@@ -1,32 +1,26 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 import { createParam } from "solito";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
-import {
-  Badge,
-  InformationCircle,
-  LockBadge,
-} from "@showtime-xyz/universal.icon";
+import { InformationCircle, LockBadge } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
-import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
-import { UserContext } from "app/context/user-context";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useContractBalanceOfToken } from "app/hooks/creator-token/use-balance-of-token";
 import { useApproveToken } from "app/hooks/creator-token/use-creator-token-approve";
 import { useContractBuyToken } from "app/hooks/creator-token/use-creator-token-buy";
+import { useCreatorTokenBuyPoll } from "app/hooks/creator-token/use-creator-token-buy-poll";
 import { useContractPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price";
 import { useWallet } from "app/hooks/use-wallet";
-import { useWalletBalance } from "app/hooks/use-wallet-balance";
-import { useWeb3 } from "app/hooks/use-web3";
-import { useNavigateToBuy } from "app/navigation/use-navigate-to";
 
 type Query = {
   username: string;
@@ -35,19 +29,19 @@ type Query = {
 const { useParam } = createParam<Query>();
 
 export const BuyCreatorToken = () => {
-  const user = useContext(UserContext);
-  const navigateToBuy = useNavigateToBuy();
   const wallet = useWallet();
-  const isWeb3Wallet = useWeb3();
-  const { trigger: buyToken } = useContractBuyToken();
   const [username] = useParam("username");
   const approveToken = useApproveToken();
+  const buyToken = useContractBuyToken();
   const [tokenAmount, setTokenAmount] = useState(1);
   const { data: profileData } = useUserProfile({ address: username });
+  const Alert = useAlert();
+  const pollBuyToken = useCreatorTokenBuyPoll();
   const priceToBuyNext = useContractPriceToBuyNext({
     address: profileData?.data?.profile.creator_token?.address,
     tokenAmount,
   });
+  const router = useRouter();
   const totalTokenPrice =
     priceToBuyNext.data?.tokenPrice +
     priceToBuyNext.data?.adminFee +
@@ -56,11 +50,11 @@ export const BuyCreatorToken = () => {
   const displayTokenPrice = (
     typeof totalTokenPrice === "bigint" ? totalTokenPrice / 1000000n : 0
   ).toString();
+
   const tokenBalance = useContractBalanceOfToken({
     ownerAddress: wallet.address,
     contractAddress: profileData?.data?.profile.creator_token?.address,
   });
-  console.log("data ", priceToBuyNext, wallet.address, tokenBalance);
 
   const renderBuyButton = () => {
     if (wallet.isMagicWallet) {
@@ -78,15 +72,37 @@ export const BuyCreatorToken = () => {
         <Button
           onPress={async () => {
             if (wallet.address && profileData?.data?.profile.creator_token) {
+              // @ts-ignore
               const result = await approveToken.trigger({
                 creatorTokenContract:
                   profileData?.data?.profile.creator_token.address,
                 maxPrice: totalTokenPrice,
               });
+              if (result) {
+                const res = await buyToken.trigger({
+                  contractAddress:
+                    profileData?.data?.profile.creator_token.address,
+                  maxPrice: totalTokenPrice,
+                });
+
+                if (res) {
+                  pollBuyToken.pollBuyStatus({
+                    creatorTokenId: profileData.data.profile.creator_token.id,
+                    txHash: res,
+                    quantity: tokenAmount,
+                  });
+                  Alert.alert("Success", "You have bought the token");
+                  router.pop();
+                }
+              } else {
+                Alert.alert("Failed", "Approve transaction failed");
+              }
             }
           }}
         >
-          Buy
+          {pollBuyToken.status === "pending" || approveToken.isMutating
+            ? "Loading..."
+            : "Buy"}
         </Button>
       );
     }
