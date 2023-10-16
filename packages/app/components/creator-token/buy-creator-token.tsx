@@ -126,7 +126,7 @@ export const BuyCreatorToken = () => {
               </View> */}
             </View>
             <View>
-              {priceToBuyNext.isValidating ? (
+              {priceToBuyNext.isLoading ? (
                 <Skeleton width={100} height={32} />
               ) : (
                 <Text tw="text-4xl font-semibold">
@@ -198,7 +198,7 @@ export const BuyCreatorToken = () => {
         </View> */}
         <View tw="flex-row justify-between">
           <Text tw="text-gray-700">You will pay in USDC:</Text>
-          {priceToBuyNext.isValidating ? (
+          {priceToBuyNext.isLoading ? (
             <Skeleton width={40} height={14} />
           ) : (
             <Text tw="text-gray-700">${priceToBuyNext.data?.displayPrice}</Text>
