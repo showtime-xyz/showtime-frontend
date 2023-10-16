@@ -30,7 +30,7 @@ export const SelfServeExplainer = () => {
     },
   });
 
-  const loading = creatorTokenDeployStatus.status === "loading" || isMutating;
+  const loading = creatorTokenDeployStatus.status === "pending" || isMutating;
   console.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
 
   return (

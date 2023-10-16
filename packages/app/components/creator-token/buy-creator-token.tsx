@@ -97,7 +97,7 @@ export const BuyCreatorToken = () => {
           }}
         >
           {buyToken.isMutating || approveToken.isMutating
-            ? "Loading..."
+            ? "Please wait..."
             : "Approve & Buy"}
         </Button>
       );

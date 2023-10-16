@@ -11,12 +11,16 @@ import { useStableCallback } from "../use-stable-callback";
 export const useCreatorTokenDeployStatus = (param?: {
   onSuccess: () => void;
 }) => {
-  const [status, setStatus] = useState("idle");
+  const [status, setStatus] = useState<
+    "idle" | "pending" | "success" | "failure"
+  >("idle");
   const Alert = useAlert();
 
   const pollDeployStatus = useStableCallback(async () => {
+    setStatus("pending");
     let intervalMs = 2000;
     for (let attempts = 0; attempts < 100; attempts++) {
+      await delay(intervalMs);
       Logger.log(`Checking deploy status... (${attempts + 1} / 100)`);
       const res = await axios({
         url: "/v1/creator-token/deploy/status",
@@ -35,8 +39,6 @@ export const useCreatorTokenDeployStatus = (param?: {
         Alert.alert("Creator token deployment failed");
         break;
       }
-
-      await delay(intervalMs);
     }
   });
 
