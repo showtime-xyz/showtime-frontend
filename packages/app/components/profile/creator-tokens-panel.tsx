@@ -9,8 +9,11 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-type CreatorTokensPanelProps = { isSelf?: boolean };
-export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
+type CreatorTokensPanelProps = { isSelf?: boolean; username?: string };
+export const CreatorTokensPanel = ({
+  isSelf,
+  username,
+}: CreatorTokensPanelProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
   if (isSelf) {
@@ -101,6 +104,8 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
       </View>
     );
   }
+  const buyPath = `/creator-token/${username}/buy`;
+
   return (
     <View tw="rounded-4xl mb-2 mt-4 border border-gray-200 px-10 py-4">
       <View tw="flex-row items-center justify-between gap-4">
@@ -116,21 +121,19 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
             onPress={() => {
               router.push(
                 Platform.select({
-                  native: "/creator-token/buy",
+                  native: buyPath,
                   web: {
                     pathname: router.pathname,
                     query: {
                       ...router.query,
                       creatorTokenBuyModal: true,
+                      username: username,
                     },
                   } as any,
                 }),
                 Platform.select({
-                  native: "/creator-token/buy",
-                  web:
-                    router.asPath === "/"
-                      ? "/creator-token/buy"
-                      : router.asPath,
+                  native: buyPath,
+                  web: router.asPath === "/" ? buyPath : router.asPath,
                 }),
                 { shallow: true }
               );
@@ -153,21 +156,19 @@ export const CreatorTokensPanel = ({ isSelf }: CreatorTokensPanelProps) => {
             onPress={() => {
               router.push(
                 Platform.select({
-                  native: "/creator-token/buy",
+                  native: buyPath,
                   web: {
                     pathname: router.pathname,
                     query: {
                       ...router.query,
                       creatorTokenBuyModal: true,
+                      username: username,
                     },
                   } as any,
                 }),
                 Platform.select({
-                  native: "/creator-token/buy",
-                  web:
-                    router.asPath === "/"
-                      ? "/creator-token/buy"
-                      : router.asPath,
+                  native: buyPath,
+                  web: router.asPath === "/" ? buyPath : router.asPath,
                 }),
                 { shallow: true }
               );

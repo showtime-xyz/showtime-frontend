@@ -168,6 +168,10 @@ export interface Profile {
   social_login_connections: SocialLoginConnections;
   social_login_handles: SocialLoginHandles;
   latest_star_drop_collected?: StarDropBadgeType;
+  creator_token?: {
+    address: string;
+    id: number;
+  };
 }
 
 type FollowType = {

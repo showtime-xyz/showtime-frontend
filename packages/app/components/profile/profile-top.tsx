@@ -356,7 +356,10 @@ export const ProfileTop = ({
           ) : null}
         </View>
         <ProfileSocial profile={profileData?.profile} savedSongs={savedSongs} />
-        <CreatorTokensPanel isSelf={isSelf} />
+        <CreatorTokensPanel
+          isSelf={isSelf}
+          username={profileData?.profile.username}
+        />
       </View>
     </>
   );

@@ -281,7 +281,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 {isProfileMdScreen ? (
                   <View style={{ width: 400 }} tw="animate-fade-in-250 pl-16">
                     <Sticky enabled>
-                      <CreatorTokensPanel />
+                      <CreatorTokensPanel username={username} />
                       {list.length > 0 ? (
                         <TokensTabItem item={list[0]} />
                       ) : null}
