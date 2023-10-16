@@ -53,7 +53,7 @@ export const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
 export const MessageBoxUnavailable = () => {
   return (
     <MessageBox
-      placeholder="Coming soon..."
+      placeholder="..."
       tw="bg-white text-center dark:bg-black"
       textInputProps={{
         editable: false,
@@ -208,16 +208,22 @@ export const MessageInput = memo(
     if (!isUserAdmin && edition && !hasUnlockedMessages) {
       return (
         <LeanView
-          tw="justify-center px-3"
+          tw="flex-row items-center justify-start bg-black px-2 py-2"
           style={{
-            paddingBottom: bottom,
+            paddingBottom: Math.max(bottom || 0, 8),
           }}
         >
-          <ClaimPaidNFTButton edition={edition} type="messageInput" />
-          <LeanView tw="mt-3 pb-4">
-            <LeanText tw="text-center text-xs text-gray-500 dark:text-gray-300">
-              Collecting a Star Drop unlocks privileges with this artist like
-              exclusive channel content, a Star Badge, and more
+          <Pressable
+            tw="web:min-w-[200px] mr-4 min-w-[180px] items-center  rounded-full bg-[#08F6CC] px-4 py-3"
+            onPress={() => {
+              alert("not implemented");
+            }}
+          >
+            <LeanText tw="text-center text-lg font-bold">Buy - $21.67</LeanText>
+          </Pressable>
+          <LeanView tw="flex-1">
+            <LeanText tw="text-xs font-semibold text-white">
+              99 collected
             </LeanText>
           </LeanView>
         </LeanView>
