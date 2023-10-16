@@ -109,7 +109,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
   const channelId = useMemo(() => {
     if (profileData?.data?.profile.channels) {
-      return profileData?.data?.profile.channels[0].id;
+      return profileData?.data?.profile.channels[0]?.id;
     }
     return null;
   }, [profileData?.data?.profile.channels]);
