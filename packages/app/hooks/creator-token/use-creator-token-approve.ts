@@ -5,12 +5,10 @@ import { publicClient } from "app/lib/wallet-public-client";
 import { isDEV } from "app/utilities";
 
 import { useWallet } from "../use-wallet";
-import { useSwitchChain } from "./use-switch-chain";
 import { usdcAddress } from "./utils";
 
 export const useApproveToken = () => {
   const wallet = useWallet();
-  const switchChain = useSwitchChain();
   const state = useSWRMutation<boolean | undefined>(
     "approveToken",
     async function approveToken(
@@ -25,8 +23,6 @@ export const useApproveToken = () => {
       if (wallet.address) {
         const { creatorTokenContract, maxPrice } = arg;
         const chain = isDEV ? baseGoerli : base;
-        await switchChain.trigger();
-
         const res = (await publicClient?.readContract({
           address: usdcAddress,
           account: wallet.address,

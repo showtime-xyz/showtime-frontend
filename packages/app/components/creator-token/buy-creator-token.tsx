@@ -20,6 +20,7 @@ import { useApproveToken } from "app/hooks/creator-token/use-creator-token-appro
 import { useContractBuyToken } from "app/hooks/creator-token/use-creator-token-buy";
 import { useCreatorTokenBuyPoll } from "app/hooks/creator-token/use-creator-token-buy-poll";
 import { useContractPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price";
+import { useSwitchChain } from "app/hooks/creator-token/use-switch-chain";
 import { useWallet } from "app/hooks/use-wallet";
 
 type Query = {
@@ -41,6 +42,7 @@ export const BuyCreatorToken = () => {
     address: profileData?.data?.profile.creator_token?.address,
     tokenAmount,
   });
+  const switchChain = useSwitchChain();
   const router = useRouter();
 
   const tokenBalance = useContractBalanceOfToken({
@@ -65,6 +67,7 @@ export const BuyCreatorToken = () => {
           disabled={buyToken.isMutating || approveToken.isMutating}
           onPress={async () => {
             if (wallet.address && profileData?.data?.profile.creator_token) {
+              await switchChain.trigger();
               // @ts-ignore
               const result = await approveToken.trigger({
                 creatorTokenContract:
