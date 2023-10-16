@@ -49,6 +49,7 @@ import { formatProfileRoutes, getProfileImage } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
 
+import { MessageItem } from "../creator-channels/components/message-item";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { HeaderLeft } from "../header";
@@ -151,7 +152,14 @@ const Profile = ({ username }: ProfileScreenProps) => {
       index: itemIndex,
     }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
       if (type === "tokens") {
-        return <TokensTabHeader channelId={channelId} isSelf={isSelf} />;
+        if (itemIndex === 0) {
+          return (
+            <>
+              <TokensTabHeader channelId={channelId} isSelf={isSelf} />
+            </>
+          );
+        }
+        return null;
       }
       return (
         <Card
