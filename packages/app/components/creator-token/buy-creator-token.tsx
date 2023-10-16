@@ -62,6 +62,7 @@ export const BuyCreatorToken = () => {
     } else {
       return (
         <Button
+          disabled={buyToken.isMutating || approveToken.isMutating}
           onPress={async () => {
             if (wallet.address && profileData?.data?.profile.creator_token) {
               // @ts-ignore
@@ -92,7 +93,7 @@ export const BuyCreatorToken = () => {
             }
           }}
         >
-          {pollBuyToken.status === "pending" || approveToken.isMutating
+          {buyToken.isMutating || approveToken.isMutating
             ? "Loading..."
             : "Approve & Buy"}
         </Button>

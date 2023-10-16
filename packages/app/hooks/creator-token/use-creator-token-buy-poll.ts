@@ -68,8 +68,7 @@ export const useCreatorTokenBuyPoll = (param?: { onSuccess: () => void }) => {
   return useMemo(
     () => ({
       pollBuyStatus,
-      status,
     }),
-    [pollBuyStatus, status]
+    [pollBuyStatus]
   );
 };
