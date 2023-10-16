@@ -17,9 +17,12 @@ import type { ParsedUrlQuery } from "querystring";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { GiftSolid } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
@@ -47,6 +50,7 @@ import { formatProfileRoutes, getProfileImage } from "app/utilities";
 import { Spinner } from "design-system/spinner";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
+import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { HeaderLeft } from "../header";
 import { HeaderRightSm } from "../header/header-right.sm";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
@@ -103,6 +107,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
+  const channelId = useMemo(() => {
+    if (profileData?.data?.profile.channels) {
+      return profileData?.data?.profile.channels[0].id;
+    }
+    return null;
+  }, [profileData?.data?.profile.channels]);
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
@@ -141,7 +151,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       index: itemIndex,
     }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
       if (type === "tokens") {
-        return <TokensTabHeader />;
+        return <TokensTabHeader channelId={channelId} isSelf={isSelf} />;
       }
       return (
         <Card
@@ -156,7 +166,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         />
       );
     },
-    [numColumns, profileId, type]
+    [channelId, isSelf, numColumns, profileId, type]
   );
   const ListFooterComponent = useCallback(() => {
     if ((isLoadingMore || profileIsLoading) && !error) {
@@ -245,13 +255,46 @@ const Profile = ({ username }: ProfileScreenProps) => {
           <MutateProvider mutate={updateItem}>
             <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
               {isProfileMdScreen ? (
-                <ProfileCover
-                  tw="overflow-hidden rounded-b-3xl"
-                  uri={getProfileImage(profileData?.data?.profile)}
-                />
+                <>
+                  <ProfileCover
+                    tw="overflow-hidden rounded-b-3xl"
+                    uri={getProfileImage(profileData?.data?.profile)}
+                  />
+                  <Pressable
+                    tw={[
+                      "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+                    ]}
+                    onPress={() => {
+                      const as = "/creator-token/invite-creator-token";
+                      router.push(
+                        Platform.select({
+                          native: as,
+                          web: {
+                            pathname: router.pathname,
+                            query: {
+                              ...router.query,
+                              inviteCreatorTokenModal: true,
+                            },
+                          } as any,
+                        }),
+                        Platform.select({ native: as, web: router.asPath }),
+                        {
+                          shallow: true,
+                        }
+                      );
+                    }}
+                  >
+                    <ButtonGoldLinearGradient />
+                    <GiftSolid
+                      width={26}
+                      height={26}
+                      color={colors.gray[900]}
+                    />
+                  </Pressable>
+                </>
               ) : null}
               <View tw="w-full flex-row">
-                <View tw="-mt-4 flex-1">
+                <View tw="-mt-3 flex-1">
                   <ProfileTop
                     address={username}
                     isBlocked={isBlocked}
@@ -260,6 +303,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                     isError={isError}
                     isSelf={isSelf}
                   />
+
                   <ProfileTabBar
                     onPress={onChangeTabBar}
                     routes={routes}
@@ -298,8 +342,35 @@ const Profile = ({ username }: ProfileScreenProps) => {
       </ProfileHeaderContext.Provider>
       <>
         {isSelf ? (
-          <View tw={["fixed right-4 top-2 z-50 flex md:hidden"]}>
+          <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
             <HeaderRightSm withBackground />
+            <Pressable
+              tw={[
+                "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+              ]}
+              onPress={() => {
+                const as = "/creator-token/invite-creator-token";
+                router.push(
+                  Platform.select({
+                    native: as,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        inviteCreatorTokenModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({ native: as, web: router.asPath }),
+                  {
+                    shallow: true,
+                  }
+                );
+              }}
+            >
+              <ButtonGoldLinearGradient />
+              <GiftSolid width={26} height={26} color={colors.gray[900]} />
+            </Pressable>
           </View>
         ) : (
           <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>

@@ -219,7 +219,7 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
           </View>
         </View>
         <View tw="w-full px-6" style={{ rowGap: 16 }}>
-          <TwitterButton onPress={shareWithTwitterIntent} />
+          <TwitterButton theme="dark" onPress={shareWithTwitterIntent} />
           {Platform.OS !== "web" ? (
             <InstagramButton onPress={shareSingleImage} />
           ) : null}

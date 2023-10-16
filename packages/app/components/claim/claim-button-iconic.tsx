@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Showtime, Check2 } from "@showtime-xyz/universal.icon";
+import { Saved, Check2 } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -236,7 +236,7 @@ export function ClaimButtonIconic({
       buttonColor={isDark ? "#fff" : colors.gray[900]}
       {...rest}
     >
-      <Showtime height={25} width={25} color={isDark ? "#000" : "#fff"} />
+      <Saved height={25} width={25} color={isDark ? "#000" : "#fff"} />
     </FeedSocialButton>
   );
 }

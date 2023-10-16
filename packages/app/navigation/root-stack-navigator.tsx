@@ -46,7 +46,9 @@ import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
-import { ProfileScreen } from "app/screens/profile";
+import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
+import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
+import { ProfileScreen } from "app/screens/profile/profile";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
@@ -166,6 +168,17 @@ export function RootStackNavigator() {
           name="reviewCreatorToken"
           component={ReviewCreatorTokenScreen}
         />
+        <Stack.Screen
+          name="creatorTokensImportAllowlistSuccess"
+          component={CreatorTokensImportAllowlistSuccessScreen}
+          options={{
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
+            animationDuration: 200,
+          }}
+        />
       </Stack.Group>
 
       {/* Screens accessible in most of the navigators */}
@@ -281,7 +294,6 @@ export function RootStackNavigator() {
           name="dropExplanation"
           component={DropExplanationScreen}
         />
-
         <Stack.Screen name="dropStar" component={DropStarScreen} />
         <Stack.Screen name="payoutsSetup" component={PayoutsSetupScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
@@ -334,6 +346,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="creatorTokenInviteSignIn"
           component={CreatorTokenInviteSignInScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensImportAllowlist"
+          component={CreatorTokensImportAllowlistScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

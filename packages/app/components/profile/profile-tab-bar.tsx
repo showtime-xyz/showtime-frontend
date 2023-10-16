@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { SongsTab, SavedTab, TokensTab } from "@showtime-xyz/universal.icon";
+import { Songs, Saved, Tokens } from "@showtime-xyz/universal.icon";
 import {
   ScollableTabBar,
   TabBarSingle,
@@ -24,11 +24,11 @@ export const ProfileTabBar = (props: any) => {
 
       switch (route.key) {
         case "song_drops_created":
-          return <SongsTab height={16} color={iconColor} />;
+          return <Songs height={16} color={iconColor} />;
         case "song_drops_collected":
-          return <SavedTab height={16} color={iconColor} />;
+          return <Saved height={16} color={iconColor} />;
         case "tokens":
-          return <TokensTab height={16} color={iconColor} />;
+          return <Tokens height={16} color={iconColor} />;
         default:
           return null;
       }

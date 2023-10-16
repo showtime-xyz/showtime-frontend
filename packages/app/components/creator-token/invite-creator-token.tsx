@@ -84,11 +84,7 @@ const InviteCreatorTokenItem = ({ code }: { code: string }) => {
           </Pressable>
         </View>
       </View>
-      <Button
-        tw="mt-4"
-        onPress={shareInvite}
-        variant={isDark ? "primary" : "secondary"}
-      >
+      <Button tw="mt-4" onPress={shareInvite}>
         Share invite
       </Button>
     </View>
@@ -133,7 +129,10 @@ export const InviteCreatorToken = () => {
   const { top, bottom } = useSafeAreaInsets();
   return (
     <ScrollView
-      contentContainerStyle={{ paddingTop: top + 40, paddingBottom: bottom }}
+      contentContainerStyle={{
+        paddingTop: Platform.select({ web: 0, default: top + 40 }),
+        paddingBottom: bottom,
+      }}
     >
       <View tw="p-4">
         <View tw="items-center">

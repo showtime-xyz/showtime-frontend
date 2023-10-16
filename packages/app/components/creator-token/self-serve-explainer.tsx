@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { Platform } from "react-native";
+
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -38,13 +41,16 @@ export const SelfServeExplainer = () => {
 
   return (
     <View
-      tw="md:max-w-screen-content min-h-screen px-5"
-      style={{ paddingTop: 48 + top, paddingHorizontal: 20 }}
+      tw="md:max-w-screen-content px-5"
+      style={{
+        paddingTop: Platform.select({ web: 0, default: top + 48 }),
+        paddingHorizontal: 20,
+      }}
     >
       <Text tw="text-2xl font-bold text-gray-900 dark:text-white">
         You're invited to be first.
       </Text>
-      <View tw="py-4">
+      <View tw="web:py-0 py-4">
         <View tw="flex-row items-center py-2">
           <Text tw="text-sm text-gray-900 dark:text-white">
             Introducing{" "}
@@ -68,7 +74,7 @@ export const SelfServeExplainer = () => {
         source={{
           uri: "https://showtime-media.b-cdn.net/assets/creator-profile-example.png",
         }}
-        tw="-mx-5"
+        tw="ios:-mx-5 android:-mx-5"
         width={width}
         height={width * (203 / 284)}
       />

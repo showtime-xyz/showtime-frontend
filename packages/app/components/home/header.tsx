@@ -35,7 +35,24 @@ const CreatorTokensBanner = () => {
       </View>
       <Text
         onPress={() => {
-          router.push("/creator-token/self-serve-explainer");
+          const as = `/creator-token/self-serve-explainer`;
+          router.push(
+            Platform.select({
+              native: as,
+              web: {
+                pathname: router.pathname,
+                query: {
+                  ...router.query,
+                  creatorTokensSelfServeExplainerModal: true,
+                },
+              } as any,
+            }),
+            Platform.select({
+              native: as,
+              web: router.asPath,
+            }),
+            { shallow: true }
+          );
           // router.push("/creator-token/imalan/invite-sign-in");
         }}
         tw="text-13 ml-2 font-bold text-gray-900 underline"

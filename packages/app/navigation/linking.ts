@@ -67,7 +67,6 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       followers: "profile/followers",
       following: "profile/following",
       reviewCreatorToken: "profile/review-creator-token",
-      inviteCreatorToken: "profile/invite-creator-token",
       settings: "settings",
       spotifyAuth: "spotifyAuth",
       addEmail: "settings/add-email",
@@ -92,8 +91,12 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       channelsMessageReactions:
         "channels/:channelId/messages/:messageId/reactions",
       channelUnlocked: "channels/:contractAddress/unlocked",
+      inviteCreatorToken: "creator-token/invite-creator-token",
       creatorTokensShare: "creator-token/:username/share",
       topCreatorTokens: "creator-token/top",
+      creatorTokensImportAllowlistSuccess:
+        "creator-token/import-allowlist-success",
+      creatorTokensImportAllowlist: "creator-token/import-allowlist",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {
