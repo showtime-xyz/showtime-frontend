@@ -13,6 +13,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useContractTotalCollected } from "app/hooks/creator-token/use-contract-total-collected";
 import { useContractPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price";
+import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 
 type CreatorTokensPanelProps = { isSelf?: boolean; username?: string };
 export const CreatorTokensPanel = ({
@@ -30,6 +31,7 @@ export const CreatorTokensPanel = ({
     address: userProfileData?.data?.profile.creator_token?.address,
     tokenAmount: 1,
   });
+  const usdcBalance = useWalletUSDCBalance();
 
   if (isSelf) {
     return (
@@ -72,7 +74,7 @@ export const CreatorTokensPanel = ({
               </PressableScale>
             </View>
             <Text tw="text-base font-bold text-gray-900 dark:text-white">
-              $21.67
+              ${usdcBalance.data?.displayBalance}
             </Text>
           </View>
           <View tw="w-full flex-row items-center justify-between">

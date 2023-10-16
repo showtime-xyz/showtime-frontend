@@ -10,12 +10,16 @@ export const useWalletUSDCBalance = () => {
   const wallet = useWallet();
   const res = useSWR("usdcBalance" + wallet.address, async () => {
     if (wallet.address) {
-      return publicClient.readContract({
+      const res = (await publicClient.readContract({
         address: usdcAddress,
         abi: creatorTokenAbi,
         functionName: "balanceOf",
         args: [wallet.address],
-      });
+      })) as bigint;
+      return {
+        balance: res,
+        displayBalance: (res / 1000000n).toString(),
+      };
     }
   });
 
