@@ -25,7 +25,10 @@ export const SelfServeExplainer = () => {
   const creatorTokenDeployStatus = useCreatorTokenDeployStatus({
     onSuccess: () => {
       if (user?.data.profile.username) {
-        redirectToCreatorTokensShare(user?.data.profile.username, "launched");
+        redirectToCreatorTokensShare({
+          username: user?.data.profile.username,
+          type: "launched",
+        });
       }
     },
   });

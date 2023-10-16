@@ -21,6 +21,7 @@ import { useContractBuyToken } from "app/hooks/creator-token/use-creator-token-b
 import { useCreatorTokenBuyPoll } from "app/hooks/creator-token/use-creator-token-buy-poll";
 import { useContractPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price";
 import { useSwitchChain } from "app/hooks/creator-token/use-switch-chain";
+import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 
 type Query = {
@@ -37,6 +38,7 @@ export const BuyCreatorToken = () => {
   const [tokenAmount, setTokenAmount] = useState(1);
   const { data: profileData } = useUserProfile({ address: username });
   const Alert = useAlert();
+  const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
   const pollBuyToken = useCreatorTokenBuyPoll();
   const priceToBuyNext = useContractPriceToBuyNext({
     address: profileData?.data?.profile.creator_token?.address,
@@ -87,7 +89,11 @@ export const BuyCreatorToken = () => {
                     txHash: res,
                     quantity: tokenAmount,
                   });
-                  Alert.alert("Success", "You have bought the token");
+                  redirectToCreatorTokensShare({
+                    username: profileData.data.profile.username,
+                    type: "collected",
+                    collectedCount: tokenAmount,
+                  });
                   router.pop();
                 }
               } else {

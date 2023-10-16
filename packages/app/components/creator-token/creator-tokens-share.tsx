@@ -42,11 +42,13 @@ export type TokenShareType = "collected" | "launched" | "channel";
 const { useParam } = createParam<{
   username: string;
   type: TokenShareType;
+  collectedCount: string;
 }>();
 
 export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const linearOpaticy = useSharedValue(0);
   const [username] = useParam("username");
+  const [collectedCount] = useParam("collectedCount");
   const [type] = useParam("type");
 
   const { data: userInfo } = useUserProfile({ address: username });
@@ -124,7 +126,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
               {type === "launched"
                 ? "You just launched your Creator Token!"
                 : type === "collected"
-                ? `You just collected 1 token!`
+                ? `You just collected ${collectedCount} token!`
                 : "Share your Creator Token to grow your channel"}
             </Text>
             <View tw="mt-4 flex-row items-center justify-center px-8">

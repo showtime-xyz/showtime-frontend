@@ -8,8 +8,14 @@ import { TokenShareType } from "app/components/creator-token/creator-tokens-shar
 export const useRedirectToCreatorTokensShare = () => {
   const router = useRouter();
   const redirectToCreatorTokensShare = useCallback(
-    async (username: string, type: TokenShareType, disablePop = false) => {
-      const nativeLink = `/creator-token/${username}/share?type=${type}`;
+    async (params: {
+      username: string;
+      type: TokenShareType;
+      disablePop?: boolean;
+      collectedCount?: number;
+    }) => {
+      const { username, type, disablePop = false, collectedCount } = params;
+      const nativeLink = `/creator-token/${username}/share?type=${type}&collectedCount=${collectedCount}`;
       const as = Platform.select({ native: nativeLink, web: router.asPath });
       const url = Platform.select({
         native: as,
@@ -19,6 +25,7 @@ export const useRedirectToCreatorTokensShare = () => {
             ...router.query,
             username,
             creatorTokensShareModal: true,
+            collectedCount,
             type,
           },
         } as any,

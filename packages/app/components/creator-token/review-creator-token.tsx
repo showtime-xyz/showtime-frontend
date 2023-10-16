@@ -36,7 +36,10 @@ export const ReviewCreatorToken = () => {
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
   const handleSubmitForm = () => {
     if (user?.data.profile.username) {
-      redirectToCreatorTokensShare(user?.data.profile.username, "launched");
+      redirectToCreatorTokensShare({
+        username: user?.data.profile.username,
+        type: "launched",
+      });
     }
   };
   const { top } = useSafeAreaInsets();
