@@ -5,10 +5,7 @@ import { publicClient } from "app/lib/wallet-public-client";
 import { isDEV } from "app/utilities";
 
 import { useWallet } from "../use-wallet";
-
-const usdcAddress = isDEV
-  ? "0xF175520C52418dfE19C8098071a252da48Cd1C19"
-  : "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+import { usdcAddress } from "./utils";
 
 export const useApproveToken = () => {
   const wallet = useWallet();

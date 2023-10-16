@@ -42,14 +42,6 @@ export const BuyCreatorToken = () => {
     tokenAmount,
   });
   const router = useRouter();
-  const totalTokenPrice =
-    priceToBuyNext.data?.tokenPrice +
-    priceToBuyNext.data?.adminFee +
-    priceToBuyNext.data?.creatorFee;
-
-  const displayTokenPrice = (
-    typeof totalTokenPrice === "bigint" ? totalTokenPrice / 1000000n : 0
-  ).toString();
 
   const tokenBalance = useContractBalanceOfToken({
     ownerAddress: wallet.address,
@@ -76,13 +68,13 @@ export const BuyCreatorToken = () => {
               const result = await approveToken.trigger({
                 creatorTokenContract:
                   profileData?.data?.profile.creator_token.address,
-                maxPrice: totalTokenPrice,
+                maxPrice: priceToBuyNext.data?.totalPrice,
               });
               if (result) {
                 const res = await buyToken.trigger({
                   contractAddress:
                     profileData?.data?.profile.creator_token.address,
-                  maxPrice: totalTokenPrice,
+                  maxPrice: priceToBuyNext.data?.totalPrice,
                 });
 
                 if (res) {
@@ -134,7 +126,9 @@ export const BuyCreatorToken = () => {
               </View> */}
             </View>
             <View>
-              <Text tw="text-4xl font-semibold">{displayTokenPrice}</Text>
+              <Text tw="text-4xl font-semibold">
+                ${priceToBuyNext.data?.displayPrice}
+              </Text>
             </View>
             {/* <View>
               <Text tw="font-semibold text-green-500">^ $2.49 (25%) Month</Text>
@@ -199,13 +193,7 @@ export const BuyCreatorToken = () => {
           {priceToBuyNext.isValidating ? (
             <Skeleton width={40} height={14} />
           ) : (
-            <Text tw="text-gray-700">
-              $
-              {(typeof totalTokenPrice === "bigint"
-                ? totalTokenPrice / 1000000n
-                : 0
-              ).toString()}
-            </Text>
+            <Text tw="text-gray-700">${priceToBuyNext.data?.displayPrice}</Text>
           )}
         </View>
       </View>

@@ -7,16 +7,19 @@ export const useContractBalanceOfToken = (params: {
   ownerAddress?: any;
   contractAddress?: any;
 }) => {
-  const res = useSWR("balanceOfToken", () => {
-    if (params.ownerAddress && params.contractAddress) {
-      return publicClient.readContract({
-        address: params.contractAddress,
-        abi: creatorTokenAbi,
-        functionName: "balanceOf",
-        args: [params.ownerAddress],
-      }) as Promise<bigint>;
+  const res = useSWR(
+    "balanceOfToken" + params.ownerAddress + params.contractAddress,
+    () => {
+      if (params.ownerAddress && params.contractAddress) {
+        return publicClient.readContract({
+          address: params.contractAddress,
+          abi: creatorTokenAbi,
+          functionName: "balanceOf",
+          args: [params.ownerAddress],
+        }) as Promise<bigint>;
+      }
     }
-  });
+  );
 
   return res;
 };

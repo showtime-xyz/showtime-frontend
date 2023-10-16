@@ -17,10 +17,13 @@ export const useContractPriceToBuyNext = (params: {
           functionName: "priceToBuyNext",
           args: [params.tokenAmount],
         });
+        const totalPrice = res[0] + res[1] + res[2];
         return {
           tokenPrice: res[0],
-          creatorFee: res[0],
-          adminFee: res[0],
+          creatorFee: res[1],
+          adminFee: res[2],
+          totalPrice,
+          displayPrice: (totalPrice / 1000000n).toString(),
         };
       }
     }
