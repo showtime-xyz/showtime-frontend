@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, useContext } from "react";
 import { useWindowDimensions, Platform, Linking } from "react-native";
 
 import { Close, Showtime } from "@showtime-xyz/universal.icon";
@@ -14,6 +14,7 @@ import {
   DESKTOP_CONTENT_WIDTH,
   DESKTOP_LEFT_MENU_WIDTH,
 } from "app/constants/layout";
+import { UserContext } from "app/context/user-context";
 import { Carousel } from "app/lib/carousel";
 
 import { breakpoints } from "design-system/theme";
@@ -26,7 +27,14 @@ import { TrendingCarousel } from "./trending-carousel";
 const CreatorTokensBanner = () => {
   const [isShow, setIsShow] = useState(true);
   const router = useRouter();
-  if (!isShow) return null;
+  const user = useContext(UserContext);
+  if (
+    !isShow ||
+    user?.user?.data.profile.creator_token_onboarding_status === "onboarded"
+  ) {
+    return null;
+  }
+
   return (
     <View tw="w-full flex-row items-center px-4 py-2.5">
       <BgGoldLinearGradient />

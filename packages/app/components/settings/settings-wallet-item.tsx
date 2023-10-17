@@ -194,7 +194,7 @@ export const SettingsWalletItem = (props: Props) => {
             <Hidden from="md">
               <MakePrimaryBtn
                 isPrimary={isPrimary}
-                onPress={() => setPrimaryWallet(wallet)}
+                onPress={() => setPrimaryWallet(wallet.address)}
               />
             </Hidden>
             <Text tw="text-sm text-gray-900 dark:text-white">{address}</Text>
@@ -204,7 +204,7 @@ export const SettingsWalletItem = (props: Props) => {
             <Hidden until="md">
               <MakePrimaryBtn
                 isPrimary={isPrimary}
-                onPress={() => setPrimaryWallet(wallet)}
+                onPress={() => setPrimaryWallet(wallet.address)}
               />
             </Hidden>
             <WalletDropdownMenu
