@@ -55,22 +55,30 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const profileData = userInfo?.data?.profile;
   const { top } = useSafeAreaInsets();
   const router = useRouter();
-  const { data: user } = useMyInfo();
   const viewRef = useRef<any>(null);
   const url = useMemo(() => "", []);
   const { shareImageToIG } = useShareImage(viewRef);
-  console.log(type);
+  const { data: user } = useMyInfo();
+  const currentUserProfileData = user?.data?.profile;
 
   const shareWithTwitterIntent = useCallback(() => {
+    const message_launched = `Just created my @Showtime_xyz token ✦ find me at ${getShowtimeUsernameOnTwitter(
+      profileData
+    )} and DM me for invites.`;
+
+    const message_collected = `Just collected ${collectedCount} ${getShowtimeUsernameOnTwitter(
+      profileData
+    )} token ✦ find me at ${getShowtimeUsernameOnTwitter(
+      currentUserProfileData
+    )}.`;
+
     Linking.openURL(
       getTwitterIntent({
         url: url,
-        message: `Just created my @Showzime_xyz token ✦. Find me at ${getShowtimeUsernameOnTwitter(
-          profileData
-        )} and DM me for invites.`,
+        message: type === "launched" ? message_launched : message_collected,
       })
     );
-  }, [profileData, url]);
+  }, [profileData, collectedCount, currentUserProfileData, url, type]);
 
   const shareSingleImage = useCallback(async () => {
     linearOpaticy.value = withTiming(1, {}, () => {
@@ -128,7 +136,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
                 : type === "collected"
                 ? `You just collected ${collectedCount} ${
                     collectedCount === "1" ? "token" : "tokens"
-                  }!}`
+                  }!`
                 : "Share your Creator Token to grow your channel"}
             </Text>
             <View tw="mt-4 flex-row items-center justify-center px-8">
