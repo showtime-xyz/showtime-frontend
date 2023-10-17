@@ -448,6 +448,8 @@ export function generateRandomFilename(mimeType: string): string {
     "audio/x-pn-wav": "wav",
     "audio/ogg": "ogg",
     "audio/x-ogg": "ogg",
+    "text/csv": "csv",
+
     // Add more mappings if needed
   };
 
