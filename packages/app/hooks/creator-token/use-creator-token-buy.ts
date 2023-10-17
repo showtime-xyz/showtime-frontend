@@ -16,20 +16,37 @@ export const useContractBuyToken = () => {
     "buyToken",
     async (
       _url: string,
-      { arg }: { arg: { contractAddress: any; maxPrice: BigInt } }
+      {
+        arg,
+      }: { arg: { contractAddress: any; maxPrice: BigInt; quantity: number } }
     ) => {
       if (arg.contractAddress) {
-        const { request } = await publicClient.simulateContract({
-          address: arg.contractAddress,
-          account: wallet.address,
-          abi: creatorTokenAbi,
-          functionName: "buy",
-          args: [arg.maxPrice],
-        });
+        let requestPayload: any;
 
-        Logger.log("simulate ", request);
-        const hash = await wallet.walletClient?.writeContract?.(request);
-        Logger.log("Buy transaction hash ", request);
+        if (arg.quantity === 1) {
+          const { request } = await publicClient.simulateContract({
+            address: arg.contractAddress,
+            account: wallet.address,
+            abi: creatorTokenAbi,
+            functionName: "buy",
+            args: [arg.maxPrice],
+          });
+          requestPayload = request;
+        } else {
+          const { request } = await publicClient.simulateContract({
+            address: arg.contractAddress,
+            account: wallet.address,
+            abi: creatorTokenAbi,
+            functionName: "bulkBuy",
+            args: [arg.quantity, arg.maxPrice],
+          });
+          console.log("bulk buy ", request);
+          requestPayload = request;
+        }
+
+        Logger.log("simulate ", requestPayload);
+        const hash = await wallet.walletClient?.writeContract?.(requestPayload);
+        Logger.log("Buy transaction hash ", requestPayload);
         if (hash) {
           await publicClient.waitForTransactionReceipt({
             hash,
