@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import { createParam } from "solito";
 
-import { useAlert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { InformationCircle, LockBadge } from "@showtime-xyz/universal.icon";
@@ -15,13 +14,9 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUserProfile } from "app/hooks/api-hooks";
-import { useAuth } from "app/hooks/auth/use-auth";
 import { useContractBalanceOfToken } from "app/hooks/creator-token/use-balance-of-token";
-import { useApproveToken } from "app/hooks/creator-token/use-creator-token-approve";
-import { useContractBuyToken } from "app/hooks/creator-token/use-creator-token-buy";
-import { useCreatorTokenBuyPoll } from "app/hooks/creator-token/use-creator-token-buy-poll";
+import { useCreatorTokenBuy } from "app/hooks/creator-token/use-creator-token-buy";
 import { useContractPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price";
-import { useSwitchChain } from "app/hooks/creator-token/use-switch-chain";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 
@@ -34,18 +29,14 @@ const { useParam } = createParam<Query>();
 export const BuyCreatorToken = () => {
   const wallet = useWallet();
   const [username] = useParam("username");
-  const approveToken = useApproveToken();
-  const buyToken = useContractBuyToken();
   const [tokenAmount, setTokenAmount] = useState(1);
   const { data: profileData } = useUserProfile({ address: username });
-  const Alert = useAlert();
+  const buyToken = useCreatorTokenBuy({ username, tokenAmount });
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
-  const pollBuyToken = useCreatorTokenBuyPoll();
   const priceToBuyNext = useContractPriceToBuyNext({
     address: profileData?.data?.profile.creator_token?.address,
     tokenAmount,
   });
-  const switchChain = useSwitchChain();
   const router = useRouter();
 
   const tokenBalance = useContractBalanceOfToken({
@@ -53,72 +44,28 @@ export const BuyCreatorToken = () => {
     contractAddress: profileData?.data?.profile.creator_token?.address,
   });
 
-  const { logout } = useAuth();
   const renderBuyButton = () => {
     if (wallet.isMagicWallet) {
-      return (
-        <Button
-          onPress={async () => {
-            Alert.alert(
-              "Unsupported wallet",
-              "Please login using a web3 wallet to buy the creator token",
-              [
-                {
-                  text: "Log out",
-                  onPress: () => {
-                    logout();
-                  },
-                },
-              ]
-            );
-          }}
-        >
-          Connect
-        </Button>
-      );
+      return <Button onPress={() => buyToken.trigger()}>Connect</Button>;
     } else {
       return (
         <Button
-          disabled={buyToken.isMutating || approveToken.isMutating}
+          disabled={buyToken.isMutating}
           onPress={async () => {
-            if (wallet.address && profileData?.data?.profile.creator_token) {
-              await switchChain.trigger();
-              // @ts-ignore
-              const result = await approveToken.trigger({
-                creatorTokenContract:
-                  profileData?.data?.profile.creator_token.address,
-                maxPrice: priceToBuyNext.data?.totalPrice,
-              });
-              if (result) {
-                const res = await buyToken.trigger({
-                  contractAddress:
-                    profileData?.data?.profile.creator_token.address,
-                  maxPrice: priceToBuyNext.data?.totalPrice,
-                  quantity: tokenAmount,
+            if (profileData?.data?.profile) {
+              const res = await buyToken.trigger();
+              if (res) {
+                redirectToCreatorTokensShare({
+                  username: profileData.data.profile.username,
+                  type: "collected",
+                  collectedCount: tokenAmount,
                 });
-
-                if (res) {
-                  pollBuyToken.pollBuyStatus({
-                    creatorTokenId: profileData.data.profile.creator_token.id,
-                    txHash: res,
-                    quantity: tokenAmount,
-                  });
-                  redirectToCreatorTokensShare({
-                    username: profileData.data.profile.username,
-                    type: "collected",
-                    collectedCount: tokenAmount,
-                  });
-                  router.pop();
-                }
-              } else {
-                Alert.alert("Failed", "Approve transaction failed");
+                router.pop();
               }
             }
           }}
         >
-          {buyToken.isMutating || approveToken.isMutating
-            ? "Please wait..."
-            : "Approve & Buy"}
+          {buyToken.isMutating ? "Please wait..." : "Approve & Buy"}
         </Button>
       );
     }
