@@ -81,6 +81,7 @@ export const BuyCreatorToken = () => {
                   contractAddress:
                     profileData?.data?.profile.creator_token.address,
                   maxPrice: priceToBuyNext.data?.totalPrice,
+                  quantity: tokenAmount,
                 });
 
                 if (res) {
