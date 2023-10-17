@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useWindowDimensions, Platform } from "react-native";
 import { Linking } from "react-native";
 
@@ -11,6 +11,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
@@ -25,10 +26,13 @@ import { TwitterButton } from "../social-buttons";
 
 export const ImportedAllowlistSuccess = () => {
   const isDark = useIsDarkMode();
-  const context = useContext(UserContext);
+  const userContext = useContext(UserContext);
   const bottomBarHeight = usePlatformBottomHeight();
   const { width } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
+  const [intentCopy, setIntentCopy] = useState(
+    `Just gave free access to my channel to wallets 💬 \n\nFind me at "${userContext?.user?.data.profile.username}" on @Showtime_xyz and make sure to use the same wallet!`
+  );
 
   const isSmWidth = width >= breakpoints["sm"];
   const imageSize = isSmWidth ? 420 : width;
@@ -44,7 +48,7 @@ export const ImportedAllowlistSuccess = () => {
       >
         <View tw="self-center rounded-full border border-gray-300 dark:border-gray-700">
           <Avatar
-            url={context?.user?.data.profile.img_url}
+            url={userContext?.user?.data.profile.img_url}
             enableSkeleton={Platform.OS !== "web"}
             size={140}
           />
@@ -73,12 +77,16 @@ export const ImportedAllowlistSuccess = () => {
             tw="text-center font-bold text-gray-900 dark:text-white"
             style={{ fontSize: 32 }}
           >
-            234 wallets added. Now go tell them to join!
+            Wallets added. Now go tell them to join!
           </Text>
-          <View tw="mt-5 rounded-3xl border border-gray-200 p-4 dark:border-gray-700">
-            <Text tw="text-base text-black dark:text-white">
-              {`Just gave free access to my channel to 234 wallets 💬 \n\nFind me at “username” on @Showtime_xyz and make sure to use the same wallet!`}
-            </Text>
+          <View tw="mt-5 w-full rounded-3xl border border-gray-200 p-4 dark:border-gray-700">
+            <TextInput
+              tw="w-full text-base text-black dark:text-white"
+              value={intentCopy}
+              style={{ minHeight: 80 }}
+              multiline
+              onChangeText={setIntentCopy}
+            />
           </View>
 
           <TwitterButton
@@ -87,7 +95,7 @@ export const ImportedAllowlistSuccess = () => {
               Linking.openURL(
                 getTwitterIntent({
                   url: "",
-                  message: `Just messaged my exclusive collector channel on @Showtime_xyz: `,
+                  message: intentCopy,
                 })
               );
             }}
