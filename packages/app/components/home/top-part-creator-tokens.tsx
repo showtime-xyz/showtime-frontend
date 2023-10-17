@@ -27,7 +27,7 @@ export const TopPartCreatorTokens = () => {
           See more
         </Text>
       </View>
-      <View tw="flex-row flex-wrap items-center gap-4">
+      <View tw="flex-row flex-wrap items-center justify-between gap-4">
         {new Array(6).fill(0).map((_, i) => {
           return (
             <TopCreatorTokensItem index={i} key={i} style={{ width: "29%" }} />

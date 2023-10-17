@@ -50,7 +50,6 @@ export const TopCreatorTokensItem = ({
 
   return (
     <View
-      key={index}
       tw={[
         "mb-4 items-center overflow-hidden rounded-md border border-gray-300 px-1 py-4 dark:border-gray-600",
         tw,
