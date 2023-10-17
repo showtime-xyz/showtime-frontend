@@ -65,9 +65,9 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
     Linking.openURL(
       getTwitterIntent({
         url: url,
-        message: `Just collected tokens from ${getShowtimeUsernameOnTwitter(
+        message: `Just created my @Showzime_xyz token ✦. Find me at ${getShowtimeUsernameOnTwitter(
           profileData
-        )} on @Showtime_xyz ✦ \nCollect to unlock:`,
+        )} and DM me for invites.`,
       })
     );
   }, [profileData, url]);
@@ -126,7 +126,9 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
               {type === "launched"
                 ? "You just launched your Creator Token!"
                 : type === "collected"
-                ? `You just collected ${collectedCount} token!`
+                ? `You just collected ${collectedCount} ${
+                    collectedCount === "1" ? "token" : "tokens"
+                  }!}`
                 : "Share your Creator Token to grow your channel"}
             </Text>
             <View tw="mt-4 flex-row items-center justify-center px-8">
