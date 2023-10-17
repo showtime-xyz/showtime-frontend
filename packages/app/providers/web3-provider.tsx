@@ -99,10 +99,13 @@ export function Web3Provider({
 
   useEffect(() => {
     // @ts-ignore
-    if (web3?.isMagic)
+    if (web3?.isMagic) {
       web3.getAddresses().then((address) => {
         setMagicWalletAddress(address[0]);
       });
+    } else {
+      setMagicWalletAddress(undefined);
+    }
   }, [web3]);
 
   // (Web only) initialises web3 provider from wagmi

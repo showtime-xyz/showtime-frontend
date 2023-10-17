@@ -15,6 +15,7 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUserProfile } from "app/hooks/api-hooks";
+import { useAuth } from "app/hooks/auth/use-auth";
 import { useContractBalanceOfToken } from "app/hooks/creator-token/use-balance-of-token";
 import { useApproveToken } from "app/hooks/creator-token/use-creator-token-approve";
 import { useContractBuyToken } from "app/hooks/creator-token/use-creator-token-buy";
@@ -52,12 +53,24 @@ export const BuyCreatorToken = () => {
     contractAddress: profileData?.data?.profile.creator_token?.address,
   });
 
+  const { logout } = useAuth();
   const renderBuyButton = () => {
     if (wallet.isMagicWallet) {
       return (
         <Button
-          onPress={() => {
-            wallet.connect();
+          onPress={async () => {
+            Alert.alert(
+              "Unsupported wallet",
+              "Please login using a web3 wallet to buy the creator token",
+              [
+                {
+                  text: "Log out",
+                  onPress: () => {
+                    logout();
+                  },
+                },
+              ]
+            );
           }}
         >
           Connect

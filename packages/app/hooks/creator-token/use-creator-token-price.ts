@@ -12,24 +12,31 @@ export const useContractPriceToBuyNext = (params: {
   address?: any;
   tokenAmount: number;
 }) => {
-  const res = useSWR(getPriceToBuyNextKey(params), async () => {
-    if (params.address) {
-      const res: any = await publicClient.readContract({
-        address: params.address,
-        abi: creatorTokenAbi,
-        functionName: "priceToBuyNext",
-        args: [params.tokenAmount],
-      });
-      const totalPrice = res[0] + res[1] + res[2];
-      return {
-        tokenPrice: res[0],
-        creatorFee: res[1],
-        adminFee: res[2],
-        totalPrice,
-        displayPrice: (totalPrice / 1000000n).toString(),
-      };
+  const res = useSWR(
+    getPriceToBuyNextKey(params),
+    async () => {
+      if (params.address) {
+        const res: any = await publicClient.readContract({
+          address: params.address,
+          abi: creatorTokenAbi,
+          functionName: "priceToBuyNext",
+          args: [params.tokenAmount],
+        });
+        const totalPrice = res[0] + res[1] + res[2];
+        return {
+          tokenPrice: res[0],
+          creatorFee: res[1],
+          adminFee: res[2],
+          totalPrice,
+          displayPrice: (totalPrice / 1000000n).toString(),
+        };
+      }
+    },
+    {
+      refreshInterval: 10_000,
+      revalidateOnMount: true,
     }
-  });
+  );
 
   return res;
 };
