@@ -47,28 +47,18 @@ export const SelfServeExplainer = () => {
         paddingHorizontal: 20,
       }}
     >
-      <Text tw="text-2xl font-bold text-gray-900 dark:text-white">
-        You're invited to be first.
+      <Text tw="text-xl font-bold text-gray-900 dark:text-white">
+        Inviting onchain artists like you first.
       </Text>
-      <View tw="web:py-0 py-4">
+      <View tw="py-4">
         <View tw="flex-row items-center py-2">
           <Text tw="text-sm text-gray-900 dark:text-white">
-            Introducing{" "}
-            <View tw="flex-row items-end pt-0.5">
-              <ShowtimeRounded
-                color={colors.gray[900]}
-                width={16}
-                height={16}
-              />
-              <Text tw="font-bold"> Creator Tokens.</Text>
-            </View>
+            Introducing <Text tw="font-bold">Creator Tokens.</Text> In one
+            click, let your fans access your <Text tw="font-bold">Channel</Text>
+            , starting at $1. Every purchase, your Token{" "}
+            <Text tw="font-bold">price increases.</Text>
           </Text>
         </View>
-        <Text tw="leading45 text-sm text-gray-900 dark:text-white">
-          In one click, let your fans access your{" "}
-          <Text tw="font-bold">Channel.</Text>, starting at $1. Every purchase,
-          your Token <Text tw="font-bold">price increases.</Text>
-        </Text>
       </View>
       <Image
         source={{
