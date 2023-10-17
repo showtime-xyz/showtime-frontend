@@ -168,6 +168,11 @@ export interface Profile {
   social_login_connections: SocialLoginConnections;
   social_login_handles: SocialLoginHandles;
   latest_star_drop_collected?: StarDropBadgeType;
+  creator_token_onboarding_status:
+    | "allowlist"
+    | "onboarded"
+    | "requires_invite"
+    | "opted_in";
   creator_token?: {
     address: string;
     id: number;
