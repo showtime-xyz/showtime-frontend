@@ -51,35 +51,36 @@ export const TopCreatorTokensItem = ({
   return (
     <View
       tw={[
-        "mb-4 items-center overflow-hidden rounded-md border border-gray-200 px-1 py-4 dark:border-gray-700",
+        "mb-4 items-center rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900",
         tw,
       ].join(" ")}
       {...rest}
     >
-      <View tw="mb-2">
-        <View tw="absolute -left-1 top-0">
-          <Showtime
-            width={8}
-            height={8}
-            color={isDark ? colors.white : colors.gray[900]}
+      <>
+        <View tw="mb-3">
+          <View tw="absolute -left-1 top-0">
+            <Showtime
+              width={8}
+              height={8}
+              color={isDark ? colors.white : colors.gray[900]}
+            />
+          </View>
+          <Avatar
+            url={
+              "https://media-stage.showtime.xyz/c95130b6-3cdb-4056-9cda-4258675d435d.jpeg"
+            }
+            size={44}
           />
         </View>
-        <Text tw="absolute -left-3 top-5 text-xs font-semibold text-gray-500">
-          {index + 1}
+        <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
+          @alan
         </Text>
-
-        <Avatar
-          url={
-            "https://media-stage.showtime.xyz/c95130b6-3cdb-4056-9cda-4258675d435d.jpeg"
-          }
-          size={44}
-        />
+        <View tw="h-3" />
+        <Text tw="text-sm font-bold text-gray-900 dark:text-white">$2.60</Text>
+      </>
+      <View tw="absolute -right-2.5 -top-2.5 h-6 min-w-[24px] items-center justify-center rounded-full bg-slate-500 px-1.5 text-gray-500 dark:bg-gray-600">
+        <Text tw="text-xs font-semibold text-white">{index + 1}</Text>
       </View>
-      <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
-        @alan
-      </Text>
-      <View tw="h-2" />
-      <Text tw="text-sm font-bold text-gray-900 dark:text-white">$2.60</Text>
     </View>
   );
 };
