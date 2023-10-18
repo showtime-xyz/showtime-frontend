@@ -51,7 +51,7 @@ export const TopCreatorTokensItem = ({
   return (
     <View
       tw={[
-        "mb-4 items-center rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900",
+        "mb-3 items-center rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900",
         tw,
       ].join(" ")}
       {...rest}
