@@ -175,7 +175,7 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           Alan collected
         </Text>
-        <Text tw="text-xs font-semibold text-gray-900 dark:text-gray-50">
+        <Text tw="text-xs font-semibold text-gray-500 dark:text-gray-50">
           Show all
         </Text>
       </View>
