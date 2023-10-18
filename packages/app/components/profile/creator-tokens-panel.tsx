@@ -39,7 +39,7 @@ export const CreatorTokensPanel = ({
 
   if (isSelf) {
     return (
-      <View tw="rounded-4xl mb-2 mt-4 border border-gray-200 px-10 py-4">
+      <View tw="rounded-4xl mb-2 mt-4 border border-gray-200 bg-slate-50 px-10 py-3 dark:border-gray-700 dark:bg-gray-900">
         <View tw="items-center gap-2">
           <View tw="w-full flex-row items-center justify-between">
             <View tw="flex-row items-center">
