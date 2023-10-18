@@ -32,7 +32,11 @@ import {
 } from "app/components/social-buttons";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { createParam } from "app/navigation/use-param";
-import { getShowtimeUsernameOnTwitter, getTwitterIntent } from "app/utilities";
+import {
+  getShowtimeUsernameOnTwitter,
+  getTwitterIntent,
+  getWebBaseURL,
+} from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -57,9 +61,8 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const router = useRouter();
   const { data: user } = useMyInfo();
   const viewRef = useRef<any>(null);
-  const url = useMemo(() => "", []);
+  const url = useMemo(() => `${getWebBaseURL()}/@${username}`, [username]);
   const { shareImageToIG } = useShareImage(viewRef);
-  console.log(type);
 
   const shareWithTwitterIntent = useCallback(() => {
     Linking.openURL(
