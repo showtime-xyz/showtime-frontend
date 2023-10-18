@@ -109,21 +109,19 @@ export const SelfServeExplainer = () => {
         <Text tw="text-xl font-bold text-gray-900 dark:text-white">
           Inviting onchain artists like you first.
         </Text>
-        <View tw="web:py-0 py-4">
-          <View tw="flex-row items-center py-2">
-            <Text tw="mr-1 text-sm text-gray-900 dark:text-white">
-              Introducing
-            </Text>
-            <ShowtimeRounded
-              color={isDark ? "white" : colors.gray[900]}
-              width={14}
-              height={14}
-            />
-            <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-              {" "}
-              Creator Tokens.
-            </Text>
-          </View>
+        <View tw="flex-row items-center py-2">
+          <Text tw="mr-1 text-sm text-gray-900 dark:text-white">
+            Introducing
+          </Text>
+          <ShowtimeRounded
+            color={isDark ? "white" : colors.gray[900]}
+            width={14}
+            height={14}
+          />
+          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+            {" "}
+            Creator Tokens.
+          </Text>
         </View>
 
         <View tw="mt-4 items-center rounded-3xl border border-gray-200 px-4 py-6 dark:border-gray-800">
