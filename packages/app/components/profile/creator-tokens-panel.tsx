@@ -39,11 +39,11 @@ export const CreatorTokensPanel = ({
 
   if (isSelf) {
     return (
-      <View tw="mb-2 mt-4 rounded-2xl border border-gray-200 bg-slate-50 px-10 py-3 dark:border-gray-700 dark:bg-gray-900">
+      <View tw="mb-2 mt-4 rounded-xl border border-gray-200 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-900">
         <View tw="items-center gap-2">
           <View tw="w-full flex-row items-center justify-between">
             <View tw="flex-row items-center">
-              <Text tw="mr-2 text-xs text-gray-500 dark:text-gray-300">
+              <Text tw="mr-2 text-gray-500 dark:text-gray-300">
                 Wallet balance
               </Text>
               <PressableScale
@@ -85,8 +85,8 @@ export const CreatorTokensPanel = ({
           </View>
           <View tw="w-full flex-row items-center justify-between">
             <View tw="flex-row items-center">
-              <Text tw="mr-2 text-xs text-gray-500 dark:text-gray-300">
-                Token earnings{" "}
+              <Text tw="mr-2 text-gray-500 dark:text-gray-300">
+                Token earnings
               </Text>
               <PressableScale
                 tw="h-4 w-4"
