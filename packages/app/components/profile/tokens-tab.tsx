@@ -130,7 +130,7 @@ export const TokensTabHeader = ({
           </Text>
           <ChevronRight width={20} height={20} color={colors.gray[500]} />
         </View>
-        <View tw="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+        <View tw="overflow-hidden rounded-xl border border-gray-200 bg-slate-50 dark:border-gray-700 dark:bg-gray-900">
           <View tw="mx-4 flex-row items-center pt-4">
             <Avatar
               url={
@@ -181,7 +181,7 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
           return (
             <View
               key={i}
-              tw="flex-1 items-center overflow-hidden rounded-md border border-gray-200 px-1 py-4 dark:border-gray-700"
+              tw="flex-1 items-center overflow-hidden rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900"
             >
               <View tw="mb-2">
                 <View tw="absolute -left-1 top-0">
