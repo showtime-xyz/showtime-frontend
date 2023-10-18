@@ -120,7 +120,7 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
             </Button>
           </View>
           <PressableScale
-            tw="absolute -right-6 top-12 h-4 w-4"
+            tw="web:top-12 absolute -right-6 top-1 h-4 w-4"
             onPress={() => {
               router.push(
                 Platform.select({
