@@ -39,7 +39,9 @@ export const CreatorTokensPanel = ({
         <View tw="items-center gap-2">
           <View tw="w-full flex-row items-center justify-between">
             <View tw="flex-row items-center">
-              <Text tw="mr-2 text-xs text-gray-500">Wallet balance</Text>
+              <Text tw="mr-2 text-xs text-gray-500 dark:text-gray-300">
+                Wallet balance
+              </Text>
               <PressableScale
                 tw="h-4 w-4"
                 onPress={() => {
@@ -69,7 +71,7 @@ export const CreatorTokensPanel = ({
                 <InformationCircle
                   width={16}
                   height={16}
-                  color={colors.gray[500]}
+                  color={isDark ? colors.gray[300] : colors.gray[500]}
                 />
               </PressableScale>
             </View>
@@ -79,7 +81,9 @@ export const CreatorTokensPanel = ({
           </View>
           <View tw="w-full flex-row items-center justify-between">
             <View tw="flex-row items-center">
-              <Text tw="mr-2 text-xs text-gray-500">Token earnings </Text>
+              <Text tw="mr-2 text-xs text-gray-500 dark:text-gray-300">
+                Token earnings{" "}
+              </Text>
               <PressableScale
                 tw="h-4 w-4"
                 onPress={() => {
@@ -109,7 +113,7 @@ export const CreatorTokensPanel = ({
                 <InformationCircle
                   width={16}
                   height={16}
-                  color={colors.gray[500]}
+                  color={isDark ? colors.gray[300] : colors.gray[500]}
                 />
               </PressableScale>
             </View>

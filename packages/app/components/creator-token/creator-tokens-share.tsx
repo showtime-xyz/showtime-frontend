@@ -32,7 +32,11 @@ import {
 } from "app/components/social-buttons";
 import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
 import { createParam } from "app/navigation/use-param";
-import { getShowtimeUsernameOnTwitter, getTwitterIntent } from "app/utilities";
+import {
+  getShowtimeUsernameOnTwitter,
+  getTwitterIntent,
+  getWebBaseURL,
+} from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -56,7 +60,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const { top } = useSafeAreaInsets();
   const router = useRouter();
   const viewRef = useRef<any>(null);
-  const url = useMemo(() => "", []);
+  const url = useMemo(() => `${getWebBaseURL()}/@${username}`, [username]);
   const { shareImageToIG } = useShareImage(viewRef);
   const { data: user } = useMyInfo();
   const currentUserProfileData = user?.data?.profile;
