@@ -96,16 +96,17 @@ export const ImportAllowlist = () => {
   }, []);
 
   return (
-    <View tw="px-4 py-4">
+    <View tw="px-4">
       <Text tw="text-xl font-bold text-gray-900 dark:text-white">
         Give your previous collectors free access to your channel.
       </Text>
-      <View tw="h-3" />
+      <View tw="h-4" />
       <Text tw="text-sm text-gray-800 dark:text-gray-200">
         By importing an allowlist (Ethereum wallet addresses spreadsheet, ENS
         supported), your existing community will not need to buy 1 of your
         Creator Tokens to unlock your channel.
       </Text>
+      <View tw="h-2" />
       <Button size="regular" tw="my-4 w-full" onPress={pickCSV}>
         Import Allowlist (.csv)
       </Button>
