@@ -72,7 +72,10 @@ export const TopCreatorTokensItem = ({
             size={44}
           />
         </View>
-        <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
+        <Text
+          tw="px-1 text-sm font-semibold text-gray-900 dark:text-white"
+          numberOfLines={1}
+        >
           @alan
         </Text>
         <View tw="h-3" />
