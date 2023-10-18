@@ -37,7 +37,7 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
 
   return (
     <View tw="rounded-4xl mb-2 mt-4 overflow-hidden border border-gray-200 dark:border-gray-700">
-      <View tw="px-10 py-4">
+      <View tw="px-8 py-4">
         <View tw="flex-row items-center justify-between gap-4">
           <View tw="flex-1 items-center">
             <Text tw="text-xs text-gray-500 dark:text-gray-400">TOKEN</Text>
@@ -152,18 +152,13 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
             />
           </PressableScale>
         </View>
-        <View tw="mt-2 flex-row items-center self-center">
+        <View tw="mt-4 flex-row items-center self-center">
           <LockRounded
             width={12}
             height={12}
             color={isDark ? colors.gray[400] : colors.gray[500]}
           />
-          <Text
-            style={{
-              fontSize: 10,
-            }}
-            tw="ml-1 font-medium text-gray-500 dark:text-gray-400"
-          >
+          <Text tw="text-13 web:text-[11px] ml-1 font-medium text-gray-500 dark:text-gray-400">
             Collect at least 1 token to unlock their channel.
           </Text>
         </View>
