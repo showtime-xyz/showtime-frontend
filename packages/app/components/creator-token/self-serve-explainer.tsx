@@ -114,7 +114,11 @@ export const SelfServeExplainer = () => {
             <Text tw="mr-1 text-sm text-gray-900 dark:text-white">
               Introducing
             </Text>
-            <ShowtimeRounded color={colors.gray[900]} width={14} height={14} />
+            <ShowtimeRounded
+              color={isDark ? "white" : colors.gray[900]}
+              width={14}
+              height={14}
+            />
             <Text tw="text-sm font-bold text-gray-900 dark:text-white">
               {" "}
               Creator Tokens.
@@ -122,7 +126,7 @@ export const SelfServeExplainer = () => {
           </View>
         </View>
 
-        <View tw="mt-6 items-center rounded-3xl border border-gray-200 px-4 py-6">
+        <View tw="mt-6 items-center rounded-3xl border border-gray-200 px-4 py-6 dark:border-gray-800">
           <Pressable
             onPress={async () => {
               const file = await pickFile({
@@ -141,7 +145,7 @@ export const SelfServeExplainer = () => {
               <Text tw="ml-1 text-base font-bold text-white">Replace</Text>
             </View>
           </Pressable>
-          <View tw="rounded-4xl mb-2 mt-4 w-full border border-gray-200 px-10 py-4">
+          <View tw="rounded-4xl mb-2 mt-4 w-full border border-gray-200 px-10 py-4 dark:border-gray-800">
             <View tw="flex-row items-center justify-between gap-4">
               <View tw="flex-1 items-center">
                 <Text tw="text-xs text-gray-500">TOKEN</Text>
