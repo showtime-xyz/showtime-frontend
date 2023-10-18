@@ -202,7 +202,7 @@ export const ProfileTop = ({
               )}
             </Skeleton>
           </Animated.View>
-          <View tw="ml-4 flex-1 flex-row items-start justify-between">
+          <View tw="ml-4 flex-1 flex-row justify-between pt-4">
             <View tw="flex-1">
               <Text
                 tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"

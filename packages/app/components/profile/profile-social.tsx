@@ -47,7 +47,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   const onPressLink = useCallback(async (link: string) => {
     return Linking.openURL(link);
   }, []);
-
+  if (!profile) return null;
   return (
     <View tw="sm:flex-row sm:items-center">
       {profile?.website_url && websiteLink && (
