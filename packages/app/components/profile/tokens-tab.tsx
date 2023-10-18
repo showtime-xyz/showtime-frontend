@@ -119,41 +119,47 @@ export const TokensTabHeader = ({
           </Text>
         </Pressable>
       </View>
-      <View tw="flex-row items-center justify-between py-4">
-        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-          19 Channel messages
-        </Text>
-        <ChevronRight width={20} height={20} color={colors.gray[500]} />
-      </View>
-      <View tw="overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600">
-        <View tw="mx-4 flex-row items-center pt-4">
-          <Avatar
-            url={
-              "https://lh3.googleusercontent.com/3uRH_HyktnOwLhkI9NAKegoACTmcIroFg1CWNhuYCwFDdgpceYUVTRu4WvURevYxfOguKYIMTvvEwKAuarbRopJvbuireVxv8G8"
-            }
-            size={20}
-          />
-          <Text tw="text-13 ml-2 font-bold text-gray-900 dark:text-gray-50">
-            Valentia Cy
+      <Pressable
+        onPress={() => {
+          router.push(`/channels/${channelId}`);
+        }}
+      >
+        <View tw="flex-row items-center justify-between py-4">
+          <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+            19 Channel messages
           </Text>
-          <Text tw="ml-2 text-xs text-gray-500">1d</Text>
+          <ChevronRight width={20} height={20} color={colors.gray[500]} />
         </View>
-        <View tw="pb-4">
-          <View tw="ml-11 mt-2">
-            <Text tw="text-sm text-gray-900 dark:text-gray-50">{`sadsaddasdkljklfgsjlkasj; d
-      asdsadsa`}</Text>
+        <View tw="overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600">
+          <View tw="mx-4 flex-row items-center pt-4">
+            <Avatar
+              url={
+                "https://lh3.googleusercontent.com/3uRH_HyktnOwLhkI9NAKegoACTmcIroFg1CWNhuYCwFDdgpceYUVTRu4WvURevYxfOguKYIMTvvEwKAuarbRopJvbuireVxv8G8"
+              }
+              size={20}
+            />
+            <Text tw="text-13 ml-2 font-bold text-gray-900 dark:text-gray-50">
+              Valentia Cy
+            </Text>
+            <Text tw="ml-2 text-xs text-gray-500">1d</Text>
           </View>
-          <PlatformBlurView
-            // tw="web:bg-black/30 android:bg-gray-800 backdrop-blur-3xl"
-            tint={isDark ? "dark" : "light"}
-            intensity={20}
-            style={{
-              ...StyleSheet.absoluteFillObject,
-              overflow: "hidden",
-            }}
-          />
+          <View tw="pb-4">
+            <View tw="ml-11 mt-2">
+              <Text tw="text-sm text-gray-900 dark:text-gray-50">{`sadsaddasdkljklfgsjlkasj; d
+      asdsadsa`}</Text>
+            </View>
+            <PlatformBlurView
+              // tw="web:bg-black/30 android:bg-gray-800 backdrop-blur-3xl"
+              tint={isDark ? "dark" : "light"}
+              intensity={20}
+              style={{
+                ...StyleSheet.absoluteFillObject,
+                overflow: "hidden",
+              }}
+            />
+          </View>
         </View>
-      </View>
+      </Pressable>
     </View>
   );
 };
