@@ -43,6 +43,7 @@ import { NFT } from "app/types";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { MessageReactions } from "../reaction/message-reactions";
 import { FilterContext } from "./fillter-context";
+import { MyCollection } from "./my-collection";
 import { ProfileFooter } from "./profile-footer";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
@@ -88,8 +89,9 @@ export const TokensTabHeader = ({
           </Button>
         </View>
       ) : null}
+
       <View tw="mt-6 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-3 py-5 dark:border-gray-700 dark:bg-gray-900">
-        <Text tw="flex-1 text-sm text-gray-500 dark:text-gray-400">
+        <Text tw="mr-2 flex-1 text-sm text-gray-500 dark:text-gray-400">
           Create your token to access your channel.
         </Text>
         <Pressable
@@ -119,6 +121,7 @@ export const TokensTabHeader = ({
           </Text>
         </Pressable>
       </View>
+      {isSelf && <MyCollection />}
       <Pressable
         onPress={() => {
           router.push(`/channels/${channelId}`);

@@ -55,6 +55,7 @@ import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { HeaderLeft } from "../header";
 import { HeaderRightSm } from "../header/header-right.sm";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
+import { MyCollection } from "./my-collection";
 import { ProfileError } from "./profile-error";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileCover, ProfileTop } from "./profile-top";
@@ -334,6 +335,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   <View style={{ width: 400 }} tw="animate-fade-in-250 pl-16">
                     <Sticky enabled>
                       <CreatorTokensPanel username={username} isSelf={isSelf} />
+                      {isSelf && <MyCollection />}
                       {list.length > 0 ? (
                         <TokensTabItem item={list[0]} />
                       ) : null}
