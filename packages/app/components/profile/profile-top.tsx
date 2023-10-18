@@ -150,59 +150,61 @@ export const ProfileTop = ({
   if (isProfileMdScreen) {
     return (
       <View tw="pl-7">
-        <View tw="flex-row items-center">
-          <Animated.View
-            style={[
-              {
-                width: avatarSize + AVATAR_BORDER_SIZE * 2,
-                height: avatarSize + AVATAR_BORDER_SIZE * 2,
-                borderRadius: 9999,
-                overflow: "hidden",
-                borderWidth: AVATAR_BORDER_SIZE,
-                borderColor: isDark ? "#000" : "#FFF",
-                backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
-                margin: -AVATAR_BORDER_SIZE,
-              },
-              avatarStyle,
-            ]}
-          >
-            <Skeleton
-              height={avatarSize}
-              width={avatarSize}
-              show={isLoading}
-              radius={0}
+        <View tw="flex-row">
+          <View tw="pb-2">
+            <Animated.View
+              style={[
+                {
+                  width: avatarSize + AVATAR_BORDER_SIZE * 2,
+                  height: avatarSize + AVATAR_BORDER_SIZE * 2,
+                  borderRadius: 9999,
+                  overflow: "hidden",
+                  borderWidth: AVATAR_BORDER_SIZE,
+                  borderColor: isDark ? "#000" : "#FFF",
+                  backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
+                  margin: -AVATAR_BORDER_SIZE,
+                },
+                avatarStyle,
+              ]}
             >
-              {profileData && (
-                <LightBox
-                  width={avatarSize}
-                  height={avatarSize}
-                  imgLayout={{ width: contentWidth, height: width }}
-                  borderRadius={999}
-                  tapToClose
-                >
-                  <Image
-                    source={{
-                      uri: getProfileImage(profileData?.profile),
-                    }}
-                    width={Platform.select({
-                      web: screenHeight * 0.82,
-                      default: undefined,
-                    })}
-                    height={Platform.select({
-                      web: screenHeight * 0.82,
-                      default: undefined,
-                    })}
-                    style={Platform.select({
-                      web: {},
-                      default: { ...StyleSheet.absoluteFillObject },
-                    })}
-                    alt={profileData?.profile.name ?? ""}
-                  />
-                </LightBox>
-              )}
-            </Skeleton>
-          </Animated.View>
-          <View tw="ml-4 flex-1 flex-row justify-between pt-4">
+              <Skeleton
+                height={avatarSize}
+                width={avatarSize}
+                show={isLoading}
+                radius={0}
+              >
+                {profileData && (
+                  <LightBox
+                    width={avatarSize}
+                    height={avatarSize}
+                    imgLayout={{ width: contentWidth, height: width }}
+                    borderRadius={999}
+                    tapToClose
+                  >
+                    <Image
+                      source={{
+                        uri: getProfileImage(profileData?.profile),
+                      }}
+                      width={Platform.select({
+                        web: screenHeight * 0.82,
+                        default: undefined,
+                      })}
+                      height={Platform.select({
+                        web: screenHeight * 0.82,
+                        default: undefined,
+                      })}
+                      style={Platform.select({
+                        web: {},
+                        default: { ...StyleSheet.absoluteFillObject },
+                      })}
+                      alt={profileData?.profile.name ?? ""}
+                    />
+                  </LightBox>
+                )}
+              </Skeleton>
+            </Animated.View>
+          </View>
+          <View tw="ml-4 flex-1 pt-7">
             <View tw="flex-1">
               <Text
                 tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
@@ -240,7 +242,7 @@ export const ProfileTop = ({
                   <View tw="items-baseline">
                     <ClampText
                       text={bioWithMentions}
-                      maxLines={2}
+                      maxLines={3}
                       tw="text-sm text-gray-900 dark:text-white"
                     />
                   </View>

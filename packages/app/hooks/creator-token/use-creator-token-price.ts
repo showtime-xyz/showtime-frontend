@@ -28,7 +28,7 @@ export const useContractPriceToBuyNext = (params: {
           creatorFee: res[1],
           adminFee: res[2],
           totalPrice,
-          displayPrice: (totalPrice / 1000000n).toString(),
+          displayPrice: (Number(totalPrice) / 1000000).toFixed(2).toString(),
         };
       }
     },
