@@ -39,21 +39,11 @@ export function NavigationProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const lastGcCall = useRef<number | null>(null);
   const trackedLinking = useRef(linking);
   const linkingConfig = useLinkingConfig(trackedLinking);
   const isDark = useIsDarkMode();
   const [isHeaderHidden, setIsHeaderHidden] = useState(false);
   const [isTabBarHidden, setIsTabBarHidden] = useState(false);
-
-  const handleStateChange = useCallback(() => {
-    const now = Date.now();
-    // If lastGcCall is null (i.e., gc has not been called yet) or it's been more than a 30 secs since the last call
-    if (!lastGcCall.current || now - lastGcCall.current > 30_000) {
-      globalThis?.gc?.();
-      lastGcCall.current = now;
-    }
-  }, []);
 
   return (
     <NavigationContainer
@@ -77,7 +67,6 @@ export function NavigationProvider({
         formatter: (options) =>
           options?.title ? `${options.title} | Showtime` : "Showtime",
       }}
-      onStateChange={handleStateChange}
     >
       <NavigationElementsProvider
         value={{
