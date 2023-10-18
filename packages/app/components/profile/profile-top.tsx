@@ -261,7 +261,7 @@ export const ProfileTop = ({
       <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
         <ProfileCover uri={getProfileImage(profileData?.profile)} />
       </View>
-      <View tw="-mt-2 px-7">
+      <View tw="-mt-2 px-4">
         <View tw="flex-row items-center">
           <Animated.View
             style={[
