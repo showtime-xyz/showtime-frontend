@@ -200,8 +200,8 @@ const MenuItem = ({
   return (
     <Link
       tw={[
-        "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
-        focused && "bg-coolGray-50 dark:bg-gray-800",
+        "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-100 hover:dark:bg-gray-900",
+        focused && "bg-gray-100 dark:bg-gray-800",
       ].join(" ")}
       href={href}
     >
