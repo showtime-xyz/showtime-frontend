@@ -2,7 +2,11 @@ import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InformationCircle, Lock } from "@showtime-xyz/universal.icon";
+import {
+  InformationCircle,
+  Lock,
+  LockRounded,
+} from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -128,11 +132,11 @@ export const CreatorTokensPanel = ({
   const buyPath = `/creator-token/${username}/buy`;
 
   return (
-    <View tw="rounded-4xl mb-2 mt-4 border border-gray-200 px-10 py-4">
+    <View tw="rounded-4xl mb-2 mt-4 border border-gray-200 px-10 py-4 dark:border-gray-700">
       <View tw="flex-row items-center justify-between gap-4">
         <View tw="flex-1 items-center">
           <Text tw="text-xs text-gray-500">TOKEN</Text>
-          <View tw="h-2" />
+          <View tw="h-3" />
           {priceToBuyNext.isLoading ? (
             <Skeleton width={30} height={16} />
           ) : (
@@ -171,12 +175,12 @@ export const CreatorTokensPanel = ({
         </View>
         <View tw="flex-1 items-center justify-center">
           <Text tw="text-xs text-gray-500">COLLECTORS</Text>
-          <View tw="h-2" />
+          <View tw="h-3" />
           {totalCollectors.isLoading ? (
             <Skeleton width={30} height={16} />
           ) : (
             <Text tw="text-base font-bold text-gray-900 dark:text-white">
-              {totalCollectors.data?.toString()}
+              {totalCollectors.data?.toString() || "0"}
             </Text>
           )}
           <Button
@@ -209,7 +213,7 @@ export const CreatorTokensPanel = ({
           </Button>
         </View>
         <PressableScale
-          tw="absolute -right-7 top-1 h-4 w-4"
+          tw="absolute -right-8 top-12 h-4 w-4"
           onPress={() => {
             router.push(
               Platform.select({
@@ -237,13 +241,17 @@ export const CreatorTokensPanel = ({
           <InformationCircle width={16} height={16} color={colors.gray[500]} />
         </PressableScale>
       </View>
-      <View tw="mt-2 flex-row self-center">
-        <Lock width={12} height={12} color={colors.gray[500]} />
+      <View tw="mt-2 flex-row items-center self-center">
+        <LockRounded
+          width={12}
+          height={12}
+          color={isDark ? colors.gray[400] : colors.gray[500]}
+        />
         <Text
           style={{
             fontSize: 10,
           }}
-          tw="ml-1 text-gray-500"
+          tw="ml-1 font-medium text-gray-500 dark:text-gray-400"
         >
           Collect at least 1 token to unlock their channel.
         </Text>
