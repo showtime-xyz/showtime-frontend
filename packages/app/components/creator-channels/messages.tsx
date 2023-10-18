@@ -25,12 +25,7 @@ import { useSWRConfig } from "swr";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
-  GiftV2,
-  LockRounded,
-  Music,
-  Shopping,
   CreatorChannelFilled,
-  BellFilled,
   ShowtimeRounded,
 } from "@showtime-xyz/universal.icon";
 import {
@@ -61,7 +56,6 @@ import TrackPlayer from "design-system/track-player";
 
 import { setupPlayer } from "../audio-player/service";
 import { pauseAllActiveTracks } from "../audio-player/store";
-import { CloseButton } from "../close-button";
 import {
   AnimatedInfiniteScrollListWithRef,
   CustomCellRenderer,
@@ -82,24 +76,6 @@ type Query = {
   fresh?: string;
 };
 const { useParam } = createParam<Query>();
-const benefits = [
-  {
-    icon: Music,
-    text: "Music releases and shows",
-  },
-  {
-    icon: GiftV2,
-    text: "NFT drops & allowlists",
-  },
-  {
-    icon: Shopping,
-    text: "Merchandise links & discounts",
-  },
-  {
-    icon: LockRounded,
-    text: "Unreleased content or news",
-  },
-];
 
 const keyExtractor = (item: ChannelMessageItem) =>
   item.channel_message.id.toString();
@@ -325,9 +301,10 @@ export const Messages = memo(() => {
     if (error && axios.isAxiosError(error)) {
       if (error?.response?.status === 404) {
         router.replace("/channels");
+        return;
       }
     }
-  }, [error, router]);
+  }, [channelId, error, router]);
 
   // this check is an extra check in case of 401 error
   // the user most likely follwed a link to a channel that they are not a member of
@@ -395,7 +372,6 @@ export const Messages = memo(() => {
   );
 
   const listEmptyComponent = useCallback(() => {
-    const iconColor = isDark ? colors.white : colors.gray[900];
     return (
       <AnimatedView
         tw="ios:scale-y-[-1] android:scale-y-[1] web:justify-start android:rotate-180 w-full items-center justify-center"
@@ -463,7 +439,6 @@ export const Messages = memo(() => {
     );
   }, [
     introCompensation,
-    isDark,
     isUserAdmin,
     router,
     shareLink,
