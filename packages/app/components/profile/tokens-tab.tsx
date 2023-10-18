@@ -193,11 +193,14 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
                 </View>
                 <Avatar url={item.creator_img_url} size={44} />
               </View>
-              <Text tw="text-sm font-semibold text-gray-900 dark:text-white">
+              <Text
+                tw="text-xs font-semibold text-gray-900 dark:text-white"
+                numberOfLines={1}
+              >
                 @{item.creator_username}
               </Text>
-              <View tw="h-2" />
-              <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+              <View tw="h-3" />
+              <Text tw="text-xs font-bold text-gray-900 dark:text-white">
                 $2.60
               </Text>
             </View>
