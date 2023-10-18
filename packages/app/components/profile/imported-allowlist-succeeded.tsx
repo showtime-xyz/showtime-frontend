@@ -46,7 +46,7 @@ export const ImportedAllowlistSuccess = () => {
           paddingTop: top + 44,
         }}
       >
-        <View tw="self-center rounded-full border border-gray-300 dark:border-gray-700">
+        <View tw="self-center rounded-full border border-gray-200 dark:border-gray-700">
           <Avatar
             url={userContext?.user?.data.profile.img_url}
             enableSkeleton={Platform.OS !== "web"}
