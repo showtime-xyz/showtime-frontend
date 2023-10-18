@@ -204,7 +204,7 @@ export const ProfileTop = ({
               </Skeleton>
             </Animated.View>
           </View>
-          <View tw="ml-4 flex-1 pt-5">
+          <View tw="ml-4 flex-1 pt-7">
             <View tw="flex-1">
               <Text
                 tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
