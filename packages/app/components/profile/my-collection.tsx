@@ -11,7 +11,7 @@ export const MyCollection = () => {
           My collection
         </Text>
         <Text
-          tw="text-xs text-gray-500 dark:text-gray-500"
+          tw="text-xs font-semibold text-gray-500 dark:text-gray-500"
           onPress={() => {
             // router.push("/profile/collection");
           }}
