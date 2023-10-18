@@ -132,7 +132,7 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
             </View>
           </View>
         </View>
-        <View tw="rounded-3xl border-[1px] border-gray-300 p-4">
+        <View tw="rounded-3xl border-[1px] border-gray-200 p-4">
           <Pressable
             onPress={() => {
               if (canCreateMusicDrop) {
