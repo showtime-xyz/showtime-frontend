@@ -76,7 +76,7 @@ export const ReviewCreatorToken = () => {
 
                     onChange(file.file);
                   }}
-                  tw="h-32 w-32 overflow-hidden rounded-full border-4 border-gray-300 bg-white  dark:border-gray-700 dark:bg-gray-700"
+                  tw="h-32 w-32 overflow-hidden rounded-full border-4 border-gray-200 bg-white  dark:border-gray-700 dark:bg-gray-700"
                 >
                   {value ? (
                     <View>
