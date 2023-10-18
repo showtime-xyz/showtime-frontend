@@ -88,8 +88,8 @@ export const TokensTabHeader = ({
           </Button>
         </View>
       ) : null}
-      <View tw="mt-6 w-full flex-row items-center justify-between rounded-xl border border-gray-300 px-3 py-5 dark:border-gray-600">
-        <Text tw="flex-1 text-sm text-gray-500 dark:text-gray-300">
+      <View tw="mt-6 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-3 py-5 dark:border-gray-700 dark:bg-gray-900">
+        <Text tw="flex-1 text-sm text-gray-500 dark:text-gray-400">
           Create your token to access your channel.
         </Text>
         <Pressable
@@ -130,7 +130,7 @@ export const TokensTabHeader = ({
           </Text>
           <ChevronRight width={20} height={20} color={colors.gray[500]} />
         </View>
-        <View tw="overflow-hidden rounded-xl border border-gray-300 dark:border-gray-600">
+        <View tw="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
           <View tw="mx-4 flex-row items-center pt-4">
             <Avatar
               url={
@@ -172,14 +172,16 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           Alan collected
         </Text>
-        <Text tw="text-xs text-gray-900 dark:text-gray-50">Show all</Text>
+        <Text tw="text-xs font-semibold text-gray-900 dark:text-gray-50">
+          Show all
+        </Text>
       </View>
       <View tw="flex-row gap-2.5">
         {new Array(3).fill(0).map((_, i) => {
           return (
             <View
               key={i}
-              tw="flex-1 items-center overflow-hidden rounded-md border border-gray-300 px-1 py-4 dark:border-gray-600"
+              tw="flex-1 items-center overflow-hidden rounded-md border border-gray-200 px-1 py-4 dark:border-gray-700"
             >
               <View tw="mb-2">
                 <View tw="absolute -left-1 top-0">
