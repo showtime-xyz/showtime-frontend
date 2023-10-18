@@ -109,7 +109,7 @@ export const EnterInviteCodeModal = () => {
               toast.error("No permission to paste from clipboard");
             }
           }}
-          tw="text-sm text-indigo-700"
+          tw="text-sm font-medium text-indigo-700"
         >
           Paste
         </Text>
