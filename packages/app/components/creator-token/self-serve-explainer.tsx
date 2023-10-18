@@ -126,7 +126,7 @@ export const SelfServeExplainer = () => {
           </View>
         </View>
 
-        <View tw="mt-6 items-center rounded-3xl border border-gray-200 px-4 py-6 dark:border-gray-800">
+        <View tw="mt-4 items-center rounded-3xl border border-gray-200 px-4 py-6 dark:border-gray-800">
           <Pressable
             onPress={async () => {
               const file = await pickFile({
@@ -154,7 +154,7 @@ export const SelfServeExplainer = () => {
                   $1
                 </Text>
                 <Button
-                  tw="mt-2.5"
+                  tw="pointer-events-none mt-2.5"
                   style={{ backgroundColor: "#08F6CC", width: "100%" }}
                   disabled
                 >
@@ -170,7 +170,7 @@ export const SelfServeExplainer = () => {
                   0
                 </Text>
                 <Button
-                  tw="mt-2.5"
+                  tw="pointer-events-none mt-2.5"
                   style={{ backgroundColor: "#FD749D", width: "100%" }}
                   disabled
                 >
