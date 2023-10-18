@@ -181,7 +181,7 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
           return (
             <View
               key={i}
-              tw="flex-1 items-center overflow-hidden rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900"
+              tw="flex-1 items-center rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900"
             >
               <View tw="mb-2">
                 <View tw="absolute -left-1 top-0">
@@ -203,6 +203,9 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
               <Text tw="text-xs font-bold text-gray-900 dark:text-white">
                 $2.60
               </Text>
+              <View tw="absolute -right-1.5 -top-2 h-5 min-w-[20px] items-center justify-center rounded-full bg-slate-500 px-1.5 text-gray-500 dark:bg-gray-600">
+                <Text tw="text-[10px] font-semibold text-white">1</Text>
+              </View>
             </View>
           );
         })}
