@@ -17,7 +17,7 @@ export const TopPartCreatorTokens = () => {
           onPress={() => {
             router.push("/creator-token/top");
           }}
-          tw="text-xs font-semibold text-gray-500 dark:text-white"
+          tw="text-xs font-semibold text-gray-800 dark:text-white"
         >
           See more
         </Text>
