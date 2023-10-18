@@ -73,14 +73,16 @@ const InviteCreatorTokenItem = ({ code }: { code: string }) => {
   return (
     <View tw="mt-2 rounded-2xl border border-gray-500 p-4">
       <View tw="flex flex-row">
-        <View tw="flex items-center justify-center rounded-lg bg-gray-300">
-          <Text tw="letter tracking-ultra-wide py-2.5 pl-6 pr-5 text-center text-2xl text-black">
+        <View tw="flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-800">
+          <Text tw="letter tracking-ultra-wide py-2.5 pl-6 pr-5 text-center text-2xl text-black dark:text-white">
             {code}
           </Text>
         </View>
         <View tw="flex-1 items-center justify-center">
           <Pressable onPress={copyCode}>
-            <Text tw="font-semibold text-indigo-400">Copy code</Text>
+            <Text tw="font-medium text-indigo-600 dark:text-indigo-500">
+              Copy code
+            </Text>
           </Pressable>
         </View>
       </View>
