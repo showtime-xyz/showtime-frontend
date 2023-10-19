@@ -90,7 +90,7 @@ export const TokensTabHeader = ({
         </View>
       ) : null}
 
-      <View tw="mt-6 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-4 py-4 dark:border-gray-700 dark:bg-gray-900">
+      <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-4 py-4 dark:border-gray-700 dark:bg-gray-900">
         <Text tw="mr-4 flex-1 text-sm text-gray-500 dark:text-gray-400">
           Create your token to access your channel.
         </Text>
@@ -127,7 +127,7 @@ export const TokensTabHeader = ({
           router.push(`/channels/${channelId}`);
         }}
       >
-        <View tw="flex-row items-center justify-between py-4">
+        <View tw="mt-2 flex-row items-center justify-between py-4">
           <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
             19 Channel messages
           </Text>
