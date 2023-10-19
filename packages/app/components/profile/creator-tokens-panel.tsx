@@ -36,20 +36,28 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
 
   const buyPath = `/creator-token/${username}/buy`;
 
+  // only show the panel card if the profile is onboarded
+  if (
+    userProfileData?.data?.profile?.creator_token_onboarding_status !==
+    "onboarded"
+  )
+    return null;
+
   return (
     <View tw="rounded-4xl mb-2 mt-4 overflow-hidden border border-gray-200 dark:border-gray-700">
       <View tw="px-8 py-4">
         <View tw="flex-row items-center justify-between gap-4">
           <View tw="flex-1 items-center">
             <Text tw="text-xs text-gray-500 dark:text-gray-400">TOKEN</Text>
-            <View tw="h-3" />
-            {priceToBuyNext.isLoading ? (
-              <Skeleton width={30} height={16} />
-            ) : (
-              <Text tw="text-base font-bold text-gray-900 dark:text-white">
-                ${priceToBuyNext.data?.displayPrice}
-              </Text>
-            )}
+            <View tw="mt-3 h-4 items-center justify-center">
+              {priceToBuyNext.isLoading ? (
+                <Skeleton width={30} height={16} />
+              ) : (
+                <Text tw="text-base font-bold text-gray-900 dark:text-white">
+                  ${priceToBuyNext.data?.displayPrice}
+                </Text>
+              )}
+            </View>
             <Button
               tw="mt-2.5"
               style={{ backgroundColor: "#08F6CC", width: "100%" }}
@@ -84,14 +92,15 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
             <Text tw="text-xs text-gray-500 dark:text-gray-400">
               COLLECTORS
             </Text>
-            <View tw="h-3" />
-            {totalCollectors.isLoading ? (
-              <Skeleton width={30} height={16} />
-            ) : (
-              <Text tw="text-base font-bold text-gray-900 dark:text-white">
-                {totalCollectors.data?.toString() || "0"}
-              </Text>
-            )}
+            <View tw="mt-3 h-4 items-center justify-center">
+              {totalCollectors.isLoading ? (
+                <Skeleton width={30} height={16} />
+              ) : (
+                <Text tw="text-base font-bold text-gray-900 dark:text-white">
+                  {totalCollectors.data?.toString() || "0"}
+                </Text>
+              )}
+            </View>
             <Button
               tw="mt-2.5"
               style={{ backgroundColor: "#FD749D", width: "100%" }}
