@@ -76,7 +76,7 @@ export const EnterInviteCodeModal = () => {
               <Text
                 key={index}
                 tw={
-                  "upperca flex-1 self-center text-center text-3xl font-bold uppercase"
+                  "flex-1 self-center text-center text-3xl font-bold uppercase dark:text-white"
                 }
               >
                 {inviteCode[index] || " "}
@@ -84,7 +84,7 @@ export const EnterInviteCodeModal = () => {
             ))}
             {caretPosition < 7 && (
               <AnimatedView
-                tw="absolute h-2/3 w-px bg-black"
+                tw="absolute h-2/3 w-px bg-black dark:bg-gray-300"
                 style={[
                   { left: `${Math.min(caretPosition * 16.66, 93)}%` },
                   {
@@ -109,7 +109,7 @@ export const EnterInviteCodeModal = () => {
               toast.error("No permission to paste from clipboard");
             }
           }}
-          tw="text-sm font-medium text-indigo-700"
+          tw="text-sm font-medium text-indigo-500"
         >
           Paste
         </Text>
