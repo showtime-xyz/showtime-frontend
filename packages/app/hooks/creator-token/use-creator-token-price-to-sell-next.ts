@@ -5,12 +5,12 @@ import { publicClient } from "app/lib/wallet-public-client";
 
 export const getPriceToSellNextKey = (params?: {
   address?: any;
-  tokenAmount: number;
+  tokenAmount?: number;
 }) => (params ? "priceToSellNext" + params.address + params.tokenAmount : null);
 
 export const useCreatorTokenPriceToSellNext = (params?: {
   address?: any;
-  tokenAmount: number;
+  tokenAmount?: number;
 }) => {
   const res = useSWR(
     getPriceToSellNextKey(params),

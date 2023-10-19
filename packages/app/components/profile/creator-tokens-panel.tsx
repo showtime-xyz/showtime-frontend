@@ -15,9 +15,12 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUserProfile } from "app/hooks/api-hooks";
+import { useContractBalanceOfToken } from "app/hooks/creator-token/use-balance-of-token";
 import { useContractTotalCollected } from "app/hooks/creator-token/use-contract-total-collected";
 import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
+import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
+import { useWallet } from "app/hooks/use-wallet";
 
 type CreatorTokensPanelProps = { isSelf?: boolean; username?: string };
 const DataPanel = ({ username }: CreatorTokensPanelProps) => {
@@ -35,6 +38,17 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
   });
 
   const buyPath = `/creator-token/${username}/buy`;
+
+  const wallet = useWallet();
+  const balanceOfToken = useContractBalanceOfToken({
+    ownerAddress: wallet.address,
+    contractAddress: userProfileData?.data?.profile.creator_token?.address,
+  });
+
+  const priceToSellNext = useCreatorTokenPriceToSellNext({
+    address: userProfileData?.data?.profile.creator_token?.address,
+    tokenAmount: balanceOfToken.data ? Number(balanceOfToken.data) : undefined,
+  });
 
   // only show the panel card if the profile is onboarded
   if (
@@ -179,13 +193,13 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
         <View tw="flex-1 items-center gap-2 pl-6">
           <Text tw="text-xs text-gray-500 dark:text-gray-400">YOU OWN</Text>
           <Text tw="text-base font-bold text-gray-900 dark:text-white">
-            123
+            {balanceOfToken.data?.toString()}
           </Text>
         </View>
         <View tw="flex-1 items-center gap-2 pr-6">
           <Text tw="text-xs text-gray-500  dark:text-gray-400">VALUE</Text>
           <Text tw="text-base font-bold text-gray-900 dark:text-white">
-            $65.01
+            ${priceToSellNext.data?.displayPrice}
           </Text>
         </View>
       </View>
