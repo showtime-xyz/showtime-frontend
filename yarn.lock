@@ -6983,7 +6983,7 @@ __metadata:
     react-native-bignumber: ^0.2.1
     react-native-blob-jsi-helper: ^0.3.1
     react-native-blurhash: ^1.1.10
-    react-native-compressor: ^1.8.4
+    react-native-compressor: ^1.8.12
     react-native-gesture-handler: 2.13.1
     react-native-get-random-values: ~1.9.0
     react-native-image-colors: ^2.3.0
@@ -24483,13 +24483,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-compressor@npm:^1.8.4":
-  version: 1.8.4
-  resolution: "react-native-compressor@npm:1.8.4"
+"react-native-compressor@npm:^1.8.12":
+  version: 1.8.12
+  resolution: "react-native-compressor@npm:1.8.12"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 582cd1acb92da9e6fb1482822128b4a94e2b57570df6a90d1dfd7053f149b7def74d53809ac8d67aae895164494523255b1ec60600be513e8b1aae1fed93fb1f
+  checksum: f5c89201c4c98fe34030b753be5c5e39287ff15c8003caf67a65fc9b10d6776b3ee5bbb588d6be68f235ba7e315e0e27212c9a339245168fcef2736dbba021d6
   languageName: node
   linkType: hard
 

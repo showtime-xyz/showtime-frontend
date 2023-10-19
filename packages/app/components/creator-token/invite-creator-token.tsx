@@ -80,7 +80,7 @@ const InviteCreatorTokenItem = ({ code }: { code: string }) => {
         </View>
         <View tw="flex-1 items-center justify-center">
           <Pressable onPress={copyCode}>
-            <Text tw="font-medium text-indigo-600 dark:text-indigo-500">
+            <Text tw="text-base font-semibold text-indigo-600 dark:text-indigo-500">
               Copy code
             </Text>
           </Pressable>
