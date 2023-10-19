@@ -154,7 +154,12 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
       return {
         data: {
           ...data.data,
-          profile: myInfoData.data.profile,
+          profile: {
+            ...data.data.profile,
+            ...myInfoData.data.profile,
+            // need to explicitly set channels as it's not returned from myinfo api
+            channels: data.data.profile.channels,
+          },
         },
       };
     } else {
