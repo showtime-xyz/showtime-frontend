@@ -16,7 +16,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useContractTotalCollected } from "app/hooks/creator-token/use-contract-total-collected";
-import { useContractPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price";
+import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 
 type CreatorTokensPanelProps = { isSelf?: boolean; username?: string };
@@ -192,7 +192,7 @@ export const CreatorTokensPanel = ({
   const totalCollectors = useContractTotalCollected({
     contractAddress: userProfileData?.data?.profile.creator_token?.address,
   });
-  const priceToBuyNext = useContractPriceToBuyNext({
+  const priceToBuyNext = useCreatorTokenPriceToBuyNext({
     address: userProfileData?.data?.profile.creator_token?.address,
     tokenAmount: 1,
   });

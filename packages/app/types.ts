@@ -174,7 +174,7 @@ export interface Profile {
     | "requires_invite"
     | "opted_in";
   creator_token?: {
-    address: string;
+    address: `0x${string}`;
     id: number;
   };
 }

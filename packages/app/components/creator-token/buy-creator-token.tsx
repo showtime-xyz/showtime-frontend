@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { createParam } from "solito";
 
@@ -16,12 +16,15 @@ import { View } from "@showtime-xyz/universal.view";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useContractBalanceOfToken } from "app/hooks/creator-token/use-balance-of-token";
 import { useCreatorTokenBuy } from "app/hooks/creator-token/use-creator-token-buy";
-import { useContractPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price";
+import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
+import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
+import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-sell";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 
 type Query = {
   username: string;
+  selectedAction: "buy" | "sell";
 };
 
 const { useParam } = createParam<Query>();
@@ -29,14 +32,31 @@ const { useParam } = createParam<Query>();
 export const BuyCreatorToken = () => {
   const wallet = useWallet();
   const [username] = useParam("username");
+  const [selectedActionParam] = useParam("selectedAction");
   const [tokenAmount, setTokenAmount] = useState(1);
   const { data: profileData } = useUserProfile({ address: username });
   const buyToken = useCreatorTokenBuy({ username, tokenAmount });
+  const sellToken = useCreatorTokenSell();
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
-  const priceToBuyNext = useContractPriceToBuyNext({
-    address: profileData?.data?.profile.creator_token?.address,
-    tokenAmount,
-  });
+  const [selectedAction, setSelectedAction] = useState<"buy" | "sell">(
+    selectedActionParam ?? "buy"
+  );
+  const priceToBuyNext = useCreatorTokenPriceToBuyNext(
+    selectedAction === "buy"
+      ? {
+          address: profileData?.data?.profile.creator_token?.address,
+          tokenAmount,
+        }
+      : undefined
+  );
+  const priceToSellNext = useCreatorTokenPriceToSellNext(
+    selectedAction === "sell"
+      ? {
+          address: profileData?.data?.profile.creator_token?.address,
+          tokenAmount,
+        }
+      : undefined
+  );
   const router = useRouter();
 
   const tokenBalance = useContractBalanceOfToken({
@@ -47,6 +67,27 @@ export const BuyCreatorToken = () => {
   const renderBuyButton = () => {
     if (wallet.isMagicWallet) {
       return <Button onPress={() => buyToken.trigger()}>Connect</Button>;
+    } else if (selectedAction === "sell") {
+      return (
+        <Button
+          disabled={sellToken.isMutating}
+          onPress={async () => {
+            if (profileData?.data?.profile.creator_token) {
+              const res = await sellToken.trigger({
+                contractAddress:
+                  profileData?.data?.profile.creator_token?.address,
+                creatorTokenId: profileData?.data?.profile.creator_token?.id,
+                quantity: tokenAmount,
+              });
+              if (res) {
+                router.pop();
+              }
+            }
+          }}
+        >
+          {sellToken.isMutating ? "Please wait..." : "Sell"}
+        </Button>
+      );
     } else {
       return (
         <Button
@@ -70,6 +111,14 @@ export const BuyCreatorToken = () => {
       );
     }
   };
+
+  useEffect(() => {
+    if (selectedAction === "sell" && typeof tokenBalance.data !== "undefined") {
+      setTokenAmount(Math.min(1, Number(tokenBalance.data)));
+    } else {
+      setTokenAmount(1);
+    }
+  }, [selectedAction, tokenBalance.data]);
 
   return (
     <View tw="p-4">
@@ -96,15 +145,28 @@ export const BuyCreatorToken = () => {
                 <Text>ETH</Text>
               </View> */}
             </View>
-            <View>
-              {priceToBuyNext.isLoading ? (
-                <Skeleton width={100} height={32} />
-              ) : (
-                <Text tw="text-4xl font-semibold">
-                  ${priceToBuyNext.data?.displayPrice}
-                </Text>
-              )}
-            </View>
+            {selectedAction === "buy" ? (
+              <View>
+                {priceToBuyNext.isLoading ? (
+                  <Skeleton width={100} height={32} />
+                ) : (
+                  <Text tw="text-4xl font-semibold">
+                    ${priceToBuyNext.data?.displayPrice}
+                  </Text>
+                )}
+              </View>
+            ) : (
+              <View>
+                {priceToSellNext.isLoading ? (
+                  <Skeleton width={100} height={32} />
+                ) : (
+                  <Text tw="text-4xl font-semibold">
+                    ${priceToSellNext.data?.displayPrice}
+                  </Text>
+                )}
+              </View>
+            )}
+
             {/* <View>
               <Text tw="font-semibold text-green-500">^ $2.49 (25%) Month</Text>
             </View> */}
@@ -114,12 +176,26 @@ export const BuyCreatorToken = () => {
           tw="mt-4 flex-row items-center justify-between"
           style={{ columnGap: 16 }}
         >
-          <Button tw="flex-1" style={{ backgroundColor: "#08F6CC" }}>
+          <Button
+            tw="flex-1"
+            style={{
+              backgroundColor:
+                selectedAction === "buy" ? "#08F6CC" : colors.gray[200],
+            }}
+            onPress={() => setSelectedAction("buy")}
+          >
             <Text style={{ color: colors.black }} tw="font-semibold">
               Buy
             </Text>
           </Button>
-          <Button tw="flex-1" style={{ backgroundColor: colors.gray[200] }}>
+          <Button
+            tw="flex-1"
+            style={{
+              backgroundColor:
+                selectedAction === "sell" ? colors.red[400] : colors.gray[200],
+            }}
+            onPress={() => setSelectedAction("sell")}
+          >
             <Text style={{ color: colors.black }} tw="font-semibold">
               Sell
             </Text>
@@ -139,7 +215,9 @@ export const BuyCreatorToken = () => {
           )}
         </View>
         <View tw="flex-row items-center">
-          <Text tw="flex-2 text-gray-700">Quantity to buy:</Text>
+          <Text tw="flex-2 text-gray-700">
+            Quantity to {selectedAction === "buy" ? "buy" : "sell"}:
+          </Text>
           <View tw="w-4" />
           <View tw="flex-1 flex-row rounded-sm border-[1px] border-gray-200">
             <View tw="flex-1 border-gray-200 p-4 text-center">
@@ -155,7 +233,13 @@ export const BuyCreatorToken = () => {
             </Pressable>
             <Pressable
               onPress={() => {
-                setTokenAmount((t) => t + 1);
+                setTokenAmount((t) =>
+                  selectedAction === "sell" &&
+                  tokenBalance.data &&
+                  t >= Number(tokenBalance.data)
+                    ? t
+                    : t + 1
+                );
               }}
               tw="flex-1 items-center bg-blue-50 p-4"
             >
@@ -168,11 +252,31 @@ export const BuyCreatorToken = () => {
           <Text tw="text-gray-700">$4.00</Text>
         </View> */}
         <View tw="flex-row justify-between">
-          <Text tw="text-gray-700">You will pay in USDC:</Text>
-          {priceToBuyNext.isLoading ? (
-            <Skeleton width={40} height={14} />
+          <Text tw="text-gray-700">
+            {selectedAction === "buy"
+              ? "You will pay in USDC:"
+              : "You will receive in USDC:"}
+          </Text>
+          {selectedAction === "buy" ? (
+            <>
+              {priceToBuyNext.isLoading ? (
+                <Skeleton width={40} height={14} />
+              ) : (
+                <Text tw="text-gray-700">
+                  ${priceToBuyNext.data?.displayPrice}
+                </Text>
+              )}
+            </>
           ) : (
-            <Text tw="text-gray-700">${priceToBuyNext.data?.displayPrice}</Text>
+            <>
+              {priceToSellNext.isLoading ? (
+                <Skeleton width={40} height={14} />
+              ) : (
+                <Text tw="text-gray-700">
+                  ${priceToSellNext.data?.displayPrice}
+                </Text>
+              )}
+            </>
           )}
         </View>
       </View>

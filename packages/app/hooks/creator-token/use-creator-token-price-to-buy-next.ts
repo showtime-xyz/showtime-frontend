@@ -3,19 +3,19 @@ import useSWR from "swr";
 import { creatorTokenAbi } from "app/abi/CreatorTokenAbi";
 import { publicClient } from "app/lib/wallet-public-client";
 
-export const getPriceToBuyNextKey = (params: {
+export const getPriceToBuyNextKey = (params?: {
   address?: any;
   tokenAmount: number;
-}) => "priceToBuyNext" + params.address + params.tokenAmount;
+}) => (params ? "priceToBuyNext" + params.address + params.tokenAmount : "");
 
-export const useContractPriceToBuyNext = (params: {
+export const useCreatorTokenPriceToBuyNext = (params?: {
   address?: any;
   tokenAmount: number;
 }) => {
   const res = useSWR(
     getPriceToBuyNextKey(params),
     async () => {
-      if (params.address) {
+      if (params?.address) {
         const res: any = await publicClient.readContract({
           address: params.address,
           abi: creatorTokenAbi,

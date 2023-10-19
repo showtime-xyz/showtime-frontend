@@ -1,17 +1,23 @@
+import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
+import { creatorTokenAbi } from "app/abi/CreatorTokenAbi";
+import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
+import { publicClient } from "app/lib/wallet-public-client";
 import { formatAPIErrorMessage } from "app/utilities";
 
 import { useUserProfile } from "../api-hooks";
 import { useAuth } from "../auth/use-auth";
 import { useWallet } from "../use-wallet";
+import { getTotalCollectedKey } from "./use-contract-total-collected";
 import { useApproveToken } from "./use-creator-token-approve";
-import { useCreatorTokenBuyPoll } from "./use-creator-token-buy-poll";
-import { useCreatorTokenContractBuy } from "./use-creator-token-contract-buy";
-import { useContractPriceToBuyNext } from "./use-creator-token-price";
+import {
+  getPriceToBuyNextKey,
+  useCreatorTokenPriceToBuyNext,
+} from "./use-creator-token-price-to-buy-next";
 import { useSwitchChain } from "./use-switch-chain";
 
 export const useCreatorTokenBuy = (params: {
@@ -22,15 +28,14 @@ export const useCreatorTokenBuy = (params: {
   const { data: profileData } = useUserProfile({ address: username });
   const wallet = useWallet();
   const approveToken = useApproveToken();
-  const priceToBuyNext = useContractPriceToBuyNext({
+  const priceToBuyNext = useCreatorTokenPriceToBuyNext({
     address: profileData?.data?.profile.creator_token?.address,
     tokenAmount,
   });
-  const buyToken = useCreatorTokenContractBuy();
   const Alert = useAlert();
-  const pollBuyToken = useCreatorTokenBuyPoll();
   const { logout } = useAuth();
   const switchChain = useSwitchChain();
+  const { mutate } = useSWRConfig();
 
   const state = useSWRMutation(
     "buyCreatorToken",
@@ -58,19 +63,64 @@ export const useCreatorTokenBuy = (params: {
             maxPrice: priceToBuyNext.data?.totalPrice,
           });
           if (result) {
-            const res = await buyToken.trigger({
-              contractAddress: profileData?.data?.profile.creator_token.address,
-              maxPrice: priceToBuyNext.data?.totalPrice,
-              quantity: tokenAmount,
-            });
+            let requestPayload: any;
 
-            if (res) {
-              await pollBuyToken.pollBuyStatus({
-                creatorTokenId: profileData.data.profile.creator_token.id,
-                txHash: res,
-                quantity: tokenAmount,
+            if (tokenAmount === 1) {
+              const { request } = await publicClient.simulateContract({
+                address: profileData?.data?.profile.creator_token.address,
+                account: wallet.address,
+                abi: creatorTokenAbi,
+                functionName: "buy",
+                args: [priceToBuyNext.data?.totalPrice],
               });
-              return true;
+              requestPayload = request;
+            } else {
+              const { request } = await publicClient.simulateContract({
+                address: profileData?.data?.profile.creator_token.address,
+                account: wallet.address,
+                abi: creatorTokenAbi,
+                functionName: "bulkBuy",
+                args: [tokenAmount, priceToBuyNext.data?.totalPrice],
+              });
+              console.log("bulk buy ", request);
+              requestPayload = request;
+            }
+
+            Logger.log("simulate ", requestPayload);
+            const transactionHash = await wallet.walletClient?.writeContract?.(
+              requestPayload
+            );
+            Logger.log("Buy transaction hash ", requestPayload);
+            if (transactionHash) {
+              const transaction = await publicClient.waitForTransactionReceipt({
+                hash: transactionHash,
+                pollingInterval: 2000,
+              });
+
+              if (transaction.status === "success") {
+                mutate(
+                  getTotalCollectedKey(
+                    profileData?.data?.profile.creator_token.address
+                  )
+                );
+                mutate(
+                  getPriceToBuyNextKey({
+                    address: profileData?.data?.profile.creator_token.address,
+                    tokenAmount: 1,
+                  })
+                );
+
+                await axios({
+                  url: "/v1/creator-token/poll-buy",
+                  method: "POST",
+                  data: {
+                    creator_token_id: profileData.data.profile.creator_token.id,
+                    quantity: tokenAmount,
+                    tx_hash: transactionHash,
+                  },
+                });
+                return true;
+              }
             }
           } else {
             Alert.alert("Failed", "Approve transaction failed");
