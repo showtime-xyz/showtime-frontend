@@ -35,6 +35,7 @@ import { createParam } from "app/navigation/use-param";
 import {
   getShowtimeUsernameOnTwitter,
   getTwitterIntent,
+  getTwitterIntentUsername,
   getWebBaseURL,
 } from "app/utilities";
 
@@ -63,26 +64,23 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const url = useMemo(() => `${getWebBaseURL()}/@${username}`, [username]);
   const { shareImageToIG } = useShareImage(viewRef);
   const { data: user } = useMyInfo();
-  const currentUserProfileData = user?.data?.profile;
 
   const shareWithTwitterIntent = useCallback(() => {
-    const message_launched = `Just created my @Showtime_xyz token ✦ find me at ${getShowtimeUsernameOnTwitter(
+    const message_launched = `Just created my @Showtime_xyz token ✦ find me at ${getTwitterIntentUsername(
       profileData
     )} and DM me for invites.`;
 
-    const message_collected = `Just collected ${collectedCount} ${getShowtimeUsernameOnTwitter(
+    const message_collected = `Just collected ${collectedCount} ${getTwitterIntentUsername(
       profileData
-    )} token ✦ find me at ${getShowtimeUsernameOnTwitter(
-      currentUserProfileData
-    )}.`;
+    )} token ✦ find me at @Showtime_xyz or DM me.`;
 
     Linking.openURL(
       getTwitterIntent({
-        url: url,
+        url: type === "launched" ? "" : url,
         message: type === "launched" ? message_launched : message_collected,
       })
     );
-  }, [profileData, collectedCount, currentUserProfileData, url, type]);
+  }, [profileData, collectedCount, url, type]);
 
   const shareSingleImage = useCallback(async () => {
     linearOpaticy.value = withTiming(1, {}, () => {
