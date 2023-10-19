@@ -5,7 +5,7 @@ import { View } from "@showtime-xyz/universal.view";
 export const MyCollection = () => {
   const router = useRouter();
   return (
-    <View tw="mt-4">
+    <View tw="mt-8">
       <View tw="flex-row items-center justify-between">
         <Text tw="text-13 font-bold text-gray-900 dark:text-white">
           My collection
