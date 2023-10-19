@@ -74,7 +74,7 @@ export const TokensTabHeader = ({
   return (
     <View tw="w-full px-4">
       {channelId && isSelf ? (
-        <View tw="mt-6 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5">
+        <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5 dark:border-transparent">
           <Text tw="flex-1 text-sm text-white">
             Share updates, audio, and photos to token collectors
           </Text>
