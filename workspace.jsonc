@@ -75,7 +75,7 @@
       "peerDependencies": {
         "moti": "*",
         "next": "*",
-        "react-native-gesture-handler": ">=2.1.0",
+        "react-native-gesture-handler": ">=2.13.3",
         "react-native-reanimated": ">=3.5.4",
         "react-native-web": "*"
       }
