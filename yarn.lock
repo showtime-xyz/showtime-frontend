@@ -7078,7 +7078,7 @@ __metadata:
     autoprefixer: ^10.4.14
     axios: ^0.24.0
     blurhash: 2.0.5
-    critters: ^0.0.19
+    critters: ^0.0.20
     date-fns: ^2.30.0
     design-system: "*"
     dom-to-image: ^2.6.0
@@ -7095,7 +7095,7 @@ __metadata:
     next-pwa: ^5.6.0
     nextjs-progressbar: ^0.0.16
     patch-package: ^7.0.2
-    postcss: ^8.4.27
+    postcss: ^8.4.31
     postinstall-postinstall: ^2.1.0
     raf: ^3.4.1
     react-datepicker: ^4.16.0
@@ -7138,7 +7138,7 @@ __metadata:
     eslint-config-next: 13.4.5
     next: ^13.4.13
     path-browserify: ^1.0.1
-    postcss: ^8.4.27
+    postcss: ^8.4.31
     react: 18.2.0
     react-dom: 18.2.0
     react-hot-toast: ^2.4.1
@@ -13817,9 +13817,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"critters@npm:^0.0.19":
-  version: 0.0.19
-  resolution: "critters@npm:0.0.19"
+"critters@npm:^0.0.20":
+  version: 0.0.20
+  resolution: "critters@npm:0.0.20"
   dependencies:
     chalk: ^4.1.0
     css-select: ^5.1.0
@@ -13828,7 +13828,7 @@ __metadata:
     htmlparser2: ^8.0.2
     postcss: ^8.4.23
     pretty-bytes: ^5.3.0
-  checksum: 662aabb3ddd665c85b418ddf0ab2b179485997ad9288ec8e127d37c8a359c93166ccd35587586c374aa69bf34b985c8da92345ea0a63a72848e7abcfa1df71be
+  checksum: 402b9a2cf69a31d255925f062eefb2a1743eb6ce0d8e55beb5006ef61d1c9ea56f2f59e8f441e639fd8ea06a81cd982d7371de28828de488f94511269849df5c
   languageName: node
   linkType: hard
 
@@ -23639,7 +23639,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.2.14, postcss@npm:^8.4.12, postcss@npm:^8.4.21, postcss@npm:^8.4.23, postcss@npm:^8.4.27, postcss@npm:~8.4.21":
+"postcss@npm:^8.2.14, postcss@npm:^8.4.12, postcss@npm:^8.4.21, postcss@npm:^8.4.23, postcss@npm:~8.4.21":
   version: 8.4.27
   resolution: "postcss@npm:8.4.27"
   dependencies:
@@ -23647,6 +23647,17 @@ __metadata:
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
   checksum: 1cdd0c298849df6cd65f7e646a3ba36870a37b65f55fd59d1a165539c263e9b4872a402bf4ed1ca1bc31f58b68b2835545e33ea1a23b161a1f8aa6d5ded81e78
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.4.31":
+  version: 8.4.31
+  resolution: "postcss@npm:8.4.31"
+  dependencies:
+    nanoid: ^3.3.6
+    picocolors: ^1.0.0
+    source-map-js: ^1.0.2
+  checksum: 1d8611341b073143ad90486fcdfeab49edd243377b1f51834dc4f6d028e82ce5190e4f11bb2633276864503654fb7cab28e67abdc0fbf9d1f88cad4a0ff0beea
   languageName: node
   linkType: hard
 
