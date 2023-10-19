@@ -155,10 +155,9 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
         data: {
           ...data.data,
           profile: {
+            // merging is required, because myinfo is not returning all the fields
             ...data.data.profile,
             ...myInfoData.data.profile,
-            // need to explicitly set channels as it's not returned from myinfo api
-            channels: data.data.profile.channels,
           },
         },
       };
