@@ -15,7 +15,7 @@ export const useCreatorTokenPriceToSellNext = (params?: {
   const res = useSWR(
     getPriceToSellNextKey(params),
     async () => {
-      if (params?.address) {
+      if (params?.address && params.tokenAmount) {
         const res: any = await publicClient.readContract({
           address: params.address,
           abi: creatorTokenAbi,
