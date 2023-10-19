@@ -13,7 +13,7 @@ import { useAuth } from "../auth/use-auth";
 import { useWallet } from "../use-wallet";
 import { getTotalCollectedKey } from "./use-contract-total-collected";
 import { getPriceToBuyNextKey } from "./use-creator-token-price-to-buy-next";
-import { useSwitchChain } from "./use-switch-chain";
+import { baseChain, useSwitchChain } from "./use-switch-chain";
 
 export const useCreatorTokenSell = () => {
   const wallet = useWallet();
@@ -75,6 +75,7 @@ export const useCreatorTokenSell = () => {
             abi: creatorTokenAbi,
             functionName: "sell",
             args: [tokenIds[0]],
+            chain: baseChain,
           });
           requestPayload = request;
         } else {
@@ -84,6 +85,7 @@ export const useCreatorTokenSell = () => {
             abi: creatorTokenAbi,
             functionName: "bulkSell",
             args: [tokenIds],
+            chain: baseChain,
           });
           requestPayload = request;
         }

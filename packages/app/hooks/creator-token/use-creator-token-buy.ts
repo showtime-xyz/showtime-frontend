@@ -18,7 +18,7 @@ import {
   getPriceToBuyNextKey,
   useCreatorTokenPriceToBuyNext,
 } from "./use-creator-token-price-to-buy-next";
-import { useSwitchChain } from "./use-switch-chain";
+import { baseChain, useSwitchChain } from "./use-switch-chain";
 
 export const useCreatorTokenBuy = (params: {
   username?: string;
@@ -72,6 +72,7 @@ export const useCreatorTokenBuy = (params: {
                 abi: creatorTokenAbi,
                 functionName: "buy",
                 args: [priceToBuyNext.data?.totalPrice],
+                chain: baseChain,
               });
               requestPayload = request;
             } else {
@@ -81,6 +82,7 @@ export const useCreatorTokenBuy = (params: {
                 abi: creatorTokenAbi,
                 functionName: "bulkBuy",
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
+                chain: baseChain,
               });
               console.log("bulk buy ", request);
               requestPayload = request;

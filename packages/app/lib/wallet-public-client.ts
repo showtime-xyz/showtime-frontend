@@ -1,7 +1,8 @@
 import { createPublicClient, http } from "viem";
-import { base, baseGoerli } from "viem/chains";
+
+import { baseChain } from "app/hooks/creator-token/use-switch-chain";
 
 export const publicClient = createPublicClient({
-  chain: process.env.NEXT_PUBLIC_STAGE === "development" ? baseGoerli : base,
+  chain: baseChain,
   transport: http(),
 });
