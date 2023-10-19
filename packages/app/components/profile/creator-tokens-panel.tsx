@@ -28,7 +28,8 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
   const totalCollectors = useContractTotalCollected({
     contractAddress: userProfileData?.data?.profile.creator_token?.address,
   });
-  const priceToBuyNext = useContractPriceToBuyNext({
+
+  const priceToBuyNext = useCreatorTokenPriceToBuyNext({
     address: userProfileData?.data?.profile.creator_token?.address,
     tokenAmount: 1,
   });
@@ -55,13 +56,14 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
               onPress={() => {
                 router.push(
                   Platform.select({
-                    native: buyPath,
+                    native: buyPath + "?selectedAction=buy",
                     web: {
                       pathname: router.pathname,
                       query: {
                         ...router.query,
                         creatorTokenBuyModal: true,
                         username: username,
+                        selectedAction: "buy",
                       },
                     } as any,
                   }),
@@ -96,13 +98,14 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
               onPress={() => {
                 router.push(
                   Platform.select({
-                    native: buyPath,
+                    native: buyPath + "?selectedAction=sell",
                     web: {
                       pathname: router.pathname,
                       query: {
                         ...router.query,
                         creatorTokenBuyModal: true,
                         username: username,
+                        selectedAction: "sell",
                       },
                     } as any,
                   }),
@@ -189,13 +192,6 @@ export const CreatorTokensPanel = ({
   const router = useRouter();
   const { data: userProfileData } = useUserProfile({ address: username });
 
-  const totalCollectors = useContractTotalCollected({
-    contractAddress: userProfileData?.data?.profile.creator_token?.address,
-  });
-  const priceToBuyNext = useCreatorTokenPriceToBuyNext({
-    address: userProfileData?.data?.profile.creator_token?.address,
-    tokenAmount: 1,
-  });
   const usdcBalance = useWalletUSDCBalance();
 
   if (isSelf) {
