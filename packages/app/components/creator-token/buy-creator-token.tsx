@@ -22,6 +22,8 @@ import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-s
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 
+import { toast } from "design-system/toast";
+
 type Query = {
   username: string;
   selectedAction: "buy" | "sell";
@@ -72,6 +74,7 @@ export const BuyCreatorToken = () => {
         <Button
           disabled={sellToken.isMutating}
           onPress={async () => {
+            const tokenSellPrice = priceToSellNext.data?.displayPrice;
             if (profileData?.data?.profile.creator_token) {
               const res = await sellToken.trigger({
                 contractAddress:
@@ -81,6 +84,7 @@ export const BuyCreatorToken = () => {
               });
               if (res) {
                 router.pop();
+                toast.success("Sold for " + tokenSellPrice + " USDC");
               }
             }
           }}
