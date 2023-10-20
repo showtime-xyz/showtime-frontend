@@ -40,13 +40,10 @@ export const SelfServeExplainer = () => {
   const [profilePic, setProfilePic] = useState<string | undefined | File>(
     defaultProfilePic
   );
-  const [value, setValue] = useState<File | undefined>();
+  const [value, setValue] = useState<File | undefined | string>();
 
   const [selectedImg, setSelectedImg] = useState<
     string | File | undefined | null
-  >(null);
-  const [currentCropField, setCurrentCropField] = useState<
-    null | "coverPicture" | "profilePicture"
   >(null);
 
   const pickFile = useFilePicker();
@@ -133,7 +130,10 @@ export const SelfServeExplainer = () => {
               });
 
               setSelectedImg(getLocalFileURI(file.file));
-              setCurrentCropField("profilePicture");
+              setValue(file.file);
+              if (Platform.OS !== "web") {
+                setProfilePic(file.file);
+              }
             }}
             tw="overflow-hidden rounded-full"
           >
@@ -208,13 +208,10 @@ export const SelfServeExplainer = () => {
         src={selectedImg}
         visible={!!selectedImg}
         onClose={() => setSelectedImg(null)}
-        aspect={currentCropField === "coverPicture" ? 3 / 1 : 1}
-        title={`Crop your ${
-          currentCropField === "coverPicture" ? "cover" : "profile"
-        } picture`}
+        aspect={1}
+        title={`Crop your Creator Token picture`}
         cropViewHeight={380}
         onApply={async (e) => {
-          if (!currentCropField) return;
           const timestamp = new Date().valueOf();
           const imgFile = new File([e], timestamp.toString(), {
             lastModified: timestamp,

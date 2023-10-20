@@ -73,9 +73,8 @@ const CreatorTokensBanner = () => {
       ),
     };
   }, [showBanner]);
-
   if (
-    user?.user?.data.profile.creator_token_onboarding_status === "onboarded"
+    user?.user?.data.profile.creator_token_onboarding_status !== "allowlist"
   ) {
     return null;
   }
@@ -171,11 +170,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
 
   return (
     <View tw="w-full">
-      {user &&
-      user.user?.data?.profile?.creator_token_onboarding_status ===
-        "allowlist" ? (
-        <CreatorTokensBanner />
-      ) : null}
+      <CreatorTokensBanner />
 
       <View tw="mt-2 px-4 md:px-0">
         {isLoadingBanner ? (
