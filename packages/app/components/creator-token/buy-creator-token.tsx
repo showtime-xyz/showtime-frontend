@@ -138,16 +138,18 @@ export const BuyCreatorToken = () => {
         </View>
         <Text tw="text-2xl font-semibold dark:text-gray-200">tokens</Text>
       </View>
-      <View tw="flex-row items-center pt-4" style={{ columnGap: 2 }}>
-        <LockBadge
-          width={14}
-          height={14}
-          color={isDark ? colors.gray[300] : colors.gray[600]}
-        />
-        <Text tw="text-gray-600 dark:text-gray-300">
-          Unlocks exclusive channel content
-        </Text>
-      </View>
+      {selectedAction === "buy" ? (
+        <View tw="flex-row items-center pt-4" style={{ columnGap: 2 }}>
+          <LockBadge
+            width={14}
+            height={14}
+            color={isDark ? colors.gray[300] : colors.gray[600]}
+          />
+          <Text tw="text-gray-600 dark:text-gray-300">
+            Unlocks exclusive channel content
+          </Text>
+        </View>
+      ) : null}
       <View tw="mt-4 rounded-3xl border-[1px] border-gray-300 p-8 dark:border-gray-500">
         <View tw="flex-row" style={{ columnGap: 16 }}>
           <Avatar size={100} url={profileData?.data?.profile.img_url} />
