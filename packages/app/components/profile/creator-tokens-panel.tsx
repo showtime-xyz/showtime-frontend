@@ -21,6 +21,7 @@ import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creat
 import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 import { useWallet } from "app/hooks/use-wallet";
+import { getCurrencyPrice } from "app/utilities";
 
 type CreatorTokensPanelProps = { isSelf?: boolean; username?: string };
 const DataPanel = ({ username }: CreatorTokensPanelProps) => {
@@ -68,7 +69,7 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
                 <Skeleton width={30} height={16} />
               ) : (
                 <Text tw="text-base font-bold text-gray-900 dark:text-white">
-                  ${priceToBuyNext.data?.displayPrice}
+                  {getCurrencyPrice("USD", priceToBuyNext.data?.displayPrice)}
                 </Text>
               )}
             </View>
@@ -193,13 +194,13 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
         <View tw="flex-1 items-center gap-2 pl-6">
           <Text tw="text-xs text-gray-500 dark:text-gray-400">YOU OWN</Text>
           <Text tw="text-base font-bold text-gray-900 dark:text-white">
-            {balanceOfToken.data?.toString()}
+            {balanceOfToken.data?.toString() || 0}
           </Text>
         </View>
         <View tw="flex-1 items-center gap-2 pr-6">
           <Text tw="text-xs text-gray-500  dark:text-gray-400">VALUE</Text>
           <Text tw="text-base font-bold text-gray-900 dark:text-white">
-            ${priceToSellNext.data?.displayPrice ?? 0}
+            {getCurrencyPrice("USD", priceToSellNext.data?.displayPrice)}
           </Text>
         </View>
       </View>
@@ -262,7 +263,7 @@ export const CreatorTokensPanel = ({
                 </PressableScale>
               </View>
               <Text tw="text-base font-bold text-gray-900 dark:text-white">
-                ${usdcBalance.data?.displayBalance}
+                {getCurrencyPrice("USD", usdcBalance.data?.displayBalance)}
               </Text>
             </View>
             {/*
