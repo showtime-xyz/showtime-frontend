@@ -199,7 +199,7 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
         <View tw="flex-1 items-center gap-2 pr-6">
           <Text tw="text-xs text-gray-500  dark:text-gray-400">VALUE</Text>
           <Text tw="text-base font-bold text-gray-900 dark:text-white">
-            ${priceToSellNext.data?.displayPrice}
+            ${priceToSellNext.data?.displayPrice ?? 0}
           </Text>
         </View>
       </View>
