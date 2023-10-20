@@ -40,6 +40,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useIntroducingCreatorChannels } from "app/components/onboarding/introducing-creator-channels";
+import { useUserProfile } from "app/hooks/api-hooks";
 import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-detail";
 import { useNFTDetailBySlug } from "app/hooks/use-nft-details-by-slug";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
@@ -478,6 +479,10 @@ export const Messages = memo(() => {
     return null;
   }, [isLoadingMore]);
 
+  const channelOwnerProfile = useUserProfile({
+    address: channelDetail.data?.owner.username,
+  });
+
   if (!channelId) {
     return (
       <View tw="animate-fade-in-250 h-full w-full flex-1 items-center justify-center">
@@ -596,6 +601,7 @@ export const Messages = memo(() => {
           edition={edition}
           hasUnlockedMessages={hasUnlockedMessage}
           permissions={channelDetail.data?.permissions}
+          channelOwnerProfile={channelOwnerProfile.data?.data?.profile}
         />
 
         {showScrollToBottom ? (

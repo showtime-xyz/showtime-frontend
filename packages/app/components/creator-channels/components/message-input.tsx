@@ -22,15 +22,16 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check, Close, ChevronDown } from "@showtime-xyz/universal.icon";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
 
-import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
 import { MessageBox } from "app/components/messages";
+import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { containsURL } from "app/lib/linkify";
+import { Profile } from "app/types";
 
 import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
@@ -84,6 +85,7 @@ export const MessageInput = memo(
     edition,
     hasUnlockedMessages,
     permissions,
+    channelOwnerProfile,
   }: {
     listRef: RefObject<FlashList<any>>;
     channelId: string;
@@ -95,6 +97,7 @@ export const MessageInput = memo(
     edition?: CreatorEditionResponse;
     hasUnlockedMessages?: boolean;
     permissions?: ChannelById["permissions"];
+    channelOwnerProfile?: Profile;
   }) => {
     const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
       useState(false);
@@ -104,6 +107,12 @@ export const MessageInput = memo(
     const inputRef = useRef<any>(null);
     const editMessages = useEditChannelMessage(channelId);
     const isDark = useIsDarkMode();
+    const priceToBuyNext = useCreatorTokenPriceToBuyNext({
+      tokenAmount: 1,
+      address: channelOwnerProfile?.creator_token?.address,
+    });
+    const router = useRouter();
+
     const bottom = useMemo(
       () =>
         Platform.select({
@@ -206,6 +215,8 @@ export const MessageInput = memo(
     }, [channelId, editMessage, editMessages, setEditMessage, isUserAdmin]);
 
     if (!isUserAdmin && edition && !hasUnlockedMessages) {
+      const buyPath = `/creator-token/${channelOwnerProfile?.username}/buy`;
+
       return (
         <LeanView
           tw="flex-row items-center justify-start bg-black px-2 py-2"
@@ -216,16 +227,36 @@ export const MessageInput = memo(
           <Pressable
             tw="web:min-w-[200px] mr-4 min-w-[180px] items-center  rounded-full bg-[#08F6CC] px-4 py-3"
             onPress={() => {
-              alert("not implemented");
+              router.push(
+                Platform.select({
+                  native: buyPath + "?selectedAction=buy",
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenBuyModal: true,
+                      username: channelOwnerProfile?.username,
+                      selectedAction: "buy",
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: buyPath,
+                  web: router.asPath === "/" ? buyPath : router.asPath,
+                }),
+                { shallow: true }
+              );
             }}
           >
-            <LeanText tw="text-center text-lg font-bold">Buy - $21.67</LeanText>
+            <LeanText tw="text-center text-base font-semibold">
+              Buy - ${priceToBuyNext.data?.displayPrice}
+            </LeanText>
           </Pressable>
-          <LeanView tw="flex-1">
+          {/* <LeanView tw="flex-1">
             <LeanText tw="text-xs font-semibold text-white">
               99 collected
             </LeanText>
-          </LeanView>
+          </LeanView> */}
         </LeanView>
       );
     }

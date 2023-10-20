@@ -4,6 +4,8 @@ import useSWRMutation from "swr/mutation";
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { creatorTokenAbi } from "app/abi/CreatorTokenAbi";
+import { getChannelByIdCacheKey } from "app/components/creator-channels/hooks/use-channel-detail";
+import { getChannelMessageKey } from "app/components/creator-channels/hooks/use-channel-messages";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { publicClient } from "app/lib/wallet-public-client";
@@ -121,6 +123,21 @@ export const useCreatorTokenBuy = (params: {
                     tx_hash: transactionHash,
                   },
                 });
+                mutate(
+                  (key: any) => {
+                    const channelId = profileData.data?.profile.channels[0]?.id;
+                    if (
+                      typeof key === "string" &&
+                      typeof channelId === "number" &&
+                      (key.startsWith(getChannelByIdCacheKey(channelId)) ||
+                        key.startsWith(getChannelMessageKey(channelId)))
+                    ) {
+                      return true;
+                    }
+                  },
+                  undefined,
+                  { revalidate: true }
+                );
                 return true;
               }
             }
