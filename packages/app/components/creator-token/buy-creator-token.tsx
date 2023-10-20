@@ -179,7 +179,7 @@ export const BuyCreatorToken = () => {
               ) : (
                 <View>
                   {priceToSellNext.isLoading ? (
-                    <Skeleton width={100} height={32} />
+                    <Skeleton width={100} height={27} />
                   ) : (
                     <Text tw="text-4xl font-semibold dark:text-gray-200">
                       {priceToSellNext.data?.displayPrice}
