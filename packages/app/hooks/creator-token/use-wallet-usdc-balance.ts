@@ -18,7 +18,7 @@ export const useWalletUSDCBalance = () => {
       })) as bigint;
       return {
         balance: res,
-        displayBalance: (res / 1000000n).toString(),
+        displayBalance: (Number(res) / 1000000).toFixed(2).toString(),
       };
     }
   });

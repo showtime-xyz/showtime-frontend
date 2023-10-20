@@ -1,13 +1,18 @@
+import { useContext } from "react";
+
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
 
 import { creatorTokenAbi } from "app/abi/CreatorTokenAbi";
+import { UserContext } from "app/context/user-context";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { publicClient } from "app/lib/wallet-public-client";
 import { delay, formatAPIErrorMessage } from "app/utilities";
+
+import { toast } from "design-system/toast";
 
 import { useAuth } from "../auth/use-auth";
 import { useWallet } from "../use-wallet";
@@ -21,6 +26,7 @@ export const useCreatorTokenSell = () => {
   const { logout } = useAuth();
   const switchChain = useSwitchChain();
   const { mutate } = useSWRConfig();
+  const user = useContext(UserContext);
 
   const state = useSWRMutation(
     "sellToken",
@@ -64,7 +70,16 @@ export const useCreatorTokenSell = () => {
 
         if (tokenIds.length === 0) {
           // Should never happen ideally, but could happen as currently backend is depending on frontend to sync info. Should be fixed once we integrate webhooks
-          Alert.alert("No tokens to sell");
+          toast.error("You have no tokens to sell this time");
+          return;
+        }
+
+        if (
+          tokenIds.length === 1 &&
+          user?.user?.data.profile.creator_token?.address ===
+            arg.contractAddress
+        ) {
+          toast.error("You cannot sell your last token");
           return;
         }
 
