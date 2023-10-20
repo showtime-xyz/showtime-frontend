@@ -1,5 +1,6 @@
 import { memo } from "react";
 
+import { Spinner } from "@showtime-xyz/universal.spinner";
 import { View } from "@showtime-xyz/universal.view";
 
 import { CardSkeleton } from "app/components/card/card-skeleton";
@@ -33,5 +34,22 @@ export const ProfileFooter = memo(
     return <View style={{ height: tabBarHeight }} tw="mb-4" />;
   }
 );
-
 ProfileFooter.displayName = "ProfileFooter";
+
+export const ProfileSpinnerFooter = memo(
+  ({ isLoading }: ProfileFooterProps) => {
+    const tabBarHeight = usePlatformBottomHeight();
+    if (isLoading) {
+      return (
+        <View
+          style={{ marginBottom: tabBarHeight }}
+          tw="w-full flex-row items-center justify-center py-4"
+        >
+          <Spinner />
+        </View>
+      );
+    }
+    return <View style={{ height: tabBarHeight }} tw="mb-4" />;
+  }
+);
+ProfileSpinnerFooter.displayName = "ProfileSpinnerFooter";

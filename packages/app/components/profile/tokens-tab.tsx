@@ -35,7 +35,7 @@ import { formatNumber } from "app/utilities";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { MyCollection } from "./my-collection";
-import { ProfileFooter } from "./profile-footer";
+import { ProfileFooter, ProfileSpinnerFooter } from "./profile-footer";
 
 type TabListProps = {
   username?: string;
@@ -255,21 +255,21 @@ export const TokensTab = forwardRef<
   useImperativeHandle(ref, () => ({
     refresh,
   }));
-  const onItemPress = useCallback(
-    (item: NFT) => {
-      router.push(
-        `${getNFTSlug(item)}?initialScrollItemId=${item.nft_id}&tabType=${
-          list.type
-        }&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${
-          filter.sortType
-        }&type=profile`
-      );
-    },
-    [list.type, profileId, filter.collectionId, filter.sortType, router]
-  );
+  // const onItemPress = useCallback(
+  //   (item: NFT) => {
+  //     router.push(
+  //       `${getNFTSlug(item)}?initialScrollItemId=${item.nft_id}&tabType=${
+  //         list.type
+  //       }&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${
+  //         filter.sortType
+  //       }&type=profile`
+  //     );
+  //   },
+  //   [list.type, profileId, filter.collectionId, filter.sortType, router]
+  // );
 
   const ListFooterComponent = useCallback(
-    () => <ProfileFooter isLoading={isLoadingMore} />,
+    () => <ProfileSpinnerFooter isLoading={isLoadingMore} />,
     [isLoadingMore]
   );
 

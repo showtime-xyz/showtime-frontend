@@ -131,28 +131,28 @@ export const ProfileTop = ({
   // for iPhone 14+
 
   const avatarSize = isProfileMdScreen ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL;
-  const avatarStyle = useAnimatedStyle(() => {
-    if (!animationHeaderHeight || !animationHeaderPosition) {
-      return {};
-    }
-    return {
-      transform: [
-        {
-          scale: interpolate(
-            Math.min(animationHeaderPosition.value, 0),
-            [0, animationHeaderHeight.value],
-            [1, 1.15]
-          ),
-        },
-      ],
-    };
-  }, []);
+  // const avatarStyle = useAnimatedStyle(() => {
+  //   if (!animationHeaderHeight || !animationHeaderPosition) {
+  //     return {};
+  //   }
+  //   return {
+  //     transform: [
+  //       {
+  //         scale: interpolate(
+  //           Math.min(animationHeaderPosition.value, 0),
+  //           [0, animationHeaderHeight.value],
+  //           [1, 1.15]
+  //         ),
+  //       },
+  //     ],
+  //   };
+  // }, []);
   if (isProfileMdScreen) {
     return (
       <View tw="pl-7">
         <View tw="flex-row">
           <View tw="pb-2">
-            <Animated.View
+            <View
               style={[
                 {
                   width: avatarSize + AVATAR_BORDER_SIZE * 2,
@@ -164,7 +164,6 @@ export const ProfileTop = ({
                   backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
                   margin: -AVATAR_BORDER_SIZE,
                 },
-                avatarStyle,
               ]}
             >
               <Skeleton
@@ -202,7 +201,7 @@ export const ProfileTop = ({
                   </LightBox>
                 )}
               </Skeleton>
-            </Animated.View>
+            </View>
           </View>
           <View tw="ml-4 flex-1 pt-7">
             <View tw="flex-1">
@@ -277,7 +276,7 @@ export const ProfileTop = ({
                 backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
                 margin: -AVATAR_BORDER_SIZE,
               },
-              avatarStyle,
+              // avatarStyle,
             ]}
           >
             <Skeleton
