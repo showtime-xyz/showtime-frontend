@@ -118,7 +118,8 @@ export const MessagesHeader = (props: HeaderProps) => {
                 />
               </Pressable>
             ) : (
-              <Pressable onPress={inviteAllowlist}>
+              // TODO: Creator Tokens P1 (hide hidden class)
+              <Pressable onPress={inviteAllowlist} tw="hidden">
                 <AccessTicket
                   height={Platform.OS === "web" ? 20 : 24}
                   width={Platform.OS === "web" ? 20 : 24}

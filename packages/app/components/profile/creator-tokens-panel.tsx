@@ -265,6 +265,8 @@ export const CreatorTokensPanel = ({
                 ${usdcBalance.data?.displayBalance}
               </Text>
             </View>
+            {/*
+            // TODO: Creator Tokens P1
             <View tw="w-full flex-row items-center justify-between">
               <View tw="flex-row items-center">
                 <Text tw="mr-2 text-gray-500 dark:text-gray-300">
@@ -307,6 +309,7 @@ export const CreatorTokensPanel = ({
                 $21.67
               </Text>
             </View>
+            */}
           </View>
         </View>
       </View>

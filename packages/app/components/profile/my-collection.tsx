@@ -3,6 +3,10 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 export const MyCollection = () => {
+  // TODO: Creator tokens P1
+  return null;
+  // REMOVE THIS LINE TO CONTINUE
+  /*
   const router = useRouter();
   return (
     <View tw="mt-8">
@@ -35,4 +39,5 @@ export const MyCollection = () => {
       </View>
     </View>
   );
+  */
 };

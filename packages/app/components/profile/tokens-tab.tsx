@@ -90,6 +90,7 @@ export const TokensTabHeader = ({
         </View>
       ) : null}
 
+      {/* TODO: Creator tokens P1
       <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-4 py-4 dark:border-gray-700 dark:bg-gray-900">
         <Text tw="mr-4 flex-1 text-sm text-gray-500 dark:text-gray-400">
           Create your token to access your channel.
@@ -121,18 +122,22 @@ export const TokensTabHeader = ({
           </Text>
         </Pressable>
       </View>
+      */}
+
       {isSelf && <MyCollection />}
       <Pressable
         onPress={() => {
           router.push(`/channels/${channelId}`);
         }}
+        tw="mt-6 rounded-xl border border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900"
       >
-        <View tw="mt-2 flex-row items-center justify-between py-4">
+        <View tw="flex-row items-center justify-between py-4">
           <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
             19 Channel messages
           </Text>
           <ChevronRight width={20} height={20} color={colors.gray[500]} />
         </View>
+        {/* TODO: Creator tokens P1
         <View tw="overflow-hidden rounded-xl border border-gray-200 bg-slate-50 dark:border-gray-700 dark:bg-gray-900">
           <View tw="mx-4 flex-row items-center pt-4">
             <Avatar
@@ -162,6 +167,7 @@ export const TokensTabHeader = ({
             />
           </View>
         </View>
+        */}
       </Pressable>
     </View>
   );
@@ -169,6 +175,11 @@ export const TokensTabHeader = ({
 export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
   const isDark = useIsDarkMode();
 
+  // TODO: Creator tokens P1
+  return null;
+  // END
+
+  /*
   return (
     <View {...rest}>
       <View tw="flex-row items-center justify-between py-4">
@@ -215,6 +226,7 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
       </View>
     </View>
   );
+  */
 };
 export const TokensTab = forwardRef<
   ProfileTabListRef,

@@ -146,7 +146,7 @@ const CreatorTokensBanner = () => {
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-
+  const user = useContext(UserContext);
   const { data: banners = [], isLoading: isLoadingBanner } = useBanners();
   const router = useRouter();
   const pagerWidth = isMdWidth
@@ -171,7 +171,12 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
 
   return (
     <View tw="w-full">
-      <CreatorTokensBanner />
+      {user &&
+      user.user?.data?.profile?.creator_token_onboarding_status ===
+        "allowlist" ? (
+        <CreatorTokensBanner />
+      ) : null}
+
       <View tw="mt-2 px-4 md:px-0">
         {isLoadingBanner ? (
           <Skeleton
@@ -225,7 +230,10 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      <TopPartCreatorTokens />
+      {/*
+        // TODO: Creator Tokens P1
+        <TopPartCreatorTokens />
+      */}
       <TrendingCarousel />
     </View>
   );
