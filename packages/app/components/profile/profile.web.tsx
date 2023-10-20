@@ -109,11 +109,16 @@ const Profile = ({ username }: ProfileScreenProps) => {
   });
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
+
   const channelId = useMemo(() => {
     if (profileData?.data?.profile.channels) {
       return profileData?.data?.profile.channels[0]?.id;
     }
     return null;
+  }, [profileData?.data?.profile.channels]);
+
+  const messageCount = useMemo(() => {
+    return profileData?.data?.profile?.channels?.[0]?.message_count || 0;
   }, [profileData?.data?.profile.channels]);
 
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
@@ -156,7 +161,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
         if (itemIndex === 0) {
           return (
             <>
-              <TokensTabHeader channelId={channelId} isSelf={isSelf} />
+              <TokensTabHeader
+                channelId={channelId}
+                isSelf={isSelf}
+                messageCount={messageCount}
+              />
             </>
           );
         }
@@ -175,7 +184,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         />
       );
     },
-    [channelId, isSelf, numColumns, profileId, type]
+    [channelId, isSelf, messageCount, numColumns, profileId, type]
   );
   const ListFooterComponent = useCallback(() => {
     if ((isLoadingMore || profileIsLoading) && !error) {

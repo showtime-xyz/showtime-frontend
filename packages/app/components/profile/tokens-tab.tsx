@@ -5,21 +5,12 @@ import React, {
   useImperativeHandle,
   useRef,
 } from "react";
-import { Platform, StyleSheet } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
-import { BlurView as ExpoBlurView } from "expo-blur";
-import Animated from "react-native-reanimated";
 
-import { AnimateHeight } from "@showtime-xyz/universal.accordion";
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Showtime,
-} from "@showtime-xyz/universal.icon";
+import { ChevronRight } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -39,16 +30,12 @@ import { useUser } from "app/hooks/use-user";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
+import { formatNumber } from "app/utilities";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { MessageReactions } from "../reaction/message-reactions";
 import { FilterContext } from "./fillter-context";
 import { MyCollection } from "./my-collection";
 import { ProfileFooter } from "./profile-footer";
-
-const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
-const AnimatedView = Animated.createAnimatedComponent(View);
-const PlatformBlurView = Platform.OS === "ios" ? ExpoBlurView : View;
 
 type TabListProps = {
   username?: string;
@@ -64,8 +51,10 @@ export type ProfileTabListRef = {
 export const TokensTabHeader = ({
   channelId,
   isSelf,
+  messageCount,
 }: {
   channelId: number | null | undefined;
+  messageCount?: number | null;
   isSelf: boolean;
 }) => {
   const isDark = useIsDarkMode();
@@ -85,7 +74,7 @@ export const TokensTabHeader = ({
             theme="dark"
             tw="ml-2"
           >
-            {`   Channel   `}
+            {`View Channel`}
           </Button>
         </View>
       ) : null}
@@ -133,7 +122,7 @@ export const TokensTabHeader = ({
       >
         <View tw="flex-row items-center justify-between py-4">
           <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-            19 Channel messages
+            {formatNumber(messageCount || 0)} Channel messages
           </Text>
           <ChevronRight width={20} height={20} color={colors.gray[500]} />
         </View>
@@ -232,10 +221,20 @@ export const TokensTab = forwardRef<
   ProfileTabListRef,
   TabListProps & {
     channelId: number | null | undefined;
+    messageCount?: number | null;
     isSelf: boolean;
   }
 >(function ProfileTabList(
-  { username, profileId, isBlocked, list, index, channelId, isSelf },
+  {
+    username,
+    profileId,
+    isBlocked,
+    list,
+    index,
+    channelId,
+    messageCount,
+    isSelf,
+  },
   ref
 ) {
   const isDark = useIsDarkMode();
@@ -275,8 +274,14 @@ export const TokensTab = forwardRef<
   );
 
   const ListHeaderComponent = useCallback(
-    () => <TokensTabHeader channelId={channelId} isSelf={isSelf} />,
-    [channelId, isSelf]
+    () => (
+      <TokensTabHeader
+        channelId={channelId}
+        isSelf={isSelf}
+        messageCount={messageCount}
+      />
+    ),
+    [channelId, isSelf, messageCount]
   );
   const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
 

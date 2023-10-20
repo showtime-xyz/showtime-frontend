@@ -149,7 +149,12 @@ export interface Profile {
   wallet_addresses_v2: WalletAddressesV2[];
   wallet_addresses_excluding_email_v2: WalletAddressesExcludingEmailV2[];
   bio: string;
-  channels: Array<{ id: number; name: string; self_is_member: boolean }>;
+  channels: Array<{
+    id: number;
+    name: string;
+    self_is_member: boolean;
+    message_count: number;
+  }>;
   website_url: string;
   username: string;
   default_list_id: number;
@@ -286,6 +291,7 @@ export type MyInfo = {
         id: number;
         name: string;
         self_is_member: boolean;
+        message_count: number;
       }>;
       stripe_connect_details: null | {
         details_submitted: boolean;
