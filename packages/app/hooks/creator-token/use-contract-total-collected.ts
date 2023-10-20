@@ -9,15 +9,21 @@ export const getTotalCollectedKey = (contractAddress: string) =>
 export const useContractTotalCollected = (params: {
   contractAddress?: any;
 }) => {
-  const res = useSWR(getTotalCollectedKey(params.contractAddress), async () => {
-    if (params.contractAddress) {
-      return publicClient.readContract({
-        address: params.contractAddress,
-        abi: creatorTokenAbi,
-        functionName: "totalSupply",
-      }) as Promise<bigint>;
+  const res = useSWR(
+    getTotalCollectedKey(params.contractAddress),
+    async () => {
+      if (params.contractAddress) {
+        return publicClient.readContract({
+          address: params.contractAddress,
+          abi: creatorTokenAbi,
+          functionName: "totalSupply",
+        }) as Promise<bigint>;
+      }
+    },
+    {
+      refreshInterval: 10_000,
     }
-  });
+  );
 
   return res;
 };

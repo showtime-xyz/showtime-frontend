@@ -169,7 +169,7 @@ export const BuyCreatorToken = () => {
               {selectedAction === "buy" ? (
                 <View>
                   {priceToBuyNext.isLoading ? (
-                    <Skeleton width={100} height={32} />
+                    <Skeleton width={100} height={27} />
                   ) : (
                     <Text tw="text-4xl font-semibold text-gray-800 dark:text-gray-200">
                       {priceToBuyNext.data?.displayPrice}
