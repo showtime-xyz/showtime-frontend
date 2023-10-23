@@ -2,11 +2,7 @@ import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  InformationCircle,
-  Lock,
-  LockRounded,
-} from "@showtime-xyz/universal.icon";
+import { InformationCircle, LockRounded } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -104,9 +100,7 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
             </Button>
           </View>
           <View tw="flex-1 items-center justify-center">
-            <Text tw="text-xs text-gray-500 dark:text-gray-400">
-              COLLECTORS
-            </Text>
+            <Text tw="text-xs text-gray-500 dark:text-gray-400">COLLECTED</Text>
             <View tw="mt-3 h-4 items-center justify-center">
               {totalCollectors.isLoading ? (
                 <Skeleton width={30} height={16} />
