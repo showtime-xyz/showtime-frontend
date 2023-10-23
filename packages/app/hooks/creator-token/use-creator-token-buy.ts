@@ -11,6 +11,8 @@ import { Logger } from "app/lib/logger";
 import { publicClient } from "app/lib/wallet-public-client";
 import { formatAPIErrorMessage } from "app/utilities";
 
+import { toast } from "design-system/toast";
+
 import { useUserProfile } from "../api-hooks";
 import { useAuth } from "../auth/use-auth";
 import { useWallet } from "../use-wallet";
@@ -142,7 +144,9 @@ export const useCreatorTokenBuy = (params: {
               }
             }
           } else {
-            Alert.alert("Failed", "Approve transaction failed");
+            toast.error("Failed", {
+              message: "Approve transaction failed",
+            });
           }
         }
       }
@@ -151,7 +155,9 @@ export const useCreatorTokenBuy = (params: {
       onError: (error) => {
         {
           Logger.error("useCreatorTokenContractBuy", error);
-          Alert.alert("Failed", formatAPIErrorMessage(error));
+          toast.error("Failed", {
+            message: formatAPIErrorMessage(error),
+          });
         }
       },
     }
