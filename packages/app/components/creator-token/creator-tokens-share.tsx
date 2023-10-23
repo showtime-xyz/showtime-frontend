@@ -30,10 +30,9 @@ import {
   CopyLinkButton,
   AccessChannelButton,
 } from "app/components/social-buttons";
-import { useMyInfo, useUserProfile } from "app/hooks/api-hooks";
+import { useUserProfile } from "app/hooks/api-hooks";
 import { createParam } from "app/navigation/use-param";
 import {
-  getShowtimeUsernameOnTwitter,
   getTwitterIntent,
   getTwitterIntentUsername,
   getWebBaseURL,
@@ -63,7 +62,6 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const viewRef = useRef<any>(null);
   const url = useMemo(() => `${getWebBaseURL()}/@${username}`, [username]);
   const { shareImageToIG } = useShareImage(viewRef);
-  const { data: user } = useMyInfo();
 
   const shareWithTwitterIntent = useCallback(() => {
     const message_launched = `Just created my @Showtime_xyz token ✦ find me at ${getTwitterIntentUsername(
@@ -101,7 +99,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   }, []);
 
   const viewChannel = useCallback(() => {
-    const pathname = `/channels/${profileData?.channels[0]}?unlocked=now`;
+    const pathname = `/channels/${profileData?.channels[0].id}?unlocked=now`;
     if (Platform.OS === "web") {
       router.replace(pathname);
     } else {
@@ -129,7 +127,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
             <View tw="absolute left-0 top-0">
               <Showtime color="black" width={24} height={24} />
             </View>
-            <Avatar url={user?.data?.profile?.img_url} tw="mr-2" size={176} />
+            <Avatar url={profileData?.img_url} tw="mr-2" size={176} />
           </View>
           <View tw="mt-6">
             <Text tw="text-center text-2xl font-bold text-gray-900">
