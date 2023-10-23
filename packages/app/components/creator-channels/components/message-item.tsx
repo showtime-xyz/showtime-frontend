@@ -114,7 +114,7 @@ export const MessageItem = memo(
         backgroundColor: "transparent",
         borderRadius: 0,
       };
-    }, [isDark, editMessageIdSharedValue.value, channel_message.id]);
+    }, [isDark, editMessageIdSharedValue, channel_message.id]);
 
     // check if message was edited
     const messageWasEdited = useMemo(() => {
