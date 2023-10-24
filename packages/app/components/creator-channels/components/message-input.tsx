@@ -4,7 +4,6 @@ import {
   useRef,
   useMemo,
   RefObject,
-  useState,
   memo,
 } from "react";
 import { Platform } from "react-native";
@@ -35,7 +34,6 @@ import { Profile } from "app/types";
 
 import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
-import { MissingStarDropModal } from "../missing-star-drop-modal";
 import { ChannelById } from "../types";
 import { LeanText, LeanView } from "./lean-text";
 import { MessageInputToolbar } from "./message-input-toolbar";
@@ -99,8 +97,6 @@ export const MessageInput = memo(
     permissions?: ChannelById["permissions"];
     channelOwnerProfile?: Profile;
   }) => {
-    const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
-      useState(false);
     const insets = useSafeAreaInsets();
     const bottomHeight = usePlatformBottomHeight();
     const sendMessage = useSendChannelMessage(channelId);
@@ -281,15 +277,7 @@ export const MessageInput = memo(
                 textInputProps={{
                   maxLength: 2000,
                 }}
-                onSubmit={
-                  !edition
-                    ? async () => {
-                        setShouldShowMissingStarDropModal(true);
-                      }
-                    : editMessage
-                    ? handleEditMessage
-                    : handleSubmit
-                }
+                onSubmit={editMessage ? handleEditMessage : handleSubmit}
                 submitting={editMessages.isMutating || sendMessage.isMutating}
                 tw="bg-white dark:bg-black"
                 submitButton={
@@ -324,12 +312,6 @@ export const MessageInput = memo(
             <MessageBoxUnavailable />
           )}
         </Animated.View>
-        <MissingStarDropModal
-          isOpen={shouldShowMissingStarDropModal}
-          close={() => {
-            setShouldShowMissingStarDropModal(false);
-          }}
-        />
       </>
     );
   }
