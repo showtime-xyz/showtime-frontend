@@ -144,7 +144,7 @@ export const MessageItem = memo(
       return false;
     }, [channel_message.created_at]);
 
-    const isByCreator = channel_message.sent_by.admin;
+    const isByCreator = channel_message?.sent_by?.admin;
 
     const loremText = useMemo(
       () =>
@@ -166,12 +166,16 @@ export const MessageItem = memo(
         <LeanView tw="flex-row" style={{ columnGap: 8 }}>
           <Link
             href={`/@${
-              item.channel_message.sent_by.profile.username ??
-              item.channel_message.sent_by.profile.wallet_addresses
+              item.channel_message?.sent_by?.profile.username ??
+              item.channel_message?.sent_by?.profile.wallet_addresses ??
+              "deleted-user"
             }`}
           >
             <LeanView tw="h-6 w-6">
-              <Avatar size={24} url={channel_message.sent_by.profile.img_url} />
+              <Avatar
+                size={24}
+                url={channel_message?.sent_by?.profile.img_url}
+              />
               <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
             </LeanView>
           </Link>
@@ -179,14 +183,15 @@ export const MessageItem = memo(
             <LeanView tw="flex-row items-center" style={{ columnGap: 8 }}>
               <Link
                 href={`/@${
-                  item.channel_message.sent_by.profile.username ??
-                  item.channel_message.sent_by.profile.wallet_addresses
+                  item.channel_message?.sent_by?.profile.username ??
+                  item.channel_message?.sent_by?.profile.wallet_addresses ??
+                  "deleted-user"
                 }`}
               >
                 <LeanText
                   tw={"text-sm font-bold text-gray-900 dark:text-gray-100"}
                 >
-                  {channel_message.sent_by.profile.name}
+                  {channel_message?.sent_by?.profile.name ?? "Deleted User"}
                 </LeanText>
               </Link>
 
@@ -244,7 +249,7 @@ export const MessageItem = memo(
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent loop sideOffset={8}>
-                    {item.channel_message.sent_by.profile.profile_id ===
+                    {item.channel_message?.sent_by?.profile.profile_id ===
                       user?.user?.data.profile.profile_id || isUserAdmin ? (
                       <DropdownMenuItem
                         onSelect={() => {
@@ -291,7 +296,7 @@ export const MessageItem = memo(
 
                     {
                       // edit message only if message is not older than 2 hours and it belongs to the user
-                      item.channel_message.sent_by.profile.profile_id ===
+                      item.channel_message?.sent_by?.profile.profile_id ===
                         user?.user?.data.profile.profile_id &&
                       allowMessageEditing ? (
                         <DropdownMenuItem
@@ -325,7 +330,7 @@ export const MessageItem = memo(
                         </DropdownMenuItem>
                       ) : null
                     }
-                    {item.channel_message.sent_by.profile.profile_id !==
+                    {item.channel_message?.sent_by?.profile.profile_id !==
                     user?.user?.data.profile.profile_id ? (
                       <DropdownMenuItem
                         onSelect={() => {
