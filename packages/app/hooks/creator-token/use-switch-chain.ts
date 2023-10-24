@@ -1,11 +1,7 @@
 import useSWRMutation from "swr/mutation";
-import { baseGoerli, base } from "viem/chains";
-
-import { isDEV } from "app/utilities";
 
 import { useWallet } from "../use-wallet";
-
-export const baseChain = isDEV ? baseGoerli : base;
+import { baseChain } from "./utils";
 
 export const useSwitchChain = () => {
   const wallet = useWallet();
