@@ -138,15 +138,15 @@ export const BuyCreatorToken = () => {
         <View tw="p-4">
           <View tw="flex-row items-center" style={{ columnGap: 8 }}>
             <View tw="flex-row items-center" style={{ columnGap: 2 }}>
-              <Text tw="text-2xl font-semibold dark:text-gray-200">
+              <Text tw="text-xl font-semibold dark:text-gray-200">
                 {selectedAction === "buy" ? "Buy" : "Sell"} @{username}
               </Text>
               <VerificationBadge size={20} />
             </View>
-            <Text tw="text-2xl font-semibold dark:text-gray-200">tokens</Text>
+            <Text tw="text-xl font-semibold dark:text-gray-200">tokens</Text>
           </View>
           {selectedAction === "buy" ? (
-            <View tw="flex-row items-center pt-4" style={{ columnGap: 2 }}>
+            <View tw="flex-row items-center pt-3" style={{ columnGap: 2 }}>
               <LockBadge
                 width={14}
                 height={14}
@@ -157,7 +157,7 @@ export const BuyCreatorToken = () => {
               </Text>
             </View>
           ) : null}
-          <View tw="mt-4 rounded-3xl border-[1px] border-gray-300 p-8 dark:border-gray-500">
+          <View tw="mt-4 rounded-3xl border-[1px] border-gray-300 p-8 dark:border-gray-700">
             <View tw="flex-row" style={{ columnGap: 16 }}>
               <Avatar size={100} url={profileData?.data?.profile.img_url} />
               <View style={{ rowGap: 16 }}>
@@ -211,6 +211,8 @@ export const BuyCreatorToken = () => {
                 style={{
                   backgroundColor:
                     selectedAction === "buy" ? "#08F6CC" : colors.gray[200],
+                  opacity: selectedAction === "buy" ? 1 : 0.7,
+                  height: 28,
                 }}
                 onPress={() => setSelectedAction("buy")}
               >
@@ -225,6 +227,8 @@ export const BuyCreatorToken = () => {
                     selectedAction === "sell"
                       ? colors.red[400]
                       : colors.gray[200],
+                  height: 28,
+                  opacity: selectedAction === "sell" ? 1 : 0.7,
                 }}
                 onPress={() => setSelectedAction("sell")}
               >
@@ -261,8 +265,8 @@ export const BuyCreatorToken = () => {
                 Quantity to {selectedAction === "buy" ? "buy" : "sell"}:
               </Text>
               <View tw="w-4" />
-              <View tw="flex-1 flex-row rounded-sm border-[1px] border-gray-200 dark:border-gray-600">
-                <View tw="flex-1 border-gray-200 p-4 text-center dark:border-gray-600 dark:text-gray-200">
+              <View tw="flex-1 flex-row rounded-sm border-[1px] border-gray-200 dark:border-gray-700">
+                <View tw="flex-1 border-gray-200 p-4 text-center dark:border-gray-700 dark:text-gray-200">
                   <Text tw="text-gray-900 dark:text-gray-200">
                     {tokenAmount}
                   </Text>
