@@ -183,6 +183,7 @@ function HeaderDropdown({
             Download collector list
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
+        {/* TODO: Creator Tokens P1
         {isAuthenticated && (
           <DropdownMenuItem
             onSelect={() => {
@@ -212,12 +213,12 @@ function HeaderDropdown({
                 name: "ticket",
               }}
             />
-
             <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
               Import allowlist to channel
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
+        */}
         <DropdownMenuSub>
           <DropdownMenuSubTrigger key="nested-group-trigger">
             <MenuItemIcon

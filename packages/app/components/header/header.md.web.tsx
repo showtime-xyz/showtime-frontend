@@ -442,6 +442,7 @@ export const HeaderMd = withColorScheme(() => {
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
               )}
+              {/* TODO: Creator Tokens P1
               {isAuthenticated && (
                 <DropdownMenuItem
                   onSelect={() => {
@@ -477,6 +478,7 @@ export const HeaderMd = withColorScheme(() => {
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
               )}
+              */}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger key="nested-group-trigger">
                   <MenuItemIcon
