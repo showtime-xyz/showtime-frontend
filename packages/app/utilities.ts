@@ -819,7 +819,8 @@ export const isProfileIncomplete = (profile?: Profile) => {
   return isIncomplete;
 };
 
-export function getFullSizeCover(url: string | undefined) {
+export function getFullSizeCover(profile?: Profile) {
+  const url = profile?.cover_url ? profile?.cover_url : profile?.img_url;
   if (!url) return DEFAULT_PROFILE_PIC;
   if (
     url &&

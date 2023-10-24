@@ -45,7 +45,11 @@ import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
-import { formatProfileRoutes, getProfileImage } from "app/utilities";
+import {
+  formatProfileRoutes,
+  getFullSizeCover,
+  getProfileImage,
+} from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
 
@@ -276,9 +280,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 <>
                   <ProfileCover
                     tw="overflow-hidden rounded-b-3xl"
-                    uri={getProfileImage(profileData?.data?.profile)}
+                    uri={getFullSizeCover(profileData?.data?.profile)}
                   />
-                  <Pressable
+                  {/* <Pressable
                     tw={[
                       "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
                     ]}
@@ -308,7 +312,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                       height={26}
                       color={colors.gray[900]}
                     />
-                  </Pressable>
+                  </Pressable> */}
                 </>
               ) : null}
               <View tw="w-full flex-row">

@@ -37,7 +37,11 @@ import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import { Profile } from "app/types";
-import { getProfileImage, getProfileName } from "app/utilities";
+import {
+  getFullSizeCover,
+  getProfileImage,
+  getProfileName,
+} from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 
@@ -243,7 +247,7 @@ export const ProfileTop = ({
                     ) : null}
                   </View>
                 </View>
-                {isSelf && !isIncompletedProfile ? (
+                {isSelf && isIncompletedProfile ? (
                   <GradientButton
                     size="small"
                     onPress={redirectToCreateDrop}
@@ -283,7 +287,7 @@ export const ProfileTop = ({
   return (
     <>
       <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
-        <ProfileCover uri={getProfileImage(profileData?.profile)} />
+        <ProfileCover uri={getFullSizeCover(profileData?.profile)} />
       </View>
       <View tw="-mt-2 px-4">
         <View tw="flex-row items-center">

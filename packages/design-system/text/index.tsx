@@ -17,7 +17,6 @@ export type Props = {
   | "onLayout"
   | "onTextLayout"
   | "children"
-  | "selectable"
   | "id"
   | "role"
   | "numberOfLines"
@@ -36,7 +35,6 @@ export const Text = forwardRef<TextType, Props>(
       onLayout,
       onTextLayout,
       children,
-      selectable,
       tw = "",
       id,
       htmlFor,
@@ -54,7 +52,6 @@ export const Text = forwardRef<TextType, Props>(
         tw={Array.isArray(tw) ? tw.join(" ") : tw}
         id={id}
         ref={ref}
-        selectable={selectable}
         onLayout={onLayout}
         onTextLayout={onTextLayout}
         role={role}
