@@ -40,8 +40,6 @@ import {
 
 import { toast } from "design-system/toast";
 
-import { CloseButton } from "../close-button";
-
 export type TokenShareType = "collected" | "launched" | "channel";
 const { useParam } = createParam<{
   username: string;
@@ -57,7 +55,6 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
 
   const { data: userInfo } = useUserProfile({ address: username });
   const profileData = userInfo?.data?.profile;
-  const { top } = useSafeAreaInsets();
   const router = useRouter();
   const viewRef = useRef<any>(null);
   const url = useMemo(() => `${getWebBaseURL()}/@${username}`, [username]);
@@ -113,7 +110,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
       <BgGoldLinearGradient />
       <SafeAreaView>
         <View
-          tw="items-center justify-center overflow-hidden rounded-2xl pb-10"
+          tw="items-center justify-center overflow-hidden rounded-2xl pb-4"
           collapsable={false}
           ref={viewRef as any}
         >
@@ -123,7 +120,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
           >
             <BgGoldLinearGradient />
           </Animated.View>
-          <View tw="mt-28">
+          <View tw="mt-20">
             <View tw="absolute left-0 top-0">
               <Showtime color="black" width={24} height={24} />
             </View>
@@ -222,14 +219,6 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
           )}
         </View>
       </SafeAreaView>
-      <View
-        tw="absolute left-4 z-50"
-        style={{
-          top: top + 12,
-        }}
-      >
-        <CloseButton color={colors.gray[900]} onPress={() => router.pop()} />
-      </View>
     </View>
   );
 });

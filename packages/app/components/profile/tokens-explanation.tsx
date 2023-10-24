@@ -7,7 +7,7 @@ import { View } from "@showtime-xyz/universal.view";
 export const CreatorTokensExplanation = () => {
   const isDark = useIsDarkMode();
   return (
-    <View tw=" flex-1 px-4 pb-2">
+    <View tw="flex-1 px-4 pb-2">
       <Text tw="text-xl font-semibold text-gray-900 dark:text-gray-50">
         What are Creator Tokens?
       </Text>

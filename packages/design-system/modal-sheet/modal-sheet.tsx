@@ -19,6 +19,7 @@ export type ModalSheetProps = Pick<ModalProps, "web_height"> & {
   onClose?: () => void;
   snapPoints?: BottomSheetProps["snapPoints"];
   bodyStyle?: StyleProp<ViewStyle>;
+  tw?: string;
 };
 
 export function ModalSheet({

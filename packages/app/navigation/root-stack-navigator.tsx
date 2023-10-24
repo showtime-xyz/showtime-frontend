@@ -23,6 +23,7 @@ import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-membe
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
+import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
@@ -316,6 +317,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="channelsShare"
           component={CreatorChannelsShareScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenBuy"
+          component={CreatorTokenBuyScreen}
         />
       </Stack.Group>
       <Stack.Group
