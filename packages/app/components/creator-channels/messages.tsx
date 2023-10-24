@@ -561,7 +561,7 @@ export const Messages = memo(() => {
               <AnimatedInfiniteScrollListWithRef
                 ref={listRef}
                 keyExtractor={keyExtractor}
-                data={[]}
+                data={data}
                 onEndReached={onLoadMore}
                 inverted
                 getItemType={getItemType}
