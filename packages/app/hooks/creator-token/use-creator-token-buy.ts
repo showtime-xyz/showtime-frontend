@@ -19,7 +19,8 @@ import {
   getPriceToBuyNextKey,
   useCreatorTokenPriceToBuyNext,
 } from "./use-creator-token-price-to-buy-next";
-import { baseChain, useSwitchChain } from "./use-switch-chain";
+import { useSwitchChain } from "./use-switch-chain";
+import { baseChain } from "./utils";
 
 export const useCreatorTokenBuy = (params: {
   username?: string;

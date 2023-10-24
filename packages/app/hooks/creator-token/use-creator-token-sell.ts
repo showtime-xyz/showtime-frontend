@@ -17,7 +17,8 @@ import { toast } from "design-system/toast";
 import { useWallet } from "../use-wallet";
 import { getTotalCollectedKey } from "./use-contract-total-collected";
 import { getPriceToBuyNextKey } from "./use-creator-token-price-to-buy-next";
-import { baseChain, useSwitchChain } from "./use-switch-chain";
+import { useSwitchChain } from "./use-switch-chain";
+import { baseChain } from "./utils";
 
 export const useCreatorTokenSell = () => {
   const wallet = useWallet();
