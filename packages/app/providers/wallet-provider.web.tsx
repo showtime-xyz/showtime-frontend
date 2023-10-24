@@ -8,7 +8,7 @@ import * as allChains from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
-import { baseChain } from "app/hooks/creator-token/use-switch-chain";
+import { baseChain } from "app/hooks/creator-token/utils";
 
 const lineaChain = {
   id: 59144,
