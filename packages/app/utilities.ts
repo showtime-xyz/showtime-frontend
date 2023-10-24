@@ -918,6 +918,12 @@ export const getWebImageSize = (file: File) => {
 
 export const formatAPIErrorMessage = (error: AxiosError | Error) => {
   let messages = [];
+  console.log(
+    { ...error },
+    axios.isAxiosError(error),
+    (error as any)?.shortMessage
+  );
+
   if (axios.isAxiosError(error)) {
     const res = error.response?.data;
     if (res.errors) {
@@ -925,6 +931,8 @@ export const formatAPIErrorMessage = (error: AxiosError | Error) => {
     } else if (res.error) {
       messages.push(res.error.message);
     }
+  } else if ((error as any)?.shortMessage) {
+    messages.push((error as any).shortMessage);
   } else if (error.message) {
     messages.push(error.message);
   }

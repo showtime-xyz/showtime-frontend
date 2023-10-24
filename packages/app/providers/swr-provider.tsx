@@ -15,6 +15,7 @@ import * as loginStorage from "app/lib/login";
 import * as logoutStorage from "app/lib/logout";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import { isUndefined } from "app/lib/swr/helper";
+import { formatAPIErrorMessage } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -52,7 +53,7 @@ export const SWRProvider = ({
         onError: (err) => {
           if (err?.message && __DEV__ && lastError.current !== err?.message) {
             console.error(err);
-            toast.error(err.message);
+            toast.error(formatAPIErrorMessage(err));
             // sometimes we receive massive toast error spams, I added a little check to prevent that
             lastError.current = err.message;
           }
