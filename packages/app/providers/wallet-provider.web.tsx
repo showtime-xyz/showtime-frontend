@@ -8,27 +8,7 @@ import * as allChains from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
-const baseChain = {
-  id: 8453,
-  name: "Base",
-  network: "mainnet",
-  nativeCurrency: {
-    decimals: 18,
-    name: "Ether",
-    symbol: "ETH",
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://developer-access-mainnet.base.org"],
-    },
-    public: {
-      http: ["https://developer-access-mainnet.base.org"],
-    },
-  },
-  blockExplorers: {
-    default: { name: "Basescan", url: "https://basescan.org" },
-  },
-};
+import { baseChain } from "app/hooks/creator-token/use-switch-chain";
 
 const lineaChain = {
   id: 59144,
@@ -86,7 +66,9 @@ const wagmiConfig = createConfig({
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>{children}</RainbowKitProvider>
+      <RainbowKitProvider chains={chains} initialChain={baseChain}>
+        {children}
+      </RainbowKitProvider>
     </WagmiConfig>
   );
 };
