@@ -928,7 +928,7 @@ export const formatAPIErrorMessage = (error: AxiosError | Error) => {
     const res = error.response?.data;
     if (res?.errors) {
       messages = res.errors.map((e: any) => e.message);
-    } else if (res.error) {
+    } else if (res?.error) {
       messages.push(res.error.message);
     }
   } else if ((error as any)?.shortMessage) {
