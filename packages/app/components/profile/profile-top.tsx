@@ -7,7 +7,7 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 
-import { Button } from "@showtime-xyz/universal.button";
+import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -33,6 +33,8 @@ import { DESKTOP_PROFILE_WIDTH } from "app/constants/layout";
 import { UserProfile, useUserProfile } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
 import { Profile } from "app/types";
 import { getProfileImage, getProfileName } from "app/utilities";
@@ -126,6 +128,8 @@ export const ProfileTop = ({
   const { width, height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
+  const { isIncompletedProfile } = useUser();
+  const redirectToCreateDrop = useRedirectToCreateDrop();
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+
@@ -205,35 +209,54 @@ export const ProfileTop = ({
           </View>
           <View tw="ml-4 flex-1 pt-7">
             <View tw="flex-1">
-              <Text
-                tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
-                numberOfLines={2}
-              >
-                {name}
-              </Text>
-              <View tw="h-2 md:h-3" />
-              <View tw="flex-row items-center">
-                {Boolean(username) && (
-                  <>
-                    <Text tw="text-xl text-gray-900 dark:text-gray-400 md:text-lg">
-                      {`@${username}`}
-                    </Text>
-                  </>
-                )}
+              <View tw="flex-row justify-between">
+                <View>
+                  <Text
+                    tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
+                    numberOfLines={2}
+                  >
+                    {name}
+                  </Text>
+                  <View tw="h-2 md:h-3" />
+                  <View tw="flex-row items-center">
+                    {Boolean(username) && (
+                      <>
+                        <Text tw="text-xl text-gray-900 dark:text-gray-400 md:text-lg">
+                          {`@${username}`}
+                        </Text>
+                      </>
+                    )}
 
-                {profileData?.profile.verified ? (
-                  <View tw="ml-1">
-                    <VerificationBadge size={16} />
+                    {profileData?.profile.verified ? (
+                      <View tw="ml-1">
+                        <VerificationBadge size={16} />
+                      </View>
+                    ) : null}
+                    <View tw="ml-1">
+                      <StarDropBadge
+                        size={16}
+                        data={profileData?.profile.latest_star_drop_collected}
+                      />
+                    </View>
+                    {profileData?.follows_you && !isSelf ? (
+                      <Chip label="Follows You" tw="ml-2" />
+                    ) : null}
                   </View>
-                ) : null}
-                <View tw="ml-1">
-                  <StarDropBadge
-                    size={16}
-                    data={profileData?.profile.latest_star_drop_collected}
-                  />
                 </View>
-                {profileData?.follows_you && !isSelf ? (
-                  <Chip label="Follows You" tw="ml-2" />
+                {isSelf && !isIncompletedProfile ? (
+                  <GradientButton
+                    size="small"
+                    onPress={redirectToCreateDrop}
+                    labelTW={"color-white"}
+                    gradientProps={{
+                      colors: ["#ED0A25", "#ED0ABB"],
+                      locations: [0, 1],
+                      start: { x: 1.0263092128417304, y: 0.5294252532614323 },
+                      end: { x: -0.02630921284173038, y: 0.4705747467385677 },
+                    }}
+                  >
+                    Complete profile
+                  </GradientButton>
                 ) : null}
               </View>
               <View tw="py-2.5">
