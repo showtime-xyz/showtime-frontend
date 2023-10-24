@@ -926,14 +926,14 @@ export const formatAPIErrorMessage = (error: AxiosError | Error) => {
 
   if (axios.isAxiosError(error)) {
     const res = error.response?.data;
-    if (res.errors) {
+    if (res?.errors) {
       messages = res.errors.map((e: any) => e.message);
     } else if (res.error) {
       messages.push(res.error.message);
     }
   } else if ((error as any)?.shortMessage) {
     messages.push((error as any).shortMessage);
-  } else if (error.message) {
+  } else if (error?.message) {
     messages.push(error.message);
   }
 

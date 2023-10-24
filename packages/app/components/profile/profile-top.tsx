@@ -2,6 +2,7 @@ import { useMemo, useCallback } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { BlurView } from "expo-blur";
+import * as Clipboard from "expo-clipboard";
 import Animated, {
   useAnimatedStyle,
   interpolate,
@@ -44,8 +45,10 @@ import {
 } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
+import { toast } from "design-system/toast";
 
 import { ButtonGoldLinearGradient } from "../gold-gradient";
+import { CompleteProfileButton } from "./complete-profile-button";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { ProfileSocial } from "./profile-social";
 
@@ -132,7 +135,6 @@ export const ProfileTop = ({
   const { width, height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
-  const { isIncompletedProfile } = useUser();
   const redirectToCreateDrop = useRedirectToCreateDrop();
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
@@ -247,21 +249,7 @@ export const ProfileTop = ({
                     ) : null}
                   </View>
                 </View>
-                {isSelf && isIncompletedProfile ? (
-                  <GradientButton
-                    size="small"
-                    onPress={redirectToCreateDrop}
-                    labelTW={"color-white"}
-                    gradientProps={{
-                      colors: ["#ED0A25", "#ED0ABB"],
-                      locations: [0, 1],
-                      start: { x: 1.0263092128417304, y: 0.5294252532614323 },
-                      end: { x: -0.02630921284173038, y: 0.4705747467385677 },
-                    }}
-                  >
-                    Complete profile
-                  </GradientButton>
-                ) : null}
+                <CompleteProfileButton isSelf={isSelf} />
               </View>
               <View tw="py-2.5">
                 {bio ? (
@@ -342,8 +330,8 @@ export const ProfileTop = ({
               )}
             </Skeleton>
           </Animated.View>
-          <View tw="ml-4 flex-row items-start justify-between">
-            <View tw="flex-1">
+          <View tw="ml-4 flex-1 flex-row items-start justify-between">
+            <View>
               <Text
                 tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
                 numberOfLines={2}
@@ -351,10 +339,20 @@ export const ProfileTop = ({
                 {name}
               </Text>
               <View tw="h-2 md:h-3" />
-              <View tw="flex-row items-center">
+              <Pressable
+                tw="flex-row items-center"
+                onPress={async () => {
+                  if (!username) return;
+                  await Clipboard.setStringAsync(username);
+                  toast.success("Copied!");
+                }}
+              >
                 {Boolean(username) && (
                   <>
-                    <Text tw="text-xl text-gray-900 dark:text-gray-400 md:text-lg">
+                    <Text
+                      tw="max-w-[120px] text-xl text-gray-900 dark:text-gray-400 md:text-lg"
+                      numberOfLines={1}
+                    >
                       {`@${username}`}
                     </Text>
                   </>
@@ -374,7 +372,10 @@ export const ProfileTop = ({
                 {profileData?.follows_you && !isSelf ? (
                   <Chip label="Follows You" tw="ml-2" />
                 ) : null}
-              </View>
+              </Pressable>
+            </View>
+            <View tw="ml-auto">
+              <CompleteProfileButton isSelf={isSelf} />
             </View>
           </View>
         </View>
