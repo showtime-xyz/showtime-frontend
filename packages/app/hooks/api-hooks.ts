@@ -216,9 +216,9 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     collectionId = defaultFilters.collectionId,
     refreshInterval,
   } = params;
-  const tabType = type === "tokens" ? "drops" : type;
+  const tabType = type === "tokens" ? null : type;
 
-  const trendingCreatorsUrlFn = useCallback(
+  const profileUrlFn = useCallback(
     (index: number) => {
       const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
         index + 1
@@ -229,7 +229,7 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
   );
 
   const { mutate, ...queryState } = useInfiniteListQuerySWR<UseProfileNFTs>(
-    params?.profileId && tabType ? trendingCreatorsUrlFn : () => null,
+    params?.profileId && tabType ? profileUrlFn : () => null,
     { refreshInterval, pageSize: PAGE_SIZE }
   );
 

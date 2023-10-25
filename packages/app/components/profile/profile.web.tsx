@@ -162,17 +162,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
       index: itemIndex,
     }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
       if (type === "tokens") {
-        if (itemIndex === 0) {
-          return (
-            <>
-              <TokensTabHeader
-                channelId={channelId}
-                isSelf={isSelf}
-                messageCount={messageCount}
-              />
-            </>
-          );
-        }
         return null;
       }
       return (
@@ -188,10 +177,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
         />
       );
     },
-    [channelId, isSelf, messageCount, numColumns, profileId, type]
+    [numColumns, profileId, type]
   );
   const ListFooterComponent = useCallback(() => {
-    if ((isLoadingMore || profileIsLoading) && !error) {
+    if (((isLoadingMore && isLoading) || profileIsLoading) && !error) {
       return (
         <View
           tw="mx-auto flex-row items-center justify-center py-4"
@@ -202,7 +191,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       );
     }
     return null;
-  }, [contentWidth, isLoadingMore, profileIsLoading, error]);
+  }, [isLoadingMore, isLoading, profileIsLoading, error, contentWidth]);
   const onChangeTabBar = useCallback(
     (index: number) => {
       const currentType = routes[index].key;
@@ -233,7 +222,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <ProfileError error={error} isBlocked={isBlocked} username={username} />
       );
     }
-
+    if (type === "tokens") {
+      return null;
+    }
     if (
       list.length === 0 &&
       !isLoading &&
@@ -325,12 +316,18 @@ const Profile = ({ username }: ProfileScreenProps) => {
                     isError={isError}
                     isSelf={isSelf}
                   />
-
                   <ProfileTabBar
                     onPress={onChangeTabBar}
                     routes={routes}
                     index={routes.findIndex((item) => item.key === type)}
                   />
+                  {type === "tokens" && (
+                    <TokensTabHeader
+                      channelId={channelId}
+                      isSelf={isSelf}
+                      messageCount={messageCount}
+                    />
+                  )}
                   <InfiniteScrollList
                     useWindowScroll
                     numColumns={numColumns}
