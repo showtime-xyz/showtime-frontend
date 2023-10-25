@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { EyeOffV2 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -20,14 +21,19 @@ export const ProfileNFTHiddenButton = ({
   onPress: () => void;
   showHidden: boolean;
 }) => {
+  const isDark = useIsDarkMode();
   return (
     <View tw="my-4 items-center">
       <Pressable
         onPress={onPress}
-        tw="flex-row items-center justify-center rounded-full bg-gray-200 px-2 py-1"
+        tw="flex-row items-center justify-center rounded-full bg-gray-200 px-2 py-1 dark:bg-gray-700"
       >
-        <EyeOffV2 color={colors.gray[600]} width={16} height={16} />
-        <Text tw="ml-1 text-sm text-gray-600">
+        <EyeOffV2
+          color={isDark ? colors.gray[400] : colors.gray[600]}
+          width={16}
+          height={16}
+        />
+        <Text tw="ml-1 text-sm text-gray-600 dark:text-gray-400">
           {showHidden ? "Hidden" : "Show hidden"}
         </Text>
       </Pressable>
