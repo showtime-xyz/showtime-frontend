@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Flip, ShowtimeRounded } from "@showtime-xyz/universal.icon";
@@ -35,7 +36,9 @@ export const SelfServeExplainer = () => {
   const isDark = useIsDarkMode();
   const { user } = useUser();
   const { top } = useSafeAreaInsets();
-  const userProfilePic = user?.data.profile.img_url;
+  // const userProfilePic = user?.data.profile.img_url;
+  const userProfilePic = "";
+
   const [profilePic, setProfilePic] = useState<string | undefined | File>(
     userProfilePic
   );
@@ -87,20 +90,22 @@ export const SelfServeExplainer = () => {
         }
       }
     }
+    if (!userProfilePic) {
+      await axios({
+        url: "/v1/creator-token/metadata/prepare",
+        method: "POST",
+      });
+    }
     await deployContract();
     creatorTokenDeployStatus.pollDeployStatus();
-  }, [creatorTokenDeployStatus, deployContract, matchMutate, mutate, value]);
-  useEffect(() => {
-    const prepareCreatorToken = async () => {
-      if (!userProfilePic) {
-        await axios({
-          url: "/v1/creator-token/metadata/prepare",
-          method: "POST",
-        });
-      }
-    };
-    prepareCreatorToken();
-  }, [userProfilePic]);
+  }, [
+    creatorTokenDeployStatus,
+    deployContract,
+    matchMutate,
+    mutate,
+    userProfilePic,
+    value,
+  ]);
 
   Logger.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
 
