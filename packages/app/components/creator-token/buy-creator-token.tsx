@@ -273,9 +273,9 @@ export const BuyCreatorToken = () => {
                 Quantity to {selectedAction === "buy" ? "buy" : "sell"}:
               </Text>
               <View tw="w-4" />
-              <View tw="flex-1 flex-row rounded-sm border-[1px] border-gray-200 dark:border-gray-700">
+              <View tw="flex-1 flex-row overflow-hidden rounded-xl border-[1px] border-gray-200 dark:border-gray-700">
                 <View tw="flex-1 border-gray-200 p-4 text-center dark:border-gray-700 dark:text-gray-200">
-                  <Text tw="pt-0.5 font-bold text-gray-900 dark:text-gray-200">
+                  <Text tw="pt-0.5 text-xl font-semibold text-gray-900 dark:text-gray-200">
                     {tokenAmount}
                   </Text>
                 </View>
@@ -299,7 +299,7 @@ export const BuyCreatorToken = () => {
                         : t + 1
                     );
                   }}
-                  tw="flex-1 items-center bg-blue-50 p-4 dark:bg-gray-800"
+                  tw="flex-1 items-center justify-center bg-blue-50 p-4 dark:bg-gray-800"
                 >
                   <Text tw="select-none text-3xl font-normal text-gray-800 dark:text-gray-200">
                     +
