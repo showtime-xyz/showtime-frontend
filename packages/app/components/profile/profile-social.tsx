@@ -105,7 +105,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             onPress={() => onPressLink(`https://twitter.com/${twitter}`)}
             aria-label="Twitter"
             role="link"
-            tw="ml-2"
+            tw="mr-2"
           >
             <Twitter
               width={20}
@@ -119,7 +119,6 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             onPress={() => onPressLink(`https://instagram.com/${instagram}`)}
             aria-label="Instagram"
             role="link"
-            tw="ml-2"
           >
             <Instagram
               width={20}
