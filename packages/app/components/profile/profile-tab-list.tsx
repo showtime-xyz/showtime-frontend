@@ -4,6 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useRef,
+  useState,
 } from "react";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
@@ -29,6 +30,7 @@ import { NFT } from "app/types";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { ProfileFooter } from "./profile-footer";
+import { ProfileHideList, ProfileNFTHiddenButton } from "./profile-hide-list";
 
 type TabListProps = {
   username?: string;
@@ -47,8 +49,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
     { username, profileId, isBlocked, list, index },
     ref
   ) {
-    console.log(list.type);
-
+    const [showHidden, setShowHidden] = useState(false);
     const router = useRouter();
     const { filter } = useContext(FilterContext);
     const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
@@ -84,6 +85,21 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       () => <ProfileFooter isLoading={isLoadingMore} />,
       [isLoadingMore]
     );
+    const ListHeaderComponent = useCallback(() => {
+      if (list.type === "song_drops_created") {
+        return (
+          <>
+            <ProfileNFTHiddenButton
+              onPress={() => {
+                setShowHidden(!showHidden);
+              }}
+              showHidden={showHidden}
+            />
+            {showHidden ? <ProfileHideList profileId={profileId} /> : null}
+          </>
+        );
+      }
+    }, [list.type, profileId, showHidden]);
 
     const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
 
@@ -95,7 +111,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
         return (
           <Card
             nft={item}
-            onPress={() => onItemPress(item, itemIndex)}
+            onPress={() => onItemPress(item)}
             numColumns={NUM_COLUMNS}
             index={itemIndex}
           />
@@ -156,6 +172,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
             estimatedItemSize={contentWidth / NUM_COLUMNS}
             style={{ margin: -GAP }}
             ListFooterComponent={ListFooterComponent}
+            ListHeaderComponent={ListHeaderComponent}
             onEndReached={fetchMore}
             index={index}
           />

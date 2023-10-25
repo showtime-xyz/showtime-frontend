@@ -160,7 +160,7 @@ export const ProfileTop = ({
     return (
       <View tw="pl-7">
         <View tw="flex-row">
-          <View tw="pb-2">
+          <View tw="pb-7">
             <View
               style={[
                 {
@@ -226,7 +226,7 @@ export const ProfileTop = ({
                   <View tw="flex-row items-center">
                     {Boolean(username) && (
                       <>
-                        <Text tw="text-xl text-gray-900 dark:text-gray-400 md:text-lg">
+                        <Text tw="text-xl text-gray-900 dark:text-gray-400">
                           {`@${username}`}
                         </Text>
                       </>
@@ -250,7 +250,7 @@ export const ProfileTop = ({
                 </View>
                 <CompleteProfileButton isSelf={isSelf} />
               </View>
-              <View tw="py-2.5">
+              <View tw="pb-3.5 pt-4">
                 {bio ? (
                   <View tw="items-baseline">
                     <ClampText

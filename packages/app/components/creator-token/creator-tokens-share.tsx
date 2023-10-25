@@ -98,7 +98,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const viewChannel = useCallback(() => {
     const pathname = `/channels/${profileData?.channels[0].id}?unlocked=now`;
     if (Platform.OS === "web") {
-      router.replace(pathname);
+      router.push(pathname);
     } else {
       router.pop();
       router.push(pathname);
