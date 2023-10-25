@@ -14,6 +14,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useUser } from "app/hooks/use-user";
+import { axios } from "app/lib/axios";
 import { DropFileZone } from "app/lib/drop-file-zone";
 import { useFilePicker } from "app/lib/file-picker";
 
@@ -34,7 +35,11 @@ export const ReviewCreatorToken = () => {
   const isDark = useIsDarkMode();
   const { user } = useUser();
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async () => {
+    await axios({
+      url: "/v1/creator-token/metadata/prepare",
+      method: "POST",
+    });
     if (user?.data.profile.username) {
       redirectToCreatorTokensShare({
         username: user?.data.profile.username,

@@ -1,9 +1,8 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 
-import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Flip, ShowtimeRounded } from "@showtime-xyz/universal.icon";
@@ -63,6 +62,10 @@ export const SelfServeExplainer = () => {
   });
   const loading = creatorTokenDeployStatus.status === "pending" || isMutating;
   const onSubmit = useCallback(async () => {
+    await axios({
+      url: "/v1/creator-token/metadata/prepare",
+      method: "POST",
+    });
     if (value) {
       const formData = new FormData();
       const profilePictureFormData = await getFileFormData(value);
@@ -90,22 +93,10 @@ export const SelfServeExplainer = () => {
         }
       }
     }
-    if (!userProfilePic) {
-      await axios({
-        url: "/v1/creator-token/metadata/prepare",
-        method: "POST",
-      });
-    }
+
     await deployContract();
     creatorTokenDeployStatus.pollDeployStatus();
-  }, [
-    creatorTokenDeployStatus,
-    deployContract,
-    matchMutate,
-    mutate,
-    userProfilePic,
-    value,
-  ]);
+  }, [creatorTokenDeployStatus, deployContract, matchMutate, mutate, value]);
 
   Logger.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
 
