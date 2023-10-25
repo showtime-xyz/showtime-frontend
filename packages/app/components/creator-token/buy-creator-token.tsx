@@ -275,7 +275,10 @@ export const BuyCreatorToken = () => {
               <View tw="w-4" />
               <View tw="flex-1 flex-row overflow-hidden rounded-xl border-[1px] border-gray-200 dark:border-gray-700">
                 <View tw="flex-1 border-gray-200 p-4 text-center dark:border-gray-700 dark:text-gray-200">
-                  <Text tw="pt-0.5 text-xl font-semibold text-gray-900 dark:text-gray-200">
+                  <Text
+                    tw="text-xl font-semibold text-gray-900 dark:text-gray-200"
+                    style={{ lineHeight: 24 }}
+                  >
                     {tokenAmount}
                   </Text>
                 </View>
@@ -283,7 +286,7 @@ export const BuyCreatorToken = () => {
                   onPress={() => {
                     setTokenAmount((t) => (t > 1 ? t - 1 : 1));
                   }}
-                  tw="flex-1 items-center border-[1px] border-transparent border-l-gray-200 border-r-gray-200 bg-blue-50 p-4 dark:border-l-gray-600 dark:border-r-gray-600 dark:bg-gray-800"
+                  tw="-mt-0.5 flex-1 items-center border-[1px] border-transparent border-l-gray-200 border-r-gray-200 bg-blue-50 p-4 dark:border-l-gray-600 dark:border-r-gray-600 dark:bg-gray-800"
                 >
                   <Text tw="dark:text-gray-20 select-none text-2xl font-normal text-gray-800">
                     —
@@ -299,7 +302,7 @@ export const BuyCreatorToken = () => {
                         : t + 1
                     );
                   }}
-                  tw="flex-1 items-center justify-center bg-blue-50 p-4 dark:bg-gray-800"
+                  tw="-mt-1 flex-1 items-center justify-center bg-blue-50 p-4 dark:bg-gray-800"
                 >
                   <Text tw="select-none text-3xl font-normal text-gray-800 dark:text-gray-200">
                     +
