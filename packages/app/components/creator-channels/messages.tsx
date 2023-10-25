@@ -338,15 +338,17 @@ export const Messages = memo(() => {
           edition={edition}
           isUserAdmin={isUserAdmin}
           permissions={channelDetail.data?.permissions}
+          channelOwnerProfileId={channelDetail?.data?.owner.profile_id}
         />
       );
     },
     [
-      channelDetail.data?.permissions,
       editMessageIdSharedValue,
       editMessageItemDimension,
       edition,
       isUserAdmin,
+      channelDetail.data?.permissions,
+      channelDetail.data?.owner.profile_id,
     ]
   );
 

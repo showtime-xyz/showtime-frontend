@@ -69,11 +69,13 @@ export const MessageItem = memo(
     editMessageItemDimension,
     permissions,
     isUserAdmin,
+    channelOwnerProfileId,
   }: MessageItemProps & {
     edition?: CreatorEditionResponse;
     isUserAdmin?: boolean;
     permissions?: ChannelById["permissions"];
     listRef: RefObject<FlashList<any>>;
+    channelOwnerProfileId: number;
     editMessageIdSharedValue: SharedValue<number | undefined>;
     editMessageItemDimension: SharedValue<{
       height: number;
@@ -144,7 +146,7 @@ export const MessageItem = memo(
       return false;
     }, [channel_message.created_at]);
 
-    const isByCreator = channel_message?.sent_by?.admin;
+    const isByCreator = channel_message?.sent_by?.id === channelOwnerProfileId;
 
     const loremText = useMemo(
       () =>
