@@ -86,7 +86,10 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
       [isLoadingMore]
     );
     const ListHeaderComponent = useCallback(() => {
-      if (list.type === "song_drops_created") {
+      if (
+        list.type === "song_drops_created" &&
+        user?.data.profile.profile_id === profileId
+      ) {
         return (
           <>
             <ProfileNFTHiddenButton
@@ -99,7 +102,7 @@ export const ProfileTabList = forwardRef<ProfileTabListRef, TabListProps>(
           </>
         );
       }
-    }, [list.type, profileId, showHidden]);
+    }, [list.type, profileId, showHidden, user?.data.profile.profile_id]);
 
     const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
 
