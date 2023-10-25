@@ -77,6 +77,24 @@ export const useCreatorTokenSell = () => {
         return;
       }
 
+      for (let i = 0; i < tokenIds.length; i++) {
+        const tokenId = tokenIds[i];
+        const res: any = await publicClient.readContract({
+          address: arg.contractAddress,
+          abi: creatorTokenAbi,
+          functionName: "ownerOf",
+          args: [tokenId],
+        });
+
+        if (res && res.toLowerCase() !== walletAddress?.toLowerCase()) {
+          Alert.alert(
+            "Failed",
+            `You don't own all the tokens you are trying to sell. The token id ${tokenId} is owned by ${res} and your current wallet address is ${walletAddress}`
+          );
+          return;
+        }
+      }
+
       if (tokenIds.length === 1) {
         const { request } = await publicClient.simulateContract({
           address: arg.contractAddress,

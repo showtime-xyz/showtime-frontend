@@ -288,7 +288,7 @@ export const BuyCreatorToken = () => {
                   }}
                   tw="-mt-0.5 flex-1 items-center border-[1px] border-transparent border-l-gray-200 border-r-gray-200 bg-blue-50 p-4 dark:border-l-gray-600 dark:border-r-gray-600 dark:bg-gray-800"
                 >
-                  <Text tw="dark:text-gray-20 select-none text-2xl font-normal text-gray-800">
+                  <Text tw="select-none text-2xl font-normal text-gray-800 dark:text-gray-200">
                     —
                   </Text>
                 </Pressable>
