@@ -45,8 +45,6 @@ const VISIBLE_HEIGHT_NATIVE = 60;
 const heightsNative = [HIDDEN_HEIGHT, VISIBLE_HEIGHT_NATIVE];
 
 const CreatorTokensBanner = () => {
-  console.log(getIsShowCreatorTokenIntroBanner());
-
   const showValue = getIsShowCreatorTokenIntroBanner() ? 1 : 0;
   const showBanner = useSharedValue(showValue);
   const translateYValues = [HIDDEN_HEIGHT, showValue];
