@@ -24,4 +24,5 @@ export type UseWalletReturnType = {
   isMagicWallet?: boolean;
   getBalance: (address: string) => Promise<bigint | undefined>;
   walletClient?: WalletClient | null;
+  getWalletClient: () => WalletClient | undefined | null;
 };

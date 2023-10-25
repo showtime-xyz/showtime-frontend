@@ -44,14 +44,12 @@ export const useCreatorTokenSell = () => {
     ) => {
       await loginPromise();
 
-      let walletAddress = wallet.address;
       if (wallet.isMagicWallet) {
         await wallet.disconnect();
-        const account = await wallet.connect();
-        if (account) {
-          walletAddress = account.address;
-        }
+        await wallet.connect();
       }
+
+      let walletAddress = wallet.getWalletClient?.()?.account?.address;
 
       const tokenIdsRes = await axios({
         url:

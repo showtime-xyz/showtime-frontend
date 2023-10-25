@@ -16,7 +16,7 @@ const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const web3Modal = useWeb3Modal();
-  const { web3, isMagic, magicWalletAddress } = useWeb3();
+  const { web3, isMagic, magicWalletAddress, getWalletClient } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
   const { getBalance } = useWalletBalance();
   const [address, setAddress] = useState<`0x${string}` | undefined>();
@@ -130,6 +130,7 @@ const useWallet = (): UseWalletReturnType => {
       networkChanged: undefined,
       getBalance,
       walletClient: web3,
+      getWalletClient,
       signMessageAsync: async (args: { message: string }) => {
         if (
           walletConnectInstanceRef.current.isConnected &&
@@ -171,6 +172,7 @@ const useWallet = (): UseWalletReturnType => {
     walletConnectInstanceRef,
     coinbaseMobileSDKInstanceRef,
     web3,
+    getWalletClient,
   ]);
 
   if (process.env.E2E) {

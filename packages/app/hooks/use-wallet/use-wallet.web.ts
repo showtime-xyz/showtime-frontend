@@ -20,16 +20,11 @@ import { ConnectResult, UseWalletReturnType } from "./types";
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const { getBalance } = useWalletBalance();
+  const connectorRef = useRef<any>(null);
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const wagmiData = useAccount({
-    onConnect: ({ connector, ...rest }) => {
-      const walletName = connector?.name;
-      walletConnectedPromiseResolveCallback.current?.({
-        ...rest,
-        connector: connector,
-        walletName,
-      });
-      walletConnectedPromiseResolveCallback.current = null;
+    onConnect: (connectorParams) => {
+      connectorRef.current = connectorParams;
     },
     onDisconnect: () => {
       walletDisconnectedPromiseResolveCallback.current?.();
@@ -41,7 +36,7 @@ const useWallet = (): UseWalletReturnType => {
   const { chain } = useNetwork();
   const { openConnectModal } = useConnectModal();
   const { disconnect } = useDisconnect();
-  const { web3, isMagic, magicWalletAddress } = useWeb3();
+  const { web3, isMagic, magicWalletAddress, getWalletClient } = useWeb3();
 
   const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
   const [address, setAddress] = useState<`0x${string}` | undefined>();
@@ -63,6 +58,17 @@ const useWallet = (): UseWalletReturnType => {
       }
     })();
   }, [web3, wagmiData?.address, magicWalletAddress]);
+
+  useEffect(() => {
+    if (
+      wagmiData.isConnected &&
+      walletConnectedPromiseResolveCallback.current &&
+      web3?.account?.address === wagmiData.address
+    ) {
+      walletConnectedPromiseResolveCallback.current(connectorRef.current);
+      walletConnectedPromiseResolveCallback.current = null;
+    }
+  }, [wagmiData.address, wagmiData.isConnected, web3?.account?.address]);
 
   const connected =
     (wagmiData.isConnected && !!wagmiSigner?.account.address && !!chain) ||
@@ -86,6 +92,7 @@ const useWallet = (): UseWalletReturnType => {
           walletConnectedPromiseResolveCallback.current = resolve;
         });
       },
+      getWalletClient,
       connected,
       disconnect: async () => {
         localStorage.removeItem("walletconnect");
@@ -112,6 +119,7 @@ const useWallet = (): UseWalletReturnType => {
     openConnectModalRef,
     disconnect,
     wagmiData.isConnected,
+    getWalletClient,
   ]);
 
   return result;

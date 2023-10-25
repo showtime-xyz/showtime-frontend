@@ -11,7 +11,8 @@ export const useSwitchChain = () => {
   const wallet = useWallet();
   const state = useSWRMutation("switchChain", async function switchChain() {
     if (wallet.address) {
-      const currentChain = await wallet.walletClient?.getChainId();
+      const walletClient = wallet.getWalletClient?.();
+      const currentChain = await walletClient?.getChainId();
       if (currentChain !== baseChain.id) {
         // HACK because mobile wallets are notoriously buggy
         if (isMobileWeb()) {
@@ -20,15 +21,18 @@ export const useSwitchChain = () => {
           );
         } else {
           try {
-            await wallet?.walletClient?.switchChain({ id: baseChain.id });
+            await walletClient?.switchChain({ id: baseChain.id });
+            return true;
           } catch (e: any) {
             if (e.code === 4902) {
-              await wallet?.walletClient?.addChain({
+              await walletClient?.addChain({
                 chain: baseChain,
               });
             }
           }
         }
+      } else {
+        return true;
       }
     }
   });

@@ -20,15 +20,18 @@ export const useApproveToken = () => {
       }
     ) {
       const erc20Abi = require("app/abi/IERC20Permit.json");
-      if (wallet.address) {
+      const walletClient = wallet.getWalletClient?.();
+
+      const walletAddress = walletClient?.account?.address;
+      if (walletAddress) {
         const { creatorTokenContract, maxPrice } = arg;
         const chain = isDEV ? baseGoerli : base;
         const res = (await publicClient?.readContract({
           address: usdcAddress,
-          account: wallet.address,
+          account: walletAddress,
           abi: erc20Abi,
           functionName: "allowance",
-          args: [wallet.address, creatorTokenContract],
+          args: [walletAddress, creatorTokenContract],
         })) as unknown as bigint;
         console.log(
           "allowance and required price ",
@@ -38,9 +41,9 @@ export const useApproveToken = () => {
         );
 
         if (res < maxPrice) {
-          const hash = await wallet.walletClient?.writeContract({
+          const hash = await walletClient?.writeContract({
             address: usdcAddress,
-            account: wallet.address,
+            account: walletAddress,
             abi: erc20Abi,
             functionName: "approve",
             args: [creatorTokenContract, maxPrice],
