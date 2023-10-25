@@ -263,7 +263,7 @@ export const BuyCreatorToken = () => {
               {tokenBalance.isLoading ? (
                 <Skeleton width={40} height={14} />
               ) : (
-                <Text tw="text-gray-700 dark:text-gray-200">
+                <Text tw="font-semibold text-gray-700 dark:text-gray-200">
                   {tokenBalance.data?.toString()}
                 </Text>
               )}
@@ -275,7 +275,7 @@ export const BuyCreatorToken = () => {
               <View tw="w-4" />
               <View tw="flex-1 flex-row rounded-sm border-[1px] border-gray-200 dark:border-gray-700">
                 <View tw="flex-1 border-gray-200 p-4 text-center dark:border-gray-700 dark:text-gray-200">
-                  <Text tw="text-gray-900 dark:text-gray-200">
+                  <Text tw="pt-0.5 font-bold text-gray-900 dark:text-gray-200">
                     {tokenAmount}
                   </Text>
                 </View>
@@ -285,7 +285,7 @@ export const BuyCreatorToken = () => {
                   }}
                   tw="flex-1 items-center border-[1px] border-transparent border-l-gray-200 border-r-gray-200 bg-blue-50 p-4 dark:border-l-gray-600 dark:border-r-gray-600 dark:bg-gray-800"
                 >
-                  <Text tw="text-2xl font-normal text-gray-800 dark:text-gray-200">
+                  <Text tw="dark:text-gray-20 select-none text-2xl font-normal text-gray-800">
                     —
                   </Text>
                 </Pressable>
@@ -301,7 +301,7 @@ export const BuyCreatorToken = () => {
                   }}
                   tw="flex-1 items-center bg-blue-50 p-4 dark:bg-gray-800"
                 >
-                  <Text tw="text-3xl font-normal text-gray-800 dark:text-gray-200">
+                  <Text tw="select-none text-3xl font-normal text-gray-800 dark:text-gray-200">
                     +
                   </Text>
                 </Pressable>
@@ -322,7 +322,7 @@ export const BuyCreatorToken = () => {
                   {priceToBuyNext.isLoading ? (
                     <Skeleton width={40} height={14} />
                   ) : (
-                    <Text tw="text-gray-700 dark:text-gray-200">
+                    <Text tw="font-semibold text-gray-700 dark:text-gray-200">
                       ${priceToBuyNext.data?.displayPrice}
                     </Text>
                   )}
@@ -332,7 +332,7 @@ export const BuyCreatorToken = () => {
                   {priceToSellNext.isLoading ? (
                     <Skeleton width={40} height={14} />
                   ) : (
-                    <Text tw="text-gray-700 dark:text-gray-200">
+                    <Text tw="font-semibold text-gray-700 dark:text-gray-200">
                       ${priceToSellNext.data?.displayPrice}
                     </Text>
                   )}
