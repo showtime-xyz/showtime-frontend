@@ -67,7 +67,7 @@ export const useCreatorTokenSell = () => {
         tokenIds.length === 1 &&
         user?.user?.data.profile.creator_token?.address === arg.contractAddress
       ) {
-        toast.error("You cannot sell your last token");
+        toast.error("You need at least 1 of your Creator Token.");
         return;
       }
 
