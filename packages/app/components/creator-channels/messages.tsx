@@ -410,6 +410,7 @@ export const Messages = memo(() => {
                   </Button>
                 </View>
               </View>
+              {/* TODO: Creator Tokens P1
               <View tw="mt-5 w-full max-w-[357px] rounded-2xl border border-gray-300 bg-gray-100 pb-3 pt-3 dark:border-gray-800 dark:bg-gray-900">
                 <View tw="px-6 pt-1">
                   <View tw="flex-row items-center">
@@ -433,18 +434,13 @@ export const Messages = memo(() => {
                   </Button>
                 </View>
               </View>
+              */}
             </>
           )}
         </View>
       </AnimatedView>
     );
-  }, [
-    introCompensation,
-    isUserAdmin,
-    router,
-    shareLink,
-    windowDimension.height,
-  ]);
+  }, [introCompensation, isUserAdmin, shareLink, windowDimension.height]);
 
   const extraData = useMemo(
     () => ({ reactions: channelDetail.data?.channel_reactions, channelId }),
