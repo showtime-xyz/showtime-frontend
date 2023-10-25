@@ -8,7 +8,7 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 
-import { Close, Showtime, ShowtimeRounded } from "@showtime-xyz/universal.icon";
+import { Close, ShowtimeRounded } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -156,7 +156,6 @@ const CreatorTokensBanner = () => {
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const user = useContext(UserContext);
   const { data: banners = [], isLoading: isLoadingBanner } = useBanners();
   const router = useRouter();
   const pagerWidth = isMdWidth
