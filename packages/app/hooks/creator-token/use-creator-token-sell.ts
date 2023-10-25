@@ -44,9 +44,13 @@ export const useCreatorTokenSell = () => {
     ) => {
       await loginPromise();
 
+      let walletAddress = wallet.address;
       if (wallet.isMagicWallet) {
         await wallet.disconnect();
-        await wallet.connect();
+        const account = await wallet.connect();
+        if (account) {
+          walletAddress = account.address;
+        }
       }
 
       const tokenIdsRes = await axios({
@@ -78,7 +82,7 @@ export const useCreatorTokenSell = () => {
       if (tokenIds.length === 1) {
         const { request } = await publicClient.simulateContract({
           address: arg.contractAddress,
-          account: wallet.address,
+          account: walletAddress,
           abi: creatorTokenAbi,
           functionName: "sell",
           args: [tokenIds[0]],
@@ -88,7 +92,7 @@ export const useCreatorTokenSell = () => {
       } else {
         const { request } = await publicClient.simulateContract({
           address: arg.contractAddress,
-          account: wallet.address,
+          account: walletAddress,
           abi: creatorTokenAbi,
           functionName: "bulkSell",
           args: [tokenIds],

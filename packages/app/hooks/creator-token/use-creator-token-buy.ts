@@ -44,12 +44,16 @@ export const useCreatorTokenBuy = (params: {
     async () => {
       await loginPromise();
 
+      let walletAddress = wallet.address;
       if (wallet.isMagicWallet) {
         await wallet.disconnect();
-        await wallet.connect();
+        const account = await wallet.connect();
+        if (account) {
+          walletAddress = account.address;
+        }
       }
 
-      if (wallet.address && profileData?.data?.profile.creator_token) {
+      if (walletAddress && profileData?.data?.profile.creator_token) {
         await switchChain.trigger();
         // @ts-ignore
         const result = await approveToken.trigger({
@@ -65,7 +69,7 @@ export const useCreatorTokenBuy = (params: {
           if (tokenAmount === 1) {
             const { request } = await publicClient.simulateContract({
               address: profileData?.data?.profile.creator_token.address,
-              account: wallet.address,
+              account: walletAddress,
               abi: creatorTokenAbi,
               functionName: "buy",
               args: [priceToBuyNext.data?.totalPrice],
@@ -75,7 +79,7 @@ export const useCreatorTokenBuy = (params: {
           } else {
             const { request } = await publicClient.simulateContract({
               address: profileData?.data?.profile.creator_token.address,
-              account: wallet.address,
+              account: walletAddress,
               abi: creatorTokenAbi,
               functionName: "bulkBuy",
               args: [tokenAmount, priceToBuyNext.data?.totalPrice],

@@ -3,7 +3,7 @@ import type { WalletClient } from "viem";
 
 export type ConnectResult = Promise<
   | {
-      address: string;
+      address: `0x${string}`;
       walletName: string;
       /**
        * **WEB ONLY**: from wagmi lib
