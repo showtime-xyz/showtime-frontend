@@ -9,6 +9,7 @@ import { creatorTokenAbi } from "app/abi/CreatorTokenAbi";
 import { UserContext } from "app/context/user-context";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
+import { useLogInPromise } from "app/lib/login-promise";
 import { publicClient } from "app/lib/wallet-public-client";
 import { formatAPIErrorMessage } from "app/utilities";
 
@@ -26,6 +27,7 @@ export const useCreatorTokenSell = () => {
   const switchChain = useSwitchChain();
   const { mutate } = useSWRConfig();
   const user = useContext(UserContext);
+  const { loginPromise } = useLogInPromise();
   const state = useSWRMutation(
     "sellToken",
     async (
@@ -40,6 +42,8 @@ export const useCreatorTokenSell = () => {
         };
       }
     ) => {
+      await loginPromise();
+
       if (wallet.isMagicWallet) {
         await wallet.disconnect();
         await wallet.connect();

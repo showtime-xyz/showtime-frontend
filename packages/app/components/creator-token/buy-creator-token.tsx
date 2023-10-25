@@ -74,9 +74,7 @@ export const BuyCreatorToken = () => {
   });
 
   const renderBuyButton = () => {
-    if (wallet.isMagicWallet) {
-      return <Button onPress={() => buyToken.trigger()}>Connect</Button>;
-    } else if (selectedAction === "sell") {
+    if (selectedAction === "sell") {
       return (
         <Button
           disabled={sellToken.isMutating}
@@ -96,7 +94,11 @@ export const BuyCreatorToken = () => {
             }
           }}
         >
-          {sellToken.isMutating ? "Please wait..." : "Sell"}
+          {sellToken.isMutating
+            ? "Please wait..."
+            : wallet.isMagicWallet
+            ? "Connect"
+            : "Sell"}
         </Button>
       );
     } else {
@@ -117,7 +119,11 @@ export const BuyCreatorToken = () => {
             }
           }}
         >
-          {buyToken.isMutating ? "Please wait..." : "Approve & Buy"}
+          {buyToken.isMutating
+            ? "Please wait..."
+            : wallet.isMagicWallet
+            ? "Connect"
+            : "Approve & Buy"}
         </Button>
       );
     }
