@@ -268,10 +268,11 @@ export const TokensTab = forwardRef<
   //   [list.type, profileId, filter.collectionId, filter.sortType, router]
   // );
 
-  const ListFooterComponent = useCallback(
-    () => <ProfileSpinnerFooter isLoading={isLoadingMore} />,
-    [isLoadingMore]
-  );
+  const ListFooterComponent = useCallback(() => {
+    if (isLoading) {
+      return <ProfileSpinnerFooter isLoading={isLoadingMore} />;
+    }
+  }, [isLoading, isLoadingMore]);
 
   const ListHeaderComponent = useCallback(
     () => (
@@ -291,6 +292,10 @@ export const TokensTab = forwardRef<
     },
     []
   );
+  const ListEmptyComponent = useCallback(() => {
+    return null;
+    // return <EmptyPlaceholder title="No creator token, yet." hideLoginBtn />;
+  }, []);
 
   if (isBlocked) {
     return (
@@ -311,21 +316,6 @@ export const TokensTab = forwardRef<
     );
   }
 
-  if (isLoading) {
-    return <TabSpinner index={index} />;
-  }
-  if (data.length === 0 && !isLoading) {
-    return (
-      <TabScrollView
-        contentContainerStyle={{ marginTop: 48, alignItems: "center" }}
-        index={index}
-        ref={listRef}
-      >
-        <EmptyPlaceholder title="No drops, yet." hideLoginBtn />
-      </TabScrollView>
-    );
-  }
-
   return (
     <MutateProvider mutate={updateItem}>
       <ProfileTabsNFTProvider
@@ -341,6 +331,7 @@ export const TokensTab = forwardRef<
           ListHeaderComponent={ListHeaderComponent}
           estimatedItemSize={contentWidth / NUM_COLUMNS}
           ListFooterComponent={ListFooterComponent}
+          ListEmptyComponent={ListEmptyComponent}
           onEndReached={fetchMore}
           index={index}
         />
