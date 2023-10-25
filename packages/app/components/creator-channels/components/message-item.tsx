@@ -146,7 +146,8 @@ export const MessageItem = memo(
       return false;
     }, [channel_message.created_at]);
 
-    const isByCreator = channel_message?.sent_by?.id === channelOwnerProfileId;
+    const isByCreator =
+      channel_message?.sent_by?.profile.profile_id === channelOwnerProfileId;
 
     const loremText = useMemo(
       () =>
