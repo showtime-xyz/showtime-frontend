@@ -261,7 +261,7 @@ export const BuyCreatorToken = () => {
             <View tw="flex-row justify-between">
               <Text tw="text-gray-700 dark:text-gray-200">You own:</Text>
               {tokenBalance.isLoading ? (
-                <Skeleton width={40} height={14} />
+                <Skeleton width={40} height={16} />
               ) : (
                 <Text tw="font-semibold text-gray-700 dark:text-gray-200">
                   {tokenBalance.data?.toString()}
@@ -323,7 +323,7 @@ export const BuyCreatorToken = () => {
               {selectedAction === "buy" ? (
                 <>
                   {priceToBuyNext.isLoading ? (
-                    <Skeleton width={40} height={14} />
+                    <Skeleton width={60} height={16} />
                   ) : (
                     <Text tw="font-semibold text-gray-700 dark:text-gray-200">
                       ${priceToBuyNext.data?.displayPrice}
@@ -333,7 +333,7 @@ export const BuyCreatorToken = () => {
               ) : (
                 <>
                   {priceToSellNext.isLoading ? (
-                    <Skeleton width={40} height={14} />
+                    <Skeleton width={60} height={16} />
                   ) : (
                     <Text tw="font-semibold text-gray-700 dark:text-gray-200">
                       ${priceToSellNext.data?.displayPrice}
