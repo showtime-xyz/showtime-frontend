@@ -188,7 +188,6 @@ type UserProfileNFTs = {
   profileId?: number;
   tabType?: string;
   sortType?: string;
-  showHidden?: number;
   collectionId?: number;
   refreshInterval?: number;
 };
@@ -199,7 +198,6 @@ type UseProfileNFTs = {
 };
 
 export const defaultFilters = {
-  showHidden: 0,
   collectionId: 0,
   sortType: "newest",
 };
@@ -212,7 +210,6 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     profileId,
     tabType: type,
     sortType = defaultFilters.sortType,
-    showHidden = defaultFilters.showHidden,
     collectionId = defaultFilters.collectionId,
     refreshInterval,
   } = params;
@@ -222,10 +219,10 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
     (index: number) => {
       const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
         index + 1
-      }&limit=${PAGE_SIZE}&tab_type=${tabType}&sort_type=${sortType}&show_hidden=${showHidden}&collection_id=${collectionId}`;
+      }&limit=${PAGE_SIZE}&tab_type=${tabType}&sort_type=${sortType}&collection_id=${collectionId}`;
       return url;
     },
-    [profileId, tabType, sortType, showHidden, collectionId]
+    [profileId, tabType, sortType, collectionId]
   );
 
   const { mutate, ...queryState } = useInfiniteListQuerySWR<UseProfileNFTs>(
@@ -273,7 +270,14 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
 
   return { ...queryState, fetchMore, updateItem, data: newData };
 };
+export const useProfileHideNFTs = (profileId?: number) => {
+  const PAGE_SIZE = 100;
+  const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=1&limit=${PAGE_SIZE}&tab_type=hidden`;
 
+  const queryState = useSWR<UseProfileNFTs>(url, fetcher);
+
+  return { ...queryState };
+};
 export type Collection = {
   collection_id: number;
   collection_name: string;
@@ -301,6 +305,16 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
   //   profileId ? "/v2/profile-tabs/tabs?profile_id=" + profileId : null,
   //   fetcher
   // );
+  // const songsCount = useMemo(() => {
+  //   return (
+  //     data?.tabs.find((item) => item.type === "created")?.displayed_count || 0
+  //   );
+  // }, [data?.tabs]);
+  // const savedCount = useMemo(() => {
+  //   return (
+  //     data?.tabs.find((item) => item.type === "owned")?.displayed_count || 0
+  //   );
+  // }, [data?.tabs]);
   return {
     data: {
       default_tab_type: "tokens",

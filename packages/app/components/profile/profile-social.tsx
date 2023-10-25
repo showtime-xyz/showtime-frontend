@@ -49,7 +49,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   }, []);
   if (!profile) return null;
   return (
-    <View tw="sm:flex-row sm:items-center">
+    <View tw="flex-row items-center">
       {profile?.website_url && websiteLink && (
         <PressableScale
           onPress={() => onPressLink(formatLink(profile.website_url))}
@@ -66,16 +66,16 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         </PressableScale>
       )}
 
-      <View tw="mt-2 w-full flex-row items-center sm:mt-0">
-        <Text tw="text-13 text-gray-900 dark:text-white">
+      <View tw="w-full flex-row items-center">
+        {/* <Text tw="text-13 text-gray-900 dark:text-white">
           <Text tw="font-bold">{savedSongs?.toLocaleString()}</Text> Song saves
-        </Text>
+        </Text> */}
         {spotifyUrl && (
           <PressableScale
             onPress={() => onPressLink(spotifyUrl)}
             aria-label="SpotifyPure"
             role="link"
-            tw="ml-2"
+            tw="mr-2"
           >
             <SpotifyPure
               width={16}
@@ -90,7 +90,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             onPress={() => onPressLink(appleMusicUrl)}
             aria-label="Apple Music"
             role="link"
-            tw="ml-2"
+            tw="mr-2"
           >
             <AppleMusic
               width={16}

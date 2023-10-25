@@ -773,7 +773,7 @@ export const formatProfileRoutes = (
     title: item.name,
     key: item?.type,
     index: index,
-    subtitle: 0,
+    subtitle: item.displayed_count,
   }));
 };
 //#endregion

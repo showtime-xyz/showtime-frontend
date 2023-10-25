@@ -17,12 +17,13 @@ import type { ParsedUrlQuery } from "querystring";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { GiftSolid } from "@showtime-xyz/universal.icon";
+import { EyeOff, EyeOffV2, GiftSolid } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
@@ -61,6 +62,7 @@ import { HeaderRightSm } from "../header/header-right.sm";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { MyCollection } from "./my-collection";
 import { ProfileError } from "./profile-error";
+import { ProfileHideList, ProfileNFTHiddenButton } from "./profile-hide-list";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileCover, ProfileTop } from "./profile-top";
 import { TokensTabHeader, TokensTabItem } from "./tokens-tab";
@@ -103,6 +105,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     error,
   } = useUserProfile({ address: username });
   const profileId = profileData?.data?.profile.profile_id;
+  const [showHidden, setShowHidden] = useState(false);
   const { getIsBlocked } = useBlock();
   const router = useRouter();
   const userId = useCurrentUserId();
@@ -321,13 +324,28 @@ const Profile = ({ username }: ProfileScreenProps) => {
                     routes={routes}
                     index={routes.findIndex((item) => item.key === type)}
                   />
-                  {type === "tokens" && (
+
+                  {type === "tokens" ? (
                     <TokensTabHeader
                       channelId={channelId}
                       isSelf={isSelf}
                       messageCount={messageCount}
                     />
-                  )}
+                  ) : null}
+                  {type === "song_drops_created" ? (
+                    <>
+                      <ProfileNFTHiddenButton
+                        onPress={() => {
+                          setShowHidden(!showHidden);
+                        }}
+                        showHidden={showHidden}
+                      />
+                      {showHidden ? (
+                        <ProfileHideList profileId={profileId} />
+                      ) : null}
+                    </>
+                  ) : null}
+
                   <InfiniteScrollList
                     useWindowScroll
                     numColumns={numColumns}
@@ -342,7 +360,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   />
                 </View>
                 {isProfileMdScreen ? (
-                  <View style={{ width: 400 }} tw="animate-fade-in-250 pl-16">
+                  <View style={{ width: 320 }} tw="animate-fade-in-250 ml-10">
                     <Sticky enabled>
                       <CreatorTokensPanel username={username} isSelf={isSelf} />
                       {isSelf && <MyCollection />}
