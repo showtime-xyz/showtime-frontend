@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
@@ -7,7 +7,6 @@ import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Flip, ShowtimeRounded } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -36,9 +35,9 @@ export const SelfServeExplainer = () => {
   const isDark = useIsDarkMode();
   const { user } = useUser();
   const { top } = useSafeAreaInsets();
-  const defaultProfilePic = user?.data.profile?.img_url;
+  const userProfilePic = user?.data.profile.img_url;
   const [profilePic, setProfilePic] = useState<string | undefined | File>(
-    defaultProfilePic
+    userProfilePic
   );
   const [value, setValue] = useState<File | undefined | string>();
 
@@ -91,6 +90,17 @@ export const SelfServeExplainer = () => {
     await deployContract();
     creatorTokenDeployStatus.pollDeployStatus();
   }, [creatorTokenDeployStatus, deployContract, matchMutate, mutate, value]);
+  useEffect(() => {
+    const prepareCreatorToken = async () => {
+      if (!userProfilePic) {
+        await axios({
+          url: "/v1/creator-token/metadata/prepare",
+          method: "POST",
+        });
+      }
+    };
+    prepareCreatorToken();
+  }, [userProfilePic]);
 
   Logger.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
 
@@ -120,7 +130,10 @@ export const SelfServeExplainer = () => {
             Creator Tokens.
           </Text>
         </View>
-
+        <Text tw="text-sm text-gray-900 dark:text-white">
+          In one click, let your fans access your Channel, starting at $1. Every
+          purchase, your Token price increases.
+        </Text>
         <View tw="mt-4 items-center rounded-3xl border border-gray-200 px-4 py-6 dark:border-gray-800">
           <Pressable
             onPress={async () => {
@@ -135,12 +148,14 @@ export const SelfServeExplainer = () => {
                 setProfilePic(file.file);
               }
             }}
-            tw="overflow-hidden rounded-full"
+            tw="h-28 w-28 overflow-hidden rounded-full"
           >
             <Preview file={profilePic} width={112} height={112} />
             <View tw="absolute bottom-0 left-0 right-0 top-0 flex-row items-center justify-center rounded-full bg-black/30">
               <Flip color="#fff" width={20} height={20} />
-              <Text tw="ml-1 text-base font-bold text-white">Replace</Text>
+              <Text tw="ml-1 text-base font-bold text-white">
+                {profilePic ? "Replace" : "Upload"}
+              </Text>
             </View>
           </Pressable>
           <View tw="rounded-4xl mb-2 mt-4 w-full border border-gray-200 px-10 py-4 dark:border-gray-800">
