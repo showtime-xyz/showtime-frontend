@@ -19,6 +19,8 @@ import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-ba
 import { useWallet } from "app/hooks/use-wallet";
 import { getCurrencyPrice } from "app/utilities";
 
+import { TopPartCreatorTokens } from "../home/top-part-creator-tokens";
+
 type CreatorTokensPanelProps = { isSelf?: boolean; username?: string };
 const DataPanel = ({ username }: CreatorTokensPanelProps) => {
   const isDark = useIsDarkMode();

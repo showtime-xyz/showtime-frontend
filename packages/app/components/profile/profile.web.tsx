@@ -332,7 +332,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                       messageCount={messageCount}
                     />
                   ) : null}
-                  {type === "song_drops_created" ? (
+                  {type === "song_drops_created" && isSelf ? (
                     <>
                       <ProfileNFTHiddenButton
                         onPress={() => {
@@ -360,7 +360,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   />
                 </View>
                 {isProfileMdScreen ? (
-                  <View style={{ width: 320 }} tw="animate-fade-in-250 ml-10">
+                  <View
+                    style={{
+                      width: 320,
+                    }}
+                    tw="animate-fade-in-250 ml-10"
+                  >
                     <Sticky enabled>
                       <CreatorTokensPanel username={username} isSelf={isSelf} />
                       {isSelf && <MyCollection />}
