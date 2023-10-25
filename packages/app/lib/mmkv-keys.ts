@@ -12,11 +12,10 @@ export const setHideCreatorChannelIntro = (value = true) => {
   return store.set(SHOWN_CREATOR_CHANNEL_INTRO, value);
 };
 
-export const SHOWN_INTRO_BANNER = "showIntroBanner";
-
-export const getIsShowIntroBanner = () => {
-  return !store.getBoolean(SHOWN_INTRO_BANNER);
+export const SHOWN_CREATOR_TOKEN_INTRO = "showCreatorTokenIntro";
+export const getIsShowCreatorTokenIntroBanner = () => {
+  return !store.getBoolean(SHOWN_CREATOR_TOKEN_INTRO);
 };
-export const setHideShowIntroBanner = (value = true) => {
-  return store.set(SHOWN_INTRO_BANNER, value);
+export const setHideShowCreatorTokenBanner = (value = true) => {
+  return store.set(SHOWN_CREATOR_TOKEN_INTRO, value);
 };

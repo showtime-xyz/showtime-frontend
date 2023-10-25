@@ -6,6 +6,7 @@ import { getChannelByIdCacheKey } from "app/components/creator-channels/hooks/us
 import { getChannelMessageKey } from "app/components/creator-channels/hooks/use-channel-messages";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
+import { useLogInPromise } from "app/lib/login-promise";
 import { publicClient } from "app/lib/wallet-public-client";
 import { formatAPIErrorMessage } from "app/utilities";
 
@@ -36,10 +37,13 @@ export const useCreatorTokenBuy = (params: {
   });
   const switchChain = useSwitchChain();
   const { mutate } = useSWRConfig();
+  const { loginPromise } = useLogInPromise();
 
   const state = useSWRMutation(
     "buyCreatorToken",
     async () => {
+      await loginPromise();
+
       if (wallet.isMagicWallet) {
         await wallet.disconnect();
         await wallet.connect();
@@ -51,7 +55,9 @@ export const useCreatorTokenBuy = (params: {
         const result = await approveToken.trigger({
           creatorTokenContract:
             profileData?.data?.profile.creator_token.address,
-          maxPrice: priceToBuyNext.data?.totalPrice,
+          // add 10 cents more to cover for weird fluctuation
+          // TODO: remove if not needed after more testing
+          maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
         });
         if (result) {
           let requestPayload: any;

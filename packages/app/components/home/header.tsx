@@ -1,4 +1,4 @@
-import { memo, useContext } from "react";
+import { memo, useContext, useCallback } from "react";
 import { useWindowDimensions, Platform, Linking } from "react-native";
 
 import Animated, {
@@ -8,7 +8,7 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 
-import { Close, Showtime } from "@showtime-xyz/universal.icon";
+import { Close, Showtime, ShowtimeRounded } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -23,6 +23,11 @@ import {
 } from "app/constants/layout";
 import { UserContext } from "app/context/user-context";
 import { Carousel } from "app/lib/carousel";
+import {
+  getIsShowCreatorTokenIntroBanner,
+  setHideCreatorChannelIntro,
+  setHideShowCreatorTokenBanner,
+} from "app/lib/mmkv-keys";
 
 import { breakpoints } from "design-system/theme";
 
@@ -33,21 +38,27 @@ import { TrendingCarousel } from "./trending-carousel";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-const SHOW_VALUE = 1;
 const HIDDEN_HEIGHT = 0;
-const VISIBLE_HEIGHT_WEB = 44;
+const VISIBLE_HEIGHT_DESKTOP = 44;
 const VISIBLE_HEIGHT_NATIVE = 60;
 
-const translateYValues = [HIDDEN_HEIGHT, SHOW_VALUE];
-const heightsWeb = [HIDDEN_HEIGHT, VISIBLE_HEIGHT_WEB];
 const heightsNative = [HIDDEN_HEIGHT, VISIBLE_HEIGHT_NATIVE];
-const visibleHeight =
-  Platform.OS === "web" ? VISIBLE_HEIGHT_WEB : VISIBLE_HEIGHT_NATIVE;
 
 const CreatorTokensBanner = () => {
-  const showBanner = useSharedValue(SHOW_VALUE);
+  console.log(getIsShowCreatorTokenIntroBanner());
+
+  const showValue = getIsShowCreatorTokenIntroBanner() ? 1 : 0;
+  const showBanner = useSharedValue(showValue);
+  const translateYValues = [HIDDEN_HEIGHT, showValue];
+
   const router = useRouter();
   const user = useContext(UserContext);
+  const { width } = useWindowDimensions();
+  const isMdWidth = width >= breakpoints["md"];
+  const visibleHeight = isMdWidth
+    ? VISIBLE_HEIGHT_DESKTOP
+    : VISIBLE_HEIGHT_NATIVE;
+  const heightsWeb = [HIDDEN_HEIGHT, visibleHeight];
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -73,60 +84,62 @@ const CreatorTokensBanner = () => {
       ),
     };
   }, [showBanner]);
-  if (
-    user?.user?.data.profile.creator_token_onboarding_status !== "allowlist"
-  ) {
-    return null;
-  }
+  const onPressBanner = useCallback(() => {
+    if (
+      user?.user?.data.profile.creator_token_onboarding_status === "allowlist"
+    ) {
+      const as = `/creator-token/self-serve-explainer`;
+      router.push(
+        Platform.select({
+          native: as,
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              creatorTokensSelfServeExplainerModal: true,
+            },
+          } as any,
+        }),
+        Platform.select({
+          native: as,
+          web: router.asPath,
+        }),
+        { shallow: true }
+      );
+      return;
+    }
+    Linking.openURL(
+      "https://www.notion.so/showtime-xyz/Showtime-xyz-Creator-Tokens-alpha-1-min-read-7f8b0c621e4442e98ec4c4189bec28df?pvs=4"
+    );
+  }, [router, user?.user?.data.profile.creator_token_onboarding_status]);
 
   return (
     <>
       <AnimatedView
-        tw="absolute mb-4 w-full flex-row items-center overflow-hidden px-4 py-2.5"
+        tw="absolute w-full flex-row items-center overflow-hidden px-4 py-2.5"
         style={animatedStyle}
       >
         <BgGoldLinearGradient />
-        <View tw="rounded-full border border-gray-900 p-1">
-          <Showtime color={colors.gray[900]} width={12} height={12} />
+        <View>
+          <ShowtimeRounded color={colors.gray[900]} width={24} height={24} />
         </View>
-        <View
-          tw="ml-2"
-          style={{
-            borderBottomColor: "black",
-            borderBottomWidth: 1,
-            paddingBottom: 4,
-          }}
-        >
+        <View tw="ml-2 flex-1">
           <Text
-            onPress={() => {
-              const as = `/creator-token/self-serve-explainer`;
-              router.push(
-                Platform.select({
-                  native: as,
-                  web: {
-                    pathname: router.pathname,
-                    query: {
-                      ...router.query,
-                      creatorTokensSelfServeExplainerModal: true,
-                    },
-                  } as any,
-                }),
-                Platform.select({
-                  native: as,
-                  web: router.asPath,
-                }),
-                { shallow: true }
-              );
-            }}
-            tw="text-13 pt-1 font-bold text-gray-900"
+            onPress={onPressBanner}
+            tw="font-bold text-gray-900 underline"
+            style={{ fontSize: 13, lineHeight: 16 }}
           >
-            Be the first to create your Token
+            {user?.user?.data.profile.creator_token_onboarding_status ===
+            "allowlist"
+              ? "You are eligible to launch your Creator Token & let your fans invest in you."
+              : "Introducing Creators Tokens: invest in your favorite creators. Read more."}
           </Text>
         </View>
         <Pressable
           tw="ml-auto"
           onPress={() => {
             showBanner.value = 0;
+            setHideShowCreatorTokenBanner(true);
           }}
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
         >

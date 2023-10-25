@@ -1,9 +1,13 @@
+import { Platform } from "react-native";
+
 import { Button, GradientButton } from "@showtime-xyz/universal.button";
+import { useRouter } from "@showtime-xyz/universal.router";
 
 import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 
 export const CompleteProfileButton = ({ isSelf }: { isSelf: boolean }) => {
+  const router = useRouter();
   const { isIncompletedProfile } = useUser();
   const redirectToCreateDrop = useRedirectToCreateDrop();
   if (!isSelf) return null;
@@ -31,9 +35,26 @@ export const CompleteProfileButton = ({ isSelf }: { isSelf: boolean }) => {
       variant="outlined"
       style={{ height: 26, paddingVertical: 0 }}
       tw="py-0"
-      onPress={redirectToCreateDrop}
+      onPress={() => {
+        router.push(
+          Platform.select({
+            native: "/profile/edit",
+            web: {
+              pathname: router.pathname,
+              query: {
+                ...router.query,
+                editProfileModal: true,
+              },
+            } as any,
+          }),
+          Platform.select({
+            native: "/profile/edit",
+            web: router.asPath,
+          })
+        );
+      }}
     >
-      Edit
+      Edit profile
     </Button>
   );
 };

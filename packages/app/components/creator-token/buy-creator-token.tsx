@@ -74,9 +74,7 @@ export const BuyCreatorToken = () => {
   });
 
   const renderBuyButton = () => {
-    if (wallet.isMagicWallet) {
-      return <Button onPress={() => buyToken.trigger()}>Connect</Button>;
-    } else if (selectedAction === "sell") {
+    if (selectedAction === "sell") {
       return (
         <Button
           disabled={sellToken.isMutating}
@@ -96,7 +94,11 @@ export const BuyCreatorToken = () => {
             }
           }}
         >
-          {sellToken.isMutating ? "Please wait..." : "Sell"}
+          {sellToken.isMutating
+            ? "Please wait..."
+            : wallet.isMagicWallet
+            ? "Connect"
+            : "Sell"}
         </Button>
       );
     } else {
@@ -117,7 +119,11 @@ export const BuyCreatorToken = () => {
             }
           }}
         >
-          {buyToken.isMutating ? "Please wait..." : "Approve & Buy"}
+          {buyToken.isMutating
+            ? "Please wait..."
+            : wallet.isMagicWallet
+            ? "Connect"
+            : "Approve & Buy"}
         </Button>
       );
     }
@@ -135,7 +141,7 @@ export const BuyCreatorToken = () => {
   return (
     <BottomSheetModalProvider>
       <>
-        <View tw="p-4">
+        <View tw="px-4 py-2">
           <View tw="flex-row items-center" style={{ columnGap: 8 }}>
             <View tw="flex-row items-center" style={{ columnGap: 2 }}>
               <Text tw="text-xl font-semibold dark:text-gray-200">
@@ -146,7 +152,7 @@ export const BuyCreatorToken = () => {
             <Text tw="text-xl font-semibold dark:text-gray-200">tokens</Text>
           </View>
           {selectedAction === "buy" ? (
-            <View tw="flex-row items-center pt-3" style={{ columnGap: 2 }}>
+            <View tw="h-6 flex-row items-center pt-2" style={{ columnGap: 2 }}>
               <LockBadge
                 width={14}
                 height={14}
@@ -156,8 +162,10 @@ export const BuyCreatorToken = () => {
                 Unlocks exclusive channel content
               </Text>
             </View>
-          ) : null}
-          <View tw="mt-4 rounded-3xl border-[1px] border-gray-300 p-8 dark:border-gray-700">
+          ) : (
+            <View tw="h-6" />
+          )}
+          <View tw="mt-6 rounded-3xl border-[1px] border-gray-300 p-8 dark:border-gray-800">
             <View tw="flex-row" style={{ columnGap: 16 }}>
               <Avatar size={100} url={profileData?.data?.profile.img_url} />
               <View style={{ rowGap: 16 }}>
