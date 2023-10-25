@@ -135,7 +135,6 @@ export const ProfileTop = ({
   const { width, height: screenHeight } = useWindowDimensions();
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
-  const redirectToCreateDrop = useRedirectToCreateDrop();
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+
