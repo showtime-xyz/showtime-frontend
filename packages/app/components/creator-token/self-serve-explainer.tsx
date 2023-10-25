@@ -1,8 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Platform } from "react-native";
 
 import { useSWRConfig } from "swr";
 
+import { Alert } from "@showtime-xyz/universal.alert";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Flip, ShowtimeRounded } from "@showtime-xyz/universal.icon";
@@ -35,8 +36,7 @@ export const SelfServeExplainer = () => {
   const isDark = useIsDarkMode();
   const { user } = useUser();
   const { top } = useSafeAreaInsets();
-  // const userProfilePic = user?.data.profile.img_url;
-  const userProfilePic = "";
+  const userProfilePic = user?.data.profile.img_url;
 
   const [profilePic, setProfilePic] = useState<string | undefined | File>(
     userProfilePic
@@ -62,10 +62,6 @@ export const SelfServeExplainer = () => {
   });
   const loading = creatorTokenDeployStatus.status === "pending" || isMutating;
   const onSubmit = useCallback(async () => {
-    await axios({
-      url: "/v1/creator-token/metadata/prepare",
-      method: "POST",
-    });
     if (value) {
       const formData = new FormData();
       const profilePictureFormData = await getFileFormData(value);
@@ -93,10 +89,22 @@ export const SelfServeExplainer = () => {
         }
       }
     }
-
+    if (!userProfilePic) {
+      await axios({
+        url: "/v1/creator-token/metadata/prepare",
+        method: "POST",
+      });
+    }
     await deployContract();
     creatorTokenDeployStatus.pollDeployStatus();
-  }, [creatorTokenDeployStatus, deployContract, matchMutate, mutate, value]);
+  }, [
+    creatorTokenDeployStatus,
+    deployContract,
+    matchMutate,
+    mutate,
+    userProfilePic,
+    value,
+  ]);
 
   Logger.log("creatorTokenDeployStatus", creatorTokenDeployStatus.status);
 
@@ -147,7 +155,7 @@ export const SelfServeExplainer = () => {
             tw="h-28 w-28 overflow-hidden rounded-full"
           >
             <Preview file={profilePic} width={112} height={112} />
-            <View tw="absolute bottom-0 left-0 right-0 top-0 flex-row items-center justify-center rounded-full bg-black/30">
+            <View tw="absolute bottom-0 left-0 right-0 top-0 flex-row items-center justify-center rounded-full bg-black/30 dark:bg-white/30">
               <Flip color="#fff" width={20} height={20} />
               <Text tw="ml-1 text-base font-bold text-white">
                 {profilePic ? "Replace" : "Upload"}
