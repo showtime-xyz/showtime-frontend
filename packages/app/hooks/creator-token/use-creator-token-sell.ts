@@ -50,7 +50,9 @@ export const useCreatorTokenSell = () => {
         await wallet.connect();
       }
 
-      let walletAddress = wallet.getWalletClient?.()?.account?.address;
+      const walletAddress = (
+        await wallet.getWalletClient?.()?.getAddresses?.()
+      )?.[0];
 
       const tokenIdsRes = await axios({
         url:

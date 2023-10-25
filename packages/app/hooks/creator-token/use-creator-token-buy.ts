@@ -51,7 +51,8 @@ export const useCreatorTokenBuy = (params: {
       }
 
       const walletClient = wallet.getWalletClient?.();
-      const walletAddress = walletClient?.account?.address;
+      const walletAddresses = await walletClient?.getAddresses();
+      const walletAddress = walletAddresses?.[0];
 
       if (walletAddress && profileData?.data?.profile.creator_token) {
         const res = await switchChain.trigger();
