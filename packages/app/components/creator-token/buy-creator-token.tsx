@@ -269,7 +269,7 @@ export const BuyCreatorToken = () => {
               )}
             </View>
             <View tw="flex-row items-center">
-              <Text tw="flex-2 text-gray-700 dark:text-gray-200">
+              <Text tw="flex-2 w-32 text-gray-700 dark:text-gray-200">
                 Quantity to {selectedAction === "buy" ? "buy" : "sell"}:
               </Text>
               <View tw="w-4" />
