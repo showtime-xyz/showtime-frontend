@@ -141,7 +141,7 @@ function InfiniteScrollListImpl<Item>(
     }
 
     if (count > 0 && lastItem.index >= count - 1) {
-      onEndReached?.();
+      debounce(() => onEndReached?.(), 300);
     }
   }, [count, onEndReached, renderedItems]);
 
