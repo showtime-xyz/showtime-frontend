@@ -75,7 +75,7 @@ export const MessageItem = memo(
     isUserAdmin?: boolean;
     permissions?: ChannelById["permissions"];
     listRef: RefObject<FlashList<any>>;
-    channelOwnerProfileId: number;
+    channelOwnerProfileId?: number;
     editMessageIdSharedValue: SharedValue<number | undefined>;
     editMessageItemDimension: SharedValue<{
       height: number;
