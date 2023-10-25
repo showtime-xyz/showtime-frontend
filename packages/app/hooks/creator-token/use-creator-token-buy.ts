@@ -14,6 +14,7 @@ import { toast } from "design-system/toast";
 
 import { useUserProfile } from "../api-hooks";
 import { useWallet } from "../use-wallet";
+import { getContractBalanceOfTokenKey } from "./use-balance-of-token";
 import { getTotalCollectedKey } from "./use-contract-total-collected";
 import { useApproveToken } from "./use-creator-token-approve";
 import {
@@ -110,6 +111,14 @@ export const useCreatorTokenBuy = (params: {
                   getPriceToBuyNextKey({
                     address: profileData?.data?.profile.creator_token.address,
                     tokenAmount: 1,
+                  })
+                );
+
+                mutate(
+                  getContractBalanceOfTokenKey({
+                    ownerAddress: walletAddress,
+                    contractAddress:
+                      profileData?.data?.profile.creator_token.address,
                   })
                 );
 

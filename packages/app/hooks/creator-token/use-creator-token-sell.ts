@@ -16,6 +16,7 @@ import { formatAPIErrorMessage } from "app/utilities";
 import { toast } from "design-system/toast";
 
 import { useWallet } from "../use-wallet";
+import { getContractBalanceOfTokenKey } from "./use-balance-of-token";
 import { getTotalCollectedKey } from "./use-contract-total-collected";
 import { getPriceToBuyNextKey } from "./use-creator-token-price-to-buy-next";
 import { useSwitchChain } from "./use-switch-chain";
@@ -130,6 +131,12 @@ export const useCreatorTokenSell = () => {
           getPriceToBuyNextKey({
             address: arg.contractAddress,
             tokenAmount: 1,
+          })
+        );
+        mutate(
+          getContractBalanceOfTokenKey({
+            ownerAddress: walletAddress,
+            contractAddress: arg.contractAddress,
           })
         );
         await axios({
