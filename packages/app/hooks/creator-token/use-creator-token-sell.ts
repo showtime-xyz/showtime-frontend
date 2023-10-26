@@ -22,6 +22,13 @@ import { getPriceToBuyNextKey } from "./use-creator-token-price-to-buy-next";
 import { useSwitchChain } from "./use-switch-chain";
 import { baseChain } from "./utils";
 
+type TokenIdsMappingResponseType = {
+  logged_in_wallet_address: string;
+  token_ids_by_wallet: {
+    [key: string]: string[];
+  };
+};
+
 export const useCreatorTokenSell = () => {
   const wallet = useWallet();
   const Alert = useAlert();
@@ -54,103 +61,108 @@ export const useCreatorTokenSell = () => {
         await wallet.getWalletClient?.()?.getAddresses?.()
       )?.[0];
 
-      const tokenIdsRes = await axios({
+      const tokenIdsRes: TokenIdsMappingResponseType = await axios({
         url:
-          "/v1/creator-token/sell/token-ids?creator_token_id=" +
+          "/v1/creator-token/sell/token-ids/profile?creator_token_id=" +
           arg.creatorTokenId,
         method: "GET",
       });
-      console.log("Res ", tokenIdsRes);
-      await switchChain.trigger();
+      console.log("token ids ", tokenIdsRes);
+      if (tokenIdsRes && walletAddress) {
+        const walletsThatOwnToken = Object.keys(
+          tokenIdsRes.token_ids_by_wallet
+        );
 
-      let requestPayload: any;
-      const tokenIds = tokenIdsRes.token_ids.slice(0, arg.quantity);
-
-      if (tokenIds.length === 0) {
-        // Should never happen ideally, but could happen as currently backend is depending on frontend to sync info. Should be fixed once we integrate webhooks
-        toast.error("You have no tokens to sell this time");
-        return;
-      }
-
-      if (
-        tokenIds.length === 1 &&
-        user?.user?.data.profile.creator_token?.address === arg.contractAddress
-      ) {
-        toast.error("You need at least 1 of your Creator Token.");
-        return;
-      }
-
-      for (let i = 0; i < tokenIds.length; i++) {
-        const tokenId = tokenIds[i];
-        const res: any = await publicClient.readContract({
-          address: arg.contractAddress,
-          abi: creatorTokenAbi,
-          functionName: "ownerOf",
-          args: [tokenId],
-        });
-
-        if (res && res.toLowerCase() !== walletAddress?.toLowerCase()) {
-          Alert.alert(
-            "Failed",
-            `You don't own all the tokens you are trying to sell. The token id ${tokenId} is owned by ${res} and your current wallet address is ${walletAddress}`
-          );
+        if (walletsThatOwnToken.length === 0) {
+          toast.error("You don't own any of this token.");
           return;
         }
-      }
 
-      if (tokenIds.length === 1) {
-        const { request } = await publicClient.simulateContract({
-          address: arg.contractAddress,
-          account: walletAddress,
-          abi: creatorTokenAbi,
-          functionName: "sell",
-          args: [tokenIds[0]],
-          chain: baseChain,
-        });
-        requestPayload = request;
-      } else {
-        const { request } = await publicClient.simulateContract({
-          address: arg.contractAddress,
-          account: walletAddress,
-          abi: creatorTokenAbi,
-          functionName: "bulkSell",
-          args: [tokenIds],
-          chain: baseChain,
-        });
-        requestPayload = request;
-      }
-
-      const txHash = await wallet.walletClient?.writeContract?.(requestPayload);
-
-      const transaction = await publicClient.waitForTransactionReceipt({
-        hash: txHash as any,
-        pollingInterval: 2000,
-      });
-
-      if (transaction.status === "success") {
-        mutate(getTotalCollectedKey(arg.contractAddress));
-        mutate(
-          getPriceToBuyNextKey({
-            address: arg.contractAddress,
-            tokenAmount: 1,
-          })
+        const walletAddressKey = walletsThatOwnToken.find(
+          (c) => c.toLowerCase() === walletAddress.toLowerCase()
         );
-        mutate(
-          getContractBalanceOfTokenKey({
-            ownerAddress: walletAddress,
-            contractAddress: arg.contractAddress,
-          })
-        );
-        await axios({
-          url: "/v1/creator-token/poll-sell",
-          method: "POST",
-          data: {
-            creator_token_id: arg.creatorTokenId,
-            token_ids: tokenIds,
-            tx_hash: txHash,
-          },
-        });
-        return true;
+
+        if (walletAddressKey) {
+          const tokenIds = tokenIdsRes.token_ids_by_wallet[
+            walletAddressKey
+          ].slice(0, arg.quantity);
+
+          if (
+            tokenIds.length === 1 &&
+            user?.user?.data.profile.creator_token?.address ===
+              arg.contractAddress
+          ) {
+            toast.error("You need at least 1 of your Creator Token.");
+            return;
+          }
+
+          await switchChain.trigger();
+          let requestPayload: any;
+
+          if (tokenIds.length === 1) {
+            const { request } = await publicClient.simulateContract({
+              address: arg.contractAddress,
+              account: walletAddress,
+              abi: creatorTokenAbi,
+              functionName: "sell",
+              args: [Number(tokenIds[0])],
+              chain: baseChain,
+            });
+            requestPayload = request;
+          } else {
+            const { request } = await publicClient.simulateContract({
+              address: arg.contractAddress,
+              account: walletAddress,
+              abi: creatorTokenAbi,
+              functionName: "bulkSell",
+              args: [tokenIds.map((c) => Number(c))],
+              chain: baseChain,
+            });
+            requestPayload = request;
+          }
+
+          const txHash = await wallet.walletClient?.writeContract?.(
+            requestPayload
+          );
+
+          const transaction = await publicClient.waitForTransactionReceipt({
+            hash: txHash as any,
+            pollingInterval: 2000,
+          });
+
+          if (transaction.status === "success") {
+            mutate(getTotalCollectedKey(arg.contractAddress));
+            mutate(
+              getPriceToBuyNextKey({
+                address: arg.contractAddress,
+                tokenAmount: 1,
+              })
+            );
+            mutate(
+              getContractBalanceOfTokenKey({
+                ownerAddress: walletAddress,
+                contractAddress: arg.contractAddress,
+              })
+            );
+            await axios({
+              url: "/v1/creator-token/poll-sell",
+              method: "POST",
+              data: {
+                creator_token_id: arg.creatorTokenId,
+                token_ids: tokenIds,
+                tx_hash: txHash,
+              },
+            });
+            return true;
+          }
+        } else if (tokenIdsRes.token_ids_by_wallet) {
+          Alert.alert(
+            "Failed",
+            `Your current wallet doesn't own all the tokens you are trying to sell. Try selling using one of the wallets you used to buy the tokens. e.g. ${Object.keys(
+              tokenIdsRes.token_ids_by_wallet
+            ).join(", ")}`
+          );
+        }
       }
     },
     {
