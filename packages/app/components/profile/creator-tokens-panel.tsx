@@ -1,6 +1,5 @@
 import { Platform } from "react-native";
 
-import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InformationCircle, LockRounded } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -19,9 +18,10 @@ import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-ba
 import { useWallet } from "app/hooks/use-wallet";
 import { getCurrencyPrice } from "app/utilities";
 
-import { TopPartCreatorTokens } from "../home/top-part-creator-tokens";
+import { PlatformBuyButton, PlatformSellButton } from "./buy-and-sell-buttons";
 
 type CreatorTokensPanelProps = { isSelf?: boolean; username?: string };
+
 const DataPanel = ({ username }: CreatorTokensPanelProps) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
@@ -35,8 +35,6 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
     address: userProfileData?.data?.profile.creator_token?.address,
     tokenAmount: 1,
   });
-
-  const buyPath = `/creator-token/${username}/buy`;
 
   const wallet = useWallet();
   const balanceOfToken = useContractBalanceOfToken({
@@ -60,87 +58,37 @@ const DataPanel = ({ username }: CreatorTokensPanelProps) => {
     <View tw="rounded-4xl mb-2 mt-4 overflow-hidden border border-gray-200 dark:border-gray-700">
       <View tw="px-8 py-4">
         <View tw="flex-row items-center justify-between gap-4">
-          <View tw="flex-1 items-center">
-            <Text tw="text-xs text-gray-500 dark:text-gray-400">TOKEN</Text>
-            <View tw="mt-3 h-4 items-center justify-center">
-              {priceToBuyNext.isLoading ? (
-                <Skeleton width={30} height={16} />
-              ) : (
-                <Text tw="text-base font-bold text-gray-900 dark:text-white">
-                  {getCurrencyPrice("USD", priceToBuyNext.data?.displayPrice)}
-                </Text>
-              )}
+          <View tw="flex-1">
+            <View tw="items-center">
+              <Text tw="text-xs text-gray-500 dark:text-gray-400">TOKEN</Text>
+              <View tw="mt-3 h-4 items-center justify-center">
+                {priceToBuyNext.isLoading ? (
+                  <Skeleton width={30} height={16} />
+                ) : (
+                  <Text tw="text-base font-bold text-gray-900 dark:text-white">
+                    {getCurrencyPrice("USD", priceToBuyNext.data?.displayPrice)}
+                  </Text>
+                )}
+              </View>
             </View>
-            <Button
-              tw="mt-2.5"
-              style={{ backgroundColor: "#08F6CC", width: "100%" }}
-              onPress={() => {
-                router.push(
-                  Platform.select({
-                    native: buyPath + "?selectedAction=buy",
-                    web: {
-                      pathname: router.pathname,
-                      query: {
-                        ...router.query,
-                        creatorTokenBuyModal: true,
-                        username: username,
-                        selectedAction: "buy",
-                      },
-                    } as any,
-                  }),
-                  Platform.select({
-                    native: buyPath,
-                    web: router.asPath === "/" ? buyPath : router.asPath,
-                  }),
-                  { shallow: true }
-                );
-              }}
-            >
-              <>
-                <Text tw="text-base font-bold text-gray-900">Buy</Text>
-              </>
-            </Button>
+            <PlatformBuyButton username={username} />
           </View>
-          <View tw="flex-1 items-center justify-center">
-            <Text tw="text-xs text-gray-500 dark:text-gray-400">COLLECTED</Text>
-            <View tw="mt-3 h-4 items-center justify-center">
-              {totalCollectors.isLoading ? (
-                <Skeleton width={30} height={16} />
-              ) : (
-                <Text tw="text-base font-bold text-gray-900 dark:text-white">
-                  {totalCollectors.data?.toString() || "0"}
-                </Text>
-              )}
+          <View tw="flex-1">
+            <View tw="items-center">
+              <Text tw="text-xs text-gray-500 dark:text-gray-400">
+                COLLECTED
+              </Text>
+              <View tw="mt-3 h-4 items-center justify-center">
+                {totalCollectors.isLoading ? (
+                  <Skeleton width={30} height={16} />
+                ) : (
+                  <Text tw="text-base font-bold text-gray-900 dark:text-white">
+                    {totalCollectors.data?.toString() || "0"}
+                  </Text>
+                )}
+              </View>
             </View>
-            <Button
-              tw="mt-2.5"
-              style={{ backgroundColor: "#FD749D", width: "100%" }}
-              onPress={() => {
-                router.push(
-                  Platform.select({
-                    native: buyPath + "?selectedAction=sell",
-                    web: {
-                      pathname: router.pathname,
-                      query: {
-                        ...router.query,
-                        creatorTokenBuyModal: true,
-                        username: username,
-                        selectedAction: "sell",
-                      },
-                    } as any,
-                  }),
-                  Platform.select({
-                    native: buyPath,
-                    web: router.asPath === "/" ? buyPath : router.asPath,
-                  }),
-                  { shallow: true }
-                );
-              }}
-            >
-              <>
-                <Text tw="text-base font-bold text-gray-900">Sell</Text>
-              </>
-            </Button>
+            <PlatformSellButton username={username} />
           </View>
           <PressableScale
             tw="web:top-14 absolute -right-6 top-2 h-4 w-4"
