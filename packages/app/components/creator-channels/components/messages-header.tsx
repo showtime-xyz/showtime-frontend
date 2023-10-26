@@ -101,12 +101,6 @@ export const MessagesHeader = (props: HeaderProps) => {
             >
               {props.title ?? "Loading..."}
             </Text>
-            <Text
-              onPress={viewMembersList}
-              tw="text-xs text-indigo-600 dark:text-blue-400"
-            >
-              {props.members ?? 0} members
-            </Text>
           </LeanView>
           <LeanView tw="flex-row items-center justify-center gap-3">
             {!props.isCurrentUserOwner ? (
