@@ -362,7 +362,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 {isProfileMdScreen ? (
                   <View
                     style={{
-                      width: 320,
+                      width: 335,
                     }}
                     tw="animate-fade-in-250 ml-10"
                   >
