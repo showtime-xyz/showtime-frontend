@@ -79,6 +79,7 @@ const nextConfig = {
     "react-native-track-player",
     "expo-document-picker",
     "react-native-compressor",
+    "expo-sharing",
   ],
   webpack: (config, options) => {
     if (!options.isServer) {

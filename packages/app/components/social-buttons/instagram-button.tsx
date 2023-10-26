@@ -12,7 +12,7 @@ export const InstagramButton = memo(function InstagramButton({
     return null;
   }
   return (
-    <Button variant="primary" size="regular" {...rest}>
+    <Button variant="primary" size="regular" theme="dark" {...rest}>
       <>
         <InstagramColorful width={20} height={20} />
       </>

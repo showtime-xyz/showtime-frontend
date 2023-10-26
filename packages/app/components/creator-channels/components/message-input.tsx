@@ -4,7 +4,6 @@ import {
   useRef,
   useMemo,
   RefObject,
-  useState,
   memo,
 } from "react";
 import { Platform } from "react-native";
@@ -22,19 +21,19 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Check, Close, ChevronDown } from "@showtime-xyz/universal.icon";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { View } from "@showtime-xyz/universal.view";
 
-import { ClaimPaidNFTButton } from "app/components/claim/claim-paid-nft-button";
 import { MessageBox } from "app/components/messages";
+import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { containsURL } from "app/lib/linkify";
+import { Profile } from "app/types";
 
 import { useEditChannelMessage } from "../hooks/use-edit-channel-message";
 import { useSendChannelMessage } from "../hooks/use-send-channel-message";
-import { MissingStarDropModal } from "../missing-star-drop-modal";
 import { ChannelById } from "../types";
 import { LeanText, LeanView } from "./lean-text";
 import { MessageInputToolbar } from "./message-input-toolbar";
@@ -53,7 +52,7 @@ export const ScrollToBottomButton = ({ onPress }: { onPress: any }) => {
 export const MessageBoxUnavailable = () => {
   return (
     <MessageBox
-      placeholder="Coming soon..."
+      placeholder="..."
       tw="bg-white text-center dark:bg-black"
       textInputProps={{
         editable: false,
@@ -84,6 +83,7 @@ export const MessageInput = memo(
     edition,
     hasUnlockedMessages,
     permissions,
+    channelOwnerProfile,
   }: {
     listRef: RefObject<FlashList<any>>;
     channelId: string;
@@ -95,15 +95,20 @@ export const MessageInput = memo(
     edition?: CreatorEditionResponse;
     hasUnlockedMessages?: boolean;
     permissions?: ChannelById["permissions"];
+    channelOwnerProfile?: Profile;
   }) => {
-    const [shouldShowMissingStarDropModal, setShouldShowMissingStarDropModal] =
-      useState(false);
     const insets = useSafeAreaInsets();
     const bottomHeight = usePlatformBottomHeight();
     const sendMessage = useSendChannelMessage(channelId);
     const inputRef = useRef<any>(null);
     const editMessages = useEditChannelMessage(channelId);
     const isDark = useIsDarkMode();
+    const priceToBuyNext = useCreatorTokenPriceToBuyNext({
+      tokenAmount: 1,
+      address: channelOwnerProfile?.creator_token?.address,
+    });
+    const router = useRouter();
+
     const bottom = useMemo(
       () =>
         Platform.select({
@@ -206,20 +211,48 @@ export const MessageInput = memo(
     }, [channelId, editMessage, editMessages, setEditMessage, isUserAdmin]);
 
     if (!isUserAdmin && edition && !hasUnlockedMessages) {
+      const buyPath = `/creator-token/${channelOwnerProfile?.username}/buy`;
+
       return (
         <LeanView
-          tw="justify-center px-3"
+          tw="flex-row items-center justify-start bg-black px-2 py-2"
           style={{
-            paddingBottom: bottom,
+            paddingBottom: Math.max(bottom || 0, 8),
           }}
         >
-          <ClaimPaidNFTButton edition={edition} type="messageInput" />
-          <LeanView tw="mt-3 pb-4">
-            <LeanText tw="text-center text-xs text-gray-500 dark:text-gray-300">
-              Collecting a Star Drop unlocks privileges with this artist like
-              exclusive channel content, a Star Badge, and more
+          <Pressable
+            tw="web:min-w-[200px] mr-4 min-w-[180px] items-center  rounded-full bg-[#08F6CC] px-4 py-3"
+            onPress={() => {
+              router.push(
+                Platform.select({
+                  native: buyPath + "?selectedAction=buy",
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenBuyModal: true,
+                      username: channelOwnerProfile?.username,
+                      selectedAction: "buy",
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: buyPath,
+                  web: router.asPath === "/" ? buyPath : router.asPath,
+                }),
+                { shallow: true }
+              );
+            }}
+          >
+            <LeanText tw="text-center text-base font-semibold">
+              Buy - ${priceToBuyNext.data?.displayPrice}
             </LeanText>
-          </LeanView>
+          </Pressable>
+          {/* <LeanView tw="flex-1">
+            <LeanText tw="text-xs font-semibold text-white">
+              99 collected
+            </LeanText>
+          </LeanView> */}
         </LeanView>
       );
     }
@@ -244,15 +277,7 @@ export const MessageInput = memo(
                 textInputProps={{
                   maxLength: 2000,
                 }}
-                onSubmit={
-                  !edition
-                    ? async () => {
-                        setShouldShowMissingStarDropModal(true);
-                      }
-                    : editMessage
-                    ? handleEditMessage
-                    : handleSubmit
-                }
+                onSubmit={editMessage ? handleEditMessage : handleSubmit}
                 submitting={editMessages.isMutating || sendMessage.isMutating}
                 tw="bg-white dark:bg-black"
                 submitButton={
@@ -287,12 +312,6 @@ export const MessageInput = memo(
             <MessageBoxUnavailable />
           )}
         </Animated.View>
-        <MissingStarDropModal
-          isOpen={shouldShowMissingStarDropModal}
-          close={() => {
-            setShouldShowMissingStarDropModal(false);
-          }}
-        />
       </>
     );
   }

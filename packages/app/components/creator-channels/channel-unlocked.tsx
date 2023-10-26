@@ -150,7 +150,7 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
             <View tw="absolute bottom-0 right-0 h-12 w-12">
               <Image
                 source={{
-                  uri: "https://showtime-media.b-cdn.net/assets/gold-button-iconv2.png",
+                  uri: "https://media.showtime.xyz/assets/gold-button-iconv2.png",
                 }}
                 style={{ width: "100%", height: "100%" }}
               />
@@ -219,7 +219,7 @@ const UnlockedChannel = memo(function UnlockedChannel({ nft }: { nft: NFT }) {
           </View>
         </View>
         <View tw="w-full px-6" style={{ rowGap: 16 }}>
-          <TwitterButton onPress={shareWithTwitterIntent} />
+          <TwitterButton theme="dark" onPress={shareWithTwitterIntent} />
           {Platform.OS !== "web" ? (
             <InstagramButton onPress={shareSingleImage} />
           ) : null}

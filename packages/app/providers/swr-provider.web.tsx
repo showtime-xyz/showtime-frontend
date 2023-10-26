@@ -6,6 +6,7 @@ import type { SWRConfiguration } from "swr";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { isServer } from "app/lib/is-server";
 import { isUndefined } from "app/lib/swr/helper";
+import { formatAPIErrorMessage } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -35,7 +36,7 @@ export const SWRProvider = ({
         onError: (err) => {
           if (__DEV__ && err?.message && err?.message !== "canceled") {
             console.error(err);
-            toast.error(err.message);
+            toast.error(formatAPIErrorMessage(err));
           }
         },
         onErrorRetry: async (

@@ -448,6 +448,8 @@ export function generateRandomFilename(mimeType: string): string {
     "audio/x-pn-wav": "wav",
     "audio/ogg": "ogg",
     "audio/x-ogg": "ogg",
+    "text/csv": "csv",
+
     // Add more mappings if needed
   };
 
@@ -753,8 +755,8 @@ export const obfuscatePhoneNumber = (phoneNumber: string) => {
 
 //#region format profile routers
 const ProfileTabNameMap = new Map([
-  ["owned", "collected"],
-  ["created", "drops"],
+  ["owned", "Saved"],
+  ["created", "Songs"],
 ]);
 
 const getProfileTitle = (name: string) => {
@@ -766,10 +768,11 @@ export const formatProfileRoutes = (
   tabs: ProfileTabsAPI["tabs"] | undefined
 ) => {
   if (!tabs) return [];
+
   return tabs.map((item, index) => ({
-    title: getProfileTitle(item.name),
-    key: item?.name,
-    index,
+    title: item.name,
+    key: item?.type,
+    index: index,
     subtitle: item.displayed_count,
   }));
 };
@@ -816,7 +819,8 @@ export const isProfileIncomplete = (profile?: Profile) => {
   return isIncomplete;
 };
 
-export function getFullSizeCover(url: string | undefined) {
+export function getFullSizeCover(profile?: Profile) {
+  const url = profile?.cover_url ? profile?.cover_url : profile?.img_url;
   if (!url) return DEFAULT_PROFILE_PIC;
   if (
     url &&
@@ -914,14 +918,22 @@ export const getWebImageSize = (file: File) => {
 
 export const formatAPIErrorMessage = (error: AxiosError | Error) => {
   let messages = [];
+  console.log(
+    { ...error },
+    axios.isAxiosError(error),
+    (error as any)?.shortMessage
+  );
+
   if (axios.isAxiosError(error)) {
     const res = error.response?.data;
-    if (res.errors) {
+    if (res?.errors) {
       messages = res.errors.map((e: any) => e.message);
-    } else if (res.error) {
+    } else if (res?.error) {
       messages.push(res.error.message);
     }
-  } else if (error.message) {
+  } else if ((error as any)?.shortMessage) {
+    messages.push((error as any).shortMessage);
+  } else if (error?.message) {
     messages.push(error.message);
   }
 
@@ -1196,3 +1208,6 @@ export const getClaimLimitLeftDuration = (timeLimit: string) => {
     }
   )} left`;
 };
+
+export const isDEV =
+  process.env.NEXT_PUBLIC_STAGE === "development" ? true : false;

@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useCallback } from "react";
 import { Platform } from "react-native";
 
 import * as SplashScreen from "expo-splash-screen";

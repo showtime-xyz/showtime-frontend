@@ -146,6 +146,7 @@ export const EditProfile = () => {
       submitError: "",
     };
   }, [user?.data?.profile]);
+  console.log(router);
 
   const {
     control,
@@ -235,6 +236,13 @@ export const EditProfile = () => {
 
       if (redirectUri) {
         router.replace(redirectUri);
+      } else if (
+        user?.data?.profile.username !== values.username &&
+        router.pathname === "/profile/[username]" &&
+        router.query.username === user?.data?.profile.username &&
+        Platform.OS === "web"
+      ) {
+        router.replace(`/@${values.username}`);
       } else {
         router.pop();
       }
@@ -297,21 +305,23 @@ export const EditProfile = () => {
                     }}
                     tw="mx-4 flex-row overflow-hidden rounded-2xl dark:border-gray-900 dark:bg-gray-800"
                   >
-                    <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
-                      <View tw="rounded-full bg-gray-800/70 p-1">
-                        <Upload height={20} width={20} color={colors.white} />
+                    <>
+                      <View tw="absolute z-10 h-full w-full flex-row items-center justify-center bg-black/10 p-2 dark:bg-black/60">
+                        <View tw="rounded-full bg-gray-800/70 p-1">
+                          <Upload height={20} width={20} color={colors.white} />
+                        </View>
                       </View>
-                    </View>
-                    {value && (
-                      <Preview
-                        file={value}
-                        style={{ height: coverImageHeight }}
-                        tw="web:object-cover"
-                        resizeMode="cover"
-                        width={isMdWidth ? 480 : width}
-                        height={isMdWidth ? 480 : width}
-                      />
-                    )}
+                      {value && (
+                        <Preview
+                          file={value}
+                          style={{ height: coverImageHeight }}
+                          tw="web:object-cover"
+                          resizeMode="cover"
+                          width={isMdWidth ? 480 : width}
+                          height={isMdWidth ? 480 : width}
+                        />
+                      )}
+                    </>
                   </Pressable>
                 </DropFileZone>
               )}

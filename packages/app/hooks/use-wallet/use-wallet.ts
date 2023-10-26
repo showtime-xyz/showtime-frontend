@@ -8,6 +8,7 @@ import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 
+import { useWalletBalance } from "../use-wallet-balance";
 import { ConnectResult, UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
 
@@ -15,9 +16,10 @@ const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const web3Modal = useWeb3Modal();
-  const { web3, isMagic, magicWalletAddress } = useWeb3();
+  const { web3, isMagic, magicWalletAddress, getWalletClient } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
-  const [address, setAddress] = useState<string | undefined>();
+  const { getBalance } = useWalletBalance();
+  const [address, setAddress] = useState<`0x${string}` | undefined>();
 
   // we use this hook to prevent stale values in closures
   const walletConnectInstanceRef = useLatestValueRef(web3Modal);
@@ -27,11 +29,11 @@ const useWallet = (): UseWalletReturnType => {
   useEffect(() => {
     (async function fetchUserAddress() {
       if (web3Modal.address) {
-        setAddress(web3Modal.address);
+        setAddress(web3Modal.address as `0x${string}`);
       } else if (magicWalletAddress) {
-        setAddress(magicWalletAddress);
+        setAddress(magicWalletAddress as `0x${string}`);
       } else if (mobileSDK.address) {
-        setAddress(mobileSDK.address);
+        setAddress(mobileSDK.address as `0x${string}`);
       } else if (web3) {
         const address = web3.account?.address;
         setAddress(address);
@@ -124,7 +126,11 @@ const useWallet = (): UseWalletReturnType => {
       },
       name: walletName,
       connected: walletConnected || isMagic,
+      isMagicWallet: isMagic,
       networkChanged: undefined,
+      getBalance,
+      walletClient: web3,
+      getWalletClient,
       signMessageAsync: async (args: { message: string }) => {
         if (
           walletConnectInstanceRef.current.isConnected &&
@@ -162,8 +168,11 @@ const useWallet = (): UseWalletReturnType => {
     address,
     walletConnected,
     isMagic,
+    getBalance,
     walletConnectInstanceRef,
     coinbaseMobileSDKInstanceRef,
+    web3,
+    getWalletClient,
   ]);
 
   if (process.env.E2E) {

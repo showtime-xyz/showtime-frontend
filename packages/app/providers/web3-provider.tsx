@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Platform } from "react-native";
 
 import { createWalletClient, custom } from "viem";
@@ -20,10 +20,11 @@ export function Web3Provider({
   connected,
   client,
 }: Web3ProviderProps) {
-  const [web3, setWeb3] = useState<Web3ContextType["web3"] | undefined>(
+  const [web3, setWeb3State] = useState<Web3ContextType["web3"] | undefined>(
     undefined
   );
   const [mountRelayerOnApp, setMountRelayerOnApp] = useState(true);
+  const walletClientRef = useRef<Web3ContextType["web3"] | undefined>(null);
   const web3Modal = useWeb3Modal();
   const mobileSDK = useWalletMobileSDK();
   const { magic } = useMagic();
@@ -31,12 +32,18 @@ export function Web3Provider({
     string | undefined
   >(undefined);
 
+  const setWeb3 = (web3: Web3ContextType["web3"] | undefined) => {
+    walletClientRef.current = web3;
+    setWeb3State(web3);
+  };
+
   const Web3ContextValue = useMemo(
     () => ({
       web3,
       setWeb3,
       //@ts-ignore
       isMagic: web3?.isMagic,
+      getWalletClient: () => walletClientRef.current,
       setMountRelayerOnApp,
       magicWalletAddress,
     }),
@@ -99,10 +106,13 @@ export function Web3Provider({
 
   useEffect(() => {
     // @ts-ignore
-    if (web3?.isMagic)
+    if (web3?.isMagic) {
       web3.getAddresses().then((address) => {
         setMagicWalletAddress(address[0]);
       });
+    } else {
+      setMagicWalletAddress(undefined);
+    }
   }, [web3]);
 
   // (Web only) initialises web3 provider from wagmi

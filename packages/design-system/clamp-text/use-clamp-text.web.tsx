@@ -5,7 +5,7 @@ import { MultiClamp } from "./clamp.web";
 import type { ClampTextParams } from "./use-clamp-text";
 
 const tw =
-  "text-sm font-bold text-gray-900 dark:text-white cursor-pointer hover:bg-gray-600 rounded-sm px-0.5";
+  "text-sm font-bold text-gray-900 dark:text-white cursor-pointer hover:text-gray-600 hover:dark:text-gray-200 rounded-sm px-0.5";
 export const useClampText = ({
   element,
   text = "",

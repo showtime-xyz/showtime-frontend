@@ -26,6 +26,11 @@ module.exports = {
         "inter-bold": "Inter-Bold",
         sans: ["Inter-Regular", ...defaultTheme.fontFamily.sans],
       },
+      borderRadius: {
+        inherit: "inherit",
+        "4xl": "32px",
+        4: "16px",
+      },
     },
   },
   plugins: [

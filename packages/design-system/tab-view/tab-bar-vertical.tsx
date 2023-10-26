@@ -37,7 +37,7 @@ export const TabBarVertical = memo<TabBarVerticalProps>(
       <View tw={["mt-8", tw]}>
         {routes.map((item, index) => (
           <Pressable
-            tw="flex-row items-center justify-between rounded-2xl px-3 py-5 transition-all hover:bg-gray-50 hover:dark:bg-gray-900"
+            tw="flex-row items-center justify-between rounded-2xl px-3 py-5 transition-all hover:bg-gray-100 hover:dark:bg-gray-900"
             key={item.key}
             onPress={() => onPress?.(index)}
             onLayout={({

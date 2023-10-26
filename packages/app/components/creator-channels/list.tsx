@@ -230,8 +230,9 @@ const CreatorChannelsListItem = memo(
                   (item.latest_message?.sent_by.profile.name ||
                     item.latest_message?.sent_by.profile.username) ? (
                     <LeanText tw="font-semibold">
-                      {item.latest_message.sent_by.profile.name ||
-                        item.latest_message.sent_by.profile.username}
+                      {item.latest_message?.sent_by?.profile.name ||
+                        item.latest_message?.sent_by?.profile.username ||
+                        "Deleted User"}
                       {": "}
                     </LeanText>
                   ) : null}

@@ -7,7 +7,7 @@ import {
   Twitter,
   Link as LinkIcon,
   Instagram,
-  Spotify,
+  SpotifyPure,
   AppleMusic,
 } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -18,20 +18,19 @@ import { View } from "@showtime-xyz/universal.view";
 import { Profile } from "app/types";
 import { getDomainName, formatLink } from "app/utilities";
 
-import { Hidden } from "design-system/hidden";
-
 type ProfileSocialProps = {
   profile?: Profile;
+  savedSongs?: number;
 };
 
 export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   profile,
+  savedSongs = 0,
 }) {
   const isDark = useIsDarkMode();
 
   const twitter = profile?.social_login_handles?.twitter;
   const instagram = profile?.social_login_handles?.instagram;
-
   const spotifyUrl = profile?.spotify_artist_id
     ? `https://open.spotify.com/artist/${profile?.spotify_artist_id}`
     : null;
@@ -48,49 +47,39 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   const onPressLink = useCallback(async (link: string) => {
     return Linking.openURL(link);
   }, []);
-
+  if (!profile) return null;
   return (
-    <View tw="items-center justify-center sm:flex-row">
+    <View tw="flex-row items-center">
       {profile?.website_url && websiteLink && (
         <PressableScale
           onPress={() => onPressLink(formatLink(profile.website_url))}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-          }}
           aria-label="Profile website"
           role="link"
+          tw="mr-2"
         >
-          <LinkIcon
-            color={isDark ? "#FFF" : colors.gray[900]}
-            width={20}
-            height={20}
-          />
           <Text
             numberOfLines={1}
-            tw="ml-1 max-w-[150px] text-sm font-bold text-gray-900 dark:text-white"
+            tw="text-13 max-w-[150px] font-bold text-gray-900 dark:text-white"
           >
             {websiteLink}
           </Text>
         </PressableScale>
       )}
 
-      <Hidden until="sm">
-        {websiteLink && (twitter || instagram || spotifyUrl) && (
-          <Divider orientation="vertical" height={16} tw="mx-4" />
-        )}
-      </Hidden>
-
-      <View tw="mt-2 w-full max-w-[150px] flex-row items-center justify-end gap-2 sm:mt-0 sm:w-auto">
+      <View tw="w-full flex-row items-center">
+        {/* <Text tw="text-13 text-gray-900 dark:text-white">
+          <Text tw="font-bold">{savedSongs?.toLocaleString()}</Text> Song saves
+        </Text> */}
         {spotifyUrl && (
           <PressableScale
             onPress={() => onPressLink(spotifyUrl)}
-            aria-label="Spotify"
+            aria-label="SpotifyPure"
             role="link"
+            tw="mr-2"
           >
-            <Spotify
-              width={20}
-              height={20}
+            <SpotifyPure
+              width={16}
+              height={16}
               color={isDark ? "#FFF" : colors.gray[900]}
             />
           </PressableScale>
@@ -101,9 +90,10 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             onPress={() => onPressLink(appleMusicUrl)}
             aria-label="Apple Music"
             role="link"
+            tw="mr-2"
           >
             <AppleMusic
-              width={17}
+              width={16}
               height={17}
               color={isDark ? "#FFF" : colors.gray[900]}
             />
@@ -115,6 +105,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             onPress={() => onPressLink(`https://twitter.com/${twitter}`)}
             aria-label="Twitter"
             role="link"
+            tw="mr-2"
           >
             <Twitter
               width={20}

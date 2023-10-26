@@ -8,7 +8,7 @@ import {
   useState,
   useEffect,
 } from "react";
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 import chunk from "lodash/chunk";
@@ -17,12 +17,17 @@ import type { ParsedUrlQuery } from "querystring";
 import { useSharedValue } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { EyeOff, EyeOffV2, GiftSolid } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
+import { colors } from "@showtime-xyz/universal.tailwind";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
+import { DESKTOP_PROFILE_WIDTH } from "app/constants/layout";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import {
   defaultFilters,
@@ -33,23 +38,34 @@ import {
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
+import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
-import { formatProfileRoutes } from "app/utilities";
+import {
+  formatProfileRoutes,
+  getFullSizeCover,
+  getProfileImage,
+} from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
-import { breakpoints } from "design-system/theme";
 
+import { MessageItem } from "../creator-channels/components/message-item";
 import { EmptyPlaceholder } from "../empty-placeholder";
+import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { HeaderLeft } from "../header";
 import { HeaderRightSm } from "../header/header-right.sm";
-import { FilterContext } from "./fillter-context";
+import { CreatorTokensPanel } from "./creator-tokens-panel";
+import { MyCollection } from "./my-collection";
 import { ProfileError } from "./profile-error";
-import { ProfileTop } from "./profile-top";
+import { ProfileHideList, ProfileNFTHiddenButton } from "./profile-hide-list";
+import { ProfileTabBar } from "./profile-tab-bar";
+import { ProfileCover, ProfileTop } from "./profile-top";
+import { TokensTabHeader, TokensTabItem } from "./tokens-tab";
 
 export type ProfileScreenProps = {
   username: string;
@@ -59,7 +75,6 @@ const ProfileScreen = ({ username }: ProfileScreenProps) => {
   return <Profile username={username} />;
 };
 
-type Filter = typeof defaultFilters;
 const { useParam } = createParam();
 
 const ProfileHeaderContext = createContext<{
@@ -82,24 +97,105 @@ const ProfileHeaderContext = createContext<{
   setType: () => {},
 });
 
-const Header = memo(function Header() {
-  const context = useContext(ProfileHeaderContext);
-  const animationHeaderPosition = useSharedValue(0);
-  const animationHeaderHeight = useSharedValue(0);
+const Profile = ({ username }: ProfileScreenProps) => {
+  const {
+    data: profileData,
+    isError,
+    isLoading: profileIsLoading,
+    error,
+  } = useUserProfile({ address: username });
+  const profileId = profileData?.data?.profile.profile_id;
+  const [showHidden, setShowHidden] = useState(false);
+  const { getIsBlocked } = useBlock();
   const router = useRouter();
+  const userId = useCurrentUserId();
+  const isSelf = userId === profileId;
+  const isBlocked = getIsBlocked(profileId);
+  const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
+    profileId: profileId,
+  });
+  const contentWidth = useContentWidth();
+  const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
+
+  const channelId = useMemo(() => {
+    if (profileData?.data?.profile.channels) {
+      return profileData?.data?.profile.channels[0]?.id;
+    }
+    return null;
+  }, [profileData?.data?.profile.channels]);
+
+  const messageCount = useMemo(() => {
+    return profileData?.data?.profile?.channels?.[0]?.message_count || 0;
+  }, [profileData?.data?.profile.channels]);
+
+  const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
+
+  const [queryTab] = useParam("type", {
+    initial: data?.default_tab_type,
+  });
+  const [type, setType] = useState(queryTab);
+  const numColumns = type === "tokens" ? 1 : 3;
+
+  useEffect(() => {
+    if (!data?.default_tab_type || type) return;
+    setType(data?.default_tab_type);
+  }, [data?.default_tab_type, type]);
 
   const {
-    profileData,
-    isError,
     isLoading,
-    username,
-    routes,
-    isBlocked,
-    type,
-    setType,
-  } = context;
+    data: list,
+    fetchMore,
+    updateItem,
+    isLoadingMore,
+  } = useProfileNFTs({
+    tabType: type,
+    profileId: profileId,
+    collectionId: 0,
+    sortType: "newest",
+  });
 
-  const onPress = useCallback(
+  const keyExtractor = useCallback(
+    (_item: NFT, index: number) => `${index}`,
+    []
+  );
+
+  const renderItem = useCallback(
+    ({
+      item,
+      index: itemIndex,
+    }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
+      if (type === "tokens") {
+        return null;
+      }
+      return (
+        <Card
+          nft={item}
+          key={item.nft_id}
+          numColumns={numColumns}
+          as={getNFTSlug(item)}
+          href={`${getNFTSlug(item)}?initialScrollItemId=${
+            item.nft_id
+          }&tabType=${type}&profileId=${profileId}&collectionId=0&sortType=newest&type=profile`}
+          index={itemIndex}
+        />
+      );
+    },
+    [numColumns, profileId, type]
+  );
+  const ListFooterComponent = useCallback(() => {
+    if (((isLoadingMore && isLoading) || profileIsLoading) && !error) {
+      return (
+        <View
+          tw="mx-auto flex-row items-center justify-center py-4"
+          style={{ maxWidth: contentWidth }}
+        >
+          <Spinner />
+        </View>
+      );
+    }
+    return null;
+  }, [isLoadingMore, isLoading, profileIsLoading, error, contentWidth]);
+  const onChangeTabBar = useCallback(
     (index: number) => {
       const currentType = routes[index].key;
       const newQuery = {
@@ -123,156 +219,17 @@ const Header = memo(function Header() {
     },
     [router, routes, setType]
   );
-
-  return (
-    <View tw="items-center bg-white dark:bg-black">
-      <View tw="w-full max-w-screen-xl">
-        <ProfileTop
-          address={username}
-          animationHeaderPosition={animationHeaderPosition}
-          animationHeaderHeight={animationHeaderHeight}
-          isBlocked={isBlocked}
-          profileData={profileData}
-          isLoading={isLoading}
-          isError={isError}
-        />
-        <View tw="bg-white dark:bg-black">
-          <View tw="mx-auto min-h-[43px] w-full max-w-screen-xl px-0 md:px-2 xl:px-0">
-            <TabBarSingle
-              onPress={onPress}
-              routes={routes}
-              index={routes.findIndex((item) => item.key === type)}
-            />
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-});
-
-const Profile = ({ username }: ProfileScreenProps) => {
-  const {
-    data: profileData,
-    isError,
-    isLoading: profileIsLoading,
-    error,
-  } = useUserProfile({ address: username });
-  const profileId = profileData?.data?.profile.profile_id;
-  const { getIsBlocked } = useBlock();
-  const bottomBarHeight = usePlatformBottomHeight();
-  const isBlocked = getIsBlocked(profileId);
-  const { user } = useUser();
-  const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
-    profileId: profileId,
-  });
-  const { height: screenHeight, width } = useWindowDimensions();
-  const contentWidth = useContentWidth();
-  const numColumns =
-    width <= breakpoints["lg"] && width >= breakpoints["md"] ? 2 : 3;
-  const isSelf = user?.data?.profile?.profile_id === profileId;
-
-  const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
-
-  const [queryTab] = useParam("type", {
-    initial: data?.default_tab_type,
-  });
-  const [type, setType] = useState(queryTab);
-  useEffect(() => {
-    if (!data?.default_tab_type || type) return;
-    setType(data?.default_tab_type);
-  }, [data?.default_tab_type, type]);
-
-  const [filter, dispatch] = useReducer(
-    (state: Filter, action: any): Filter => {
-      switch (action.type) {
-        case "collection_change":
-          return { ...state, collectionId: action.payload };
-        case "sort_change":
-          return { ...state, sortType: action.payload };
-        default:
-          return state;
-      }
-    },
-    { ...defaultFilters }
-  );
-
-  const {
-    isLoading,
-    data: list,
-    fetchMore,
-    updateItem,
-    isLoadingMore,
-  } = useProfileNFTs({
-    tabType: type,
-    profileId: profileId,
-    collectionId: filter.collectionId,
-    sortType: filter.sortType,
-  });
-
-  const keyExtractor = useCallback(
-    (_item: NFT[], index: number) => `${index}`,
-    []
-  );
-
-  const chuckList = useMemo(() => {
-    return chunk(list, numColumns);
-  }, [list, numColumns]);
-
-  const renderItem = useCallback(
-    ({
-      item: chuckItem,
-      index: itemIndex,
-    }: ListRenderItemInfo<NFT[] & { loading?: boolean }>) => {
-      return (
-        <View tw="mx-auto mb-px max-w-screen-xl flex-row space-x-px px-0 md:space-x-6 md:px-4 lg:space-x-8">
-          {chuckItem.map((item) => (
-            <Card
-              index={itemIndex}
-              key={item.nft_id}
-              nft={item}
-              numColumns={numColumns}
-              as={getNFTSlug(item)}
-              href={`${getNFTSlug(item)}?initialScrollItemId=${
-                item.nft_id
-              }&tabType=${type}&profileId=${profileId}&collectionId=${
-                filter.collectionId
-              }&sortType=${filter.sortType}&type=profile`}
-            />
-          ))}
-          {chuckItem.length < numColumns &&
-            new Array(numColumns - chuckItem.length)
-              .fill(0)
-              .map((_, itemIndex) => (
-                <View key={itemIndex.toString()} tw="flex-1" />
-              ))}
-        </View>
-      );
-    },
-    [filter.collectionId, filter.sortType, numColumns, profileId, type]
-  );
-  const ListFooterComponent = useCallback(() => {
-    if ((isLoadingMore || profileIsLoading) && !error) {
-      return (
-        <View
-          tw="mx-auto flex-row items-center justify-center py-4"
-          style={{ maxWidth: contentWidth }}
-        >
-          <Spinner />
-        </View>
-      );
-    }
-    return null;
-  }, [contentWidth, isLoadingMore, profileIsLoading, error]);
-
   const ListEmptyComponent = useCallback(() => {
     if (error || isBlocked) {
       return (
         <ProfileError error={error} isBlocked={isBlocked} username={username} />
       );
     }
-
+    if (type === "tokens") {
+      return null;
+    }
     if (
-      chuckList.length === 0 &&
+      list.length === 0 &&
       !isLoading &&
       !profileIsLoading &&
       !error &&
@@ -287,14 +244,14 @@ const Profile = ({ username }: ProfileScreenProps) => {
   }, [
     error,
     isBlocked,
-    chuckList.length,
+    list.length,
     isLoading,
     profileIsLoading,
     type,
     username,
   ]);
   return (
-    <>
+    <View tw="w-full items-center border-l border-gray-200 bg-white dark:border-gray-800 dark:bg-black">
       <ProfileHeaderContext.Provider
         value={{
           profileData: profileData?.data,
@@ -307,34 +264,156 @@ const Profile = ({ username }: ProfileScreenProps) => {
           isBlocked,
         }}
       >
-        <FilterContext.Provider value={{ filter, dispatch }}>
-          <View tw="min-h-screen w-full">
-            <MutateProvider mutate={updateItem}>
-              <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
-                <InfiniteScrollList
-                  useWindowScroll
-                  ListHeaderComponent={Header}
-                  numColumns={1}
-                  preserveScrollPosition
-                  data={isBlocked ? [] : chuckList}
-                  keyExtractor={keyExtractor}
-                  renderItem={renderItem}
-                  style={{
-                    height: screenHeight - bottomBarHeight,
-                  }}
-                  ListEmptyComponent={ListEmptyComponent}
-                  ListFooterComponent={ListFooterComponent}
-                  onEndReached={fetchMore}
-                />
-              </ProfileTabsNFTProvider>
-            </MutateProvider>
-          </View>
-        </FilterContext.Provider>
+        <View
+          tw="min-h-screen w-full"
+          style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}
+        >
+          <MutateProvider mutate={updateItem}>
+            <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
+              {isProfileMdScreen ? (
+                <>
+                  <ProfileCover
+                    tw="overflow-hidden rounded-b-3xl"
+                    uri={getFullSizeCover(profileData?.data?.profile)}
+                  />
+                  {/* <Pressable
+                    tw={[
+                      "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+                    ]}
+                    onPress={() => {
+                      const as = "/creator-token/invite-creator-token";
+                      router.push(
+                        Platform.select({
+                          native: as,
+                          web: {
+                            pathname: router.pathname,
+                            query: {
+                              ...router.query,
+                              inviteCreatorTokenModal: true,
+                            },
+                          } as any,
+                        }),
+                        Platform.select({ native: as, web: router.asPath }),
+                        {
+                          shallow: true,
+                        }
+                      );
+                    }}
+                  >
+                    <ButtonGoldLinearGradient />
+                    <GiftSolid
+                      width={26}
+                      height={26}
+                      color={colors.gray[900]}
+                    />
+                  </Pressable> */}
+                </>
+              ) : null}
+              <View tw="w-full flex-row">
+                <View tw="-mt-3 flex-1">
+                  <ProfileTop
+                    address={username}
+                    isBlocked={isBlocked}
+                    profileData={profileData?.data}
+                    isLoading={isLoading}
+                    isError={isError}
+                    isSelf={isSelf}
+                  />
+                  <ProfileTabBar
+                    onPress={onChangeTabBar}
+                    routes={routes}
+                    index={routes.findIndex((item) => item.key === type)}
+                  />
+
+                  {type === "tokens" ? (
+                    <TokensTabHeader
+                      channelId={channelId}
+                      isSelf={isSelf}
+                      messageCount={messageCount}
+                    />
+                  ) : null}
+                  {type === "song_drops_created" && isSelf ? (
+                    <>
+                      <ProfileNFTHiddenButton
+                        onPress={() => {
+                          setShowHidden(!showHidden);
+                        }}
+                        showHidden={showHidden}
+                      />
+                      {showHidden ? (
+                        <ProfileHideList profileId={profileId} />
+                      ) : null}
+                    </>
+                  ) : null}
+
+                  <InfiniteScrollList
+                    useWindowScroll
+                    numColumns={numColumns}
+                    preserveScrollPosition
+                    data={isBlocked ? [] : list}
+                    keyExtractor={keyExtractor}
+                    renderItem={renderItem}
+                    overscan={12}
+                    ListEmptyComponent={ListEmptyComponent}
+                    ListFooterComponent={ListFooterComponent}
+                    onEndReached={fetchMore}
+                  />
+                </View>
+                {isProfileMdScreen ? (
+                  <View
+                    style={{
+                      width: 320,
+                    }}
+                    tw="animate-fade-in-250 ml-10"
+                  >
+                    <Sticky enabled>
+                      <CreatorTokensPanel username={username} isSelf={isSelf} />
+                      {isSelf && <MyCollection />}
+                      {list.length > 0 ? (
+                        <TokensTabItem item={list[0]} />
+                      ) : null}
+                      {list.length > 0 ? (
+                        <TokensTabItem item={list[0]} />
+                      ) : null}
+                    </Sticky>
+                  </View>
+                ) : null}
+              </View>
+            </ProfileTabsNFTProvider>
+          </MutateProvider>
+        </View>
       </ProfileHeaderContext.Provider>
       <>
         {isSelf ? (
-          <View tw={["fixed right-4 top-2 z-50 flex md:hidden"]}>
+          <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
             <HeaderRightSm withBackground />
+            {/* <Pressable
+              tw={[
+                "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+              ]}
+              onPress={() => {
+                const as = "/creator-token/invite-creator-token";
+                router.push(
+                  Platform.select({
+                    native: as,
+                    web: {
+                      pathname: router.pathname,
+                      query: {
+                        ...router.query,
+                        inviteCreatorTokenModal: true,
+                      },
+                    } as any,
+                  }),
+                  Platform.select({ native: as, web: router.asPath }),
+                  {
+                    shallow: true,
+                  }
+                );
+              }}
+            >
+              <ButtonGoldLinearGradient />
+              <GiftSolid width={26} height={26} color={colors.gray[900]} />
+            </Pressable> */}
           </View>
         ) : (
           <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
@@ -342,7 +421,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
           </View>
         )}
       </>
-    </>
+    </View>
   );
 };
 

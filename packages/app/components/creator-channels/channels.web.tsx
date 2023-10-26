@@ -201,13 +201,14 @@ const CreatorChannelsListItem = memo(
                   ]}
                   numberOfLines={2}
                 >
-                  {item.latest_message?.sent_by.profile.profile_id !==
+                  {item.latest_message?.sent_by?.profile.profile_id !==
                     item.owner.profile_id &&
-                  (item.latest_message?.sent_by.profile.name ||
-                    item.latest_message?.sent_by.profile.username) ? (
+                  (item.latest_message?.sent_by?.profile.name ||
+                    item.latest_message?.sent_by?.profile.username) ? (
                     <Text tw="font-semibold">
-                      {item.latest_message?.sent_by.profile.name ||
-                        item.latest_message?.sent_by.profile.username}
+                      {item.latest_message?.sent_by?.profile.name ||
+                        item.latest_message?.sent_by?.profile.username ||
+                        "Deleted User"}
                       {": "}
                     </Text>
                   ) : null}

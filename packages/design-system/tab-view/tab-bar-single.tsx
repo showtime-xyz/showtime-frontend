@@ -1,11 +1,13 @@
 import { useState, memo, useMemo, useLayoutEffect, useRef } from "react";
 import { Platform } from "react-native";
 
+import type { SceneMap } from "react-native-tab-view";
+
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Route } from "./";
+import { Route, SceneProps } from "./";
 
 type IndependentTabBarProps = {
   routes: Route[];
@@ -13,6 +15,11 @@ type IndependentTabBarProps = {
   onPress?: (index: number) => void;
   tw?: string;
   disableScrollableBar?: boolean;
+  renderIcon?: (scene: {
+    focused: boolean;
+    color: string;
+    route: Route;
+  }) => React.ReactNode;
 };
 const PADDING_X = 16;
 
@@ -25,6 +32,7 @@ export const TabBarSingle = memo<IndependentTabBarProps>(function TabBarSingle({
   onPress,
   tw = "",
   disableScrollableBar = false,
+  renderIcon,
 }) {
   const [tabsWidth, setTabsWidth] = useState<{
     [index: number]: number;
@@ -73,8 +81,13 @@ export const TabBarSingle = memo<IndependentTabBarProps>(function TabBarSingle({
                 setTabsWidth({ ...tabs });
               }
             }}
-            tw={["py-4", disableScrollableBar ? "items-center" : ""]}
+            tw={["flex-row items-center py-4"]}
           >
+            {renderIcon?.({
+              focused: propIndex === index,
+              color: "#000",
+              route: item,
+            })}
             <Text tw={["text-sm font-bold", getTextColor(propIndex === index)]}>
               {item.title}
               {Boolean(item.subtitle) && (

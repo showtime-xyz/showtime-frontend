@@ -85,7 +85,7 @@ const useAddWallet = () => {
 
                     // automatically set the primary wallet on add wallet if user doesn't have one
                     if (hasNoPrimaryWallet) {
-                      setPrimaryWallet(addedWallet);
+                      setPrimaryWallet(addedWallet.address);
                     }
                   }
                 },
@@ -105,7 +105,7 @@ const useAddWallet = () => {
 
             // automatically set the primary wallet on add wallet if user doesn't have one
             if (hasNoPrimaryWallet) {
-              setPrimaryWallet(addedWallet);
+              setPrimaryWallet(addedWallet.address);
             }
           }
         }
@@ -135,7 +135,7 @@ const useAddWallet = () => {
 
                   // automatically set the primary wallet on add wallet if user doesn't have one
                   if (hasNoPrimaryWallet) {
-                    setPrimaryWallet(addedWallet);
+                    setPrimaryWallet(addedWallet.address);
                   }
                 }
               },

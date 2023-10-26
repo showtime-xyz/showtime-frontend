@@ -2,7 +2,11 @@ import { useCallback } from "react";
 import { Platform } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ArrowLeft, Settings } from "@showtime-xyz/universal.icon";
+import {
+  AccessTicket,
+  ArrowLeft,
+  Settings,
+} from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -39,6 +43,26 @@ export const MessagesHeader = (props: HeaderProps) => {
       { shallow: true }
     );
   }, [props.channelId, router]);
+
+  const inviteAllowlist = useCallback(() => {
+    const as = "/creator-token/import-allowlist";
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            creatorTokensImportAllowlistModal: true,
+          },
+        } as any,
+      }),
+      Platform.select({ native: as, web: router.asPath }),
+      {
+        shallow: true,
+      }
+    );
+  }, [router]);
 
   return (
     <LeanView
@@ -93,7 +117,16 @@ export const MessagesHeader = (props: HeaderProps) => {
                   color={isDark ? colors.gray["100"] : colors.gray[500]}
                 />
               </Pressable>
-            ) : null}
+            ) : (
+              // TODO: Creator Tokens P1 (hide hidden class)
+              <Pressable onPress={inviteAllowlist} tw="hidden">
+                <AccessTicket
+                  height={Platform.OS === "web" ? 20 : 24}
+                  width={Platform.OS === "web" ? 20 : 24}
+                  color={isDark ? colors.gray["100"] : colors.gray[500]}
+                />
+              </Pressable>
+            )}
             <Pressable onPress={props.onPressShare}>
               <View tw="items-center justify-center overflow-hidden rounded-full bg-indigo-600 px-3 py-1.5 text-center ">
                 <LeanText tw="web:text-xs text-sm font-bold text-white">

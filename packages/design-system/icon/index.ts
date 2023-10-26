@@ -121,6 +121,8 @@ export { default as EyeOff } from "./EyeOff";
 export { default as ScanOutline } from "./ScanOutline";
 export { default as Location } from "./Location";
 export { default as Lock } from "./Lock";
+export { default as UnLocked } from "./Unlocked";
+
 export { default as Download } from "./Download";
 export { default as Download2 } from "./Download2";
 export { default as Download3 } from "./Download3";
@@ -151,12 +153,22 @@ export { default as Messagev2 } from "./Messagev2";
 export { default as MusicBadge } from "./MusicBadge";
 export { default as RaffleBadge } from "./RaffleBadge";
 export { default as LockBadge } from "./LockBadge";
+export { default as Songs } from "./Songs";
+export { default as Saved } from "./Saved";
+export { default as Tokens } from "./Tokens";
 export { default as Photo } from "./Photo";
 export { default as Gallery } from "./Gallery";
+export { default as GrowthArrow } from "./GrowthArrow";
+export { default as PieChart } from "./PieChart";
+export { default as AccessTicket } from "./AccessTicket";
+export { default as InviteTicket } from "./InviteTicket";
+export { default as ArrowTopRounded } from "./ArrowTopRounded";
+
 //#region social icons
 export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";
 export { default as SpotifyPure } from "./SpotifyPure";
+export { default as ShowtimeRounded } from "./ShowtimeRounded";
 
 export { default as Facebook } from "./Facebook";
 export { default as GoogleOriginal } from "./GoogleOriginal";

@@ -58,6 +58,23 @@ function App() {
   // check for updates as early as possible
   useExpoUpdate();
 
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    const scheduleGC = () => {
+      timeoutId = setInterval(() => {
+        setImmediate(() => {
+          globalThis?.gc?.();
+        });
+      }, 60_000);
+    };
+
+    scheduleGC();
+
+    return () => {
+      clearInterval(timeoutId);
+    };
+  }, []);
+
   // Handle push notifications
   useEffect(() => {
     // a memory warning listener for free up FastImage Cache

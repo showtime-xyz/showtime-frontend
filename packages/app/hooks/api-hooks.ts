@@ -154,7 +154,11 @@ export const useUserProfile = ({ address }: { address?: string | null }) => {
       return {
         data: {
           ...data.data,
-          profile: myInfoData.data.profile,
+          profile: {
+            // merging is required, because myinfo is not returning all the fields
+            ...data.data.profile,
+            ...myInfoData.data.profile,
+          },
         },
       };
     } else {
@@ -184,7 +188,6 @@ type UserProfileNFTs = {
   profileId?: number;
   tabType?: string;
   sortType?: string;
-  showHidden?: number;
   collectionId?: number;
   refreshInterval?: number;
 };
@@ -195,7 +198,6 @@ type UseProfileNFTs = {
 };
 
 export const defaultFilters = {
-  showHidden: 0,
   collectionId: 0,
   sortType: "newest",
 };
@@ -203,28 +205,28 @@ export const defaultFilters = {
 export const PROFILE_NFTS_QUERY_KEY = "v2/profile-tabs/nfts";
 
 export const useProfileNFTs = (params: UserProfileNFTs) => {
-  const PAGE_SIZE = 12;
+  const PAGE_SIZE = 15;
   const {
     profileId,
-    tabType,
+    tabType: type,
     sortType = defaultFilters.sortType,
-    showHidden = defaultFilters.showHidden,
     collectionId = defaultFilters.collectionId,
     refreshInterval,
   } = params;
+  const tabType = type === "tokens" ? null : type;
 
-  const trendingCreatorsUrlFn = useCallback(
+  const profileUrlFn = useCallback(
     (index: number) => {
       const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=${
         index + 1
-      }&limit=${PAGE_SIZE}&tab_type=${tabType}&sort_type=${sortType}&show_hidden=${showHidden}&collection_id=${collectionId}`;
+      }&limit=${PAGE_SIZE}&tab_type=${tabType}&sort_type=${sortType}&collection_id=${collectionId}`;
       return url;
     },
-    [profileId, tabType, sortType, showHidden, collectionId]
+    [profileId, tabType, sortType, collectionId]
   );
 
   const { mutate, ...queryState } = useInfiniteListQuerySWR<UseProfileNFTs>(
-    params?.profileId && tabType ? trendingCreatorsUrlFn : () => null,
+    params?.profileId && tabType ? profileUrlFn : () => null,
     { refreshInterval, pageSize: PAGE_SIZE }
   );
 
@@ -268,7 +270,14 @@ export const useProfileNFTs = (params: UserProfileNFTs) => {
 
   return { ...queryState, fetchMore, updateItem, data: newData };
 };
+export const useProfileHideNFTs = (profileId?: number) => {
+  const PAGE_SIZE = 100;
+  const url = `${PROFILE_NFTS_QUERY_KEY}?profile_id=${profileId}&page=1&limit=${PAGE_SIZE}&tab_type=hidden`;
 
+  const queryState = useSWR<UseProfileNFTs>(url, fetcher);
+
+  return { ...queryState };
+};
 export type Collection = {
   collection_id: number;
   collection_name: string;
@@ -277,13 +286,13 @@ export type Collection = {
 };
 
 export type List = {
-  collections: Array<Collection>;
+  collections?: Array<Collection>;
   displayed_count: number;
-  has_custom_sort: boolean;
+  has_custom_sort?: boolean;
   name: string;
-  sort_type: string;
+  sort_type?: string;
   type: string;
-  user_has_hidden_items: boolean;
+  user_has_hidden_items?: boolean;
 };
 
 export type ProfileTabsAPI = {
@@ -292,11 +301,44 @@ export type ProfileTabsAPI = {
 };
 
 export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
-  const { data, error, isLoading } = useSWR<ProfileTabsAPI>(
-    profileId ? "/v2/profile-tabs/tabs?profile_id=" + profileId : null,
-    fetcher
-  );
-  return { data, isLoading, error };
+  // const { data, error, isLoading } = useSWR<ProfileTabsAPI>(
+  //   profileId ? "/v2/profile-tabs/tabs?profile_id=" + profileId : null,
+  //   fetcher
+  // );
+  // const songsCount = useMemo(() => {
+  //   return (
+  //     data?.tabs.find((item) => item.type === "created")?.displayed_count || 0
+  //   );
+  // }, [data?.tabs]);
+  // const savedCount = useMemo(() => {
+  //   return (
+  //     data?.tabs.find((item) => item.type === "owned")?.displayed_count || 0
+  //   );
+  // }, [data?.tabs]);
+  return {
+    data: {
+      default_tab_type: "tokens",
+      tabs: [
+        {
+          type: "tokens",
+          name: "Tokens",
+          displayed_count: 0,
+        },
+        {
+          type: "song_drops_created",
+          name: "Songs",
+          displayed_count: 0,
+        },
+        {
+          type: "song_drops_collected",
+          name: "Saved",
+          displayed_count: 0,
+        },
+      ],
+    },
+    isLoading: false,
+    error: null,
+  };
 };
 
 export const useMyInfo = () => {

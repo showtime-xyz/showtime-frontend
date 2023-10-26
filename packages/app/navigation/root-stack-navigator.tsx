@@ -23,6 +23,14 @@ import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-membe
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
+import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
+import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
+import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
+import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
+import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
+import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
+import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
+import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
@@ -39,7 +47,9 @@ import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
-import { ProfileScreen } from "app/screens/profile";
+import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
+import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
+import { ProfileScreen } from "app/screens/profile/profile";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
@@ -47,6 +57,7 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { TopCreatorTokensScreen } from "app/screens/top-creator-tokens";
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
@@ -131,6 +142,18 @@ export function RootStackNavigator() {
           }}
         />
         <Stack.Screen
+          name="creatorTokensShare"
+          component={CreatorTokensShareModalScreen}
+          options={{
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
+            animationDuration: 200,
+          }}
+        />
+
+        <Stack.Screen
           name="dropViewShareModal"
           component={DropViewShareScreen}
           options={{
@@ -140,6 +163,21 @@ export function RootStackNavigator() {
                 : "slide_from_bottom",
             animationDuration: 200,
             statusBarStyle: "dark",
+          }}
+        />
+        <Stack.Screen
+          name="reviewCreatorToken"
+          component={ReviewCreatorTokenScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensImportAllowlistSuccess"
+          component={CreatorTokensImportAllowlistSuccessScreen}
+          options={{
+            animation:
+              Platform.OS === "android"
+                ? "fade_from_bottom"
+                : "slide_from_bottom",
+            animationDuration: 200,
           }}
         />
       </Stack.Group>
@@ -216,6 +254,20 @@ export function RootStackNavigator() {
           options={{ headerTitle: "Trending" }}
           component={TrendingScreen}
         />
+        <Stack.Screen
+          name="topCreatorTokens"
+          options={{ headerTitle: "Top Creator Tokens" }}
+          component={TopCreatorTokensScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensSelfServeExplainer"
+          component={CreatorTokensSelfServeExplainerScreen}
+        />
+        <Stack.Screen
+          name="inviteCreatorToken"
+          options={{ headerTitle: "Invite friends" }}
+          component={InviteCreatorTokenScreen}
+        />
       </Stack.Group>
 
       {/* Modals */}
@@ -243,7 +295,6 @@ export function RootStackNavigator() {
           name="dropExplanation"
           component={DropExplanationScreen}
         />
-
         <Stack.Screen name="dropStar" component={DropStarScreen} />
         <Stack.Screen name="payoutsSetup" component={PayoutsSetupScreen} />
         <Stack.Screen name="claim" component={ClaimScreen} />
@@ -267,6 +318,10 @@ export function RootStackNavigator() {
           name="channelsShare"
           component={CreatorChannelsShareScreen}
         />
+        <Stack.Screen
+          name="creatorTokenBuy"
+          component={CreatorTokenBuyScreen}
+        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -284,6 +339,22 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="channelsSettings"
           component={CreatorChannelsSettingsScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensExplanation"
+          component={CreatorTokensExplanationScreen}
+        />
+        <Stack.Screen
+          name="enterInviteCode"
+          component={EnterInviteCodeModalScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenInviteSignIn"
+          component={CreatorTokenInviteSignInScreen}
+        />
+        <Stack.Screen
+          name="creatorTokensImportAllowlist"
+          component={CreatorTokensImportAllowlistScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

@@ -105,6 +105,7 @@ export function GradientButton({
   iconColor = ["white", "black"],
   children,
   isDark,
+  style,
   ...props
 }: BaseButtonProps) {
   const containerTW = useMemo(
@@ -153,7 +154,7 @@ export function GradientButton({
   }, [size, iconColor, labelTW, children, isDark]);
 
   return (
-    <View tw={[containerTW, "overflow-hidden"]}>
+    <View tw={[containerTW, "overflow-hidden"]} style={style as any}>
       {props.gradientProps ? (
         <LinearGradient
           style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}

@@ -55,7 +55,7 @@ export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
             <Image
               alt="Profile Image"
               source={{
-                uri: getFullSizeCover(profileData?.profile.cover_url),
+                uri: getFullSizeCover(profileData?.profile),
               }}
               resizeMode="cover"
               width={CARD_WIDTH}

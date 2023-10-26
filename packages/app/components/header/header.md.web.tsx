@@ -30,6 +30,7 @@ import {
   ChevronRight,
   SearchFilled,
   Download3,
+  AccessTicket,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { useRouter } from "@showtime-xyz/universal.router";
@@ -199,8 +200,8 @@ const MenuItem = ({
   return (
     <Link
       tw={[
-        "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
-        focused && "bg-coolGray-50 dark:bg-gray-800",
+        "mt-2 h-[50px] flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-100 hover:dark:bg-gray-900",
+        focused && "bg-gray-100 dark:bg-gray-800",
       ].join(" ")}
       href={href}
     >
@@ -441,6 +442,43 @@ export const HeaderMd = withColorScheme(() => {
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
               )}
+              {/* TODO: Creator Tokens P1
+              {isAuthenticated && (
+                <DropdownMenuItem
+                  onSelect={() => {
+                    const as = "/creator-token/import-allowlist";
+                    router.push(
+                      Platform.select({
+                        native: as,
+                        web: {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            creatorTokensImportAllowlistModal: true,
+                          },
+                        } as any,
+                      }),
+                      Platform.select({ native: as, web: router.asPath }),
+                      {
+                        shallow: true,
+                      }
+                    );
+                  }}
+                  key="import-allowlist"
+                >
+                  <MenuItemIcon
+                    Icon={AccessTicket}
+                    ios={{
+                      name: "ticket",
+                    }}
+                  />
+
+                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                    Import allowlist to channel
+                  </DropdownMenuItemTitle>
+                </DropdownMenuItem>
+              )}
+              */}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger key="nested-group-trigger">
                   <MenuItemIcon

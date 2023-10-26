@@ -164,6 +164,8 @@ export const Default = () => {
           <IconItem icon={Icon.EyeOffV2} title="EyeOffV2" />
           <IconItem icon={Icon.Location} title="Location" />
           <IconItem icon={Icon.Lock} title="Lock" />
+          <IconItem icon={Icon.UnLocked} title="UnLocked" />
+
           <IconItem icon={Icon.Download} title="Download" />
           <IconItem icon={Icon.Download2} title="Download2" />
           <IconItem icon={Icon.Download3} title="Download3" />
@@ -198,8 +200,16 @@ export const Default = () => {
           <IconItem icon={Icon.RaffleBadge} title="RaffleBadge" />
           <IconItem icon={Icon.MusicBadge} title="MusicBadge" />
           <IconItem icon={Icon.LockBadge} title="LockBadge" />
+          <IconItem icon={Icon.Songs} title="Songs" />
+          <IconItem icon={Icon.Saved} title="Saved" />
+          <IconItem icon={Icon.Tokens} title="Tokens" />
           <IconItem icon={Icon.Photo} title="Photo" />
           <IconItem icon={Icon.Gallery} title="Gallery" />
+          <IconItem icon={Icon.PieChart} title="PieChart" />
+          <IconItem icon={Icon.GrowthArrow} title="GrowthArrow" />
+          <IconItem icon={Icon.ShowtimeRounded} title="ShowtimeRounded" />
+          <IconItem icon={Icon.AccessTicket} title="AccessTicket" />
+          <IconItem icon={Icon.ArrowTopRounded} title="ArrowTopRounded" />
         </View>
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>
