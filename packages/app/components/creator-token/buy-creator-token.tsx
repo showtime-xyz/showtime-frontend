@@ -77,7 +77,7 @@ export const BuyCreatorToken = () => {
   });
 
   const renderBuyButton = () => {
-    if (usdcBalance.data?.balance === 0n) {
+    if (usdcBalance.data?.balance === 0n && !wallet.isMagicWallet) {
       return (
         <Button
           onPress={() =>
