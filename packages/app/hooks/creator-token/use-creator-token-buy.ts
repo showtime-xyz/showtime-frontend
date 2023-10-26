@@ -66,10 +66,9 @@ export const useCreatorTokenBuy = (params: {
             maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
           });
           if (result) {
-            let requestPayload: any;
-
+            let transactionHash: `0x${string}` | undefined;
             if (tokenAmount === 1) {
-              const { request } = await publicClient.simulateContract({
+              transactionHash = await walletClient?.writeContract?.({
                 address: profileData?.data?.profile.creator_token.address,
                 account: walletAddress,
                 abi: creatorTokenAbi,
@@ -77,9 +76,8 @@ export const useCreatorTokenBuy = (params: {
                 args: [priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
-              requestPayload = request;
             } else {
-              const { request } = await publicClient.simulateContract({
+              transactionHash = await walletClient?.writeContract?.({
                 address: profileData?.data?.profile.creator_token.address,
                 account: walletAddress,
                 abi: creatorTokenAbi,
@@ -87,15 +85,9 @@ export const useCreatorTokenBuy = (params: {
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
-              console.log("bulk buy ", request);
-              requestPayload = request;
             }
 
-            Logger.log("simulate ", requestPayload);
-            const transactionHash = await walletClient?.writeContract?.(
-              requestPayload
-            );
-            Logger.log("Buy transaction hash ", requestPayload);
+            Logger.log("Buy transaction hash ", transactionHash);
             if (transactionHash) {
               const transaction = await publicClient.waitForTransactionReceipt({
                 hash: transactionHash,

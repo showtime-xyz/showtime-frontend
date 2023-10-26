@@ -97,10 +97,10 @@ export const useCreatorTokenSell = () => {
           }
 
           await switchChain.trigger();
-          let requestPayload: any;
+          let transactionHash: `0x${string}` | undefined;
 
           if (tokenIds.length === 1) {
-            const { request } = await publicClient.simulateContract({
+            transactionHash = await wallet.walletClient?.writeContract?.({
               address: arg.contractAddress,
               account: walletAddress,
               abi: creatorTokenAbi,
@@ -108,9 +108,8 @@ export const useCreatorTokenSell = () => {
               args: [Number(tokenIds[0])],
               chain: baseChain,
             });
-            requestPayload = request;
           } else {
-            const { request } = await publicClient.simulateContract({
+            transactionHash = await wallet.walletClient?.writeContract?.({
               address: arg.contractAddress,
               account: walletAddress,
               abi: creatorTokenAbi,
@@ -118,42 +117,39 @@ export const useCreatorTokenSell = () => {
               args: [tokenIds.map((c) => Number(c))],
               chain: baseChain,
             });
-            requestPayload = request;
           }
 
-          const txHash = await wallet.walletClient?.writeContract?.(
-            requestPayload
-          );
-
-          const transaction = await publicClient.waitForTransactionReceipt({
-            hash: txHash as any,
-            pollingInterval: 2000,
-          });
-
-          if (transaction.status === "success") {
-            mutate(getTotalCollectedKey(arg.contractAddress));
-            mutate(
-              getPriceToBuyNextKey({
-                address: arg.contractAddress,
-                tokenAmount: 1,
-              })
-            );
-            mutate(
-              getContractBalanceOfTokenKey({
-                ownerAddress: walletAddress,
-                contractAddress: arg.contractAddress,
-              })
-            );
-            await axios({
-              url: "/v1/creator-token/poll-sell",
-              method: "POST",
-              data: {
-                creator_token_id: arg.creatorTokenId,
-                token_ids: tokenIds,
-                tx_hash: txHash,
-              },
+          if (transactionHash) {
+            const transaction = await publicClient.waitForTransactionReceipt({
+              hash: transactionHash,
+              pollingInterval: 2000,
             });
-            return true;
+
+            if (transaction.status === "success") {
+              mutate(getTotalCollectedKey(arg.contractAddress));
+              mutate(
+                getPriceToBuyNextKey({
+                  address: arg.contractAddress,
+                  tokenAmount: 1,
+                })
+              );
+              mutate(
+                getContractBalanceOfTokenKey({
+                  ownerAddress: walletAddress,
+                  contractAddress: arg.contractAddress,
+                })
+              );
+              await axios({
+                url: "/v1/creator-token/poll-sell",
+                method: "POST",
+                data: {
+                  creator_token_id: arg.creatorTokenId,
+                  token_ids: tokenIds,
+                  tx_hash: transactionHash,
+                },
+              });
+              return true;
+            }
           }
         } else if (tokenIdsRes.token_ids_by_wallet) {
           Alert.alert(
