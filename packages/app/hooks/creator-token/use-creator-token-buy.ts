@@ -51,8 +51,7 @@ export const useCreatorTokenBuy = (params: {
       }
 
       const walletClient = wallet.getWalletClient?.();
-      const walletAddresses = await walletClient?.getAddresses();
-      const walletAddress = walletAddresses?.[0];
+      const walletAddress = walletClient?.account?.address;
 
       if (walletAddress && profileData?.data?.profile.creator_token) {
         const res = await switchChain.trigger();
@@ -66,9 +65,10 @@ export const useCreatorTokenBuy = (params: {
             maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
           });
           if (result) {
-            let transactionHash: `0x${string}` | undefined;
+            let requestPayload: any;
+
             if (tokenAmount === 1) {
-              transactionHash = await walletClient?.writeContract?.({
+              const { request } = await publicClient.simulateContract({
                 address: profileData?.data?.profile.creator_token.address,
                 account: walletAddress,
                 abi: creatorTokenAbi,
@@ -76,8 +76,9 @@ export const useCreatorTokenBuy = (params: {
                 args: [priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
+              requestPayload = request;
             } else {
-              transactionHash = await walletClient?.writeContract?.({
+              const { request } = await publicClient.simulateContract({
                 address: profileData?.data?.profile.creator_token.address,
                 account: walletAddress,
                 abi: creatorTokenAbi,
@@ -85,9 +86,15 @@ export const useCreatorTokenBuy = (params: {
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
+              console.log("bulk buy ", request);
+              requestPayload = request;
             }
 
-            Logger.log("Buy transaction hash ", transactionHash);
+            Logger.log("simulate ", requestPayload);
+            const transactionHash = await walletClient?.writeContract?.(
+              requestPayload
+            );
+            Logger.log("Buy transaction hash ", requestPayload);
             if (transactionHash) {
               const transaction = await publicClient.waitForTransactionReceipt({
                 hash: transactionHash,
