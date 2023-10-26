@@ -210,7 +210,11 @@ export const MessageInput = memo(
       });
     }, [channelId, editMessage, editMessages, setEditMessage, isUserAdmin]);
 
-    if (!isUserAdmin && edition && !hasUnlockedMessages) {
+    if (
+      !isUserAdmin &&
+      channelOwnerProfile?.creator_token?.address &&
+      !hasUnlockedMessages
+    ) {
       const buyPath = `/creator-token/${channelOwnerProfile?.username}/buy`;
 
       return (
