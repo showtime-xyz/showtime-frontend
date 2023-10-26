@@ -74,8 +74,8 @@
     "swiper": "^10.0.4",
     "swr": "^2.2.0",
     "twitter-lite": "^1.1.0",
-    "viem": "^1.12.2",
-    "wagmi": "^1.4.2"
+    "viem": "^1.17.1",
+    "wagmi": "^1.4.5"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.9",

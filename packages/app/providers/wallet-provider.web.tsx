@@ -9,6 +9,8 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 import { baseChain } from "app/hooks/creator-token/utils";
+import { alchemyProviderApiKey } from "app/lib/wallet-public-client";
+import { isDEV } from "app/utilities";
 
 const lineaChain = {
   id: 59144,
@@ -39,12 +41,13 @@ const allChainsArray = [
   lineaChain,
 ];
 
+const provider = isDEV
+  ? [alchemyProvider({ apiKey: alchemyProviderApiKey }), publicProvider()]
+  : [publicProvider()];
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   allChainsArray,
-  [
-    publicProvider(),
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }),
-  ]
+  provider
 );
 
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID;
