@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Linking } from "react-native";
 
 import { createParam } from "solito";
 
@@ -23,6 +24,7 @@ import { useCreatorTokenBuy } from "app/hooks/creator-token/use-creator-token-bu
 import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
 import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
 import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-sell";
+import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 
@@ -49,6 +51,7 @@ export const BuyCreatorToken = () => {
   const [selectedAction, setSelectedAction] = useState<"buy" | "sell">(
     selectedActionParam ?? "buy"
   );
+  const usdcBalance = useWalletUSDCBalance();
   const [showExplanation, setShowExplanation] = useState(false);
   const priceToBuyNext = useCreatorTokenPriceToBuyNext(
     selectedAction === "buy"
@@ -74,6 +77,20 @@ export const BuyCreatorToken = () => {
   });
 
   const renderBuyButton = () => {
+    if (usdcBalance.data?.balance === 0n) {
+      return (
+        <Button
+          onPress={() =>
+            Linking.openURL(
+              "https://app.uniswap.org/swap?outputCurrency=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base"
+            )
+          }
+        >
+          Buy USDC on Uniswap
+        </Button>
+      );
+    }
+
     if (selectedAction === "sell") {
       return (
         <Button
