@@ -48,7 +48,13 @@ export function useHandleNotification() {
   useEffect(() => {
     const responseListener =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        router.push("/notifications");
+        const channelId =
+          response?.notification?.request?.content?.data?.channel_id;
+        if (channelId) {
+          router.push(`/channels/${channelId}`);
+        } else {
+          router.push("/notifications");
+        }
         // const content =
         //   Platform.OS === "ios"
         //     ? response?.notification?.request?.content?.data?.body?.path
