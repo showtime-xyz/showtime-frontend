@@ -57,12 +57,11 @@ export const SettingsMd = () => {
       </View>
 
       <View style={{ height: bottomHeight }} />
-      {editingWallet ? (
-        <EditNicknameModal
-          editingWallet={editingWallet}
-          onClose={() => setEditingWallet(undefined)}
-        />
-      ) : null}
+      <EditNicknameModal
+        editingWallet={editingWallet}
+        visible={!!editingWallet}
+        onClose={() => setEditingWallet(undefined)}
+      />
     </View>
   );
 };

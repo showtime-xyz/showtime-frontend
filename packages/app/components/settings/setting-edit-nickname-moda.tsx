@@ -13,10 +13,12 @@ import { WalletAddressesV2 } from "app/types";
 export type EditNicknameModalProps = {
   editingWallet?: WalletAddressesV2;
   onClose: any;
+  visible: boolean;
 };
 export const EditNicknameModal = ({
   editingWallet,
   onClose,
+  visible = false,
 }: EditNicknameModalProps) => {
   const [nickname, setNickname] = useState("");
   const { editWalletNickName } = useAddWalletNickname();
@@ -34,9 +36,13 @@ export const EditNicknameModal = ({
       AvoidSoftInput.setEnabled(true);
     };
   }, [editingWallet?.nickname]);
-
   return (
-    <Modal tw="bottom-16 md:bottom-0" onClose={onClose} title="Edit Nickname">
+    <Modal
+      tw="bottom-16 md:bottom-0"
+      onClose={onClose}
+      visible={visible}
+      title="Edit Nickname"
+    >
       <View tw="p-4">
         <Fieldset
           placeholder="rainbow wallet"
