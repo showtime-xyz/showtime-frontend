@@ -38,8 +38,9 @@ type Query = {
 };
 
 const { useParam } = createParam<Query>();
-// const paymentMethods = ["USDC", "ETH"];
-const paymentMethods = ["USDC"];
+const PAYMENT_METHODS = ["USDC"];
+const SELECT_LIST: Query["selectedAction"][] = ["buy", "sell"];
+
 export const BuyCreatorToken = () => {
   const wallet = useWallet();
   const [username] = useParam("username");
@@ -51,7 +52,7 @@ export const BuyCreatorToken = () => {
   const buyToken = useCreatorTokenBuy({ username, tokenAmount });
   const sellToken = useCreatorTokenSell();
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
-  const [selectedAction, setSelectedAction] = useState<"buy" | "sell">(
+  const [selectedAction, setSelectedAction] = useState<Query["selectedAction"]>(
     selectedActionParam ?? "buy"
   );
   const usdcBalance = useWalletUSDCBalance();
@@ -185,40 +186,56 @@ export const BuyCreatorToken = () => {
           ) : (
             <View tw="h-6" />
           )}
-          <View tw="mt-6 rounded-3xl border-[1px] border-gray-300 p-8 dark:border-gray-800">
+          <View tw="mt-6 rounded-3xl border-[1px] border-gray-300 px-6 py-4 dark:border-gray-800">
             <View tw="flex-row" style={{ columnGap: 16 }}>
               <Avatar size={100} url={profileData?.data?.profile.img_url} />
-              <View style={{ rowGap: 16 }}>
-                <View tw="mr-auto flex-row overflow-hidden rounded-md">
-                  {paymentMethods.map((method) => (
-                    <Pressable
-                      key={method}
-                      tw={[
-                        "items-start self-start  p-2",
-                        paymentMethod === method
-                          ? "bg-gray-900 dark:bg-gray-200"
-                          : "bg-gray-200 dark:bg-gray-700",
-                      ]}
-                      onPress={() => setPaymentMethod(method)}
-                    >
-                      <Text
+              <View tw="flex-1" style={{ rowGap: 16 }}>
+                <View tw="w-full flex-row items-center justify-between">
+                  <View tw="flex-row overflow-hidden rounded-md border border-gray-200">
+                    {PAYMENT_METHODS.map((method) => (
+                      <Pressable
+                        key={method}
                         tw={[
-                          "text-xs",
+                          "items-start self-start  p-2",
                           paymentMethod === method
-                            ? "text-white dark:text-gray-900"
-                            : "text-gray-900 dark:text-white",
+                            ? "bg-gray-900 dark:bg-white"
+                            : "bg-gray-200 dark:bg-gray-800",
                         ]}
+                        onPress={() => setPaymentMethod(method)}
                       >
-                        {method}
-                      </Text>
-                    </Pressable>
-                  ))}
+                        <Text
+                          tw={[
+                            "text-xs",
+                            paymentMethod === method
+                              ? "text-white dark:text-gray-900"
+                              : "text-gray-900 dark:text-white",
+                          ]}
+                        >
+                          {method}
+                        </Text>
+                      </Pressable>
+                    ))}
+                  </View>
+                  <Pressable
+                    onPress={() => {
+                      setShowExplanation(true);
+                    }}
+                  >
+                    <InformationCircle
+                      width={20}
+                      height={20}
+                      color={isDark ? colors.gray[200] : colors.gray[400]}
+                    />
+                  </Pressable>
                 </View>
                 <View tw="flex-row items-center" style={{ columnGap: 4 }}>
                   <Image
-                    source={require("./usdc-image.png")}
-                    width={24}
-                    height={24}
+                    source={{
+                      uri: "https://media.showtime.xyz/assets/usdc%26base.png",
+                    }}
+                    width={44}
+                    height={44}
+                    tw="mr-2"
                   />
                   {selectedAction === "buy" ? (
                     <View>
@@ -236,7 +253,7 @@ export const BuyCreatorToken = () => {
                         <Skeleton width={100} height={27} />
                       ) : (
                         <Text tw="text-4xl font-semibold dark:text-gray-200">
-                          {priceToSellNext.data?.displayPrice}
+                          {priceToSellNext.data?.displayPrice ?? "0.00"}
                         </Text>
                       )}
                     </View>
@@ -246,52 +263,6 @@ export const BuyCreatorToken = () => {
               <Text tw="font-semibold text-green-500">^ $2.49 (25%) Month</Text>
             </View> */}
               </View>
-            </View>
-            <View
-              tw="mt-4 flex-row items-center justify-between"
-              style={{ columnGap: 16 }}
-            >
-              <Button
-                tw="flex-1"
-                style={{
-                  backgroundColor:
-                    selectedAction === "buy" ? "#08F6CC" : colors.gray[200],
-                  opacity: selectedAction === "buy" ? 1 : 0.7,
-                  height: 28,
-                }}
-                onPress={() => setSelectedAction("buy")}
-              >
-                <Text style={{ color: colors.black }} tw="font-semibold">
-                  Buy
-                </Text>
-              </Button>
-              <Button
-                tw="flex-1"
-                style={{
-                  backgroundColor:
-                    selectedAction === "sell"
-                      ? colors.red[400]
-                      : colors.gray[200],
-                  height: 28,
-                  opacity: selectedAction === "sell" ? 1 : 0.7,
-                }}
-                onPress={() => setSelectedAction("sell")}
-              >
-                <Text style={{ color: colors.black }} tw="font-semibold">
-                  Sell
-                </Text>
-              </Button>
-              <Pressable
-                onPress={() => {
-                  setShowExplanation(true);
-                }}
-              >
-                <InformationCircle
-                  width={20}
-                  height={20}
-                  color={isDark ? colors.gray[200] : colors.gray[400]}
-                />
-              </Pressable>
             </View>
           </View>
           <View style={{ rowGap: 16 }} tw="mt-8">
@@ -304,6 +275,31 @@ export const BuyCreatorToken = () => {
                   {tokenBalance.data?.toString() ?? "N/A"}
                 </Text>
               )}
+            </View>
+            <View tw="ml-auto flex-row overflow-hidden rounded-md border border-gray-300 dark:border-gray-600">
+              {SELECT_LIST.map((item) => (
+                <Pressable
+                  key={item}
+                  tw={[
+                    "items-start self-start  p-2",
+                    selectedAction === item
+                      ? "bg-gray-900 dark:bg-white"
+                      : "bg-gray-200 dark:bg-gray-800",
+                  ]}
+                  onPress={() => setSelectedAction(item)}
+                >
+                  <Text
+                    tw={[
+                      "text-xs capitalize",
+                      selectedAction === item
+                        ? "text-white dark:text-gray-900"
+                        : "text-gray-900 dark:text-white",
+                    ]}
+                  >
+                    {item}
+                  </Text>
+                </Pressable>
+              ))}
             </View>
             <View tw="flex-row items-center">
               <Text tw="flex-2 w-32 text-gray-700 dark:text-gray-200">
