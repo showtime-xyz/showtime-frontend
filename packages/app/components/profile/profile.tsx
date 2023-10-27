@@ -184,8 +184,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
           )}
           <ProfileTop
             address={username}
-            animationHeaderPosition={animationHeaderPosition}
-            animationHeaderHeight={animationHeaderHeight}
             isBlocked={isBlocked}
             profileData={profileData?.data}
             isLoading={isLoading}
@@ -199,8 +197,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
   }, [
     headerHeight,
     username,
-    animationHeaderPosition,
-    animationHeaderHeight,
     isBlocked,
     profileData?.data,
     isLoading,

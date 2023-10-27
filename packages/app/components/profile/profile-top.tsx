@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, memo } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { BlurView } from "expo-blur";
@@ -116,17 +116,12 @@ export const ProfileCover = ({
     </View>
   );
 };
-export const ProfileTop = ({
-  address,
-  isBlocked,
-  animationHeaderPosition,
-  animationHeaderHeight,
+export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
   profileData,
-  isError,
   isLoading,
   savedSongs,
   isSelf = false,
-}: ProfileTopProps) => {
+}) {
   const isDark = useIsDarkMode();
   const router = useRouter();
   const name = getProfileName(profileData?.profile);
@@ -138,6 +133,7 @@ export const ProfileTop = ({
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+
+  console.log(123);
 
   const avatarSize = isProfileMdScreen ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL;
   // const avatarStyle = useAnimatedStyle(() => {
@@ -397,4 +393,4 @@ export const ProfileTop = ({
       </View>
     </>
   );
-};
+});
