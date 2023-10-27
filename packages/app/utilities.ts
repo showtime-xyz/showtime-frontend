@@ -1009,10 +1009,11 @@ export function formatDateRelativeWithIntl(
   }
 
   const diffInMonths = Math.floor(diffInDays / 30.44);
-  if (diffInMonths === 1) {
+  if (diffInMonths === 0) {
+    return `${1}${isDisplayCompleteUnit ? " month ago" : "mo"}`; // Rounding up to 1 month if diffInMonths is 0.
+  } else if (diffInMonths === 1) {
     return `${diffInMonths}${isDisplayCompleteUnit ? " month ago" : "mo"}`;
-  } else if (diffInMonths > 0 && diffInMonths < 12) {
-    // Ensure diffInMonths isn't 0
+  } else if (diffInMonths < 12) {
     return `${diffInMonths}${isDisplayCompleteUnit ? " months ago" : "mo"}`;
   }
 
