@@ -2,6 +2,8 @@ import { useCallback } from "react";
 
 import { useSnapshot } from "valtio";
 
+import { Logger } from "app/lib/logger";
+
 import { AccountCtrl } from "../controllers/AccountCtrl";
 import { ClientCtrl } from "../controllers/ClientCtrl";
 import { ConfigCtrl } from "../controllers/ConfigCtrl";
@@ -20,7 +22,7 @@ export function useWeb3Modal() {
     close: ModalCtrl.close,
     provider: clientState.initialized ? ClientCtrl.provider() : undefined,
     disconnect: useCallback(() => {
-      console.log("disconnect callled");
+      Logger.log("disconnect callled");
       ClientCtrl.provider()?.disconnect();
       ClientCtrl.resetSession();
       AccountCtrl.resetAccount();

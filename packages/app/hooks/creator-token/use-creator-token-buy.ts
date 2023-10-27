@@ -86,7 +86,7 @@ export const useCreatorTokenBuy = (params: {
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
-              console.log("bulk buy ", request);
+              Logger.log("bulk buy ", request);
               requestPayload = request;
             }
 

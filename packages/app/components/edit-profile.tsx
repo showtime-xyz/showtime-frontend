@@ -146,7 +146,6 @@ export const EditProfile = () => {
       submitError: "",
     };
   }, [user?.data?.profile]);
-  console.log(router);
 
   const {
     control,

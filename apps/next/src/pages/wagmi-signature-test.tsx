@@ -2,6 +2,8 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import { useAccount, useDisconnect, useSignMessage } from "wagmi";
 
+import { Logger } from "app/lib/logger";
+
 const signatureData = {
   domain: {
     name: "showtime.xyz",
@@ -56,7 +58,7 @@ const Home: NextPage = () => {
   const { isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { signMessageAsync } = useSignMessage();
-  console.log("is connected :: ", isConnected);
+  Logger.log("is connected :: ", isConnected);
   const signMessageAsyncTimeout = async () => {
     await fetch("https://my-vercel-functions-six.vercel.app/api?delay=1000");
     signMessageAsync({ message: "yo!" });

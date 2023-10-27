@@ -19,6 +19,7 @@ import { SORT_FIELDS } from "app/lib/constants";
 import { removeMd } from "app/lib/remove-markdown";
 
 import { ProfileTabsAPI } from "./hooks/api-hooks";
+import { Logger } from "./lib/logger";
 import { BunnyVideoUrls, NFT, Profile } from "./types";
 
 export const formatAddressShort = (address?: string | null) => {
@@ -918,7 +919,8 @@ export const getWebImageSize = (file: File) => {
 
 export const formatAPIErrorMessage = (error: AxiosError | Error) => {
   let messages = [];
-  console.log(
+
+  Logger.log(
     { ...error },
     axios.isAxiosError(error),
     (error as any)?.shortMessage

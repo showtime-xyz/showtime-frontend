@@ -4,6 +4,7 @@ import useSWR from "swr";
 
 import { Analytics, EVENTS } from "app/lib/analytics";
 import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
 import { MyInfo, NFT, Profile } from "app/types";
 
@@ -47,9 +48,7 @@ export const useActivity = ({
             if (v === undefined) {
               return true;
             }
-            if (__DEV__) {
-              console.log("duplicate record in feed ", d.id);
-            }
+            Logger.log("duplicate record in feed ", d.id);
             return false;
           });
           newData = newData.concat(page.data);

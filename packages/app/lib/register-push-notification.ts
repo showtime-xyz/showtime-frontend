@@ -5,6 +5,8 @@ import * as Notifications from "expo-notifications";
 
 import { axios } from "app/lib/axios";
 
+import { Logger } from "./logger";
+
 const PlatformExpo = 1;
 const PlatformWeb = 2;
 const PlatformIos = 3;
@@ -56,9 +58,7 @@ async function registerForPushNotificationsAsync() {
 
   // Get the device token. Can be used with another push notification service
   const devicePushToken = await Notifications.getDevicePushTokenAsync();
-  if (__DEV__) {
-    console.log(devicePushToken);
-  }
+  Logger.log(devicePushToken);
 
   // Save the device token to the database
   await axios({
