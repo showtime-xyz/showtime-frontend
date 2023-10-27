@@ -38,12 +38,15 @@ type Query = {
 };
 
 const { useParam } = createParam<Query>();
-
+// const paymentMethods = ["USDC", "ETH"];
+const paymentMethods = ["USDC"];
 export const BuyCreatorToken = () => {
   const wallet = useWallet();
   const [username] = useParam("username");
   const [selectedActionParam] = useParam("selectedAction");
   const [tokenAmount, setTokenAmount] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState("USDC");
+
   const { data: profileData } = useUserProfile({ address: username });
   const buyToken = useCreatorTokenBuy({ username, tokenAmount });
   const sellToken = useCreatorTokenSell();
@@ -186,13 +189,30 @@ export const BuyCreatorToken = () => {
             <View tw="flex-row" style={{ columnGap: 16 }}>
               <Avatar size={100} url={profileData?.data?.profile.img_url} />
               <View style={{ rowGap: 16 }}>
-                <View tw="flex-row" style={{ columnGap: 8 }}>
-                  <View tw="items-start self-start rounded-md bg-gray-900 p-2 dark:bg-gray-200">
-                    <Text tw="text-xs text-white dark:text-gray-900">USDC</Text>
-                  </View>
-                  {/* <View tw="items-start self-start rounded-sm bg-blue-200 px-2">
-                <Text>ETH</Text>
-              </View> */}
+                <View tw="mr-auto flex-row overflow-hidden rounded-md">
+                  {paymentMethods.map((method) => (
+                    <Pressable
+                      key={method}
+                      tw={[
+                        "items-start self-start  p-2",
+                        paymentMethod === method
+                          ? "bg-gray-900 dark:bg-gray-200"
+                          : "bg-gray-200 dark:bg-gray-700",
+                      ]}
+                      onPress={() => setPaymentMethod(method)}
+                    >
+                      <Text
+                        tw={[
+                          "text-xs",
+                          paymentMethod === method
+                            ? "text-white dark:text-gray-900"
+                            : "text-gray-900 dark:text-white",
+                        ]}
+                      >
+                        {method}
+                      </Text>
+                    </Pressable>
+                  ))}
                 </View>
                 <View tw="flex-row items-center" style={{ columnGap: 4 }}>
                   <Image
@@ -362,6 +382,13 @@ export const BuyCreatorToken = () => {
           </View>
           <View tw="h-8" />
           {renderBuyButton()}
+          <View tw="items-center pt-4">
+            <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
+              {paymentMethod === "USDC"
+                ? "USDC is traded on the Base network."
+                : "Must purchase with Crypto on Base network"}
+            </Text>
+          </View>
         </View>
         <ModalSheet
           snapPoints={[400]}
