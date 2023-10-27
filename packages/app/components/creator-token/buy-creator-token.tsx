@@ -301,7 +301,7 @@ export const BuyCreatorToken = () => {
                 <Skeleton width={40} height={16} />
               ) : (
                 <Text tw="font-semibold text-gray-700 dark:text-gray-200">
-                  {tokenBalance.data?.toString()}
+                  {tokenBalance.data?.toString() ?? "N/A"}
                 </Text>
               )}
             </View>
