@@ -77,26 +77,6 @@ const ProfileScreen = ({ username }: ProfileScreenProps) => {
 
 const { useParam } = createParam();
 
-const ProfileHeaderContext = createContext<{
-  profileData?: undefined | UserProfile;
-  username: string;
-  isError: boolean;
-  isLoading: boolean;
-  routes: Route[];
-  isBlocked: boolean;
-  type: string | undefined;
-  setType: (type: string) => void;
-}>({
-  profileData: undefined,
-  username: "",
-  isError: false,
-  isLoading: false,
-  routes: [],
-  isBlocked: false,
-  type: undefined,
-  setType: () => {},
-});
-
 const Profile = ({ username }: ProfileScreenProps) => {
   const {
     data: profileData,
@@ -111,7 +91,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const userId = useCurrentUserId();
   const isSelf = userId === profileId;
   const isBlocked = getIsBlocked(profileId);
-  const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
+  const { data } = useProfileNftTabs({
     profileId: profileId,
   });
   const contentWidth = useContentWidth();
@@ -134,8 +114,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
     initial: data?.default_tab_type,
   });
   const [type, setType] = useState(queryTab);
-  const numColumns = type === "tokens" ? 1 : 3;
-
+  const numColumns = useMemo(() => (type === "tokens" ? 1 : 3), [type]);
+  const index = useMemo(
+    () => routes.findIndex((item) => item.key === type),
+    [routes, type]
+  );
   useEffect(() => {
     if (!data?.default_tab_type || type) return;
     setType(data?.default_tab_type);
@@ -251,32 +234,20 @@ const Profile = ({ username }: ProfileScreenProps) => {
     username,
   ]);
   return (
-    <View tw="w-full items-center border-l border-gray-200 bg-white dark:border-gray-800 dark:bg-black">
-      <ProfileHeaderContext.Provider
-        value={{
-          profileData: profileData?.data,
-          username,
-          isError,
-          isLoading: profileIsLoading && profileTabIsLoading,
-          routes,
-          type,
-          setType: setType,
-          isBlocked,
-        }}
+    <View tw="w-full items-center border-gray-200 bg-white dark:border-gray-800 dark:bg-black md:border-l">
+      <View
+        tw="min-h-screen w-full"
+        style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}
       >
-        <View
-          tw="min-h-screen w-full"
-          style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}
-        >
-          <MutateProvider mutate={updateItem}>
-            <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
-              {isProfileMdScreen ? (
-                <>
-                  <ProfileCover
-                    tw="overflow-hidden rounded-b-3xl"
-                    uri={getFullSizeCover(profileData?.data?.profile)}
-                  />
-                  {/* <Pressable
+        <MutateProvider mutate={updateItem}>
+          <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
+            {isProfileMdScreen ? (
+              <>
+                <ProfileCover
+                  tw="overflow-hidden rounded-b-3xl"
+                  uri={getFullSizeCover(profileData?.data?.profile)}
+                />
+                {/* <Pressable
                     tw={[
                       "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
                     ]}
@@ -307,82 +278,77 @@ const Profile = ({ username }: ProfileScreenProps) => {
                       color={colors.gray[900]}
                     />
                   </Pressable> */}
-                </>
-              ) : null}
-              <View tw="w-full flex-row">
-                <View tw="-mt-3 flex-1">
-                  <ProfileTop
-                    address={username}
-                    isBlocked={isBlocked}
-                    profileData={profileData?.data}
-                    isLoading={isLoading}
-                    isError={isError}
+              </>
+            ) : null}
+            <View tw="w-full flex-row">
+              <View tw="-mt-3 flex-1">
+                <ProfileTop
+                  address={username}
+                  isBlocked={isBlocked}
+                  profileData={profileData?.data}
+                  isLoading={profileIsLoading}
+                  isError={isError}
+                  isSelf={isSelf}
+                />
+                <ProfileTabBar
+                  onPress={onChangeTabBar}
+                  routes={routes}
+                  index={index}
+                />
+
+                {type === "tokens" ? (
+                  <TokensTabHeader
+                    channelId={channelId}
                     isSelf={isSelf}
+                    messageCount={messageCount}
                   />
-                  <ProfileTabBar
-                    onPress={onChangeTabBar}
-                    routes={routes}
-                    index={routes.findIndex((item) => item.key === type)}
-                  />
-
-                  {type === "tokens" ? (
-                    <TokensTabHeader
-                      channelId={channelId}
-                      isSelf={isSelf}
-                      messageCount={messageCount}
-                    />
-                  ) : null}
-                  {type === "song_drops_created" && isSelf ? (
-                    <>
-                      <ProfileNFTHiddenButton
-                        onPress={() => {
-                          setShowHidden(!showHidden);
-                        }}
-                        showHidden={showHidden}
-                      />
-                      {showHidden ? (
-                        <ProfileHideList profileId={profileId} />
-                      ) : null}
-                    </>
-                  ) : null}
-
-                  <InfiniteScrollList
-                    useWindowScroll
-                    numColumns={numColumns}
-                    preserveScrollPosition
-                    data={isBlocked ? [] : list}
-                    keyExtractor={keyExtractor}
-                    renderItem={renderItem}
-                    overscan={12}
-                    ListEmptyComponent={ListEmptyComponent}
-                    ListFooterComponent={ListFooterComponent}
-                    onEndReached={fetchMore}
-                  />
-                </View>
-                {isProfileMdScreen ? (
-                  <View
-                    style={{
-                      width: 335,
-                    }}
-                    tw="animate-fade-in-250 ml-10"
-                  >
-                    <Sticky enabled>
-                      <CreatorTokensPanel username={username} isSelf={isSelf} />
-                      {isSelf && <MyCollection />}
-                      {list.length > 0 ? (
-                        <TokensTabItem item={list[0]} />
-                      ) : null}
-                      {list.length > 0 ? (
-                        <TokensTabItem item={list[0]} />
-                      ) : null}
-                    </Sticky>
-                  </View>
                 ) : null}
+                {type === "song_drops_created" && isSelf ? (
+                  <>
+                    <ProfileNFTHiddenButton
+                      onPress={() => {
+                        setShowHidden(!showHidden);
+                      }}
+                      showHidden={showHidden}
+                    />
+                    {showHidden ? (
+                      <ProfileHideList profileId={profileId} />
+                    ) : null}
+                  </>
+                ) : null}
+
+                <InfiniteScrollList
+                  useWindowScroll
+                  numColumns={numColumns}
+                  preserveScrollPosition
+                  data={isBlocked ? [] : list}
+                  keyExtractor={keyExtractor}
+                  renderItem={renderItem}
+                  overscan={12}
+                  ListEmptyComponent={ListEmptyComponent}
+                  ListFooterComponent={ListFooterComponent}
+                  onEndReached={fetchMore}
+                />
               </View>
-            </ProfileTabsNFTProvider>
-          </MutateProvider>
-        </View>
-      </ProfileHeaderContext.Provider>
+              {isProfileMdScreen ? (
+                <View
+                  style={{
+                    width: 335,
+                  }}
+                  tw="animate-fade-in-250 ml-10"
+                >
+                  <Sticky enabled>
+                    <CreatorTokensPanel username={username} isSelf={isSelf} />
+                    {isSelf && <MyCollection />}
+                    {list.length > 0 ? <TokensTabItem item={list[0]} /> : null}
+                    {list.length > 0 ? <TokensTabItem item={list[0]} /> : null}
+                  </Sticky>
+                </View>
+              ) : null}
+            </View>
+          </ProfileTabsNFTProvider>
+        </MutateProvider>
+      </View>
       <>
         {isSelf ? (
           <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>

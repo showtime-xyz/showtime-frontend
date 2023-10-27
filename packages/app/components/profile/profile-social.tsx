@@ -66,7 +66,7 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
         </PressableScale>
       )}
 
-      <View tw="w-full flex-row items-center">
+      <View tw="flex-row items-center">
         {/* <Text tw="text-13 text-gray-900 dark:text-white">
           <Text tw="font-bold">{savedSongs?.toLocaleString()}</Text> Song saves
         </Text> */}
@@ -78,8 +78,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             tw="mr-2"
           >
             <SpotifyPure
-              width={16}
-              height={16}
+              width={18}
+              height={18}
               color={isDark ? "#FFF" : colors.gray[900]}
             />
           </PressableScale>
@@ -93,8 +93,8 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             tw="mr-2"
           >
             <AppleMusic
-              width={16}
-              height={17}
+              width={18}
+              height={18}
               color={isDark ? "#FFF" : colors.gray[900]}
             />
           </PressableScale>
@@ -105,11 +105,11 @@ export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
             onPress={() => onPressLink(`https://twitter.com/${twitter}`)}
             aria-label="Twitter"
             role="link"
-            tw="mr-2"
+            tw="mr-1"
           >
             <Twitter
-              width={20}
-              height={20}
+              width={22}
+              height={22}
               color={isDark ? "#FFF" : colors.gray[900]}
             />
           </PressableScale>
