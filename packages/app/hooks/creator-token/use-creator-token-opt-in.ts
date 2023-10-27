@@ -2,13 +2,13 @@ import Axios from "axios";
 import useSWRMutation from "swr/mutation";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
+import { useRouter } from "@showtime-xyz/universal.router";
 
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { formatAPIErrorMessage, formatAddressShort } from "app/utilities";
 
 import { useSetPrimaryWallet } from "../api/use-set-primary-wallet";
-import { useAuth } from "../auth/use-auth";
 import { useUser } from "../use-user";
 import { useWallet } from "../use-wallet";
 
@@ -16,8 +16,8 @@ export const useCreatorTokenOptIn = () => {
   const Alert = useAlert();
   const wallet = useWallet();
   const user = useUser();
+  const router = useRouter();
   const { setPrimaryWallet } = useSetPrimaryWallet();
-  const auth = useAuth();
 
   const state = useSWRMutation(
     "creatorTokenOptIn",
@@ -57,13 +57,19 @@ export const useCreatorTokenOptIn = () => {
       if (wallet.isMagicWallet) {
         Alert.alert(
           "Unsupported wallet",
-          "Please login using a web3 wallet to create the creator token",
+          "To enable creator token, please add a regular web3 wallet to your account and set that to primary",
           [
             {
-              text: "Log out",
+              text: "Okay",
               onPress: () => {
-                auth.logout();
-                reject();
+                router.push("/settings");
+              },
+            },
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => {
+                reject("User cancelled");
               },
             },
           ]
@@ -71,7 +77,7 @@ export const useCreatorTokenOptIn = () => {
       } else {
         Alert.alert(
           "Unsupported wallet set to Primary",
-          ` Would you like to set current wallet (${formatAddressShort(
+          `Would you like to set current wallet (${formatAddressShort(
             wallet.address
           )}) to Primary? Primary wallet is used to create the creator token.`,
           [
@@ -81,6 +87,13 @@ export const useCreatorTokenOptIn = () => {
                 if (wallet.address) {
                   setPrimaryWallet(wallet.address).then(resolve).catch(reject);
                 }
+              },
+            },
+            {
+              text: "Cancel",
+              style: "cancel",
+              onPress: () => {
+                reject("User cancelled");
               },
             },
           ]
