@@ -77,20 +77,6 @@ export const BuyCreatorToken = () => {
   });
 
   const renderBuyButton = () => {
-    if (usdcBalance.data?.balance === 0n && !wallet.isMagicWallet) {
-      return (
-        <Button
-          onPress={() =>
-            Linking.openURL(
-              "https://app.uniswap.org/swap?outputCurrency=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base"
-            )
-          }
-        >
-          Buy USDC on Uniswap
-        </Button>
-      );
-    }
-
     if (selectedAction === "sell") {
       return (
         <Button
@@ -116,6 +102,18 @@ export const BuyCreatorToken = () => {
             : wallet.isMagicWallet
             ? "Connect"
             : "Sell"}
+        </Button>
+      );
+    } else if (usdcBalance.data?.balance === 0n && !wallet.isMagicWallet) {
+      return (
+        <Button
+          onPress={() =>
+            Linking.openURL(
+              "https://app.uniswap.org/swap?outputCurrency=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base"
+            )
+          }
+        >
+          Buy USDC on Uniswap
         </Button>
       );
     } else {
