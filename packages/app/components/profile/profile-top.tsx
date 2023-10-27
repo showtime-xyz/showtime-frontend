@@ -123,7 +123,6 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
   isSelf = false,
 }) {
   const isDark = useIsDarkMode();
-  const router = useRouter();
   const name = getProfileName(profileData?.profile);
   const username = profileData?.profile.username;
   const bio = profileData?.profile.bio;
@@ -133,8 +132,6 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
 
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
   // for iPhone 14+
-  console.log(123);
-
   const avatarSize = isProfileMdScreen ? AVATAR_SIZE_LARGE : AVATAR_SIZE_SMALL;
   // const avatarStyle = useAnimatedStyle(() => {
   //   if (!animationHeaderHeight || !animationHeaderPosition) {

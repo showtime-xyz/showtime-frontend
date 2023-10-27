@@ -91,7 +91,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const userId = useCurrentUserId();
   const isSelf = userId === profileId;
   const isBlocked = getIsBlocked(profileId);
-  const { data, isLoading: profileTabIsLoading } = useProfileNftTabs({
+  const { data } = useProfileNftTabs({
     profileId: profileId,
   });
   const contentWidth = useContentWidth();
@@ -119,10 +119,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
     () => routes.findIndex((item) => item.key === type),
     [routes, type]
   );
-  // useEffect(() => {
-  //   if (!data?.default_tab_type || type) return;
-  //   setType(data?.default_tab_type);
-  // }, [data?.default_tab_type, type]);
+  useEffect(() => {
+    if (!data?.default_tab_type || type) return;
+    setType(data?.default_tab_type);
+  }, [data?.default_tab_type, type]);
 
   const {
     isLoading,
@@ -286,7 +286,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   address={username}
                   isBlocked={isBlocked}
                   profileData={profileData?.data}
-                  isLoading={isLoading}
+                  isLoading={profileIsLoading}
                   isError={isError}
                   isSelf={isSelf}
                 />
