@@ -47,7 +47,7 @@ const ModalContainerComponent = forwardRef<ModalMethods, ModalContainerProps>(
       disableBackdropPress,
       tw: propTw = "",
       headerShown = true,
-      visible,
+      visible = false,
       closeButtonProps,
     }: ModalContainerProps,
     ref
