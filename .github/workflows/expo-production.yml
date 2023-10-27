@@ -88,4 +88,4 @@ jobs:
 
       - name: Build iOS on EAS
         if: steps.version.outputs.type == 'major'
-        run: NODE_ENV=production STAGE=production eas build --platform ios --non-interactive --no-wait --auto-submit --resource-class=m1-experimental
+        run: NODE_ENV=production STAGE=production eas build --platform ios --non-interactive --no-wait --auto-submit --resource-class=m1-medium

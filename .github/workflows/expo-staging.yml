@@ -59,4 +59,4 @@ jobs:
         run: STAGE=staging eas build --profile preview --platform android --non-interactive --no-wait --resource-class=large
 
       - name: Build iOS on EAS
-        run: STAGE=staging eas build --profile preview --platform ios --non-interactive --no-wait --resource-class=m1-experimental
+        run: STAGE=staging eas build --profile preview --platform ios --non-interactive --no-wait --resource-class=m1-medium
