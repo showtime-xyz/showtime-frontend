@@ -234,7 +234,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     username,
   ]);
   return (
-    <View tw="w-full items-center border-l border-gray-200 bg-white dark:border-gray-800 dark:bg-black">
+    <View tw="w-full items-center border-gray-200 bg-white dark:border-gray-800 dark:bg-black md:border-l">
       <View
         tw="min-h-screen w-full"
         style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}
