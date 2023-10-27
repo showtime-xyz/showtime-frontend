@@ -6917,7 +6917,7 @@ __metadata:
     babel-plugin-inline-dotenv: ^1.7.0
     blurhash: 2.0.5
     browserify-zlib: ~0.2.0
-    burnt: ^0.11.7
+    burnt: ^0.12.1
     comment-json: ^4.2.3
     console-browserify: ^1.2.0
     constants-browserify: ^1.0.0
@@ -12797,9 +12797,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"burnt@npm:^0.11.7":
-  version: 0.11.7
-  resolution: "burnt@npm:0.11.7"
+"burnt@npm:^0.12.1":
+  version: 0.12.1
+  resolution: "burnt@npm:0.12.1"
   dependencies:
     sf-symbols-typescript: ^1.0.0
     sonner: ^0.3.5
@@ -12807,7 +12807,7 @@ __metadata:
     expo: "*"
     react: "*"
     react-native: "*"
-  checksum: 4b7d74e0400a2a81712ec0d11d2e41175304d95dae425fe5bbc1fa560103d1d51455a53c33f8b7196c28506c853c8b4b0c303ea04a34cbb1009079a35ae37c35
+  checksum: 5aa27ffd871daf47237a973f43611031bbb7a00ae50b7469c875b2a487659e43440d616e71671cc433c1c15b83fe8c2563320d8b72700508b0d0149460d9a747
   languageName: node
   linkType: hard
 

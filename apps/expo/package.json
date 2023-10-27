@@ -79,7 +79,7 @@
     "babel-plugin-inline-dotenv": "^1.7.0",
     "blurhash": "2.0.5",
     "browserify-zlib": "~0.2.0",
-    "burnt": "^0.11.7",
+    "burnt": "^0.12.1",
     "comment-json": "^4.2.3",
     "console-browserify": "^1.2.0",
     "constants-browserify": "^1.0.0",
