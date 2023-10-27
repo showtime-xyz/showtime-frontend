@@ -29,6 +29,7 @@ import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creat
 import { useWallet } from "app/hooks/use-wallet";
 
 import { toast } from "design-system/toast";
+import { Toggle } from "design-system/toggle";
 
 import { CreatorTokensExplanation } from "../profile/tokens-explanation";
 
@@ -38,8 +39,22 @@ type Query = {
 };
 
 const { useParam } = createParam<Query>();
-const PAYMENT_METHODS = ["USDC"];
-const SELECT_LIST: Query["selectedAction"][] = ["buy", "sell"];
+const PAYMENT_METHODS = [
+  {
+    title: "USDC",
+    value: "USDC",
+  },
+];
+const SELECT_LIST = [
+  {
+    title: "Buy",
+    value: "buy",
+  },
+  {
+    title: "Sell",
+    value: "sell",
+  },
+];
 
 export const BuyCreatorToken = () => {
   const wallet = useWallet();
@@ -79,7 +94,6 @@ export const BuyCreatorToken = () => {
     ownerAddress: wallet.address,
     contractAddress: profileData?.data?.profile.creator_token?.address,
   });
-
   const renderBuyButton = () => {
     if (usdcBalance.data?.balance === 0n && !wallet.isMagicWallet) {
       return (
@@ -89,6 +103,7 @@ export const BuyCreatorToken = () => {
               "https://app.uniswap.org/swap?outputCurrency=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base"
             )
           }
+          size="regular"
         >
           Buy USDC on Uniswap
         </Button>
@@ -114,6 +129,7 @@ export const BuyCreatorToken = () => {
               }
             }
           }}
+          size="regular"
         >
           {sellToken.isMutating
             ? "Please wait..."
@@ -139,6 +155,7 @@ export const BuyCreatorToken = () => {
               }
             }
           }}
+          size="regular"
         >
           {buyToken.isMutating
             ? "Please wait..."
@@ -186,36 +203,16 @@ export const BuyCreatorToken = () => {
           ) : (
             <View tw="h-6" />
           )}
-          <View tw="mt-6 rounded-3xl border-[1px] border-gray-300 px-6 py-4 dark:border-gray-800">
+          <View tw="mt-4 rounded-3xl border-[1px] border-gray-300 px-6 py-4 dark:border-gray-800">
             <View tw="flex-row" style={{ columnGap: 16 }}>
               <Avatar size={100} url={profileData?.data?.profile.img_url} />
               <View tw="flex-1" style={{ rowGap: 16 }}>
                 <View tw="w-full flex-row items-center justify-between">
-                  <View tw="flex-row overflow-hidden rounded-md border border-gray-200">
-                    {PAYMENT_METHODS.map((method) => (
-                      <Pressable
-                        key={method}
-                        tw={[
-                          "items-start self-start  p-2",
-                          paymentMethod === method
-                            ? "bg-gray-900 dark:bg-white"
-                            : "bg-gray-200 dark:bg-gray-800",
-                        ]}
-                        onPress={() => setPaymentMethod(method)}
-                      >
-                        <Text
-                          tw={[
-                            "text-xs",
-                            paymentMethod === method
-                              ? "text-white dark:text-gray-900"
-                              : "text-gray-900 dark:text-white",
-                          ]}
-                        >
-                          {method}
-                        </Text>
-                      </Pressable>
-                    ))}
-                  </View>
+                  <Toggle
+                    options={PAYMENT_METHODS}
+                    value={paymentMethod}
+                    onChange={(value) => setPaymentMethod(value)}
+                  />
                   <Pressable
                     onPress={() => {
                       setShowExplanation(true);
@@ -265,7 +262,15 @@ export const BuyCreatorToken = () => {
               </View>
             </View>
           </View>
-          <View style={{ rowGap: 16 }} tw="mt-8">
+          <View style={{ rowGap: 16 }} tw="mt-6">
+            <Toggle
+              options={SELECT_LIST}
+              value={selectedAction}
+              onChange={(value) =>
+                setSelectedAction(value as Query["selectedAction"])
+              }
+              tw="ml-auto"
+            />
             <View tw="flex-row justify-between">
               <Text tw="text-gray-700 dark:text-gray-200">You own:</Text>
               {tokenBalance.isLoading ? (
@@ -275,31 +280,6 @@ export const BuyCreatorToken = () => {
                   {tokenBalance.data?.toString() ?? "N/A"}
                 </Text>
               )}
-            </View>
-            <View tw="ml-auto flex-row overflow-hidden rounded-md border border-gray-300 dark:border-gray-600">
-              {SELECT_LIST.map((item) => (
-                <Pressable
-                  key={item}
-                  tw={[
-                    "items-start self-start  p-2",
-                    selectedAction === item
-                      ? "bg-gray-900 dark:bg-white"
-                      : "bg-gray-200 dark:bg-gray-800",
-                  ]}
-                  onPress={() => setSelectedAction(item)}
-                >
-                  <Text
-                    tw={[
-                      "text-xs capitalize",
-                      selectedAction === item
-                        ? "text-white dark:text-gray-900"
-                        : "text-gray-900 dark:text-white",
-                    ]}
-                  >
-                    {item}
-                  </Text>
-                </Pressable>
-              ))}
             </View>
             <View tw="flex-row items-center">
               <Text tw="flex-2 w-32 text-gray-700 dark:text-gray-200">
