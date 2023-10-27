@@ -29,6 +29,7 @@ import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creat
 import { useWallet } from "app/hooks/use-wallet";
 
 import { toast } from "design-system/toast";
+import { Toggle } from "design-system/toggle";
 
 import { CreatorTokensExplanation } from "../profile/tokens-explanation";
 
@@ -38,17 +39,35 @@ type Query = {
 };
 
 const { useParam } = createParam<Query>();
+const PAYMENT_METHODS = [
+  {
+    title: "USDC",
+    value: "USDC",
+  },
+];
+const SELECT_LIST = [
+  {
+    title: "Buy",
+    value: "buy",
+  },
+  {
+    title: "Sell",
+    value: "sell",
+  },
+];
 
 export const BuyCreatorToken = () => {
   const wallet = useWallet();
   const [username] = useParam("username");
   const [selectedActionParam] = useParam("selectedAction");
   const [tokenAmount, setTokenAmount] = useState(1);
+  const [paymentMethod, setPaymentMethod] = useState("USDC");
+
   const { data: profileData } = useUserProfile({ address: username });
   const buyToken = useCreatorTokenBuy({ username, tokenAmount });
   const sellToken = useCreatorTokenSell();
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
-  const [selectedAction, setSelectedAction] = useState<"buy" | "sell">(
+  const [selectedAction, setSelectedAction] = useState<Query["selectedAction"]>(
     selectedActionParam ?? "buy"
   );
   const usdcBalance = useWalletUSDCBalance();
@@ -75,7 +94,6 @@ export const BuyCreatorToken = () => {
     ownerAddress: wallet.address,
     contractAddress: profileData?.data?.profile.creator_token?.address,
   });
-
   const renderBuyButton = () => {
     if (selectedAction === "sell") {
       return (
@@ -96,6 +114,7 @@ export const BuyCreatorToken = () => {
               }
             }
           }}
+          size="regular"
         >
           {sellToken.isMutating
             ? "Please wait..."
@@ -133,6 +152,7 @@ export const BuyCreatorToken = () => {
               }
             }
           }}
+          size="regular"
         >
           {buyToken.isMutating
             ? "Please wait..."
@@ -180,23 +200,36 @@ export const BuyCreatorToken = () => {
           ) : (
             <View tw="h-6" />
           )}
-          <View tw="mt-6 rounded-3xl border-[1px] border-gray-300 p-8 dark:border-gray-800">
+          <View tw="mt-4 rounded-3xl border-[1px] border-gray-300 px-6 py-4 dark:border-gray-800">
             <View tw="flex-row" style={{ columnGap: 16 }}>
               <Avatar size={100} url={profileData?.data?.profile.img_url} />
-              <View style={{ rowGap: 16 }}>
-                <View tw="flex-row" style={{ columnGap: 8 }}>
-                  <View tw="items-start self-start rounded-md bg-gray-900 p-2 dark:bg-gray-200">
-                    <Text tw="text-xs text-white dark:text-gray-900">USDC</Text>
-                  </View>
-                  {/* <View tw="items-start self-start rounded-sm bg-blue-200 px-2">
-                <Text>ETH</Text>
-              </View> */}
+              <View tw="flex-1" style={{ rowGap: 16 }}>
+                <View tw="w-full flex-row items-center justify-between">
+                  <Toggle
+                    options={PAYMENT_METHODS}
+                    value={paymentMethod}
+                    onChange={(value) => setPaymentMethod(value)}
+                  />
+                  <Pressable
+                    onPress={() => {
+                      setShowExplanation(true);
+                    }}
+                  >
+                    <InformationCircle
+                      width={20}
+                      height={20}
+                      color={isDark ? colors.gray[200] : colors.gray[400]}
+                    />
+                  </Pressable>
                 </View>
                 <View tw="flex-row items-center" style={{ columnGap: 4 }}>
                   <Image
-                    source={require("./usdc-image.png")}
-                    width={24}
-                    height={24}
+                    source={{
+                      uri: "https://media.showtime.xyz/assets/usdc%26base.png",
+                    }}
+                    width={44}
+                    height={44}
+                    tw="mr-2"
                   />
                   {selectedAction === "buy" ? (
                     <View>
@@ -214,7 +247,7 @@ export const BuyCreatorToken = () => {
                         <Skeleton width={100} height={27} />
                       ) : (
                         <Text tw="text-4xl font-semibold dark:text-gray-200">
-                          {priceToSellNext.data?.displayPrice}
+                          {priceToSellNext.data?.displayPrice ?? "0.00"}
                         </Text>
                       )}
                     </View>
@@ -225,61 +258,23 @@ export const BuyCreatorToken = () => {
             </View> */}
               </View>
             </View>
-            <View
-              tw="mt-4 flex-row items-center justify-between"
-              style={{ columnGap: 16 }}
-            >
-              <Button
-                tw="flex-1"
-                style={{
-                  backgroundColor:
-                    selectedAction === "buy" ? "#08F6CC" : colors.gray[200],
-                  opacity: selectedAction === "buy" ? 1 : 0.7,
-                  height: 28,
-                }}
-                onPress={() => setSelectedAction("buy")}
-              >
-                <Text style={{ color: colors.black }} tw="font-semibold">
-                  Buy
-                </Text>
-              </Button>
-              <Button
-                tw="flex-1"
-                style={{
-                  backgroundColor:
-                    selectedAction === "sell"
-                      ? colors.red[400]
-                      : colors.gray[200],
-                  height: 28,
-                  opacity: selectedAction === "sell" ? 1 : 0.7,
-                }}
-                onPress={() => setSelectedAction("sell")}
-              >
-                <Text style={{ color: colors.black }} tw="font-semibold">
-                  Sell
-                </Text>
-              </Button>
-              <Pressable
-                onPress={() => {
-                  setShowExplanation(true);
-                }}
-              >
-                <InformationCircle
-                  width={20}
-                  height={20}
-                  color={isDark ? colors.gray[200] : colors.gray[400]}
-                />
-              </Pressable>
-            </View>
           </View>
-          <View style={{ rowGap: 16 }} tw="mt-8">
+          <View style={{ rowGap: 16 }} tw="mt-6">
+            <Toggle
+              options={SELECT_LIST}
+              value={selectedAction}
+              onChange={(value) =>
+                setSelectedAction(value as Query["selectedAction"])
+              }
+              tw="ml-auto"
+            />
             <View tw="flex-row justify-between">
               <Text tw="text-gray-700 dark:text-gray-200">You own:</Text>
               {tokenBalance.isLoading ? (
                 <Skeleton width={40} height={16} />
               ) : (
                 <Text tw="font-semibold text-gray-700 dark:text-gray-200">
-                  {tokenBalance.data?.toString()}
+                  {tokenBalance.data?.toString() ?? "N/A"}
                 </Text>
               )}
             </View>
@@ -360,6 +355,13 @@ export const BuyCreatorToken = () => {
           </View>
           <View tw="h-8" />
           {renderBuyButton()}
+          <View tw="items-center pt-4">
+            <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
+              {paymentMethod === "USDC"
+                ? "USDC is traded on the Base network."
+                : "Must purchase with Crypto on Base network"}
+            </Text>
+          </View>
         </View>
         <ModalSheet
           snapPoints={[400]}
