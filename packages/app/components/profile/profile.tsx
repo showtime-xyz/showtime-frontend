@@ -122,6 +122,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
     }, 1000);
   }, [currentTab, mutate, setIsRefreshing]);
 
+  const messageCount = useMemo(() => {
+    return profileData?.data?.profile?.channels?.[0]?.message_count || 0;
+  }, [profileData?.data?.profile.channels]);
+
   const renderScene = useCallback(
     ({
       route: { index: routeIndex, key },
@@ -139,6 +143,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             ref={(ref) => (tabRefs.current[routeIndex] = ref)}
             channelId={channelId}
             isSelf={isSelf}
+            messageCount={messageCount}
           />
         );
       }
@@ -171,6 +176,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       isBlocked,
       channelId,
       isSelf,
+      messageCount,
       tabRefs,
     ]
   );
