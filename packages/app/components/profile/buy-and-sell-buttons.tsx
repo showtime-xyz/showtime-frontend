@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, isValidElement } from "react";
 import { Platform } from "react-native";
 
 import * as Tooltip from "universal-tooltip";
@@ -10,10 +10,12 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-const BuyButton = ({
-  username,
-  ...rest
-}: { username?: string } & ButtonProps) => {
+type BuyButtonProps = {
+  username?: string;
+  text?: JSX.Element | string;
+  side?: "top" | "bottom";
+} & ButtonProps;
+const BuyButton = ({ username, text = "Buy", ...rest }: BuyButtonProps) => {
   const buyPath = `/creator-token/${username}/buy`;
   const router = useRouter();
   return (
@@ -45,13 +47,16 @@ const BuyButton = ({
         {...rest}
       >
         <>
-          <Text tw="text-base font-bold text-gray-900">Buy</Text>
+          {isValidElement(text) ? (
+            text
+          ) : (
+            <Text tw="text-base font-bold text-gray-900">Buy</Text>
+          )}
         </>
       </Button>
     </View>
   );
 };
-
 const SellButton = ({
   username,
   ...rest
@@ -94,7 +99,9 @@ const SellButton = ({
   );
 };
 
-export const PlatformSellButton = (props: { username?: string }) => {
+export const PlatformSellButton = (
+  props: { username?: string } & ButtonProps
+) => {
   const [open, setOpen] = useState(false);
   const isDark = useIsDarkMode();
   if (Platform.OS !== "web") {
@@ -148,7 +155,10 @@ export const PlatformSellButton = (props: { username?: string }) => {
   return <SellButton {...props} />;
 };
 
-export const PlatformBuyButton = (props: { username?: string }) => {
+export const PlatformBuyButton = ({
+  side = "bottom",
+  ...rest
+}: BuyButtonProps) => {
   const [open, setOpen] = useState(false);
   const isDark = useIsDarkMode();
   if (Platform.OS !== "web") {
@@ -162,7 +172,7 @@ export const PlatformBuyButton = (props: { username?: string }) => {
       >
         <Tooltip.Trigger>
           <BuyButton
-            {...props}
+            {...rest}
             onPress={() => {
               setOpen(true);
             }}
@@ -177,7 +187,7 @@ export const PlatformBuyButton = (props: { username?: string }) => {
             paddingBottom: 8,
           }}
           className="web:outline-none"
-          side="bottom"
+          side={side}
           presetAnimation="fadeIn"
           backgroundColor={isDark ? "#fff" : colors.gray[900]}
           borderRadius={12}
@@ -199,5 +209,5 @@ export const PlatformBuyButton = (props: { username?: string }) => {
       </Tooltip.Root>
     );
   }
-  return <BuyButton {...props} />;
+  return <BuyButton {...rest} />;
 };
