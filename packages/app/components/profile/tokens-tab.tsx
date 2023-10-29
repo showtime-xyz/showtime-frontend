@@ -114,19 +114,20 @@ export const TokensTabHeader = ({
       */}
 
       {isSelf && <MyCollection />}
-      <Pressable
-        onPress={() => {
-          router.push(`/channels/${channelId}`);
-        }}
-        tw="mt-6 rounded-xl border border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900"
-      >
-        <View tw="flex-row items-center justify-between py-4">
-          <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-            {formatNumber(messageCount || 0)} Channel messages
-          </Text>
-          <ChevronRight width={20} height={20} color={colors.gray[500]} />
-        </View>
-        {/* TODO: Creator tokens P1
+      {channelId && messageCount && messageCount > 0 ? (
+        <Pressable
+          onPress={() => {
+            router.push(`/channels/${channelId}`);
+          }}
+          tw="mt-6 rounded-xl border border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900"
+        >
+          <View tw="flex-row items-center justify-between py-4">
+            <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+              {formatNumber(messageCount || 0)} Channel messages
+            </Text>
+            <ChevronRight width={20} height={20} color={colors.gray[500]} />
+          </View>
+          {/* TODO: Creator tokens P1
         <View tw="overflow-hidden rounded-xl border border-gray-200 bg-slate-50 dark:border-gray-700 dark:bg-gray-900">
           <View tw="mx-4 flex-row items-center pt-4">
             <Avatar
@@ -157,7 +158,8 @@ export const TokensTabHeader = ({
           </View>
         </View>
         */}
-      </Pressable>
+        </Pressable>
+      ) : null}
     </View>
   );
 };
