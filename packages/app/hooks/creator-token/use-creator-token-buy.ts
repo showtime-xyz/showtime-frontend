@@ -77,10 +77,10 @@ export const useCreatorTokenBuy = (params: {
                 account: walletAddress,
                 abi: creatorTokenSwapRouterAbi,
                 functionName: "buyWithEth",
+                value: priceToBuyNext.data?.totalPrice + 500000n,
                 args: [
                   Number(ethPriceToBuyNext.data?.value) / 10 ** 18,
                   profileData.data.profile.creator_token.address,
-                  priceToBuyNext.data?.totalPrice + 500000n,
                 ],
                 chain: baseChain,
               });
@@ -92,11 +92,11 @@ export const useCreatorTokenBuy = (params: {
                 account: walletAddress,
                 abi: creatorTokenSwapRouterAbi,
                 functionName: "bulkBuyWithEth",
+                value: priceToBuyNext.data?.totalPrice + 500000n,
                 args: [
                   Number(ethPriceToBuyNext.data?.value) / 10 ** 18,
                   profileData.data.profile.creator_token.address,
                   tokenAmount,
-                  priceToBuyNext.data?.totalPrice + 500000n,
                 ],
                 chain: baseChain,
               });
