@@ -247,37 +247,33 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   tw="overflow-hidden rounded-b-3xl"
                   uri={getFullSizeCover(profileData?.data?.profile)}
                 />
-                {/* <Pressable
-                    tw={[
-                      "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
-                    ]}
-                    onPress={() => {
-                      const as = "/creator-token/invite-creator-token";
-                      router.push(
-                        Platform.select({
-                          native: as,
-                          web: {
-                            pathname: router.pathname,
-                            query: {
-                              ...router.query,
-                              inviteCreatorTokenModal: true,
-                            },
-                          } as any,
-                        }),
-                        Platform.select({ native: as, web: router.asPath }),
-                        {
-                          shallow: true,
-                        }
-                      );
-                    }}
-                  >
-                    <ButtonGoldLinearGradient />
-                    <GiftSolid
-                      width={26}
-                      height={26}
-                      color={colors.gray[900]}
-                    />
-                  </Pressable> */}
+                <Pressable
+                  tw={[
+                    "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+                  ]}
+                  onPress={() => {
+                    const as = "/creator-token/invite-creator-token";
+                    router.push(
+                      Platform.select({
+                        native: as,
+                        web: {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            inviteCreatorTokenModal: true,
+                          },
+                        } as any,
+                      }),
+                      Platform.select({ native: as, web: router.asPath }),
+                      {
+                        shallow: true,
+                      }
+                    );
+                  }}
+                >
+                  <ButtonGoldLinearGradient />
+                  <GiftSolid width={26} height={26} color={colors.gray[900]} />
+                </Pressable>
               </>
             ) : null}
             <View tw="w-full flex-row">
@@ -353,7 +349,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
         {isSelf ? (
           <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
             <HeaderRightSm withBackground />
-            {/* <Pressable
+            <Pressable
               tw={[
                 "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
               ]}
@@ -379,7 +375,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             >
               <ButtonGoldLinearGradient />
               <GiftSolid width={26} height={26} color={colors.gray[900]} />
-            </Pressable> */}
+            </Pressable>
           </View>
         ) : (
           <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>

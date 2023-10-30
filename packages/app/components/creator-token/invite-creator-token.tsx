@@ -18,6 +18,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { toast } from "design-system/toast";
 
 import InviteCreatorTokenHeader from "./assets/invite";
+import { useAvailableCreatorTokensInvites } from "./hooks/use-invite-creator-token";
 
 const data = [
   {
@@ -129,6 +130,10 @@ const InviteCreatorTokenClaimedItem = ({
 
 export const InviteCreatorToken = () => {
   const { top, bottom } = useSafeAreaInsets();
+  const { data } = useAvailableCreatorTokensInvites();
+
+  if (!data) return null;
+
   return (
     <ScrollView
       contentContainerStyle={{
