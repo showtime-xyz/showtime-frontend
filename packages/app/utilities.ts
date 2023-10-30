@@ -801,7 +801,9 @@ export const OAUTH_REDIRECT_URI = Platform.select({
   web: __DEV__
     ? "http://localhost:3000/magic-oauth-redirect"
     : `https://${
-        window?.location?.host ?? process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
+        typeof window !== "undefined"
+          ? window?.location?.host
+          : process.env.NEXT_PUBLIC_WEBSITE_DOMAIN
       }/magic-oauth-redirect`,
   default: `io.showtime${__DEV__ ? ".development" : ""}://magic-oauth-redirect`,
 });
