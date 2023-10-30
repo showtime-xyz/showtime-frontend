@@ -242,7 +242,7 @@ export const BuyCreatorToken = () => {
                   </Pressable>
                 </View>
                 <View tw="flex-row items-center" style={{ columnGap: 4 }}>
-                  {paymentMethod === "USDC" ? (
+                  {paymentMethod === "USDC" || selectedAction === "sell" ? (
                     <Image
                       source={{
                         uri: "https://media.showtime.xyz/assets/usdc%26base.png",
@@ -268,7 +268,7 @@ export const BuyCreatorToken = () => {
                         <Text tw="text-4xl font-semibold text-gray-800 dark:text-gray-200">
                           {paymentMethod === "USDC"
                             ? priceToBuyNext.data?.displayPrice
-                            : 10}
+                            : ethPriceToBuyNext.data?.displayValue}
                         </Text>
                       )}
                     </View>
