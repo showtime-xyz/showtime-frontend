@@ -148,61 +148,61 @@ export const useCreatorTokenBuy = (params: {
               );
               console.log("Buy transaction hash usdc ", requestPayload);
             }
+          }
 
-            console.log("transaction hash ", transactionHash);
-            if (transactionHash) {
-              const transaction = await publicClient.waitForTransactionReceipt({
-                hash: transactionHash,
-                pollingInterval: 2000,
+          console.log("transaction hash ", transactionHash);
+          if (transactionHash) {
+            const transaction = await publicClient.waitForTransactionReceipt({
+              hash: transactionHash,
+              pollingInterval: 2000,
+            });
+
+            if (transaction.status === "success") {
+              mutate(
+                getTotalCollectedKey(
+                  profileData?.data?.profile.creator_token.address
+                )
+              );
+              mutate(
+                getPriceToBuyNextKey({
+                  address: profileData?.data?.profile.creator_token.address,
+                  tokenAmount: 1,
+                })
+              );
+
+              mutate(
+                getContractBalanceOfTokenKey({
+                  ownerAddress: walletAddress,
+                  contractAddress:
+                    profileData?.data?.profile.creator_token.address,
+                })
+              );
+
+              await axios({
+                url: "/v1/creator-token/poll-buy",
+                method: "POST",
+                data: {
+                  creator_token_id: profileData.data.profile.creator_token.id,
+                  quantity: tokenAmount,
+                  tx_hash: transactionHash,
+                },
               });
-
-              if (transaction.status === "success") {
-                mutate(
-                  getTotalCollectedKey(
-                    profileData?.data?.profile.creator_token.address
-                  )
-                );
-                mutate(
-                  getPriceToBuyNextKey({
-                    address: profileData?.data?.profile.creator_token.address,
-                    tokenAmount: 1,
-                  })
-                );
-
-                mutate(
-                  getContractBalanceOfTokenKey({
-                    ownerAddress: walletAddress,
-                    contractAddress:
-                      profileData?.data?.profile.creator_token.address,
-                  })
-                );
-
-                await axios({
-                  url: "/v1/creator-token/poll-buy",
-                  method: "POST",
-                  data: {
-                    creator_token_id: profileData.data.profile.creator_token.id,
-                    quantity: tokenAmount,
-                    tx_hash: transactionHash,
-                  },
-                });
-                mutate(
-                  (key: any) => {
-                    const channelId = profileData.data?.profile.channels[0]?.id;
-                    if (
-                      typeof key === "string" &&
-                      typeof channelId === "number" &&
-                      (key.startsWith(getChannelByIdCacheKey(channelId)) ||
-                        key.startsWith(getChannelMessageKey(channelId)))
-                    ) {
-                      return true;
-                    }
-                  },
-                  undefined,
-                  { revalidate: true }
-                );
-                return true;
-              }
+              mutate(
+                (key: any) => {
+                  const channelId = profileData.data?.profile.channels[0]?.id;
+                  if (
+                    typeof key === "string" &&
+                    typeof channelId === "number" &&
+                    (key.startsWith(getChannelByIdCacheKey(channelId)) ||
+                      key.startsWith(getChannelMessageKey(channelId)))
+                  ) {
+                    return true;
+                  }
+                },
+                undefined,
+                { revalidate: true }
+              );
+              return true;
             }
           }
         } else {
