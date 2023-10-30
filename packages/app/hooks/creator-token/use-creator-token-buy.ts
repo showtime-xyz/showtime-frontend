@@ -2,6 +2,7 @@ import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
 import { creatorTokenAbi } from "app/abi/CreatorTokenAbi";
+import { creatorTokenSwapRouterAbi } from "app/abi/CreatorTokenSwapRouterAbi";
 import { getChannelByIdCacheKey } from "app/components/creator-channels/hooks/use-channel-detail";
 import { getChannelMessageKey } from "app/components/creator-channels/hooks/use-channel-messages";
 import { axios } from "app/lib/axios";
@@ -13,6 +14,7 @@ import { formatAPIErrorMessage } from "app/utilities";
 import { toast } from "design-system/toast";
 
 import { useUserProfile } from "../api-hooks";
+import { useGetETHForUSDC } from "../auth/use-get-eth-for-usdc";
 import { useWallet } from "../use-wallet";
 import { getContractBalanceOfTokenKey } from "./use-balance-of-token";
 import { getTotalCollectedKey } from "./use-contract-total-collected";
@@ -22,11 +24,12 @@ import {
   useCreatorTokenPriceToBuyNext,
 } from "./use-creator-token-price-to-buy-next";
 import { useSwitchChain } from "./use-switch-chain";
-import { baseChain } from "./utils";
+import { baseChain, creatorTokenSwapRouterAddress } from "./utils";
 
 export const useCreatorTokenBuy = (params: {
   username?: string;
   tokenAmount: number;
+  paymentMethod: "USDC" | "ETH";
 }) => {
   const { username, tokenAmount } = params;
   const { data: profileData } = useUserProfile({ address: username });
@@ -36,6 +39,12 @@ export const useCreatorTokenBuy = (params: {
     address: profileData?.data?.profile.creator_token?.address,
     tokenAmount,
   });
+  const ethPriceToBuyNext = useGetETHForUSDC(
+    params.paymentMethod === "ETH"
+      ? { amount: priceToBuyNext.data?.totalPrice }
+      : undefined
+  );
+
   const switchChain = useSwitchChain();
   const { mutate } = useSWRConfig();
   const { loginPromise } = useLogInPromise();
@@ -55,46 +64,91 @@ export const useCreatorTokenBuy = (params: {
 
       if (walletAddress && profileData?.data?.profile.creator_token) {
         const res = await switchChain.trigger();
+
+        let transactionHash: `0x${string}` | undefined;
         if (res) {
-          // @ts-ignore
-          const result = await approveToken.trigger({
-            creatorTokenContract:
-              profileData?.data?.profile.creator_token.address,
-            // add 10 cents more to cover for weird fluctuation
-            // TODO: remove if not needed after more testing
-            maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
-          });
-          if (result) {
+          if (params.paymentMethod === "ETH") {
             let requestPayload: any;
 
             if (tokenAmount === 1) {
               const { request } = await publicClient.simulateContract({
-                address: profileData?.data?.profile.creator_token.address,
+                // @ts-ignore
+                address: creatorTokenSwapRouterAddress,
                 account: walletAddress,
-                abi: creatorTokenAbi,
-                functionName: "buy",
-                args: [priceToBuyNext.data?.totalPrice],
+                abi: creatorTokenSwapRouterAbi,
+                functionName: "buyWithEth",
+                args: [
+                  Number(ethPriceToBuyNext) / (10 ^ 18),
+                  profileData.data.profile.creator_token.address,
+                  priceToBuyNext.data?.totalPrice + 500000n,
+                ],
                 chain: baseChain,
               });
               requestPayload = request;
             } else {
               const { request } = await publicClient.simulateContract({
-                address: profileData?.data?.profile.creator_token.address,
+                // @ts-ignore
+                address: creatorTokenSwapRouterAddress,
                 account: walletAddress,
-                abi: creatorTokenAbi,
-                functionName: "bulkBuy",
-                args: [tokenAmount, priceToBuyNext.data?.totalPrice],
+                abi: creatorTokenSwapRouterAbi,
+                functionName: "bulkBuyWithEth",
+                args: [
+                  Number(ethPriceToBuyNext) / (10 ^ 18),
+                  profileData.data.profile.creator_token.address,
+                  tokenAmount,
+                  priceToBuyNext.data?.totalPrice + 500000n,
+                ],
                 chain: baseChain,
               });
-              Logger.log("bulk buy ", request);
               requestPayload = request;
             }
 
-            Logger.log("simulate ", requestPayload);
-            const transactionHash = await walletClient?.writeContract?.(
+            Logger.log("simulate eth", requestPayload);
+            transactionHash = await walletClient?.writeContract?.(
               requestPayload
             );
-            Logger.log("Buy transaction hash ", requestPayload);
+            Logger.log("Buy transaction hash eth ", requestPayload);
+          } else {
+            // @ts-ignore
+            const result = await approveToken.trigger({
+              creatorTokenContract:
+                profileData?.data?.profile.creator_token.address,
+              // add 10 cents more to cover for weird fluctuation
+              // TODO: remove if not needed after more testing
+              maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
+            });
+            if (result) {
+              let requestPayload: any;
+
+              if (tokenAmount === 1) {
+                const { request } = await publicClient.simulateContract({
+                  address: profileData?.data?.profile.creator_token.address,
+                  account: walletAddress,
+                  abi: creatorTokenAbi,
+                  functionName: "buy",
+                  args: [priceToBuyNext.data?.totalPrice],
+                  chain: baseChain,
+                });
+                requestPayload = request;
+              } else {
+                const { request } = await publicClient.simulateContract({
+                  address: profileData?.data?.profile.creator_token.address,
+                  account: walletAddress,
+                  abi: creatorTokenAbi,
+                  functionName: "bulkBuy",
+                  args: [tokenAmount, priceToBuyNext.data?.totalPrice],
+                  chain: baseChain,
+                });
+                requestPayload = request;
+              }
+
+              Logger.log("simulate usdc", requestPayload);
+              transactionHash = await walletClient?.writeContract?.(
+                requestPayload
+              );
+              Logger.log("Buy transaction hash usdc ", requestPayload);
+            }
+
             if (transactionHash) {
               const transaction = await publicClient.waitForTransactionReceipt({
                 hash: transactionHash,

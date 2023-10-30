@@ -39,6 +39,7 @@
     "@types/react-datepicker": "^4.11.2",
     "@types/react-dropzone": "^5.1.0",
     "@types/react-stickynode": "^4.0.0",
+    "@uniswap/v3-periphery": "^1.4.4",
     "@vercel/og": "^0.5.11",
     "app": "*",
     "array-to-image": "^1.0.0",

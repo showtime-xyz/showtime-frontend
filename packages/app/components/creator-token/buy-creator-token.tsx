@@ -7,7 +7,11 @@ import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { InformationCircle, LockBadge } from "@showtime-xyz/universal.icon";
+import {
+  Ethereum,
+  InformationCircle,
+  LockBadge,
+} from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -19,6 +23,7 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useUserProfile } from "app/hooks/api-hooks";
+import { useGetETHForUSDC } from "app/hooks/auth/use-get-eth-for-usdc";
 import { useContractBalanceOfToken } from "app/hooks/creator-token/use-balance-of-token";
 import { useCreatorTokenBuy } from "app/hooks/creator-token/use-creator-token-buy";
 import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
@@ -44,6 +49,10 @@ const PAYMENT_METHODS = [
     title: "USDC",
     value: "USDC",
   },
+  {
+    title: "ETH",
+    value: "ETH",
+  },
 ];
 const SELECT_LIST = [
   {
@@ -61,12 +70,13 @@ export const BuyCreatorToken = () => {
   const [username] = useParam("username");
   const [selectedActionParam] = useParam("selectedAction");
   const [tokenAmount, setTokenAmount] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState("USDC");
+  const [paymentMethod, setPaymentMethod] = useState<"ETH" | "USDC">("USDC");
 
   const { data: profileData } = useUserProfile({ address: username });
-  const buyToken = useCreatorTokenBuy({ username, tokenAmount });
+  const buyToken = useCreatorTokenBuy({ username, tokenAmount, paymentMethod });
   const sellToken = useCreatorTokenSell();
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
+
   const [selectedAction, setSelectedAction] = useState<Query["selectedAction"]>(
     selectedActionParam ?? "buy"
   );
@@ -80,6 +90,15 @@ export const BuyCreatorToken = () => {
         }
       : undefined
   );
+
+  const ethPriceToBuyNext = useGetETHForUSDC(
+    paymentMethod === "ETH"
+      ? {
+          amount: priceToBuyNext.data?.totalPrice,
+        }
+      : undefined
+  );
+
   const priceToSellNext = useCreatorTokenPriceToSellNext(
     selectedAction === "sell"
       ? {
@@ -208,7 +227,7 @@ export const BuyCreatorToken = () => {
                   <Toggle
                     options={PAYMENT_METHODS}
                     value={paymentMethod}
-                    onChange={(value) => setPaymentMethod(value)}
+                    onChange={(value: any) => setPaymentMethod(value)}
                   />
                   <Pressable
                     onPress={() => {
@@ -223,21 +242,33 @@ export const BuyCreatorToken = () => {
                   </Pressable>
                 </View>
                 <View tw="flex-row items-center" style={{ columnGap: 4 }}>
-                  <Image
-                    source={{
-                      uri: "https://media.showtime.xyz/assets/usdc%26base.png",
-                    }}
-                    width={44}
-                    height={44}
-                    tw="mr-2"
-                  />
+                  {paymentMethod === "USDC" ? (
+                    <Image
+                      source={{
+                        uri: "https://media.showtime.xyz/assets/usdc%26base.png",
+                      }}
+                      width={44}
+                      height={44}
+                      tw="mr-2"
+                    />
+                  ) : (
+                    <Ethereum
+                      width={44}
+                      height={44}
+                      color={isDark ? "white" : "black"}
+                    />
+                  )}
                   {selectedAction === "buy" ? (
                     <View>
-                      {priceToBuyNext.isLoading ? (
+                      {(priceToBuyNext.isLoading && paymentMethod === "USDC") ||
+                      (ethPriceToBuyNext.isLoading &&
+                        paymentMethod === "ETH") ? (
                         <Skeleton width={100} height={27} />
                       ) : (
                         <Text tw="text-4xl font-semibold text-gray-800 dark:text-gray-200">
-                          {priceToBuyNext.data?.displayPrice}
+                          {paymentMethod === "USDC"
+                            ? priceToBuyNext.data?.displayPrice
+                            : 10}
                         </Text>
                       )}
                     </View>
