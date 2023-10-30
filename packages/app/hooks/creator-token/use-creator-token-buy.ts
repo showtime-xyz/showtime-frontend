@@ -5,8 +5,8 @@ import { creatorTokenAbi } from "app/abi/CreatorTokenAbi";
 import { getChannelByIdCacheKey } from "app/components/creator-channels/hooks/use-channel-detail";
 import { getChannelMessageKey } from "app/components/creator-channels/hooks/use-channel-messages";
 import { axios } from "app/lib/axios";
-import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
+import { captureException } from "app/lib/sentry";
 import { publicClient } from "app/lib/wallet-public-client";
 import { formatAPIErrorMessage } from "app/utilities";
 
@@ -86,15 +86,15 @@ export const useCreatorTokenBuy = (params: {
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
-              Logger.log("bulk buy ", request);
+              console.log("bulk buy ", request);
               requestPayload = request;
             }
 
-            Logger.log("simulate ", requestPayload);
+            console.log("simulate ", requestPayload);
             const transactionHash = await walletClient?.writeContract?.(
               requestPayload
             );
-            Logger.log("Buy transaction hash ", requestPayload);
+            console.log("Buy transaction hash ", requestPayload);
             if (transactionHash) {
               const transaction = await publicClient.waitForTransactionReceipt({
                 hash: transactionHash,
@@ -160,7 +160,8 @@ export const useCreatorTokenBuy = (params: {
     {
       onError: (error) => {
         {
-          Logger.error("useCreatorTokenContractBuy", error);
+          console.error("useCreatorTokenContractBuy", error);
+          captureException(error);
           toast.error("Failed", {
             message: formatAPIErrorMessage(error),
           });
