@@ -177,6 +177,8 @@ export const BuyCreatorToken = () => {
             ? "Please wait..."
             : wallet.isMagicWallet
             ? "Connect"
+            : paymentMethod === "ETH"
+            ? "Buy"
             : "Approve & Buy"}
         </Button>
       );

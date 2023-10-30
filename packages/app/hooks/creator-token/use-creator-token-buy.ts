@@ -107,7 +107,11 @@ export const useCreatorTokenBuy = (params: {
             transactionHash = await walletClient?.writeContract?.(
               requestPayload
             );
-            console.log("Buy transaction hash eth ", requestPayload);
+            console.log(
+              "Buy transaction hash eth ",
+              requestPayload,
+              transactionHash
+            );
           } else {
             // @ts-ignore
             const result = await approveToken.trigger({
