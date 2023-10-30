@@ -1,3 +1,4 @@
+import { providers } from "ethers";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
@@ -67,6 +68,29 @@ export const useCreatorTokenBuy = (params: {
           if (result) {
             let requestPayload: any;
 
+            console.log(
+              "Using following RPC for determing gas price",
+              baseChain?.rpcUrls.default.http[0]
+            );
+
+            // Fetch current gas price from the Ethereum network
+            const provider = new providers.JsonRpcProvider(
+              baseChain?.rpcUrls.default.http[0]
+            );
+            let currentGasPrice = await provider.getGasPrice();
+            console.log("current Gas price fetched from RPC", currentGasPrice);
+
+            // Adjust the gas price (increase it by 20% to be more competitive)
+            const paddedGasPrice = currentGasPrice.mul(120).div(100);
+            console.log("padded gas price after calculation:", paddedGasPrice);
+
+            const paddedGasPriceBigInt = BigInt(paddedGasPrice.toString());
+
+            console.log(
+              "padded gas price after conversion:",
+              paddedGasPriceBigInt
+            );
+
             if (tokenAmount === 1) {
               const { request } = await publicClient.simulateContract({
                 address: profileData?.data?.profile.creator_token.address,
@@ -75,8 +99,10 @@ export const useCreatorTokenBuy = (params: {
                 functionName: "buy",
                 args: [priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
+                gasPrice: paddedGasPriceBigInt,
               });
               requestPayload = request;
+              console.log("token amount 1 simulation ", request);
             } else {
               const { request } = await publicClient.simulateContract({
                 address: profileData?.data?.profile.creator_token.address,
@@ -86,14 +112,16 @@ export const useCreatorTokenBuy = (params: {
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
-              console.log("bulk buy ", request);
+              console.log("bulk buy request", request);
               requestPayload = request;
             }
 
             console.log("simulate ", requestPayload);
-            const transactionHash = await walletClient?.writeContract?.(
-              requestPayload
-            );
+
+            const transactionHash = await walletClient?.writeContract?.({
+              ...requestPayload,
+            });
+
             console.log("Buy transaction hash ", requestPayload);
             if (transactionHash) {
               const transaction = await publicClient.waitForTransactionReceipt({
