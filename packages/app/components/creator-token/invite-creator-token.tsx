@@ -127,8 +127,8 @@ export const InviteCreatorToken = () => {
           <View tw="h-4" />
           <Text tw="text-black dark:text-white">
             You have <Text tw="font-bold">{invitesData.length}</Text>{" "}
-            {inviteText} left. Share or email invites below to earn your
-            friends' creator tokens.
+            {inviteText} left. Share invites below to earn your friends' creator
+            tokens.
           </Text>
           <View tw="mt-2">
             {invitesData.map((item) => (
