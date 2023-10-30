@@ -24,6 +24,24 @@ import {
 import { useSwitchChain } from "./use-switch-chain";
 import { baseChain } from "./utils";
 
+type BigIntish = string | number | bigint; // Define BigIntish type
+const paddedGasPrice = (
+  estimatedGasPrice: BigIntish,
+  paddingPercentage: number
+): bigint => {
+  const estimatedPriceBigInt = BigInt(estimatedGasPrice);
+  const paddedPriceBigInt =
+    (estimatedPriceBigInt * BigInt(paddingPercentage)) / BigInt(100);
+
+  Logger.log(
+    "padding estimated gas price, estimated -> padded ",
+    estimatedGasPrice,
+    paddedPriceBigInt.toString()
+  );
+
+  return paddedPriceBigInt;
+};
+
 export const useCreatorTokenBuy = (params: {
   username?: string;
   tokenAmount: number;
@@ -76,6 +94,11 @@ export const useCreatorTokenBuy = (params: {
                 args: [priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
+
+              if (request.gasPrice) {
+                request.gasPrice = paddedGasPrice(request.gasPrice, 110);
+              }
+
               requestPayload = request;
             } else {
               const { request } = await publicClient.simulateContract({
@@ -86,6 +109,11 @@ export const useCreatorTokenBuy = (params: {
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
+
+              if (request.gasPrice) {
+                request.gasPrice = paddedGasPrice(request.gasPrice, 110);
+              }
+
               Logger.log("bulk buy ", request);
               requestPayload = request;
             }
