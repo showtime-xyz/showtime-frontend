@@ -103,11 +103,11 @@ export const useCreatorTokenBuy = (params: {
               requestPayload = request;
             }
 
-            Logger.log("simulate eth", requestPayload);
+            console.log("simulate eth", requestPayload);
             transactionHash = await walletClient?.writeContract?.(
               requestPayload
             );
-            Logger.log("Buy transaction hash eth ", requestPayload);
+            console.log("Buy transaction hash eth ", requestPayload);
           } else {
             // @ts-ignore
             const result = await approveToken.trigger({
@@ -142,13 +142,14 @@ export const useCreatorTokenBuy = (params: {
                 requestPayload = request;
               }
 
-              Logger.log("simulate usdc", requestPayload);
+              console.log("simulate usdc", requestPayload);
               transactionHash = await walletClient?.writeContract?.(
                 requestPayload
               );
-              Logger.log("Buy transaction hash usdc ", requestPayload);
+              console.log("Buy transaction hash usdc ", requestPayload);
             }
 
+            console.log("transaction hash ", transactionHash);
             if (transactionHash) {
               const transaction = await publicClient.waitForTransactionReceipt({
                 hash: transactionHash,
@@ -214,7 +215,7 @@ export const useCreatorTokenBuy = (params: {
     {
       onError: (error) => {
         {
-          Logger.error("useCreatorTokenContractBuy", error);
+          console.error("useCreatorTokenContractBuy", error);
           toast.error("Failed", {
             message: formatAPIErrorMessage(error),
           });
