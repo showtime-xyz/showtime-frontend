@@ -32,6 +32,7 @@ import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-s
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
+import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
 
 import { toast } from "design-system/toast";
 import { Toggle } from "design-system/toggle";
@@ -81,6 +82,7 @@ export const BuyCreatorToken = () => {
     selectedActionParam ?? "buy"
   );
   const usdcBalance = useWalletUSDCBalance();
+  const ethBalance = useWalletETHBalance();
   const [showExplanation, setShowExplanation] = useState(false);
   const priceToBuyNext = useCreatorTokenPriceToBuyNext(
     selectedAction === "buy"
@@ -142,7 +144,11 @@ export const BuyCreatorToken = () => {
             : "Sell"}
         </Button>
       );
-    } else if (usdcBalance.data?.balance === 0n && !wallet.isMagicWallet) {
+    } else if (
+      paymentMethod === "USDC" &&
+      usdcBalance.data?.balance === 0n &&
+      !wallet.isMagicWallet
+    ) {
       return (
         <Button
           onPress={() =>
@@ -152,6 +158,18 @@ export const BuyCreatorToken = () => {
           }
         >
           Buy USDC on Uniswap
+        </Button>
+      );
+    } else if (
+      paymentMethod === "ETH" &&
+      ethBalance.data?.balance === 0n &&
+      !wallet.isMagicWallet
+    ) {
+      return (
+        <Button
+          onPress={() => Linking.openURL("https://bridge.base.org/deposit")}
+        >
+          Bridge ETH to Base
         </Button>
       );
     } else {
