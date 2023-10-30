@@ -388,16 +388,20 @@ export const BuyCreatorToken = () => {
             <View tw="flex-row justify-between">
               <Text tw="text-gray-700 dark:text-gray-200">
                 {selectedAction === "buy"
-                  ? "You will pay in USDC:"
+                  ? `You will pay in ${paymentMethod}:`
                   : "You will receive in USDC:"}
               </Text>
               {selectedAction === "buy" ? (
                 <>
-                  {priceToBuyNext.isLoading ? (
+                  {(priceToBuyNext.isLoading && paymentMethod === "USDC") ||
+                  (ethPriceToBuyNext.isLoading && paymentMethod === "ETH") ? (
                     <Skeleton width={60} height={16} />
                   ) : (
                     <Text tw="font-semibold text-gray-700 dark:text-gray-200">
-                      ${priceToBuyNext.data?.displayPrice}
+                      $
+                      {paymentMethod === "USDC"
+                        ? priceToBuyNext.data?.displayPrice
+                        : ethPriceToBuyNext.data?.displayValue}
                     </Text>
                   )}
                 </>
