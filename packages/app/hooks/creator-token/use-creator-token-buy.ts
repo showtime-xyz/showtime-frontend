@@ -1,3 +1,4 @@
+import { providers } from "ethers";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
@@ -77,6 +78,7 @@ export const useCreatorTokenBuy = (params: {
                 chain: baseChain,
               });
               requestPayload = request;
+              console.log("token amount 1 request ", request);
             } else {
               const { request } = await publicClient.simulateContract({
                 address: profileData?.data?.profile.creator_token.address,
@@ -86,14 +88,29 @@ export const useCreatorTokenBuy = (params: {
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
               });
-              console.log("bulk buy ", request);
+              console.log("bulk buy request", request);
               requestPayload = request;
             }
 
             console.log("simulate ", requestPayload);
-            const transactionHash = await walletClient?.writeContract?.(
-              requestPayload
-            );
+
+            console.log(requestPayload?.chain?.rpcUrls.default.http[0]);
+            // Fetch current gas price from the Ethereum network
+            const provider = new providers.JsonRpcProvider(
+              requestPayload?.chain?.rpcUrls.default.http[0]
+            ); // Replace `INFURA_URL` with your Ethereum RPC URL
+            let currentGasPrice = await provider.getGasPrice();
+            console.log("current Gas price", currentGasPrice);
+
+            // Adjust the gas price (e.g., increase it by 20% to be more competitive)
+            const paddedGasPrice = currentGasPrice.mul(120).div(100);
+            console.log("padded gas price", paddedGasPrice);
+
+            const transactionHash = await walletClient?.writeContract?.({
+              ...requestPayload,
+              gasPrice: paddedGasPrice,
+            });
+
             console.log("Buy transaction hash ", requestPayload);
             if (transactionHash) {
               const transaction = await publicClient.waitForTransactionReceipt({
