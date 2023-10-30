@@ -1,6 +1,7 @@
 import QuoterAbi from "@uniswap/v3-periphery/artifacts/contracts/lens/QuoterV2.sol/QuoterV2.json";
 import useSWR from "swr";
 
+import { Logger } from "app/lib/logger";
 import { publicClient } from "app/lib/wallet-public-client";
 
 import {
@@ -32,7 +33,7 @@ export const useGetETHForUSDC = (params?: { amount: bigint }) => {
           args: [req],
         });
 
-        console.log("res ", res);
+        Logger.log("res ", res);
         return res[0];
       }
     },
