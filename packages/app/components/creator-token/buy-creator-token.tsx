@@ -190,6 +190,12 @@ export const BuyCreatorToken = () => {
       setTokenAmount(1);
     }
   }, [selectedAction, tokenBalance.data]);
+
+  useEffect(() => {
+    if (selectedAction === "sell") {
+      setPaymentMethod("USDC");
+    }
+  }, [selectedAction, tokenBalance.data]);
   const isDark = useIsDarkMode();
 
   return (
@@ -225,7 +231,11 @@ export const BuyCreatorToken = () => {
               <View tw="flex-1" style={{ rowGap: 16 }}>
                 <View tw="w-full flex-row items-center justify-between">
                   <Toggle
-                    options={PAYMENT_METHODS}
+                    options={
+                      selectedAction === "buy"
+                        ? PAYMENT_METHODS
+                        : PAYMENT_METHODS.slice(0, 1)
+                    }
                     value={paymentMethod}
                     onChange={(value: any) => setPaymentMethod(value)}
                   />

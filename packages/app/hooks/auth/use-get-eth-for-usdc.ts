@@ -36,7 +36,7 @@ export const useGetETHForUSDC = (params?: { amount: bigint }) => {
         console.log("res ", res);
         return {
           value: res[0],
-          displayValue: Number(res[0]) / (10 ^ 18),
+          displayValue: Number(res[0]) / 10 ** 18,
         };
       }
     },
