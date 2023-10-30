@@ -23,35 +23,6 @@ import {
   useRedeemedCreatorTokensInvites,
 } from "./hooks/use-invite-creator-token";
 
-const data = [
-  {
-    id: 1,
-    code: "AFD43A",
-  },
-  {
-    id: 2,
-    code: "DAA43A",
-  },
-];
-
-const claimedData = [
-  {
-    id: 1,
-    date: "2021-09-01",
-    username: "am",
-  },
-  {
-    id: 2,
-    date: "2021-09-01",
-    username: "hirbod",
-  },
-  {
-    id: 3,
-    date: "2021-09-01",
-    username: "maxiricha",
-  },
-];
-
 const InviteCreatorTokenItem = ({ code }: { code: string }) => {
   const isDark = useIsDarkMode();
   const copyCode = useCallback(async () => {
@@ -137,8 +108,6 @@ export const InviteCreatorToken = () => {
   const { data: redeemedData = [] } = useRedeemedCreatorTokensInvites();
 
   const inviteText = invitesData.length === 1 ? "invite" : "invites";
-
-  if (!data) return null;
 
   return (
     <ScrollView
