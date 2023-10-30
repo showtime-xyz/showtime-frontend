@@ -80,8 +80,8 @@ export const useCreatorTokenBuy = (params: {
             let currentGasPrice = await provider.getGasPrice();
             console.log("current Gas price fetched from RPC", currentGasPrice);
 
-            // Adjust the gas price (increase it by 20% to be more competitive)
-            const paddedGasPrice = currentGasPrice.mul(120).div(100);
+            // Adjust the gas price (increase it by 100% to be more competitive, based on base crossmint suggestion)
+            const paddedGasPrice = currentGasPrice.mul(200).div(100);
             console.log("padded gas price after calculation:", paddedGasPrice);
 
             const paddedGasPriceBigInt = BigInt(paddedGasPrice.toString());
