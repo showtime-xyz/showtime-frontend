@@ -111,6 +111,7 @@ export const useCreatorTokenBuy = (params: {
                 functionName: "bulkBuy",
                 args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                 chain: baseChain,
+                gasPrice: paddedGasPriceBigInt,
               });
               console.log("bulk buy request", request);
               requestPayload = request;
@@ -120,6 +121,7 @@ export const useCreatorTokenBuy = (params: {
 
             const transactionHash = await walletClient?.writeContract?.({
               ...requestPayload,
+              gasPrice: paddedGasPriceBigInt,
             });
 
             console.log("Buy transaction hash ", requestPayload);
