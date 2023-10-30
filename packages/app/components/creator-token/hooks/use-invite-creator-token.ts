@@ -29,7 +29,7 @@ export const useAvailableCreatorTokensInvites = () => {
 };
 
 export const useRedeemedCreatorTokensInvites = () => {
-  const queryState = useSWR<AvailableCreatorTokensInviteCodes>(
+  const queryState = useSWR<RedeemedCreatorTokensInviteCodes>(
     "/v1/creator-token/invitations/redeemed?limit=10&page=1",
     fetcher,
     {

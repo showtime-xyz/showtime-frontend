@@ -18,7 +18,10 @@ import { View } from "@showtime-xyz/universal.view";
 import { toast } from "design-system/toast";
 
 import InviteCreatorTokenHeader from "./assets/invite";
-import { useAvailableCreatorTokensInvites } from "./hooks/use-invite-creator-token";
+import {
+  useAvailableCreatorTokensInvites,
+  useRedeemedCreatorTokensInvites,
+} from "./hooks/use-invite-creator-token";
 
 const data = [
   {
@@ -130,7 +133,10 @@ const InviteCreatorTokenClaimedItem = ({
 
 export const InviteCreatorToken = () => {
   const { top, bottom } = useSafeAreaInsets();
-  const { data } = useAvailableCreatorTokensInvites();
+  const { data: invitesData = [] } = useAvailableCreatorTokensInvites();
+  const { data: redeemedData = [] } = useRedeemedCreatorTokensInvites();
+
+  const inviteText = invitesData.length === 1 ? "invite" : "invites";
 
   if (!data) return null;
 
@@ -151,25 +157,28 @@ export const InviteCreatorToken = () => {
           </Text>
           <View tw="h-4" />
           <Text tw="text-black dark:text-white">
-            You have{" "}
-            <Text tw="font-bold">
-              {data.length} {data.length > 1 ? "invites" : "invite"}
-            </Text>{" "}
-            left. Share or email invites below to earn your friends' creator
-            tokens.
+            You have <Text tw="font-bold">{invitesData.length}</Text>{" "}
+            {inviteText} left. Share or email invites below to earn your
+            friends' creator tokens.
           </Text>
           <View tw="mt-2">
-            {data.map((item) => (
-              <InviteCreatorTokenItem key={item.id} code={item.code} />
+            {invitesData.map((item) => (
+              <InviteCreatorTokenItem key={item.code} code={item.code} />
             ))}
           </View>
           <View tw="mt-8">
-            <Text tw="font-bold text-black dark:text-white">Claimed</Text>
-            {claimedData.map((item) => (
+            {redeemedData.length ? (
+              <Text tw="font-bold text-black dark:text-white">Claimed</Text>
+            ) : (
+              <Text tw="font-bold text-black dark:text-white">
+                No invites claimed yet.
+              </Text>
+            )}
+            {redeemedData.map((item) => (
               <InviteCreatorTokenClaimedItem
-                key={item.id}
-                date={item.date}
-                username={item.username}
+                key={item.invitee.id}
+                date={item.redeemed_at}
+                username={item.invitee.username}
               />
             ))}
           </View>
