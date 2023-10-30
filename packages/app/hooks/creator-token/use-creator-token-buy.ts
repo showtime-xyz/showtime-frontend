@@ -78,7 +78,7 @@ export const useCreatorTokenBuy = (params: {
                 chain: baseChain,
               });
               requestPayload = request;
-              console.log("token amount 1 request ", request);
+              console.log("token amount 1 simulation ", request);
             } else {
               const { request } = await publicClient.simulateContract({
                 address: profileData?.data?.profile.creator_token.address,
@@ -94,17 +94,20 @@ export const useCreatorTokenBuy = (params: {
 
             console.log("simulate ", requestPayload);
 
-            console.log(requestPayload?.chain?.rpcUrls.default.http[0]);
+            console.log(
+              "Using following RPC for determing gas price",
+              requestPayload?.chain?.rpcUrls.default.http[0]
+            );
             // Fetch current gas price from the Ethereum network
             const provider = new providers.JsonRpcProvider(
               requestPayload?.chain?.rpcUrls.default.http[0]
-            ); // Replace `INFURA_URL` with your Ethereum RPC URL
+            );
             let currentGasPrice = await provider.getGasPrice();
-            console.log("current Gas price", currentGasPrice);
+            console.log("current Gas price fetched from RPC", currentGasPrice);
 
-            // Adjust the gas price (e.g., increase it by 20% to be more competitive)
+            // Adjust the gas price (increase it by 20% to be more competitive)
             const paddedGasPrice = currentGasPrice.mul(120).div(100);
-            console.log("padded gas price", paddedGasPrice);
+            console.log("padded gas price after calculation:", paddedGasPrice);
 
             const transactionHash = await walletClient?.writeContract?.({
               ...requestPayload,
