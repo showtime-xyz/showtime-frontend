@@ -1,7 +1,6 @@
 import useSWRMutation from "swr/mutation";
 import { baseGoerli, base } from "viem/chains";
 
-import { Logger } from "app/lib/logger";
 import { publicClient } from "app/lib/wallet-public-client";
 import { isDEV } from "app/utilities";
 
@@ -34,7 +33,7 @@ export const useApproveToken = () => {
           functionName: "allowance",
           args: [walletAddress, creatorTokenContract],
         })) as unknown as bigint;
-        Logger.log(
+        console.log(
           "allowance and required price ",
           res,
           maxPrice,
@@ -50,7 +49,7 @@ export const useApproveToken = () => {
             args: [creatorTokenContract, maxPrice],
             chain: chain,
           });
-          Logger.log("approve transaction hash ", hash);
+          console.log("approve transaction hash ", hash);
           if (hash) {
             const transaction = await publicClient.waitForTransactionReceipt({
               hash,
