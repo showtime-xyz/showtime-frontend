@@ -8,7 +8,6 @@ import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3 } from "app/hooks/use-web3";
 import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 
-import { useWalletBalance } from "../use-wallet-balance";
 import { ConnectResult, UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
 
@@ -18,7 +17,6 @@ const useWallet = (): UseWalletReturnType => {
   const web3Modal = useWeb3Modal();
   const { web3, isMagic, magicWalletAddress, getWalletClient } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
-  const { getBalance } = useWalletBalance();
   const [address, setAddress] = useState<`0x${string}` | undefined>();
 
   // we use this hook to prevent stale values in closures
@@ -128,7 +126,6 @@ const useWallet = (): UseWalletReturnType => {
       connected: walletConnected || isMagic,
       isMagicWallet: isMagic,
       networkChanged: undefined,
-      getBalance,
       walletClient: web3,
       getWalletClient,
       signMessageAsync: async (args: { message: string }) => {
@@ -168,7 +165,6 @@ const useWallet = (): UseWalletReturnType => {
     address,
     walletConnected,
     isMagic,
-    getBalance,
     walletConnectInstanceRef,
     coinbaseMobileSDKInstanceRef,
     web3,

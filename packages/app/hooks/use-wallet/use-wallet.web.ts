@@ -14,12 +14,10 @@ import { Alert } from "@showtime-xyz/universal.alert";
 import { useWeb3 } from "app/hooks/use-web3";
 
 import { useLatestValueRef } from "../use-latest-value-ref";
-import { useWalletBalance } from "../use-wallet-balance";
 import { ConnectResult, UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
-  const { getBalance } = useWalletBalance();
   const connectorRef = useRef<any>(null);
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const wagmiData = useAccount({
@@ -77,7 +75,6 @@ const useWallet = (): UseWalletReturnType => {
   const result = useMemo(() => {
     return {
       address,
-      getBalance,
       isMagicWallet: isMagic,
       walletClient: web3,
       connect: async () => {
@@ -110,7 +107,6 @@ const useWallet = (): UseWalletReturnType => {
     };
   }, [
     address,
-    getBalance,
     isMagic,
     connected,
     web3,

@@ -41,13 +41,30 @@ export const useApproveToken = () => {
         );
 
         if (res < maxPrice) {
-          const hash = await walletClient?.writeContract({
+          const { maxFeePerGas, maxPriorityFeePerGas } =
+            await publicClient.estimateFeesPerGas({
+              type: "eip1559",
+            });
+
+          console.log("gas price  approve", {
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+          });
+          const { request } = await publicClient.simulateContract({
             address: usdcAddress,
             account: walletAddress,
             abi: erc20Abi,
             functionName: "approve",
             args: [creatorTokenContract, maxPrice],
             chain: chain,
+          });
+
+          //@ts-ignore
+          const hash = await walletClient?.writeContract({
+            ...request,
+            type: "eip1559",
+            maxFeePerGas,
+            maxPriorityFeePerGas,
           });
           console.log("approve transaction hash ", hash);
           if (hash) {
