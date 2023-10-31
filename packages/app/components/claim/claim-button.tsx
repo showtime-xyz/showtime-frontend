@@ -1,7 +1,5 @@
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { StyleProp, ViewStyle } from "react-native";
-
-import { formatDistanceToNowStrict } from "date-fns";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { ButtonProps } from "@showtime-xyz/universal.button";
@@ -23,7 +21,6 @@ import { useAppleMusicGatedClaim } from "app/hooks/use-apple-music-gated-claim";
 import { useClaimDrop } from "app/hooks/use-claim-drop";
 import { CreatorEditionResponse } from "app/hooks/use-creator-collection-detail";
 import { useRedirectToChannelUnlocked } from "app/hooks/use-redirect-to-channel-unlocked-screen";
-import { useRedirectToRaffleResult } from "app/hooks/use-redirect-to-raffle-result";
 import { useSpotifyGatedClaim } from "app/hooks/use-spotify-gated-claim";
 import { useUser } from "app/hooks/use-user";
 import { NFT } from "app/types";
@@ -55,7 +52,6 @@ export const ClaimButton = ({
   const { isMutating: isAppleMusicCollectLoading } = useAppleMusicGatedClaim(
     edition.creator_airdrop_edition
   );
-  const redirectToRaffleResult = useRedirectToRaffleResult();
   const { state: claimStates, contractAddress } = useContext(ClaimContext);
   const isProgress =
     claimStates.status === "loading" &&
@@ -64,19 +60,12 @@ export const ClaimButton = ({
   const { isMutating: isSpotifyCollectLoading } = useSpotifyGatedClaim(
     edition.creator_airdrop_edition
   );
-  const { isAuthenticated, user } = useUser();
-  const isSelf =
-    user?.data?.profile.profile_id ===
-    edition.creator_airdrop_edition?.owner_profile_id;
+  const { isAuthenticated } = useUser();
   const redirectToChannelUnlocked = useRedirectToChannelUnlocked();
 
-  const handleRaffleResultPress = () => {
-    redirectToRaffleResult(edition.creator_airdrop_edition.contract_address);
-  };
   const { handleClaimNFT } = useClaimDrop(edition);
 
   const status = getClaimStatus(edition);
-  const isRaffleDrop = edition?.raffles && edition.raffles?.length > 0;
 
   const isPaidGated = edition?.gating_type === "paid_nft";
 
@@ -103,62 +92,8 @@ export const ClaimButton = ({
   };
 
   const preAddIconheight = buttonProps.size === "small" ? 24 : 26;
-  const raffleConcludedAt = useMemo(() => {
-    if (!isSelf || !isRaffleDrop) return null;
-    if (
-      (edition.gating_type === "spotify_presave" ||
-        edition?.gating_type === "music_presave") &&
-      edition?.presave_release_date
-    ) {
-      return formatDistanceToNowStrict(
-        new Date(edition?.presave_release_date),
-        {
-          addSuffix: true,
-        }
-      );
-    }
-    if (edition?.time_limit) {
-      return formatDistanceToNowStrict(new Date(edition?.time_limit), {
-        addSuffix: true,
-      });
-    }
-  }, [
-    edition.gating_type,
-    edition?.presave_release_date,
-    edition?.time_limit,
-    isRaffleDrop,
-    isSelf,
-  ]);
 
-  const isCanViewRaffleResult = useMemo(() => {
-    const isRaffleHasWinner =
-      isRaffleDrop && edition.raffles?.findIndex((r) => !!r.winner) != -1;
-    return isSelf && isRaffleHasWinner;
-  }, [edition.raffles, isRaffleDrop, isSelf]);
-
-  if (isCanViewRaffleResult) {
-    return (
-      <Button {...buttonProps} onPress={handleRaffleResultPress}>
-        <>
-          <Text tw={["font-semibold text-white", LABEL_SIZE_TW[size]]}>
-            {isPaidGated ? "Announce winner" : "Announce your raffle"}
-          </Text>
-        </>
-      </Button>
-    );
-  } else if (raffleConcludedAt) {
-    return (
-      <Button {...buttonProps}>
-        <>
-          <Text
-            tw={["text-center font-semibold text-white", LABEL_SIZE_TW[size]]}
-          >
-            Your raffle ends {`${raffleConcludedAt}`}
-          </Text>
-        </>
-      </Button>
-    );
-  } else if (status === ClaimStatus.Claimed) {
+  if (status === ClaimStatus.Claimed) {
     if (isPaidGated) {
       return (
         <Button

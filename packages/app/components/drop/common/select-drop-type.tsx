@@ -1,5 +1,5 @@
 import React from "react";
-import { Linking, Platform } from "react-native";
+import { Linking } from "react-native";
 
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { LinearGradient } from "expo-linear-gradient";
@@ -9,17 +9,13 @@ import {
   AppleMusic,
   ChevronRight,
   Spotify,
-  Showtime,
   Boost,
 } from "@showtime-xyz/universal.icon";
-import { CreatorChannel } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
-import { useOnboardingStatus } from "app/components/payouts/hooks/use-onboarding-status";
 import { useUser } from "app/hooks/use-user";
 
 export const SelectDropType = (props: { handleNextStep: any }) => {
@@ -34,11 +30,13 @@ export const SelectDropType = (props: { handleNextStep: any }) => {
     !!user.user?.data.profile.apple_music_artist_id;
 
   const isDark = useIsDarkMode();
-  const router = useRouter();
-  const onboardingStatus = useOnboardingStatus();
 
-  if (user.isIncompletedProfile) {
-    return null;
+  if (user.isIncompletedProfile || !canCreateMusicDrop) {
+    return (
+      <View tw="items-center justify-center p-4">
+        <Text tw="text-xl font-bold">No permission</Text>
+      </View>
+    );
   }
   const iconColor = isDark ? "#fff" : "#121212";
 
