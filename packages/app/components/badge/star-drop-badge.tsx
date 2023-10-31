@@ -12,10 +12,12 @@ type StarDropBadgeProps = Omit<
 > & {
   size?: number;
   data?: StarDropBadgeType;
+  tw?: string;
 };
 export const StarDropBadge = ({
   size = 18,
   data,
+  tw,
   ...rest
 }: StarDropBadgeProps) => {
   const router = useRouter();
@@ -29,6 +31,7 @@ export const StarDropBadge = ({
           router.push(`/@${data?.username}/${data.slug}`);
         }
       }}
+      tw={tw}
     >
       <Image
         source={
