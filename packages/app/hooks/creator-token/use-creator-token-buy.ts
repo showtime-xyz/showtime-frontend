@@ -91,9 +91,6 @@ export const useCreatorTokenBuy = (params: {
                   functionName: "buy",
                   args: [priceToBuyNext.data?.totalPrice],
                   chain: baseChain,
-                  type: "eip1559",
-                  maxFeePerGas,
-                  maxPriorityFeePerGas,
                 });
                 requestPayload = request;
                 console.log("token amount 1 simulation ", request);
@@ -105,9 +102,6 @@ export const useCreatorTokenBuy = (params: {
                   functionName: "bulkBuy",
                   args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                   chain: baseChain,
-                  type: "eip1559",
-                  maxFeePerGas,
-                  maxPriorityFeePerGas,
                 });
                 console.log("bulk buy request", request);
                 requestPayload = request;
@@ -115,9 +109,12 @@ export const useCreatorTokenBuy = (params: {
 
               console.log("simulate ", requestPayload);
 
-              const transactionHash = await walletClient?.writeContract?.(
-                requestPayload
-              );
+              const transactionHash = await walletClient?.writeContract?.({
+                ...requestPayload,
+                type: "eip1559",
+                maxFeePerGas,
+                maxPriorityFeePerGas,
+              });
 
               console.log("Buy transaction hash ", requestPayload);
               if (transactionHash) {

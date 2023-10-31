@@ -50,34 +50,36 @@ export const useApproveToken = () => {
             maxFeePerGas,
             maxPriorityFeePerGas,
           });
-          if (maxFeePerGas) {
-            const { request } = await publicClient.simulateContract({
-              address: usdcAddress,
-              account: walletAddress,
-              abi: erc20Abi,
-              functionName: "approve",
-              args: [creatorTokenContract, maxPrice],
-              chain: chain,
-              maxFeePerGas,
-              maxPriorityFeePerGas,
-            });
+          const { request } = await publicClient.simulateContract({
+            address: usdcAddress,
+            account: walletAddress,
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [creatorTokenContract, maxPrice],
+            chain: chain,
+          });
 
-            const hash = await walletClient?.writeContract(request);
-            console.log("approve transaction hash ", hash);
-            if (hash) {
-              const transaction = await publicClient.waitForTransactionReceipt({
-                hash,
-                pollingInterval: 2000,
-                confirmations: 3,
-              });
-              if (transaction.status === "success") {
-                return true;
-              }
+          //@ts-ignore
+          const hash = await walletClient?.writeContract({
+            ...request,
+            type: "eip1559",
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+          });
+          console.log("approve transaction hash ", hash);
+          if (hash) {
+            const transaction = await publicClient.waitForTransactionReceipt({
+              hash,
+              pollingInterval: 2000,
+              confirmations: 3,
+            });
+            if (transaction.status === "success") {
+              return true;
             }
           }
-        } else {
-          return true;
         }
+      } else {
+        return true;
       }
     }
   );
