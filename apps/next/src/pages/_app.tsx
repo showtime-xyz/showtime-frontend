@@ -28,7 +28,6 @@ import { CheckoutScreen } from "app/screens/checkout";
 import { CheckoutPaidNFTScreen } from "app/screens/checkout-paid-nft";
 import { CheckoutReturnScreen } from "app/screens/checkout-return";
 import { CheckoutReturnForPaidNFTScreen } from "app/screens/checkout-return-for-paid-nft";
-import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
@@ -47,21 +46,17 @@ import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-inv
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
-import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropImageShareScreen } from "app/screens/drop-image-share";
-import { DropStarScreen } from "app/screens/drop-star";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
-import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { OnboardingScreen } from "app/screens/onboarding";
 import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
 import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
-import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
@@ -238,16 +233,11 @@ function App({ Component, pageProps, router }: AppProps) {
         <FollowersScreen />
         <FollowingScreen />
         <DropScreen />
-        <DropExplanationScreen />
         <CreatorTokensExplanationScreen />
         <EnterInviteCodeModalScreen />
-        <ClaimScreen />
-        <RaffleScreen />
         <CollectorsScreen />
         <ClaimLimitExplanationScreen />
-        <LikersScreen />
         <ReportScreen />
-        <DropStarScreen />
         <PayoutsSetupScreen />
         <CheckoutScreen />
         <CheckoutReturnScreen />
