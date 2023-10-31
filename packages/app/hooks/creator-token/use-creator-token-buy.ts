@@ -76,8 +76,17 @@ export const useCreatorTokenBuy = (params: {
             const { gasPrice } = await publicClient.estimateFeesPerGas({
               type: "legacy",
             });
+            const { maxFeePerGas, maxPriorityFeePerGas } =
+              await publicClient.estimateFeesPerGas({
+                type: "eip1559",
+              });
 
-            if (gasPrice) {
+            console.log("gas price  buy", {
+              gasPrice,
+              maxFeePerGas,
+              maxPriorityFeePerGas,
+            });
+            if (gasPrice && maxFeePerGas) {
               if (tokenAmount === 1) {
                 const { request } = await publicClient.simulateContract({
                   address: profileData?.data?.profile.creator_token.address,
@@ -87,7 +96,9 @@ export const useCreatorTokenBuy = (params: {
                   args: [priceToBuyNext.data?.totalPrice],
                   chain: baseChain,
                   type: "eip1559",
-                  maxFeePerGas: gasPrice * 2n,
+                  maxFeePerGas:
+                    maxFeePerGas > gasPrice * 2n ? maxFeePerGas : gasPrice * 2n,
+                  maxPriorityFeePerGas,
                 });
                 requestPayload = request;
                 console.log("token amount 1 simulation ", request);
@@ -100,7 +111,9 @@ export const useCreatorTokenBuy = (params: {
                   args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                   chain: baseChain,
                   type: "eip1559",
-                  maxFeePerGas: gasPrice * 2n,
+                  maxFeePerGas:
+                    maxFeePerGas > gasPrice * 2n ? maxFeePerGas : gasPrice * 2n,
+                  maxPriorityFeePerGas,
                 });
                 console.log("bulk buy request", request);
                 requestPayload = request;
