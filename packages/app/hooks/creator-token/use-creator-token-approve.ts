@@ -77,9 +77,9 @@ export const useApproveToken = () => {
               return true;
             }
           }
+        } else {
+          return true;
         }
-      } else {
-        return true;
       }
     }
   );
