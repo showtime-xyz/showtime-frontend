@@ -3,19 +3,22 @@ import { Platform } from "react-native";
 import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
+import { useOnboardingPromise } from "app/components/onboarding";
 import { useUser } from "app/hooks/use-user";
 
 export const CompleteProfileButton = ({ isSelf }: { isSelf: boolean }) => {
   const router = useRouter();
   const { isIncompletedProfile } = useUser();
-  const redirectToCreateDrop = useRedirectToCreateDrop();
+  const { onboardingPromise } = useOnboardingPromise();
+
   if (!isSelf) return null;
   if (isIncompletedProfile) {
     return (
       <GradientButton
         size="small"
-        onPress={redirectToCreateDrop}
+        onPress={async () => {
+          await onboardingPromise();
+        }}
         labelTW={"color-white"}
         style={{ height: 28, paddingVertical: 0 }}
         gradientProps={{
