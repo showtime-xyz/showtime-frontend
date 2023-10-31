@@ -41,20 +41,16 @@ export const useApproveToken = () => {
         );
 
         if (res < maxPrice) {
-          const { gasPrice } = await publicClient.estimateFeesPerGas({
-            type: "legacy",
-          });
           const { maxFeePerGas, maxPriorityFeePerGas } =
             await publicClient.estimateFeesPerGas({
               type: "eip1559",
             });
 
           console.log("gas price  approve", {
-            gasPrice,
             maxFeePerGas,
             maxPriorityFeePerGas,
           });
-          if (gasPrice && maxFeePerGas) {
+          if (maxFeePerGas) {
             const { request } = await publicClient.simulateContract({
               address: usdcAddress,
               account: walletAddress,
@@ -62,8 +58,7 @@ export const useApproveToken = () => {
               functionName: "approve",
               args: [creatorTokenContract, maxPrice],
               chain: chain,
-              maxFeePerGas:
-                maxFeePerGas > gasPrice * 2n ? maxFeePerGas : gasPrice * 2n,
+              maxFeePerGas,
               maxPriorityFeePerGas,
             });
 

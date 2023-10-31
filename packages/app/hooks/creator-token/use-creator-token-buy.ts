@@ -73,20 +73,16 @@ export const useCreatorTokenBuy = (params: {
               baseChain?.rpcUrls.default.http[0]
             );
 
-            const { gasPrice } = await publicClient.estimateFeesPerGas({
-              type: "legacy",
-            });
             const { maxFeePerGas, maxPriorityFeePerGas } =
               await publicClient.estimateFeesPerGas({
                 type: "eip1559",
               });
 
             console.log("gas price  buy", {
-              gasPrice,
               maxFeePerGas,
               maxPriorityFeePerGas,
             });
-            if (gasPrice && maxFeePerGas) {
+            if (maxFeePerGas) {
               if (tokenAmount === 1) {
                 const { request } = await publicClient.simulateContract({
                   address: profileData?.data?.profile.creator_token.address,
@@ -96,8 +92,7 @@ export const useCreatorTokenBuy = (params: {
                   args: [priceToBuyNext.data?.totalPrice],
                   chain: baseChain,
                   type: "eip1559",
-                  maxFeePerGas:
-                    maxFeePerGas > gasPrice * 2n ? maxFeePerGas : gasPrice * 2n,
+                  maxFeePerGas,
                   maxPriorityFeePerGas,
                 });
                 requestPayload = request;
@@ -111,8 +106,7 @@ export const useCreatorTokenBuy = (params: {
                   args: [tokenAmount, priceToBuyNext.data?.totalPrice],
                   chain: baseChain,
                   type: "eip1559",
-                  maxFeePerGas:
-                    maxFeePerGas > gasPrice * 2n ? maxFeePerGas : gasPrice * 2n,
+                  maxFeePerGas,
                   maxPriorityFeePerGas,
                 });
                 console.log("bulk buy request", request);
