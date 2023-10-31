@@ -71,16 +71,20 @@ export const BuyCreatorToken = () => {
   const [username] = useParam("username");
   const [selectedActionParam] = useParam("selectedAction");
   const [tokenAmount, setTokenAmount] = useState(1);
-  const [paymentMethod, setPaymentMethod] = useState<"ETH" | "USDC">("USDC");
 
   const { data: profileData } = useUserProfile({ address: username });
-  const buyToken = useCreatorTokenBuy({ username, tokenAmount, paymentMethod });
   const sellToken = useCreatorTokenSell();
   const redirectToCreatorTokensShare = useRedirectToCreatorTokensShare();
 
   const [selectedAction, setSelectedAction] = useState<Query["selectedAction"]>(
     selectedActionParam ?? "buy"
   );
+
+  const [paymentMethod, setPaymentMethod] = useState<"ETH" | "USDC">(
+    selectedAction === "buy" ? "ETH" : "USDC"
+  );
+  const buyToken = useCreatorTokenBuy({ username, tokenAmount, paymentMethod });
+
   const usdcBalance = useWalletUSDCBalance();
   const ethBalance = useWalletETHBalance();
   const [showExplanation, setShowExplanation] = useState(false);
