@@ -66,151 +66,160 @@ export const useCreatorTokenBuy = (params: {
       if (walletAddress && profileData?.data?.profile.creator_token) {
         const switchChainSuccess = await switchChain.trigger();
 
-        const { maxFeePerGas, maxPriorityFeePerGas } =
+        const { maxFeePerGas: estimatedMaxFeePerGas, maxPriorityFeePerGas } =
           await publicClient.estimateFeesPerGas({
             type: "eip1559",
           });
 
-        console.log("gas price  buy", {
-          maxFeePerGas,
-          maxPriorityFeePerGas,
-        });
+        const latestBlockBaseFeePerGas = (await publicClient.getBlock())
+          .baseFeePerGas;
 
-        let transactionHash: `0x${string}` | undefined;
-        let requestPayload: any;
+        if (maxPriorityFeePerGas) {
+          const maxFeePerGas = latestBlockBaseFeePerGas
+            ? latestBlockBaseFeePerGas * 2n + maxPriorityFeePerGas
+            : estimatedMaxFeePerGas;
 
-        if (switchChainSuccess && maxFeePerGas) {
-          if (params.paymentMethod === "ETH") {
-            if (tokenAmount === 1) {
-              const { request } = await publicClient.simulateContract({
-                // @ts-ignore
-                address: creatorTokenSwapRouterAddress,
-                account: walletAddress,
-                abi: creatorTokenSwapRouterAbi,
-                functionName: "buyWithEth",
-                value: ethPriceToBuyNext.data?.value,
-                args: [
-                  profileData.data.profile.creator_token.address,
-                  priceToBuyNext.data?.totalPrice + 500000n,
-                ],
-                chain: baseChain,
-              });
-              requestPayload = request;
-              console.log("buy with eth request payload ", request);
-            } else {
-              const { request } = await publicClient.simulateContract({
-                // @ts-ignore
-                address: creatorTokenSwapRouterAddress,
-                account: walletAddress,
-                abi: creatorTokenSwapRouterAbi,
-                functionName: "bulkBuyWithEth",
-                value: ethPriceToBuyNext.data?.value,
-                args: [
-                  profileData.data.profile.creator_token.address,
-                  tokenAmount,
-                  priceToBuyNext.data?.totalPrice + 500000n,
-                ],
-                chain: baseChain,
-              });
-              requestPayload = request;
-              console.log("buy with eth bulk request payload ", request);
-            }
-          } else {
-            // @ts-ignore
-            const approveSuccess = await approveToken.trigger({
-              creatorTokenContract:
-                profileData?.data?.profile.creator_token.address,
-              // add 10 cents more to cover for weird fluctuation
-              // TODO: remove if not needed after more testing
-              maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
-            });
-            if (approveSuccess) {
-              if (tokenAmount === 1) {
-                const { request } = await publicClient.simulateContract({
-                  address: profileData?.data?.profile.creator_token.address,
-                  account: walletAddress,
-                  abi: creatorTokenAbi,
-                  functionName: "buy",
-                  args: [priceToBuyNext.data?.totalPrice],
-                  chain: baseChain,
-                });
-                requestPayload = request;
-                console.log("buy with usdc request payload ", request);
-              } else {
-                const { request } = await publicClient.simulateContract({
-                  address: profileData?.data?.profile.creator_token.address,
-                  account: walletAddress,
-                  abi: creatorTokenAbi,
-                  functionName: "bulkBuy",
-                  args: [tokenAmount, priceToBuyNext.data?.totalPrice],
-                  chain: baseChain,
-                });
-                requestPayload = request;
-                console.log("buy bulk with usdc request payload ", request);
-              }
-            }
-          }
-
-          transactionHash = await walletClient?.writeContract?.({
-            ...requestPayload,
-            type: "eip1559",
+          console.log("gas price  buy", {
             maxFeePerGas,
             maxPriorityFeePerGas,
           });
-          console.log("buy transaction hash ", transactionHash);
 
-          if (transactionHash) {
-            const transaction = await publicClient.waitForTransactionReceipt({
-              hash: transactionHash,
-              pollingInterval: 2000,
-            });
+          let transactionHash: `0x${string}` | undefined;
+          let requestPayload: any;
 
-            if (transaction.status === "success") {
-              mutate(
-                getTotalCollectedKey(
-                  profileData?.data?.profile.creator_token.address
-                )
-              );
-              mutate(
-                getPriceToBuyNextKey({
-                  address: profileData?.data?.profile.creator_token.address,
-                  tokenAmount: 1,
-                })
-              );
-
-              mutate(
-                getContractBalanceOfTokenKey({
-                  ownerAddress: walletAddress,
-                  contractAddress:
-                    profileData?.data?.profile.creator_token.address,
-                })
-              );
-
-              await axios({
-                url: "/v1/creator-token/poll-buy",
-                method: "POST",
-                data: {
-                  creator_token_id: profileData.data.profile.creator_token.id,
-                  quantity: tokenAmount,
-                  tx_hash: transactionHash,
-                },
+          if (switchChainSuccess && maxFeePerGas) {
+            if (params.paymentMethod === "ETH") {
+              if (tokenAmount === 1) {
+                const { request } = await publicClient.simulateContract({
+                  // @ts-ignore
+                  address: creatorTokenSwapRouterAddress,
+                  account: walletAddress,
+                  abi: creatorTokenSwapRouterAbi,
+                  functionName: "buyWithEth",
+                  value: ethPriceToBuyNext.data?.value,
+                  args: [
+                    profileData.data.profile.creator_token.address,
+                    priceToBuyNext.data?.totalPrice + 500000n,
+                  ],
+                  chain: baseChain,
+                });
+                requestPayload = request;
+                console.log("buy with eth request payload ", request);
+              } else {
+                const { request } = await publicClient.simulateContract({
+                  // @ts-ignore
+                  address: creatorTokenSwapRouterAddress,
+                  account: walletAddress,
+                  abi: creatorTokenSwapRouterAbi,
+                  functionName: "bulkBuyWithEth",
+                  value: ethPriceToBuyNext.data?.value,
+                  args: [
+                    profileData.data.profile.creator_token.address,
+                    tokenAmount,
+                    priceToBuyNext.data?.totalPrice + 500000n,
+                  ],
+                  chain: baseChain,
+                });
+                requestPayload = request;
+                console.log("buy with eth bulk request payload ", request);
+              }
+            } else {
+              // @ts-ignore
+              const approveSuccess = await approveToken.trigger({
+                creatorTokenContract:
+                  profileData?.data?.profile.creator_token.address,
+                // add 10 cents more to cover for weird fluctuation
+                // TODO: remove if not needed after more testing
+                maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
               });
-              mutate(
-                (key: any) => {
-                  const channelId = profileData.data?.profile.channels[0]?.id;
-                  if (
-                    typeof key === "string" &&
-                    typeof channelId === "number" &&
-                    (key.startsWith(getChannelByIdCacheKey(channelId)) ||
-                      key.startsWith(getChannelMessageKey(channelId)))
-                  ) {
-                    return true;
-                  }
-                },
-                undefined,
-                { revalidate: true }
-              );
-              return true;
+              if (approveSuccess) {
+                if (tokenAmount === 1) {
+                  const { request } = await publicClient.simulateContract({
+                    address: profileData?.data?.profile.creator_token.address,
+                    account: walletAddress,
+                    abi: creatorTokenAbi,
+                    functionName: "buy",
+                    args: [priceToBuyNext.data?.totalPrice],
+                    chain: baseChain,
+                  });
+                  requestPayload = request;
+                  console.log("buy with usdc request payload ", request);
+                } else {
+                  const { request } = await publicClient.simulateContract({
+                    address: profileData?.data?.profile.creator_token.address,
+                    account: walletAddress,
+                    abi: creatorTokenAbi,
+                    functionName: "bulkBuy",
+                    args: [tokenAmount, priceToBuyNext.data?.totalPrice],
+                    chain: baseChain,
+                  });
+                  requestPayload = request;
+                  console.log("buy bulk with usdc request payload ", request);
+                }
+              }
+            }
+
+            transactionHash = await walletClient?.writeContract?.({
+              ...requestPayload,
+              type: "eip1559",
+              maxFeePerGas,
+              maxPriorityFeePerGas,
+            });
+            console.log("buy transaction hash ", transactionHash);
+
+            if (transactionHash) {
+              const transaction = await publicClient.waitForTransactionReceipt({
+                hash: transactionHash,
+                pollingInterval: 2000,
+              });
+
+              if (transaction.status === "success") {
+                mutate(
+                  getTotalCollectedKey(
+                    profileData?.data?.profile.creator_token.address
+                  )
+                );
+                mutate(
+                  getPriceToBuyNextKey({
+                    address: profileData?.data?.profile.creator_token.address,
+                    tokenAmount: 1,
+                  })
+                );
+
+                mutate(
+                  getContractBalanceOfTokenKey({
+                    ownerAddress: walletAddress,
+                    contractAddress:
+                      profileData?.data?.profile.creator_token.address,
+                  })
+                );
+
+                await axios({
+                  url: "/v1/creator-token/poll-buy",
+                  method: "POST",
+                  data: {
+                    creator_token_id: profileData.data.profile.creator_token.id,
+                    quantity: tokenAmount,
+                    tx_hash: transactionHash,
+                  },
+                });
+                mutate(
+                  (key: any) => {
+                    const channelId = profileData.data?.profile.channels[0]?.id;
+                    if (
+                      typeof key === "string" &&
+                      typeof channelId === "number" &&
+                      (key.startsWith(getChannelByIdCacheKey(channelId)) ||
+                        key.startsWith(getChannelMessageKey(channelId)))
+                    ) {
+                      return true;
+                    }
+                  },
+                  undefined,
+                  { revalidate: true }
+                );
+                return true;
+              }
             }
           }
         }
