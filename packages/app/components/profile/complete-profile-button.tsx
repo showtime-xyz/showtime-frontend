@@ -3,9 +3,8 @@ import { Platform } from "react-native";
 import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
 
+import { useOnboardingPromise } from "app/components/onboarding";
 import { useUser } from "app/hooks/use-user";
-
-import { useOnboardingPromise } from "../onboarding";
 
 export const CompleteProfileButton = ({ isSelf }: { isSelf: boolean }) => {
   const router = useRouter();
