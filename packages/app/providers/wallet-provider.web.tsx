@@ -42,8 +42,8 @@ const allChainsArray = [
 ];
 
 const provider = isDEV
-  ? [alchemyProvider({ apiKey: alchemyProviderApiKey }), publicProvider()]
-  : [publicProvider()];
+  ? [publicProvider()]
+  : [alchemyProvider({ apiKey: alchemyProviderApiKey }), publicProvider()];
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   allChainsArray,

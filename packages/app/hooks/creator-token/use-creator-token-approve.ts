@@ -1,7 +1,6 @@
 import useSWRMutation from "swr/mutation";
 import { baseGoerli, base } from "viem/chains";
 
-import { Logger } from "app/lib/logger";
 import { publicClient } from "app/lib/wallet-public-client";
 import { isDEV } from "app/utilities";
 
@@ -34,7 +33,7 @@ export const useApproveToken = () => {
           functionName: "allowance",
           args: [walletAddress, creatorTokenContract],
         })) as unknown as bigint;
-        Logger.log(
+        console.log(
           "allowance and required price ",
           res,
           maxPrice,
@@ -42,7 +41,16 @@ export const useApproveToken = () => {
         );
 
         if (res < maxPrice) {
-          const hash = await walletClient?.writeContract({
+          const { maxFeePerGas, maxPriorityFeePerGas } =
+            await publicClient.estimateFeesPerGas({
+              type: "eip1559",
+            });
+
+          console.log("gas price  approve", {
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+          });
+          const { request } = await publicClient.simulateContract({
             address: usdcAddress,
             account: walletAddress,
             abi: erc20Abi,
@@ -50,7 +58,15 @@ export const useApproveToken = () => {
             args: [creatorTokenContract, maxPrice],
             chain: chain,
           });
-          Logger.log("approve transaction hash ", hash);
+
+          //@ts-ignore
+          const hash = await walletClient?.writeContract({
+            ...request,
+            type: "eip1559",
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+          });
+          console.log("approve transaction hash ", hash);
           if (hash) {
             const transaction = await publicClient.waitForTransactionReceipt({
               hash,
@@ -61,9 +77,9 @@ export const useApproveToken = () => {
               return true;
             }
           }
-        } else {
-          return true;
         }
+      } else {
+        return true;
       }
     }
   );

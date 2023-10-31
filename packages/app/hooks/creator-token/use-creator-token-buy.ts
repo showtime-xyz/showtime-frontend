@@ -1,3 +1,4 @@
+import { providers } from "ethers";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
@@ -6,8 +7,8 @@ import { creatorTokenSwapRouterAbi } from "app/abi/CreatorTokenSwapRouterAbi";
 import { getChannelByIdCacheKey } from "app/components/creator-channels/hooks/use-channel-detail";
 import { getChannelMessageKey } from "app/components/creator-channels/hooks/use-channel-messages";
 import { axios } from "app/lib/axios";
-import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
+import { captureException } from "app/lib/sentry";
 import { publicClient } from "app/lib/wallet-public-client";
 import { formatAPIErrorMessage } from "app/utilities";
 
@@ -63,13 +64,23 @@ export const useCreatorTokenBuy = (params: {
       const walletAddress = walletClient?.account?.address;
 
       if (walletAddress && profileData?.data?.profile.creator_token) {
-        const res = await switchChain.trigger();
+        const switchChainSuccess = await switchChain.trigger();
+
+        const { maxFeePerGas, maxPriorityFeePerGas } =
+          await publicClient.estimateFeesPerGas({
+            type: "eip1559",
+          });
+
+        console.log("gas price  buy", {
+          maxFeePerGas,
+          maxPriorityFeePerGas,
+        });
 
         let transactionHash: `0x${string}` | undefined;
-        if (res) {
-          if (params.paymentMethod === "ETH") {
-            let requestPayload: any;
+        let requestPayload: any;
 
+        if (switchChainSuccess && maxFeePerGas) {
+          if (params.paymentMethod === "ETH") {
             if (tokenAmount === 1) {
               const { request } = await publicClient.simulateContract({
                 // @ts-ignore
@@ -85,6 +96,7 @@ export const useCreatorTokenBuy = (params: {
                 chain: baseChain,
               });
               requestPayload = request;
+              console.log("buy with eth request payload ", request);
             } else {
               const { request } = await publicClient.simulateContract({
                 // @ts-ignore
@@ -101,29 +113,18 @@ export const useCreatorTokenBuy = (params: {
                 chain: baseChain,
               });
               requestPayload = request;
+              console.log("buy with eth bulk request payload ", request);
             }
-
-            console.log("simulate eth", requestPayload);
-            transactionHash = await walletClient?.writeContract?.(
-              requestPayload
-            );
-            console.log(
-              "Buy transaction hash eth ",
-              requestPayload,
-              transactionHash
-            );
           } else {
             // @ts-ignore
-            const result = await approveToken.trigger({
+            const approveSuccess = await approveToken.trigger({
               creatorTokenContract:
                 profileData?.data?.profile.creator_token.address,
               // add 10 cents more to cover for weird fluctuation
               // TODO: remove if not needed after more testing
               maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
             });
-            if (result) {
-              let requestPayload: any;
-
+            if (approveSuccess) {
               if (tokenAmount === 1) {
                 const { request } = await publicClient.simulateContract({
                   address: profileData?.data?.profile.creator_token.address,
@@ -134,6 +135,7 @@ export const useCreatorTokenBuy = (params: {
                   chain: baseChain,
                 });
                 requestPayload = request;
+                console.log("buy with usdc request payload ", request);
               } else {
                 const { request } = await publicClient.simulateContract({
                   address: profileData?.data?.profile.creator_token.address,
@@ -144,17 +146,19 @@ export const useCreatorTokenBuy = (params: {
                   chain: baseChain,
                 });
                 requestPayload = request;
+                console.log("buy bulk with usdc request payload ", request);
               }
-
-              console.log("simulate usdc", requestPayload);
-              transactionHash = await walletClient?.writeContract?.(
-                requestPayload
-              );
-              console.log("Buy transaction hash usdc ", requestPayload);
             }
           }
 
-          console.log("transaction hash ", transactionHash);
+          transactionHash = await walletClient?.writeContract?.({
+            ...requestPayload,
+            type: "eip1559",
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+          });
+          console.log("buy transaction hash ", transactionHash);
+
           if (transactionHash) {
             const transaction = await publicClient.waitForTransactionReceipt({
               hash: transactionHash,
@@ -209,10 +213,6 @@ export const useCreatorTokenBuy = (params: {
               return true;
             }
           }
-        } else {
-          toast.error("Failed", {
-            message: "Approve transaction failed",
-          });
         }
       }
     },
@@ -220,6 +220,7 @@ export const useCreatorTokenBuy = (params: {
       onError: (error) => {
         {
           console.error("useCreatorTokenContractBuy", error);
+          captureException(error);
           toast.error("Failed", {
             message: formatAPIErrorMessage(error),
           });
