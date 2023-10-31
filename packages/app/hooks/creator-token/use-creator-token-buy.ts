@@ -73,110 +73,102 @@ export const useCreatorTokenBuy = (params: {
               baseChain?.rpcUrls.default.http[0]
             );
 
-            // Fetch current gas price from the Ethereum network
-            const provider = new providers.JsonRpcProvider(
-              baseChain?.rpcUrls.default.http[0]
-            );
-            let currentGasPrice = await provider.getGasPrice();
-            console.log("current Gas price fetched from RPC", currentGasPrice);
-
-            // Adjust the gas price (increase it by 100% to be more competitive, based on base crossmint suggestion)
-            const paddedGasPrice = currentGasPrice.mul(200).div(100);
-            console.log("padded gas price after calculation:", paddedGasPrice);
-
-            const paddedGasPriceBigInt = BigInt(paddedGasPrice.toString());
-
-            console.log(
-              "padded gas price after conversion:",
-              paddedGasPriceBigInt
-            );
-
-            if (tokenAmount === 1) {
-              const { request } = await publicClient.simulateContract({
-                address: profileData?.data?.profile.creator_token.address,
-                account: walletAddress,
-                abi: creatorTokenAbi,
-                functionName: "buy",
-                args: [priceToBuyNext.data?.totalPrice],
-                chain: baseChain,
-                gasPrice: paddedGasPriceBigInt,
-              });
-              requestPayload = request;
-              console.log("token amount 1 simulation ", request);
-            } else {
-              const { request } = await publicClient.simulateContract({
-                address: profileData?.data?.profile.creator_token.address,
-                account: walletAddress,
-                abi: creatorTokenAbi,
-                functionName: "bulkBuy",
-                args: [tokenAmount, priceToBuyNext.data?.totalPrice],
-                chain: baseChain,
-                gasPrice: paddedGasPriceBigInt,
-              });
-              console.log("bulk buy request", request);
-              requestPayload = request;
-            }
-
-            console.log("simulate ", requestPayload);
-
-            const transactionHash = await walletClient?.writeContract?.({
-              ...requestPayload,
-              gasPrice: paddedGasPriceBigInt,
+            const { gasPrice } = await publicClient.estimateFeesPerGas({
+              type: "legacy",
             });
 
-            console.log("Buy transaction hash ", requestPayload);
-            if (transactionHash) {
-              const transaction = await publicClient.waitForTransactionReceipt({
-                hash: transactionHash,
-                pollingInterval: 2000,
-              });
-
-              if (transaction.status === "success") {
-                mutate(
-                  getTotalCollectedKey(
-                    profileData?.data?.profile.creator_token.address
-                  )
-                );
-                mutate(
-                  getPriceToBuyNextKey({
-                    address: profileData?.data?.profile.creator_token.address,
-                    tokenAmount: 1,
-                  })
-                );
-
-                mutate(
-                  getContractBalanceOfTokenKey({
-                    ownerAddress: walletAddress,
-                    contractAddress:
-                      profileData?.data?.profile.creator_token.address,
-                  })
-                );
-
-                await axios({
-                  url: "/v1/creator-token/poll-buy",
-                  method: "POST",
-                  data: {
-                    creator_token_id: profileData.data.profile.creator_token.id,
-                    quantity: tokenAmount,
-                    tx_hash: transactionHash,
-                  },
+            if (gasPrice) {
+              if (tokenAmount === 1) {
+                const { request } = await publicClient.simulateContract({
+                  address: profileData?.data?.profile.creator_token.address,
+                  account: walletAddress,
+                  abi: creatorTokenAbi,
+                  functionName: "buy",
+                  args: [priceToBuyNext.data?.totalPrice],
+                  chain: baseChain,
+                  type: "eip1559",
+                  maxFeePerGas: gasPrice * 2n,
                 });
-                mutate(
-                  (key: any) => {
-                    const channelId = profileData.data?.profile.channels[0]?.id;
-                    if (
-                      typeof key === "string" &&
-                      typeof channelId === "number" &&
-                      (key.startsWith(getChannelByIdCacheKey(channelId)) ||
-                        key.startsWith(getChannelMessageKey(channelId)))
-                    ) {
-                      return true;
-                    }
-                  },
-                  undefined,
-                  { revalidate: true }
-                );
-                return true;
+                requestPayload = request;
+                console.log("token amount 1 simulation ", request);
+              } else {
+                const { request } = await publicClient.simulateContract({
+                  address: profileData?.data?.profile.creator_token.address,
+                  account: walletAddress,
+                  abi: creatorTokenAbi,
+                  functionName: "bulkBuy",
+                  args: [tokenAmount, priceToBuyNext.data?.totalPrice],
+                  chain: baseChain,
+                  type: "eip1559",
+                  maxFeePerGas: gasPrice * 2n,
+                });
+                console.log("bulk buy request", request);
+                requestPayload = request;
+              }
+
+              console.log("simulate ", requestPayload);
+
+              const transactionHash = await walletClient?.writeContract?.(
+                requestPayload
+              );
+
+              console.log("Buy transaction hash ", requestPayload);
+              if (transactionHash) {
+                const transaction =
+                  await publicClient.waitForTransactionReceipt({
+                    hash: transactionHash,
+                    pollingInterval: 2000,
+                  });
+
+                if (transaction.status === "success") {
+                  mutate(
+                    getTotalCollectedKey(
+                      profileData?.data?.profile.creator_token.address
+                    )
+                  );
+                  mutate(
+                    getPriceToBuyNextKey({
+                      address: profileData?.data?.profile.creator_token.address,
+                      tokenAmount: 1,
+                    })
+                  );
+
+                  mutate(
+                    getContractBalanceOfTokenKey({
+                      ownerAddress: walletAddress,
+                      contractAddress:
+                        profileData?.data?.profile.creator_token.address,
+                    })
+                  );
+
+                  await axios({
+                    url: "/v1/creator-token/poll-buy",
+                    method: "POST",
+                    data: {
+                      creator_token_id:
+                        profileData.data.profile.creator_token.id,
+                      quantity: tokenAmount,
+                      tx_hash: transactionHash,
+                    },
+                  });
+                  mutate(
+                    (key: any) => {
+                      const channelId =
+                        profileData.data?.profile.channels[0]?.id;
+                      if (
+                        typeof key === "string" &&
+                        typeof channelId === "number" &&
+                        (key.startsWith(getChannelByIdCacheKey(channelId)) ||
+                          key.startsWith(getChannelMessageKey(channelId)))
+                      ) {
+                        return true;
+                      }
+                    },
+                    undefined,
+                    { revalidate: true }
+                  );
+                  return true;
+                }
               }
             }
           }
