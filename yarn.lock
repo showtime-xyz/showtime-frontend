@@ -4600,6 +4600,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openzeppelin/contracts@npm:3.4.2-solc-0.7":
+  version: 3.4.2-solc-0.7
+  resolution: "@openzeppelin/contracts@npm:3.4.2-solc-0.7"
+  checksum: 1a6048f31ed560c34429a05e534102c51124ecaf113aca7ebeb7897cfaaf61007cdd7952374c282adaeb79b04ee86ee80b16eed28b62fc6d60e3ffcd7a696895
+  languageName: node
+  linkType: hard
+
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
@@ -7073,6 +7080,7 @@ __metadata:
     "@types/react-datepicker": ^4.11.2
     "@types/react-dropzone": ^5.1.0
     "@types/react-stickynode": ^4.0.0
+    "@uniswap/v3-periphery": ^1.4.4
     "@vercel/og": ^0.5.11
     app: "*"
     array-to-image: ^1.0.0
@@ -9569,6 +9577,40 @@ __metadata:
     "@typescript-eslint/types": 6.3.0
     eslint-visitor-keys: ^3.4.1
   checksum: fc3148c3284de3f42724736f312a4fd0c3c2029617ae2ea9a84cf6601d31f600ee6563f9288de162028ffffde85b58d92feaafbe75a2da863ff2c4e3a0b5ed8c
+  languageName: node
+  linkType: hard
+
+"@uniswap/lib@npm:^4.0.1-alpha":
+  version: 4.0.1-alpha
+  resolution: "@uniswap/lib@npm:4.0.1-alpha"
+  checksum: d7bbacccef40966af16c7e215ab085f575686d316b2802c9e1cfd03f7ad351970e547535670a28b2279c3cfcc4fb02888614c46f94efe2987af2309f3ec86127
+  languageName: node
+  linkType: hard
+
+"@uniswap/v2-core@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@uniswap/v2-core@npm:1.0.1"
+  checksum: eaa118fe45eac2e80b7468547ce2cde12bd3c8157555d2e40e0462a788c9506c6295247b511382da85e44a89ad92aff7bb3433b23bfbd2eeea23942ecd46e979
+  languageName: node
+  linkType: hard
+
+"@uniswap/v3-core@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "@uniswap/v3-core@npm:1.0.1"
+  checksum: 4bfd8b218391a3d9efde44e0f984cfec3bc25889cd4d1386766828521006e71b210a3583ee32b52f3c81d384af9e8c39f471f2229e9af4d50da6801446ecb3e4
+  languageName: node
+  linkType: hard
+
+"@uniswap/v3-periphery@npm:^1.4.4":
+  version: 1.4.4
+  resolution: "@uniswap/v3-periphery@npm:1.4.4"
+  dependencies:
+    "@openzeppelin/contracts": 3.4.2-solc-0.7
+    "@uniswap/lib": ^4.0.1-alpha
+    "@uniswap/v2-core": ^1.0.1
+    "@uniswap/v3-core": ^1.0.0
+    base64-sol: 1.0.1
+  checksum: 48b57f1f648cb002935421ac1770666ab3c0263885a03c769985b06501b88d513a435c8edc439b41ac5aef7ad40a11038a3561f7e828cce5ae6ec2c77742f1af
   languageName: node
   linkType: hard
 
@@ -12247,6 +12289,13 @@ __metadata:
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
   checksum: 669632eb3745404c2f822a18fc3a0122d2f9a7a13f7fb8b5823ee19d1d2ff9ee5b52c53367176ea4ad093c332fd5ab4bd0ebae5a8e27917a4105a4cfc86b1005
+  languageName: node
+  linkType: hard
+
+"base64-sol@npm:1.0.1":
+  version: 1.0.1
+  resolution: "base64-sol@npm:1.0.1"
+  checksum: be0f9e8cf3c744256913223fbae8187773f530cc096e98a77f49ef0bd6cedeb294d15a784e439419f7cb99f07bf85b08999169feafafa1a9e29c3affc0bc6d0a
   languageName: node
   linkType: hard
 
