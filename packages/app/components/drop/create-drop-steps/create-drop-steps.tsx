@@ -73,7 +73,7 @@ type CreateDropStep =
   | "select-drop";
 
 export const CreateDropSteps = () => {
-  const [step, setStep] = useState<CreateDropStep>("select-drop");
+  const [step, setStep] = useState<CreateDropStep>("media");
   const modalContext = useModalScreenContext();
   const {
     control,
@@ -228,8 +228,9 @@ export const CreateDropSteps = () => {
             handleNextStep={() => setStep("title")}
             handleFileChange={handleFileChange}
             handlePrevStep={() => {
-              setStep("select-drop");
-              modalContext?.snapToIndex(0);
+              //setStep("select-drop");
+              //modalContext?.snapToIndex(0);
+              modalContext?.pop();
             }}
             description={description}
             file={file}
@@ -332,7 +333,7 @@ const CreateDropStepMedia = (
   const mediaWidth = Math.min(340, windowWidth - 32);
 
   return (
-    <Layout onBackPress={handlePrevStep} title="Create">
+    <Layout onBackPress={handlePrevStep} title="Create" closeIcon>
       <View tw="px-4">
         <Text tw="px-8 text-center text-xl font-medium text-gray-900 dark:text-gray-50">
           Upload an image or video for your Pre-Save Airdrop
