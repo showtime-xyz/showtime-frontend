@@ -195,7 +195,7 @@ export const CreatorTokenCollectors = ({
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collectors
         </Text>
-        {count > 0 ? (
+        {count > 6 ? (
           <Text
             onPress={() => {
               const as = `/creator-token/${creatorTokenId}/collectors`;
