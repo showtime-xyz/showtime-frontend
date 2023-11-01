@@ -561,7 +561,7 @@ export const EditProfile = () => {
               {/* End Social */}
             </View>
           </BottomSheetScrollView>
-          <View tw="my-2.5 mb-4 px-4">
+          <View tw="ios:mb-4 p-4">
             <Button
               disabled={isSubmitting || !formIsValid || !isValid || isLoading}
               tw={
@@ -574,10 +574,14 @@ export const EditProfile = () => {
             >
               {isSubmitting ? "Submitting..." : "Save"}
             </Button>
-            <View tw="h-1" />
-            <Text tw="text-center text-sm text-red-500">
-              {errors.submitError?.message}
-            </Text>
+            {errors.submitError?.message ? (
+              <>
+                <View tw="h-1" />
+                <Text tw="text-center text-sm text-red-500">
+                  {errors.submitError?.message}
+                </Text>
+              </>
+            ) : null}
           </View>
         </View>
         <ModalSheet

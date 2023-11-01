@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback, useState } from "react";
+import { memo, useContext, useCallback } from "react";
 import { useWindowDimensions, Platform, Linking } from "react-native";
 
 import Animated, {
@@ -24,11 +24,6 @@ import {
 } from "app/constants/layout";
 import { UserContext } from "app/context/user-context";
 import { Carousel } from "app/lib/carousel";
-import {
-  getIsShowCreatorTokenIntroBanner,
-  setHideCreatorChannelIntro,
-  setHideShowCreatorTokenBanner,
-} from "app/lib/mmkv-keys";
 
 import { breakpoints } from "design-system/theme";
 
