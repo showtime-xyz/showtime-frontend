@@ -140,7 +140,9 @@ export const TokensTabHeader = ({
           <View tw="flex-row items-center justify-between py-4">
             <View tw="flex-row items-center justify-between">
               <View tw="-mt-0.5 mr-2">
-                {channelPermissions?.can_view_creator_messages ? (
+                {(channelPermissions &&
+                  !channelPermissions?.can_view_creator_messages) ||
+                !channelPermissions ? (
                   <Lock
                     width={20}
                     height={20}
@@ -161,7 +163,8 @@ export const TokensTabHeader = ({
                 </Text>
               ) : (
                 <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-                  {!channelPermissions?.can_view_creator_messages
+                  {channelPermissions &&
+                  !channelPermissions?.can_view_creator_messages
                     ? `You've unlocked ${channelMessageCountFormatted} messages`
                     : `Channel locked (${channelMessageCountFormatted} messages)`}
                 </Text>
