@@ -45,16 +45,24 @@ type Query = {
 };
 
 const { useParam } = createParam<Query>();
-const PAYMENT_METHODS = [
-  {
-    title: "USDC",
-    value: "USDC",
-  },
-  {
-    title: "ETH",
-    value: "ETH",
-  },
-];
+// Disable ETH payment on dev for now because it doesn't support the dev environment yet.
+const PAYMENT_METHODS = __DEV__
+  ? [
+      {
+        title: "USDC",
+        value: "USDC",
+      },
+    ]
+  : [
+      {
+        title: "USDC",
+        value: "USDC",
+      },
+      {
+        title: "ETH",
+        value: "ETH",
+      },
+    ];
 const SELECT_LIST = [
   {
     title: "Buy",
@@ -81,7 +89,7 @@ export const BuyCreatorToken = () => {
   );
 
   const [paymentMethod, setPaymentMethod] = useState<"ETH" | "USDC">(
-    selectedAction === "buy" ? "ETH" : "USDC"
+    __DEV__ ? "USDC" : selectedAction === "buy" ? "ETH" : "USDC"
   );
   const buyToken = useCreatorTokenBuy({ username, tokenAmount, paymentMethod });
 
@@ -286,10 +294,12 @@ export const BuyCreatorToken = () => {
                       tw="mr-2"
                     />
                   ) : (
-                    <Ethereum
+                    <Image
+                      source={{
+                        uri: "https://media.showtime.xyz/assets/ETH%26Base.png",
+                      }}
                       width={44}
                       height={44}
-                      color={isDark ? "white" : "black"}
                     />
                   )}
                   {selectedAction === "buy" ? (
@@ -427,8 +437,8 @@ export const BuyCreatorToken = () => {
           <View tw="items-center pt-4">
             <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
               {paymentMethod === "USDC"
-                ? "USDC is traded on the Base network."
-                : "Must purchase with Crypto on Base network"}
+                ? "Trade with USDC on the Base Ethereum L2."
+                : "Buy with ETH or USDC on the Base Ethereum L2."}
             </Text>
           </View>
         </View>
