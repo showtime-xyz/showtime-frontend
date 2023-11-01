@@ -1,4 +1,3 @@
-import { providers } from "ethers";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 
@@ -26,7 +25,11 @@ import {
 } from "./use-creator-token-price-to-buy-next";
 import { useMaxGasPrices } from "./use-max-gas-prices";
 import { useSwitchChain } from "./use-switch-chain";
-import { baseChain, creatorTokenSwapRouterAddress } from "./utils";
+import {
+  baseChain,
+  creatorTokenSwapRouterAddress,
+  isInsufficientFundsErrorFn,
+} from "./utils";
 
 export const useCreatorTokenBuy = (params: {
   username?: string;
@@ -223,6 +226,10 @@ export const useCreatorTokenBuy = (params: {
     {
       onError: (error) => {
         {
+          if (isInsufficientFundsErrorFn(error)) {
+            toast.error(`Insufficient ${params.paymentMethod} balance`);
+          }
+
           console.error("useCreatorTokenContractBuy", error);
           captureException(error);
           toast.error("Failed", {
