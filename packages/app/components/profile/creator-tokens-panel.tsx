@@ -18,6 +18,7 @@ import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-ba
 import { useWallet } from "app/hooks/use-wallet";
 import { getCurrencyPrice } from "app/utilities";
 
+import { TextTooltip } from "../tooltips/text-tooltip";
 import { PlatformBuyButton, PlatformSellButton } from "./buy-and-sell-buttons";
 
 type CreatorTokensPanelProps = { isSelf?: boolean; username?: string };
@@ -171,84 +172,48 @@ export const CreatorTokensPanel = ({
             <View tw="w-full flex-row items-center justify-between">
               <View tw="flex-row items-center">
                 <Text tw="mr-2 text-gray-500 dark:text-gray-300">
-                  Wallet balance
+                  USDC wallet balance
                 </Text>
-                <PressableScale
-                  tw="h-4 w-4"
-                  onPress={() => {
-                    router.push(
-                      Platform.select({
-                        native: "/creator-token/explanation",
-                        web: {
-                          pathname: router.pathname,
-                          query: {
-                            ...router.query,
-                            creatorTokensExplanationModal: true,
-                          },
-                        } as any,
-                      }),
-                      Platform.select({
-                        native: "/creator-token/explanation",
-                        web:
-                          router.asPath === "/"
-                            ? "/creator-token/explanation"
-                            : router.asPath,
-                      }),
-                      { shallow: true }
-                    );
-                  }}
-                  hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}
-                >
-                  <InformationCircle
-                    width={16}
-                    height={16}
-                    color={isDark ? colors.gray[300] : colors.gray[500]}
-                  />
-                </PressableScale>
+
+                <TextTooltip
+                  side="bottom"
+                  theme={isDark ? "dark" : "light"}
+                  triggerElement={
+                    <InformationCircle
+                      width={16}
+                      height={16}
+                      color={isDark ? colors.gray[300] : colors.gray[500]}
+                    />
+                  }
+                  text={
+                    "Your estimated USDC wallet\nbalance on the Base network."
+                  }
+                />
               </View>
               <Text tw="text-base font-bold text-gray-900 dark:text-white">
                 {getCurrencyPrice("USD", usdcBalance.data?.displayBalance)}
               </Text>
             </View>
-            {/*
-            // TODO: Creator Tokens P1
+            {/* TODO: creator tokens p2
             <View tw="w-full flex-row items-center justify-between">
               <View tw="flex-row items-center">
                 <Text tw="mr-2 text-gray-500 dark:text-gray-300">
                   Token earnings
                 </Text>
-                <PressableScale
-                  tw="h-4 w-4"
-                  onPress={() => {
-                    router.push(
-                      Platform.select({
-                        native: "/creator-token/explanation",
-                        web: {
-                          pathname: router.pathname,
-                          query: {
-                            ...router.query,
-                            creatorTokensExplanationModal: true,
-                          },
-                        } as any,
-                      }),
-                      Platform.select({
-                        native: "/creator-token/explanation",
-                        web:
-                          router.asPath === "/"
-                            ? "/creator-token/explanation"
-                            : router.asPath,
-                      }),
-                      { shallow: true }
-                    );
-                  }}
-                  hitSlop={{ top: 12, left: 12, right: 12, bottom: 12 }}
-                >
-                  <InformationCircle
-                    width={16}
-                    height={16}
-                    color={isDark ? colors.gray[300] : colors.gray[500]}
-                  />
-                </PressableScale>
+                <TextTooltip
+                  side="bottom"
+                  theme={isDark ? "dark" : "light"}
+                  triggerElement={
+                    <InformationCircle
+                      width={16}
+                      height={16}
+                      color={isDark ? colors.gray[300] : colors.gray[500]}
+                    />
+                  }
+                  text={
+                    "Every time someone trades\nyour token you earn a 7%\nfee."
+                  }
+                />
               </View>
               <Text tw="text-base font-bold text-gray-900 dark:text-white">
                 $21.67
