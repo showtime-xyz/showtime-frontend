@@ -165,6 +165,7 @@ export const useCreatorTokenBuy = (params: {
               const transaction = await publicClient.waitForTransactionReceipt({
                 hash: transactionHash,
                 pollingInterval: 2000,
+                confirmations: 2,
               });
 
               if (transaction.status === "success") {
