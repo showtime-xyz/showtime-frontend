@@ -93,7 +93,9 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       channelUnlocked: "channels/:contractAddress/unlocked",
       inviteCreatorToken: "creator-token/invite-creator-token",
       creatorTokensShare: "creator-token/:username/share",
-      topCreatorTokens: "creator-token/top",
+      topCreatorToken: "creator-token/:profileId/top",
+      creatorTokenCollectors: "creator-token/:creatorTokenId/collectors",
+      creatorTokenCollected: "creator-token/:profileId/collected",
       creatorTokensImportAllowlistSuccess:
         "creator-token/import-allowlist-success",
       creatorTokensImportAllowlist: "creator-token/import-allowlist",

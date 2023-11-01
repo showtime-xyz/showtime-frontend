@@ -24,6 +24,8 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { breakpoints } from "design-system/theme";
 
+import { TopCreatorTokensItem } from "./creator-token-users";
+
 const Header = () => {
   const headerHeight = useHeaderHeight();
   return (
@@ -45,49 +47,6 @@ const Header = () => {
   );
 };
 
-export const TopCreatorTokensItem = ({
-  index,
-  tw,
-  item,
-  ...rest
-}: ViewProps & { index: number; item: CreatorTokenUser }) => {
-  const isDark = useIsDarkMode();
-  const router = useRouter();
-  return (
-    <PressableHover
-      tw={[
-        "mb-3 items-center rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900",
-        tw,
-      ].join(" ")}
-      onPress={() => router.push(`/@${item.username}`)}
-      {...rest}
-    >
-      <>
-        <View tw="mb-3">
-          <View tw="absolute -left-1 top-0">
-            <Showtime
-              width={8}
-              height={8}
-              color={isDark ? colors.white : colors.gray[900]}
-            />
-          </View>
-          <Avatar url={item?.img_url} size={44} />
-        </View>
-        <Text
-          tw="px-1 text-sm font-semibold text-gray-900 dark:text-white"
-          numberOfLines={1}
-        >
-          @{item?.username}
-        </Text>
-        <View tw="h-3" />
-        {/* <Text tw="text-sm font-bold text-gray-900 dark:text-white">$2.60</Text> */}
-      </>
-      <View tw="absolute -right-2.5 -top-2.5 h-6 min-w-[24px] items-center justify-center rounded-full bg-slate-500 px-1.5 text-gray-500 dark:bg-gray-600">
-        <Text tw="text-xs font-semibold text-white">{index + 1}</Text>
-      </View>
-    </PressableHover>
-  );
-};
 const keyExtractor = (item: CreatorTokenUser) => `${item.profile_id}`;
 export const TopCreatorTokens = () => {
   const { height: screenHeight, width } = useWindowDimensions();
@@ -140,7 +99,7 @@ export const TopCreatorTokens = () => {
         <ErrorBoundary>
           <InfiniteScrollList
             useWindowScroll
-            data={list?.profiles || []}
+            data={list || []}
             preserveScrollPosition
             keyExtractor={keyExtractor}
             numColumns={numColumns}

@@ -23,9 +23,12 @@ import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-chann
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
+import { CreatorTokenCollectedScreen } from "app/screens/creator-token/creator-token-collected";
+import { CreatorTokenCollectorsScreen } from "app/screens/creator-token/creator-token-collectors";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
+import { TopCreatorTokenScreen } from "app/screens/creator-token/top-creator-token";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
@@ -53,7 +56,6 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
-import { TopCreatorTokensScreen } from "app/screens/top-creator-tokens";
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
@@ -245,9 +247,19 @@ export function RootStackNavigator() {
           component={TrendingScreen}
         />
         <Stack.Screen
-          name="topCreatorTokens"
+          name="topCreatorToken"
           options={{ headerTitle: "Top Creator Tokens" }}
-          component={TopCreatorTokensScreen}
+          component={TopCreatorTokenScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenCollected"
+          options={{ headerTitle: "Creator Tokens Collected" }}
+          component={CreatorTokenCollectedScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenCollectors"
+          options={{ headerTitle: "Creator Tokens Collectors" }}
+          component={CreatorTokenCollectorsScreen}
         />
         <Stack.Screen
           name="creatorTokensSelfServeExplainer"

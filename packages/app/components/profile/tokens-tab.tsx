@@ -5,6 +5,7 @@ import React, {
   useImperativeHandle,
   useRef,
 } from "react";
+import { Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
@@ -30,22 +31,22 @@ import {
   useCreatorTokenCollectors,
 } from "app/hooks/creator-token/use-creator-tokens";
 import { useContentWidth } from "app/hooks/use-content-width";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
-import { NFT } from "app/types";
+import { NFT, Profile } from "app/types";
 import { formatNumber } from "app/utilities";
 
-import { TopCreatorTokensItem } from "../creator-token/top-creator-tokens";
+import { TopCreatorTokensItem } from "../creator-token/creator-token-users";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { MyCollection } from "./my-collection";
 import { ProfileFooter, ProfileSpinnerFooter } from "./profile-footer";
 
 type TabListProps = {
-  username?: string;
-  profileId?: number;
+  profile?: Profile;
   isBlocked?: boolean;
   list: List;
   index: number;
@@ -169,56 +170,7 @@ export const TokensTabHeader = ({
     </View>
   );
 };
-export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
-  const isDark = useIsDarkMode();
 
-  return (
-    <View {...rest}>
-      <View tw="flex-row items-center justify-between py-4">
-        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-          Alan collected
-        </Text>
-        <Text tw="text-xs font-semibold text-gray-500 dark:text-gray-50">
-          Show all
-        </Text>
-      </View>
-      <View tw="flex-row gap-2.5">
-        {new Array(3).fill(0).map((_, i) => {
-          return (
-            <View
-              key={i}
-              tw="flex-1 items-center rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900"
-            >
-              <View tw="mb-2">
-                <View tw="absolute -left-1 top-0">
-                  <Showtime
-                    width={8}
-                    height={8}
-                    color={isDark ? colors.white : colors.gray[900]}
-                  />
-                </View>
-                <Avatar url={item.creator_img_url} size={44} />
-              </View>
-              <Text
-                tw="text-xs font-semibold text-gray-900 dark:text-white"
-                numberOfLines={1}
-              >
-                @{item.creator_username}
-              </Text>
-              <View tw="h-3" />
-              <Text tw="text-xs font-bold text-gray-900 dark:text-white">
-                $2.60
-              </Text>
-              <View tw="absolute -right-1.5 -top-2 h-5 min-w-[20px] items-center justify-center rounded-full bg-slate-500 px-1.5 text-gray-500 dark:bg-gray-600">
-                <Text tw="text-[10px] font-semibold text-white">1</Text>
-              </View>
-            </View>
-          );
-        })}
-      </View>
-    </View>
-  );
-};
 export const CreatorTokenCollectors = ({
   creatorTokenId,
   username,
@@ -229,25 +181,49 @@ export const CreatorTokenCollectors = ({
   username: string | undefined;
   name: string | undefined;
 } & ViewProps) => {
-  const { data } = useCreatorTokenCollectors(creatorTokenId);
+  const { data, isLoading } = useCreatorTokenCollectors(creatorTokenId, 6);
+  const router = useRouter();
+  if ((!data?.length || data.length === 0) && !isLoading) {
+    return null;
+  }
   return (
     <View {...rest}>
-      <View tw="mb-2 flex-row items-center justify-between py-4">
+      <View tw="flex-row items-center justify-between py-4">
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collectors
         </Text>
-        <Text tw="text-xs font-semibold text-gray-500 dark:text-gray-50">
+        <Text
+          onPress={() => {
+            const as = `/creator-token/${creatorTokenId}/collectors`;
+            router.push(
+              Platform.select({
+                native: as,
+                web: {
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    creatorTokenCollectorsModal: true,
+                    creatorTokenId,
+                  },
+                } as any,
+              }),
+              Platform.select({ native: as, web: router.asPath })
+            );
+          }}
+          tw="text-xs font-semibold text-gray-500 dark:text-gray-50"
+        >
           Show all
         </Text>
       </View>
-      <View tw="flex-row flex-wrap items-center justify-between gap-2">
-        {data?.profiles.map((item, i) => {
+      <View tw="h-2" />
+      <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
+        {data?.map((item, i) => {
           return (
             <TopCreatorTokensItem
               item={item}
               index={i}
               key={i}
-              style={{ width: "30%" }}
+              style={{ width: "29%" }}
             />
           );
         })}
@@ -265,25 +241,51 @@ export const CreatorTokenCollected = ({
   username: string | undefined;
   name: string | undefined;
 } & ViewProps) => {
-  const { data } = useCreatorTokenCoLlected(profileId);
+  const router = useRouter();
+  const { data, isLoading } = useCreatorTokenCoLlected(profileId, 6);
+  if ((!data?.length || data?.length === 0) && !isLoading) {
+    return null;
+  }
   return (
     <View {...rest}>
-      <View tw="mb-2 flex-row items-center justify-between py-4">
+      <View tw="flex-row items-center justify-between py-4">
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collected
         </Text>
-        <Text tw="text-xs font-semibold text-gray-500 dark:text-gray-50">
+        <Text
+          onPress={() => {
+            const as = `/creator-token/${profileId}/collected`;
+            console.log(as);
+
+            router.push(
+              Platform.select({
+                native: as,
+                web: {
+                  pathname: router.pathname,
+                  query: {
+                    ...router.query,
+                    creatorTokenCollectedModal: true,
+                    profileId,
+                  },
+                } as any,
+              }),
+              Platform.select({ native: as, web: router.asPath })
+            );
+          }}
+          tw="text-xs font-semibold text-gray-500 dark:text-gray-50"
+        >
           Show all
         </Text>
       </View>
-      <View tw="flex-row flex-wrap items-center justify-between gap-2">
-        {data?.profiles.map((item, i) => {
+      <View tw="h-2" />
+      <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
+        {data?.map((item, i) => {
           return (
             <TopCreatorTokensItem
               item={item}
               index={i}
               key={i}
-              style={{ width: "30%" }}
+              style={{ width: "29%" }}
             />
           );
         })}
@@ -299,35 +301,18 @@ export const TokensTab = forwardRef<
     isSelf: boolean;
   }
 >(function ProfileTabList(
-  {
-    username,
-    profileId,
-    isBlocked,
-    list,
-    index,
-    channelId,
-    messageCount,
-    isSelf,
-  },
+  { profile, isBlocked, list, index, channelId, messageCount, isSelf },
   ref
 ) {
   const isDark = useIsDarkMode();
-  const router = useRouter();
-  const { filter } = useContext(FilterContext);
-  const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
-    useProfileNFTs({
-      tabType: list.type,
-      profileId,
-      collectionId: filter.collectionId,
-      sortType: filter.sortType,
-    });
-  const contentWidth = useContentWidth();
-
+  const profileId = profile?.profile_id;
+  const username = profile?.username;
   const { user } = useUser();
   const listRef = useRef(null);
+  const bottomHeight = usePlatformBottomHeight();
   useScrollToTop(listRef);
   useImperativeHandle(ref, () => ({
-    refresh,
+    refresh: () => {},
   }));
   // const onItemPress = useCallback(
   //   (item: NFT) => {
@@ -342,34 +327,34 @@ export const TokensTab = forwardRef<
   //   [list.type, profileId, filter.collectionId, filter.sortType, router]
   // );
 
-  const ListFooterComponent = useCallback(() => {
-    if (isLoading) {
-      return <ProfileSpinnerFooter isLoading={isLoadingMore} />;
-    }
-  }, [isLoading, isLoadingMore]);
+  // const ListFooterComponent = useCallback(() => {
+  //   if (isLoading) {
+  //     return <ProfileSpinnerFooter isLoading={isLoadingMore} />;
+  //   }
+  // }, [isLoading, isLoadingMore]);
 
-  const ListHeaderComponent = useCallback(
-    () => (
-      <TokensTabHeader
-        channelId={channelId}
-        isSelf={isSelf}
-        messageCount={messageCount}
-      />
-    ),
-    [channelId, isSelf, messageCount]
-  );
-  const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
+  // const ListHeaderComponent = useCallback(
+  //   () => (
+  //     <TokensTabHeader
+  //       channelId={channelId}
+  //       isSelf={isSelf}
+  //       messageCount={messageCount}
+  //     />
+  //   ),
+  //   [channelId, isSelf, messageCount]
+  // );
+  // const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
 
-  const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-      return <TokensTabItem item={item} tw="px-6" />;
-    },
-    []
-  );
-  const ListEmptyComponent = useCallback(() => {
-    return null;
-    // return <EmptyPlaceholder title="No creator token, yet." hideLoginBtn />;
-  }, []);
+  // const renderItem = useCallback(
+  //   ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
+  //     return <TokensTabItem item={item} tw="px-6" />;
+  //   },
+  //   []
+  // );
+  // const ListEmptyComponent = useCallback(() => {
+  //   return null;
+  //   // return <EmptyPlaceholder title="No creator token, yet." hideLoginBtn />;
+  // }, []);
 
   if (isBlocked) {
     return (
@@ -391,13 +376,8 @@ export const TokensTab = forwardRef<
   }
 
   return (
-    <MutateProvider mutate={updateItem}>
-      <ProfileTabsNFTProvider
-        tabType={
-          user?.data?.profile?.profile_id === profileId ? list.type : undefined
-        }
-      >
-        <TabInfiniteScrollList
+    <>
+      {/* <TabInfiniteScrollList
           data={data}
           ref={listRef}
           keyExtractor={keyExtractor}
@@ -408,8 +388,30 @@ export const TokensTab = forwardRef<
           ListEmptyComponent={ListEmptyComponent}
           onEndReached={fetchMore}
           index={index}
+        /> */}
+      <TabScrollView
+        contentContainerStyle={{ paddingBottom: bottomHeight + 56 }}
+        index={index}
+        ref={listRef}
+      >
+        <TokensTabHeader
+          channelId={channelId}
+          isSelf={isSelf}
+          messageCount={messageCount}
         />
-      </ProfileTabsNFTProvider>
-    </MutateProvider>
+        <View tw="px-4">
+          <CreatorTokenCollectors
+            creatorTokenId={profile?.creator_token?.id}
+            name={profile?.name}
+            username={username}
+          />
+          <CreatorTokenCollected
+            profileId={profileId}
+            name={profile?.name}
+            username={username}
+          />
+        </View>
+      </TabScrollView>
+    </>
   );
 });

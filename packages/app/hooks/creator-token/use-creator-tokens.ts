@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import useSWR from "swr";
 
 import { fetcher } from "app/hooks/use-infinite-list-query";
@@ -16,7 +18,10 @@ export type CreatorTokenCollectors = {
   profiles: CreatorTokenUser[];
 };
 
-export const useCreatorTokenCollectors = (creatorTokenId?: number) => {
+export const useCreatorTokenCollectors = (
+  creatorTokenId?: number | string,
+  limit?: number
+) => {
   const { data, isLoading, mutate, error } = useSWR<CreatorTokenCollectors>(
     creatorTokenId
       ? `/v1/creator-token/collectors?creator_token_id=${creatorTokenId}`
@@ -24,16 +29,31 @@ export const useCreatorTokenCollectors = (creatorTokenId?: number) => {
     fetcher,
     { revalidateOnFocus: false }
   );
+  const newData = useMemo(() => {
+    if (limit) {
+      return data?.profiles.slice(0, limit);
+    }
+    return data?.profiles;
+  }, [data, limit]);
 
-  return { data: data, isLoading, mutate, error };
+  return { data: newData, isLoading, mutate, error };
 };
 
-export const useCreatorTokenCoLlected = (profileId?: number) => {
+export const useCreatorTokenCoLlected = (
+  profileId?: number | string,
+  limit?: number
+) => {
   const { data, isLoading, mutate, error } = useSWR<CreatorTokenCollectors>(
     profileId ? `/v1/creator-token/collected?profile_id=${profileId}` : "",
     fetcher,
     { revalidateOnFocus: false }
   );
+  const newData = useMemo(() => {
+    if (limit) {
+      return data?.profiles.slice(0, limit);
+    }
+    return data?.profiles;
+  }, [data, limit]);
 
-  return { data: data, isLoading, mutate, error };
+  return { data: newData, isLoading, mutate, error };
 };

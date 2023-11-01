@@ -38,7 +38,7 @@ export function ClaimButtonIconic({
   const redirectToDropImageShareScreen = useRedirectDropImageShareScreen();
   const { handleClaimNFT } = useClaimDrop(edition);
 
-  const viewCollecters = useCallback(() => {
+  const viewCollectors = useCallback(() => {
     const as = `/collectors/${nft?.chain_name}/${nft?.contract_address}/${nft?.token_id}`;
     router.push(
       Platform.select({
@@ -84,7 +84,7 @@ export function ClaimButtonIconic({
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
               ]}
-              onPress={viewCollecters}
+              onPress={viewCollectors}
             >
               {formatClaimNumber(edition.total_claimed_count)}
               {edition.creator_airdrop_edition.edition_size > 0
@@ -110,7 +110,7 @@ export function ClaimButtonIconic({
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
               ]}
-              onPress={viewCollecters}
+              onPress={viewCollectors}
             >
               {formatClaimNumber(edition.total_claimed_count)}
               {edition.creator_airdrop_edition.edition_size > 0
@@ -134,7 +134,7 @@ export function ClaimButtonIconic({
               tw={[
                 "text-center text-xs font-semibold text-gray-900 dark:text-white",
               ]}
-              onPress={viewCollecters}
+              onPress={viewCollectors}
             >
               {formatClaimNumber(edition.total_claimed_count)}
               {edition.creator_airdrop_edition.edition_size > 0
@@ -194,7 +194,7 @@ export function ClaimButtonIconic({
                   ? "text-orange-500"
                   : "text-gray-900 dark:text-white",
               ]}
-              onPress={viewCollecters}
+              onPress={viewCollectors}
             >
               {formatClaimNumber(edition.total_claimed_count)}
               {edition.creator_airdrop_edition.edition_size > 0
@@ -224,7 +224,7 @@ export function ClaimButtonIconic({
                 ? "text-orange-500"
                 : "text-gray-900 dark:text-white",
             ]}
-            onPress={viewCollecters}
+            onPress={viewCollectors}
           >
             {formatClaimNumber(edition.total_claimed_count)}
             {edition.creator_airdrop_edition.edition_size > 0
