@@ -412,9 +412,8 @@ export const BuyCreatorToken = () => {
                     <Skeleton width={60} height={16} />
                   ) : (
                     <Text tw="font-semibold text-gray-700 dark:text-gray-200">
-                      $
                       {paymentMethod === "USDC"
-                        ? priceToBuyNext.data?.displayPrice
+                        ? "$" + priceToBuyNext.data?.displayPrice
                         : ethPriceToBuyNext.data?.displayValue}
                     </Text>
                   )}
