@@ -8,9 +8,10 @@ import React, {
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
+import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
+import { ChevronRight, Showtime } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -24,6 +25,10 @@ import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
+import {
+  useCreatorTokenCoLlected,
+  useCreatorTokenCollectors,
+} from "app/hooks/creator-token/use-creator-tokens";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
@@ -32,6 +37,7 @@ import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
 
+import { TopCreatorTokensItem } from "../creator-token/top-creator-tokens";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { MyCollection } from "./my-collection";
@@ -166,11 +172,6 @@ export const TokensTabHeader = ({
 export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
   const isDark = useIsDarkMode();
 
-  // TODO: Creator tokens P1
-  return null;
-  // END
-
-  /*
   return (
     <View {...rest}>
       <View tw="flex-row items-center justify-between py-4">
@@ -217,7 +218,78 @@ export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
       </View>
     </View>
   );
-  */
+};
+export const CreatorTokenCollectors = ({
+  creatorTokenId,
+  username,
+  name,
+  ...rest
+}: {
+  creatorTokenId: number | undefined;
+  username: string | undefined;
+  name: string | undefined;
+} & ViewProps) => {
+  const { data } = useCreatorTokenCollectors(creatorTokenId);
+  return (
+    <View {...rest}>
+      <View tw="mb-2 flex-row items-center justify-between py-4">
+        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+          {name ? name : `@${username}`} collectors
+        </Text>
+        <Text tw="text-xs font-semibold text-gray-500 dark:text-gray-50">
+          Show all
+        </Text>
+      </View>
+      <View tw="flex-row flex-wrap items-center justify-between gap-2">
+        {data?.profiles.map((item, i) => {
+          return (
+            <TopCreatorTokensItem
+              item={item}
+              index={i}
+              key={i}
+              style={{ width: "30%" }}
+            />
+          );
+        })}
+      </View>
+    </View>
+  );
+};
+export const CreatorTokenCollected = ({
+  profileId,
+  username,
+  name,
+  ...rest
+}: {
+  profileId: number | undefined;
+  username: string | undefined;
+  name: string | undefined;
+} & ViewProps) => {
+  const { data } = useCreatorTokenCoLlected(profileId);
+  return (
+    <View {...rest}>
+      <View tw="mb-2 flex-row items-center justify-between py-4">
+        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+          {name ? name : `@${username}`} collected
+        </Text>
+        <Text tw="text-xs font-semibold text-gray-500 dark:text-gray-50">
+          Show all
+        </Text>
+      </View>
+      <View tw="flex-row flex-wrap items-center justify-between gap-2">
+        {data?.profiles.map((item, i) => {
+          return (
+            <TopCreatorTokensItem
+              item={item}
+              index={i}
+              key={i}
+              style={{ width: "30%" }}
+            />
+          );
+        })}
+      </View>
+    </View>
+  );
 };
 export const TokensTab = forwardRef<
   ProfileTabListRef,
