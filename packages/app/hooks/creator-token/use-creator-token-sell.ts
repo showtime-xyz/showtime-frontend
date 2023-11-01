@@ -128,6 +128,7 @@ export const useCreatorTokenSell = () => {
           const transaction = await publicClient.waitForTransactionReceipt({
             hash: txHash as any,
             pollingInterval: 2000,
+            confirmations: 2,
           });
 
           if (transaction.status === "success") {

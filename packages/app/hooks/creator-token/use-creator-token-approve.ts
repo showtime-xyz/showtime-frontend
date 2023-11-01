@@ -76,7 +76,7 @@ export const useApproveToken = () => {
             const transaction = await publicClient.waitForTransactionReceipt({
               hash,
               pollingInterval: 2000,
-              confirmations: 3,
+              confirmations: 2,
             });
             if (transaction.status === "success") {
               return true;

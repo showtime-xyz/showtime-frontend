@@ -55,12 +55,12 @@ const PAYMENT_METHODS = __DEV__
     ]
   : [
       {
-        title: "USDC",
-        value: "USDC",
-      },
-      {
         title: "ETH",
         value: "ETH",
+      },
+      {
+        title: "USDC",
+        value: "USDC",
       },
     ];
 const SELECT_LIST = [
@@ -266,7 +266,7 @@ export const BuyCreatorToken = () => {
                     options={
                       selectedAction === "buy"
                         ? PAYMENT_METHODS
-                        : PAYMENT_METHODS.slice(0, 1)
+                        : PAYMENT_METHODS.filter((m) => m.value === "USDC")
                     }
                     value={paymentMethod}
                     onChange={(value: any) => setPaymentMethod(value)}
