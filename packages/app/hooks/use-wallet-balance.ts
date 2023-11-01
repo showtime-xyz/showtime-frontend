@@ -1,17 +1,22 @@
-import { useCallback } from "react";
+import useSWR from "swr";
 
 import { publicClient } from "app/lib/wallet-public-client";
 
-export const useWalletBalance = () => {
-  const getBalance = useCallback(async (address: string) => {
-    const balance = await publicClient.getBalance({
-      address: address as `0x${string}`,
-    });
+import { useWallet } from "./use-wallet/use-wallet";
 
-    return balance;
-  }, []);
+export const useWalletETHBalance = () => {
+  const wallet = useWallet();
+  const res = useSWR("ethBalance" + wallet.address, async () => {
+    if (wallet.address) {
+      const res = (await publicClient.getBalance({
+        address: wallet.address,
+      })) as bigint;
+      return {
+        balance: res,
+        displayBalance: (Number(res) / 10 ** 18).toFixed(6).toString(),
+      };
+    }
+  });
 
-  return {
-    getBalance,
-  };
+  return res;
 };

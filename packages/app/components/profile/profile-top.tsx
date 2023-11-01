@@ -208,7 +208,7 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
           <View tw="ml-4 flex-1 pt-7">
             <View tw="flex-1">
               <View tw="flex-row justify-between">
-                <View>
+                <View tw="flex-1">
                   <Text
                     tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
                     numberOfLines={2}
@@ -269,8 +269,8 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
       <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
         <ProfileCover uri={getFullSizeCover(profileData?.profile)} />
       </View>
-      <View tw="-mt-2 px-4">
-        <View tw="flex-row items-center">
+      <View tw="px-4">
+        <View tw="flex-row">
           <Animated.View
             style={[
               {
@@ -281,7 +281,7 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
                 borderWidth: AVATAR_BORDER_SIZE,
                 borderColor: isDark ? "#000" : "#FFF",
                 backgroundColor: isDark ? colors.gray[900] : colors.gray[200],
-                margin: -AVATAR_BORDER_SIZE,
+                marginTop: -AVATAR_BORDER_SIZE - 8,
               },
               // avatarStyle,
             ]}
@@ -322,17 +322,17 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
               )}
             </Skeleton>
           </Animated.View>
-          <View tw="ml-4 flex-1 flex-row items-start justify-between">
-            <View>
+          <View tw="ml-3.5 mt-3 flex-1 flex-row items-start justify-between">
+            <View tw="flex-1">
               <Text
                 tw="max-w-45 text-xl font-bold text-gray-900 dark:text-white"
                 numberOfLines={2}
               >
                 {name}
               </Text>
-              <View tw="h-2 md:h-3" />
+              <View tw="h-2" />
               <Pressable
-                tw="flex-row items-center"
+                tw="flex-1 flex-row flex-wrap items-center"
                 onPress={async () => {
                   if (!username) return;
                   await Clipboard.setStringAsync(username);
@@ -340,33 +340,30 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
                 }}
               >
                 {Boolean(username) && (
-                  <>
-                    <Text
-                      tw="max-w-[120px] text-xl text-gray-900 dark:text-gray-400 md:text-lg"
-                      numberOfLines={1}
-                    >
-                      {`@${username}`}
-                    </Text>
-                  </>
+                  <Text
+                    tw="items-center leading-5 text-gray-900 dark:text-gray-400"
+                    style={{ fontSize: 20 }}
+                    numberOfLines={2}
+                  >
+                    {`@${username}`}
+                  </Text>
                 )}
-
-                {profileData?.profile.verified ? (
-                  <View tw="ml-1">
-                    <VerificationBadge size={16} />
-                  </View>
-                ) : null}
                 <View tw="ml-1">
-                  <StarDropBadge
-                    size={16}
-                    data={profileData?.profile.latest_star_drop_collected}
-                  />
+                  {profileData?.profile.verified ? (
+                    <VerificationBadge size={16} />
+                  ) : null}
                 </View>
+                <StarDropBadge
+                  size={16}
+                  data={profileData?.profile.latest_star_drop_collected}
+                  tw="ml-1"
+                />
                 {profileData?.follows_you && !isSelf ? (
                   <Chip label="Follows You" tw="ml-2" />
                 ) : null}
               </Pressable>
             </View>
-            <View tw="ml-auto">
+            <View tw="-mt-1 ml-auto">
               <CompleteProfileButton isSelf={isSelf} />
             </View>
           </View>

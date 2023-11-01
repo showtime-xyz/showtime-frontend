@@ -13,7 +13,6 @@ import { screenOptions } from "app/navigation/navigator-screen-options";
 import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
-import { ClaimScreen } from "app/screens/claim";
 import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
@@ -34,14 +33,12 @@ import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-inv
 import { DetailsScreen } from "app/screens/details";
 import { DropScreen } from "app/screens/drop";
 import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
-import { DropExplanationScreen } from "app/screens/drop-explanation";
 import { DropImageShareScreen } from "app/screens/drop-image-share";
 import { DropUpdateScreen } from "app/screens/drop-update";
 import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
-import { LikersScreen } from "app/screens/likers";
 import { LoginScreen } from "app/screens/login";
 import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
@@ -51,7 +48,6 @@ import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-a
 import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
 import { ProfileScreen } from "app/screens/profile/profile";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
-import { RaffleScreen } from "app/screens/raffle";
 import { ReportScreen } from "app/screens/report";
 import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
@@ -61,7 +57,6 @@ import { TopCreatorTokensScreen } from "app/screens/top-creator-tokens";
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
-import { DropStarScreen } from "../screens/drop-star";
 import { OnboardingScreen } from "../screens/onboarding";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { createStackNavigator } from "./create-stack-navigator";
@@ -221,11 +216,6 @@ export function RootStackNavigator() {
           component={CollectorsScreen}
         />
         <Stack.Screen
-          name="likers"
-          options={{ headerTitle: "Likers" }}
-          component={LikersScreen}
-        />
-        <Stack.Screen
           name="comments"
           options={{
             headerTitle: "Comments",
@@ -291,20 +281,13 @@ export function RootStackNavigator() {
           name="verifyPhoneNumber"
           component={VerifyPhoneNumberScreen}
         />
-        <Stack.Screen
-          name="dropExplanation"
-          component={DropExplanationScreen}
-        />
-        <Stack.Screen name="dropStar" component={DropStarScreen} />
         <Stack.Screen name="payoutsSetup" component={PayoutsSetupScreen} />
-        <Stack.Screen name="claim" component={ClaimScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
         <Stack.Screen name="dropImageShare" component={DropImageShareScreen} />
         <Stack.Screen
           name="dropEditDetailsModal"
           component={DropEditDetailsScreen}
         />
-        <Stack.Screen name="raffle" component={RaffleScreen} />
         <Stack.Screen
           name="channelsIntro"
           options={{ gestureEnabled: false }}

@@ -28,7 +28,6 @@ import {
   ChevronRight,
   InformationCircle,
   Close,
-  Raffle,
   Spotify,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
@@ -39,7 +38,6 @@ import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import Spinner from "@showtime-xyz/universal.spinner";
-import { Switch } from "@showtime-xyz/universal.switch";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -73,7 +71,7 @@ type CreateDropStep =
   | "select-drop";
 
 export const CreateDropSteps = () => {
-  const [step, setStep] = useState<CreateDropStep>("select-drop");
+  const [step, setStep] = useState<CreateDropStep>("media");
   const modalContext = useModalScreenContext();
   const {
     control,
@@ -228,8 +226,9 @@ export const CreateDropSteps = () => {
             handleNextStep={() => setStep("title")}
             handleFileChange={handleFileChange}
             handlePrevStep={() => {
-              setStep("select-drop");
-              modalContext?.snapToIndex(0);
+              //setStep("select-drop");
+              //modalContext?.snapToIndex(0);
+              modalContext?.pop();
             }}
             description={description}
             file={file}
@@ -328,13 +327,12 @@ const CreateDropStepMedia = (
     handleNextStep,
   } = props;
   const { width: windowWidth } = useWindowDimensions();
-
   const mediaWidth = Math.min(340, windowWidth - 32);
 
   return (
-    <Layout onBackPress={handlePrevStep} title="Create">
-      <View tw="px-4">
-        <Text tw="px-8 text-center text-xl font-medium text-gray-900 dark:text-gray-50">
+    <Layout onBackPress={handlePrevStep} title="Create" closeIcon>
+      <ScrollView tw="px-4">
+        <Text tw="px-8 text-center text-lg font-medium text-gray-900 dark:text-gray-50">
           Upload an image or video for your Pre-Save Airdrop
         </Text>
         <View tw="mt-8 self-center" style={{ maxWidth: mediaWidth }}>
@@ -357,7 +355,7 @@ const CreateDropStepMedia = (
             short video snippet promoting your upcoming release.
           </Text>
         </View>
-      </View>
+      </ScrollView>
       <View tw="mt-4 px-4">
         <Button
           size="regular"
