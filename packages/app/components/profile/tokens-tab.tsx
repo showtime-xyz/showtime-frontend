@@ -146,11 +146,11 @@ export const TokensTabHeader = ({
                   <Lock
                     width={20}
                     height={20}
-                    stroke={isDark ? "white" : colors.gray[500]}
+                    stroke={isDark ? "white" : "black"}
                   />
                 ) : (
                   <UnLocked
-                    stroke={isDark ? "white" : colors.gray[500]}
+                    stroke={isDark ? "white" : "black"}
                     width={20}
                     height={20}
                   />
