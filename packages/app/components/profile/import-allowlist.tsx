@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Platform, Linking } from "react-native";
 
 import axios from "axios";
@@ -22,6 +22,7 @@ import { toast } from "design-system/toast";
 
 export const ImportAllowlist = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const pickCSV = useCallback(async () => {
     try {
       const file = await DocumentPicker.getDocumentAsync({
@@ -38,30 +39,38 @@ export const ImportAllowlist = () => {
           "Content-Type": `multipart/form-data`,
         };
         const attachment = file.assets[0].uri;
-        if (Platform.OS === "web") {
-          const attachmentFormData = await getFileFormData(attachment);
-          const formData = new FormData();
-          formData.append(
-            "file",
-            attachmentFormData!,
-            generateRandomFilename(extractMimeType(attachment))
-          );
-          await axios({
-            url: uploadUrl,
-            method: "POST",
-            headers: headers,
-            data: formData,
-          });
-        } else {
-          await FileSystem.uploadAsync(uploadUrl, attachment, {
-            uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-            sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
-            fieldName: "file",
-            httpMethod: "POST",
-            headers,
-          });
+
+        try {
+          setIsLoading(true);
+          if (Platform.OS === "web") {
+            const attachmentFormData = await getFileFormData(attachment);
+            const formData = new FormData();
+            formData.append(
+              "file",
+              attachmentFormData!,
+              generateRandomFilename(extractMimeType(attachment))
+            );
+            await axios({
+              url: uploadUrl,
+              method: "POST",
+              headers: headers,
+              data: formData,
+            });
+          } else {
+            await FileSystem.uploadAsync(uploadUrl, attachment, {
+              uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+              sessionType: FileSystem.FileSystemSessionType.BACKGROUND,
+              fieldName: "file",
+              httpMethod: "POST",
+              headers,
+            });
+          }
+          toast.success("Allowlist imported successfully");
+        } catch {
+          toast.error("An error occurred while uploading the file");
+        } finally {
+          setIsLoading(false);
         }
-        toast.success("Allowlist imported successfully");
 
         const nativeUrl = "/creator-token/import-allowlist-success";
         const url = Platform.select({
@@ -107,14 +116,22 @@ export const ImportAllowlist = () => {
         Creator Tokens to unlock your channel.
       </Text>
       <View tw="h-2" />
-      <Button size="regular" tw="my-4 w-full" onPress={pickCSV}>
-        Import Allowlist (.csv)
+      <Button
+        size="regular"
+        tw="my-4 w-full"
+        onPress={pickCSV}
+        disabled={isLoading}
+        style={{ opacity: isLoading ? 0.8 : 1 }}
+      >
+        {isLoading ? "Upload in progress..." : "Import Allowlist (.csv)"}
       </Button>
       <Button
         size="regular"
         variant="outlined"
         tw="w-full"
         onPress={downloadCSVTemplate}
+        style={{ opacity: isLoading ? 0.5 : 1 }}
+        disabled={isLoading}
       >
         Download template
       </Button>
