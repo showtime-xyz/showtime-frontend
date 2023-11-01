@@ -330,14 +330,6 @@ const CreateDropStepMedia = (
   const { width: windowWidth } = useWindowDimensions();
   const mediaWidth = Math.min(340, windowWidth - 32);
 
-  const modalContext = useModalScreenContext();
-
-  console.log(modalContext);
-
-  useEffectOnce(() => {
-    modalContext?.snapToIndex(1);
-  });
-
   return (
     <Layout onBackPress={handlePrevStep} title="Create" closeIcon>
       <ScrollView tw="px-4">
