@@ -279,15 +279,6 @@ export const BuyCreatorToken = () => {
                       key="SELL_PAYMENTS"
                     />
                   )}
-                  {/* <Toggle
-                    options={
-                      selectedAction === "buy"
-                        ? PAYMENT_METHODS
-                        : PAYMENT_METHODS.filter((m) => m.value === "USDC")
-                    }
-                    value={paymentMethod}
-                    onChange={(value: any) => setPaymentMethod(value)}
-                  /> */}
                   <Pressable
                     onPress={() => {
                       setShowExplanation(true);
