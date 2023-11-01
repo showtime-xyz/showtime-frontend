@@ -181,7 +181,10 @@ export const CreatorTokenCollectors = ({
   username: string | undefined;
   name: string | undefined;
 } & ViewProps) => {
-  const { data, isLoading } = useCreatorTokenCollectors(creatorTokenId, 6);
+  const { data, isLoading, count } = useCreatorTokenCollectors(
+    creatorTokenId,
+    6
+  );
   const router = useRouter();
   if ((!data?.length || data.length === 0) && !isLoading) {
     return null;
@@ -192,28 +195,30 @@ export const CreatorTokenCollectors = ({
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collectors
         </Text>
-        <Text
-          onPress={() => {
-            const as = `/creator-token/${creatorTokenId}/collectors`;
-            router.push(
-              Platform.select({
-                native: as,
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    creatorTokenCollectorsModal: true,
-                    creatorTokenId,
-                  },
-                } as any,
-              }),
-              Platform.select({ native: as, web: router.asPath })
-            );
-          }}
-          tw="text-xs font-semibold text-gray-500 dark:text-gray-50"
-        >
-          Show all
-        </Text>
+        {count > 0 ? (
+          <Text
+            onPress={() => {
+              const as = `/creator-token/${creatorTokenId}/collectors`;
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenCollectorsModal: true,
+                      creatorTokenId,
+                    },
+                  } as any,
+                }),
+                Platform.select({ native: as, web: router.asPath })
+              );
+            }}
+            tw="text-xs font-semibold text-gray-500 dark:text-gray-50"
+          >
+            Show all
+          </Text>
+        ) : null}
       </View>
       <View tw="h-2" />
       <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
@@ -242,7 +247,7 @@ export const CreatorTokenCollected = ({
   name: string | undefined;
 } & ViewProps) => {
   const router = useRouter();
-  const { data, isLoading } = useCreatorTokenCoLlected(profileId, 6);
+  const { data, count, isLoading } = useCreatorTokenCoLlected(profileId, 6);
   if ((!data?.length || data?.length === 0) && !isLoading) {
     return null;
   }
@@ -252,30 +257,32 @@ export const CreatorTokenCollected = ({
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collected
         </Text>
-        <Text
-          onPress={() => {
-            const as = `/creator-token/${profileId}/collected`;
-            console.log(as);
+        {count > 6 ? (
+          <Text
+            onPress={() => {
+              const as = `/creator-token/${profileId}/collected`;
+              console.log(as);
 
-            router.push(
-              Platform.select({
-                native: as,
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    creatorTokenCollectedModal: true,
-                    profileId,
-                  },
-                } as any,
-              }),
-              Platform.select({ native: as, web: router.asPath })
-            );
-          }}
-          tw="text-xs font-semibold text-gray-500 dark:text-gray-50"
-        >
-          Show all
-        </Text>
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenCollectedModal: true,
+                      profileId,
+                    },
+                  } as any,
+                }),
+                Platform.select({ native: as, web: router.asPath })
+              );
+            }}
+            tw="text-xs font-semibold text-gray-500 dark:text-gray-50"
+          >
+            Show all
+          </Text>
+        ) : null}
       </View>
       <View tw="h-2" />
       <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">

@@ -36,7 +36,13 @@ export const useCreatorTokenCollectors = (
     return data?.profiles;
   }, [data, limit]);
 
-  return { data: newData, isLoading, mutate, error };
+  return {
+    data: newData,
+    count: data?.profiles.length || 0,
+    isLoading,
+    mutate,
+    error,
+  };
 };
 
 export const useCreatorTokenCoLlected = (
@@ -55,5 +61,11 @@ export const useCreatorTokenCoLlected = (
     return data?.profiles;
   }, [data, limit]);
 
-  return { data: newData, isLoading, mutate, error };
+  return {
+    data: newData,
+    count: data?.profiles.length || 0,
+    isLoading,
+    mutate,
+    error,
+  };
 };
