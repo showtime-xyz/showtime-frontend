@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Linking } from "react-native";
 
+import { CrossmintPayButton } from "@crossmint/client-sdk-react-ui";
 import { createParam } from "solito";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -103,6 +104,12 @@ export const BuyCreatorToken = () => {
           tokenAmount,
         }
       : undefined
+  );
+
+  console.log(
+    "iedief ",
+    priceToBuyNext.data?.totalPrice?.toString(),
+    wallet.address
   );
 
   const ethPriceToBuyNext = useGetETHForUSDC(
@@ -208,8 +215,8 @@ export const BuyCreatorToken = () => {
             : wallet.isMagicWallet
             ? "Connect"
             : paymentMethod === "ETH"
-            ? "Buy"
-            : "Approve & Buy"}
+            ? "Buy with ETH"
+            : "Buy with USDC"}
         </Button>
       );
     }
@@ -433,6 +440,21 @@ export const BuyCreatorToken = () => {
           </View>
           <View tw="h-8" />
           {renderBuyButton()}
+          <View tw="mx-auto my-4 h-[1px] w-[20%] rounded-full bg-gray-400" />
+          <CrossmintPayButton
+            style={{
+              borderRadius: 100,
+            }}
+            collectionId="e91b3e6a-27ef-4c90-aa02-10af5ecfa0fb"
+            projectId="043c259c-878c-49a9-bd86-cf99f583125b"
+            mintConfig={{
+              totalPrice: priceToBuyNext.data?.totalPrice?.toString(),
+              _numOfTokens: tokenAmount,
+              _maxPayment: priceToBuyNext.data?.totalPrice?.toString(),
+            }}
+            environment="staging"
+            mintTo={"0xD60FB1e898eeacD5D1935FA161DaDf96AC3b0EDa"}
+          />
           <View tw="items-center pt-4">
             <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
               {paymentMethod === "USDC"
