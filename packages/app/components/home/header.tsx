@@ -84,7 +84,7 @@ const CreatorTokensBanner = () => {
     if (
       user?.user?.data.profile.creator_token_onboarding_status === "allowlist"
     ) {
-      setHideCreatorChannelIntro(true);
+      redirectToSelfServeExplainerModal();
     }
   });
 
