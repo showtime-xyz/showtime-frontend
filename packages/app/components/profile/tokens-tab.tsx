@@ -4,13 +4,20 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useRef,
+  useMemo,
 } from "react";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
+import {
+  ChevronRight,
+  Lock,
+  LockBadge,
+  LockRounded,
+  UnLocked,
+} from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import {
@@ -25,17 +32,19 @@ import { View, ViewProps } from "@showtime-xyz/universal.view";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import { List, useProfileNFTs } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { getNFTSlug } from "app/hooks/use-share-nft";
 import { useUser } from "app/hooks/use-user";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 import { formatNumber } from "app/utilities";
 
+import SvgUnlocked from "design-system/icon/Unlocked";
+
+import { ChannelPermissions } from "../creator-channels/types";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { MyCollection } from "./my-collection";
-import { ProfileFooter, ProfileSpinnerFooter } from "./profile-footer";
+import { ProfileSpinnerFooter } from "./profile-footer";
 
 type TabListProps = {
   username?: string;
@@ -52,13 +61,20 @@ export const TokensTabHeader = ({
   channelId,
   isSelf,
   messageCount,
+  channelPermissions,
 }: {
   channelId: number | null | undefined;
   messageCount?: number | null;
   isSelf: boolean;
+  channelPermissions?: ChannelPermissions | null;
 }) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
+
+  const channelMessageCountFormatted = useMemo(
+    () => formatNumber(messageCount || 0),
+    [messageCount]
+  );
 
   return (
     <View tw="w-full px-4">
@@ -114,7 +130,7 @@ export const TokensTabHeader = ({
       */}
 
       {isSelf && <MyCollection />}
-      {channelId && messageCount && messageCount > 0 ? (
+      {channelId && (messageCount || messageCount == 0) && messageCount >= 0 ? (
         <Pressable
           onPress={() => {
             router.push(`/channels/${channelId}`);
@@ -122,9 +138,38 @@ export const TokensTabHeader = ({
           tw="mt-6 rounded-xl border border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900"
         >
           <View tw="flex-row items-center justify-between py-4">
-            <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-              {formatNumber(messageCount || 0)} Channel messages
-            </Text>
+            <View tw="flex-row items-center justify-between">
+              <View tw="-mt-0.5 mr-2">
+                {(channelPermissions &&
+                  !channelPermissions?.can_view_creator_messages) ||
+                !channelPermissions ? (
+                  <Lock
+                    width={20}
+                    height={20}
+                    stroke={isDark ? "white" : colors.gray[500]}
+                  />
+                ) : (
+                  <UnLocked
+                    stroke={isDark ? "white" : colors.gray[500]}
+                    width={20}
+                    height={20}
+                  />
+                )}
+              </View>
+
+              {messageCount === 0 ? (
+                <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+                  View Channel
+                </Text>
+              ) : (
+                <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+                  {channelPermissions &&
+                  !channelPermissions?.can_view_creator_messages
+                    ? `You've unlocked ${channelMessageCountFormatted} messages`
+                    : `Channel locked (${channelMessageCountFormatted} messages)`}
+                </Text>
+              )}
+            </View>
             <ChevronRight width={20} height={20} color={colors.gray[500]} />
           </View>
           {/* TODO: Creator tokens P1
@@ -224,6 +269,7 @@ export const TokensTab = forwardRef<
   TabListProps & {
     channelId: number | null | undefined;
     messageCount?: number | null;
+    channelPermissions?: ChannelPermissions | null;
     isSelf: boolean;
   }
 >(function ProfileTabList(
@@ -235,6 +281,7 @@ export const TokensTab = forwardRef<
     index,
     channelId,
     messageCount,
+    channelPermissions,
     isSelf,
   },
   ref
@@ -282,9 +329,10 @@ export const TokensTab = forwardRef<
         channelId={channelId}
         isSelf={isSelf}
         messageCount={messageCount}
+        channelPermissions={channelPermissions}
       />
     ),
-    [channelId, isSelf, messageCount]
+    [channelId, channelPermissions, isSelf, messageCount]
   );
   const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
 
