@@ -126,6 +126,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
     return profileData?.data?.profile?.channels?.[0]?.message_count || 0;
   }, [profileData?.data?.profile.channels]);
 
+  const channelPermissions = useMemo(() => {
+    return profileData?.data?.profile?.channels?.[0]?.permissions;
+  }, [profileData?.data?.profile.channels]);
+
   const renderScene = useCallback(
     ({
       route: { index: routeIndex, key },
@@ -144,6 +148,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             channelId={channelId}
             isSelf={isSelf}
             messageCount={messageCount}
+            channelPermissions={channelPermissions}
           />
         );
       }
@@ -177,6 +182,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       channelId,
       isSelf,
       messageCount,
+      channelPermissions,
       tabRefs,
     ]
   );
