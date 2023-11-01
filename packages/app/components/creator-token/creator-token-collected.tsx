@@ -44,7 +44,7 @@ export const CreatorTokenCollectedList = () => {
   const isMdWidth = width >= breakpoints["md"];
   const { data: list, isLoading } = useCreatorTokenCoLlected(profileId);
   const numColumns = 3;
-  const itemWidth = isMdWidth ? 120 : (width - 40 - 2 * 16) / 3;
+  const itemWidth = isMdWidth ? 130 : (width - 40 - 2 * 16) / 3;
 
   const renderItem = useCallback(
     ({
@@ -97,7 +97,7 @@ export const CreatorTokenCollectedList = () => {
   }, []);
 
   return (
-    <View tw="bg-white px-2 dark:bg-black md:px-8">
+    <View tw="bg-white px-2 dark:bg-black md:px-4">
       <ErrorBoundary>
         <InfiniteScrollList
           useWindowScroll
@@ -120,7 +120,7 @@ export const CreatorTokenCollectedList = () => {
           overscan={12}
           ListEmptyComponent={ListEmptyComponent}
           ListHeaderComponent={ListHeaderComponent}
-          estimatedItemSize={275}
+          estimatedItemSize={101}
         />
       </ErrorBoundary>
     </View>
