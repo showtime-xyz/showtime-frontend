@@ -122,9 +122,15 @@ export const TokensTabHeader = ({
           tw="mt-6 rounded-xl border border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900"
         >
           <View tw="flex-row items-center justify-between py-4">
-            <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-              {formatNumber(messageCount || 0)} Channel messages
-            </Text>
+            {messageCount === 0 ? (
+              <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+                View Channel messages
+              </Text>
+            ) : (
+              <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+                {formatNumber(messageCount || 0)} Channel messages
+              </Text>
+            )}
             <ChevronRight width={20} height={20} color={colors.gray[500]} />
           </View>
           {/* TODO: Creator tokens P1
