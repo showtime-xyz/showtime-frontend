@@ -7,10 +7,7 @@ import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
 import { captureException } from "app/lib/sentry";
 
-import {
-  useJoinedChannelsList,
-  useSuggestedChannelsList,
-} from "./use-channels-list";
+import { useJoinedChannelsList } from "./use-channels-list";
 
 async function joinChannel(
   url: string,
@@ -34,7 +31,6 @@ export const useJoinChannel = () => {
     joinChannel
   );
   const joinedChannels = useJoinedChannelsList();
-  const suggestedChannels = useSuggestedChannelsList();
   const { onboardingPromise } = useOnboardingPromise();
 
   const handleSubmit = useStableCallback(
@@ -47,7 +43,6 @@ export const useJoinChannel = () => {
         captureException(e);
         Logger.error(e);
       } finally {
-        suggestedChannels.mutate();
         joinedChannels.mutate();
       }
     }

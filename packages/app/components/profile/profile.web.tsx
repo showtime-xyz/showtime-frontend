@@ -112,6 +112,10 @@ const Profile = ({ username }: ProfileScreenProps) => {
     return profileData?.data?.profile?.channels?.[0]?.message_count || 0;
   }, [profileData?.data?.profile.channels]);
 
+  const channelPermissions = useMemo(() => {
+    return profileData?.data?.profile?.channels?.[0]?.permissions;
+  }, [profileData?.data?.profile.channels]);
+
   const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
 
   const [queryTab] = useParam("type", {
@@ -306,6 +310,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                       channelId={channelId}
                       isSelf={isSelf}
                       messageCount={messageCount}
+                      channelPermissions={channelPermissions}
                     />
                     {isProfileMdScreen ? null : (
                       <View tw="pl-5">

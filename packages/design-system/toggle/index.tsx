@@ -4,6 +4,8 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   useSharedValue,
+  FadeIn,
+  Layout,
 } from "react-native-reanimated";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -71,6 +73,7 @@ export const Toggle = ({
               backgroundColor: isDark ? colors.white : colors.gray[900],
             },
           ]}
+          entering={FadeIn}
         />
       ) : null}
       {options.map((item, index) => (
