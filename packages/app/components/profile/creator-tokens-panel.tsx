@@ -158,8 +158,6 @@ export const CreatorTokensPanel = ({
   username,
 }: CreatorTokensPanelProps) => {
   const isDark = useIsDarkMode();
-  const router = useRouter();
-  const { data: userProfileData } = useUserProfile({ address: username });
 
   const usdcBalance = useWalletUSDCBalance();
 
