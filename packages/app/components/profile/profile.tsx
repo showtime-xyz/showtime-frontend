@@ -139,8 +139,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
       if (key === "tokens") {
         return (
           <TokensTab
-            username={profileData?.data?.profile.username}
-            profileId={profileId}
+            profile={profileData?.data?.profile}
             isBlocked={isBlocked}
             list={data?.tabs[routeIndex]}
             index={routeIndex}
@@ -176,7 +175,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     },
     [
       data?.tabs,
-      profileData?.data?.profile.username,
+      profileData?.data?.profile,
       profileId,
       isBlocked,
       channelId,

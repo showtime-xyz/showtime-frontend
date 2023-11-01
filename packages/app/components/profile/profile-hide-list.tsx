@@ -42,7 +42,7 @@ export const ProfileNFTHiddenButton = ({
 };
 export const ProfileHideList = ({ profileId }: { profileId?: number }) => {
   const router = useRouter();
-  const { data } = useProfileHideNFTs(profileId);
+  const { data, isLoading } = useProfileHideNFTs(profileId);
   const onItemPress = useCallback(
     (item: NFT) => {
       router.push(
@@ -53,6 +53,12 @@ export const ProfileHideList = ({ profileId }: { profileId?: number }) => {
     },
     [profileId, router]
   );
+  if (isLoading) {
+    return null;
+  }
+  if (!data?.items || data?.items.length === 0) {
+    return null;
+  }
   return (
     <View tw="pb-4">
       {data?.items.map((item, index) => {

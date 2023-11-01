@@ -7,6 +7,8 @@ import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Showtime } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
+import { useRouter } from "@showtime-xyz/universal.router";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -14,11 +16,15 @@ import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
-import { useTrendingNFTS } from "app/hooks/api-hooks";
+import {
+  CreatorTokenUser,
+  useCreatorTokenCollectors,
+} from "app/hooks/creator-token/use-creator-tokens";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
+
+import { TopCreatorTokensItem } from "./creator-token-users";
 
 const Header = () => {
   const headerHeight = useHeaderHeight();
@@ -41,69 +47,26 @@ const Header = () => {
   );
 };
 
-export const TopCreatorTokensItem = ({
-  index,
-  tw,
-  ...rest
-}: ViewProps & { index: number }) => {
-  const isDark = useIsDarkMode();
-
-  return (
-    <View
-      tw={[
-        "mb-3 items-center rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900",
-        tw,
-      ].join(" ")}
-      {...rest}
-    >
-      <>
-        <View tw="mb-3">
-          <View tw="absolute -left-1 top-0">
-            <Showtime
-              width={8}
-              height={8}
-              color={isDark ? colors.white : colors.gray[900]}
-            />
-          </View>
-          <Avatar
-            url={
-              "https://media-stage.showtime.xyz/c95130b6-3cdb-4056-9cda-4258675d435d.jpeg"
-            }
-            size={44}
-          />
-        </View>
-        <Text
-          tw="px-1 text-sm font-semibold text-gray-900 dark:text-white"
-          numberOfLines={1}
-        >
-          @alan
-        </Text>
-        <View tw="h-3" />
-        <Text tw="text-sm font-bold text-gray-900 dark:text-white">$2.60</Text>
-      </>
-      <View tw="absolute -right-2.5 -top-2.5 h-6 min-w-[24px] items-center justify-center rounded-full bg-slate-500 px-1.5 text-gray-500 dark:bg-gray-600">
-        <Text tw="text-xs font-semibold text-white">{index + 1}</Text>
-      </View>
-    </View>
-  );
-};
-const keyExtractor = (item: NFT) => `${item.nft_id}`;
+const keyExtractor = (item: CreatorTokenUser) => `${item.profile_id}`;
 export const TopCreatorTokens = () => {
   const { height: screenHeight, width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const { data: list, isLoading } = useTrendingNFTS({});
+  const { data: list, isLoading } = useCreatorTokenCollectors(27);
 
   const numColumns = 3;
 
   const renderItem = useCallback(
-    ({ item, index }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-      return <TopCreatorTokensItem index={index} />;
+    ({
+      item,
+      index,
+    }: ListRenderItemInfo<CreatorTokenUser & { loading?: boolean }>) => {
+      return <TopCreatorTokensItem item={item} index={index} />;
     },
     []
   );
 
   const getItemType = useCallback(
-    (_: NFT, index: number) => {
+    (_: CreatorTokenUser, index: number) => {
       const marginLeft = isMdWidth ? 0 : index % numColumns === 0 ? 0 : 8;
       if (marginLeft) {
         return "right";
@@ -136,7 +99,7 @@ export const TopCreatorTokens = () => {
         <ErrorBoundary>
           <InfiniteScrollList
             useWindowScroll
-            data={list}
+            data={list || []}
             preserveScrollPosition
             keyExtractor={keyExtractor}
             numColumns={numColumns}

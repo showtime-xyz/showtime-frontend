@@ -65,7 +65,11 @@ import { ProfileError } from "./profile-error";
 import { ProfileHideList, ProfileNFTHiddenButton } from "./profile-hide-list";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileCover, ProfileTop } from "./profile-top";
-import { TokensTabHeader, TokensTabItem } from "./tokens-tab";
+import {
+  CreatorTokenCollected,
+  CreatorTokenCollectors,
+  TokensTabHeader,
+} from "./tokens-tab";
 
 export type ProfileScreenProps = {
   username: string;
@@ -301,12 +305,30 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 />
 
                 {type === "tokens" ? (
-                  <TokensTabHeader
-                    channelId={channelId}
-                    isSelf={isSelf}
-                    messageCount={messageCount}
-                    channelPermissions={channelPermissions}
-                  />
+                  <>
+                    <TokensTabHeader
+                      channelId={channelId}
+                      isSelf={isSelf}
+                      messageCount={messageCount}
+                      channelPermissions={channelPermissions}
+                    />
+                    {isProfileMdScreen ? null : (
+                      <View tw="pl-5">
+                        <CreatorTokenCollectors
+                          creatorTokenId={
+                            profileData?.data?.profile.creator_token?.id
+                          }
+                          name={profileData?.data?.profile.name}
+                          username={username}
+                        />
+                        <CreatorTokenCollected
+                          profileId={profileId}
+                          name={profileData?.data?.profile.name}
+                          username={username}
+                        />
+                      </View>
+                    )}
+                  </>
                 ) : null}
                 {type === "song_drops_created" && isSelf ? (
                   <>
@@ -345,8 +367,18 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   <Sticky enabled>
                     <CreatorTokensPanel username={username} isSelf={isSelf} />
                     {isSelf && <MyCollection />}
-                    {list.length > 0 ? <TokensTabItem item={list[0]} /> : null}
-                    {list.length > 0 ? <TokensTabItem item={list[0]} /> : null}
+                    <CreatorTokenCollectors
+                      creatorTokenId={
+                        profileData?.data?.profile.creator_token?.id
+                      }
+                      name={profileData?.data?.profile.name}
+                      username={username}
+                    />
+                    <CreatorTokenCollected
+                      profileId={profileId}
+                      name={profileData?.data?.profile.name}
+                      username={username}
+                    />
                   </Sticky>
                 </View>
               ) : null}
