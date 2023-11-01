@@ -161,53 +161,53 @@ export const PlatformBuyButton = ({
 }: BuyButtonProps) => {
   const [open, setOpen] = useState(false);
   const isDark = useIsDarkMode();
-  if (Platform.OS !== "web") {
-    return (
-      <Tooltip.Root
-        onDismiss={() => {
-          setOpen(false);
-        }}
-        delayDuration={100}
-        open={open}
-      >
-        <Tooltip.Trigger>
-          <BuyButton
-            {...rest}
-            onPress={() => {
-              setOpen(true);
-            }}
-          />
-        </Tooltip.Trigger>
-        <Tooltip.Content
-          sideOffset={3}
-          containerStyle={{
-            paddingLeft: 16,
-            paddingRight: 16,
-            paddingTop: 8,
-            paddingBottom: 8,
-          }}
-          className="web:outline-none"
-          side={side}
-          presetAnimation="fadeIn"
-          backgroundColor={isDark ? "#fff" : colors.gray[900]}
-          borderRadius={12}
-        >
-          <Tooltip.Text
-            text={Platform.select({
-              ios: "Unable to purchase on iOS",
-              android: "Unable to purchase on Android",
-              default: "Unable to purchase",
-            })}
-            style={{
-              fontSize: 16,
-              fontWeight: "bold",
-              color: isDark ? colors.gray[900] : "#fff",
-            }}
-          />
-          <Tooltip.Arrow width={12} height={6} />
-        </Tooltip.Content>
-      </Tooltip.Root>
-    );
-  }
+  // if (Platform.OS !== "web") {
+  //   return (
+  //     <Tooltip.Root
+  //       onDismiss={() => {
+  //         setOpen(false);
+  //       }}
+  //       delayDuration={100}
+  //       open={open}
+  //     >
+  //       <Tooltip.Trigger>
+  //         <BuyButton
+  //           {...rest}
+  //           onPress={() => {
+  //             setOpen(true);
+  //           }}
+  //         />
+  //       </Tooltip.Trigger>
+  //       <Tooltip.Content
+  //         sideOffset={3}
+  //         containerStyle={{
+  //           paddingLeft: 16,
+  //           paddingRight: 16,
+  //           paddingTop: 8,
+  //           paddingBottom: 8,
+  //         }}
+  //         className="web:outline-none"
+  //         side={side}
+  //         presetAnimation="fadeIn"
+  //         backgroundColor={isDark ? "#fff" : colors.gray[900]}
+  //         borderRadius={12}
+  //       >
+  //         <Tooltip.Text
+  //           text={Platform.select({
+  //             ios: "Unable to purchase on iOS",
+  //             android: "Unable to purchase on Android",
+  //             default: "Unable to purchase",
+  //           })}
+  //           style={{
+  //             fontSize: 16,
+  //             fontWeight: "bold",
+  //             color: isDark ? colors.gray[900] : "#fff",
+  //           }}
+  //         />
+  //         <Tooltip.Arrow width={12} height={6} />
+  //       </Tooltip.Content>
+  //     </Tooltip.Root>
+  //   );
+  // }
   return <BuyButton {...rest} />;
 };
