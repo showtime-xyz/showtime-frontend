@@ -19,7 +19,6 @@ import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import {
-  useEffectOnce,
   useIsDarkMode,
   useIsomorphicLayoutEffect,
 } from "@showtime-xyz/universal.hooks";
