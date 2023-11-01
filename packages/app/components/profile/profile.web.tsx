@@ -69,7 +69,6 @@ import {
   CreatorTokenCollected,
   CreatorTokenCollectors,
   TokensTabHeader,
-  TokensTabItem,
 } from "./tokens-tab";
 
 export type ProfileScreenProps = {
@@ -302,11 +301,29 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 />
 
                 {type === "tokens" ? (
-                  <TokensTabHeader
-                    channelId={channelId}
-                    isSelf={isSelf}
-                    messageCount={messageCount}
-                  />
+                  <>
+                    <TokensTabHeader
+                      channelId={channelId}
+                      isSelf={isSelf}
+                      messageCount={messageCount}
+                    />
+                    {isProfileMdScreen ? null : (
+                      <View tw="pl-5">
+                        <CreatorTokenCollectors
+                          creatorTokenId={
+                            profileData?.data?.profile.creator_token?.id
+                          }
+                          name={profileData?.data?.profile.name}
+                          username={username}
+                        />
+                        <CreatorTokenCollected
+                          profileId={profileId}
+                          name={profileData?.data?.profile.name}
+                          username={username}
+                        />
+                      </View>
+                    )}
+                  </>
                 ) : null}
                 {type === "song_drops_created" && isSelf ? (
                   <>
