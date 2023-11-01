@@ -19,6 +19,7 @@ import { Checkbox } from "@showtime-xyz/universal.checkbox";
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
 import {
+  useEffectOnce,
   useIsDarkMode,
   useIsomorphicLayoutEffect,
 } from "@showtime-xyz/universal.hooks";
@@ -28,7 +29,6 @@ import {
   ChevronRight,
   InformationCircle,
   Close,
-  Raffle,
   Spotify,
 } from "@showtime-xyz/universal.icon";
 import { Label } from "@showtime-xyz/universal.label";
@@ -39,7 +39,6 @@ import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import Spinner from "@showtime-xyz/universal.spinner";
-import { Switch } from "@showtime-xyz/universal.switch";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -329,13 +328,20 @@ const CreateDropStepMedia = (
     handleNextStep,
   } = props;
   const { width: windowWidth } = useWindowDimensions();
-
   const mediaWidth = Math.min(340, windowWidth - 32);
+
+  const modalContext = useModalScreenContext();
+
+  console.log(modalContext);
+
+  useEffectOnce(() => {
+    modalContext?.snapToIndex(1);
+  });
 
   return (
     <Layout onBackPress={handlePrevStep} title="Create" closeIcon>
-      <View tw="px-4">
-        <Text tw="px-8 text-center text-xl font-medium text-gray-900 dark:text-gray-50">
+      <ScrollView tw="px-4">
+        <Text tw="px-8 text-center text-lg font-medium text-gray-900 dark:text-gray-50">
           Upload an image or video for your Pre-Save Airdrop
         </Text>
         <View tw="mt-8 self-center" style={{ maxWidth: mediaWidth }}>
@@ -358,7 +364,7 @@ const CreateDropStepMedia = (
             short video snippet promoting your upcoming release.
           </Text>
         </View>
-      </View>
+      </ScrollView>
       <View tw="mt-4 px-4">
         <Button
           size="regular"
