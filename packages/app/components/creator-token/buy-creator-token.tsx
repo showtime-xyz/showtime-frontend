@@ -45,16 +45,24 @@ type Query = {
 };
 
 const { useParam } = createParam<Query>();
-const PAYMENT_METHODS = [
-  {
-    title: "USDC",
-    value: "USDC",
-  },
-  {
-    title: "ETH",
-    value: "ETH",
-  },
-];
+// Disable ETH payment on dev for now because it doesn't support the dev environment yet.
+const PAYMENT_METHODS = __DEV__
+  ? [
+      {
+        title: "USDC",
+        value: "USDC",
+      },
+    ]
+  : [
+      {
+        title: "USDC",
+        value: "USDC",
+      },
+      {
+        title: "ETH",
+        value: "ETH",
+      },
+    ];
 const SELECT_LIST = [
   {
     title: "Buy",
@@ -81,7 +89,7 @@ export const BuyCreatorToken = () => {
   );
 
   const [paymentMethod, setPaymentMethod] = useState<"ETH" | "USDC">(
-    selectedAction === "buy" ? "ETH" : "USDC"
+    __DEV__ ? "USDC" : selectedAction === "buy" ? "ETH" : "USDC"
   );
   const buyToken = useCreatorTokenBuy({ username, tokenAmount, paymentMethod });
 
