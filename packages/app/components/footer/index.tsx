@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -5,6 +6,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MOBILE_WEB_TABS_HEIGHT } from "app/constants/layout";
+import { UserContext } from "app/context/user-context";
 import {
   HIDE_MOBILE_WEB_FOOTER_SCREENS,
   SWIPE_LIST_SCREENS,
@@ -19,6 +21,7 @@ import {
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
 const Footer = () => {
+  const user = useContext(UserContext);
   const router = useRouter();
   const isDark = useIsDarkMode();
   const isDarkThemePage = SWIPE_LIST_SCREENS.includes(router.pathname);
@@ -32,6 +35,11 @@ const Footer = () => {
 
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
+
+  const canCreateMusicDrop =
+    !!user?.user?.data.profile.bypass_track_ownership_validation ||
+    !!user?.user?.data.profile.spotify_artist_id ||
+    !!user?.user?.data.profile.apple_music_artist_id;
 
   if (width >= 768) {
     return null;
@@ -65,11 +73,13 @@ const Footer = () => {
         color={color}
         focused={router.pathname === "/channels"}
       />
-      <CreateTabBarIcon
-        color={buttonColor}
-        focused={router.pathname === "/drop"}
-        style={{ backgroundColor: buttonBackgroundColor }}
-      />
+      {canCreateMusicDrop && (
+        <CreateTabBarIcon
+          color={buttonColor}
+          focused={router.pathname === "/drop"}
+          style={{ backgroundColor: buttonBackgroundColor }}
+        />
+      )}
       <NotificationsTabBarIcon
         color={color}
         focused={router.pathname === "/notifications"}
