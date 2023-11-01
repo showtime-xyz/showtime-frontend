@@ -114,7 +114,7 @@ export const TokensTabHeader = ({
       */}
 
       {isSelf && <MyCollection />}
-      {channelId && messageCount && messageCount >= 0 ? (
+      {channelId && (messageCount || messageCount == 0) && messageCount >= 0 ? (
         <Pressable
           onPress={() => {
             router.push(`/channels/${channelId}`);
