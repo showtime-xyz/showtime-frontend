@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback } from "react";
+import { memo, useContext, useCallback, useState } from "react";
 import { useWindowDimensions, Platform, Linking } from "react-native";
 
 import Animated, {
@@ -8,6 +8,7 @@ import Animated, {
   interpolate,
 } from "react-native-reanimated";
 
+import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import { Close, ShowtimeRounded } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -45,7 +46,8 @@ const VISIBLE_HEIGHT_NATIVE = 60;
 const heightsNative = [HIDDEN_HEIGHT, VISIBLE_HEIGHT_NATIVE];
 
 const CreatorTokensBanner = () => {
-  const showValue = getIsShowCreatorTokenIntroBanner() ? 1 : 0;
+  // const showValue = getIsShowCreatorTokenIntroBanner() ? 1 : 0;
+  const showValue = 1;
   const showBanner = useSharedValue(showValue);
   const translateYValues = [HIDDEN_HEIGHT, showValue];
 
@@ -57,6 +59,34 @@ const CreatorTokensBanner = () => {
     ? VISIBLE_HEIGHT_DESKTOP
     : VISIBLE_HEIGHT_NATIVE;
   const heightsWeb = [HIDDEN_HEIGHT, visibleHeight];
+  const redirectToSelfServeExplainerModal = useCallback(() => {
+    const as = `/creator-token/self-serve-explainer`;
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            creatorTokensSelfServeExplainerModal: true,
+          },
+        } as any,
+      }),
+      Platform.select({
+        native: as,
+        web: router.asPath,
+      }),
+      { shallow: true }
+    );
+  }, [router]);
+
+  useEffectOnce(() => {
+    if (
+      user?.user?.data.profile.creator_token_onboarding_status === "allowlist"
+    ) {
+      redirectToSelfServeExplainerModal();
+    }
+  });
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -86,30 +116,16 @@ const CreatorTokensBanner = () => {
     if (
       user?.user?.data.profile.creator_token_onboarding_status === "allowlist"
     ) {
-      const as = `/creator-token/self-serve-explainer`;
-      router.push(
-        Platform.select({
-          native: as,
-          web: {
-            pathname: router.pathname,
-            query: {
-              ...router.query,
-              creatorTokensSelfServeExplainerModal: true,
-            },
-          } as any,
-        }),
-        Platform.select({
-          native: as,
-          web: router.asPath,
-        }),
-        { shallow: true }
-      );
+      redirectToSelfServeExplainerModal();
       return;
     }
     Linking.openURL(
       "https://www.notion.so/showtime-xyz/Showtime-xyz-Creator-Tokens-alpha-1-min-read-7f8b0c621e4442e98ec4c4189bec28df?pvs=4"
     );
-  }, [router, user?.user?.data.profile.creator_token_onboarding_status]);
+  }, [
+    redirectToSelfServeExplainerModal,
+    user?.user?.data.profile.creator_token_onboarding_status,
+  ]);
 
   return (
     <>
@@ -137,7 +153,7 @@ const CreatorTokensBanner = () => {
           tw="ml-auto"
           onPress={() => {
             showBanner.value = 0;
-            setHideShowCreatorTokenBanner(true);
+            // setHideShowCreatorTokenBanner(true);
           }}
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
         >
