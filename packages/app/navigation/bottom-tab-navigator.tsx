@@ -50,7 +50,7 @@ export function BottomTabNavigator() {
           tabBarIcon: CreatorChannelsTabBarIcon,
         }}
       />
-      {width < 768 && canCreateMusicDrop && (
+      {canCreateMusicDrop && width < 768 && (
         <BottomTab.Screen
           name="createTab"
           component={CreateNavigator}
