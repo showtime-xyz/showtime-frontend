@@ -25,7 +25,6 @@ import { breakpoints } from "design-system/theme";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,
-  useSuggestedChannelsList,
 } from "./hooks/use-channels-list";
 import { useJoinChannel } from "./hooks/use-join-channel";
 import { CreatorChannelsList as CreatorChannelsListMobile } from "./list";
@@ -44,12 +43,6 @@ const channelsSection = {
   title: "Channels",
   subtext:
     "Get exclusive updates, presale access and unreleased content from your favorite creators.",
-};
-
-const suggestedChannelsSection = {
-  type: "section",
-  title: "Popular creators",
-  tw: "text-xl",
 };
 
 const CreatorChannelsHeader = memo(
@@ -330,10 +323,6 @@ export const CreatorChannels = memo(() => {
     isLoading: isLoadingJoinedChannels,
   } = useJoinedChannelsList();
 
-  // suggested channels
-  const { data: suggestedChannelsData, isLoading: isLoadingSuggestedChannels } =
-    useSuggestedChannelsList();
-
   // since we're quering two different endpoints, and based on the amount of data from the first endpoint
   // we have to transform our data a bit and decide if we build a section list or a single FlashList
   // we're going to useMemo for that and return the data in the format we need
@@ -353,16 +342,6 @@ export const CreatorChannels = memo(() => {
               ...joinedChannelsData,
             ]
           : []),
-        // check if we have any suggested channels, if we do, we're going to add a section for them (+ the suggested channels)
-        ...(suggestedChannelsData.length > 0
-          ? [
-              suggestedChannelsSection,
-              ...suggestedChannelsData.map((suggestedChannel) => ({
-                ...suggestedChannel,
-                itemType: "creator",
-              })),
-            ]
-          : []),
       ];
     } else {
       return [
@@ -378,11 +357,7 @@ export const CreatorChannels = memo(() => {
         ...joinedChannelsData,
       ];
     }
-  }, [
-    joinedChannelsData,
-    ownedChannelsData,
-    suggestedChannelsData,
-  ]) as CreatorChannelsListItemProps[];
+  }, [joinedChannelsData, ownedChannelsData]) as CreatorChannelsListItemProps[];
 
   const renderItem = useCallback(({ item }: CreatorChannelsListProps) => {
     if (item.type === "section") {
@@ -403,11 +378,7 @@ export const CreatorChannels = memo(() => {
   }, []);
 
   const ListFooterComponent = useCallback(() => {
-    if (
-      isLoadingJoinedChannels ||
-      isLoadingOwnChannels ||
-      isLoadingSuggestedChannels
-    ) {
+    if (isLoadingJoinedChannels || isLoadingOwnChannels) {
       return <CCSkeleton />;
     }
 
@@ -427,7 +398,6 @@ export const CreatorChannels = memo(() => {
   }, [
     isLoadingJoinedChannels,
     isLoadingOwnChannels,
-    isLoadingSuggestedChannels,
     isLoadingMoreJoinedChannels,
   ]);
   if (!isLgWidth) {
@@ -463,9 +433,7 @@ export const CreatorChannels = memo(() => {
         <InfiniteScrollList
           useWindowScroll={false}
           data={
-            isLoadingOwnChannels ||
-            isLoadingJoinedChannels ||
-            isLoadingSuggestedChannels
+            isLoadingOwnChannels || isLoadingJoinedChannels
               ? []
               : transformedData
           }
