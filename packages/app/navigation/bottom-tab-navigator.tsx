@@ -23,6 +23,10 @@ const BottomTab = createBottomTabNavigator();
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
   const user = useContext(UserContext);
+  const canCreateMusicDrop =
+    !!user?.user?.data.profile.bypass_track_ownership_validation ||
+    !!user?.user?.data.profile.spotify_artist_id ||
+    !!user?.user?.data.profile.apple_music_artist_id;
 
   return (
     <BottomTab.Navigator
@@ -46,7 +50,7 @@ export function BottomTabNavigator() {
           tabBarIcon: CreatorChannelsTabBarIcon,
         }}
       />
-      {width < 768 && (
+      {width < 768 && canCreateMusicDrop && (
         <BottomTab.Screen
           name="createTab"
           component={CreateNavigator}
