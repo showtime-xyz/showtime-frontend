@@ -5,10 +5,12 @@ import { publicClient } from "app/lib/wallet-public-client";
 import { isDEV } from "app/utilities";
 
 import { useWallet } from "../use-wallet";
+import { useMaxGasPrices } from "./use-max-gas-prices";
 import { usdcAddress } from "./utils";
 
 export const useApproveToken = () => {
   const wallet = useWallet();
+  const { getMaxFeePerGasAndPriorityPrice } = useMaxGasPrices();
   const state = useSWRMutation<boolean | undefined>(
     "approveToken",
     async function approveToken(
@@ -44,18 +46,10 @@ export const useApproveToken = () => {
           return true;
         }
 
-        const { maxFeePerGas: estimatedMaxFeePerGas, maxPriorityFeePerGas } =
-          await publicClient.estimateFeesPerGas({
-            type: "eip1559",
-          });
+        const maxPrices = await getMaxFeePerGasAndPriorityPrice();
 
-        const latestBlockBaseFeePerGas = (await publicClient.getBlock())
-          .baseFeePerGas;
-
-        if (maxPriorityFeePerGas) {
-          const maxFeePerGas = latestBlockBaseFeePerGas
-            ? latestBlockBaseFeePerGas * 2n + maxPriorityFeePerGas
-            : estimatedMaxFeePerGas;
+        if (maxPrices) {
+          const { maxFeePerGas, maxPriorityFeePerGas } = maxPrices;
 
           console.log("gas price  approve", {
             maxFeePerGas,
