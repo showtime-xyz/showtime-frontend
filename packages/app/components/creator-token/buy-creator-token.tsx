@@ -62,23 +62,7 @@ const SELL_PAYMENTS = [
     value: "USDC",
   },
 ];
-const PAYMENT_METHODS = !__DEV__
-  ? [
-      {
-        title: "USDC",
-        value: "USDC",
-      },
-    ]
-  : [
-      {
-        title: "ETH",
-        value: "ETH",
-      },
-      {
-        title: "USDC",
-        value: "USDC",
-      },
-    ];
+
 const SELECT_LIST = [
   {
     title: "Buy",
