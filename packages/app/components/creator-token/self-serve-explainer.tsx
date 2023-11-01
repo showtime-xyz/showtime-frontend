@@ -36,7 +36,9 @@ export const SelfServeExplainer = () => {
   const isDark = useIsDarkMode();
   const { user } = useUser();
   const { top } = useSafeAreaInsets();
-  const userProfilePic = user?.data.profile.img_url;
+  const userProfilePic =
+    user?.data.profile.img_url ||
+    "https://media.showtime.xyz/assets/default-creator-token-pic.png";
 
   const [profilePic, setProfilePic] = useState<string | undefined | File>(
     userProfilePic

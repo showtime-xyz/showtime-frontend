@@ -7,6 +7,7 @@ import { useWallet } from "./use-wallet/use-wallet";
 export const useWalletETHBalance = () => {
   const wallet = useWallet();
   const res = useSWR("ethBalance" + wallet.address, async () => {
+    if (__DEV__) return { balance: 0, displayBalance: "0" };
     if (wallet.address) {
       const res = (await publicClient.getBalance({
         address: wallet.address,
