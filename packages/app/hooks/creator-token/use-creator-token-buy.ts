@@ -24,6 +24,7 @@ import {
   getPriceToBuyNextKey,
   useCreatorTokenPriceToBuyNext,
 } from "./use-creator-token-price-to-buy-next";
+import { useMaxGasPrices } from "./use-max-gas-prices";
 import { useSwitchChain } from "./use-switch-chain";
 import { baseChain, creatorTokenSwapRouterAddress } from "./utils";
 
@@ -36,6 +37,7 @@ export const useCreatorTokenBuy = (params: {
   const { data: profileData } = useUserProfile({ address: username });
   const wallet = useWallet();
   const approveToken = useApproveToken();
+  const { getMaxFeePerGasAndPriorityPrice } = useMaxGasPrices();
   const priceToBuyNext = useCreatorTokenPriceToBuyNext({
     address: profileData?.data?.profile.creator_token?.address,
     tokenAmount,
@@ -66,18 +68,10 @@ export const useCreatorTokenBuy = (params: {
       if (walletAddress && profileData?.data?.profile.creator_token) {
         const switchChainSuccess = await switchChain.trigger();
 
-        const { maxFeePerGas: estimatedMaxFeePerGas, maxPriorityFeePerGas } =
-          await publicClient.estimateFeesPerGas({
-            type: "eip1559",
-          });
+        const maxPrices = await getMaxFeePerGasAndPriorityPrice();
 
-        const latestBlockBaseFeePerGas = (await publicClient.getBlock())
-          .baseFeePerGas;
-
-        if (maxPriorityFeePerGas) {
-          const maxFeePerGas = latestBlockBaseFeePerGas
-            ? latestBlockBaseFeePerGas * 2n + maxPriorityFeePerGas
-            : estimatedMaxFeePerGas;
+        if (maxPrices) {
+          const { maxFeePerGas, maxPriorityFeePerGas } = maxPrices;
 
           console.log("gas price  buy", {
             maxFeePerGas,
