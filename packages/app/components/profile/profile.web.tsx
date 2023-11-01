@@ -313,7 +313,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                       channelPermissions={channelPermissions}
                     />
                     {isProfileMdScreen ? null : (
-                      <View tw="pl-5">
+                      <View tw="pl-4">
                         <CreatorTokenCollectors
                           creatorTokenId={
                             profileData?.data?.profile.creator_token?.id
