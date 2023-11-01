@@ -1,4 +1,3 @@
-import { providers } from "ethers";
 import { useSWRConfig } from "swr";
 import useSWRMutation from "swr/mutation";
 

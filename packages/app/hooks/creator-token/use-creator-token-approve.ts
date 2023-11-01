@@ -40,11 +40,22 @@ export const useApproveToken = () => {
           res < maxPrice
         );
 
-        if (res < maxPrice) {
-          const { maxFeePerGas, maxPriorityFeePerGas } =
-            await publicClient.estimateFeesPerGas({
-              type: "eip1559",
-            });
+        if (res >= maxPrice) {
+          return true;
+        }
+
+        const { maxFeePerGas: estimatedMaxFeePerGas, maxPriorityFeePerGas } =
+          await publicClient.estimateFeesPerGas({
+            type: "eip1559",
+          });
+
+        const latestBlockBaseFeePerGas = (await publicClient.getBlock())
+          .baseFeePerGas;
+
+        if (maxPriorityFeePerGas) {
+          const maxFeePerGas = latestBlockBaseFeePerGas
+            ? latestBlockBaseFeePerGas * 2n + maxPriorityFeePerGas
+            : estimatedMaxFeePerGas;
 
           console.log("gas price  approve", {
             maxFeePerGas,
@@ -77,8 +88,6 @@ export const useApproveToken = () => {
               return true;
             }
           }
-        } else {
-          return true;
         }
       }
     }
