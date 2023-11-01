@@ -286,10 +286,12 @@ export const BuyCreatorToken = () => {
                       tw="mr-2"
                     />
                   ) : (
-                    <Ethereum
+                    <Image
+                      source={{
+                        uri: "https://media.showtime.xyz/assets/ETH%26Base.png",
+                      }}
                       width={44}
                       height={44}
-                      color={isDark ? "white" : "black"}
                     />
                   )}
                   {selectedAction === "buy" ? (
@@ -427,8 +429,8 @@ export const BuyCreatorToken = () => {
           <View tw="items-center pt-4">
             <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
               {paymentMethod === "USDC"
-                ? "USDC is traded on the Base network."
-                : "Must purchase with Crypto on Base network"}
+                ? "Trade with USDC on the Base Ethereum L2."
+                : "Buy with ETH or USDC on the Base Ethereum L2."}
             </Text>
           </View>
         </View>
