@@ -183,9 +183,7 @@ export const CreatorTokensPanel = ({
                       color={isDark ? colors.gray[300] : colors.gray[500]}
                     />
                   }
-                  text={
-                    "Your estimated USDC wallet\nbalance on the Base network."
-                  }
+                  text={"Your USDC balance on\nthe Base Ethereum L2."}
                 />
               </View>
               <Text tw="text-base font-bold text-gray-900 dark:text-white">

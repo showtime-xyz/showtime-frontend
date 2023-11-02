@@ -40,7 +40,7 @@ const VISIBLE_HEIGHT_NATIVE = 60;
 
 const heightsNative = [HIDDEN_HEIGHT, VISIBLE_HEIGHT_NATIVE];
 
-const CreatorTokensBanner = () => {
+export const CreatorTokensBanner = ({ height }: { height?: number }) => {
   // const showValue = getIsShowCreatorTokenIntroBanner() ? 1 : 0;
   const showValue = 1;
   const showBanner = useSharedValue(showValue);
@@ -50,7 +50,9 @@ const CreatorTokensBanner = () => {
   const user = useContext(UserContext);
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const visibleHeight = isMdWidth
+  const visibleHeight = height
+    ? height
+    : isMdWidth
     ? VISIBLE_HEIGHT_DESKTOP
     : VISIBLE_HEIGHT_NATIVE;
   const heightsWeb = [HIDDEN_HEIGHT, visibleHeight];
