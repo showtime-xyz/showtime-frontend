@@ -135,7 +135,7 @@ export const CreatorTokensBanner = ({
       <AnimatedView
         tw={[
           "absolute w-full flex-row items-center overflow-hidden px-4 py-2.5",
-          tw,
+          tw as any,
         ]}
         style={animatedStyle}
       >
@@ -155,7 +155,7 @@ export const CreatorTokensBanner = ({
               : "Introducing Creator Tokens: invest in your favorite creators. Read more."}
           </Text>
         </View>
-        <Pressable
+        {/* <Pressable
           tw="ml-auto"
           onPress={() => {
             showBanner.value = 0;
@@ -164,7 +164,7 @@ export const CreatorTokensBanner = ({
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
         >
           <Close color={colors.gray[900]} width={24} height={24} />
-        </Pressable>
+        </Pressable> */}
       </AnimatedView>
       <AnimatedView
         pointerEvents={"none"}

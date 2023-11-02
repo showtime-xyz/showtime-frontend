@@ -31,7 +31,7 @@ export const ImportedAllowlistSuccess = () => {
   const { width } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
   const [intentCopy, setIntentCopy] = useState(
-    `Just gave free channel access to my allowlist 💬 \n\nFind me at @"${userContext?.user?.data.profile.username}" on @Showtime_xyz and make sure to use the same wallet!`
+    `Just gave free channel access to my allowlist 💬 \n\nFind me at @${userContext?.user?.data.profile.username} on @Showtime_xyz and make sure to use the same wallet!`
   );
 
   const isSmWidth = width >= breakpoints["sm"];
