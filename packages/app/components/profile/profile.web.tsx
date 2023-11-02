@@ -59,6 +59,7 @@ import { EmptyPlaceholder } from "../empty-placeholder";
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { HeaderLeft } from "../header";
 import { HeaderRightSm } from "../header/header-right.sm";
+import { CreatorTokensBanner } from "../home/header";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { MyCollection } from "./my-collection";
 import { ProfileError } from "./profile-error";
@@ -251,6 +252,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
           <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
             {isProfileMdScreen ? (
               <>
+                <CreatorTokensBanner />
                 <ProfileCover
                   tw="overflow-hidden rounded-b-3xl"
                   uri={getFullSizeCover(profileData?.data?.profile)}
@@ -289,7 +291,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               </>
             ) : null}
             <View tw="w-full flex-row">
-              <View tw="-mt-3 flex-1">
+              <View tw="flex-1">
                 <ProfileTop
                   address={username}
                   isBlocked={isBlocked}

@@ -48,6 +48,7 @@ import { breakpoints } from "design-system/theme";
 import { toast } from "design-system/toast";
 
 import { ButtonGoldLinearGradient } from "../gold-gradient";
+import { CreatorTokensBanner } from "../home/header";
 import { CompleteProfileButton } from "./complete-profile-button";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { ProfileSocial } from "./profile-social";
@@ -266,6 +267,7 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
   }
   return (
     <>
+      <CreatorTokensBanner height={52} />
       <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
         <ProfileCover uri={getFullSizeCover(profileData?.profile)} />
       </View>
