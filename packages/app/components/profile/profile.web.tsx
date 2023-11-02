@@ -314,22 +314,20 @@ const Profile = ({ username }: ProfileScreenProps) => {
                       messageCount={messageCount}
                       channelPermissions={channelPermissions}
                     />
-                    {isProfileMdScreen ? null : (
-                      <View tw="pl-5">
-                        <CreatorTokenCollectors
-                          creatorTokenId={
-                            profileData?.data?.profile.creator_token?.id
-                          }
-                          name={profileData?.data?.profile.name}
-                          username={username}
-                        />
-                        <CreatorTokenCollected
-                          profileId={profileId}
-                          name={profileData?.data?.profile.name}
-                          username={username}
-                        />
-                      </View>
-                    )}
+                    <View tw="pl-5">
+                      <CreatorTokenCollectors
+                        creatorTokenId={
+                          profileData?.data?.profile.creator_token?.id
+                        }
+                        name={profileData?.data?.profile.name}
+                        username={username}
+                      />
+                      <CreatorTokenCollected
+                        profileId={profileId}
+                        name={profileData?.data?.profile.name}
+                        username={username}
+                      />
+                    </View>
                   </>
                 ) : null}
                 {type === "song_drops_created" && isSelf ? (
@@ -369,18 +367,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   <Sticky enabled>
                     <CreatorTokensPanel username={username} isSelf={isSelf} />
                     {isSelf && <MyCollection />}
-                    <CreatorTokenCollectors
-                      creatorTokenId={
-                        profileData?.data?.profile.creator_token?.id
-                      }
-                      name={profileData?.data?.profile.name}
-                      username={username}
-                    />
-                    <CreatorTokenCollected
-                      profileId={profileId}
-                      name={profileData?.data?.profile.name}
-                      username={username}
-                    />
                   </Sticky>
                 </View>
               ) : null}

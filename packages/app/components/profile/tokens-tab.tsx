@@ -226,10 +226,7 @@ export const CreatorTokenCollectors = ({
   username: string | undefined;
   name: string | undefined;
 } & ViewProps) => {
-  const { data, isLoading, count } = useCreatorTokenCollectors(
-    creatorTokenId,
-    6
-  );
+  const { data, isLoading, count } = useCreatorTokenCollectors(creatorTokenId);
   const router = useRouter();
   if ((!data?.length || data.length === 0) && !isLoading) {
     return null;
@@ -240,7 +237,7 @@ export const CreatorTokenCollectors = ({
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collectors
         </Text>
-        {count > 6 ? (
+        {/* {count > 6 ? (
           <Text
             onPress={() => {
               const as = `/creator-token/${creatorTokenId}/collectors`;
@@ -263,7 +260,7 @@ export const CreatorTokenCollectors = ({
           >
             Show all
           </Text>
-        ) : null}
+        ) : null} */}
       </View>
       <View tw="h-2" />
       <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
@@ -292,7 +289,7 @@ export const CreatorTokenCollected = ({
   name: string | undefined;
 } & ViewProps) => {
   const router = useRouter();
-  const { data, count, isLoading } = useCreatorTokenCoLlected(profileId, 6);
+  const { data, count, isLoading } = useCreatorTokenCoLlected(profileId);
   if ((!data?.length || data?.length === 0) && !isLoading) {
     return null;
   }
@@ -302,7 +299,7 @@ export const CreatorTokenCollected = ({
         <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collected
         </Text>
-        {count > 6 ? (
+        {/* {count > 6 ? (
           <Text
             onPress={() => {
               const as = `/creator-token/${profileId}/collected`;
@@ -327,7 +324,7 @@ export const CreatorTokenCollected = ({
           >
             Show all
           </Text>
-        ) : null}
+        ) : null} */}
       </View>
       <View tw="h-2" />
       <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
