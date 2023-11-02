@@ -40,7 +40,13 @@ const VISIBLE_HEIGHT_NATIVE = 60;
 
 const heightsNative = [HIDDEN_HEIGHT, VISIBLE_HEIGHT_NATIVE];
 
-export const CreatorTokensBanner = ({ height }: { height?: number }) => {
+export const CreatorTokensBanner = ({
+  height,
+  tw,
+}: {
+  height?: number;
+  tw?: string;
+}) => {
   // const showValue = getIsShowCreatorTokenIntroBanner() ? 1 : 0;
   const showValue = 1;
   const showBanner = useSharedValue(showValue);
@@ -127,7 +133,10 @@ export const CreatorTokensBanner = ({ height }: { height?: number }) => {
   return (
     <>
       <AnimatedView
-        tw="absolute w-full flex-row items-center overflow-hidden px-4 py-2.5"
+        tw={[
+          "absolute w-full flex-row items-center overflow-hidden px-4 py-2.5",
+          tw,
+        ]}
         style={animatedStyle}
       >
         <BgGoldLinearGradient />

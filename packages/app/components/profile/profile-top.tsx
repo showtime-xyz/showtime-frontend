@@ -267,7 +267,9 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
   }
   return (
     <>
-      {Platform.OS === "web" && <CreatorTokensBanner height={52} />}
+      {Platform.OS === "web" && (
+        <CreatorTokensBanner height={52} tw={isSelf ? "pr-14" : ""} />
+      )}
       <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
         <ProfileCover uri={getFullSizeCover(profileData?.profile)} />
       </View>
