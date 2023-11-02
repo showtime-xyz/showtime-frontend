@@ -170,7 +170,7 @@ export const CreatorTokensPanel = ({
             <View tw="w-full flex-row items-center justify-between">
               <View tw="flex-row items-center">
                 <Text tw="mr-2 text-gray-500 dark:text-gray-300">
-                  USDC wallet balance
+                  USDC balance
                 </Text>
 
                 <TextTooltip

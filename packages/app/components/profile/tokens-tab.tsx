@@ -171,7 +171,7 @@ export const TokensTabHeader = ({
               ) : (
                 <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
                   {channelPermissions &&
-                  !channelPermissions?.can_view_creator_messages
+                  channelPermissions?.can_view_creator_messages
                     ? `You've unlocked ${channelMessageCountFormatted} messages`
                     : `Channel locked (${channelMessageCountFormatted} messages)`}
                 </Text>
