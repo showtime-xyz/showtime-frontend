@@ -16,7 +16,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import {
   DESKTOP_CONTENT_WIDTH,
@@ -42,11 +42,11 @@ const heightsNative = [HIDDEN_HEIGHT, VISIBLE_HEIGHT_NATIVE];
 
 export const CreatorTokensBanner = ({
   height,
+  style,
   tw,
 }: {
   height?: number;
-  tw?: string;
-}) => {
+} & ViewProps) => {
   // const showValue = getIsShowCreatorTokenIntroBanner() ? 1 : 0;
   const showValue = 1;
   const showBanner = useSharedValue(showValue);
@@ -129,7 +129,11 @@ export const CreatorTokensBanner = ({
     redirectToSelfServeExplainerModal,
     user?.user?.data.profile.creator_token_onboarding_status,
   ]);
-
+  if (
+    user?.user?.data.profile.creator_token_onboarding_status === "onboarded"
+  ) {
+    return null;
+  }
   return (
     <>
       <AnimatedView
@@ -137,7 +141,7 @@ export const CreatorTokensBanner = ({
           "absolute w-full flex-row items-center overflow-hidden px-4 py-2.5",
           tw as any,
         ]}
-        style={animatedStyle}
+        style={[animatedStyle, style]}
       >
         <BgGoldLinearGradient />
         <View>
