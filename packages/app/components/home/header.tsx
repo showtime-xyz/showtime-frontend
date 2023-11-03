@@ -257,10 +257,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      {/*
-        // TODO: Creator Tokens P1
-        <TopPartCreatorTokens />
-      */}
+      <TopPartCreatorTokens />
       <TrendingCarousel />
     </View>
   );

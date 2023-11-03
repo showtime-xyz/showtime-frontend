@@ -7,9 +7,9 @@ import { withColorScheme } from "app/components/memo-with-theme";
 import { useTrackPageViewed } from "app/lib/analytics";
 
 const TopCreatorTokenModalScreen = withModalScreen(TopCreatorTokens, {
-  title: "",
-  matchingPathname: "/creator-token/[profileId]/top",
-  matchingQueryParam: "TopcreatorTokenScreenModal",
+  title: "Top Creator Tokens",
+  matchingPathname: "/creator-token/top",
+  matchingQueryParam: "topCreatorTokenModal",
   enableContentPanningGesture: false,
   snapPoints: ["90%"],
 });

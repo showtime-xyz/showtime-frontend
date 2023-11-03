@@ -24,7 +24,10 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { breakpoints } from "design-system/theme";
 
-import { TopCreatorTokensItem } from "./creator-token-users";
+import {
+  TopCreatorTokenItem,
+  TopCreatorTokenSkeleton,
+} from "./creator-token-users";
 
 const Header = () => {
   const headerHeight = useHeaderHeight();
@@ -49,38 +52,28 @@ const Header = () => {
 
 const keyExtractor = (item: CreatorTokenUser) => `${item.profile_id}`;
 export const TopCreatorTokens = () => {
-  const { height: screenHeight, width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
+  const { height: screenHeight } = useWindowDimensions();
   const { data: list, isLoading } = useCreatorTokenCollectors(27);
 
-  const numColumns = 3;
+  const numColumns = 1;
 
   const renderItem = useCallback(
     ({
       item,
       index,
     }: ListRenderItemInfo<CreatorTokenUser & { loading?: boolean }>) => {
-      return <TopCreatorTokensItem item={item} index={index} />;
+      return <TopCreatorTokenItem item={item} index={index} showName />;
     },
     []
   );
 
-  const getItemType = useCallback(
-    (_: CreatorTokenUser, index: number) => {
-      const marginLeft = isMdWidth ? 0 : index % numColumns === 0 ? 0 : 8;
-      if (marginLeft) {
-        return "right";
-      }
-      return "left";
-    },
-    [isMdWidth, numColumns]
-  );
-
   const ListEmptyComponent = useCallback(() => {
-    if (isLoading) {
+    if (!isLoading) {
       return (
-        <View tw="mx-auto w-full max-w-screen-xl justify-center md:px-0">
-          <Spinner />
+        <View>
+          {new Array(6).fill(0).map((_, i) => {
+            return <TopCreatorTokenSkeleton key={i} />;
+          })}
         </View>
       );
     }
@@ -105,7 +98,6 @@ export const TopCreatorTokens = () => {
             numColumns={numColumns}
             renderItem={renderItem}
             drawDistance={500}
-            getItemType={getItemType}
             style={{
               height: Platform.select({
                 web: undefined,
@@ -113,13 +105,13 @@ export const TopCreatorTokens = () => {
               }),
             }}
             contentContainerStyle={{
-              paddingHorizontal: 8,
+              paddingHorizontal: 12,
             }}
             overscan={12}
             containerTw="px-4 md:px-0"
             ListEmptyComponent={ListEmptyComponent}
             ListHeaderComponent={Header}
-            estimatedItemSize={275}
+            estimatedItemSize={46}
           />
         </ErrorBoundary>
       </View>

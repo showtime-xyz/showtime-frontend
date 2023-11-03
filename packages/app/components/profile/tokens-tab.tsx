@@ -48,7 +48,7 @@ import { formatNumber } from "app/utilities";
 import SvgUnlocked from "design-system/icon/Unlocked";
 
 import { ChannelPermissions } from "../creator-channels/types";
-import { TopCreatorTokensItem } from "../creator-token/creator-token-users";
+import { CreatorTokenCard } from "../creator-token/creator-token-users";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { MyCollection } from "./my-collection";
@@ -266,7 +266,7 @@ export const CreatorTokenCollectors = ({
       <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
         {data?.map((item, i) => {
           return (
-            <TopCreatorTokensItem
+            <CreatorTokenCard
               item={item}
               index={i}
               key={i}
@@ -330,7 +330,7 @@ export const CreatorTokenCollected = ({
       <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
         {data?.map((item, i) => {
           return (
-            <TopCreatorTokensItem
+            <CreatorTokenCard
               item={item}
               index={i}
               key={i}
