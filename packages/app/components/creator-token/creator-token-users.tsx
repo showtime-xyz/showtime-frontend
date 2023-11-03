@@ -2,7 +2,11 @@ import { Platform } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { GoldHexagon, Showtime } from "@showtime-xyz/universal.icon";
+import {
+  GoldHexagon,
+  Showtime,
+  ShowtimeRounded,
+} from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -11,7 +15,10 @@ import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
-import { CreatorTokenUser } from "app/hooks/creator-token/use-creator-tokens";
+import {
+  CreatorTokenUser,
+  TopCreatorTokenUser,
+} from "app/hooks/creator-token/use-creator-tokens";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { formatAddressShort } from "app/utilities";
 
@@ -79,7 +86,7 @@ export const CreatorTokenCard = ({
   );
 };
 
-export const TopCreatorTokenItem = ({
+export const TopCreatorTokenListItem = ({
   index,
   tw,
   item,
@@ -133,7 +140,7 @@ export const TopCreatorTokenItem = ({
 
               <View tw="flex-row items-center">
                 <Text
-                  tw="max-w-[120px] text-sm font-semibold text-gray-900 dark:text-white"
+                  tw="text-sm font-semibold text-gray-900 dark:text-white"
                   numberOfLines={1}
                 >
                   {item.username ? (
@@ -157,6 +164,78 @@ export const TopCreatorTokenItem = ({
               @{item?.username}
             </Text>
           )}
+        </View>
+      </View>
+    </PressableHover>
+  );
+};
+export const TopCreatorTokenItem = ({
+  index,
+  tw,
+  item,
+  showName = false,
+  ...rest
+}: ViewProps & {
+  index?: number;
+  item: TopCreatorTokenUser;
+  showName?: boolean;
+}) => {
+  const router = useRouter();
+  const isDark = useIsDarkMode();
+  return (
+    <PressableHover
+      tw={["py-1.5", tw].join(" ")}
+      onPress={() => router.push(`/@${item.owner_profile.username}`)}
+      {...rest}
+    >
+      <View tw="flex-row items-center">
+        {index != undefined ? (
+          index < 3 ? (
+            <View tw="mr-1 items-center justify-center">
+              <View tw="absolute -top-1">
+                <GoldHexagon width={18} height={18} />
+              </View>
+              <Text tw="text-xs font-bold text-white">{index + 1}</Text>
+            </View>
+          ) : (
+            <View tw="mr-1 items-center justify-center">
+              <Text tw="text-xs font-bold text-gray-700 dark:text-white">
+                {index + 1}
+              </Text>
+            </View>
+          )
+        ) : null}
+        <View tw="web:flex-1 ml-2 flex-row items-center">
+          <Avatar url={item?.owner_profile.img_url} size={34} />
+          <View tw="w-2" />
+          <View tw="flex-1 justify-center">
+            {item.owner_profile.username ? (
+              <>
+                <Text
+                  tw="text-sm font-semibold text-gray-900 dark:text-white"
+                  numberOfLines={1}
+                >
+                  @{item.owner_profile.username}
+                </Text>
+                <View tw="h-1" />
+              </>
+            ) : null}
+
+            <View tw="flex-row items-center">
+              <Text
+                tw="text-xs font-semibold text-gray-900 dark:text-white"
+                numberOfLines={1}
+              >
+                {item.nft_count}
+              </Text>
+              <View tw="w-1" />
+              <ShowtimeRounded
+                width={14}
+                height={14}
+                color={isDark ? colors.white : colors.gray[900]}
+              />
+            </View>
+          </View>
         </View>
       </View>
     </PressableHover>

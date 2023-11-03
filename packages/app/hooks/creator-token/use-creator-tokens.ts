@@ -6,6 +6,7 @@ import {
   fetcher,
   useInfiniteListQuerySWR,
 } from "app/hooks/use-infinite-list-query";
+import { Profile } from "app/types";
 
 export type CreatorTokenUser = {
   verified: boolean;
@@ -17,11 +18,19 @@ export type CreatorTokenUser = {
   wallet_address_nonens: string;
   img_url: string;
 };
+export type TopCreatorTokenUser = {
+  id: number;
+  owner_profile: Profile;
+  owner_address: string;
+  name: string;
+  token_uri: string;
+  nft_count: number;
+};
 export type CreatorTokenCollectors = {
   profiles: CreatorTokenUser[];
 };
 export type TopCreatorToken = {
-  creator_tokens: CreatorTokenUser[];
+  creator_tokens: TopCreatorTokenUser[];
 };
 export const useCreatorTokenCollectors = (
   creatorTokenId?: number | string,
@@ -78,20 +87,22 @@ export const useTopCreatorToken = (limit: number = 10) => {
   const fetchUrl = useCallback(
     (index: number, previousPageData: []) => {
       if (previousPageData && !previousPageData.length) return null;
-      return `/v1/creator-token/collectors?page=${
-        index + 1
-      }&limit=${limit}&creator_token_id=${27}`;
+      return `/v1/creator-token/top?page=${index + 1}&limit=${limit}`;
     },
     [limit]
   );
 
-  const queryState = useInfiniteListQuerySWR<CreatorTokenCollectors>(fetchUrl, {
+  const queryState = useInfiniteListQuerySWR<TopCreatorToken>(fetchUrl, {
     pageSize: limit,
   });
   const newData = useMemo(() => {
-    let newData: CreatorTokenUser[] = [];
-    if (queryState.data && queryState.data[0] && queryState.data[0].profiles) {
-      queryState.data[0].profiles.forEach((p) => {
+    let newData: TopCreatorTokenUser[] = [];
+    if (
+      queryState.data &&
+      queryState.data[0] &&
+      queryState.data[0].creator_tokens
+    ) {
+      queryState.data[0].creator_tokens.forEach((p) => {
         if (p) {
           newData = newData.concat(p);
         }

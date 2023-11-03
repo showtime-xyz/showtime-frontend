@@ -19,6 +19,7 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import {
   CreatorTokenUser,
   useCreatorTokenCollectors,
+  useTopCreatorToken,
 } from "app/hooks/creator-token/use-creator-tokens";
 
 import {
@@ -29,7 +30,7 @@ import {
 const keyExtractor = (item: CreatorTokenUser) => `${item.profile_id}`;
 export const TopCreatorTokens = () => {
   const { height: screenHeight } = useWindowDimensions();
-  const { data: list, isLoading } = useCreatorTokenCollectors(27);
+  const { data: list, isLoading } = useTopCreatorToken();
 
   const numColumns = 1;
 
