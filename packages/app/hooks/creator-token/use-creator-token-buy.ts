@@ -125,9 +125,8 @@ export const useCreatorTokenBuy = (params: {
               const approveSuccess = await approveToken.trigger({
                 creatorTokenContract:
                   profileData?.data?.profile.creator_token.address,
-                // add 10 cents more to cover for weird fluctuation
-                // TODO: remove if not needed after more testing
-                maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
+                // add 100 USD more to reduce approval transactions
+                maxPrice: priceToBuyNext.data?.totalPrice + 100000000n,
               });
               if (approveSuccess) {
                 if (tokenAmount === 1) {
