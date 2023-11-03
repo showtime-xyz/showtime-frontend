@@ -228,13 +228,14 @@ export const useCreatorTokenBuy = (params: {
         {
           if (isInsufficientFundsErrorFn(error)) {
             toast.error(`Insufficient ${params.paymentMethod} balance`);
+          } else {
+            toast.error("Failed", {
+              message: formatAPIErrorMessage(error),
+            });
           }
 
           console.error("useCreatorTokenContractBuy", error);
           captureException(error);
-          toast.error("Failed", {
-            message: formatAPIErrorMessage(error),
-          });
         }
       },
     }
