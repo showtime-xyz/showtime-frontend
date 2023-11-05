@@ -102,7 +102,6 @@ export const TokensTabHeader = ({
         </View>
       ) : null}
 
-      {/* TODO: Creator tokens P1
       <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-4 py-4 dark:border-gray-700 dark:bg-gray-900">
         <Text tw="mr-4 flex-1 text-sm text-gray-500 dark:text-gray-400">
           Create your token to access your channel.
@@ -134,7 +133,6 @@ export const TokensTabHeader = ({
           </Text>
         </Pressable>
       </View>
-      */}
 
       {isSelf && <MyCollection />}
       {channelId && (messageCount || messageCount == 0) && messageCount >= 0 ? (

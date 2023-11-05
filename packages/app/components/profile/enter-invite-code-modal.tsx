@@ -15,6 +15,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
+import { axios } from "app/lib/axios";
+
 import { toast } from "design-system/toast";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -51,6 +53,24 @@ export const EnterInviteCodeModal = () => {
       ),
     };
   }, [caretOpacity]);
+
+  const checkCode = async () => {
+    try {
+      const res = await axios({
+        method: "POST",
+        url: "/v1/profile/creator-tokens/optin",
+        data: {
+          invite_code: inviteCode,
+        },
+      });
+      console.log(res);
+    } catch (e: any) {
+      console.log(e);
+      toast.error(e.response.data.message);
+    } finally {
+      setInviteCode("");
+    }
+  };
 
   return (
     <View tw="px-4">
@@ -104,6 +124,8 @@ export const EnterInviteCodeModal = () => {
               if (code.length === 6) {
                 setInviteCode(code);
                 toast.success("Pasted from clipboard");
+              } else {
+                toast.error("Invalid code");
               }
             } catch (e: any) {
               toast.error("No permission to paste from clipboard");
@@ -116,8 +138,9 @@ export const EnterInviteCodeModal = () => {
       </View>
       <Button
         size="regular"
-        onPress={() => {}}
+        onPress={checkCode}
         disabled={inviteCode.length < 6}
+        style={{ opacity: inviteCode.length < 6 ? 0.5 : 1 }}
       >
         Review token
       </Button>
