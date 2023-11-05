@@ -54,12 +54,16 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
   ["CHANNEL_NEW_MESSAGE", "channel: "],
   ["CHANNEL_FIRST_MESSAGE", "just created a collector channel: "],
-
   [
     "MISSING_MUSIC_RELEASE_METADATA",
     "Spotify song link to notify your fans the song is out. ",
   ],
   ["RELEASE_SAVED_TO_SPOTIFY", "is out! Check it out now."],
+  [
+    "INVITE_REDEEMED",
+    "You earned {1} {2} token for inviting them! Tap to say hi.",
+  ],
+  ["CREATOR_TOKEN_PURCHASE", "just bought {1} of your creator tokens! "],
 ]);
 
 export const NotificationItem = memo(
@@ -70,6 +74,8 @@ export const NotificationItem = memo(
       [notification.type_name]
     );
     const isDark = useIsDarkMode();
+
+    console.log(notification.type_name);
 
     const notificationPressHandler = useCallback(() => {
       let path = "";
