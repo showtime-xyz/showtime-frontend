@@ -22,6 +22,7 @@ import { toast } from "design-system/toast";
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export const EnterInviteCodeModal = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [letterSpacing, setLetterSpacing] = useState(0);
   const [inviteCode, setInviteCode] = useState("");
   const [caretPosition, setCaretPosition] = useState(0);
@@ -56,6 +57,7 @@ export const EnterInviteCodeModal = () => {
 
   const checkCode = async () => {
     try {
+      setIsLoading(true);
       const res = await axios({
         method: "POST",
         url: "/v1/profile/creator-tokens/optin",
@@ -64,10 +66,19 @@ export const EnterInviteCodeModal = () => {
         },
       });
       console.log(res);
+      // TODO: Success message / modal or redirect to creator token page/channel
+      // Payload is still missing in the API response
     } catch (e: any) {
-      console.log(e);
-      toast.error(e.response.data.message);
+      const errorCode = e.response.data.error.code;
+      if (errorCode === 400) {
+        toast.error("You already have a creator token!");
+      } else if (errorCode === 404) {
+        toast.error("Invalid or expired invite code");
+      } else {
+        toast.error("Something went wrong");
+      }
     } finally {
+      setIsLoading(false);
       setInviteCode("");
     }
   };
@@ -139,10 +150,10 @@ export const EnterInviteCodeModal = () => {
       <Button
         size="regular"
         onPress={checkCode}
-        disabled={inviteCode.length < 6}
-        style={{ opacity: inviteCode.length < 6 ? 0.5 : 1 }}
+        disabled={inviteCode.length < 6 || isLoading}
+        style={{ opacity: inviteCode.length < 6 || isLoading ? 0.5 : 1 }}
       >
-        Review token
+        {isLoading ? "Please wait..." : "Review token"}
       </Button>
     </View>
   );
