@@ -37,8 +37,11 @@ import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-chann
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
+import { CreatorTokenCollectedScreen } from "app/screens/creator-token/creator-token-collected";
+import { CreatorTokenCollectorsScreen } from "app/screens/creator-token/creator-token-collectors";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
+import { TopCreatorTokenScreen } from "app/screens/creator-token/top-creator-token";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
@@ -264,6 +267,9 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorTokensSelfServeExplainerScreen />
         <CreatorTokensImportAllowlistScreen />
         <CreatorTokensImportAllowlistSuccessScreen />
+        <TopCreatorTokenScreen />
+        <CreatorTokenCollectedScreen />
+        <CreatorTokenCollectorsScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />

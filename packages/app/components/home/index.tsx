@@ -21,7 +21,6 @@ import { breakpoints } from "design-system/theme";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { ListHeaderComponent } from "./header";
 import { HomeItem, HomeItemSketelon } from "./home-item";
-import { PopularCreators } from "./popular-creators";
 import { TrendingCarousel } from "./trending-carousel";
 
 const ViewabilityInfiniteScrollList =
@@ -44,7 +43,6 @@ export const Home = () => {
         return (
           <>
             <HomeItem nft={item} mediaSize={mediaSize} index={index} />
-            <PopularCreators />
           </>
         );
       }

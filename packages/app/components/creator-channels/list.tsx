@@ -38,7 +38,6 @@ import { LeanText } from "./components/lean-text";
 import {
   useJoinedChannelsList,
   useOwnedChannelsList,
-  useSuggestedChannelsList,
 } from "./hooks/use-channels-list";
 import { useJoinChannel } from "./hooks/use-join-channel";
 import {
@@ -340,12 +339,6 @@ const channelsSection = {
     "Get exclusive updates, presale access and unreleased content from your favorite creators.",
 };
 
-const suggestedChannelsSection = {
-  type: "section",
-  title: "Popular creators",
-  tw: "text-xl",
-};
-
 export const CreatorChannelsList = memo(
   ({ useWindowScroll = true }: { useWindowScroll?: boolean }) => {
     const listRef = useRef<FlashList<any>>(null);
@@ -376,14 +369,6 @@ export const CreatorChannelsList = memo(
       isLoading: isLoadingJoinedChannels,
     } = useJoinedChannelsList();
 
-    // suggested channels
-    const {
-      data: suggestedChannelsData,
-      refresh: refreshSuggestedChannels,
-      isLoading: isLoadingSuggestedChannels,
-      isRefreshing: isRefreshingSuggestedChannels,
-    } = useSuggestedChannelsList();
-
     // since we're quering two different endpoints, and based on the amount of data from the first endpoint
     // we have to transform our data a bit and decide if we build a section list or a single FlashList
     // we're going to useMemo for that and return the data in the format we need
@@ -401,16 +386,6 @@ export const CreatorChannelsList = memo(
                   itemType: "owned",
                 })),
                 ...joinedChannelsData,
-              ]
-            : []),
-          // check if we have any suggested channels, if we do, we're going to add a section for them (+ the suggested channels)
-          ...(suggestedChannelsData.length > 0
-            ? [
-                suggestedChannelsSection,
-                ...suggestedChannelsData.map((suggestedChannel) => ({
-                  ...suggestedChannel,
-                  itemType: "creator",
-                })),
               ]
             : []),
         ];
@@ -431,7 +406,6 @@ export const CreatorChannelsList = memo(
     }, [
       joinedChannelsData,
       ownedChannelsData,
-      suggestedChannelsData,
     ]) as CreatorChannelsListItemProps[];
 
     const renderItem = useCallback(({ item }: CreatorChannelsListProps) => {
@@ -479,17 +453,9 @@ export const CreatorChannelsList = memo(
     ]);
 
     const refreshPage = useCallback(async () => {
-      await Promise.all([
-        refresh(),
-        refreshOwnedChannels(),
-        refreshSuggestedChannels(),
-      ]);
-    }, [refresh, refreshOwnedChannels, refreshSuggestedChannels]);
-    if (
-      isLoadingOwnChannels ||
-      isLoadingJoinedChannels ||
-      isLoadingSuggestedChannels
-    ) {
+      await Promise.all([refresh(), refreshOwnedChannels()]);
+    }, [refresh, refreshOwnedChannels]);
+    if (isLoadingOwnChannels || isLoadingJoinedChannels) {
       return <CCSkeleton />;
     }
     return (
@@ -521,11 +487,7 @@ export const CreatorChannelsList = memo(
         // Todo: unity refresh control same as tab view
         refreshControl={
           <RefreshControl
-            refreshing={
-              isRefreshing ||
-              isRefreshingOwnedChannels ||
-              isRefreshingSuggestedChannels
-            }
+            refreshing={isRefreshing || isRefreshingOwnedChannels}
             onRefresh={refreshPage}
             progressViewOffset={headerHeight}
             tintColor={isDark ? colors.gray[200] : colors.gray[700]}

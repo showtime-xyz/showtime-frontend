@@ -2,11 +2,16 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { TopCreatorTokensItem } from "../creator-token/top-creator-tokens";
+import { useCreatorTokenCollectors } from "app/hooks/creator-token/use-creator-tokens";
+
+import { TopCreatorTokensItem } from "../creator-token/creator-token-users";
 
 export const TopPartCreatorTokens = () => {
   const router = useRouter();
-
+  const { data, isLoading } = useCreatorTokenCollectors(27);
+  if ((!data?.length || data?.length === 0) && !isLoading) {
+    return null;
+  }
   return (
     <View tw="px-4 md:pl-2 md:pr-4 lg:px-0">
       <View tw="flex-row items-center justify-between py-6">
@@ -23,9 +28,14 @@ export const TopPartCreatorTokens = () => {
         </Text>
       </View>
       <View tw="flex-row flex-wrap items-center justify-between gap-2 lg:gap-4">
-        {new Array(6).fill(0).map((_, i) => {
+        {data?.map((item, i) => {
           return (
-            <TopCreatorTokensItem index={i} key={i} style={{ width: "29%" }} />
+            <TopCreatorTokensItem
+              item={item}
+              index={i}
+              key={i}
+              style={{ width: "29%" }}
+            />
           );
         })}
       </View>

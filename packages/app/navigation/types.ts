@@ -129,7 +129,9 @@ type RootStackNavigatorParams = {
   channelsSettings: undefined;
   channelUnlocked: undefined;
   creatorTokensShare: undefined;
-  topCreatorTokens: undefined;
+  topCreatorToken: undefined;
+  creatorTokenCollectors: undefined;
+  creatorTokenCollected: undefined;
   likers: undefined;
   appleMusicAuthNativeWebView: undefined;
   report: {
