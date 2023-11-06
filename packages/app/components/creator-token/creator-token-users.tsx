@@ -173,12 +173,10 @@ export const TopCreatorTokenItem = ({
   index,
   tw,
   item,
-  showName = false,
   ...rest
 }: ViewProps & {
   index?: number;
   item: TopCreatorTokenUser;
-  showName?: boolean;
 }) => {
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -189,39 +187,47 @@ export const TopCreatorTokenItem = ({
       {...rest}
     >
       <View tw="flex-row items-center">
-        {index != undefined ? (
-          index < 3 ? (
-            <View tw="mr-1 items-center justify-center">
-              <View tw="absolute -top-1">
-                <GoldHexagon width={18} height={18} />
+        <View tw="min-w-[24px]">
+          {index != undefined ? (
+            index < 3 ? (
+              <View tw="items-center justify-center">
+                <View tw="absolute -top-1">
+                  <GoldHexagon width={18} height={18} />
+                </View>
+                <Text tw="text-xs font-bold text-white">{index + 1}</Text>
               </View>
-              <Text tw="text-xs font-bold text-white">{index + 1}</Text>
-            </View>
-          ) : (
-            <View tw="mr-1 items-center justify-center">
-              <Text tw="text-xs font-bold text-gray-700 dark:text-white">
-                {index + 1}
-              </Text>
-            </View>
-          )
-        ) : null}
+            ) : (
+              <View tw="items-center justify-center">
+                <Text tw="text-xs font-bold text-gray-700 dark:text-white">
+                  {index + 1}
+                </Text>
+              </View>
+            )
+          ) : null}
+        </View>
         <View tw="web:flex-1 ml-2 flex-row items-center">
-          <Avatar url={item?.owner_profile.img_url} size={34} />
+          <Avatar url={item?.owner_profile?.img_url} size={34} />
           <View tw="w-2" />
           <View tw="flex-1 justify-center">
-            {item.owner_profile.username ? (
-              <>
-                <Text
-                  tw="text-sm font-semibold text-gray-900 dark:text-white"
-                  numberOfLines={1}
-                >
-                  @{item.owner_profile.username}
-                </Text>
-                <View tw="h-1" />
-              </>
-            ) : null}
-
             <View tw="flex-row items-center">
+              {item?.owner_profile?.username ? (
+                <>
+                  <Text
+                    tw="text-sm font-semibold text-gray-900 dark:text-white"
+                    numberOfLines={1}
+                  >
+                    @{item.owner_profile.username}
+                  </Text>
+                  <View tw="h-1" />
+                </>
+              ) : null}
+              {Boolean(item.owner_profile?.verified) && (
+                <View tw="ml-1">
+                  <VerificationBadge size={14} />
+                </View>
+              )}
+            </View>
+            <View tw="mt-1 flex-row items-center">
               <Text
                 tw="text-xs font-semibold text-gray-900 dark:text-white"
                 numberOfLines={1}
@@ -244,10 +250,10 @@ export const TopCreatorTokenItem = ({
 
 export const TopCreatorTokenSkeleton = ({ tw, ...rest }: ViewProps) => {
   return (
-    <View tw={["-ml-1 py-1.5", tw].join(" ")} {...rest}>
-      <View tw="flex-row items-center">
+    <View tw={["py-1.5", tw].join(" ")} {...rest}>
+      <View tw="flex-row items-center pl-1">
         <Skeleton width={16} height={16} show radius={8} />
-        <View tw="ml-1.5 flex-row items-center">
+        <View tw="ml-2 flex-row items-center">
           <Skeleton width={34} height={34} show radius={999} />
           <View tw="w-2" />
           <View tw="">

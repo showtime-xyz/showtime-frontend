@@ -81,7 +81,6 @@ export const TopPartCreatorTokens = () => {
                   index={i}
                   key={i}
                   tw="pr-0.5"
-                  showName
                 />
               );
             })}
@@ -95,7 +94,6 @@ export const TopPartCreatorTokens = () => {
                     index={i + 3}
                     key={i}
                     tw="pl-0.5"
-                    showName
                   />
                 );
               })}

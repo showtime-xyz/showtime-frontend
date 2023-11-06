@@ -18,6 +18,7 @@ import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import {
   CreatorTokenUser,
+  TopCreatorTokenUser,
   useCreatorTokenCollectors,
   useTopCreatorToken,
 } from "app/hooks/creator-token/use-creator-tokens";
@@ -27,10 +28,10 @@ import {
   TopCreatorTokenSkeleton,
 } from "./creator-token-users";
 
-const keyExtractor = (item: CreatorTokenUser) => `${item.profile_id}`;
+const keyExtractor = (item: TopCreatorTokenUser) => `${item.id}`;
 export const TopCreatorTokens = () => {
   const { height: screenHeight } = useWindowDimensions();
-  const { data: list, isLoading } = useTopCreatorToken();
+  const { data: list, isLoading, fetchMore } = useTopCreatorToken();
 
   const numColumns = 1;
 
@@ -38,8 +39,8 @@ export const TopCreatorTokens = () => {
     ({
       item,
       index,
-    }: ListRenderItemInfo<CreatorTokenUser & { loading?: boolean }>) => {
-      return <TopCreatorTokenItem item={item} index={index} showName />;
+    }: ListRenderItemInfo<TopCreatorTokenUser & { loading?: boolean }>) => {
+      return <TopCreatorTokenItem item={item} index={index} />;
     },
     []
   );
@@ -84,6 +85,7 @@ export const TopCreatorTokens = () => {
         }}
         overscan={12}
         containerTw="px-4"
+        onEndReached={fetchMore}
         ListEmptyComponent={ListEmptyComponent}
         estimatedItemSize={46}
       />
