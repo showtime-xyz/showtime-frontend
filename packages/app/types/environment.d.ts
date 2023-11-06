@@ -11,6 +11,7 @@ declare global {
       NEXT_PUBLIC_ALCHEMY_API_KEY: string;
       E2E: string;
       NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: string;
+      NEXT_PUBLIC_PRIVY_APP_ID: string;
     }
   }
   interface Window {

@@ -13,6 +13,7 @@ import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
 import { growthbook } from "app/lib/growthbook";
+import { PrivyProvider } from "app/lib/privy/privy-provider";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { ClaimProvider } from "app/providers/claim-provider";
@@ -49,7 +50,11 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                   <NavigationProvider>
                                     <MuteProvider>
                                       <ClaimProvider>
-                                        <DropProvider>{children}</DropProvider>
+                                        <DropProvider>
+                                          <PrivyProvider>
+                                            {children}
+                                          </PrivyProvider>
+                                        </DropProvider>
                                       </ClaimProvider>
                                     </MuteProvider>
                                   </NavigationProvider>

@@ -1,28 +1,19 @@
 import { Platform } from "react-native";
 
+import { usePrivy } from "@privy-io/react-auth";
+
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { NFT } from "app/types";
 
 export const useNavigateToLogin = () => {
-  const router = useRouter();
+  const privy = usePrivy();
 
-  const navigateToLogin = () => {
-    router.push(
-      Platform.select({
-        native: "/login",
-        // @ts-ignore
-        web: {
-          pathname: router.pathname,
-          query: { ...router.query, loginModal: true },
-        },
-      }),
-      Platform.select({
-        native: "/login",
-        web: router.asPath === "/" ? "/login" : router.asPath,
-      }),
-      { shallow: true }
-    );
+  const navigateToLogin = async () => {
+    if (privy.authenticated) {
+      await privy.logout();
+    }
+    privy.login();
   };
 
   return navigateToLogin;
