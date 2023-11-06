@@ -129,8 +129,8 @@ export const SelfServeExplainer = () => {
           </Text>
         </View>
         <Text tw="text-sm text-gray-900 dark:text-white">
-          In one click, let your fans access your Channel, starting at $1. Every
-          purchase, your Token price increases.
+          In one click, let your fans access your Channel, starting at $1. Each
+          trade, your token price evolves.
         </Text>
         <View tw="mt-4 items-center rounded-3xl border border-gray-200 px-4 py-6 dark:border-gray-800">
           <Pressable
