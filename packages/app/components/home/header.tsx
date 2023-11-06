@@ -155,8 +155,8 @@ export const CreatorTokensBanner = ({
           >
             {user?.user?.data.profile.creator_token_onboarding_status ===
             "allowlist"
-              ? "You are eligible to launch your Creator Token & let your fans invest in you."
-              : "Introducing Creator Tokens: invest in your favorite creators."}
+              ? "You are eligible to launch your Creator Token. Get closer to your collectors."
+              : "Introducing Creator Tokens: a place for all your collectors."}
           </Text>
         </View>
         {/* <Pressable
