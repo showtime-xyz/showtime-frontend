@@ -23,7 +23,6 @@ import {
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { getNFTSlug } from "app/hooks/use-share-nft";
 import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
@@ -33,7 +32,6 @@ import { formatProfileRoutes, getFullSizeCover } from "app/utilities";
 import { Spinner } from "design-system/spinner";
 
 import { CreatorTokensPanel } from "./creator-tokens-panel";
-import { MyCollection } from "./my-collection";
 import { ProfileError } from "./profile-error";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileCover, ProfileTop } from "./profile-top";
@@ -61,7 +59,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     error,
   } = useUserProfile({ address: username });
   const profileId = profileData?.data?.profile.profile_id;
-  const [showHidden, setShowHidden] = useState(false);
   const { getIsBlocked } = useBlock();
   const router = useRouter();
   const userId = useCurrentUserId();
@@ -313,7 +310,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 >
                   <Sticky enabled>
                     <CreatorTokensPanel username={username} isSelf={isSelf} />
-                    {isSelf && <MyCollection />}
                     <TopPartCreatorTokens />
                   </Sticky>
                 </View>

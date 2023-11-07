@@ -1,58 +1,29 @@
-import React, {
-  useCallback,
-  useContext,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useMemo,
-} from "react";
-import { Platform } from "react-native";
+import React, { forwardRef, useImperativeHandle, useRef, useMemo } from "react";
 
-import type { ListRenderItemInfo } from "@shopify/flash-list";
-
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  ChevronRight,
-  Lock,
-  LockBadge,
-  LockRounded,
-  UnLocked,
-} from "@showtime-xyz/universal.icon";
+import { ChevronRight, Lock, UnLocked } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import {
-  TabScrollView,
-  TabInfiniteScrollList,
-  TabSpinner,
-} from "@showtime-xyz/universal.tab-view";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
-import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
-import { List, useProfileNFTs } from "app/hooks/api-hooks";
+import { List } from "app/hooks/api-hooks";
 import {
   useCreatorTokenCoLlected,
   useCreatorTokenCollectors,
 } from "app/hooks/creator-token/use-creator-tokens";
-import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { MutateProvider } from "app/providers/mutate-provider";
-import { NFT, Profile } from "app/types";
+import { Profile } from "app/types";
 import { formatNumber } from "app/utilities";
-
-import SvgUnlocked from "design-system/icon/Unlocked";
 
 import { ChannelPermissions } from "../creator-channels/types";
 import { TopCreatorTokenItemOnProfile } from "../creator-token/creator-token-users";
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { FilterContext } from "./fillter-context";
-import { MyCollection } from "./my-collection";
-import { ProfileSpinnerFooter } from "./profile-footer";
 
 type TabListProps = {
   profile?: Profile;
@@ -60,7 +31,6 @@ type TabListProps = {
   list: List;
   index: number;
 };
-const NUM_COLUMNS = 3;
 export type ProfileTabListRef = {
   refresh: () => void;
 };
@@ -136,7 +106,6 @@ export const TokensTabHeader = ({
       </View>
       */}
 
-      {isSelf && <MyCollection />}
       {channelId && (messageCount || messageCount == 0) && messageCount >= 0 ? (
         <Pressable
           onPress={() => {
