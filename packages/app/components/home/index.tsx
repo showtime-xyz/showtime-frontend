@@ -143,7 +143,7 @@ export const Home = () => {
           </ErrorBoundary>
         </View>
         {isLgWidth ? (
-          <View tw="" style={{ width: RIGHT_SIDE_WIDTH, marginLeft: 200 }}>
+          <View tw="" style={{ width: RIGHT_SIDE_WIDTH, marginLeft: 160 }}>
             <TopCreatorTokens isSimplified limit={15} disableFetchMore />
           </View>
         ) : null}
