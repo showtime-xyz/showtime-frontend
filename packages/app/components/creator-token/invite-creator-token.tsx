@@ -7,17 +7,18 @@ import * as Sharing from "expo-sharing";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ChevronRight } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { toast } from "design-system/toast";
 
-import InviteCreatorTokenHeader from "./assets/invite";
 import {
   useAvailableCreatorTokensInvites,
   useRedeemedCreatorTokensInvites,
@@ -104,8 +105,10 @@ const InviteCreatorTokenClaimedItem = ({
 
 export const InviteCreatorToken = () => {
   const { top, bottom } = useSafeAreaInsets();
-  const { data: invitesData = [] } = useAvailableCreatorTokensInvites();
-  const { data: redeemedData = [] } = useRedeemedCreatorTokensInvites();
+  const { data: invitesData = [], isLoading: isLoadingAvailableCodes } =
+    useAvailableCreatorTokensInvites();
+  const { data: redeemedData = [], isLoading: isLoadingRedeemedCodes } =
+    useRedeemedCreatorTokensInvites();
 
   const inviteText = invitesData.length === 1 ? "invite" : "invites";
 
@@ -118,7 +121,17 @@ export const InviteCreatorToken = () => {
     >
       <View tw="p-4">
         <View tw="items-center">
-          <InviteCreatorTokenHeader />
+          <Image
+            source={
+              Platform.OS === "web"
+                ? {
+                    uri: "https://showtime-media.b-cdn.net/assets/invite_coin_header.png",
+                  }
+                : require("./assets/invite_coin_header.png")
+            }
+            width={220}
+            height={200}
+          />
         </View>
         <View tw="mt-6">
           <Text tw="text-xl font-bold text-black dark:text-white">
@@ -127,29 +140,56 @@ export const InviteCreatorToken = () => {
           <View tw="h-4" />
           <Text tw="text-black dark:text-white">
             You have <Text tw="font-bold">{invitesData.length}</Text>{" "}
-            {inviteText} left. Share invites below to earn your friends' creator
-            tokens.
+            {inviteText} left.{" "}
+            {invitesData.length > 0
+              ? "Share invites below to earn your friends' creator tokens."
+              : "Check back later for more invites."}
           </Text>
           <View tw="mt-2">
-            {invitesData.map((item) => (
-              <InviteCreatorTokenItem key={item.code} code={item.code} />
-            ))}
+            {isLoadingAvailableCodes ? (
+              <>
+                <View tw="mt-2 h-32">
+                  <Skeleton
+                    tw="absolute mt-2 w-full rounded-2xl border border-gray-500 p-4"
+                    height={128}
+                  />
+                  <Skeleton tw="ml-2 mt-6 w-28 p-3" height={20} />
+                  <Skeleton tw="ml-2 mt-2 w-28 p-3" height={20} />
+                  <Skeleton tw="ml-2 mt-2 w-28 p-3" height={20} />
+                </View>
+                <View tw="mt-2 h-32">
+                  <Skeleton
+                    tw="absolute mt-2 w-full rounded-2xl border border-gray-500 p-4"
+                    height={128}
+                  />
+                  <Skeleton tw="ml-2 mt-6 w-28 p-3" height={20} />
+                  <Skeleton tw="ml-2 mt-2 w-28 p-3" height={20} />
+                  <Skeleton tw="ml-2 mt-2 w-28 p-3" height={20} />
+                </View>
+              </>
+            ) : (
+              invitesData.map((item) => (
+                <InviteCreatorTokenItem key={item.code} code={item.code} />
+              ))
+            )}
           </View>
           <View tw="mt-8">
-            {redeemedData.length ? (
-              <Text tw="font-bold text-black dark:text-white">Claimed</Text>
+            {isLoadingRedeemedCodes ? null : redeemedData.length ? (
+              <>
+                <Text tw="font-bold text-black dark:text-white">Claimed</Text>
+                {redeemedData.map((item) => (
+                  <InviteCreatorTokenClaimedItem
+                    key={item.invitee.id}
+                    date={item.redeemed_at}
+                    username={item.invitee.username}
+                  />
+                ))}
+              </>
             ) : (
               <Text tw="font-bold text-black dark:text-white">
                 No invites claimed yet.
               </Text>
             )}
-            {redeemedData.map((item) => (
-              <InviteCreatorTokenClaimedItem
-                key={item.invitee.id}
-                date={item.redeemed_at}
-                username={item.invitee.username}
-              />
-            ))}
           </View>
         </View>
       </View>
