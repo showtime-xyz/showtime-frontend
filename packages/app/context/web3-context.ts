@@ -6,7 +6,6 @@ export type Web3ContextType = {
   web3?: (WalletClient & { isMagic?: boolean }) | null;
   isMagic?: boolean;
   setWeb3: (web3: (WalletClient & { isMagic?: boolean }) | null) => void;
-  setMountRelayerOnApp: (hide: boolean) => void;
   magicWalletAddress?: string;
   getWalletClient: () => Web3ContextType["web3"] | undefined;
 };
