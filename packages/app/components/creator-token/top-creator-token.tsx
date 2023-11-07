@@ -115,7 +115,7 @@ export const TopCreatorTokens = ({
         contentContainerStyle={{
           paddingHorizontal: 12,
         }}
-        overscan={12}
+        overscan={20}
         ListHeaderComponent={Header}
         containerTw="px-4"
         onEndReached={disableFetchMore ? () => {} : fetchMore}

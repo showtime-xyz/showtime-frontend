@@ -296,10 +296,10 @@ export const TopCreatorTokenListItem = ({
                 >
                   {item.owner_profile?.name}
                 </Text>
-                <View tw="h-1" />
+                <View tw="h-2" />
                 <Text
                   tw="text-xs text-gray-500 dark:text-gray-400"
-                  numberOfLines={1}
+                  numberOfLines={3}
                 >
                   {item.owner_profile?.bio}
                 </Text>
