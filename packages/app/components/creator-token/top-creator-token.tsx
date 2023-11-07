@@ -36,7 +36,7 @@ const Header = () => {
         }}
       />
       <View tw="hidden flex-row justify-between pb-4 pt-4 md:flex">
-        <Text tw="text-base font-semibold text-gray-900 dark:text-white">
+        <Text tw="text-base font-semibold text-gray-900 dark:text-white md:text-xl">
           Top Creator Tokens
         </Text>
       </View>
