@@ -53,7 +53,6 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       raffle: "/raffle/:contractAddress",
       claim: "claim/:contractAddress",
       collectors: "collectors/:chainName/:contractAddress/:tokenId",
-      claimLimitExplanation: "claim/claim-limit-explanation",
       likers: "likers/:nftId",
       comments: "nft/:chainName/:contractAddress/:tokenId/comments",
       dropViewShareModal: "nft/:chainName/:contractAddress/:tokenId/share",

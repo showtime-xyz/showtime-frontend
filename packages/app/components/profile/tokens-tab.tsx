@@ -368,47 +368,6 @@ export const TokensTab = forwardRef<
   useImperativeHandle(ref, () => ({
     refresh: () => {},
   }));
-  // const onItemPress = useCallback(
-  //   (item: NFT) => {
-  //     router.push(
-  //       `${getNFTSlug(item)}?initialScrollItemId=${item.nft_id}&tabType=${
-  //         list.type
-  //       }&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${
-  //         filter.sortType
-  //       }&type=profile`
-  //     );
-  //   },
-  //   [list.type, profileId, filter.collectionId, filter.sortType, router]
-  // );
-
-  // const ListFooterComponent = useCallback(() => {
-  //   if (isLoading) {
-  //     return <ProfileSpinnerFooter isLoading={isLoadingMore} />;
-  //   }
-  // }, [isLoading, isLoadingMore]);
-
-  // const ListHeaderComponent = useCallback(
-  //   () => (
-  //     <TokensTabHeader
-  //       channelId={channelId}
-  //       isSelf={isSelf}
-  //       messageCount={messageCount}
-  //     />
-  //   ),
-  //   [channelId, isSelf, messageCount]
-  // );
-  // const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
-
-  // const renderItem = useCallback(
-  //   ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-  //     return <TokensTabItem item={item} tw="px-6" />;
-  //   },
-  //   []
-  // );
-  // const ListEmptyComponent = useCallback(() => {
-  //   return null;
-  //   // return <EmptyPlaceholder title="No creator token, yet." hideLoginBtn />;
-  // }, []);
 
   if (isBlocked) {
     return (
@@ -431,18 +390,6 @@ export const TokensTab = forwardRef<
 
   return (
     <>
-      {/* <TabInfiniteScrollList
-          data={data}
-          ref={listRef}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ListHeaderComponent={ListHeaderComponent}
-          estimatedItemSize={contentWidth / NUM_COLUMNS}
-          ListFooterComponent={ListFooterComponent}
-          ListEmptyComponent={ListEmptyComponent}
-          onEndReached={fetchMore}
-          index={index}
-        /> */}
       <TabScrollView
         contentContainerStyle={{ paddingBottom: bottomHeight + 56 }}
         index={index}

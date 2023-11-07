@@ -5,7 +5,6 @@ import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -13,10 +12,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { NotificationsSettingIcon } from "app/components/header/notifications-setting-icon";
 import { NotificationItem } from "app/components/notifications/notification-item";
-import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
-  Actor,
   NotificationType,
   useNotifications,
 } from "app/hooks/use-notifications";
@@ -67,15 +64,13 @@ export const Notifications = memo(
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
     const { height: windowHeight } = useWindowDimensions();
-    const [users, setUsers] = useState<
-      Pick<Actor, "profile_id" | "username">[]
-    >([]);
+
     const listRef = useRef<any>();
     useScrollToTop(listRef);
 
     const renderItem = useCallback(
       ({ item }: ListRenderItemInfo<NotificationType>) => {
-        return <NotificationItem notification={item} setUsers={setUsers} />;
+        return <NotificationItem notification={item} />;
       },
       []
     );
@@ -169,20 +164,6 @@ export const Notifications = memo(
           ref={listRef}
           estimatedItemSize={53}
         />
-
-        <ModalSheet
-          snapPoints={["90%"]}
-          title="People"
-          visible={users.length > 0}
-          close={() => setUsers([])}
-          onClose={() => setUsers([])}
-        >
-          <UserList
-            users={users}
-            loading={false}
-            style={{ height: Platform.OS === "web" ? 200 : undefined }}
-          />
-        </ModalSheet>
       </>
     );
   }

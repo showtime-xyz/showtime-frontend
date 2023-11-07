@@ -13,7 +13,6 @@ import { screenOptions } from "app/navigation/navigator-screen-options";
 import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
-import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
 import { CollectorsScreen } from "app/screens/collectors";
 import { CommentsScreen } from "app/screens/comments";
 import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
@@ -33,11 +32,6 @@ import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-token
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
 import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
 import { DetailsScreen } from "app/screens/details";
-import { DropScreen } from "app/screens/drop";
-import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
-import { DropImageShareScreen } from "app/screens/drop-image-share";
-import { DropUpdateScreen } from "app/screens/drop-update";
-import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { FollowersScreen } from "app/screens/followers";
 import { FollowingScreen } from "app/screens/following";
@@ -150,18 +144,6 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen
-          name="dropViewShareModal"
-          component={DropViewShareScreen}
-          options={{
-            animation:
-              Platform.OS === "android"
-                ? "fade_from_bottom"
-                : "slide_from_bottom",
-            animationDuration: 200,
-            statusBarStyle: "dark",
-          }}
-        />
-        <Stack.Screen
           name="reviewCreatorToken"
           component={ReviewCreatorTokenScreen}
         />
@@ -231,11 +213,7 @@ export function RootStackNavigator() {
           options={{ headerTitle: "Members" }}
           component={CreatorChannelsMembersScreen}
         />
-        <Stack.Screen
-          name="dropUpdate"
-          options={{ headerTitle: "Update Spotify Link" }}
-          component={DropUpdateScreen}
-        />
+
         <Stack.Screen
           name="channelsMessageReactions"
           component={CreatorChannelsMessageReactionsScreen}
@@ -289,11 +267,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="payoutsSetup" component={PayoutsSetupScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
-        <Stack.Screen name="dropImageShare" component={DropImageShareScreen} />
-        <Stack.Screen
-          name="dropEditDetailsModal"
-          component={DropEditDetailsScreen}
-        />
+
         <Stack.Screen
           name="channelsIntro"
           options={{ gestureEnabled: false }}
@@ -319,12 +293,7 @@ export function RootStackNavigator() {
           presentation: "transparentModal",
         }}
       >
-        <Stack.Screen
-          name="claimLimitExplanation"
-          component={ClaimLimitExplanationScreen}
-        />
         <Stack.Screen name="report" component={ReportScreen} />
-        <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen
           name="channelsSettings"
           component={CreatorChannelsSettingsScreen}

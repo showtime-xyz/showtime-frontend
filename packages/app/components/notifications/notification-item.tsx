@@ -20,8 +20,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
-import { Actors } from "app/components/notifications/actors";
-import { Actor, NotificationType } from "app/hooks/use-notifications";
+import { NotificationType } from "app/hooks/use-notifications";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
 import {
@@ -36,7 +35,6 @@ const PlatformButton =
 
 export type NotificationItemProp = {
   notification: NotificationType;
-  setUsers: (actors: Actor[]) => void;
 };
 
 const NOTIFICATION_TYPE_COPY = new Map([
@@ -63,7 +61,7 @@ const NOTIFICATION_TYPE_COPY = new Map([
 ]);
 
 export const NotificationItem = memo(
-  ({ notification, setUsers }: NotificationItemProp) => {
+  ({ notification }: NotificationItemProp) => {
     const router = useRouter();
     const icon = useMemo(
       () => getNotificationIcon(notification.type_name),
@@ -150,10 +148,7 @@ export const NotificationItem = memo(
               alt="Notification Avatar"
             />
           </View>
-          <NotificationDescription
-            notification={notification}
-            setUsers={setUsers}
-          />
+          <NotificationDescription notification={notification} />
         </PlatformButton>
       </View>
     );
@@ -164,11 +159,10 @@ NotificationItem.displayName = "NotificationItem";
 
 type NotificationDescriptionProps = {
   notification: NotificationType;
-  setUsers: NotificationItemProp["setUsers"];
 };
 
 const NotificationDescription = memo(
-  ({ notification, setUsers }: NotificationDescriptionProps) => {
+  ({ notification }: NotificationDescriptionProps) => {
     const formatDistance = formatDateRelativeWithIntl(
       notification.to_timestamp
     );
@@ -224,7 +218,6 @@ const NotificationDescription = memo(
             ellipsizeMode="tail"
             numberOfLines={2}
           >
-            <Actors actors={notification.actors} setUsers={setUsers} />
             {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
             {notification.description?.trim()}
           </Text>
@@ -244,7 +237,6 @@ const NotificationDescription = memo(
           ellipsizeMode="tail"
           numberOfLines={2}
         >
-          <Actors actors={notification.actors} setUsers={setUsers} />
           {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
           <NFTSDisplayName nfts={notification.nfts} />
         </Text>

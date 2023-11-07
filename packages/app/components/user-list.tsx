@@ -20,7 +20,6 @@ import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 import { EmptyPlaceholder } from "./empty-placeholder";
-import { FollowButton } from "./follow-button";
 
 const SEPARATOR_HEIGHT = 1;
 const ITEM_HEIGHT = 56;
@@ -80,6 +79,7 @@ export const UserList = ({
   }
 
   return (
+    // @ts-ignore
     <InfiniteScrollList
       data={users}
       keyExtractor={keyExtractor}
@@ -160,13 +160,6 @@ const FollowingListUser = memo(
             </View>
           </View>
         </Link>
-        <View tw="max-w-[120px]">
-          <FollowButton
-            profileId={item.profile_id}
-            name={item.name}
-            onToggleFollow={onToggleFollow}
-          />
-        </View>
       </View>
     );
   }
