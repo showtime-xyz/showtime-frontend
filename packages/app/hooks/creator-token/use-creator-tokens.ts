@@ -20,7 +20,7 @@ export type CreatorTokenUser = {
 };
 export type TopCreatorTokenUser = {
   id: number;
-  owner_profile: Profile;
+  owner_profile?: Profile;
   owner_address: string;
   name: string;
   token_uri: string;
@@ -83,34 +83,35 @@ export const useCreatorTokenCoLlected = (
     error,
   };
 };
-export const useTopCreatorToken = (limit: number = 10) => {
+export const useTopCreatorToken = (limit: number = 15) => {
   const fetchUrl = useCallback(
-    (index: number, previousPageData: []) => {
-      if (previousPageData && !previousPageData.length) return null;
+    (index: number, previousPageData: any) => {
+      if (previousPageData && !previousPageData?.creator_tokens.length)
+        return null;
+
       return `/v1/creator-token/top?page=${index + 1}&limit=${limit}`;
     },
     [limit]
   );
 
-  const queryState = useInfiniteListQuerySWR<TopCreatorToken>(fetchUrl, {
-    pageSize: limit,
-  });
+  const { data, ...queryState } = useInfiniteListQuerySWR<TopCreatorToken>(
+    fetchUrl,
+    {
+      pageSize: limit,
+    }
+  );
+
   const newData = useMemo(() => {
-    let newData: TopCreatorTokenUser[] = [];
-    if (
-      queryState.data &&
-      queryState.data[0] &&
-      queryState.data[0].creator_tokens
-    ) {
-      queryState.data[0].creator_tokens.forEach((p) => {
+    let newData: TopCreatorToken["creator_tokens"] = [];
+    if (data) {
+      data.forEach((p) => {
         if (p) {
-          newData = newData.concat(p);
+          newData = newData.concat(p.creator_tokens);
         }
       });
     }
     return newData;
-  }, [queryState.data]);
-
+  }, [data]);
   return {
     ...queryState,
     data: newData,
