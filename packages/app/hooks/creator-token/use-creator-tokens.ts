@@ -1,8 +1,12 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 
 import useSWR from "swr";
 
-import { fetcher } from "app/hooks/use-infinite-list-query";
+import {
+  fetcher,
+  useInfiniteListQuerySWR,
+} from "app/hooks/use-infinite-list-query";
+import { Profile } from "app/types";
 
 export type CreatorTokenUser = {
   verified: boolean;
@@ -14,10 +18,20 @@ export type CreatorTokenUser = {
   wallet_address_nonens: string;
   img_url: string;
 };
+export type TopCreatorTokenUser = {
+  id: number;
+  owner_profile?: Profile;
+  owner_address: string;
+  name: string;
+  token_uri: string;
+  nft_count: number;
+};
 export type CreatorTokenCollectors = {
   profiles: CreatorTokenUser[];
 };
-
+export type TopCreatorToken = {
+  creator_tokens: TopCreatorTokenUser[];
+};
 export const useCreatorTokenCollectors = (
   creatorTokenId?: number | string,
   limit?: number
@@ -67,5 +81,39 @@ export const useCreatorTokenCoLlected = (
     isLoading,
     mutate,
     error,
+  };
+};
+export const useTopCreatorToken = (limit: number = 15) => {
+  const fetchUrl = useCallback(
+    (index: number, previousPageData: any) => {
+      if (previousPageData && !previousPageData?.creator_tokens.length)
+        return null;
+
+      return `/v1/creator-token/top?page=${index + 1}&limit=${limit}`;
+    },
+    [limit]
+  );
+
+  const { data, ...queryState } = useInfiniteListQuerySWR<TopCreatorToken>(
+    fetchUrl,
+    {
+      pageSize: limit,
+    }
+  );
+
+  const newData = useMemo(() => {
+    let newData: TopCreatorToken["creator_tokens"] = [];
+    if (data) {
+      data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p.creator_tokens);
+        }
+      });
+    }
+    return newData;
+  }, [data]);
+  return {
+    ...queryState,
+    data: newData,
   };
 };

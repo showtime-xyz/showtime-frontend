@@ -155,8 +155,8 @@ export const CreatorTokensBanner = ({
           >
             {user?.user?.data.profile.creator_token_onboarding_status ===
             "allowlist"
-              ? "You are eligible to launch your Creator Token & let your fans invest in you."
-              : "Introducing Creator Tokens: invest in your favorite creators."}
+              ? "You are eligible to launch your Creator Token. Get closer to your collectors."
+              : "Introducing Creator Tokens: a place for all your collectors."}
           </Text>
         </View>
         {/* <Pressable
@@ -182,6 +182,8 @@ export const CreatorTokensBanner = ({
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+  const isLgWidth = width >= breakpoints["xl"];
+
   const { data: banners = [], isLoading: isLoadingBanner } = useBanners();
   const router = useRouter();
   const pagerWidth = isMdWidth
@@ -261,11 +263,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      {/*
-        // TODO: Creator Tokens P1
-        <TopPartCreatorTokens />
-      */}
-      <TrendingCarousel />
+      {isLgWidth ? null : <TopPartCreatorTokens />}
     </View>
   );
 });

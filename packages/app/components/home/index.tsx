@@ -7,6 +7,7 @@ import {
 } from "@showtime-xyz/universal.infinite-scroll-list";
 import { View } from "@showtime-xyz/universal.view";
 
+import { TopCreatorTokens } from "app/components/creator-token/top-creator-token";
 import { ErrorBoundary } from "app/components/error-boundary";
 import { VideoConfigContext } from "app/context/video-config-context";
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
@@ -14,6 +15,7 @@ import { useFeed } from "app/hooks/use-feed";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
+import { Sticky } from "app/lib/stickynode";
 import { NFT } from "app/types";
 
 import { breakpoints } from "design-system/theme";
@@ -25,12 +27,14 @@ import { TrendingCarousel } from "./trending-carousel";
 
 const ViewabilityInfiniteScrollList =
   withViewabilityInfiniteScrollList(InfiniteScrollList);
-
+const RIGHT_SIDE_WIDTH = 300;
 export const Home = () => {
   const bottomBarHeight = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
   const { width, height } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+  const isLgWidth = width >= breakpoints["xl"];
+
   const { data, isLoading } = useFeed();
   const listRef = useRef<any>();
   useScrollToTop(listRef);
@@ -106,7 +110,7 @@ export const Home = () => {
   return (
     <VideoConfigContext.Provider value={videoConfig}>
       <View
-        tw="w-full flex-1 items-center bg-white dark:bg-black"
+        tw="w-full flex-1 flex-row justify-center bg-white dark:bg-black"
         style={{
           marginBottom: Platform.select({
             native: bottomBarHeight,
@@ -138,6 +142,11 @@ export const Home = () => {
             />
           </ErrorBoundary>
         </View>
+        {isLgWidth ? (
+          <View tw="" style={{ width: RIGHT_SIDE_WIDTH, marginLeft: 200 }}>
+            <TopCreatorTokens isSimplified />
+          </View>
+        ) : null}
       </View>
     </VideoConfigContext.Provider>
   );
