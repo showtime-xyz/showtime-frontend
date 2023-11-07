@@ -40,6 +40,7 @@ export const ScollableTabBar = ({
         fontSize: 14,
         textTransform: "none",
         marginHorizontal: 0,
+        marginVertical: 0,
       }}
       indicatorStyle={{ backgroundColor: isDark ? "#FFF" : colors.gray[900] }}
       tabStyle={{

@@ -28,34 +28,19 @@ export const TopPartCreatorTokens = () => {
 
   return (
     <View tw="px-4 md:pl-2 md:pr-4 lg:px-0">
-      {data?.length > 0 ? (
-        <View tw="flex-row items-center justify-between py-4">
-          <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
-            Top Creator Tokens
-          </Text>
-          <Text
-            onPress={() => {
-              const as = `/creator-token/top`;
-              router.push(
-                Platform.select({
-                  native: as,
-                  web: {
-                    pathname: router.pathname,
-                    query: {
-                      ...router.query,
-                      topCreatorTokenModal: true,
-                    },
-                  } as any,
-                }),
-                Platform.select({ native: as, web: router.asPath })
-              );
-            }}
-            tw="text-xs font-semibold text-indigo-700"
-          >
-            See all
-          </Text>
-        </View>
-      ) : null}
+      <View tw="flex-row items-center justify-between py-4">
+        <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
+          Top Creator Tokens
+        </Text>
+        <Text
+          onPress={() => {
+            router.push("/trending");
+          }}
+          tw="text-xs font-semibold text-indigo-700"
+        >
+          See all
+        </Text>
+      </View>
       {isLoading ? (
         <View tw="flex-row flex-wrap">
           <View tw="flex-1">

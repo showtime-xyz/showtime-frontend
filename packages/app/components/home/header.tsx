@@ -182,6 +182,8 @@ export const CreatorTokensBanner = ({
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+  const isLgWidth = width >= breakpoints["xl"];
+
   const { data: banners = [], isLoading: isLoadingBanner } = useBanners();
   const router = useRouter();
   const pagerWidth = isMdWidth
@@ -261,8 +263,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      <TopPartCreatorTokens />
-      <TrendingCarousel />
+      {isLgWidth ? null : <TopPartCreatorTokens />}
     </View>
   );
 });

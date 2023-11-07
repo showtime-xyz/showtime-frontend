@@ -28,7 +28,6 @@ import { CreatorTokenCollectorsScreen } from "app/screens/creator-token/creator-
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
-import { TopCreatorTokenScreen } from "app/screens/creator-token/top-creator-token";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
@@ -245,11 +244,6 @@ export function RootStackNavigator() {
           name="trending"
           options={{ headerTitle: "Trending" }}
           component={TrendingScreen}
-        />
-        <Stack.Screen
-          name="topCreatorToken"
-          options={{ headerTitle: "Top Creator Tokens" }}
-          component={TopCreatorTokenScreen}
         />
         <Stack.Screen
           name="creatorTokenCollected"

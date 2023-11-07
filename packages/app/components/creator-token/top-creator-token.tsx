@@ -3,36 +3,57 @@ import { useWindowDimensions, Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { Avatar } from "@showtime-xyz/universal.avatar";
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Showtime } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
-import { useRouter } from "@showtime-xyz/universal.router";
-import Spinner from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import {
-  CreatorTokenUser,
   TopCreatorTokenUser,
-  useCreatorTokenCollectors,
   useTopCreatorToken,
 } from "app/hooks/creator-token/use-creator-tokens";
+import { useHeaderHeight } from "app/lib/react-navigation/elements";
+
+import { breakpoints } from "design-system/theme";
 
 import {
-  TopCreatorTokenItem,
+  TopCreatorTokenListItem,
+  TopCreatorTokenListItemSkeleton,
   TopCreatorTokenSkeleton,
 } from "./creator-token-users";
 
+const Header = () => {
+  const headerHeight = useHeaderHeight();
+  return (
+    <>
+      <View
+        style={{
+          height: Platform.select({
+            ios: headerHeight + 8,
+            default: 8,
+          }),
+        }}
+      />
+      <View tw="hidden flex-row justify-between pb-4 pt-4 md:flex">
+        <Text tw="text-base font-semibold text-gray-900 dark:text-white">
+          Top Creator Tokens
+        </Text>
+      </View>
+    </>
+  );
+};
 const keyExtractor = (item: TopCreatorTokenUser) => `${item.id}`;
-export const TopCreatorTokens = () => {
-  const { height: screenHeight } = useWindowDimensions();
+export const TopCreatorTokens = ({
+  isSimplified,
+  disableFetchMore,
+}: {
+  isSimplified?: boolean;
+  disableFetchMore?: boolean;
+}) => {
+  const { height: screenHeight, width } = useWindowDimensions();
   const { data: list, isLoading, fetchMore } = useTopCreatorToken();
-
+  const isMdWidth = width >= breakpoints["md"];
   const numColumns = 1;
 
   const renderItem = useCallback(
@@ -40,17 +61,26 @@ export const TopCreatorTokens = () => {
       item,
       index,
     }: ListRenderItemInfo<TopCreatorTokenUser & { loading?: boolean }>) => {
-      return <TopCreatorTokenItem item={item} index={index} />;
+      return (
+        <TopCreatorTokenListItem
+          item={item}
+          index={index}
+          isSimplified={isSimplified}
+          isMdWidth={isMdWidth}
+        />
+      );
     },
-    []
+    [isSimplified, isMdWidth]
   );
 
   const ListEmptyComponent = useCallback(() => {
-    if (!isLoading) {
+    if (isLoading) {
       return (
         <View>
           {new Array(6).fill(0).map((_, i) => {
-            return <TopCreatorTokenSkeleton key={i} />;
+            return (
+              <TopCreatorTokenListItemSkeleton key={i} isMdWidth={isMdWidth} />
+            );
           })}
         </View>
       );
@@ -62,7 +92,7 @@ export const TopCreatorTokens = () => {
         hideLoginBtn
       />
     );
-  }, [isLoading]);
+  }, [isLoading, isMdWidth]);
 
   return (
     <ErrorBoundary>
@@ -84,8 +114,9 @@ export const TopCreatorTokens = () => {
           paddingHorizontal: 12,
         }}
         overscan={12}
+        ListHeaderComponent={Header}
         containerTw="px-4"
-        onEndReached={fetchMore}
+        onEndReached={disableFetchMore ? () => {} : fetchMore}
         ListEmptyComponent={ListEmptyComponent}
         estimatedItemSize={46}
       />
