@@ -4,15 +4,7 @@ import { Platform } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  HeartFilled,
-  MarketFilled,
-  MessageFilled,
-  PlusFilled,
-  GiftSolid,
-  Spotify,
-  CreatorChannelType,
-} from "@showtime-xyz/universal.icon";
+import { CreatorChannelType } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors, styled } from "@showtime-xyz/universal.tailwind";
@@ -23,12 +15,6 @@ import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { NotificationType } from "app/hooks/use-notifications";
 import { formatDateRelativeWithIntl } from "app/utilities";
 
-import {
-  NFTSDisplayName,
-  NFTSDisplayNameText,
-  getNFTLink,
-} from "./nfts-display-name";
-
 const StyledRectButton = styled(RectButton);
 const PlatformButton =
   Platform.OS === "ios" ? memo(StyledRectButton) : Pressable;
@@ -38,26 +24,8 @@ export type NotificationItemProp = {
 };
 
 const NOTIFICATION_TYPE_COPY = new Map([
-  ["FOLLOW", "followed you"],
-  ["LIKE_ON_CREATED_NFT", "liked "],
-  ["LIKE_ON_OWNED_NFT", "liked "],
-  ["COMMENT_ON_CREATED_NFT", "commented on "],
-  ["COMMENT_ON_OWNED_NFT", "commented on "],
-  ["COMMENT_MENTION", "mentioned you in "],
-  ["LIKE_ON_COMMENT", "liked your comment on "],
-  ["NFT_SALE", "bought "],
-  ["NEW_CREATOR_AIRDROP_FROM_FOLLOWING", "created a new drop "],
-  ["CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING", "collected "],
-  ["CREATED_EDITION_SOLD_OUT", "Your drop sold out: "],
-  ["CREATED_EDITION_EXPIRED", "Your drop expired: "],
   ["CHANNEL_NEW_MESSAGE", "channel: "],
   ["CHANNEL_FIRST_MESSAGE", "just created a collector channel: "],
-
-  [
-    "MISSING_MUSIC_RELEASE_METADATA",
-    "Spotify song link to notify your fans the song is out. ",
-  ],
-  ["RELEASE_SAVED_TO_SPOTIFY", "is out! Check it out now."],
 ]);
 
 export const NotificationItem = memo(
@@ -72,54 +40,18 @@ export const NotificationItem = memo(
     const notificationPressHandler = useCallback(() => {
       let path = "";
       switch (notification.type_name) {
-        case "FOLLOW":
-          path = `/@${
-            notification.actors[0]?.username ||
-            notification.actors[0]?.wallet_address
-          }`;
-          break;
-
-        case "LIKE_ON_CREATED_NFT":
-        case "LIKE_ON_OWNED_NFT":
-        case "COMMENT_ON_CREATED_NFT":
-        case "COMMENT_ON_OWNED_NFT":
-        case "COMMENT_MENTION":
-        case "LIKE_ON_COMMENT":
-        case "NFT_SALE":
-        case "NEW_CREATOR_AIRDROP_FROM_FOLLOWING":
-        case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
-        case "CREATED_EDITION_SOLD_OUT":
-        case "CREATED_EDITION_EXPIRED":
-          if (notification.nfts && notification.nfts.length > 0) {
-            path = getNFTLink(notification.nfts[0]);
-          }
-          break;
-        case "MISSING_MUSIC_RELEASE_METADATA":
-          if (notification.nfts && notification.nfts.length > 0) {
-            path = `/drop/update/${notification.nfts[0].contract_address}`;
-          }
-          break;
         case "CHANNEL_NEW_MESSAGE":
         case "CHANNEL_FIRST_MESSAGE":
           if (notification.channel) {
             path = `/channels/${notification.channel.id}`;
           }
           break;
-        case "RELEASE_SAVED_TO_SPOTIFY":
-          // to determine, currently disabled
-          break;
       }
 
       if (!path) return;
 
       router.push(path);
-    }, [
-      notification.actors,
-      notification.nfts,
-      notification.type_name,
-      notification.channel,
-      router,
-    ]);
+    }, [notification.type_name, notification.channel, router]);
 
     if (
       NOTIFICATION_TYPE_COPY.get(notification.type_name) === undefined ||
@@ -167,46 +99,6 @@ const NotificationDescription = memo(
       notification.to_timestamp
     );
 
-    if (notification.type_name === "MISSING_MUSIC_RELEASE_METADATA") {
-      return (
-        <View tw="flex-1 flex-row justify-between">
-          <Text
-            tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
-            ellipsizeMode="tail"
-            numberOfLines={2}
-          >
-            Tap here to enter <NFTSDisplayNameText nfts={notification.nfts} />{" "}
-            {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
-          </Text>
-          {Boolean(formatDistance) && (
-            <View tw="items-end">
-              <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
-            </View>
-          )}
-        </View>
-      );
-    }
-
-    if (notification.type_name === "RELEASE_SAVED_TO_SPOTIFY") {
-      return (
-        <View tw="flex-1 flex-row justify-between">
-          <Text
-            tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
-            ellipsizeMode="tail"
-            numberOfLines={2}
-          >
-            <NFTSDisplayName nfts={notification.nfts} />{" "}
-            {NOTIFICATION_TYPE_COPY.get("RELEASE_SAVED_TO_SPOTIFY")}
-          </Text>
-          {Boolean(formatDistance) && (
-            <View tw="items-end">
-              <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
-            </View>
-          )}
-        </View>
-      );
-    }
-
     if (
       notification.type_name === "CHANNEL_NEW_MESSAGE" ||
       notification.type_name === "CHANNEL_FIRST_MESSAGE"
@@ -230,23 +122,7 @@ const NotificationDescription = memo(
       );
     }
 
-    return (
-      <View tw="flex-1 flex-row justify-between">
-        <Text
-          tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
-          ellipsizeMode="tail"
-          numberOfLines={2}
-        >
-          {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
-          <NFTSDisplayName nfts={notification.nfts} />
-        </Text>
-        {Boolean(formatDistance) && (
-          <View tw="items-end">
-            <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
-          </View>
-        )}
-      </View>
-    );
+    return null;
   }
 );
 
@@ -254,39 +130,6 @@ NotificationDescription.displayName = "NotificationDescription";
 
 export const getNotificationIcon = (type_name: string) => {
   switch (type_name) {
-    case "FOLLOW":
-      return <PlusFilled width={20} height={20} color={colors.teal[500]} />;
-    case "LIKE_ON_CREATED_NFT":
-      return <HeartFilled width={20} height={20} color={colors.rose[500]} />;
-    case "LIKE_ON_OWNED_NFT":
-      return <HeartFilled width={20} height={20} color={colors.rose[500]} />;
-    case "COMMENT_ON_CREATED_NFT":
-      return (
-        <MessageFilled width={20} height={20} color={colors.indigo[500]} />
-      );
-    case "COMMENT_ON_OWNED_NFT":
-      return (
-        <MessageFilled width={20} height={20} color={colors.indigo[500]} />
-      );
-    case "COMMENT_MENTION":
-      return (
-        <MessageFilled width={20} height={20} color={colors.indigo[500]} />
-      );
-    case "LIKE_ON_COMMENT":
-      return <HeartFilled width={20} height={20} color={colors.rose[500]} />;
-    case "NFT_SALE":
-      return <MarketFilled width={20} height={20} color={colors.amber[500]} />;
-    case "NEW_CREATOR_AIRDROP_FROM_FOLLOWING":
-      return <PlusFilled width={20} height={20} color={colors.indigo[500]} />;
-    case "CLAIMED_CREATOR_AIRDROP_FROM_FOLLOWING":
-      return <GiftSolid width={20} height={20} color={colors.indigo[500]} />;
-    case "CREATED_EDITION_SOLD_OUT":
-      return <GiftSolid width={20} height={20} color={colors.rose[500]} />;
-    case "CREATED_EDITION_EXPIRED":
-      return <GiftSolid width={20} height={20} color={colors.gray[500]} />;
-    case "MISSING_MUSIC_RELEASE_METADATA":
-    case "RELEASE_SAVED_TO_SPOTIFY":
-      return <Spotify width={20} height={20} color={"#1DB954"} />;
     case "CHANNEL_NEW_MESSAGE":
     case "CHANNEL_FIRST_MESSAGE":
       return (
