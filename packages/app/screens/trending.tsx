@@ -11,7 +11,7 @@ const TrendingScreen = withColorScheme(() => {
 
   return (
     <View tw="min-h-screen w-full bg-white dark:bg-black">
-      <View tw="mx-auto w-full md:max-w-screen-lg">
+      <View tw="mx-auto w-full md:max-w-screen-md">
         <TopCreatorTokens />
       </View>
     </View>
