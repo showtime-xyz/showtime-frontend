@@ -163,6 +163,7 @@ export { default as PieChart } from "./PieChart";
 export { default as AccessTicket } from "./AccessTicket";
 export { default as InviteTicket } from "./InviteTicket";
 export { default as ArrowTopRounded } from "./ArrowTopRounded";
+export { default as GoldHexagon } from "./GoldHexagon";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

@@ -48,7 +48,7 @@ import { formatNumber } from "app/utilities";
 import SvgUnlocked from "design-system/icon/Unlocked";
 
 import { ChannelPermissions } from "../creator-channels/types";
-import { TopCreatorTokensItem } from "../creator-token/creator-token-users";
+import { TopCreatorTokenListItem } from "../creator-token/creator-token-users";
 import { EmptyPlaceholder } from "../empty-placeholder";
 import { FilterContext } from "./fillter-context";
 import { MyCollection } from "./my-collection";
@@ -234,7 +234,7 @@ export const CreatorTokenCollectors = ({
   return (
     <View {...rest}>
       <View tw="flex-row items-center justify-between py-4">
-        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+        <Text tw="text-13 font-semibold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collectors
         </Text>
         {/* {count > 6 ? (
@@ -266,11 +266,11 @@ export const CreatorTokenCollectors = ({
       <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
         {data?.map((item, i) => {
           return (
-            <TopCreatorTokensItem
+            <TopCreatorTokenListItem
               item={item}
-              index={i}
               key={i}
-              style={{ width: "29%" }}
+              style={{ width: "48%" }}
+              showName
             />
           );
         })}
@@ -296,7 +296,7 @@ export const CreatorTokenCollected = ({
   return (
     <View {...rest}>
       <View tw="flex-row items-center justify-between py-4">
-        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+        <Text tw="text-13 font-semibold text-gray-900 dark:text-gray-50">
           {name ? name : `@${username}`} collected
         </Text>
         {/* {count > 6 ? (
@@ -330,11 +330,11 @@ export const CreatorTokenCollected = ({
       <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
         {data?.map((item, i) => {
           return (
-            <TopCreatorTokensItem
+            <TopCreatorTokenListItem
               item={item}
-              index={i}
               key={i}
-              style={{ width: "29%" }}
+              style={{ width: "48%" }}
+              showName
             />
           );
         })}

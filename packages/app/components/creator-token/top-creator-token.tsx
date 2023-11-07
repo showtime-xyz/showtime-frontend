@@ -18,69 +18,40 @@ import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import {
   CreatorTokenUser,
+  TopCreatorTokenUser,
   useCreatorTokenCollectors,
+  useTopCreatorToken,
 } from "app/hooks/creator-token/use-creator-tokens";
-import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
-import { breakpoints } from "design-system/theme";
+import {
+  TopCreatorTokenItem,
+  TopCreatorTokenSkeleton,
+} from "./creator-token-users";
 
-import { TopCreatorTokensItem } from "./creator-token-users";
-
-const Header = () => {
-  const headerHeight = useHeaderHeight();
-  return (
-    <>
-      <View
-        style={{
-          height: Platform.select({
-            ios: headerHeight + 8,
-            default: 8,
-          }),
-        }}
-      />
-      <View tw="hidden flex-row justify-between bg-white pb-4 pt-6 dark:bg-black md:flex">
-        <Text tw="font-bold text-gray-900 dark:text-white md:text-xl">
-          Top Creator Tokens
-        </Text>
-      </View>
-    </>
-  );
-};
-
-const keyExtractor = (item: CreatorTokenUser) => `${item.profile_id}`;
+const keyExtractor = (item: TopCreatorTokenUser) => `${item.id}`;
 export const TopCreatorTokens = () => {
-  const { height: screenHeight, width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
-  const { data: list, isLoading } = useCreatorTokenCollectors(27);
+  const { height: screenHeight } = useWindowDimensions();
+  const { data: list, isLoading, fetchMore } = useTopCreatorToken();
 
-  const numColumns = 3;
+  const numColumns = 1;
 
   const renderItem = useCallback(
     ({
       item,
       index,
-    }: ListRenderItemInfo<CreatorTokenUser & { loading?: boolean }>) => {
-      return <TopCreatorTokensItem item={item} index={index} />;
+    }: ListRenderItemInfo<TopCreatorTokenUser & { loading?: boolean }>) => {
+      return <TopCreatorTokenItem item={item} index={index} />;
     },
     []
   );
 
-  const getItemType = useCallback(
-    (_: CreatorTokenUser, index: number) => {
-      const marginLeft = isMdWidth ? 0 : index % numColumns === 0 ? 0 : 8;
-      if (marginLeft) {
-        return "right";
-      }
-      return "left";
-    },
-    [isMdWidth, numColumns]
-  );
-
   const ListEmptyComponent = useCallback(() => {
-    if (isLoading) {
+    if (!isLoading) {
       return (
-        <View tw="mx-auto w-full max-w-screen-xl justify-center md:px-0">
-          <Spinner />
+        <View>
+          {new Array(6).fill(0).map((_, i) => {
+            return <TopCreatorTokenSkeleton key={i} />;
+          })}
         </View>
       );
     }
@@ -94,35 +65,30 @@ export const TopCreatorTokens = () => {
   }, [isLoading]);
 
   return (
-    <View tw="min-h-screen w-full bg-white dark:bg-black">
-      <View tw="md:max-w-screen-content mx-auto w-full">
-        <ErrorBoundary>
-          <InfiniteScrollList
-            useWindowScroll
-            data={list || []}
-            preserveScrollPosition
-            keyExtractor={keyExtractor}
-            numColumns={numColumns}
-            renderItem={renderItem}
-            drawDistance={500}
-            getItemType={getItemType}
-            style={{
-              height: Platform.select({
-                web: undefined,
-                default: screenHeight,
-              }),
-            }}
-            contentContainerStyle={{
-              paddingHorizontal: 8,
-            }}
-            overscan={12}
-            containerTw="px-4 md:px-0"
-            ListEmptyComponent={ListEmptyComponent}
-            ListHeaderComponent={Header}
-            estimatedItemSize={275}
-          />
-        </ErrorBoundary>
-      </View>
-    </View>
+    <ErrorBoundary>
+      <InfiniteScrollList
+        useWindowScroll
+        data={list || []}
+        preserveScrollPosition
+        keyExtractor={keyExtractor}
+        numColumns={numColumns}
+        renderItem={renderItem}
+        drawDistance={500}
+        style={{
+          height: Platform.select({
+            web: undefined,
+            default: screenHeight,
+          }),
+        }}
+        contentContainerStyle={{
+          paddingHorizontal: 12,
+        }}
+        overscan={12}
+        containerTw="px-4"
+        onEndReached={fetchMore}
+        ListEmptyComponent={ListEmptyComponent}
+        estimatedItemSize={46}
+      />
+    </ErrorBoundary>
   );
 };
