@@ -33,7 +33,8 @@ export const Home = () => {
   const headerHeight = useHeaderHeight();
   const { width, height } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const isLgWidth = width >= breakpoints["xl"];
+  const isXlWidth = width >= breakpoints["xl"];
+  const is2XlWidth = width >= breakpoints["2xl"];
 
   const { data, isLoading } = useFeed();
   const listRef = useRef<any>();
@@ -142,8 +143,14 @@ export const Home = () => {
             />
           </ErrorBoundary>
         </View>
-        {isLgWidth ? (
-          <View tw="" style={{ width: RIGHT_SIDE_WIDTH, marginLeft: 160 }}>
+        {isXlWidth ? (
+          <View
+            tw=""
+            style={{
+              width: RIGHT_SIDE_WIDTH,
+              marginLeft: is2XlWidth ? 160 : 110,
+            }}
+          >
             <TopCreatorTokens isSimplified limit={15} disableFetchMore />
           </View>
         ) : null}
