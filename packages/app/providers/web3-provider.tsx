@@ -11,15 +11,9 @@ import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 
 interface Web3ProviderProps {
   children: React.ReactNode;
-  connected?: boolean;
-  client?: Web3ContextType["web3"];
 }
 
-export function Web3Provider({
-  children,
-  connected,
-  client,
-}: Web3ProviderProps) {
+export function Web3Provider({ children }: Web3ProviderProps) {
   const [web3, setWeb3State] = useState<Web3ContextType["web3"] | undefined>(
     undefined
   );
@@ -114,13 +108,6 @@ export function Web3Provider({
       setMagicWalletAddress(undefined);
     }
   }, [web3]);
-
-  // (Web only) initialises web3 provider from wagmi
-  useEffect(() => {
-    if (Platform.OS === "web" && connected) {
-      setWeb3(client);
-    }
-  }, [connected, client]);
 
   return (
     <Web3Context.Provider value={Web3ContextValue}>
