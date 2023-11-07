@@ -24,10 +24,7 @@ import { useSWRConfig } from "swr";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  CreatorChannelFilled,
-  ShowtimeRounded,
-} from "@showtime-xyz/universal.icon";
+import { CreatorChannelFilled } from "@showtime-xyz/universal.icon";
 import {
   ListRenderItem,
   FlashList,
