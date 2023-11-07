@@ -47,12 +47,14 @@ const keyExtractor = (item: TopCreatorTokenUser) => `${item.id}`;
 export const TopCreatorTokens = ({
   isSimplified,
   disableFetchMore,
+  limit,
 }: {
   isSimplified?: boolean;
   disableFetchMore?: boolean;
+  limit?: number;
 }) => {
   const { height: screenHeight, width } = useWindowDimensions();
-  const { data: list, isLoading, fetchMore } = useTopCreatorToken();
+  const { data: list, isLoading, fetchMore } = useTopCreatorToken(limit);
   const isMdWidth = width >= breakpoints["md"];
   const numColumns = 1;
 

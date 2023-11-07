@@ -144,7 +144,7 @@ export const Home = () => {
         </View>
         {isLgWidth ? (
           <View tw="" style={{ width: RIGHT_SIDE_WIDTH, marginLeft: 200 }}>
-            <TopCreatorTokens isSimplified />
+            <TopCreatorTokens isSimplified limit={15} disableFetchMore />
           </View>
         ) : null}
       </View>
