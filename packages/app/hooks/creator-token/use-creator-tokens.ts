@@ -94,12 +94,13 @@ export const useTopCreatorToken = (limit: number = 15) => {
     [limit]
   );
 
-  const { data, ...queryState } = useInfiniteListQuerySWR<TopCreatorToken>(
-    fetchUrl,
-    {
-      pageSize: limit,
-    }
-  );
+  const {
+    data,
+    fetchMore: fetchMoreData,
+    ...queryState
+  } = useInfiniteListQuerySWR<TopCreatorToken>(fetchUrl, {
+    pageSize: limit,
+  });
 
   const newData = useMemo(() => {
     let newData: TopCreatorToken["creator_tokens"] = [];
@@ -112,8 +113,15 @@ export const useTopCreatorToken = (limit: number = 15) => {
     }
     return newData;
   }, [data]);
+
+  const fetchMore = useCallback(() => {
+    if (newData.length >= 100) return;
+    fetchMoreData();
+  }, [fetchMoreData, newData.length]);
+
   return {
     ...queryState,
+    fetchMore,
     data: newData,
   };
 };

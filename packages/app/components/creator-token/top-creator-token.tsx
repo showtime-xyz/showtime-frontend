@@ -36,7 +36,7 @@ const Header = () => {
         }}
       />
       <View tw="hidden flex-row justify-between pb-4 pt-4 md:flex">
-        <Text tw="text-base font-semibold text-gray-900 dark:text-white">
+        <Text tw="text-base font-bold text-gray-900 dark:text-white md:text-xl">
           Top Creator Tokens
         </Text>
       </View>
@@ -47,12 +47,14 @@ const keyExtractor = (item: TopCreatorTokenUser) => `${item.id}`;
 export const TopCreatorTokens = ({
   isSimplified,
   disableFetchMore,
+  limit,
 }: {
   isSimplified?: boolean;
   disableFetchMore?: boolean;
+  limit?: number;
 }) => {
   const { height: screenHeight, width } = useWindowDimensions();
-  const { data: list, isLoading, fetchMore } = useTopCreatorToken();
+  const { data: list, isLoading, fetchMore } = useTopCreatorToken(limit);
   const isMdWidth = width >= breakpoints["md"];
   const numColumns = 1;
 
@@ -113,7 +115,7 @@ export const TopCreatorTokens = ({
         contentContainerStyle={{
           paddingHorizontal: 12,
         }}
-        overscan={12}
+        overscan={20}
         ListHeaderComponent={Header}
         containerTw="px-4"
         onEndReached={disableFetchMore ? () => {} : fetchMore}
