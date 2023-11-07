@@ -4,6 +4,7 @@ import { useWindowDimensions, Platform } from "react-native";
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
@@ -20,11 +21,11 @@ import { breakpoints } from "design-system/theme";
 import {
   TopCreatorTokenListItem,
   TopCreatorTokenListItemSkeleton,
-  TopCreatorTokenSkeleton,
 } from "./creator-token-users";
 
 const Header = () => {
   const headerHeight = useHeaderHeight();
+  const router = useRouter();
   return (
     <>
       <View
@@ -35,10 +36,20 @@ const Header = () => {
           }),
         }}
       />
-      <View tw="hidden flex-row justify-between pb-4 pt-4 md:flex">
+      <View tw="hidden flex-row items-center justify-between py-4 md:flex">
         <Text tw="text-base font-bold text-gray-900 dark:text-white md:text-xl">
           Top Creator Tokens
         </Text>
+        {router.pathname === "/" ? (
+          <Text
+            onPress={() => {
+              router.push("/trending");
+            }}
+            tw="pr-3 text-xs font-semibold text-indigo-700"
+          >
+            See all
+          </Text>
+        ) : null}
       </View>
     </>
   );
@@ -117,7 +128,6 @@ export const TopCreatorTokens = ({
         }}
         overscan={20}
         ListHeaderComponent={Header}
-        containerTw="px-4"
         onEndReached={disableFetchMore ? () => {} : fetchMore}
         ListEmptyComponent={ListEmptyComponent}
         estimatedItemSize={46}

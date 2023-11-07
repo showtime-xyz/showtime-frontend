@@ -35,7 +35,9 @@ export const Home = () => {
   const isMdWidth = width >= breakpoints["md"];
   const isXlWidth = width >= breakpoints["xl"];
   const is2XlWidth = width >= breakpoints["2xl"];
-
+  const loadQuantity = useMemo(() => {
+    return Math.floor((height - 100) / 54);
+  }, [height]);
   const { data, isLoading } = useFeed();
   const listRef = useRef<any>();
   useScrollToTop(listRef);
@@ -151,7 +153,13 @@ export const Home = () => {
               marginLeft: is2XlWidth ? 160 : 110,
             }}
           >
-            <TopCreatorTokens isSimplified limit={15} disableFetchMore />
+            <Sticky enabled>
+              <TopCreatorTokens
+                isSimplified
+                limit={loadQuantity}
+                disableFetchMore
+              />
+            </Sticky>
           </View>
         ) : null}
       </View>
