@@ -289,7 +289,7 @@ export const TopCreatorTokenListItem = ({
               />
             </View>
             {!isSimplified ? (
-              <View tw="min-w-[150px] flex-1">
+              <View tw="ml-6 min-w-[150px] flex-1">
                 <Text
                   tw="text-sm font-bold text-gray-900 dark:text-white"
                   numberOfLines={1}
