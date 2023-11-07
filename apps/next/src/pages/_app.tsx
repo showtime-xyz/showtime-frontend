@@ -38,7 +38,6 @@ import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-expla
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
 import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
-import { DetailsScreen } from "app/screens/details";
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { LoginScreen } from "app/screens/login";
 import { OnboardingScreen } from "app/screens/onboarding";
@@ -216,7 +215,6 @@ function App({ Component, pageProps, router }: AppProps) {
         </Container>
 
         {/* Modals */}
-        <DetailsScreen />
         <CreatorTokensExplanationScreen />
         <EnterInviteCodeModalScreen />
         <ReportScreen />
