@@ -11,7 +11,7 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
 import { publicClient } from "app/lib/wallet-public-client";
-import { formatAPIErrorMessage } from "app/utilities";
+import { delay, formatAPIErrorMessage } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -160,15 +160,26 @@ export const useCreatorTokenSell = () => {
                   contractAddress: arg.contractAddress,
                 })
               );
-              await axios({
-                url: "/v1/creator-token/poll-sell",
-                method: "POST",
-                data: {
-                  creator_token_id: arg.creatorTokenId,
-                  token_ids: tokenIds,
-                  tx_hash: txHash,
-                },
-              });
+
+              for (let i = 0; i < 3; i++) {
+                try {
+                  await axios({
+                    url: "/v1/creator-token/poll-sell",
+                    method: "POST",
+                    data: {
+                      creator_token_id: arg.creatorTokenId,
+                      token_ids: tokenIds,
+                      tx_hash: txHash,
+                    },
+                  });
+                  break;
+                } catch (e) {
+                  Logger.error("tx not found");
+                }
+
+                await delay(2000);
+              }
+
               return true;
             }
           }

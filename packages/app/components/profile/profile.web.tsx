@@ -27,6 +27,12 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { Card } from "app/components/card";
+import { EmptyPlaceholder } from "app/components/empty-placeholder";
+import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
+import { HeaderLeft } from "app/components/header";
+import { HeaderRightSm } from "app/components/header/header-right.sm";
+import { CreatorTokensBanner } from "app/components/home/header";
+import { TopPartCreatorTokens } from "app/components/home/top-part-creator-tokens";
 import { DESKTOP_PROFILE_WIDTH } from "app/constants/layout";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import {
@@ -54,12 +60,6 @@ import {
 
 import { Spinner } from "design-system/spinner";
 
-import { MessageItem } from "../creator-channels/components/message-item";
-import { EmptyPlaceholder } from "../empty-placeholder";
-import { ButtonGoldLinearGradient } from "../gold-gradient";
-import { HeaderLeft } from "../header";
-import { HeaderRightSm } from "../header/header-right.sm";
-import { CreatorTokensBanner } from "../home/header";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { MyCollection } from "./my-collection";
 import { ProfileError } from "./profile-error";
@@ -363,6 +363,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   <Sticky enabled>
                     <CreatorTokensPanel username={username} isSelf={isSelf} />
                     {isSelf && <MyCollection />}
+                    <TopPartCreatorTokens />
                   </Sticky>
                 </View>
               ) : null}

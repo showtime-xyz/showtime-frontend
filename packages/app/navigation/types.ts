@@ -129,7 +129,6 @@ type RootStackNavigatorParams = {
   channelsSettings: undefined;
   channelUnlocked: undefined;
   creatorTokensShare: undefined;
-  topCreatorToken: undefined;
   creatorTokenCollectors: undefined;
   creatorTokenCollected: undefined;
   likers: undefined;
