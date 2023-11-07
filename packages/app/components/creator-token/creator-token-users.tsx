@@ -149,7 +149,7 @@ export const TopCreatorTokenItem = ({
           : `/@${item.owner_address}`
       }
     >
-      <View tw={["py-1.5", tw].join(" ")} {...rest}>
+      <View tw={["mb-2 py-1.5", tw].join(" ")} {...rest}>
         <View tw="flex-row items-center">
           <View tw="min-w-[24px]">
             {index != undefined ? (
@@ -314,7 +314,7 @@ export const TopCreatorTokenListItem = ({
 
 export const TopCreatorTokenSkeleton = ({ tw, ...rest }: ViewProps) => {
   return (
-    <View tw={["py-1.5", tw].join(" ")} {...rest}>
+    <View tw={["mb-2 py-1.5", tw].join(" ")} {...rest}>
       <View tw="flex-row items-center pl-1">
         <Skeleton width={16} height={16} show radius={8} />
         <View tw="ml-2 flex-row items-center">
