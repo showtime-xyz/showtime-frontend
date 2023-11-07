@@ -10,11 +10,8 @@ import { Messages } from "app/components/creator-channels/messages";
 import { useHandleNotification } from "app/hooks/use-handle-notification";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
-import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
-import { CollectorsScreen } from "app/screens/collectors";
-import { CommentsScreen } from "app/screens/comments";
 import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
 import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
@@ -31,12 +28,8 @@ import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-expla
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
 import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
-import { DetailsScreen } from "app/screens/details";
 import { EditProfileScreen } from "app/screens/edit-profile";
-import { FollowersScreen } from "app/screens/followers";
-import { FollowingScreen } from "app/screens/following";
 import { LoginScreen } from "app/screens/login";
-import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
@@ -99,26 +92,7 @@ export function RootStackNavigator() {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen
-          name="nft"
-          component={NftScreen}
-          getId={({ params }) => Object.values(params).join("-")}
-          options={{
-            statusBarStyle: "light",
-          }}
-        />
-        <Stack.Screen
-          name="dropSlug"
-          component={NftScreen}
-          getId={({ params }) => Object.values(params).join("-")}
-          options={{
-            statusBarStyle: "light",
-            contentStyle: {
-              backgroundColor: "black",
-            },
-            navigationBarColor: "black",
-          }}
-        />
+
         <Stack.Screen name="channelsMessage" component={Messages} />
         <Stack.Screen
           name="channelUnlocked"
@@ -183,30 +157,6 @@ export function RootStackNavigator() {
           component={NotificationSettingsScreen}
         />
         <Stack.Screen name="blockedList" component={BlockedListScreen} />
-        <Stack.Screen
-          name="followers"
-          component={FollowersScreen}
-          options={{ headerTitle: "Followers" }}
-        />
-        <Stack.Screen
-          name="following"
-          options={{ headerTitle: "Following" }}
-          component={FollowingScreen}
-        />
-        <Stack.Screen
-          name="collectors"
-          options={{ headerTitle: "Collectors" }}
-          component={CollectorsScreen}
-        />
-        <Stack.Screen
-          name="comments"
-          options={{
-            headerTitle: "Comments",
-            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
-            animationDuration: Platform.OS === "android" ? undefined : 200,
-          }}
-          component={CommentsScreen}
-        />
 
         <Stack.Screen
           name="channelsMembers"
@@ -253,12 +203,7 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
-        <Stack.Screen
-          name="appleMusicAuthNativeWebView"
-          component={AppleMusicAuthNativeWebViewScreen}
-        />
         <Stack.Screen name="onboarding" component={OnboardingScreen} />
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen
