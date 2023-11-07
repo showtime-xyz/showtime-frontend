@@ -2948,7 +2948,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/providers@npm:5.7.2, @ethersproject/providers@npm:^5.7.1":
+"@ethersproject/providers@npm:5.7.2, @ethersproject/providers@npm:^5.7.1, @ethersproject/providers@npm:^5.7.2":
   version: 5.7.2
   resolution: "@ethersproject/providers@npm:5.7.2"
   dependencies:
@@ -4937,6 +4937,61 @@ __metadata:
   version: 2.11.8
   resolution: "@popperjs/core@npm:2.11.8"
   checksum: e5c69fdebf52a4012f6a1f14817ca8e9599cb1be73dd1387e1785e2ed5e5f0862ff817f420a87c7fc532add1f88a12e25aeb010ffcbdc98eace3d55ce2139cf0
+  languageName: node
+  linkType: hard
+
+"@privy-io/api-base@npm:*":
+  version: 0.4.0
+  resolution: "@privy-io/api-base@npm:0.4.0"
+  dependencies:
+    zod: ^3.21.4
+  checksum: 72bdc9c951271699a037e71c291cf28c64d78cfb4e48fb3346328e36d6cf6a397af704ce595ee853daf0ac72da3a0ea6b8234bdc0d59f7b6ef13945d228d8e7a
+  languageName: node
+  linkType: hard
+
+"@privy-io/expo@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@privy-io/expo@npm:0.3.0"
+  dependencies:
+    "@privy-io/js-sdk-core": "*"
+    react-fast-compare: ^3.2.2
+  peerDependencies:
+    expo-application: "*"
+    expo-constants: "*"
+    expo-linking: "*"
+    expo-secure-store: "*"
+    react: "*"
+    react-native: "*"
+    react-native-webview: "*"
+  checksum: 8862ef727a69e816da9b19d959d35977010de3f8e119bd3b01261240f9b55e9537d78129028749c3a02f8e128a107e74f22c120027f8d6d1ccd4e3de3b9ee358
+  languageName: node
+  linkType: hard
+
+"@privy-io/js-sdk-core@npm:*":
+  version: 0.7.0
+  resolution: "@privy-io/js-sdk-core@npm:0.7.0"
+  dependencies:
+    "@ethersproject/providers": ^5.7.2
+    "@privy-io/public-api": "*"
+    eventemitter3: ^5.0.1
+    fetch-retry: ^5.0.6
+    jose: ^4.11.2
+    js-cookie: ^3.0.5
+    text-encoding: ^0.7.0
+    uuid: ">=8 <10"
+  checksum: 53a1eeddf215f935bec52d189380f0e98ca96e515f855ee4f787e194bf46c0d4d9b5b35a797ae154ea3136b476090a4b41c73ec6637ab0ff445e7aa962877cf8
+  languageName: node
+  linkType: hard
+
+"@privy-io/public-api@npm:*":
+  version: 1.4.0
+  resolution: "@privy-io/public-api@npm:1.4.0"
+  dependencies:
+    "@privy-io/api-base": "*"
+    ethers: ^5.7.2
+    libphonenumber-js: ^1.10.31
+    zod: ^3.22.4
+  checksum: 8eb8668aa847ad6620782cd1455f55c2dad219d25ce04777bcd238321bd4630aa32b98762b5a2cc5e031a23c70a8bca9b7edb487ebf89981fd8faa22f60a8080
   languageName: node
   linkType: hard
 
@@ -7210,6 +7265,7 @@ __metadata:
     "@magic-ext/react-native-expo-oauth": ^8.1.0
     "@magic-sdk/react-native-expo": ^14.1.0
     "@miblanchard/react-native-slider": ^2.3.1
+    "@privy-io/expo": ^0.3.0
     "@react-native-async-storage/async-storage": ~1.19.1
     "@react-native-community/blur": ^4.3.2
     "@react-native-community/datetimepicker": 7.4.1
@@ -7279,6 +7335,7 @@ __metadata:
     expo-modules-core: ~1.5.10
     expo-navigation-bar: ~2.3.0
     expo-notifications: ~0.20.1
+    expo-secure-store: ~12.3.1
     expo-sharing: ~11.5.0
     expo-splash-screen: ~0.20.5
     expo-status-bar: ~1.6.0
@@ -16532,7 +16589,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:5.7.2":
+"ethers@npm:5.7.2, ethers@npm:^5.7.2":
   version: 5.7.2
   resolution: "ethers@npm:5.7.2"
   dependencies:
@@ -17137,6 +17194,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-secure-store@npm:~12.3.1":
+  version: 12.3.1
+  resolution: "expo-secure-store@npm:12.3.1"
+  peerDependencies:
+    expo: "*"
+  checksum: b4e0bb14b39d9276483e6d219a445399dbe556921fa71c10dbd7927ae8f3fb8c964fab35c7ba4a9e3acc4e944130d779edaf1337c2b8d74ed25b5621ebbb0cd4
+  languageName: node
+  linkType: hard
+
 "expo-sharing@npm:~11.5.0":
   version: 11.5.0
   resolution: "expo-sharing@npm:11.5.0"
@@ -17544,7 +17610,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fetch-retry@npm:^5.0.2":
+"fetch-retry@npm:^5.0.2, fetch-retry@npm:^5.0.6":
   version: 5.0.6
   resolution: "fetch-retry@npm:5.0.6"
   checksum: 4ad8bca6ec7a7b1212e636bb422a9ae8bb9dce38df0b441c9eb77a29af99b368029d6248ff69427da67e3d43c53808b121135ea395e7fe4f8f383e0ad65b4f27
@@ -21105,7 +21171,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"libphonenumber-js@npm:^1.10.14":
+"libphonenumber-js@npm:^1.10.14, libphonenumber-js@npm:^1.10.31":
   version: 1.10.49
   resolution: "libphonenumber-js@npm:1.10.49"
   checksum: 596b4ed05fbf8c99f384cda802e6afb111accdaf96f9baf2a3ac32c885602583f3e9cba4c4475c3922e9c4f79c63bcdf7e592666b7e14b258cad26f34f51c2e0
@@ -25219,7 +25285,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^3.0.1":
+"react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.2.2":
   version: 3.2.2
   resolution: "react-fast-compare@npm:3.2.2"
   checksum: 2071415b4f76a3e6b55c84611c4d24dcb12ffc85811a2840b5a3f1ff2d1a99be1020d9437ee7c6e024c9f4cbb84ceb35e48cf84f28fcb00265ad2dfdd3947704
@@ -28468,6 +28534,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"text-encoding@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "text-encoding@npm:0.7.0"
+  checksum: b6109a843fb1b8748b32e1ecd6df74d370f46c13ac136bcb6ca15db70209bb0b8ec1f296ebb4b0dd9961150e205dcc044b89f8cf7657f6faef78c7569a2a81bc
+  languageName: node
+  linkType: hard
+
 "text-segmentation@npm:^1.0.3":
   version: 1.0.3
   resolution: "text-segmentation@npm:1.0.3"
@@ -31225,6 +31298,13 @@ __metadata:
   version: 3.21.4
   resolution: "zod@npm:3.21.4"
   checksum: f185ba87342ff16f7a06686767c2b2a7af41110c7edf7c1974095d8db7a73792696bcb4a00853de0d2edeb34a5b2ea6a55871bc864227dace682a0a28de33e1f
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.21.4, zod@npm:^3.22.4":
+  version: 3.22.4
+  resolution: "zod@npm:3.22.4"
+  checksum: 80bfd7f8039b24fddeb0718a2ec7c02aa9856e4838d6aa4864335a047b6b37a3273b191ef335bf0b2002e5c514ef261ffcda5a589fb084a48c336ffc4cdbab7f
   languageName: node
   linkType: hard
 

@@ -125,7 +125,6 @@ const useWallet = (): UseWalletReturnType => {
       name: walletName,
       connected: walletConnected || isMagic,
       isMagicWallet: isMagic,
-      networkChanged: undefined,
       walletClient: web3,
       getWalletClient,
       signMessageAsync: async (args: { message: string }) => {
