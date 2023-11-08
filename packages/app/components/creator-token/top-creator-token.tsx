@@ -7,6 +7,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { LockV2 } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -17,6 +18,7 @@ import {
   TopCreatorTokenUser,
   useTopCreatorToken,
 } from "app/hooks/creator-token/use-creator-tokens";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
@@ -100,8 +102,14 @@ export const TopCreatorTokens = ({
   disableFetchMore?: boolean;
   limit?: number;
 }) => {
+  const bottom = usePlatformBottomHeight();
   const { height: screenHeight, width } = useWindowDimensions();
-  const { data: list, isLoading, fetchMore } = useTopCreatorToken(limit);
+  const {
+    data: list,
+    isLoading,
+    fetchMore,
+    isLoadingMore,
+  } = useTopCreatorToken(limit);
   const isMdWidth = width >= breakpoints["md"];
   const numColumns = 1;
   const listRef = useRef<any>();
@@ -148,6 +156,19 @@ export const TopCreatorTokens = ({
       />
     );
   }, [isLoading, isMdWidth]);
+  const renderListFooter = useCallback(() => {
+    if (isLoadingMore) {
+      return (
+        <View
+          tw="w-full items-center py-4"
+          style={{ paddingBottom: bottom + 8 }}
+        >
+          <Spinner size="small" />
+        </View>
+      );
+    }
+    return <View style={{ height: bottom + 8 }} />;
+  }, [bottom, isLoadingMore]);
 
   return (
     <ErrorBoundary>
@@ -170,6 +191,7 @@ export const TopCreatorTokens = ({
         ListHeaderComponent={Header}
         onEndReached={disableFetchMore ? () => {} : fetchMore}
         ListEmptyComponent={ListEmptyComponent}
+        ListFooterComponent={renderListFooter}
         estimatedItemSize={46}
       />
     </ErrorBoundary>
