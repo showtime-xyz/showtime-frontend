@@ -25,7 +25,6 @@ import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
-import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 import { formatProfileRoutes, getFullSizeCover } from "app/utilities";
 
@@ -205,16 +204,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
         tw="min-h-screen w-full"
         style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}
       >
-        <MutateProvider mutate={updateItem}>
-          <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
-            {isProfileMdScreen ? (
-              <>
-                <CreatorTokensBanner />
-                <ProfileCover
-                  tw="overflow-hidden rounded-b-3xl"
-                  uri={getFullSizeCover(profileData?.data?.profile)}
-                />
-                {/* <Pressable
+        <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
+          {isProfileMdScreen ? (
+            <>
+              <CreatorTokensBanner />
+              <ProfileCover
+                tw="overflow-hidden rounded-b-3xl"
+                uri={getFullSizeCover(profileData?.data?.profile)}
+              />
+              {/* <Pressable
                     tw={[
                       "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
                     ]}
@@ -245,78 +243,77 @@ const Profile = ({ username }: ProfileScreenProps) => {
                       color={colors.gray[900]}
                     />
                   </Pressable> */}
-              </>
-            ) : null}
-            <View tw="w-full flex-row">
-              <View tw="flex-1">
-                <ProfileTop
-                  address={username}
-                  isBlocked={isBlocked}
-                  profileData={profileData?.data}
-                  isLoading={profileIsLoading}
-                  isError={isError}
-                  isSelf={isSelf}
-                />
-                {/* <ProfileTabBar
+            </>
+          ) : null}
+          <View tw="w-full flex-row">
+            <View tw="flex-1">
+              <ProfileTop
+                address={username}
+                isBlocked={isBlocked}
+                profileData={profileData?.data}
+                isLoading={profileIsLoading}
+                isError={isError}
+                isSelf={isSelf}
+              />
+              {/* <ProfileTabBar
                   onPress={onChangeTabBar}
                   routes={routes}
                   index={index}
                 /> */}
 
-                {type === "tokens" ? (
-                  <>
-                    <TokensTabHeader
-                      channelId={channelId}
-                      isSelf={isSelf}
-                      messageCount={messageCount}
-                      channelPermissions={channelPermissions}
+              {type === "tokens" ? (
+                <>
+                  <TokensTabHeader
+                    channelId={channelId}
+                    isSelf={isSelf}
+                    messageCount={messageCount}
+                    channelPermissions={channelPermissions}
+                  />
+                  <View tw="pl-5">
+                    <CreatorTokenCollectors
+                      creatorTokenId={
+                        profileData?.data?.profile.creator_token?.id
+                      }
+                      name={profileData?.data?.profile.name}
+                      username={username}
                     />
-                    <View tw="pl-5">
-                      <CreatorTokenCollectors
-                        creatorTokenId={
-                          profileData?.data?.profile.creator_token?.id
-                        }
-                        name={profileData?.data?.profile.name}
-                        username={username}
-                      />
-                      <CreatorTokenCollected
-                        profileId={profileId}
-                        name={profileData?.data?.profile.name}
-                        username={username}
-                      />
-                    </View>
-                  </>
-                ) : null}
-
-                <InfiniteScrollList
-                  useWindowScroll
-                  numColumns={numColumns}
-                  preserveScrollPosition
-                  data={isBlocked ? [] : list}
-                  keyExtractor={keyExtractor}
-                  renderItem={renderItem}
-                  overscan={12}
-                  ListEmptyComponent={ListEmptyComponent}
-                  ListFooterComponent={ListFooterComponent}
-                  onEndReached={fetchMore}
-                />
-              </View>
-              {isProfileMdScreen ? (
-                <View
-                  style={{
-                    width: 335,
-                  }}
-                  tw="animate-fade-in-250 ml-10"
-                >
-                  <Sticky enabled>
-                    <CreatorTokensPanel username={username} isSelf={isSelf} />
-                    <TopPartCreatorTokens />
-                  </Sticky>
-                </View>
+                    <CreatorTokenCollected
+                      profileId={profileId}
+                      name={profileData?.data?.profile.name}
+                      username={username}
+                    />
+                  </View>
+                </>
               ) : null}
+
+              <InfiniteScrollList
+                useWindowScroll
+                numColumns={numColumns}
+                preserveScrollPosition
+                data={isBlocked ? [] : list}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+                overscan={12}
+                ListEmptyComponent={ListEmptyComponent}
+                ListFooterComponent={ListFooterComponent}
+                onEndReached={fetchMore}
+              />
             </View>
-          </ProfileTabsNFTProvider>
-        </MutateProvider>
+            {isProfileMdScreen ? (
+              <View
+                style={{
+                  width: 335,
+                }}
+                tw="animate-fade-in-250 ml-10"
+              >
+                <Sticky enabled>
+                  <CreatorTokensPanel username={username} isSelf={isSelf} />
+                  <TopPartCreatorTokens />
+                </Sticky>
+              </View>
+            ) : null}
+          </View>
+        </ProfileTabsNFTProvider>
       </View>
       <>
         {isSelf ? (
