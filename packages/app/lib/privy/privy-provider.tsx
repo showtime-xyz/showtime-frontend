@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import {
   PrivyProvider as PrivyProviderImpl,
   User,
   usePrivy,
+  useWallets,
   PrivyInterface,
 } from "@privy-io/react-auth";
 import { useColorScheme } from "nativewind";
@@ -41,6 +42,25 @@ export const privyRef = {
 
 const PrivyAuth = (props: any) => {
   const privy = usePrivy();
+  const { wallets } = useWallets();
+
+  const embeddedWallet = wallets.find(
+    (wallet) => wallet.walletClientType === "privy"
+  );
+
+  useEffect(() => {
+    (async function createWallet() {
+      if (privy.ready && privy.authenticated && !embeddedWallet?.address) {
+        try {
+          await privy.createWallet();
+        } catch (e) {
+          console.log("wallet is probably created by privy!");
+          // Probably already created
+        }
+      }
+    })();
+  }, [embeddedWallet, privy]);
+
   if (!privy.ready) {
     return null;
   }

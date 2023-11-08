@@ -30,7 +30,7 @@ export function Login() {
     handleSubmitWallet,
     loading,
   } = useLogin();
-  const { login } = usePrivy();
+  const privy = usePrivy();
   //#endregion
   const modalScreenContext = useModalScreenContext();
 
@@ -70,7 +70,15 @@ export function Login() {
           </View>
         ) : (
           <View tw="p-4">
-            <Button size="regular" onPress={login}>
+            <Button
+              size="regular"
+              onPress={async () => {
+                if (privy.authenticated) {
+                  await privy.logout();
+                }
+                privy.login();
+              }}
+            >
               Email & Social
             </Button>
             <ConnectButton handleSubmitWallet={handleSubmitWallet} />

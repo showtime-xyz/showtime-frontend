@@ -571,7 +571,16 @@ export const HeaderMd = withColorScheme(() => {
                   </Text>
                 </>
               </Button>
-              <Button size="regular" tw="mt-6" onPress={privy.login}>
+              <Button
+                size="regular"
+                tw="mt-6"
+                onPress={async () => {
+                  if (privy.authenticated) {
+                    await privy.logout();
+                  }
+                  privy.login();
+                }}
+              >
                 <>
                   <Text tw="text-base font-bold text-white dark:text-black">
                     Email & Social
