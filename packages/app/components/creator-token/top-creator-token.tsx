@@ -31,20 +31,10 @@ import {
 } from "./creator-token-users";
 
 const Header = () => {
-  const headerHeight = useHeaderHeight();
-  const router = useRouter();
   const isDark = useIsDarkMode();
   return (
     <>
-      <View
-        style={{
-          paddingTop: Platform.select({
-            ios: headerHeight,
-            default: 0,
-          }),
-        }}
-        tw="border-b border-gray-200 pb-4 dark:border-gray-700"
-      >
+      <View style={{}} tw="border-b border-gray-200 pb-4 dark:border-gray-700">
         <ListHeaderComponent />
         <View tw="flex-row items-center justify-between px-4 py-4">
           <Text tw="text-gray-1100 text-lg font-bold dark:text-white">
@@ -103,12 +93,16 @@ export const TopCreatorTokens = ({
   limit?: number;
 }) => {
   const bottom = usePlatformBottomHeight();
+  const headerHeight = useHeaderHeight();
+
   const { height: screenHeight, width } = useWindowDimensions();
   const {
     data: list,
     isLoading,
     fetchMore,
     isLoadingMore,
+    refresh,
+    isRefreshing,
   } = useTopCreatorToken(limit);
   const isMdWidth = width >= breakpoints["md"];
   const numColumns = 1;
@@ -172,6 +166,14 @@ export const TopCreatorTokens = ({
 
   return (
     <ErrorBoundary>
+      <View
+        style={{
+          height: Platform.select({
+            ios: headerHeight,
+            default: 0,
+          }),
+        }}
+      />
       <InfiniteScrollList
         useWindowScroll
         data={list || []}
@@ -179,6 +181,8 @@ export const TopCreatorTokens = ({
         preserveScrollPosition
         keyExtractor={keyExtractor}
         numColumns={numColumns}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
         renderItem={renderItem}
         drawDistance={500}
         style={{
