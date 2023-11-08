@@ -1,10 +1,11 @@
 import { useCallback, useMemo, useState, useEffect } from "react";
+import { Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
-import { stringify } from "querystring";
-import type { ParsedUrlQuery } from "querystring";
 
+import { GiftSolid } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -27,13 +28,14 @@ import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
-import { formatProfileRoutes, getFullSizeCover } from "app/utilities";
+import { getFullSizeCover } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
+import { colors } from "design-system/tailwind/colors";
 
+import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { ProfileError } from "./profile-error";
-import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileCover, ProfileTop } from "./profile-top";
 import {
   CreatorTokenCollected,
@@ -85,17 +87,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
     return profileData?.data?.profile?.channels?.[0]?.permissions;
   }, [profileData?.data?.profile.channels]);
 
-  const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
-
   const [queryTab] = useParam("type", {
     initial: data?.default_tab_type,
   });
   const [type, setType] = useState(queryTab);
   const numColumns = useMemo(() => (type === "tokens" ? 1 : 3), [type]);
-  const index = useMemo(
-    () => routes.findIndex((item) => item.key === type),
-    [routes, type]
-  );
+
   useEffect(() => {
     if (!data?.default_tab_type || type) return;
     setType(data?.default_tab_type);
@@ -144,30 +141,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     }
     return null;
   }, [isLoadingMore, isLoading, profileIsLoading, error, contentWidth]);
-  const onChangeTabBar = useCallback(
-    (index: number) => {
-      const currentType = routes[index].key;
-      const newQuery = {
-        ...router.query,
-        type: currentType,
-      } as ParsedUrlQuery;
-      const { username = null, ...restQuery } = newQuery;
-      const queryPath = stringify(restQuery) ? `?${stringify(restQuery)}` : "";
-      /**
-       * because this packages/app/pages/profile/index.web.tsx file, we did rename route,
-       * so need to avoid triggering route changes when switching tabs.
-       */
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: newQuery,
-        },
-        username ? `/@${username}${queryPath}` : ""
-      );
-      setType(currentType);
-    },
-    [router, routes, setType]
-  );
+
   const ListEmptyComponent = useCallback(() => {
     if (error || isBlocked) {
       return (
