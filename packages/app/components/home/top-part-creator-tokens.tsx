@@ -30,7 +30,7 @@ export const TopPartCreatorTokens = () => {
     <View tw="px-4 md:pl-2 md:pr-4 lg:px-0">
       <View tw="flex-row items-center justify-between py-4">
         <Text tw="text-13 font-semibold text-gray-900 dark:text-white">
-          Top Creator Tokens
+          Leaderboard
         </Text>
         <Text
           onPress={() => {

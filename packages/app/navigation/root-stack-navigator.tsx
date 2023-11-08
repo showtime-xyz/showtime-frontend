@@ -170,7 +170,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen
           name="trending"
-          options={{ headerTitle: "Top Creator Tokens" }}
+          options={{ headerTitle: "Leaderboard" }}
           component={TrendingScreen}
         />
         <Stack.Screen

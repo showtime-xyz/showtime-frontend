@@ -39,7 +39,7 @@ const Header = () => {
         <View tw=" border-b border-gray-200 pb-4 dark:border-gray-700">
           <View tw="flex-row items-center justify-between py-4">
             <Text tw="text-gray-1100 text-lg font-bold dark:text-white">
-              Trending
+              Welcome to the creator economy.
             </Text>
           </View>
           <View tw="flex-row items-center">
