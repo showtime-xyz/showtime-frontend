@@ -34,50 +34,52 @@ const Header = () => {
   const isDark = useIsDarkMode();
   return (
     <>
-      <View style={{}} tw="border-b border-gray-200 pb-4 dark:border-gray-700">
-        <ListHeaderComponent />
-        <View tw="flex-row items-center justify-between px-4 py-4">
-          <Text tw="text-gray-1100 text-lg font-bold dark:text-white">
-            Trending
+      <ListHeaderComponent />
+      <View tw="px-4 md:px-0">
+        <View tw=" border-b border-gray-200 pb-4 dark:border-gray-700">
+          <View tw="flex-row items-center justify-between py-4">
+            <Text tw="text-gray-1100 text-lg font-bold dark:text-white">
+              Trending
+            </Text>
+          </View>
+          <View tw="flex-row items-center">
+            <LockV2
+              width={14}
+              height={14}
+              color={isDark ? colors.white : colors.gray[900]}
+            />
+            <View tw="w-1" />
+            <Text tw="text-sm font-medium text-gray-900 dark:text-white">
+              Collect at least 1 token to unlock their channel.
+            </Text>
+          </View>
+        </View>
+        <View tw="flex-row items-center pb-2 pt-4">
+          <Text
+            tw="w-[24px] text-xs text-gray-600 dark:text-gray-500"
+            style={{
+              fontSize: 11,
+            }}
+          >
+            #
+          </Text>
+          <Text
+            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[282px]"
+            style={{
+              fontSize: 11,
+            }}
+          >
+            CREATOR
+          </Text>
+          <Text
+            tw="ml-10 text-xs text-gray-600 dark:text-gray-500"
+            style={{
+              fontSize: 11,
+            }}
+          >
+            COLLECTORS
           </Text>
         </View>
-        <View tw="flex-row items-center px-4">
-          <LockV2
-            width={14}
-            height={14}
-            color={isDark ? colors.white : colors.gray[900]}
-          />
-          <View tw="w-1" />
-          <Text tw="text-sm font-medium text-gray-900 dark:text-white">
-            Collect at least 1 token to unlock their channel.
-          </Text>
-        </View>
-      </View>
-      <View tw="flex-row items-center px-4 pb-2 pt-4">
-        <Text
-          tw="w-[24px] text-xs text-gray-600 dark:text-gray-500"
-          style={{
-            fontSize: 11,
-          }}
-        >
-          #
-        </Text>
-        <Text
-          tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[282px]"
-          style={{
-            fontSize: 11,
-          }}
-        >
-          CREATOR
-        </Text>
-        <Text
-          tw="ml-10 text-xs text-gray-600 dark:text-gray-500"
-          style={{
-            fontSize: 11,
-          }}
-        >
-          COLLECTORS
-        </Text>
       </View>
     </>
   );
@@ -119,7 +121,7 @@ export const TopCreatorTokens = ({
           index={index}
           isSimplified={isSimplified}
           isMdWidth={isMdWidth}
-          style={{ paddingHorizontal: 16 }}
+          tw="px-4 md:px-0"
         />
       );
     },
@@ -133,7 +135,7 @@ export const TopCreatorTokens = ({
           {new Array(20).fill(0).map((_, index) => {
             return (
               <TopCreatorTokenListItemSkeleton
-                style={{ paddingHorizontal: 16 }}
+                tw="px-4 md:px-0"
                 key={index}
                 isMdWidth={isMdWidth}
               />
