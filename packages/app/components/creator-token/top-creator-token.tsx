@@ -6,7 +6,6 @@ import type { ListRenderItemInfo } from "@shopify/flash-list";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { LockV2 } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { useRouter } from "@showtime-xyz/universal.router";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -37,7 +36,7 @@ const Header = () => {
       <ListHeaderComponent />
       <View tw="px-4 md:px-0">
         <View tw=" border-b border-gray-200 pb-4 dark:border-gray-700">
-          <View tw="flex-row items-center justify-between py-4">
+          <View tw="flex-row items-center justify-between pb-4 pt-6">
             <Text tw="text-gray-1100 text-lg font-bold dark:text-white">
               Welcome to the creator economy.
             </Text>
