@@ -45,6 +45,11 @@ function withModalScreen<P extends object>(
       if (!isLayouted.current) return;
       if (router.asPath === "/login" || router.asPath === "/") {
         router.push("/");
+      } else if (
+        router.pathname === "/creator-token/[username]/buy" ||
+        router.pathname === "/creator-token/[username]/invite-sign-in"
+      ) {
+        router.push(`/@${router.query.username}`);
       } else {
         router.pop();
       }
