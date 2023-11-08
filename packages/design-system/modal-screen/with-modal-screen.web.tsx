@@ -43,15 +43,13 @@ function withModalScreen<P extends object>(
 
     const onClose = useCallback(() => {
       if (!isLayouted.current) return;
-      if (
-        router.asPath === "/login" ||
-        router.asPath === "/create" ||
-        router.asPath === "/drop/star" ||
-        router.asPath === "/drop/music" ||
-        router.asPath === "/drop" ||
-        router.asPath === "/"
-      ) {
+      if (router.asPath === "/login" || router.asPath === "/") {
         router.push("/");
+      } else if (
+        router.pathname === "/creator-token/[username]/buy" ||
+        router.pathname === "/creator-token/[username]/invite-sign-in"
+      ) {
+        router.push(`/@${router.query.username}`);
       } else {
         router.pop();
       }

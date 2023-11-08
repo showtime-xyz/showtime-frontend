@@ -1,1 +1,1 @@
-export { Fragment as default } from "react";
+export { default } from "app/pages/profile";
