@@ -151,18 +151,18 @@ export const TopCreatorTokens = ({
     );
   }, [isLoading, isMdWidth]);
   const renderListFooter = useCallback(() => {
-    if (isLoadingMore) {
+    if (isLoadingMore && !isLoading) {
       return (
         <View
-          tw="w-full items-center py-4"
-          style={{ paddingBottom: bottom + 8 }}
+          tw="w-full items-center pt-4"
+          style={{ paddingBottom: Math.max(bottom, 16) }}
         >
           <Spinner size="small" />
         </View>
       );
     }
     return <View style={{ height: bottom + 8 }} />;
-  }, [bottom, isLoadingMore]);
+  }, [bottom, isLoading, isLoadingMore]);
 
   return (
     <ErrorBoundary>
