@@ -234,7 +234,6 @@ const ChannelsUnreadMessages = () => {
 
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
-  const redirectToCreateDrop = useRedirectToCreateDrop();
   const navigateToLogin = useNavigateToLogin();
   const { links, social } = useFooter();
   const isDark = useIsDarkMode();
@@ -243,11 +242,6 @@ export const HeaderMd = withColorScheme(() => {
   const { setColorScheme } = useColorScheme();
   const { logout } = useAuth();
   const { height: screenHeight } = useWindowDimensions();
-
-  const canCreateMusicDrop =
-    !!user?.data.profile.bypass_track_ownership_validation ||
-    !!user?.data.profile.spotify_artist_id ||
-    !!user?.data.profile.apple_music_artist_id;
 
   const HOME_ROUTES = useMemo(
     () =>
@@ -268,14 +262,14 @@ export const HeaderMd = withColorScheme(() => {
           focused: router.pathname.includes("channels"),
           visible: isAuthenticated,
         },
-        {
-          title: "Trending",
-          key: "Trending",
-          icon: Hot,
-          pathname: "/trending",
-          focused: router.pathname === "/trending",
-          visible: true,
-        },
+        // {
+        //   title: "Trending",
+        //   key: "Trending",
+        //   icon: Hot,
+        //   pathname: "/trending",
+        //   focused: router.pathname === "/trending",
+        //   visible: true,
+        // },
         {
           title: "Notifications",
           key: "Notifications",
@@ -564,16 +558,6 @@ export const HeaderMd = withColorScheme(() => {
               <>
                 <Text tw="text-base font-bold text-white dark:text-black">
                   Sign in
-                </Text>
-              </>
-            </Button>
-          )}
-          {canCreateMusicDrop && (
-            <Button size="regular" tw="mt-4" onPress={redirectToCreateDrop}>
-              <>
-                <Plus width={20} height={20} color={isDark ? "#000" : "#fff"} />
-                <Text tw="ml-2 text-base font-bold text-white dark:text-gray-900">
-                  Create
                 </Text>
               </>
             </Button>

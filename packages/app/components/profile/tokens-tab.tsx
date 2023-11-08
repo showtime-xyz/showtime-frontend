@@ -1,58 +1,29 @@
-import React, {
-  useCallback,
-  useContext,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useMemo,
-} from "react";
-import { Platform } from "react-native";
+import React, { forwardRef, useImperativeHandle, useRef, useMemo } from "react";
 
-import type { ListRenderItemInfo } from "@shopify/flash-list";
-
-import { Avatar } from "@showtime-xyz/universal.avatar";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  ChevronRight,
-  Lock,
-  LockBadge,
-  LockRounded,
-  UnLocked,
-} from "@showtime-xyz/universal.icon";
+import { ChevronRight, Lock, UnLocked } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import {
-  TabScrollView,
-  TabInfiniteScrollList,
-  TabSpinner,
-} from "@showtime-xyz/universal.tab-view";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
-import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
-import { List, useProfileNFTs } from "app/hooks/api-hooks";
+import { List } from "app/hooks/api-hooks";
 import {
   useCreatorTokenCoLlected,
   useCreatorTokenCollectors,
 } from "app/hooks/creator-token/use-creator-tokens";
-import { useContentWidth } from "app/hooks/use-content-width";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { MutateProvider } from "app/providers/mutate-provider";
-import { NFT, Profile } from "app/types";
+import { Profile } from "app/types";
 import { formatNumber } from "app/utilities";
-
-import SvgUnlocked from "design-system/icon/Unlocked";
 
 import { ChannelPermissions } from "../creator-channels/types";
 import { TopCreatorTokenItemOnProfile } from "../creator-token/creator-token-users";
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { FilterContext } from "./fillter-context";
-import { MyCollection } from "./my-collection";
-import { ProfileSpinnerFooter } from "./profile-footer";
 
 type TabListProps = {
   profile?: Profile;
@@ -60,7 +31,6 @@ type TabListProps = {
   list: List;
   index: number;
 };
-const NUM_COLUMNS = 3;
 export type ProfileTabListRef = {
   refresh: () => void;
 };
@@ -86,7 +56,7 @@ export const TokensTabHeader = ({
   return (
     <View tw="w-full px-4">
       {channelId && isSelf ? (
-        <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5 dark:border-transparent">
+        <View tw="mt-4 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5 dark:border-transparent">
           <Text tw="flex-1 text-sm text-white">
             Share updates, audio, and photos to token collectors
           </Text>
@@ -136,7 +106,6 @@ export const TokensTabHeader = ({
       </View>
       */}
 
-      {isSelf && <MyCollection />}
       {channelId && (messageCount || messageCount == 0) && messageCount >= 0 ? (
         <Pressable
           onPress={() => {
@@ -368,47 +337,6 @@ export const TokensTab = forwardRef<
   useImperativeHandle(ref, () => ({
     refresh: () => {},
   }));
-  // const onItemPress = useCallback(
-  //   (item: NFT) => {
-  //     router.push(
-  //       `${getNFTSlug(item)}?initialScrollItemId=${item.nft_id}&tabType=${
-  //         list.type
-  //       }&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${
-  //         filter.sortType
-  //       }&type=profile`
-  //     );
-  //   },
-  //   [list.type, profileId, filter.collectionId, filter.sortType, router]
-  // );
-
-  // const ListFooterComponent = useCallback(() => {
-  //   if (isLoading) {
-  //     return <ProfileSpinnerFooter isLoading={isLoadingMore} />;
-  //   }
-  // }, [isLoading, isLoadingMore]);
-
-  // const ListHeaderComponent = useCallback(
-  //   () => (
-  //     <TokensTabHeader
-  //       channelId={channelId}
-  //       isSelf={isSelf}
-  //       messageCount={messageCount}
-  //     />
-  //   ),
-  //   [channelId, isSelf, messageCount]
-  // );
-  // const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
-
-  // const renderItem = useCallback(
-  //   ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-  //     return <TokensTabItem item={item} tw="px-6" />;
-  //   },
-  //   []
-  // );
-  // const ListEmptyComponent = useCallback(() => {
-  //   return null;
-  //   // return <EmptyPlaceholder title="No creator token, yet." hideLoginBtn />;
-  // }, []);
 
   if (isBlocked) {
     return (
@@ -431,18 +359,6 @@ export const TokensTab = forwardRef<
 
   return (
     <>
-      {/* <TabInfiniteScrollList
-          data={data}
-          ref={listRef}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ListHeaderComponent={ListHeaderComponent}
-          estimatedItemSize={contentWidth / NUM_COLUMNS}
-          ListFooterComponent={ListFooterComponent}
-          ListEmptyComponent={ListEmptyComponent}
-          onEndReached={fetchMore}
-          index={index}
-        /> */}
       <TabScrollView
         contentContainerStyle={{ paddingBottom: bottomHeight + 56 }}
         index={index}

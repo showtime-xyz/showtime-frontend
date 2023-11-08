@@ -23,7 +23,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { breakpoints } from "design-system/theme";
+import { PlatformBuyButton } from "../profile/buy-and-sell-buttons";
 
 export const CreatorTokensTitle = ({ title }: { title: string }) => {
   const headerHeight = useHeaderHeight();
@@ -223,9 +223,7 @@ export const TopCreatorTokenListItem = ({
   isMdWidth?: boolean;
 }) => {
   const isDark = useIsDarkMode();
-  if (!isMdWidth) {
-    return <TopCreatorTokenItem index={index} tw={tw} item={item} {...rest} />;
-  }
+
   return (
     <Link
       href={
@@ -234,19 +232,19 @@ export const TopCreatorTokenListItem = ({
           : `/@${item.owner_address}`
       }
     >
-      <View tw={["py-2.5", tw].join(" ")} {...rest}>
-        <View tw="flex-row items-center">
-          <View tw="min-w-[24px]">
+      <View tw={["flex-row py-2.5", tw].join(" ")} {...rest}>
+        <View tw="h-[34px] flex-row">
+          <View tw="min-w-[26px] items-start self-center">
             {index != undefined ? (
               index < 3 ? (
-                <View tw="items-center justify-center">
+                <View tw="items-center ">
                   <View tw="absolute -top-1">
                     <GoldHexagon width={18} height={18} />
                   </View>
                   <Text tw="text-xs font-bold text-white">{index + 1}</Text>
                 </View>
               ) : (
-                <View tw="items-center justify-center">
+                <View tw="items-center ">
                   <Text tw="text-xs font-bold text-gray-700 dark:text-white">
                     {index + 1}
                   </Text>
@@ -254,13 +252,15 @@ export const TopCreatorTokenListItem = ({
               )
             ) : null}
           </View>
-          <View tw="web:flex-1 ml-2 flex-row items-center">
-            <Avatar url={item?.owner_profile?.img_url} size={34} />
-            <View tw="w-2" />
-            <View tw="min-w-[180px] flex-row items-center">
+          <Avatar url={item?.owner_profile?.img_url} size={34} />
+        </View>
+        <View tw="web:flex-1 ml-2 flex-row">
+          <View tw="w-[168px] justify-center md:w-[240px]">
+            <View tw="min-w-[180px] flex-row">
               <Text
-                tw="text-sm font-semibold text-gray-900 dark:text-white"
+                tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
                 numberOfLines={1}
+                style={{ lineHeight: 20 }}
               >
                 @
                 {item.owner_profile?.username
@@ -274,37 +274,37 @@ export const TopCreatorTokenListItem = ({
                 </View>
               )}
             </View>
-            <View tw="min-w-[50px] flex-row items-center">
-              <Text
-                tw="text-xs font-semibold text-gray-900 dark:text-white"
-                numberOfLines={1}
-              >
-                {item.nft_count}
-              </Text>
-              <View tw="w-1" />
-              <ShowtimeRounded
-                width={14}
-                height={14}
-                color={isDark ? colors.white : colors.gray[900]}
-              />
-            </View>
             {!isSimplified ? (
-              <View tw="ml-6 min-w-[150px] flex-1">
-                <Text
-                  tw="text-sm font-bold text-gray-900 dark:text-white"
-                  numberOfLines={1}
-                >
-                  {item.owner_profile?.name}
-                </Text>
-                <View tw="h-2" />
+              <>
+                <View tw="h-1.5" />
                 <Text
                   tw="text-xs text-gray-500 dark:text-gray-400"
-                  numberOfLines={3}
+                  numberOfLines={2}
                 >
                   {item.owner_profile?.bio}
                 </Text>
-              </View>
+              </>
             ) : null}
+          </View>
+          <View tw="ml-4 min-w-[50px] flex-row items-center md:ml-10">
+            <Text
+              tw="text-sm font-semibold text-gray-900 dark:text-white"
+              numberOfLines={1}
+            >
+              {item.nft_count}
+            </Text>
+            <View tw="w-1" />
+            <ShowtimeRounded
+              width={16}
+              height={16}
+              color={isDark ? colors.white : colors.gray[900]}
+            />
+          </View>
+          <View tw="ml-auto">
+            <PlatformBuyButton
+              style={{ backgroundColor: "#08F6CC", height: 26 }}
+              username={item.owner_profile?.username}
+            />
           </View>
         </View>
       </View>
@@ -321,9 +321,9 @@ export const TopCreatorTokenSkeleton = ({ tw, ...rest }: ViewProps) => {
           <Skeleton width={34} height={34} show radius={999} />
           <View tw="w-2" />
           <View tw="">
-            <Skeleton width={100} height={13} show radius={4} />
-            <View tw="h-1" />
             <Skeleton width={80} height={13} show radius={4} />
+            <View tw="h-1" />
+            <Skeleton width={60} height={13} show radius={4} />
           </View>
         </View>
       </View>
@@ -333,24 +333,23 @@ export const TopCreatorTokenSkeleton = ({ tw, ...rest }: ViewProps) => {
 
 export const TopCreatorTokenListItemSkeleton = ({
   tw,
-  isMdWidth,
   ...rest
 }: ViewProps & {
   isMdWidth: boolean;
 }) => {
-  if (!isMdWidth) {
-    return <TopCreatorTokenSkeleton tw={tw} {...rest} />;
-  }
   return (
     <View tw={["py-2.5", tw].join(" ")} {...rest}>
       <View tw="flex-row items-center pl-1">
         <Skeleton width={16} height={16} show radius={8} />
         <View tw="w-2.5" />
         <Skeleton width={34} height={34} show radius={999} />
-        <View tw="w-2" />
-        <Skeleton width={120} height={13} show radius={4} />
-        <View tw="w-4" />
-        <Skeleton width={44} height={14} show radius={4} />
+        <View tw="ml-2 w-[178px] md:w-[274px]">
+          <Skeleton width={140} height={13} show radius={4} />
+        </View>
+        <Skeleton width={30} height={14} show radius={4} />
+        <View tw="ml-auto">
+          <Skeleton width={42} height={24} show radius={999} />
+        </View>
       </View>
     </View>
   );
