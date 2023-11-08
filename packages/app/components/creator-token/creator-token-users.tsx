@@ -361,9 +361,12 @@ export const TopCreatorTokenListItemSkeleton = ({
         <View tw="w-2.5" />
         <Skeleton width={34} height={34} show radius={999} />
         <View tw="w-2" />
-        <Skeleton width={120} height={13} show radius={4} />
+        <Skeleton width={140} height={13} show radius={4} />
         <View tw="w-4" />
         <Skeleton width={44} height={14} show radius={4} />
+        <View tw="ml-auto">
+          <Skeleton width={44} height={14} show radius={4} />
+        </View>
       </View>
     </View>
   );
