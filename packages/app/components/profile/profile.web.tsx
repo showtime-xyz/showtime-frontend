@@ -1,34 +1,14 @@
-import {
-  useCallback,
-  useReducer,
-  useMemo,
-  createContext,
-  useContext,
-  memo,
-  useState,
-  useEffect,
-} from "react";
-import { useWindowDimensions, Platform } from "react-native";
+import { useCallback, useMemo, useState, useEffect } from "react";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
-import chunk from "lodash/chunk";
 import { stringify } from "querystring";
 import type { ParsedUrlQuery } from "querystring";
-import { useSharedValue } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { EyeOff, EyeOffV2, GiftSolid } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
-import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Card } from "app/components/card";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
-import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { HeaderLeft } from "app/components/header";
 import { HeaderRightSm } from "app/components/header/header-right.sm";
 import { CreatorTokensBanner } from "app/components/home/header";
@@ -36,34 +16,23 @@ import { TopPartCreatorTokens } from "app/components/home/top-part-creator-token
 import { DESKTOP_PROFILE_WIDTH } from "app/constants/layout";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import {
-  defaultFilters,
   useProfileNFTs,
   useProfileNftTabs,
-  UserProfile,
   useUserProfile,
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { getNFTSlug } from "app/hooks/use-share-nft";
-import { useUser } from "app/hooks/use-user";
 import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
 import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
-import {
-  formatProfileRoutes,
-  getFullSizeCover,
-  getProfileImage,
-} from "app/utilities";
+import { formatProfileRoutes, getFullSizeCover } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
 
 import { CreatorTokensPanel } from "./creator-tokens-panel";
-import { MyCollection } from "./my-collection";
 import { ProfileError } from "./profile-error";
-import { ProfileHideList, ProfileNFTHiddenButton } from "./profile-hide-list";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileCover, ProfileTop } from "./profile-top";
 import {
@@ -90,7 +59,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     error,
   } = useUserProfile({ address: username });
   const profileId = profileData?.data?.profile.profile_id;
-  const [showHidden, setShowHidden] = useState(false);
   const { getIsBlocked } = useBlock();
   const router = useRouter();
   const userId = useCurrentUserId();
@@ -159,20 +127,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
       if (type === "tokens") {
         return null;
       }
-      return (
-        <Card
-          nft={item}
-          key={item.nft_id}
-          numColumns={numColumns}
-          as={getNFTSlug(item)}
-          href={`${getNFTSlug(item)}?initialScrollItemId=${
-            item.nft_id
-          }&tabType=${type}&profileId=${profileId}&collectionId=0&sortType=newest&type=profile`}
-          index={itemIndex}
-        />
-      );
+      return null;
     },
-    [numColumns, profileId, type]
+    [type]
   );
   const ListFooterComponent = useCallback(() => {
     if (((isLoadingMore && isLoading) || profileIsLoading) && !error) {
@@ -296,11 +253,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   isError={isError}
                   isSelf={isSelf}
                 />
-                <ProfileTabBar
+                {/* <ProfileTabBar
                   onPress={onChangeTabBar}
                   routes={routes}
                   index={index}
-                />
+                /> */}
 
                 {type === "tokens" ? (
                   <>
@@ -326,19 +283,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                     </View>
                   </>
                 ) : null}
-                {type === "song_drops_created" && isSelf ? (
-                  <>
-                    <ProfileNFTHiddenButton
-                      onPress={() => {
-                        setShowHidden(!showHidden);
-                      }}
-                      showHidden={showHidden}
-                    />
-                    {showHidden ? (
-                      <ProfileHideList profileId={profileId} />
-                    ) : null}
-                  </>
-                ) : null}
 
                 <InfiniteScrollList
                   useWindowScroll
@@ -362,7 +306,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 >
                   <Sticky enabled>
                     <CreatorTokensPanel username={username} isSelf={isSelf} />
-                    {isSelf && <MyCollection />}
                     <TopPartCreatorTokens />
                   </Sticky>
                 </View>

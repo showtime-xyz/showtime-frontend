@@ -4,7 +4,6 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
-import { FollowButton } from "app/components/follow-button";
 import { Media } from "app/components/media";
 import { withMemoAndColorScheme } from "app/components/memo-with-theme";
 import { useFollow } from "app/hooks/use-follow";
@@ -54,13 +53,6 @@ export const CreatorPreview = withMemoAndColorScheme<any, Props>(
                 </View>
               )}
             </View>
-          </View>
-          <View tw="ml-auto flex-row items-center justify-center">
-            <FollowButton
-              name={creator.name}
-              profileId={creatorId}
-              onToggleFollow={onToggleFollow}
-            />
           </View>
         </View>
         <View tw="mx-[-1px] mt-4 flex-row justify-center">

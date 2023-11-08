@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useRef, useState, memo } from "react";
+import { useCallback, useEffect, useRef, memo, useMemo } from "react";
 import { Platform, RefreshControl, useWindowDimensions } from "react-native";
 
 import { ListRenderItemInfo } from "@shopify/flash-list";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -13,10 +12,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { NotificationsSettingIcon } from "app/components/header/notifications-setting-icon";
 import { NotificationItem } from "app/components/notifications/notification-item";
-import { UserList } from "app/components/user-list";
 import { useMyInfo } from "app/hooks/api-hooks";
 import {
-  Actor,
   NotificationType,
   useNotifications,
 } from "app/hooks/use-notifications";
@@ -52,12 +49,6 @@ const keyExtractor = (item: NotificationType) => {
   return item.id.toString();
 };
 
-/*
-const getItemType = (item: NotificationType) => {
-  return item.type_name;
-};
-*/
-
 export const Notifications = memo(
   ({ hideHeader = false, useWindowScroll = true }: NotificationsProps) => {
     const { data, fetchMore, refresh, isRefreshing, isLoadingMore, isLoading } =
@@ -67,28 +58,37 @@ export const Notifications = memo(
     const bottomBarHeight = usePlatformBottomHeight();
     const headerHeight = useHeaderHeight();
     const { height: windowHeight } = useWindowDimensions();
-    const [users, setUsers] = useState<
-      Pick<Actor, "profile_id" | "username">[]
-    >([]);
+
+    // Todo: use filter in useNotifications endpoint
+    const filterData = useMemo(
+      () =>
+        data.filter(
+          (obj) =>
+            obj.type_name === "CHANNEL_NEW_MESSAGE" ||
+            obj.type_name === "CHANNEL_FIRST_MESSAGE"
+        ),
+      [data]
+    );
+
     const listRef = useRef<any>();
     useScrollToTop(listRef);
 
     const renderItem = useCallback(
       ({ item }: ListRenderItemInfo<NotificationType>) => {
-        return <NotificationItem notification={item} setUsers={setUsers} />;
+        return <NotificationItem notification={item} />;
       },
       []
     );
 
     const ListFooterComponent = useCallback(() => {
-      if (isLoadingMore && data.length > 0 && !isLoading)
+      if (isLoadingMore && filterData.length > 0 && !isLoading)
         return (
           <View tw="web:pt-2 items-center pb-2">
             <Spinner size="small" />
           </View>
         );
       return null;
-    }, [isLoadingMore, isLoading, data.length]);
+    }, [isLoadingMore, isLoading, filterData.length]);
 
     useEffect(() => {
       (async function resetNotificationLastOpenedTime() {
@@ -101,7 +101,7 @@ export const Notifications = memo(
       })();
     }, [refetchMyInfo]);
 
-    if (!isLoading && data.length === 0) {
+    if (!isLoading && filterData.length === 0) {
       return (
         <EmptyPlaceholder
           title="You have no notifications yet."
@@ -110,7 +110,7 @@ export const Notifications = memo(
       );
     }
 
-    if (isLoading && data.length === 0 && isLoadingMore) {
+    if (isLoading && filterData.length === 0 && isLoadingMore) {
       return (
         <View tw="flex-1 items-center justify-center">
           <Spinner size="small" />
@@ -122,7 +122,7 @@ export const Notifications = memo(
       <>
         <InfiniteScrollList
           useWindowScroll={useWindowScroll}
-          data={data}
+          data={filterData}
           ListHeaderComponent={Platform.select({
             web: hideHeader ? undefined : Header,
             default: undefined,
@@ -169,20 +169,6 @@ export const Notifications = memo(
           ref={listRef}
           estimatedItemSize={53}
         />
-
-        <ModalSheet
-          snapPoints={["90%"]}
-          title="People"
-          visible={users.length > 0}
-          close={() => setUsers([])}
-          onClose={() => setUsers([])}
-        >
-          <UserList
-            users={users}
-            loading={false}
-            style={{ height: Platform.OS === "web" ? 200 : undefined }}
-          />
-        </ModalSheet>
       </>
     );
   }

@@ -211,7 +211,9 @@ export const Default = () => {
           <IconItem icon={Icon.AccessTicket} title="AccessTicket" />
           <IconItem icon={Icon.ArrowTopRounded} title="ArrowTopRounded" />
           <IconItem icon={Icon.GoldHexagon} title="GoldHexagon" />
+          <IconItem icon={Icon.LockV2} title="LockV2" />
         </View>
+
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>
         <View tw="flex flex-row flex-wrap bg-white">

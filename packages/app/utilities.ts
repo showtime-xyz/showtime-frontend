@@ -755,15 +755,6 @@ export const obfuscatePhoneNumber = (phoneNumber: string) => {
 };
 
 //#region format profile routers
-const ProfileTabNameMap = new Map([
-  ["owned", "Saved"],
-  ["created", "Songs"],
-]);
-
-const getProfileTitle = (name: string) => {
-  const title = ProfileTabNameMap.get(name) ?? name;
-  return title.replace(/^\S/, (s) => s.toUpperCase());
-};
 
 export const formatProfileRoutes = (
   tabs: ProfileTabsAPI["tabs"] | undefined

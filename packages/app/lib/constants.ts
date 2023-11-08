@@ -57,13 +57,12 @@ export const ACTIVITY_TYPES = {
   COMMENT: "comment",
   SELL: "sell",
   BUY: "buy",
-  CREATE: "create",
   FOLLOW: "follow",
   SEND: "send",
   RECEIVE: "receive",
 };
 
-export const PROFILE_TABS = [null, "created", "owned", "liked"]; // first  item blank due to tabs being 1-indexed
+export const PROFILE_TABS = [null, "owned", "liked"]; // first  item blank due to tabs being 1-indexed
 
 // TODO: Convert to classes and include it into the MentionsInput component
 export const MENTIONS_STYLE = {
