@@ -64,7 +64,7 @@ const Header = () => {
             #
           </Text>
           <Text
-            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[282px]"
+            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[362px]"
             style={{
               fontSize: 11,
             }}
@@ -152,30 +152,20 @@ export const TopCreatorTokens = ({
       />
     );
   }, [isLoading, isMdWidth]);
+
   const renderListFooter = useCallback(() => {
     if (isLoadingMore && !isLoading) {
       return (
-        <View
-          tw="w-full items-center pt-4"
-          style={{ paddingBottom: Math.max(bottom, 16) }}
-        >
+        <View tw="w-full items-center py-4">
           <Spinner size="small" />
         </View>
       );
     }
-    return <View style={{ height: bottom + 8 }} />;
-  }, [bottom, isLoading, isLoadingMore]);
+    return null;
+  }, [isLoading, isLoadingMore]);
 
   return (
     <ErrorBoundary>
-      <View
-        style={{
-          height: Platform.select({
-            ios: headerHeight,
-            default: 0,
-          }),
-        }}
-      />
       <InfiniteScrollList
         useWindowScroll
         data={list || []}
@@ -190,10 +180,14 @@ export const TopCreatorTokens = ({
         style={{
           height: Platform.select({
             web: undefined,
-            default: screenHeight,
+            default: screenHeight - headerHeight,
+          }),
+          paddingTop: Platform.select({
+            ios: headerHeight,
+            default: 0,
           }),
         }}
-        overscan={20}
+        overscan={28}
         ListHeaderComponent={Header}
         onEndReached={disableFetchMore ? () => {} : fetchMore}
         ListEmptyComponent={ListEmptyComponent}
