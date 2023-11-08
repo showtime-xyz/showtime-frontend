@@ -257,11 +257,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   isError={isError}
                   isSelf={isSelf}
                 />
-                <ProfileTabBar
+                {/* <ProfileTabBar
                   onPress={onChangeTabBar}
                   routes={routes}
                   index={index}
-                />
+                /> */}
 
                 {type === "tokens" ? (
                   <>

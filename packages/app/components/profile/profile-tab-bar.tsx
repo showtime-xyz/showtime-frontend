@@ -36,7 +36,7 @@ export const ProfileTabBar = (props: any) => {
     [isDark]
   );
   return (
-    <View tw="web:items-center border-b border-gray-200 bg-white px-12 dark:border-gray-800 dark:bg-black">
+    <View tw="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-black">
       <TabBar
         {...props}
         gap={10}

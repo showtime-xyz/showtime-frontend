@@ -23,7 +23,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
-import { breakpoints } from "design-system/theme";
+import { PlatformBuyButton } from "../profile/buy-and-sell-buttons";
 
 export const CreatorTokensTitle = ({ title }: { title: string }) => {
   const headerHeight = useHeaderHeight();
@@ -204,6 +204,15 @@ export const TopCreatorTokenItem = ({
               </View>
             </View>
           </View>
+          <View tw="ml-auto">
+            <PlatformBuyButton
+              style={{
+                backgroundColor: "#08F6CC",
+                height: 28,
+              }}
+              username={item.owner_profile?.username}
+            />
+          </View>
         </View>
       </View>
     </Link>
@@ -259,7 +268,7 @@ export const TopCreatorTokenListItem = ({
             <View tw="w-2" />
             <View tw="min-w-[180px] flex-row items-center">
               <Text
-                tw="text-sm font-semibold text-gray-900 dark:text-white"
+                tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
                 numberOfLines={1}
               >
                 @
@@ -305,6 +314,10 @@ export const TopCreatorTokenListItem = ({
                 </Text>
               </View>
             ) : null}
+            <PlatformBuyButton
+              style={{ backgroundColor: "#08F6CC", width: "100%", height: 24 }}
+              username={item.owner_profile?.username}
+            />
           </View>
         </View>
       </View>

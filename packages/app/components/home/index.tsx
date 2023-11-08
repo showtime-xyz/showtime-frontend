@@ -1,36 +1,37 @@
 import { useRef, useMemo } from "react";
-import { useWindowDimensions } from "react-native";
+import { useWindowDimensions, Platform } from "react-native";
 
 import { View } from "@showtime-xyz/universal.view";
 
 import { TopCreatorTokens } from "app/components/creator-token/top-creator-token";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Sticky } from "app/lib/stickynode";
 
 import { breakpoints } from "design-system/theme";
 
+import { ListHeaderComponent } from "./header";
+import { HomeSlider } from "./home-slider";
+
 const RIGHT_SIDE_WIDTH = 300;
 export const Home = () => {
-  const { width, height } = useWindowDimensions();
+  const bottomBarHeight = usePlatformBottomHeight();
 
-  const is2XlWidth = width >= breakpoints["2xl"];
-  const loadQuantity = useMemo(() => {
-    return Math.floor((height - 100) / 54);
-  }, [height]);
   const listRef = useRef<any>();
   useScrollToTop(listRef);
 
   return (
     <View
-      tw=""
+      tw="w-full flex-1 flex-row justify-center bg-white dark:bg-black"
       style={{
-        width: RIGHT_SIDE_WIDTH,
-        marginLeft: is2XlWidth ? 160 : 110,
+        marginBottom: Platform.select({
+          native: bottomBarHeight,
+        }),
       }}
     >
-      <Sticky enabled>
-        <TopCreatorTokens isSimplified limit={loadQuantity} disableFetchMore />
-      </Sticky>
+      <View tw="md:max-w-screen-content w-full">
+        <TopCreatorTokens />
+      </View>
     </View>
   );
 };

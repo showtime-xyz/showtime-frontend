@@ -262,14 +262,14 @@ export const HeaderMd = withColorScheme(() => {
           focused: router.pathname.includes("channels"),
           visible: isAuthenticated,
         },
-        {
-          title: "Trending",
-          key: "Trending",
-          icon: Hot,
-          pathname: "/trending",
-          focused: router.pathname === "/trending",
-          visible: true,
-        },
+        // {
+        //   title: "Trending",
+        //   key: "Trending",
+        //   icon: Hot,
+        //   pathname: "/trending",
+        //   focused: router.pathname === "/trending",
+        //   visible: true,
+        // },
         {
           title: "Notifications",
           key: "Notifications",

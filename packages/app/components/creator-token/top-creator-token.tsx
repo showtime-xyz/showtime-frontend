@@ -3,8 +3,16 @@ import { useWindowDimensions, Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import {
+  Lock,
+  LockBadge,
+  LockRounded,
+  LockV2,
+} from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
@@ -18,6 +26,7 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 
 import { breakpoints } from "design-system/theme";
 
+import { ListHeaderComponent } from "../home/header";
 import {
   TopCreatorTokenListItem,
   TopCreatorTokenListItemSkeleton,
@@ -26,32 +35,35 @@ import {
 const Header = () => {
   const headerHeight = useHeaderHeight();
   const router = useRouter();
+  const isDark = useIsDarkMode();
   return (
-    <>
-      <View
-        style={{
-          height: Platform.select({
-            ios: headerHeight + 8,
-            default: 8,
-          }),
-        }}
-      />
-      <View tw="hidden flex-row items-center justify-between py-4 md:flex">
-        <Text tw="text-base font-bold text-gray-900 dark:text-white md:text-xl">
-          Top Creator Tokens
+    <View
+      style={{
+        paddingTop: Platform.select({
+          ios: headerHeight + 8,
+          default: 8,
+        }),
+      }}
+      tw="border-b border-gray-200 pb-4 dark:border-gray-700"
+    >
+      <ListHeaderComponent />
+      <View tw="flex-row items-center justify-between px-4 py-4">
+        <Text tw="text-lg font-bold text-gray-900 dark:text-white">
+          Trending
         </Text>
-        {router.pathname === "/" ? (
-          <Text
-            onPress={() => {
-              router.push("/trending");
-            }}
-            tw="pr-3 text-xs font-semibold text-indigo-700"
-          >
-            See all
-          </Text>
-        ) : null}
       </View>
-    </>
+      <View tw="flex-row items-center px-4">
+        <LockV2
+          width={14}
+          height={14}
+          color={isDark ? colors.white : colors.gray[900]}
+        />
+        <View tw="w-1" />
+        <Text tw="text-sm font-medium text-gray-900 dark:text-white">
+          Collect at least 1 token to unlock their channel.
+        </Text>
+      </View>
+    </View>
   );
 };
 const keyExtractor = (item: TopCreatorTokenUser) => `${item.id}`;
@@ -80,6 +92,7 @@ export const TopCreatorTokens = ({
           index={index}
           isSimplified={isSimplified}
           isMdWidth={isMdWidth}
+          style={{ paddingHorizontal: 16 }}
         />
       );
     },
@@ -92,7 +105,11 @@ export const TopCreatorTokens = ({
         <View>
           {new Array(6).fill(0).map((_, i) => {
             return (
-              <TopCreatorTokenListItemSkeleton key={i} isMdWidth={isMdWidth} />
+              <TopCreatorTokenListItemSkeleton
+                style={{ paddingHorizontal: 16 }}
+                key={i}
+                isMdWidth={isMdWidth}
+              />
             );
           })}
         </View>
@@ -122,9 +139,6 @@ export const TopCreatorTokens = ({
             web: undefined,
             default: screenHeight,
           }),
-        }}
-        contentContainerStyle={{
-          paddingHorizontal: 12,
         }}
         overscan={20}
         ListHeaderComponent={Header}
