@@ -164,6 +164,7 @@ export { default as AccessTicket } from "./AccessTicket";
 export { default as InviteTicket } from "./InviteTicket";
 export { default as ArrowTopRounded } from "./ArrowTopRounded";
 export { default as GoldHexagon } from "./GoldHexagon";
+export { default as LockV2 } from "./LockV2";
 
 //#region social icons
 export { default as Twitter } from "./Twitter";

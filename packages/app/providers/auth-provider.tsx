@@ -11,7 +11,6 @@ import { useSWRConfig } from "swr";
 
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { clearPersistedForms } from "app/components/drop/utils";
 import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
@@ -134,8 +133,6 @@ export function AuthProvider({
 
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
-
-      clearPersistedForms();
 
       router.push("/");
     },

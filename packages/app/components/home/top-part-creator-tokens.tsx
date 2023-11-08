@@ -34,7 +34,7 @@ export const TopPartCreatorTokens = () => {
         </Text>
         <Text
           onPress={() => {
-            router.push("/trending");
+            router.push("/");
           }}
           tw="text-xs font-semibold text-indigo-700"
         >
