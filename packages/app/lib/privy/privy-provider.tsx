@@ -1,19 +1,21 @@
-import { useEffect } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 
 import {
   PrivyProvider as PrivyProviderImpl,
   User,
   usePrivy,
-  useWallets,
   PrivyInterface,
 } from "@privy-io/react-auth";
 import { useColorScheme } from "nativewind";
 
 import { baseChain } from "app/hooks/creator-token/utils";
+import { useStableCallback } from "app/hooks/use-stable-callback";
 
 export const PrivyProvider = ({ children }: any) => {
+  const privyAuthRef = useRef<any>(null);
   const handleLogin = (user: User) => {
     console.log(`User logged in! `, user);
+    privyAuthRef.current.createWalletAndLogin();
   };
   const colorScheme = useColorScheme();
 
@@ -31,7 +33,7 @@ export const PrivyProvider = ({ children }: any) => {
         },
       }}
     >
-      <PrivyAuth>{children}</PrivyAuth>
+      <PrivyAuth ref={privyAuthRef}>{children}</PrivyAuth>
     </PrivyProviderImpl>
   );
 };
@@ -40,26 +42,27 @@ export const privyRef = {
   current: null,
 } as { current: PrivyInterface | null };
 
-const PrivyAuth = (props: any) => {
+const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
   const privy = usePrivy();
-  const { wallets } = useWallets();
 
-  const embeddedWallet = wallets.find(
-    (wallet) => wallet.walletClientType === "privy"
+  const createWalletAndLogin = useStableCallback(async () => {
+    try {
+      await privy.createWallet();
+    } catch (e) {
+      console.log("wallet is already created by privy!");
+      // Probably already created
+    }
+  });
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        createWalletAndLogin,
+      };
+    },
+    [createWalletAndLogin]
   );
-
-  useEffect(() => {
-    (async function createWallet() {
-      if (privy.ready && privy.authenticated && !embeddedWallet?.address) {
-        try {
-          await privy.createWallet();
-        } catch (e) {
-          console.log("wallet is probably created by privy!");
-          // Probably already created
-        }
-      }
-    })();
-  }, [embeddedWallet, privy]);
 
   if (!privy.ready) {
     return null;
@@ -68,4 +71,4 @@ const PrivyAuth = (props: any) => {
   privyRef.current = privy;
 
   return props.children;
-};
+});
