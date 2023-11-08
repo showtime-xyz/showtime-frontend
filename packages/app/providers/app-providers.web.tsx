@@ -23,8 +23,6 @@ import { MagicProvider } from "app/providers/magic-provider.web";
 import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
-import { WalletProvider } from "app/providers/wallet-provider";
-import { Web3Provider } from "app/providers/web3-provider";
 
 const AlertProvider = dynamic(() => import("@showtime-xyz/universal.alert"), {
   ssr: false,
@@ -38,35 +36,29 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           <ColorSchemeProvider>
             <SafeAreaProvider>
               <LightBoxProvider>
-                <WalletProvider>
-                  <AlertProvider>
-                    <SnackbarProvider>
-                      <SWRProvider>
-                        <Web3Provider>
-                          <AuthProvider>
-                            <UserProvider>
-                              <BottomSheetModalProvider>
-                                <FeedProvider>
-                                  <NavigationProvider>
-                                    <MuteProvider>
-                                      <ClaimProvider>
-                                        <DropProvider>
-                                          <PrivyProvider>
-                                            {children}
-                                          </PrivyProvider>
-                                        </DropProvider>
-                                      </ClaimProvider>
-                                    </MuteProvider>
-                                  </NavigationProvider>
-                                </FeedProvider>
-                              </BottomSheetModalProvider>
-                            </UserProvider>
-                          </AuthProvider>
-                        </Web3Provider>
-                      </SWRProvider>
-                    </SnackbarProvider>
-                  </AlertProvider>
-                </WalletProvider>
+                <AlertProvider>
+                  <SnackbarProvider>
+                    <SWRProvider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <BottomSheetModalProvider>
+                            <FeedProvider>
+                              <NavigationProvider>
+                                <MuteProvider>
+                                  <ClaimProvider>
+                                    <DropProvider>
+                                      <PrivyProvider>{children}</PrivyProvider>
+                                    </DropProvider>
+                                  </ClaimProvider>
+                                </MuteProvider>
+                              </NavigationProvider>
+                            </FeedProvider>
+                          </BottomSheetModalProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </SWRProvider>
+                  </SnackbarProvider>
+                </AlertProvider>
               </LightBoxProvider>
             </SafeAreaProvider>
           </ColorSchemeProvider>

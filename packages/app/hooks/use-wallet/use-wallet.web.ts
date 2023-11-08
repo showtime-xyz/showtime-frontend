@@ -14,6 +14,7 @@ const useWallet = (): UseWalletReturnType => {
   const prevConnectedWalletAddress = useRef<any>(null);
   const latestConnectedWallet = useLatestValueRef(wallets.wallets[0]);
 
+  // Wallet connected, resolve promise
   useEffect(() => {
     if (
       wallets.wallets[0]?.address &&
@@ -50,7 +51,7 @@ const useWallet = (): UseWalletReturnType => {
       connected,
       disconnect: async () => {
         localStorage.removeItem("walletconnect");
-        return latestConnectedWallet.current?.disconnect() as any;
+        wallets.wallets.forEach((wallet) => wallet.disconnect());
       },
       signMessageAsync: ({ message }: { message: string }) => {
         return latestConnectedWallet.current.sign(message);
