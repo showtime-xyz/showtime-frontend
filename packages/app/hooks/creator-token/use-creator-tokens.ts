@@ -83,7 +83,7 @@ export const useCreatorTokenCoLlected = (
     error,
   };
 };
-export const useTopCreatorToken = (limit: number = 15) => {
+export const useTopCreatorToken = (limit: number = 20) => {
   const fetchUrl = useCallback(
     (index: number, previousPageData: any) => {
       if (previousPageData && !previousPageData?.creator_tokens.length)
