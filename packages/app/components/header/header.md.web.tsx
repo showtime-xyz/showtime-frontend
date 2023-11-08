@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, Suspense, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { usePrivy } from "@privy-io/react-auth";
 import * as Popover from "@radix-ui/react-popover";
 import { SvgProps } from "react-native-svg";
 
@@ -64,6 +65,7 @@ import {
 } from "design-system/dropdown-menu";
 
 import { useChannelsUnreadMessages } from "../creator-channels/hooks/use-channels-unread-messages";
+import { useLogin } from "../login/use-login";
 import { withColorScheme } from "../memo-with-theme";
 
 const NotificationsInHeader = () => {
@@ -235,7 +237,7 @@ const ChannelsUnreadMessages = () => {
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
   const redirectToCreateDrop = useRedirectToCreateDrop();
-  const navigateToLogin = useNavigateToLogin();
+  const { handleSubmitWallet } = useLogin();
   const { links, social } = useFooter();
   const isDark = useIsDarkMode();
   const router = useRouter();
@@ -243,6 +245,7 @@ export const HeaderMd = withColorScheme(() => {
   const { setColorScheme } = useColorScheme();
   const { logout } = useAuth();
   const { height: screenHeight } = useWindowDimensions();
+  const privy = usePrivy();
 
   const canCreateMusicDrop =
     !!user?.data.profile.bypass_track_ownership_validation ||
@@ -560,13 +563,22 @@ export const HeaderMd = withColorScheme(() => {
         </View>
         <View tw="w-40">
           {!isAuthenticated && (
-            <Button size="regular" tw="mt-6" onPress={navigateToLogin}>
-              <>
-                <Text tw="text-base font-bold text-white dark:text-black">
-                  Sign in
-                </Text>
-              </>
-            </Button>
+            <>
+              <Button size="regular" tw="mt-6" onPress={handleSubmitWallet}>
+                <>
+                  <Text tw="text-base font-bold text-white dark:text-black">
+                    Connect
+                  </Text>
+                </>
+              </Button>
+              <Button size="regular" tw="mt-6" onPress={privy.login}>
+                <>
+                  <Text tw="text-base font-bold text-white dark:text-black">
+                    Email & Social
+                  </Text>
+                </>
+              </Button>
+            </>
           )}
           {canCreateMusicDrop && (
             <Button size="regular" tw="mt-4" onPress={redirectToCreateDrop}>

@@ -71,8 +71,7 @@ export function Login() {
         ) : (
           <View tw="p-4">
             <Button size="regular" onPress={login}>
-              Login with phone <SvgPhonePortraitOutline />, email,
-              <MessageFilled /> google <GoogleOriginal /> or apple <Apple />
+              Email & Social
             </Button>
             <ConnectButton handleSubmitWallet={handleSubmitWallet} />
           </View>
