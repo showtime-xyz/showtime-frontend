@@ -7,6 +7,7 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { LockV2 } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -17,6 +18,7 @@ import {
   TopCreatorTokenUser,
   useTopCreatorToken,
 } from "app/hooks/creator-token/use-creator-tokens";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
@@ -29,63 +31,55 @@ import {
 } from "./creator-token-users";
 
 const Header = () => {
-  const headerHeight = useHeaderHeight();
-  const router = useRouter();
   const isDark = useIsDarkMode();
   return (
     <>
-      <View
-        style={{
-          paddingTop: Platform.select({
-            ios: headerHeight,
-            default: 0,
-          }),
-        }}
-        tw="border-b border-gray-200 pb-4 dark:border-gray-700"
-      >
-        <ListHeaderComponent />
-        <View tw="flex-row items-center justify-between px-4 py-4">
-          <Text tw="text-gray-1100 text-lg font-bold dark:text-white">
-            Trending
+      <ListHeaderComponent />
+      <View tw="px-4 md:px-0">
+        <View tw=" border-b border-gray-200 pb-4 dark:border-gray-700">
+          <View tw="flex-row items-center justify-between py-4">
+            <Text tw="text-gray-1100 text-lg font-bold dark:text-white">
+              Trending
+            </Text>
+          </View>
+          <View tw="flex-row items-center">
+            <LockV2
+              width={14}
+              height={14}
+              color={isDark ? colors.white : colors.gray[900]}
+            />
+            <View tw="w-1" />
+            <Text tw="text-sm font-medium text-gray-900 dark:text-white">
+              Collect at least 1 token to unlock their channel.
+            </Text>
+          </View>
+        </View>
+        <View tw="flex-row items-center pb-2 pt-4">
+          <Text
+            tw="w-[24px] text-xs text-gray-600 dark:text-gray-500"
+            style={{
+              fontSize: 11,
+            }}
+          >
+            #
+          </Text>
+          <Text
+            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[282px]"
+            style={{
+              fontSize: 11,
+            }}
+          >
+            CREATOR
+          </Text>
+          <Text
+            tw="ml-10 text-xs text-gray-600 dark:text-gray-500"
+            style={{
+              fontSize: 11,
+            }}
+          >
+            COLLECTORS
           </Text>
         </View>
-        <View tw="flex-row items-center px-4">
-          <LockV2
-            width={14}
-            height={14}
-            color={isDark ? colors.white : colors.gray[900]}
-          />
-          <View tw="w-1" />
-          <Text tw="text-sm font-medium text-gray-900 dark:text-white">
-            Collect at least 1 token to unlock their channel.
-          </Text>
-        </View>
-      </View>
-      <View tw="flex-row items-center px-4 pb-2 pt-4">
-        <Text
-          tw="w-[24px] text-xs text-gray-600 dark:text-gray-500"
-          style={{
-            fontSize: 11,
-          }}
-        >
-          #
-        </Text>
-        <Text
-          tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[282px]"
-          style={{
-            fontSize: 11,
-          }}
-        >
-          CREATOR
-        </Text>
-        <Text
-          tw="ml-10 text-xs text-gray-600 dark:text-gray-500"
-          style={{
-            fontSize: 11,
-          }}
-        >
-          COLLECTORS
-        </Text>
       </View>
     </>
   );
@@ -100,8 +94,18 @@ export const TopCreatorTokens = ({
   disableFetchMore?: boolean;
   limit?: number;
 }) => {
+  const bottom = usePlatformBottomHeight();
+  const headerHeight = useHeaderHeight();
+
   const { height: screenHeight, width } = useWindowDimensions();
-  const { data: list, isLoading, fetchMore } = useTopCreatorToken(limit);
+  const {
+    data: list,
+    isLoading,
+    fetchMore,
+    isLoadingMore,
+    refresh,
+    isRefreshing,
+  } = useTopCreatorToken(limit);
   const isMdWidth = width >= breakpoints["md"];
   const numColumns = 1;
   const listRef = useRef<any>();
@@ -117,7 +121,7 @@ export const TopCreatorTokens = ({
           index={index}
           isSimplified={isSimplified}
           isMdWidth={isMdWidth}
-          style={{ paddingHorizontal: 16 }}
+          tw="px-4 md:px-0"
         />
       );
     },
@@ -131,7 +135,7 @@ export const TopCreatorTokens = ({
           {new Array(20).fill(0).map((_, index) => {
             return (
               <TopCreatorTokenListItemSkeleton
-                style={{ paddingHorizontal: 16 }}
+                tw="px-4 md:px-0"
                 key={index}
                 isMdWidth={isMdWidth}
               />
@@ -148,9 +152,30 @@ export const TopCreatorTokens = ({
       />
     );
   }, [isLoading, isMdWidth]);
+  const renderListFooter = useCallback(() => {
+    if (isLoadingMore && !isLoading) {
+      return (
+        <View
+          tw="w-full items-center pt-4"
+          style={{ paddingBottom: Math.max(bottom, 16) }}
+        >
+          <Spinner size="small" />
+        </View>
+      );
+    }
+    return <View style={{ height: bottom + 8 }} />;
+  }, [bottom, isLoading, isLoadingMore]);
 
   return (
     <ErrorBoundary>
+      <View
+        style={{
+          height: Platform.select({
+            ios: headerHeight,
+            default: 0,
+          }),
+        }}
+      />
       <InfiniteScrollList
         useWindowScroll
         data={list || []}
@@ -158,6 +183,8 @@ export const TopCreatorTokens = ({
         preserveScrollPosition
         keyExtractor={keyExtractor}
         numColumns={numColumns}
+        refreshing={isRefreshing}
+        onRefresh={refresh}
         renderItem={renderItem}
         drawDistance={500}
         style={{
@@ -170,6 +197,7 @@ export const TopCreatorTokens = ({
         ListHeaderComponent={Header}
         onEndReached={disableFetchMore ? () => {} : fetchMore}
         ListEmptyComponent={ListEmptyComponent}
+        ListFooterComponent={renderListFooter}
         estimatedItemSize={46}
       />
     </ErrorBoundary>
