@@ -1,4 +1,4 @@
-import { useRef, useMemo, useCallback, useEffect, Suspense } from "react";
+import { useRef, useMemo, useCallback, Suspense } from "react";
 import {
   useWindowDimensions,
   Linking,
@@ -15,20 +15,15 @@ import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   MoreHorizontal,
   Instagram,
-  TwitterOutline,
   Download,
   Link,
-  CreatorChannelType,
-  ShowtimeBrand,
   ArrowTopRounded,
   GrowthArrow,
   UnLocked,
-  PieChart,
   CreatorChannelFilled,
   X,
 } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
-import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Spinner } from "@showtime-xyz/universal.spinner";
@@ -41,22 +36,16 @@ import { ErrorBoundary } from "app/components/error-boundary";
 import { useIsInstalledApps, useShareImage } from "app/components/share";
 import { useUserProfile } from "app/hooks/api-hooks";
 import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
-import { useUser } from "app/hooks/use-user";
 import { createParam } from "app/navigation/use-param";
 import {
   getCurrencyPrice,
   getTwitterIntent,
   getWebBaseURL,
 } from "app/utilities";
-import { getTwitterIntentUsername } from "app/utilities";
 
 import { breakpoints } from "design-system/theme";
 import { toast } from "design-system/toast";
 
-import {
-  PlatformBuyButton,
-  PlatformSellButton,
-} from "../profile/buy-and-sell-buttons";
 import { ShowtimeBrandLogo } from "../showtime-brand";
 
 type ChannelsPromoteParams = {
@@ -176,7 +165,7 @@ export const CreatorTokenSocialShare = () => {
                       width: imageWidth,
                       height: imageHeight - 20,
                     }}
-                    tw="mb-4 items-center overflow-hidden rounded-3xl"
+                    tw="mb-4 items-center overflow-hidden rounded-t-3xl"
                   >
                     <View tw="absolute inset-0">
                       <Image
