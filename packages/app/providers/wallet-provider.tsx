@@ -106,7 +106,7 @@ const wallets = {
     id: "4622a2b2d6af1c9844944291e5e7351a6aa24cd7b23099efac1b2fd875da31a0",
     name: "Trust Wallet",
     homepage: "https://trustwallet.com/",
-    image_id: "0528ee7e-16d1-4089-21e3-bbfb41933100",
+    image_id: "7677b54f-3486-46e2-4e37-bf8747814f00",
     order: 1,
     app: {
       browser: null,
@@ -255,14 +255,7 @@ function WalletConnectQRCodeModal(props: RenderModalProps) {
   }
 
   return (
-    <FullWindowOverlay
-      style={{
-        position: "absolute",
-        width: "100%",
-        height: "100%",
-        justifyContent: "center",
-      }}
-    >
+    <FullWindowOverlay>
       <View tw="flex-1 bg-white dark:bg-black">
         <View style={{ paddingTop: insets.top }} />
         <ModalHeader title="Connect my wallet" onClose={props.onDismiss} />
@@ -284,7 +277,9 @@ function WalletConnectQRCodeModal(props: RenderModalProps) {
               alt="Coinbase Wallet"
             />
             <View tw="w-4" />
-            <Text tw="text-lg text-black dark:text-white">Coinbase Wallet</Text>
+            <Text tw="text-base font-bold text-black dark:text-white">
+              Coinbase Wallet
+            </Text>
           </PressableScale>
 
           {WALLETS.map((wallet) => {
@@ -309,7 +304,9 @@ function WalletConnectQRCodeModal(props: RenderModalProps) {
                   alt={w.name}
                 />
                 <View tw="w-4" />
-                <Text tw="text-lg text-black dark:text-white">{w.name}</Text>
+                <Text tw="text-base font-bold text-black dark:text-white">
+                  {w.name}
+                </Text>
               </PressableScale>
             );
           })}
