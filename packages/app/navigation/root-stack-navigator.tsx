@@ -21,6 +21,7 @@ import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
 import { CreatorTokenCollectedScreen } from "app/screens/creator-token/creator-token-collected";
 import { CreatorTokenCollectorsScreen } from "app/screens/creator-token/creator-token-collectors";
+import { CreatorTokenSocialShareScreen } from "app/screens/creator-token/creator-token-social-share";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
@@ -258,6 +259,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="creatorTokensImportAllowlist"
           component={CreatorTokensImportAllowlistScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenSocialShare"
+          component={CreatorTokenSocialShareScreen}
         />
       </Stack.Group>
     </Stack.Navigator>

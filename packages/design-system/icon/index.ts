@@ -171,6 +171,7 @@ export { default as Twitter } from "./Twitter";
 export { default as Spotify } from "./Spotify";
 export { default as SpotifyPure } from "./SpotifyPure";
 export { default as ShowtimeRounded } from "./ShowtimeRounded";
+export { default as X } from "./X";
 
 export { default as Facebook } from "./Facebook";
 export { default as GoogleOriginal } from "./GoogleOriginal";
