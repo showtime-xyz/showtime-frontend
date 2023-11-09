@@ -5,6 +5,7 @@ import { createWalletClient, custom } from "viem";
 
 import { baseChain } from "../creator-token/utils";
 import { useLatestValueRef } from "../use-latest-value-ref";
+import { useStableCallback } from "../use-stable-callback";
 import { ConnectResult, UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
@@ -22,6 +23,11 @@ const useWallet = (): UseWalletReturnType => {
   });
 
   const connected = !!wallets.wallets[0];
+
+  const disconnect = useStableCallback(() => {
+    localStorage.removeItem("walletconnect");
+    wallets.wallets.forEach((wallet) => wallet.disconnect());
+  });
 
   const result = useMemo(() => {
     return {
@@ -43,15 +49,12 @@ const useWallet = (): UseWalletReturnType => {
         return walletClient;
       },
       connected,
-      disconnect: async () => {
-        localStorage.removeItem("walletconnect");
-        wallets.wallets.forEach((wallet) => wallet.disconnect());
-      },
+      disconnect,
       signMessageAsync: ({ message }: { message: string }) => {
         return latestConnectedWallet.current.sign(message);
       },
     };
-  }, [connected, privy, latestConnectedWallet, wallets.wallets]);
+  }, [connected, disconnect, privy, latestConnectedWallet, wallets.wallets]);
 
   return result;
 };

@@ -11,6 +11,7 @@ import { useColorScheme } from "nativewind";
 import { useAuth } from "app/hooks/auth/use-auth";
 import { baseChain } from "app/hooks/creator-token/utils";
 import { useStableCallback } from "app/hooks/use-stable-callback";
+import { useWallet } from "app/hooks/use-wallet";
 
 export const PrivyProvider = ({ children }: any) => {
   const privyAuthRef = useRef<any>(null);
@@ -47,6 +48,7 @@ const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
   const privy = usePrivy();
   const { authenticationStatus, setAuthenticationStatus, login, logout } =
     useAuth();
+  const wallet = useWallet();
   let prevAuthStatus = useRef<any>();
 
   const createWalletAndLogin = useStableCallback(async (user: PrivyUser) => {
@@ -77,18 +79,20 @@ const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
     [createWalletAndLogin]
   );
 
+  const disconnect = wallet.disconnect;
+
   // TODO: remove this when we have a better way to handle this. Providers hierarchy is not ideal.
   useEffect(() => {
     if (
       authenticationStatus === "UNAUTHENTICATED" &&
-      prevAuthStatus.current === "AUTHENTICATED" &&
-      privy.authenticated
+      prevAuthStatus.current === "AUTHENTICATED"
     ) {
       privy.logout();
+      disconnect();
     }
 
     prevAuthStatus.current = authenticationStatus;
-  }, [authenticationStatus, privy]);
+  }, [authenticationStatus, privy, disconnect]);
 
   if (!privy.ready) {
     return null;
