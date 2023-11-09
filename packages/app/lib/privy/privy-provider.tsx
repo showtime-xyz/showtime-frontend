@@ -13,7 +13,7 @@ import { useStableCallback } from "app/hooks/use-stable-callback";
 
 export const PrivyProvider = ({ children }: any) => {
   const privyAuthRef = useRef<any>(null);
-  const handleLogin = (user: User) => {
+  const handleLoginSuccess = (user: User) => {
     console.log(`User logged in! `, user);
     privyAuthRef.current.createWalletAndLogin();
   };
@@ -22,7 +22,7 @@ export const PrivyProvider = ({ children }: any) => {
   return (
     <PrivyProviderImpl
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
-      onSuccess={handleLogin}
+      onSuccess={handleLoginSuccess}
       config={{
         loginMethods: ["email", "google", "apple", "sms"],
         defaultChain: baseChain,
@@ -51,6 +51,12 @@ const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
     } catch (e) {
       console.log("wallet is already created by privy!");
       // Probably already created
+    }
+
+    try {
+      // Call backend login with privy method
+    } catch (e) {
+      privy.logout();
     }
   });
 
