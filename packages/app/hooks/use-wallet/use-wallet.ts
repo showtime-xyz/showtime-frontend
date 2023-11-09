@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { createWalletClient, custom } from "viem";
 import { mainnet } from "viem/chains";
@@ -21,6 +21,19 @@ const useWallet = (): UseWalletReturnType => {
   const coinbaseMobileSDKInstanceRef = useLatestValueRef(mobileSDK);
 
   const walletConnected = web3Modal.isConnected || mobileSDK.connected;
+  const [address, setAddress] = useState<`0x${string}` | undefined>();
+
+  useEffect(() => {
+    (async function fetchUserAddress() {
+      if (web3Modal.address) {
+        setAddress(web3Modal.address as `0x${string}`);
+      } else if (mobileSDK.address) {
+        setAddress(mobileSDK.address as `0x${string}`);
+      } else {
+        setAddress(undefined);
+      }
+    })();
+  }, [mobileSDK.address, web3Modal.address]);
 
   // WalletConnect connected
   useEffect(() => {
@@ -112,6 +125,7 @@ const useWallet = (): UseWalletReturnType => {
     }
 
     return {
+      address,
       connect: async () => {
         walletConnectInstanceRef.current.open();
         return new Promise<ConnectResult>((resolve) => {
@@ -171,6 +185,7 @@ const useWallet = (): UseWalletReturnType => {
     walletConnectInstanceRef,
     coinbaseMobileSDKInstanceRef,
     getWalletClient,
+    address,
   ]);
 
   if (process.env.E2E) {
