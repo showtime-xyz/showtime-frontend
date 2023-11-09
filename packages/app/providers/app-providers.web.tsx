@@ -29,23 +29,23 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           <ColorSchemeProvider>
             <SafeAreaProvider>
               <LightBoxProvider>
-                <PrivyProvider>
-                  <AlertProvider>
-                    <SnackbarProvider>
-                      <SWRProvider>
-                        <AuthProvider>
-                          <UserProvider>
+                <AlertProvider>
+                  <SnackbarProvider>
+                    <SWRProvider>
+                      <AuthProvider>
+                        <UserProvider>
+                          <PrivyProvider>
                             <BottomSheetModalProvider>
                               <NavigationProvider>
                                 {children}
                               </NavigationProvider>
                             </BottomSheetModalProvider>
-                          </UserProvider>
-                        </AuthProvider>
-                      </SWRProvider>
-                    </SnackbarProvider>
-                  </AlertProvider>
-                </PrivyProvider>
+                          </PrivyProvider>
+                        </UserProvider>
+                      </AuthProvider>
+                    </SWRProvider>
+                  </SnackbarProvider>
+                </AlertProvider>
               </LightBoxProvider>
             </SafeAreaProvider>
           </ColorSchemeProvider>

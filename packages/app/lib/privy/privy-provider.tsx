@@ -19,7 +19,6 @@ export const PrivyProvider = ({ children }: any) => {
     console.log(`User logged in! `, user);
     privyAuthRef.current.createWalletAndLogin(user);
   };
-  const colorScheme = useColorScheme();
 
   return (
     <PrivyProviderImpl
@@ -29,7 +28,6 @@ export const PrivyProvider = ({ children }: any) => {
         loginMethods: ["email", "google", "apple", "sms"],
         defaultChain: baseChain,
         appearance: {
-          theme: colorScheme.colorScheme,
           accentColor: "#676FFF",
           logo: "https://pbs.twimg.com/profile_images/1720182212468051968/CPBHLyGx_400x400.jpg",
         },

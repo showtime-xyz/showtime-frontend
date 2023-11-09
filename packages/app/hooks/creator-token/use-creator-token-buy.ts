@@ -158,7 +158,6 @@ export const useCreatorTokenBuy = (params: {
 
             transactionHash = await walletClient?.writeContract?.({
               ...requestPayload,
-              type: "eip1559",
               maxFeePerGas,
               maxPriorityFeePerGas,
             });

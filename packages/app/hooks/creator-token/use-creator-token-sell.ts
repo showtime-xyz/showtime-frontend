@@ -135,7 +135,6 @@ export const useCreatorTokenSell = () => {
 
             const txHash = await wallet.walletClient?.writeContract({
               ...requestPayload,
-              type: "eip1559",
               maxFeePerGas,
               maxPriorityFeePerGas,
             });

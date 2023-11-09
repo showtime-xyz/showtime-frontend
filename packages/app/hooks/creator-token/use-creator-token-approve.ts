@@ -67,7 +67,6 @@ export const useApproveToken = () => {
           //@ts-ignore
           const hash = await walletClient?.writeContract({
             ...request,
-            type: "eip1559",
             maxFeePerGas,
             maxPriorityFeePerGas,
           });

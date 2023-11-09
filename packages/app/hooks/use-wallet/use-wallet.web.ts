@@ -49,6 +49,7 @@ const useWallet = (): UseWalletReturnType => {
         return walletClient;
       },
       connected,
+      address: wallets.wallets[0]?.address,
       disconnect,
       signMessageAsync: ({ message }: { message: string }) => {
         return latestConnectedWallet.current.sign(message);
