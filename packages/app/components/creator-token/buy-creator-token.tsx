@@ -30,7 +30,7 @@ import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creat
 import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
 import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-sell";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
-import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
+import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
 

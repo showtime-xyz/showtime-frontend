@@ -10,6 +10,7 @@ import {
 import { Platform, useWindowDimensions } from "react-native";
 
 import axios from "axios";
+import * as Clipboard from "expo-clipboard";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import Animated, {
   useAnimatedScrollHandler,
@@ -42,6 +43,7 @@ import { useCreatorCollectionDetail } from "app/hooks/use-creator-collection-det
 import { useNFTDetailBySlug } from "app/hooks/use-nft-details-by-slug";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useRedirectToChannelCongrats } from "app/hooks/use-redirect-to-channel-congrats";
+import { useRedirectToCreatorTokenSocialShare } from "app/hooks/use-redirect-to-creator-token-social-share-screen";
 import { useUser } from "app/hooks/use-user";
 import {
   useReanimatedKeyboardAnimation,
@@ -50,6 +52,8 @@ import {
 } from "app/lib/keyboard-controller";
 import { createParam } from "app/navigation/use-param";
 
+import { breakpoints } from "design-system/theme";
+import { toast } from "design-system/toast";
 import TrackPlayer from "design-system/track-player";
 
 import { setupPlayer } from "../audio-player/service";
@@ -141,6 +145,7 @@ export const Messages = memo(() => {
   const isDark = useIsDarkMode();
   const user = useUser();
   const windowDimension = useWindowDimensions();
+  const isMdWidth = windowDimension.width >= breakpoints["md"];
   const redirectToChannelCongrats = useRedirectToChannelCongrats();
   const isUserAdmin =
     user.user?.data.channels &&
@@ -149,6 +154,8 @@ export const Messages = memo(() => {
   const editMessageIdSharedValue = useSharedValue<undefined | number>(
     undefined
   );
+  const redirectToCreatorTokenSocialShare =
+    useRedirectToCreatorTokenSocialShare();
   const isScrolling = useSharedValue<boolean>(false);
   const keyboard =
     Platform.OS !== "web"
@@ -246,25 +253,20 @@ export const Messages = memo(() => {
   }, []);
 
   const shareLink = useCallback(async () => {
-    const as = `/channels/${channelId}/share`;
-    router.push(
-      Platform.select({
-        native: as,
-        web: {
-          pathname: router.pathname,
-          query: {
-            ...router.query,
-            channelsShareModal: true,
-          },
-        } as any,
-      }),
-      Platform.select({
-        native: as,
-        web: router.asPath,
-      }),
-      { shallow: true }
-    );
-  }, [channelId, router]);
+    const username = channelDetail.data?.owner.username;
+    if (isMdWidth) {
+      await Clipboard.setStringAsync(
+        `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${username}`
+      );
+      toast.success("Copied!");
+    } else {
+      redirectToCreatorTokenSocialShare(username);
+    }
+  }, [
+    channelDetail.data?.owner.username,
+    isMdWidth,
+    redirectToCreatorTokenSocialShare,
+  ]);
 
   const { data, isLoading, fetchMore, isLoadingMore, error } =
     useChannelMessages(channelId);

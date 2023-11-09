@@ -76,7 +76,7 @@ const Header = () => {
               fontSize: 11,
             }}
           >
-            COLLECTORS
+            COLLECTED
           </Text>
         </View>
       </View>

@@ -17,7 +17,7 @@ import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useCreatorTokenDeployStatus } from "app/hooks/creator-token/use-creator-token-deploy-status";
 import { useCreatorTokenOptIn } from "app/hooks/creator-token/use-creator-token-opt-in";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
-import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
+import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { useFilePicker } from "app/lib/file-picker";
