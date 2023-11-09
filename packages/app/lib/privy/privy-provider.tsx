@@ -1,21 +1,22 @@
-import { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef, useEffect } from "react";
 
 import {
   PrivyProvider as PrivyProviderImpl,
-  User,
+  User as PrivyUser,
   usePrivy,
   PrivyInterface,
 } from "@privy-io/react-auth";
 import { useColorScheme } from "nativewind";
 
+import { useAuth } from "app/hooks/auth/use-auth";
 import { baseChain } from "app/hooks/creator-token/utils";
 import { useStableCallback } from "app/hooks/use-stable-callback";
 
 export const PrivyProvider = ({ children }: any) => {
   const privyAuthRef = useRef<any>(null);
-  const handleLoginSuccess = (user: User) => {
+  const handleLoginSuccess = (user: PrivyUser) => {
     console.log(`User logged in! `, user);
-    privyAuthRef.current.createWalletAndLogin();
+    privyAuthRef.current.createWalletAndLogin(user);
   };
   const colorScheme = useColorScheme();
 
@@ -44,19 +45,25 @@ export const privyRef = {
 
 const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
   const privy = usePrivy();
+  const { authenticationStatus, setAuthenticationStatus, login, logout } =
+    useAuth();
+  let prevAuthStatus = useRef<any>();
 
-  const createWalletAndLogin = useStableCallback(async () => {
+  const createWalletAndLogin = useStableCallback(async (user: PrivyUser) => {
     try {
       await privy.createWallet();
     } catch (e) {
       console.log("wallet is already created by privy!");
-      // Probably already created
     }
 
     try {
-      // Call backend login with privy method
+      setAuthenticationStatus("AUTHENTICATING");
+      await login("/v2/login/privy", {
+        did: user.id,
+      });
     } catch (e) {
       privy.logout();
+      logout();
     }
   });
 
@@ -69,6 +76,19 @@ const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
     },
     [createWalletAndLogin]
   );
+
+  // TODO: remove this when we have a better way to handle this. Providers hierarchy is not ideal.
+  useEffect(() => {
+    if (
+      authenticationStatus === "UNAUTHENTICATED" &&
+      prevAuthStatus.current === "AUTHENTICATED" &&
+      privy.authenticated
+    ) {
+      privy.logout();
+    }
+
+    prevAuthStatus.current = authenticationStatus;
+  }, [authenticationStatus, privy]);
 
   if (!privy.ready) {
     return null;

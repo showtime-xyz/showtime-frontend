@@ -68,7 +68,7 @@ export function AuthProvider({
   const login = useCallback(
     async function login(endpoint: string, data: object): Promise<MyInfo> {
       const response = await fetchOnAppForeground({
-        url: `/v1/${endpoint}`,
+        url: endpoint.includes("/v2/") ? endpoint : `/v1/${endpoint}`,
         method: "POST",
         data,
       });
@@ -102,6 +102,7 @@ export function AuthProvider({
     },
     [setTokens, setAuthenticationStatus, fetchOnAppForeground, mutate]
   );
+
   /**
    * Log out the customer if logged in, and clear auth cache.
    */

@@ -236,7 +236,7 @@ const ChannelsUnreadMessages = () => {
 
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
-  const { handleSubmitWallet } = useLogin();
+  const { handleSubmitWallet, loading: loginLoading } = useLogin();
   const { links, social } = useFooter();
   const isDark = useIsDarkMode();
   const router = useRouter();
@@ -558,16 +558,22 @@ export const HeaderMd = withColorScheme(() => {
         <View tw="w-40">
           {!isAuthenticated && (
             <>
-              <Button size="regular" tw="mt-6" onPress={handleSubmitWallet}>
+              <Button
+                size="regular"
+                tw="mt-6"
+                onPress={handleSubmitWallet}
+                disabled={loginLoading}
+              >
                 <>
                   <Text tw="text-base font-bold text-white dark:text-black">
-                    Connect
+                    {loginLoading ? "loading..." : "Connect"}
                   </Text>
                 </>
               </Button>
               <Button
                 size="regular"
                 tw="mt-6"
+                disabled={loginLoading}
                 onPress={async () => {
                   if (privy.authenticated) {
                     await privy.logout();
@@ -577,7 +583,7 @@ export const HeaderMd = withColorScheme(() => {
               >
                 <>
                   <Text tw="text-base font-bold text-white dark:text-black">
-                    Email & Social
+                    {loginLoading ? "loading..." : "Email & Social"}
                   </Text>
                 </>
               </Button>

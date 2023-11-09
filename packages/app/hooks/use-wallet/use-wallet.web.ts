@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useRef } from "react";
+import { useMemo, useRef } from "react";
 
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy, useWallets, useConnectWallet } from "@privy-io/react-auth";
 import { createWalletClient, custom } from "viem";
 
 import { baseChain } from "../creator-token/utils";
@@ -11,21 +11,15 @@ const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const privy = usePrivy();
   const wallets = useWallets();
-  const prevConnectedWalletAddress = useRef<any>(null);
   const latestConnectedWallet = useLatestValueRef(wallets.wallets[0]);
-
-  // Wallet connected, resolve promise
-  useEffect(() => {
-    if (
-      wallets.wallets[0]?.address &&
-      walletConnectedPromiseResolveCallback.current &&
-      prevConnectedWalletAddress.current !== wallets.wallets[0]?.address
-    ) {
-      walletConnectedPromiseResolveCallback.current(wallets.wallets[0]);
-      walletConnectedPromiseResolveCallback.current = null;
-      prevConnectedWalletAddress.current = wallets.wallets[0].address;
-    }
-  }, [wallets.wallets]);
+  useConnectWallet({
+    onSuccess: (wallet) => {
+      if (walletConnectedPromiseResolveCallback.current) {
+        walletConnectedPromiseResolveCallback.current(wallet);
+        walletConnectedPromiseResolveCallback.current = null;
+      }
+    },
+  });
 
   const connected = !!wallets.wallets[0];
 
