@@ -55,6 +55,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       creatorTokenBuy: "creator-token/:username/buy",
       enterInviteCode: "enterInviteCode",
       creatorTokenInviteSignIn: "creator-token/:username/invite-sign-in",
+      creatorTokenSocialShare: "creator-token/:username/social-share",
       creatorTokensSelfServeExplainer: "creator-token/self-serve-explainer",
       privacySecuritySettings: "settings/privacy-and-security",
       notificationSettings: "settings/notifications",

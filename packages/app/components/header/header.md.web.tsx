@@ -48,7 +48,6 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useFooter } from "app/hooks/use-footer";
 import { useNotifications } from "app/hooks/use-notifications";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";

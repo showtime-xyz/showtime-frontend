@@ -1,12 +1,8 @@
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  GoldHexagon,
-  Showtime,
-  ShowtimeRounded,
-} from "@showtime-xyz/universal.icon";
+import { GoldHexagon, ShowtimeRounded } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -20,7 +16,6 @@ import {
   TopCreatorTokenUser,
 } from "app/hooks/creator-token/use-creator-tokens";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 import { PlatformBuyButton } from "../profile/buy-and-sell-buttons";
@@ -142,71 +137,73 @@ export const TopCreatorTokenItem = ({
   const isDark = useIsDarkMode();
 
   return (
-    <Link
-      href={
-        item.owner_profile?.username
-          ? `/@${item.owner_profile?.username}`
-          : `/@${item.owner_address}`
-      }
+    <PressableHover
+      tw={["mb-2 py-1.5", tw].join(" ")}
+      onPress={() => {
+        router.push(
+          item.owner_profile?.username
+            ? `/@${item.owner_profile?.username}`
+            : `/@${item.owner_address}`
+        );
+      }}
+      {...rest}
     >
-      <View tw={["mb-2 py-1.5", tw].join(" ")} {...rest}>
-        <View tw="flex-row items-center">
-          <View tw="min-w-[24px]">
-            {index != undefined ? (
-              index < 3 ? (
-                <View tw="items-center justify-center">
-                  <View tw="absolute -top-1">
-                    <GoldHexagon width={18} height={18} />
-                  </View>
-                  <Text tw="text-xs font-bold text-white">{index + 1}</Text>
+      <View tw="flex-row items-center">
+        <View tw="min-w-[24px]">
+          {index != undefined ? (
+            index < 3 ? (
+              <View tw="items-center justify-center">
+                <View tw="absolute -top-1">
+                  <GoldHexagon width={18} height={18} />
                 </View>
-              ) : (
-                <View tw="items-center justify-center">
-                  <Text tw="text-xs font-bold text-gray-700 dark:text-white">
-                    {index + 1}
-                  </Text>
+                <Text tw="text-xs font-bold text-white">{index + 1}</Text>
+              </View>
+            ) : (
+              <View tw="items-center justify-center">
+                <Text tw="text-xs font-bold text-gray-700 dark:text-white">
+                  {index + 1}
+                </Text>
+              </View>
+            )
+          ) : null}
+        </View>
+        <View tw="ml-1 flex-1 flex-row items-center">
+          <Avatar url={item?.owner_profile?.img_url} size={34} />
+          <View tw="ml-2 flex-1 justify-center">
+            <View tw="flex-row items-center">
+              <Text
+                tw="text-sm font-semibold text-gray-900 dark:text-white"
+                numberOfLines={1}
+              >
+                @
+                {item.owner_profile?.username
+                  ? item.owner_profile?.username
+                  : formatAddressShort(item.owner_address)}
+              </Text>
+              {Boolean(item.owner_profile?.verified) && (
+                <View tw="ml-1">
+                  <VerificationBadge size={14} />
                 </View>
-              )
-            ) : null}
-          </View>
-          <View tw="ml-1 flex-1 flex-row items-center">
-            <Avatar url={item?.owner_profile?.img_url} size={34} />
-            <View tw="ml-2 flex-1 justify-center">
-              <View tw="flex-row items-center">
-                <Text
-                  tw="text-sm font-semibold text-gray-900 dark:text-white"
-                  numberOfLines={1}
-                >
-                  @
-                  {item.owner_profile?.username
-                    ? item.owner_profile?.username
-                    : formatAddressShort(item.owner_address)}
-                </Text>
-                {Boolean(item.owner_profile?.verified) && (
-                  <View tw="ml-1">
-                    <VerificationBadge size={14} />
-                  </View>
-                )}
-              </View>
-              <View tw="mt-1 flex-row items-center">
-                <Text
-                  tw="text-xs font-semibold text-gray-900 dark:text-white"
-                  numberOfLines={1}
-                >
-                  {item.nft_count}
-                </Text>
-                <View tw="w-1" />
-                <ShowtimeRounded
-                  width={14}
-                  height={14}
-                  color={isDark ? colors.white : colors.gray[900]}
-                />
-              </View>
+              )}
+            </View>
+            <View tw="mt-1 flex-row items-center">
+              <Text
+                tw="text-xs font-semibold text-gray-900 dark:text-white"
+                numberOfLines={1}
+              >
+                {item.nft_count}
+              </Text>
+              <View tw="w-1" />
+              <ShowtimeRounded
+                width={14}
+                height={14}
+                color={isDark ? colors.white : colors.gray[900]}
+              />
             </View>
           </View>
         </View>
       </View>
-    </Link>
+    </PressableHover>
   );
 };
 export const TopCreatorTokenListItem = ({
@@ -223,92 +220,94 @@ export const TopCreatorTokenListItem = ({
   isMdWidth?: boolean;
 }) => {
   const isDark = useIsDarkMode();
-
+  const router = useRouter();
   return (
-    <Link
-      href={
-        item.owner_profile?.username
-          ? `/@${item.owner_profile?.username}`
-          : `/@${item.owner_address}`
-      }
+    <PressableHover
+      tw={["flex-row py-2.5", tw].join(" ")}
+      onPress={() => {
+        router.push(
+          item.owner_profile?.username
+            ? `/@${item.owner_profile?.username}`
+            : `/@${item.owner_address}`
+        );
+      }}
+      {...rest}
     >
-      <View tw={["flex-row py-2.5", tw].join(" ")} {...rest}>
-        <View tw="h-[34px] flex-row">
-          <View tw="min-w-[26px] items-start self-center">
-            {index != undefined ? (
-              index < 3 ? (
-                <View tw="items-center ">
-                  <View tw="absolute -top-1">
-                    <GoldHexagon width={18} height={18} />
-                  </View>
-                  <Text tw="text-xs font-bold text-white">{index + 1}</Text>
+      <View tw="h-[34px] flex-row">
+        <View tw="min-w-[26px] items-start self-center">
+          {index != undefined ? (
+            index < 3 ? (
+              <View tw="items-center ">
+                <View tw="absolute -top-1">
+                  <GoldHexagon width={18} height={18} />
                 </View>
-              ) : (
-                <View tw="items-center ">
-                  <Text tw="text-xs font-bold text-gray-700 dark:text-white">
-                    {index + 1}
-                  </Text>
-                </View>
-              )
-            ) : null}
-          </View>
-          <Avatar url={item?.owner_profile?.img_url} size={34} />
-        </View>
-        <View tw="web:flex-1 ml-2 flex-row">
-          <View tw="w-[168px] justify-center md:w-[240px]">
-            <View tw="min-w-[180px] flex-row">
-              <Text
-                tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
-                numberOfLines={1}
-                style={{ lineHeight: 20 }}
-              >
-                @
-                {item.owner_profile?.username
-                  ? item.owner_profile?.username
-                  : formatAddressShort(item.owner_address)}
-              </Text>
-              <View tw="h-1" />
-              {Boolean(item.owner_profile?.verified) && (
-                <View tw="ml-1">
-                  <VerificationBadge size={14} />
-                </View>
-              )}
-            </View>
-            {!isSimplified ? (
-              <>
-                <View tw="h-1.5" />
-                <Text
-                  tw="text-xs text-gray-500 dark:text-gray-400"
-                  numberOfLines={2}
-                >
-                  {item.owner_profile?.bio}
+                <Text tw="text-xs font-bold text-white">{index + 1}</Text>
+              </View>
+            ) : (
+              <View tw="items-center ">
+                <Text tw="text-xs font-bold text-gray-700 dark:text-white">
+                  {index + 1}
                 </Text>
-              </>
-            ) : null}
-          </View>
-          <View tw="ml-4 min-w-[50px] flex-row items-center md:ml-10">
+              </View>
+            )
+          ) : null}
+        </View>
+        <Avatar url={item?.owner_profile?.img_url} size={34} />
+      </View>
+      <View tw="web:flex-1 ml-2 flex-row">
+        <View tw="w-[168px] justify-center md:w-[320px]">
+          <View tw="min-w-[180px] flex-row">
             <Text
-              tw="text-sm font-semibold text-gray-900 dark:text-white"
+              tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
               numberOfLines={1}
+              style={{ lineHeight: 20 }}
             >
-              {item.nft_count}
+              @
+              {item.owner_profile?.username
+                ? item.owner_profile?.username
+                : formatAddressShort(item.owner_address)}
             </Text>
-            <View tw="w-1" />
-            <ShowtimeRounded
-              width={16}
-              height={16}
-              color={isDark ? colors.white : colors.gray[900]}
-            />
+            <View tw="h-1" />
+            {Boolean(item.owner_profile?.verified) && (
+              <View tw="ml-1">
+                <VerificationBadge size={14} />
+              </View>
+            )}
           </View>
-          <View tw="ml-auto">
-            <PlatformBuyButton
-              style={{ backgroundColor: "#08F6CC", height: 26 }}
-              username={item.owner_profile?.username}
-            />
-          </View>
+          {!isSimplified ? (
+            <>
+              <View tw="h-1.5" />
+              <Text
+                tw="text-xs text-gray-500 dark:text-gray-400"
+                numberOfLines={2}
+              >
+                {item.owner_profile?.bio}
+              </Text>
+            </>
+          ) : null}
+        </View>
+        <View tw="ml-4 min-w-[50px] flex-row items-center md:ml-10">
+          <Text
+            tw="text-sm font-semibold text-gray-900 dark:text-white"
+            numberOfLines={1}
+          >
+            {item.nft_count}
+          </Text>
+          <View tw="w-1" />
+          <ShowtimeRounded
+            width={16}
+            height={16}
+            color={isDark ? colors.white : colors.gray[900]}
+          />
         </View>
       </View>
-    </Link>
+      <View tw="ml-auto">
+        <PlatformBuyButton
+          style={{ backgroundColor: "#08F6CC", height: 26 }}
+          username={item.owner_profile?.username}
+        />
+      </View>
+    </PressableHover>
   );
 };
 
@@ -343,7 +342,7 @@ export const TopCreatorTokenListItemSkeleton = ({
         <Skeleton width={16} height={16} show radius={8} />
         <View tw="w-2.5" />
         <Skeleton width={34} height={34} show radius={999} />
-        <View tw="ml-2 w-[178px] md:w-[274px]">
+        <View tw="ml-2 w-[178px] md:w-[354px]">
           <Skeleton width={140} height={13} show radius={4} />
         </View>
         <Skeleton width={30} height={14} show radius={4} />

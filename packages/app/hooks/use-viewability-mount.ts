@@ -4,9 +4,9 @@ import { Video } from "expo-av";
 import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
 
 import {
-  ItemKeyContext,
   ViewabilityItemsContext,
-} from "app/components/viewability-tracker-flatlist";
+  ItemKeyContext,
+} from "app/hocs/with-viewability-infinite-scroll-list";
 import { useIsFocused } from "app/lib/react-navigation/native";
 
 export const useViewabilityMount = ({
