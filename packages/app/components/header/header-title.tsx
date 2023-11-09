@@ -4,7 +4,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 const titleMap = new Map([
   ["/notifications", "Notifications"],
-  ["/trending", "Top Creator Tokens"],
+  ["/trending", "Leaderboard"],
   ["/settings", "Settings"],
 ]);
 

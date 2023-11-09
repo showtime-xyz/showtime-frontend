@@ -255,7 +255,7 @@ export const TopCreatorTokenListItem = ({
         <Avatar url={item?.owner_profile?.img_url} size={34} />
       </View>
       <View tw="web:flex-1 ml-2 flex-row">
-        <View tw="w-[168px] justify-center md:w-[240px]">
+        <View tw="w-[168px] justify-center md:w-[320px]">
           <View tw="min-w-[180px] flex-row">
             <Text
               tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
@@ -300,12 +300,12 @@ export const TopCreatorTokenListItem = ({
             color={isDark ? colors.white : colors.gray[900]}
           />
         </View>
-        <View tw="ml-auto">
-          <PlatformBuyButton
-            style={{ backgroundColor: "#08F6CC", height: 26 }}
-            username={item.owner_profile?.username}
-          />
-        </View>
+      </View>
+      <View tw="ml-auto">
+        <PlatformBuyButton
+          style={{ backgroundColor: "#08F6CC", height: 26 }}
+          username={item.owner_profile?.username}
+        />
       </View>
     </PressableHover>
   );
@@ -342,7 +342,7 @@ export const TopCreatorTokenListItemSkeleton = ({
         <Skeleton width={16} height={16} show radius={8} />
         <View tw="w-2.5" />
         <Skeleton width={34} height={34} show radius={999} />
-        <View tw="ml-2 w-[178px] md:w-[274px]">
+        <View tw="ml-2 w-[178px] md:w-[354px]">
           <Skeleton width={140} height={13} show radius={4} />
         </View>
         <Skeleton width={30} height={14} show radius={4} />
