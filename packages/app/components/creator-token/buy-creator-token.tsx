@@ -237,6 +237,21 @@ export const BuyCreatorToken = () => {
   }, [selectedAction, tokenBalance.data]);
   const isDark = useIsDarkMode();
 
+  const crossmintConfig = {
+    collectionId: "93def410-f564-46e4-a8d6-459586aacd17",
+    projectId: process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID,
+    mintConfig: {
+      totalPrice: (
+        Number(priceToBuyNext.data?.totalPrice) / 1000000
+      ).toString(),
+      _numOfTokens: tokenAmount,
+      _maxPayment: priceToBuyNext.data?.totalPrice?.toString(),
+    },
+    mintTo: wallet.address,
+    environment:
+      process.env.NEXT_PUBLIC_STAGE === "production" ? "production" : "staging",
+  };
+
   return (
     <BottomSheetModalProvider>
       <>
@@ -441,26 +456,12 @@ export const BuyCreatorToken = () => {
           <View tw="h-8" />
           {renderBuyButton()}
           <View tw="mx-auto my-4 h-[1px] w-[20%] rounded-full bg-gray-400" />
-          {profileData?.data?.profile.creator_token?.crossmint_id !== null ? (
-            <CrossmintPayButton
-              style={{
-                borderRadius: 100,
-              }}
-              collectionId="e91b3e6a-27ef-4c90-aa02-10af5ecfa0fb"
-              projectId={process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID}
-              mintConfig={{
-                totalPrice: priceToBuyNext.data?.totalPrice?.toString(),
-                _numOfTokens: tokenAmount,
-                _maxPayment: priceToBuyNext.data?.totalPrice?.toString(),
-              }}
-              environment={
-                process.env.NEXT_PUBLIC_STAGE === "production"
-                  ? "production"
-                  : "staging"
-              }
-              mintTo={wallet.address}
-            />
-          ) : null}
+          <CrossmintPayButton
+            style={{
+              borderRadius: 100,
+            }}
+            {...crossmintConfig}
+          />
 
           <View tw="items-center pt-4">
             <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
