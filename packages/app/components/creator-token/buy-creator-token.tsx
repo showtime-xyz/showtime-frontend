@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
 import { Linking } from "react-native";
 
-import { CrossmintPayButton } from "@crossmint/client-sdk-react-ui";
+import {
+  CrossmintPaymentElement,
+  CrossmintEvent,
+} from "@crossmint/client-sdk-react-ui";
+import { useCrossmintEvents } from "@crossmint/client-sdk-react-ui";
 import { createParam } from "solito";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
+import { Fieldset } from "@showtime-xyz/universal.fieldset";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Ethereum,
-  InformationCircle,
-  LockBadge,
-} from "@showtime-xyz/universal.icon";
+import { InformationCircle, LockBadge } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
@@ -34,6 +36,7 @@ import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-ba
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
+import { captureException } from "app/lib/sentry";
 
 import { toast } from "design-system/toast";
 import { Toggle } from "design-system/toggle";
@@ -97,6 +100,7 @@ export const BuyCreatorToken = () => {
   const usdcBalance = useWalletUSDCBalance();
   const ethBalance = useWalletETHBalance();
   const [showExplanation, setShowExplanation] = useState(false);
+  const [showCrossmintModal, setShowCrossmintModal] = useState(false);
   const priceToBuyNext = useCreatorTokenPriceToBuyNext(
     selectedAction === "buy"
       ? {
@@ -104,12 +108,6 @@ export const BuyCreatorToken = () => {
           tokenAmount,
         }
       : undefined
-  );
-
-  console.log(
-    "iedief ",
-    priceToBuyNext.data?.totalPrice?.toString(),
-    wallet.address
   );
 
   const ethPriceToBuyNext = useGetETHForUSDC(
@@ -240,7 +238,7 @@ export const BuyCreatorToken = () => {
   const isDark = useIsDarkMode();
 
   const crossmintConfig = {
-    collectionId: profileData?.data?.profile.creator_token?.crossmint_id,
+    collectionId: "93def410-f564-46e4-a8d6-459586aacd17",
     projectId: process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID,
     mintConfig: {
       totalPrice: (
@@ -473,17 +471,6 @@ export const BuyCreatorToken = () => {
           </View>
           <View tw="h-8" />
           {renderBuyButton()}
-          {crossmintConfig.collectionId && selectedAction === "buy" ? (
-            <>
-              <View tw="mx-auto my-4 h-[1px] w-[20%] rounded-full bg-gray-400" />
-              <CrossmintPayButton
-                style={{
-                  borderRadius: 100,
-                }}
-                {...crossmintConfig}
-              />
-            </>
-          ) : null}
           <View tw="items-center pt-4">
             <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
               {paymentMethod === "USDC"
@@ -492,6 +479,18 @@ export const BuyCreatorToken = () => {
             </Text>
           </View>
         </View>
+        {crossmintConfig.collectionId && selectedAction === "buy" ? (
+          <>
+            <View tw="mx-auto my-2 h-[1px] w-[20%] rounded-full bg-gray-400" />
+            <Button
+              size="regular"
+              tw="mx-4"
+              onPress={() => setShowCrossmintModal(true)}
+            >
+              Buy with credit card
+            </Button>
+          </>
+        ) : null}
         <ModalSheet
           snapPoints={[400]}
           title=""
@@ -502,7 +501,136 @@ export const BuyCreatorToken = () => {
         >
           <CreatorTokensExplanation />
         </ModalSheet>
+        <ModalSheet
+          snapPoints={[400]}
+          title=""
+          visible={showCrossmintModal}
+          close={() => setShowCrossmintModal(false)}
+          onClose={() => setShowCrossmintModal(false)}
+          tw="sm:w-[400px] md:w-[400px] lg:w-[400px] xl:w-[400px] "
+        >
+          <BuyWithCreditCard
+            crossmintConfig={crossmintConfig}
+            onSuccess={() => {
+              if (profileData?.data?.profile.username) {
+                redirectToCreatorTokensShare({
+                  username: profileData.data.profile.username,
+                  type: "collected",
+                  collectedCount: tokenAmount,
+                });
+                router.pop();
+              }
+            }}
+            onFailure={(error: string) => {
+              toast.error("Something went wrong. " + error);
+            }}
+          />
+        </ModalSheet>
       </>
     </BottomSheetModalProvider>
+  );
+};
+
+const BuyWithCreditCard = (props: {
+  onSuccess: (txHash: string) => void;
+  onFailure: (error: string) => void;
+  crossmintConfig: {
+    collectionId: string;
+    projectId: string;
+    mintConfig: {
+      totalPrice: string;
+      _numOfTokens: number;
+      _maxPayment: string;
+    };
+    mintTo: any;
+    environment: string;
+  };
+}) => {
+  const { crossmintConfig, onSuccess, onFailure } = props;
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [minting, setMinting] = useState(false);
+
+  const { listenToMintingEvents } = useCrossmintEvents({
+    environment: crossmintConfig.environment,
+  });
+
+  function onEvent(event: CrossmintEvent) {
+    console.log("payment events", event);
+
+    switch (event.type) {
+      // Payment events
+      // https://docs.crossmint.com/docs/2c-embed-checkout-inside-your-ui#payment-events
+      case "payment:process.succeeded":
+        {
+          const { orderIdentifier } = event.payload;
+          listenToMintingEvents({ orderIdentifier }, (event) => {
+            console.log("minting events ", event);
+            switch (event.type) {
+              // Minting events
+              // https://docs.crossmint.com/docs/2c-embed-checkout-inside-your-ui#minting-events
+              case "order:process.started": {
+                setMinting(true);
+                break;
+              }
+              case "transaction:fulfillment.succeeded":
+                {
+                  onSuccess(event.payload.txId);
+                  setMinting(false);
+                }
+                break;
+              case "transaction:fulfillment.failed":
+                {
+                  onFailure(event.payload.error.message);
+                  setMinting(false);
+                }
+                break;
+              default:
+                break;
+            }
+          });
+        }
+        break;
+      case "payment:preparation.failed": {
+        onFailure(event.payload.error.message);
+        break;
+      }
+      case "payment:process.rejected": {
+        onFailure(event.payload.error.message);
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  return (
+    <>
+      <View tw="p-4">
+        <Fieldset
+          label="Your Email"
+          placeholder="doe@gmail.com"
+          required
+          value={customerEmail}
+          onChangeText={setCustomerEmail}
+          tw="mb-2"
+        />
+        <CrossmintPaymentElement
+          projectId={crossmintConfig.projectId}
+          collectionId={crossmintConfig.collectionId}
+          environment={crossmintConfig.environment}
+          onEvent={onEvent}
+          mintConfig={crossmintConfig.mintConfig}
+          recipient={{
+            wallet: crossmintConfig.mintTo,
+            email: customerEmail,
+          }}
+        />
+      </View>
+      {minting ? (
+        <View tw="absolute h-full w-full items-center justify-center bg-gray-600/40">
+          <Spinner />
+        </View>
+      ) : null}
+    </>
   );
 };
