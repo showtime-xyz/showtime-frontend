@@ -5,10 +5,7 @@ import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { captureException } from "app/lib/sentry";
 
-import {
-  useJoinedChannelsList,
-  useSuggestedChannelsList,
-} from "./use-channels-list";
+import { useJoinedChannelsList } from "./use-channels-list";
 
 async function leaveChannel(
   url: string,
@@ -26,7 +23,6 @@ export const useLeaveChannel = () => {
     leaveChannel
   );
   const joinedChannels = useJoinedChannelsList();
-  const suggestedChannels = useSuggestedChannelsList();
 
   const handleSubmit = useStableCallback(
     async ({ channelId }: { channelId: string }) => {
@@ -37,7 +33,6 @@ export const useLeaveChannel = () => {
         Logger.error(e);
       } finally {
         joinedChannels.mutate();
-        suggestedChannels.mutate();
       }
     }
   );

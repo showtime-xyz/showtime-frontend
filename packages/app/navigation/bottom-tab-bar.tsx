@@ -9,14 +9,12 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { BlurView } from "app/lib/blurview";
 import { BOTTOM_TABBAR_BASE_HEIGHT } from "app/lib/constants";
 import { useBottomTabBarHeightCallback } from "app/lib/react-navigation/bottom-tabs";
 
-import { CreateTabBarIcon } from "./tab-bar-icons";
 import { useNavigationElements } from "./use-navigation-elements";
 
 type ThemeBottomTabBarProps = BottomTabBarProps & {
@@ -36,7 +34,6 @@ export const ThemeBottomTabbar = ({
 
   const color = isDark ? colors.gray[100] : colors.gray[900];
 
-  const redirectToCreateDrop = useRedirectToCreateDrop();
   return (
     <View tw="flex-row bg-transparent pt-2">
       {state.routes.map((route, index) => {
@@ -49,11 +46,6 @@ export const ThemeBottomTabbar = ({
             target: route.key,
             canPreventDefault: true,
           });
-
-          if (route.name === "createTab") {
-            redirectToCreateDrop();
-            return;
-          }
 
           if (!focused && !event.defaultPrevented) {
             if (route.name !== "homeTab" && !isAuthenticated) {
@@ -94,12 +86,6 @@ export const ThemeBottomTabbar = ({
               hitSlop={10}
               exclusive
             >
-              {options.tabBarButton && (
-                <CreateTabBarIcon
-                  color={isDark ? "#000" : "#fff"}
-                  style={{ backgroundColor: isDark ? "#fff" : "#000" }}
-                />
-              )}
               {options.tabBarIcon?.({ focused, color, size: 24 })}
             </Pressable>
           </View>

@@ -16,7 +16,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { View } from "@showtime-xyz/universal.view";
+import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import {
   DESKTOP_CONTENT_WIDTH,
@@ -40,7 +40,13 @@ const VISIBLE_HEIGHT_NATIVE = 60;
 
 const heightsNative = [HIDDEN_HEIGHT, VISIBLE_HEIGHT_NATIVE];
 
-const CreatorTokensBanner = () => {
+export const CreatorTokensBanner = ({
+  height,
+  style,
+  tw,
+}: {
+  height?: number;
+} & ViewProps) => {
   // const showValue = getIsShowCreatorTokenIntroBanner() ? 1 : 0;
   const showValue = 1;
   const showBanner = useSharedValue(showValue);
@@ -50,7 +56,9 @@ const CreatorTokensBanner = () => {
   const user = useContext(UserContext);
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
-  const visibleHeight = isMdWidth
+  const visibleHeight = height
+    ? height
+    : isMdWidth
     ? VISIBLE_HEIGHT_DESKTOP
     : VISIBLE_HEIGHT_NATIVE;
   const heightsWeb = [HIDDEN_HEIGHT, visibleHeight];
@@ -121,12 +129,19 @@ const CreatorTokensBanner = () => {
     redirectToSelfServeExplainerModal,
     user?.user?.data.profile.creator_token_onboarding_status,
   ]);
-
+  if (
+    user?.user?.data.profile.creator_token_onboarding_status === "onboarded"
+  ) {
+    return null;
+  }
   return (
     <>
       <AnimatedView
-        tw="absolute w-full flex-row items-center overflow-hidden px-4 py-2.5"
-        style={animatedStyle}
+        tw={[
+          "absolute w-full flex-row items-center overflow-hidden px-4 py-2.5",
+          tw as any,
+        ]}
+        style={[animatedStyle, style]}
       >
         <BgGoldLinearGradient />
         <View>
@@ -140,11 +155,11 @@ const CreatorTokensBanner = () => {
           >
             {user?.user?.data.profile.creator_token_onboarding_status ===
             "allowlist"
-              ? "You are eligible to launch your Creator Token & let your fans invest in you."
-              : "Introducing Creator Tokens: invest in your favorite creators. Read more."}
+              ? "You are eligible to launch your Creator Token. Get closer to your collectors."
+              : "Introducing Creator Tokens: a place for all your collectors."}
           </Text>
         </View>
-        <Pressable
+        {/* <Pressable
           tw="ml-auto"
           onPress={() => {
             showBanner.value = 0;
@@ -153,7 +168,7 @@ const CreatorTokensBanner = () => {
           hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
         >
           <Close color={colors.gray[900]} width={24} height={24} />
-        </Pressable>
+        </Pressable> */}
       </AnimatedView>
       <AnimatedView
         pointerEvents={"none"}
@@ -167,6 +182,8 @@ const CreatorTokensBanner = () => {
 export const ListHeaderComponent = memo(function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
+  const isLgWidth = width >= breakpoints["xl"];
+
   const { data: banners = [], isLoading: isLoadingBanner } = useBanners();
   const router = useRouter();
   const pagerWidth = isMdWidth
@@ -192,8 +209,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
   return (
     <View tw="w-full">
       <CreatorTokensBanner />
-
-      <View tw="mt-2 px-4 md:px-0">
+      <View tw="px-4 md:px-0">
         {isLoadingBanner ? (
           <Skeleton
             height={bannerHeight}
@@ -246,11 +262,6 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      {/*
-        // TODO: Creator Tokens P1
-        <TopPartCreatorTokens />
-      */}
-      <TrendingCarousel />
     </View>
   );
 });

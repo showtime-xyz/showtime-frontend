@@ -183,7 +183,6 @@ function HeaderDropdown({
             Download collector list
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
-        {/* TODO: Creator Tokens P1
         {isAuthenticated && (
           <DropdownMenuItem
             onSelect={() => {
@@ -218,7 +217,7 @@ function HeaderDropdown({
             </DropdownMenuItemTitle>
           </DropdownMenuItem>
         )}
-        */}
+
         <DropdownMenuSub>
           <DropdownMenuSubTrigger key="nested-group-trigger">
             <MenuItemIcon

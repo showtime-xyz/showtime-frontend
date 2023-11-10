@@ -14,10 +14,6 @@ import { ReactionProvider } from "app/components/reaction/reaction-provider";
 import { KeyboardProvider } from "app/lib/keyboard-controller";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
-import { ClaimProvider } from "app/providers/claim-provider";
-import { DropProvider } from "app/providers/drop-provider";
-import { FeedProvider } from "app/providers/feed-provider";
-import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
@@ -43,16 +39,7 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                               <AuthProvider>
                                 <UserProvider>
                                   <BottomSheetModalProvider>
-                                    {/* @ts-ignore */}
-                                    <FeedProvider>
-                                      <MuteProvider>
-                                        <ClaimProvider>
-                                          <DropProvider>
-                                            {children}
-                                          </DropProvider>
-                                        </ClaimProvider>
-                                      </MuteProvider>
-                                    </FeedProvider>
+                                    {children}
                                   </BottomSheetModalProvider>
                                 </UserProvider>
                               </AuthProvider>

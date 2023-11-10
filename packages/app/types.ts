@@ -1,3 +1,4 @@
+import { ChannelPermissions } from "./components/creator-channels/types";
 import { DropPlan } from "./hooks/use-paid-drop-plans";
 
 export type BunnyVideoUrls = {
@@ -154,6 +155,7 @@ export interface Profile {
     name: string;
     self_is_member: boolean;
     message_count: number;
+    permissions: ChannelPermissions | null;
   }>;
   website_url: string;
   username: string;

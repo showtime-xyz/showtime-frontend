@@ -1,50 +1,36 @@
-import React, {
-  useCallback,
-  useContext,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from "react";
-
-import type { ListRenderItemInfo } from "@shopify/flash-list";
+import React, { forwardRef, useImperativeHandle, useRef, useMemo } from "react";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { ChevronRight } from "@showtime-xyz/universal.icon";
+import { ChevronRight, Lock, UnLocked } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import {
-  TabScrollView,
-  TabInfiniteScrollList,
-  TabSpinner,
-} from "@showtime-xyz/universal.tab-view";
+import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
-import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
-import { List, useProfileNFTs } from "app/hooks/api-hooks";
-import { useContentWidth } from "app/hooks/use-content-width";
-import { getNFTSlug } from "app/hooks/use-share-nft";
+import { List } from "app/hooks/api-hooks";
+import {
+  useCreatorTokenCoLlected,
+  useCreatorTokenCollectors,
+} from "app/hooks/creator-token/use-creator-tokens";
+import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useUser } from "app/hooks/use-user";
 import { useScrollToTop } from "app/lib/react-navigation/native";
-import { MutateProvider } from "app/providers/mutate-provider";
-import { NFT } from "app/types";
+import { Profile } from "app/types";
 import { formatNumber } from "app/utilities";
 
+import { ChannelPermissions } from "../creator-channels/types";
+import { TopCreatorTokenItemOnProfile } from "../creator-token/creator-token-users";
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { FilterContext } from "./fillter-context";
-import { MyCollection } from "./my-collection";
-import { ProfileFooter, ProfileSpinnerFooter } from "./profile-footer";
 
 type TabListProps = {
-  username?: string;
-  profileId?: number;
+  profile?: Profile;
   isBlocked?: boolean;
   list: List;
   index: number;
 };
-const NUM_COLUMNS = 3;
 export type ProfileTabListRef = {
   refresh: () => void;
 };
@@ -52,18 +38,25 @@ export const TokensTabHeader = ({
   channelId,
   isSelf,
   messageCount,
+  channelPermissions,
 }: {
   channelId: number | null | undefined;
   messageCount?: number | null;
   isSelf: boolean;
+  channelPermissions?: ChannelPermissions | null;
 }) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
 
+  const channelMessageCountFormatted = useMemo(
+    () => formatNumber(messageCount || 0),
+    [messageCount]
+  );
+
   return (
     <View tw="w-full px-4">
       {channelId && isSelf ? (
-        <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5 dark:border-transparent">
+        <View tw="mt-4 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5 dark:border-transparent">
           <Text tw="flex-1 text-sm text-white">
             Share updates, audio, and photos to token collectors
           </Text>
@@ -113,8 +106,7 @@ export const TokensTabHeader = ({
       </View>
       */}
 
-      {isSelf && <MyCollection />}
-      {channelId && messageCount && messageCount > 0 ? (
+      {channelId && (messageCount || messageCount == 0) && messageCount >= 0 ? (
         <Pressable
           onPress={() => {
             router.push(`/channels/${channelId}`);
@@ -122,9 +114,38 @@ export const TokensTabHeader = ({
           tw="mt-6 rounded-xl border border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900"
         >
           <View tw="flex-row items-center justify-between py-4">
-            <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-              {formatNumber(messageCount || 0)} Channel messages
-            </Text>
+            <View tw="flex-row items-center justify-between">
+              <View tw="-mt-0.5 mr-2">
+                {(channelPermissions &&
+                  !channelPermissions?.can_view_creator_messages) ||
+                !channelPermissions ? (
+                  <Lock
+                    width={20}
+                    height={20}
+                    stroke={isDark ? "white" : "black"}
+                  />
+                ) : (
+                  <UnLocked
+                    stroke={isDark ? "white" : "black"}
+                    width={20}
+                    height={20}
+                  />
+                )}
+              </View>
+
+              {messageCount === 0 ? (
+                <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+                  View Channel
+                </Text>
+              ) : (
+                <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
+                  {channelPermissions &&
+                  channelPermissions?.can_view_creator_messages
+                    ? `You've unlocked ${channelMessageCountFormatted} messages`
+                    : `Channel locked (${channelMessageCountFormatted} messages)`}
+                </Text>
+              )}
+            </View>
             <ChevronRight width={20} height={20} color={colors.gray[500]} />
           </View>
           {/* TODO: Creator tokens P1
@@ -163,141 +184,159 @@ export const TokensTabHeader = ({
     </View>
   );
 };
-export const TokensTabItem = ({ item, ...rest }: ViewProps & { item: any }) => {
-  const isDark = useIsDarkMode();
 
-  // TODO: Creator tokens P1
-  return null;
-  // END
-
-  /*
+export const CreatorTokenCollectors = ({
+  creatorTokenId,
+  username,
+  name,
+  ...rest
+}: {
+  creatorTokenId: number | undefined;
+  username: string | undefined;
+  name: string | undefined;
+} & ViewProps) => {
+  const { data, isLoading, count } = useCreatorTokenCollectors(creatorTokenId);
+  const router = useRouter();
+  if ((!data?.length || data.length === 0) && !isLoading) {
+    return null;
+  }
   return (
     <View {...rest}>
       <View tw="flex-row items-center justify-between py-4">
-        <Text tw="text-13 font-bold text-gray-900 dark:text-gray-50">
-          Alan collected
+        <Text tw="text-13 font-semibold text-gray-900 dark:text-gray-50">
+          {name ? name : `@${username}`} collectors
         </Text>
-        <Text tw="text-xs font-semibold text-gray-500 dark:text-gray-50">
-          Show all
-        </Text>
+        {/* {count > 6 ? (
+          <Text
+            onPress={() => {
+              const as = `/creator-token/${creatorTokenId}/collectors`;
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenCollectorsModal: true,
+                      creatorTokenId,
+                    },
+                  } as any,
+                }),
+                Platform.select({ native: as, web: router.asPath })
+              );
+            }}
+            tw="text-xs font-semibold text-gray-500 dark:text-gray-50"
+          >
+            Show all
+          </Text>
+        ) : null} */}
       </View>
-      <View tw="flex-row gap-2.5">
-        {new Array(3).fill(0).map((_, i) => {
+      <View tw="h-2" />
+      <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
+        {data?.map((item, i) => {
           return (
-            <View
+            <TopCreatorTokenItemOnProfile
+              item={item}
               key={i}
-              tw="flex-1 items-center rounded-md border border-gray-200 bg-slate-50 px-1 py-4 dark:border-gray-700 dark:bg-gray-900"
-            >
-              <View tw="mb-2">
-                <View tw="absolute -left-1 top-0">
-                  <Showtime
-                    width={8}
-                    height={8}
-                    color={isDark ? colors.white : colors.gray[900]}
-                  />
-                </View>
-                <Avatar url={item.creator_img_url} size={44} />
-              </View>
-              <Text
-                tw="text-xs font-semibold text-gray-900 dark:text-white"
-                numberOfLines={1}
-              >
-                @{item.creator_username}
-              </Text>
-              <View tw="h-3" />
-              <Text tw="text-xs font-bold text-gray-900 dark:text-white">
-                $2.60
-              </Text>
-              <View tw="absolute -right-1.5 -top-2 h-5 min-w-[20px] items-center justify-center rounded-full bg-slate-500 px-1.5 text-gray-500 dark:bg-gray-600">
-                <Text tw="text-[10px] font-semibold text-white">1</Text>
-              </View>
-            </View>
+              style={{ width: "45%" }}
+              showName
+            />
           );
         })}
       </View>
     </View>
   );
-  */
+};
+export const CreatorTokenCollected = ({
+  profileId,
+  username,
+  name,
+  ...rest
+}: {
+  profileId: number | undefined;
+  username: string | undefined;
+  name: string | undefined;
+} & ViewProps) => {
+  const router = useRouter();
+  const { data, count, isLoading } = useCreatorTokenCoLlected(profileId);
+  if ((!data?.length || data?.length === 0) && !isLoading) {
+    return null;
+  }
+  return (
+    <View {...rest}>
+      <View tw="flex-row items-center justify-between py-4">
+        <Text tw="text-13 font-semibold text-gray-900 dark:text-gray-50">
+          {name ? name : `@${username}`} collected
+        </Text>
+        {/* {count > 6 ? (
+          <Text
+            onPress={() => {
+              const as = `/creator-token/${profileId}/collected`;
+              console.log(as);
+
+              router.push(
+                Platform.select({
+                  native: as,
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      creatorTokenCollectedModal: true,
+                      profileId,
+                    },
+                  } as any,
+                }),
+                Platform.select({ native: as, web: router.asPath })
+              );
+            }}
+            tw="text-xs font-semibold text-gray-500 dark:text-gray-50"
+          >
+            Show all
+          </Text>
+        ) : null} */}
+      </View>
+      <View tw="h-2" />
+      <View tw="flex-row flex-wrap items-center gap-x-4 gap-y-2">
+        {data?.map((item, i) => {
+          return (
+            <TopCreatorTokenItemOnProfile
+              item={item}
+              key={i}
+              style={{ width: "45%" }}
+              showName
+            />
+          );
+        })}
+      </View>
+    </View>
+  );
 };
 export const TokensTab = forwardRef<
   ProfileTabListRef,
   TabListProps & {
     channelId: number | null | undefined;
     messageCount?: number | null;
+    channelPermissions?: ChannelPermissions | null;
     isSelf: boolean;
   }
 >(function ProfileTabList(
-  {
-    username,
-    profileId,
-    isBlocked,
-    list,
-    index,
-    channelId,
-    messageCount,
-    isSelf,
-  },
+  { profile, isBlocked, list, index, channelId, messageCount, isSelf },
   ref
 ) {
   const isDark = useIsDarkMode();
-  const router = useRouter();
-  const { filter } = useContext(FilterContext);
-  const { isLoading, data, fetchMore, refresh, updateItem, isLoadingMore } =
-    useProfileNFTs({
-      tabType: list.type,
-      profileId,
-      collectionId: filter.collectionId,
-      sortType: filter.sortType,
-    });
-  const contentWidth = useContentWidth();
-
+  const profileId = profile?.profile_id;
+  const username = profile?.username;
   const { user } = useUser();
   const listRef = useRef(null);
+  const channelPermissions = useMemo(() => {
+    return profile?.channels?.[0]?.permissions;
+  }, [profile?.channels]);
+
+  const bottomHeight = usePlatformBottomHeight();
   useScrollToTop(listRef);
   useImperativeHandle(ref, () => ({
-    refresh,
+    refresh: () => {},
   }));
-  // const onItemPress = useCallback(
-  //   (item: NFT) => {
-  //     router.push(
-  //       `${getNFTSlug(item)}?initialScrollItemId=${item.nft_id}&tabType=${
-  //         list.type
-  //       }&profileId=${profileId}&collectionId=${filter.collectionId}&sortType=${
-  //         filter.sortType
-  //       }&type=profile`
-  //     );
-  //   },
-  //   [list.type, profileId, filter.collectionId, filter.sortType, router]
-  // );
-
-  const ListFooterComponent = useCallback(() => {
-    if (isLoading) {
-      return <ProfileSpinnerFooter isLoading={isLoadingMore} />;
-    }
-  }, [isLoading, isLoadingMore]);
-
-  const ListHeaderComponent = useCallback(
-    () => (
-      <TokensTabHeader
-        channelId={channelId}
-        isSelf={isSelf}
-        messageCount={messageCount}
-      />
-    ),
-    [channelId, isSelf, messageCount]
-  );
-  const keyExtractor = useCallback((item: NFT) => `${item?.nft_id}`, []);
-
-  const renderItem = useCallback(
-    ({ item }: ListRenderItemInfo<NFT & { loading?: boolean }>) => {
-      return <TokensTabItem item={item} tw="px-6" />;
-    },
-    []
-  );
-  const ListEmptyComponent = useCallback(() => {
-    return null;
-    // return <EmptyPlaceholder title="No creator token, yet." hideLoginBtn />;
-  }, []);
 
   if (isBlocked) {
     return (
@@ -319,25 +358,31 @@ export const TokensTab = forwardRef<
   }
 
   return (
-    <MutateProvider mutate={updateItem}>
-      <ProfileTabsNFTProvider
-        tabType={
-          user?.data?.profile?.profile_id === profileId ? list.type : undefined
-        }
+    <>
+      <TabScrollView
+        contentContainerStyle={{ paddingBottom: bottomHeight + 56 }}
+        index={index}
+        ref={listRef}
       >
-        <TabInfiniteScrollList
-          data={data}
-          ref={listRef}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ListHeaderComponent={ListHeaderComponent}
-          estimatedItemSize={contentWidth / NUM_COLUMNS}
-          ListFooterComponent={ListFooterComponent}
-          ListEmptyComponent={ListEmptyComponent}
-          onEndReached={fetchMore}
-          index={index}
+        <TokensTabHeader
+          channelId={channelId}
+          isSelf={isSelf}
+          messageCount={messageCount}
+          channelPermissions={channelPermissions}
         />
-      </ProfileTabsNFTProvider>
-    </MutateProvider>
+        <View tw="px-4">
+          <CreatorTokenCollectors
+            creatorTokenId={profile?.creator_token?.id}
+            name={profile?.name}
+            username={username}
+          />
+          <CreatorTokenCollected
+            profileId={profileId}
+            name={profile?.name}
+            username={username}
+          />
+        </View>
+      </TabScrollView>
+    </>
   );
 });

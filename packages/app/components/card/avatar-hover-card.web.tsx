@@ -21,7 +21,6 @@ import { linkifyDescription } from "app/lib/linkify";
 import { Link, TextLink } from "app/navigation/link";
 import { getFullSizeCover, getProfileImage, isMobileWeb } from "app/utilities";
 
-import { FollowButton } from "../follow-button";
 import { ProfileFollows } from "../profile/profile-follows";
 import { AvatarHoverCardProps } from "./avatar-hover-card";
 
@@ -38,9 +37,6 @@ export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
   const bioWithMentions = useMemo(() => linkifyDescription(bio), [bio]);
 
   const isSelf = userId === profileId;
-  const { onToggleFollow } = useFollow({
-    username: profileData?.profile.username,
-  });
 
   return (
     <>
@@ -88,16 +84,7 @@ export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
               Unblock
             </Button>
           ) : (
-            profileData?.profile.profile_id &&
-            !isSelf && (
-              <FollowButton
-                name={profileData?.profile.name}
-                size="regular"
-                profileId={profileData?.profile.profile_id}
-                onToggleFollow={onToggleFollow}
-                tw="mt-2"
-              />
-            )
+            profileData?.profile.profile_id && !isSelf && null
           )}
         </View>
         {isLoading ? (

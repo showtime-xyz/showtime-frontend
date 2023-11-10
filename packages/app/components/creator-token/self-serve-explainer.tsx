@@ -17,7 +17,7 @@ import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useCreatorTokenDeployStatus } from "app/hooks/creator-token/use-creator-token-deploy-status";
 import { useCreatorTokenOptIn } from "app/hooks/creator-token/use-creator-token-opt-in";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
-import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
+import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
 import { useUser } from "app/hooks/use-user";
 import { axios } from "app/lib/axios";
 import { useFilePicker } from "app/lib/file-picker";
@@ -36,7 +36,9 @@ export const SelfServeExplainer = () => {
   const isDark = useIsDarkMode();
   const { user } = useUser();
   const { top } = useSafeAreaInsets();
-  const userProfilePic = user?.data.profile.img_url;
+  const userProfilePic =
+    user?.data.profile.img_url ||
+    "https://media.showtime.xyz/assets/default-creator-token-pic.png";
 
   const [profilePic, setProfilePic] = useState<string | undefined | File>(
     userProfilePic
@@ -127,8 +129,8 @@ export const SelfServeExplainer = () => {
           </Text>
         </View>
         <Text tw="text-sm text-gray-900 dark:text-white">
-          In one click, let your fans access your Channel, starting at $1. Every
-          purchase, your Token price increases.
+          In one click, let your fans access your Channel, starting at $1. Each
+          trade, your token price evolves.
         </Text>
         <View tw="mt-4 items-center rounded-3xl border border-gray-200 px-4 py-6 dark:border-gray-800">
           <Pressable

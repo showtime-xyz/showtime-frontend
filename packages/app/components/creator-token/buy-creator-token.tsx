@@ -31,7 +31,7 @@ import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creat
 import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
 import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-sell";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
-import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-tokens-share-screen";
+import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
 
@@ -47,23 +47,23 @@ type Query = {
 
 const { useParam } = createParam<Query>();
 // Disable ETH payment on dev for now because it doesn't support the dev environment yet.
-const PAYMENT_METHODS = __DEV__
-  ? [
-      {
-        title: "USDC",
-        value: "USDC",
-      },
-    ]
-  : [
-      {
-        title: "ETH",
-        value: "ETH",
-      },
-      {
-        title: "USDC",
-        value: "USDC",
-      },
-    ];
+const BUY_PAYMENTS = [
+  {
+    title: "ETH",
+    value: "ETH",
+  },
+  {
+    title: "USDC",
+    value: "USDC",
+  },
+];
+const SELL_PAYMENTS = [
+  {
+    title: "USDC",
+    value: "USDC",
+  },
+];
+
 const SELECT_LIST = [
   {
     title: "Buy",
@@ -175,6 +175,7 @@ export const BuyCreatorToken = () => {
               "https://app.uniswap.org/swap?outputCurrency=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base"
             )
           }
+          size="regular"
         >
           Buy USDC on Uniswap
         </Button>
@@ -187,6 +188,7 @@ export const BuyCreatorToken = () => {
       return (
         <Button
           onPress={() => Linking.openURL("https://bridge.base.org/deposit")}
+          size="regular"
         >
           Bridge ETH to Base
         </Button>
@@ -284,15 +286,21 @@ export const BuyCreatorToken = () => {
               <Avatar size={100} url={profileData?.data?.profile.img_url} />
               <View tw="flex-1" style={{ rowGap: 16 }}>
                 <View tw="w-full flex-row items-center justify-between">
-                  <Toggle
-                    options={
-                      selectedAction === "buy"
-                        ? PAYMENT_METHODS
-                        : PAYMENT_METHODS.filter((m) => m.value === "USDC")
-                    }
-                    value={paymentMethod}
-                    onChange={(value: any) => setPaymentMethod(value)}
-                  />
+                  {selectedAction === "buy" ? (
+                    <Toggle
+                      options={BUY_PAYMENTS}
+                      value={paymentMethod}
+                      onChange={(value: any) => setPaymentMethod(value)}
+                      key="BUY_PAYMENTS"
+                    />
+                  ) : (
+                    <Toggle
+                      options={SELL_PAYMENTS}
+                      value={paymentMethod}
+                      onChange={(value: any) => setPaymentMethod(value)}
+                      key="SELL_PAYMENTS"
+                    />
+                  )}
                   <Pressable
                     onPress={() => {
                       setShowExplanation(true);

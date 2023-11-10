@@ -81,37 +81,3 @@ export const useJoinedChannelsList = () => {
     data: newData,
   };
 };
-
-export const useSuggestedChannelsList = (params?: { pageSize?: number }) => {
-  const pageSize = params?.pageSize || PAGE_SIZE;
-  const channelsFetcher = useCallback(
-    (index: number, previousPageData: []) => {
-      if (previousPageData && !previousPageData.length) return null;
-      return `/v1/channels/suggested?page=${index + 1}&limit=${pageSize}`;
-    },
-    [pageSize]
-  );
-
-  const queryState = useInfiniteListQuerySWR<CreatorChannel[]>(
-    channelsFetcher,
-    {
-      pageSize,
-    }
-  );
-  const newData = useMemo(() => {
-    let newData: CreatorChannel[] = [];
-    if (queryState.data) {
-      queryState.data.forEach((p) => {
-        if (p) {
-          newData = newData.concat(p);
-        }
-      });
-    }
-    return newData;
-  }, [queryState.data]);
-
-  return {
-    ...queryState,
-    data: newData,
-  };
-};

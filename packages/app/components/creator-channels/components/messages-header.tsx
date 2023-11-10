@@ -22,28 +22,6 @@ export const MessagesHeader = (props: HeaderProps) => {
   const router = useRouter();
   const isDark = useIsDarkMode();
 
-  const viewMembersList = useCallback(() => {
-    const as = `/channels/${props.channelId}/members`;
-
-    router.push(
-      Platform.select({
-        native: as,
-        web: {
-          pathname: router.pathname,
-          query: {
-            ...router.query,
-            channelsMembersModal: true,
-          },
-        } as any,
-      }),
-      Platform.select({
-        native: as,
-        web: router.asPath,
-      }),
-      { shallow: true }
-    );
-  }, [props.channelId, router]);
-
   const inviteAllowlist = useCallback(() => {
     const as = "/creator-token/import-allowlist";
     router.push(
@@ -112,8 +90,7 @@ export const MessagesHeader = (props: HeaderProps) => {
                 />
               </Pressable>
             ) : (
-              // TODO: Creator Tokens P1 (hide hidden class)
-              <Pressable onPress={inviteAllowlist} tw="hidden">
+              <Pressable onPress={inviteAllowlist}>
                 <AccessTicket
                   height={Platform.OS === "web" ? 20 : 24}
                   width={Platform.OS === "web" ? 20 : 24}

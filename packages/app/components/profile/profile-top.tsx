@@ -1,27 +1,16 @@
-import { useMemo, useCallback, memo } from "react";
+import { useMemo, memo } from "react";
 import { Platform, StyleSheet, useWindowDimensions } from "react-native";
 
 import { BlurView } from "expo-blur";
 import * as Clipboard from "expo-clipboard";
-import Animated, {
-  useAnimatedStyle,
-  interpolate,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 
-import { Button, GradientButton } from "@showtime-xyz/universal.button";
 import { Chip } from "@showtime-xyz/universal.chip";
 import { ClampText } from "@showtime-xyz/universal.clamp-text";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  GiftSolid,
-  InformationCircle,
-  Lock,
-} from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { LightBox } from "@showtime-xyz/universal.light-box";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
-import { useRouter } from "@showtime-xyz/universal.router";
 import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -31,23 +20,18 @@ import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import { StarDropBadge } from "app/components/badge/star-drop-badge";
 import { DESKTOP_PROFILE_WIDTH } from "app/constants/layout";
-import { UserProfile, useUserProfile } from "app/hooks/api-hooks";
+import { UserProfile } from "app/hooks/api-hooks";
 import { useContentWidth } from "app/hooks/use-content-width";
-import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
-import { useUser } from "app/hooks/use-user";
 import { linkifyDescription } from "app/lib/linkify";
-import { Profile } from "app/types";
 import {
   getFullSizeCover,
   getProfileImage,
   getProfileName,
 } from "app/utilities";
 
-import { breakpoints } from "design-system/theme";
 import { toast } from "design-system/toast";
 
-import { ButtonGoldLinearGradient } from "../gold-gradient";
+import { CreatorTokensBanner } from "../home/header";
 import { CompleteProfileButton } from "./complete-profile-button";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { ProfileSocial } from "./profile-social";
@@ -266,6 +250,15 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
   }
   return (
     <>
+      {Platform.OS === "web" && (
+        <CreatorTokensBanner
+          height={52}
+          style={{
+            paddingLeft: isSelf ? 16 : 44,
+            paddingRight: isSelf ? 44 : 16,
+          }}
+        />
+      )}
       <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
         <ProfileCover uri={getFullSizeCover(profileData?.profile)} />
       </View>

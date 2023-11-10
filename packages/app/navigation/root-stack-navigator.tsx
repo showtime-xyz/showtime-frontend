@@ -10,12 +10,8 @@ import { Messages } from "app/components/creator-channels/messages";
 import { useHandleNotification } from "app/hooks/use-handle-notification";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
-import { AppleMusicAuthNativeWebViewScreen } from "app/screens/apple-music-auth-native-webview";
 import { BlockedListScreen } from "app/screens/blocked-list";
 import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
-import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
-import { CollectorsScreen } from "app/screens/collectors";
-import { CommentsScreen } from "app/screens/comments";
 import { CreatorChannelsCongratsScreen } from "app/screens/creator-channels-congrats";
 import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
@@ -23,6 +19,9 @@ import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-chann
 import { CreatorChannelsSettingsScreen } from "app/screens/creator-channels-settings";
 import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
+import { CreatorTokenCollectedScreen } from "app/screens/creator-token/creator-token-collected";
+import { CreatorTokenCollectorsScreen } from "app/screens/creator-token/creator-token-collectors";
+import { CreatorTokenSocialShareScreen } from "app/screens/creator-token/creator-token-social-share";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
@@ -30,17 +29,8 @@ import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-expla
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
 import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
-import { DetailsScreen } from "app/screens/details";
-import { DropScreen } from "app/screens/drop";
-import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
-import { DropImageShareScreen } from "app/screens/drop-image-share";
-import { DropUpdateScreen } from "app/screens/drop-update";
-import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
-import { FollowersScreen } from "app/screens/followers";
-import { FollowingScreen } from "app/screens/following";
 import { LoginScreen } from "app/screens/login";
-import { NftScreen } from "app/screens/nft";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
@@ -53,7 +43,6 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
-import { TopCreatorTokensScreen } from "app/screens/top-creator-tokens";
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
@@ -104,26 +93,7 @@ export function RootStackNavigator() {
             animationDuration: 200,
           }}
         />
-        <Stack.Screen
-          name="nft"
-          component={NftScreen}
-          getId={({ params }) => Object.values(params).join("-")}
-          options={{
-            statusBarStyle: "light",
-          }}
-        />
-        <Stack.Screen
-          name="dropSlug"
-          component={NftScreen}
-          getId={({ params }) => Object.values(params).join("-")}
-          options={{
-            statusBarStyle: "light",
-            contentStyle: {
-              backgroundColor: "black",
-            },
-            navigationBarColor: "black",
-          }}
-        />
+
         <Stack.Screen name="channelsMessage" component={Messages} />
         <Stack.Screen
           name="channelUnlocked"
@@ -148,18 +118,6 @@ export function RootStackNavigator() {
           }}
         />
 
-        <Stack.Screen
-          name="dropViewShareModal"
-          component={DropViewShareScreen}
-          options={{
-            animation:
-              Platform.OS === "android"
-                ? "fade_from_bottom"
-                : "slide_from_bottom",
-            animationDuration: 200,
-            statusBarStyle: "dark",
-          }}
-        />
         <Stack.Screen
           name="reviewCreatorToken"
           component={ReviewCreatorTokenScreen}
@@ -200,54 +158,31 @@ export function RootStackNavigator() {
           component={NotificationSettingsScreen}
         />
         <Stack.Screen name="blockedList" component={BlockedListScreen} />
-        <Stack.Screen
-          name="followers"
-          component={FollowersScreen}
-          options={{ headerTitle: "Followers" }}
-        />
-        <Stack.Screen
-          name="following"
-          options={{ headerTitle: "Following" }}
-          component={FollowingScreen}
-        />
-        <Stack.Screen
-          name="collectors"
-          options={{ headerTitle: "Collectors" }}
-          component={CollectorsScreen}
-        />
-        <Stack.Screen
-          name="comments"
-          options={{
-            headerTitle: "Comments",
-            animation: Platform.OS === "android" ? "fade_from_bottom" : "fade",
-            animationDuration: Platform.OS === "android" ? undefined : 200,
-          }}
-          component={CommentsScreen}
-        />
 
         <Stack.Screen
           name="channelsMembers"
           options={{ headerTitle: "Members" }}
           component={CreatorChannelsMembersScreen}
         />
-        <Stack.Screen
-          name="dropUpdate"
-          options={{ headerTitle: "Update Spotify Link" }}
-          component={DropUpdateScreen}
-        />
+
         <Stack.Screen
           name="channelsMessageReactions"
           component={CreatorChannelsMessageReactionsScreen}
         />
         <Stack.Screen
           name="trending"
-          options={{ headerTitle: "Trending" }}
+          options={{ headerTitle: "Leaderboard" }}
           component={TrendingScreen}
         />
         <Stack.Screen
-          name="topCreatorTokens"
-          options={{ headerTitle: "Top Creator Tokens" }}
-          component={TopCreatorTokensScreen}
+          name="creatorTokenCollected"
+          options={{ headerTitle: "Creator Tokens Collected" }}
+          component={CreatorTokenCollectedScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenCollectors"
+          options={{ headerTitle: "Creator Tokens Collectors" }}
+          component={CreatorTokenCollectorsScreen}
         />
         <Stack.Screen
           name="creatorTokensSelfServeExplainer"
@@ -269,12 +204,7 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="details" component={DetailsScreen} />
         <Stack.Screen name="editProfile" component={EditProfileScreen} />
-        <Stack.Screen
-          name="appleMusicAuthNativeWebView"
-          component={AppleMusicAuthNativeWebViewScreen}
-        />
         <Stack.Screen name="onboarding" component={OnboardingScreen} />
         <Stack.Screen name="addEmail" component={AddEmailScreen} />
         <Stack.Screen
@@ -283,11 +213,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen name="payoutsSetup" component={PayoutsSetupScreen} />
         <Stack.Screen name="qrCodeShare" component={QRCodeShareScreen} />
-        <Stack.Screen name="dropImageShare" component={DropImageShareScreen} />
-        <Stack.Screen
-          name="dropEditDetailsModal"
-          component={DropEditDetailsScreen}
-        />
+
         <Stack.Screen
           name="channelsIntro"
           options={{ gestureEnabled: false }}
@@ -313,12 +239,7 @@ export function RootStackNavigator() {
           presentation: "transparentModal",
         }}
       >
-        <Stack.Screen
-          name="claimLimitExplanation"
-          component={ClaimLimitExplanationScreen}
-        />
         <Stack.Screen name="report" component={ReportScreen} />
-        <Stack.Screen name="drop" component={DropScreen} />
         <Stack.Screen
           name="channelsSettings"
           component={CreatorChannelsSettingsScreen}
@@ -338,6 +259,10 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="creatorTokensImportAllowlist"
           component={CreatorTokensImportAllowlistScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenSocialShare"
+          component={CreatorTokenSocialShareScreen}
         />
       </Stack.Group>
     </Stack.Navigator>
