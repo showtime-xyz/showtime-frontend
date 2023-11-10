@@ -189,9 +189,7 @@ const expoConfig: ExpoConfig = {
       },
     ],
     "./plugins/with-android-manifest.js",
-    "./plugins/with-hermes-ios-m1-workaround.js",
     "sentry-expo",
-    "./plugins/with-spotify-sdk.js",
     "./plugins/with-android-splash-screen.js",
     "./plugins/with-disabled-force-dark-mode.js",
     [
