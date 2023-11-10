@@ -43,7 +43,7 @@
     "@vercel/og": "^0.5.11",
     "app": "*",
     "array-to-image": "^1.0.0",
-    "axios": "^0.24.0",
+    "axios": "^1.6.0",
     "blurhash": "2.0.5",
     "date-fns": "^2.30.0",
     "design-system": "*",
