@@ -36,7 +36,6 @@ import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-ba
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
-import { captureException } from "app/lib/sentry";
 
 import { toast } from "design-system/toast";
 import { Toggle } from "design-system/toggle";
@@ -238,7 +237,7 @@ export const BuyCreatorToken = () => {
   const isDark = useIsDarkMode();
 
   const crossmintConfig = {
-    collectionId: "93def410-f564-46e4-a8d6-459586aacd17",
+    collectionId: profileData?.data?.profile.creator_token?.crossmint_id,
     projectId: process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID,
     mintConfig: {
       totalPrice: (
@@ -535,7 +534,7 @@ const BuyWithCreditCard = (props: {
   onSuccess: (txHash: string) => void;
   onFailure: (error: string) => void;
   crossmintConfig: {
-    collectionId: string;
+    collectionId?: string;
     projectId: string;
     mintConfig: {
       totalPrice: string;
@@ -614,17 +613,19 @@ const BuyWithCreditCard = (props: {
           onChangeText={setCustomerEmail}
           tw="mb-2"
         />
-        <CrossmintPaymentElement
-          projectId={crossmintConfig.projectId}
-          collectionId={crossmintConfig.collectionId}
-          environment={crossmintConfig.environment}
-          onEvent={onEvent}
-          mintConfig={crossmintConfig.mintConfig}
-          recipient={{
-            wallet: crossmintConfig.mintTo,
-            email: customerEmail,
-          }}
-        />
+        {crossmintConfig.collectionId ? (
+          <CrossmintPaymentElement
+            projectId={crossmintConfig.projectId}
+            collectionId={crossmintConfig.collectionId}
+            environment={crossmintConfig.environment}
+            onEvent={onEvent}
+            mintConfig={crossmintConfig.mintConfig}
+            recipient={{
+              wallet: crossmintConfig.mintTo,
+              email: customerEmail,
+            }}
+          />
+        ) : null}
       </View>
       {minting ? (
         <View tw="absolute h-full w-full items-center justify-center bg-gray-600/40">
