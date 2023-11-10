@@ -252,7 +252,17 @@ export const BuyCreatorToken = () => {
     mintTo: wallet.address,
     environment:
       process.env.NEXT_PUBLIC_STAGE === "production" ? "production" : "staging",
-  };
+    checkoutProps: {
+      display: "same-tab",
+      delivery: "all",
+      experimental: true,
+    },
+    successCallbackURL:
+      typeof window !== "undefined"
+        ? "https://dev.showtime.xyz" +
+          `/creator-token/${profileData?.data?.profile.username}/share?type=collected&collectedCount=${tokenAmount}`
+        : undefined,
+  } as const;
 
   return (
     <BottomSheetModalProvider>
@@ -463,19 +473,17 @@ export const BuyCreatorToken = () => {
           </View>
           <View tw="h-8" />
           {renderBuyButton()}
-          <View tw="mx-auto my-4 h-[1px] w-[20%] rounded-full bg-gray-400" />
-          <CrossmintPayButton
-            style={{
-              borderRadius: 100,
-            }}
-            {...crossmintConfig}
-            successCallbackURL={
-              typeof window !== "undefined"
-                ? window.location.origin +
-                  `/creator-token/${profileData?.data?.profile.username}/share?type=collected&collectedCount=${tokenAmount}`
-                : undefined
-            }
-          />
+          {crossmintConfig.collectionId && selectedAction === "buy" ? (
+            <>
+              <View tw="mx-auto my-4 h-[1px] w-[20%] rounded-full bg-gray-400" />
+              <CrossmintPayButton
+                style={{
+                  borderRadius: 100,
+                }}
+                {...crossmintConfig}
+              />
+            </>
+          ) : null}
           <View tw="items-center pt-4">
             <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
               {paymentMethod === "USDC"
