@@ -3,6 +3,7 @@ export {};
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      NEXT_PUBLIC_STAGE: "development" | "staging" | "production";
       NEXT_PUBLIC_MAGIC_PUB_KEY: string;
       NEXT_PUBLIC_WEBSITE_DOMAIN: string;
       NEXT_PUBLIC_STRIPE_KEY: string;
@@ -12,6 +13,7 @@ declare global {
       E2E: string;
       NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: string;
       NEXT_PUBLIC_PRIVY_APP_ID: string;
+      NEXT_PUBLIC_CROSSMINT_PROJECT_ID: string;
     }
   }
   interface Window {
