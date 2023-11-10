@@ -298,7 +298,7 @@ export const TopCreatorTokenListItem = ({
         <Avatar url={token?.owner_profile?.img_url} size={34} />
       </View>
       <View tw="web:flex-1 ml-2 flex-row">
-        <View tw="w-[168px] justify-center md:w-[200px]">
+        <View tw="w-[168px] justify-center md:w-[180px]">
           <View tw="min-w-[180px] flex-row">
             <Text
               tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
@@ -439,14 +439,14 @@ export const TopCreatorTokenListItemSkeleton = ({
         <Skeleton width={16} height={16} show radius={8} />
         <View tw="w-2.5" />
         <Skeleton width={34} height={34} show radius={999} />
-        <View tw="ml-2 w-[178px] md:w-[234px]">
+        <View tw="ml-2 w-[178px] md:w-[214px]">
           <Skeleton width={140} height={13} show radius={4} />
         </View>
         <Skeleton width={30} height={14} show radius={4} />
-        <View tw="ml-auto lg:ml-8">
+        <View tw="ml-auto lg:ml-10">
           <Skeleton width={42} height={24} show radius={999} />
         </View>
-        <View tw="hidden lg:ml-4 lg:flex">
+        <View tw="hidden lg:ml-8 lg:flex">
           <Skeleton width={200} height={14} show radius={999} />
         </View>
       </View>

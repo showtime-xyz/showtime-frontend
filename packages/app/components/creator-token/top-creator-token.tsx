@@ -65,7 +65,7 @@ const Header = () => {
             #
           </Text>
           <Text
-            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[228px]"
+            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[208px]"
             style={{
               fontSize: 11,
             }}
@@ -84,7 +84,7 @@ const Header = () => {
             tw="hidden text-xs text-gray-600 dark:text-gray-500 lg:block"
             style={{
               fontSize: 11,
-              marginLeft: 72,
+              marginLeft: 92,
             }}
           >
             LAST MESSAGE
