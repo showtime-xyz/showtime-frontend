@@ -461,8 +461,13 @@ export const BuyCreatorToken = () => {
               borderRadius: 100,
             }}
             {...crossmintConfig}
+            successCallbackURL={
+              typeof window !== "undefined"
+                ? window.location.origin +
+                  `/creator-token/${profileData?.data?.profile.username}/share?type=collected&collectedCount=${tokenAmount}`
+                : undefined
+            }
           />
-
           <View tw="items-center pt-4">
             <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
               {paymentMethod === "USDC"
