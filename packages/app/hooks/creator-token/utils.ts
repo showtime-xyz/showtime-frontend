@@ -1,3 +1,4 @@
+import { InsufficientFundsError, ContractFunctionExecutionError } from "viem";
 import { baseGoerli, base } from "viem/chains";
 
 import { isDEV } from "app/utilities";
@@ -18,3 +19,14 @@ export const creatorTokenSwapRouterAddress = isDEV
   : "0x2390491f26873090492792f64f3eea66f611a801";
 
 export const baseChain = isDEV ? baseGoerli : base;
+
+export const isInsufficientFundsErrorFn = (error: any) => {
+  if (error instanceof ContractFunctionExecutionError) {
+    const isInsufficientFundsError = error.walk(
+      (e) => e instanceof InsufficientFundsError
+    );
+    if (isInsufficientFundsError) {
+      return true;
+    }
+  }
+};

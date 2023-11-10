@@ -3404,9 +3404,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gorhom/bottom-sheet@npm:4.4.7":
-  version: 4.4.7
-  resolution: "@gorhom/bottom-sheet@npm:4.4.7"
+"@gorhom/bottom-sheet@npm:4.5.1":
+  version: 4.5.1
+  resolution: "@gorhom/bottom-sheet@npm:4.5.1"
   dependencies:
     "@gorhom/portal": 1.0.14
     invariant: ^2.2.4
@@ -3422,7 +3422,7 @@ __metadata:
       optional: true
     "@types/react-native":
       optional: true
-  checksum: ae330e7712fa58d78dc91e089e29f07b23c0c581e8a152b806c39dd831d64a7979e274f188868b086ebbb6f435ce8575fc32f2a1df6b8cf2d522a13b7182374c
+  checksum: dbfc900b7111f723ae1ef9e36facba8779b917427d3fc820172a9547dc94ccf359bf96f66c521aa838379d0371c30ed7933e8ed241929cb01b7a801ad8757f47
   languageName: node
   linkType: hard
 
@@ -6886,7 +6886,7 @@ __metadata:
     "@craftzdog/react-native-buffer": ^6.0.5
     "@ethersproject/shims": ^5.7.0
     "@expo/xcpretty": ^4.2.2
-    "@gorhom/bottom-sheet": 4.4.7
+    "@gorhom/bottom-sheet": 4.5.1
     "@hcaptcha/react-native-hcaptcha": ^1.5.1
     "@hookform/resolvers": ^3.1.1
     "@magic-ext/react-native-expo-oauth": ^8.1.0

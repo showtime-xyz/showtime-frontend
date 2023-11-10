@@ -27,7 +27,6 @@ import { useChannelsUnreadMessages } from "app/components/creator-channels/hooks
 import { ErrorBoundary } from "app/components/error-boundary";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useNotifications } from "app/hooks/use-notifications";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
@@ -107,29 +106,6 @@ export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
         width={24}
         height={24}
       />
-    </TabBarIcon>
-  );
-};
-
-export const CreateTabBarIcon = ({
-  color,
-  tw = "",
-  style,
-}: TabBarIconProps) => {
-  const redirectToCreateDrop = useRedirectToCreateDrop();
-
-  return (
-    <TabBarIcon onPress={redirectToCreateDrop}>
-      <View
-        tw={[
-          "web:h-10 web:w-10 h-12 w-12 items-center justify-center rounded-full",
-          "bg-black dark:bg-white",
-          tw,
-        ]}
-        style={style}
-      >
-        <Plus width={24} height={24} color={color} />
-      </View>
     </TabBarIcon>
   );
 };

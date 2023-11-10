@@ -10,7 +10,6 @@ import {
   SWIPE_LIST_SCREENS,
 } from "app/lib/constants";
 import {
-  CreateTabBarIcon,
   CreatorChannelsTabBarIcon,
   HomeTabBarIcon,
   NotificationsTabBarIcon,
@@ -23,12 +22,6 @@ const Footer = () => {
   const isDark = useIsDarkMode();
   const isDarkThemePage = SWIPE_LIST_SCREENS.includes(router.pathname);
   const color = isDark ? "#fff" : isDarkThemePage ? "#fff" : "#000";
-  const buttonColor = isDark ? "#000" : isDarkThemePage ? "#000" : "#fff";
-  const buttonBackgroundColor = isDark
-    ? "#fff"
-    : SWIPE_LIST_SCREENS.includes(router.pathname)
-    ? "#fff"
-    : "#000";
 
   const { width } = useWindowDimensions();
   const { isTabBarHidden } = useNavigationElements();
@@ -64,11 +57,6 @@ const Footer = () => {
       <CreatorChannelsTabBarIcon
         color={color}
         focused={router.pathname === "/channels"}
-      />
-      <CreateTabBarIcon
-        color={buttonColor}
-        focused={router.pathname === "/drop"}
-        style={{ backgroundColor: buttonBackgroundColor }}
       />
       <NotificationsTabBarIcon
         color={color}

@@ -12,7 +12,6 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
-import { FollowButton } from "app/components/follow-button";
 import { useMyInfo } from "app/hooks/api-hooks";
 import { useFollow } from "app/hooks/use-follow";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
@@ -90,6 +89,7 @@ export const CreatorChannelUserList = ({
   }
 
   return (
+    // @ts-ignore
     <InfiniteScrollList
       data={users}
       keyExtractor={keyExtractor}
@@ -187,13 +187,6 @@ const CCUserListItem = memo(
             </View>
           </View>
         </Link>
-        <View tw="max-w-[120px]">
-          <FollowButton
-            profileId={item?.profile.profile_id}
-            name={item?.profile.name}
-            onToggleFollow={onToggleFollow}
-          />
-        </View>
       </View>
     );
   }

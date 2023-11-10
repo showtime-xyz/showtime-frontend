@@ -323,16 +323,6 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
           name: "Tokens",
           displayed_count: 0,
         },
-        {
-          type: "song_drops_created",
-          name: "Songs",
-          displayed_count: 0,
-        },
-        {
-          type: "song_drops_collected",
-          name: "Saved",
-          displayed_count: 0,
-        },
       ],
     },
     isLoading: false,

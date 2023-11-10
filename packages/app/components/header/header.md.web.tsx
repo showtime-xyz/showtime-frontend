@@ -47,7 +47,6 @@ import { useAuth } from "app/hooks/auth/use-auth";
 import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useFooter } from "app/hooks/use-footer";
 import { useNotifications } from "app/hooks/use-notifications";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
@@ -234,7 +233,6 @@ const ChannelsUnreadMessages = () => {
 
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
-  const redirectToCreateDrop = useRedirectToCreateDrop();
   const navigateToLogin = useNavigateToLogin();
   const { links, social } = useFooter();
   const isDark = useIsDarkMode();
@@ -243,6 +241,7 @@ export const HeaderMd = withColorScheme(() => {
   const { setColorScheme } = useColorScheme();
   const { logout } = useAuth();
   const { height: screenHeight } = useWindowDimensions();
+
   const HOME_ROUTES = useMemo(
     () =>
       [
@@ -262,14 +261,14 @@ export const HeaderMd = withColorScheme(() => {
           focused: router.pathname.includes("channels"),
           visible: isAuthenticated,
         },
-        {
-          title: "Trending",
-          key: "Trending",
-          icon: Hot,
-          pathname: "/trending",
-          focused: router.pathname === "/trending",
-          visible: true,
-        },
+        // {
+        //   title: "Trending",
+        //   key: "Trending",
+        //   icon: Hot,
+        //   pathname: "/trending",
+        //   focused: router.pathname === "/trending",
+        //   visible: true,
+        // },
         {
           title: "Notifications",
           key: "Notifications",
@@ -442,7 +441,6 @@ export const HeaderMd = withColorScheme(() => {
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
               )}
-              {/* TODO: Creator Tokens P1
               {isAuthenticated && (
                 <DropdownMenuItem
                   onSelect={() => {
@@ -478,7 +476,6 @@ export const HeaderMd = withColorScheme(() => {
                   </DropdownMenuItemTitle>
                 </DropdownMenuItem>
               )}
-              */}
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger key="nested-group-trigger">
                   <MenuItemIcon
@@ -564,14 +561,7 @@ export const HeaderMd = withColorScheme(() => {
               </>
             </Button>
           )}
-          <Button size="regular" tw="mt-4" onPress={redirectToCreateDrop}>
-            <>
-              <Plus width={20} height={20} color={isDark ? "#000" : "#fff"} />
-              <Text tw="ml-2 text-base font-bold text-white dark:text-gray-900">
-                Create
-              </Text>
-            </>
-          </Button>
+
           <Divider tw="my-5" />
           <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
             <View tw="flex-row items-center justify-center">

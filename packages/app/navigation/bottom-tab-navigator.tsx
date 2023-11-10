@@ -4,7 +4,6 @@ import { useWindowDimensions } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { UserContext } from "app/context/user-context";
-import CreateNavigator from "app/pages/create";
 import CreatorChannelsNavigator from "app/pages/creator-channels";
 import HomeNavigator from "app/pages/home";
 import NotificationsNavigator from "app/pages/notifications";
@@ -46,15 +45,7 @@ export function BottomTabNavigator() {
           tabBarIcon: CreatorChannelsTabBarIcon,
         }}
       />
-      {width < 768 && (
-        <BottomTab.Screen
-          name="createTab"
-          component={CreateNavigator}
-          options={{
-            tabBarButton: () => null,
-          }}
-        />
-      )}
+
       {width < 768 && (
         <BottomTab.Screen
           name="notificationsTab"

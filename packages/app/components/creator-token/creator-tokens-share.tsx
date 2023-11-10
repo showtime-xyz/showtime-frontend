@@ -63,7 +63,7 @@ export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const shareWithTwitterIntent = useCallback(() => {
     const message_launched = `Just created my @Showtime_xyz token ✦ find me at ${getTwitterIntentUsername(
       profileData
-    )} and DM me for invites.`;
+    )}.`;
 
     const message_collected = `Just collected ${collectedCount} ${getTwitterIntentUsername(
       profileData

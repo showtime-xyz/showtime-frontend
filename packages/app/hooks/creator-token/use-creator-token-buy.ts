@@ -6,10 +6,11 @@ import { creatorTokenSwapRouterAbi } from "app/abi/CreatorTokenSwapRouterAbi";
 import { getChannelByIdCacheKey } from "app/components/creator-channels/hooks/use-channel-detail";
 import { getChannelMessageKey } from "app/components/creator-channels/hooks/use-channel-messages";
 import { axios } from "app/lib/axios";
+import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
 import { captureException } from "app/lib/sentry";
 import { publicClient } from "app/lib/wallet-public-client";
-import { formatAPIErrorMessage } from "app/utilities";
+import { delay, formatAPIErrorMessage } from "app/utilities";
 
 import { toast } from "design-system/toast";
 
@@ -25,7 +26,11 @@ import {
 } from "./use-creator-token-price-to-buy-next";
 import { useMaxGasPrices } from "./use-max-gas-prices";
 import { useSwitchChain } from "./use-switch-chain";
-import { baseChain, creatorTokenSwapRouterAddress } from "./utils";
+import {
+  baseChain,
+  creatorTokenSwapRouterAddress,
+  isInsufficientFundsErrorFn,
+} from "./utils";
 
 export const useCreatorTokenBuy = (params: {
   username?: string;
@@ -121,9 +126,8 @@ export const useCreatorTokenBuy = (params: {
               const approveSuccess = await approveToken.trigger({
                 creatorTokenContract:
                   profileData?.data?.profile.creator_token.address,
-                // add 10 cents more to cover for weird fluctuation
-                // TODO: remove if not needed after more testing
-                maxPrice: priceToBuyNext.data?.totalPrice + 100000n,
+                // add 100 USD more to reduce approval transactions
+                maxPrice: priceToBuyNext.data?.totalPrice + 100000000n,
               });
               if (approveSuccess) {
                 if (tokenAmount === 1) {
@@ -164,6 +168,7 @@ export const useCreatorTokenBuy = (params: {
               const transaction = await publicClient.waitForTransactionReceipt({
                 hash: transactionHash,
                 pollingInterval: 2000,
+                confirmations: 2,
               });
 
               if (transaction.status === "success") {
@@ -187,15 +192,26 @@ export const useCreatorTokenBuy = (params: {
                   })
                 );
 
-                await axios({
-                  url: "/v1/creator-token/poll-buy",
-                  method: "POST",
-                  data: {
-                    creator_token_id: profileData.data.profile.creator_token.id,
-                    quantity: tokenAmount,
-                    tx_hash: transactionHash,
-                  },
-                });
+                for (let i = 0; i < 3; i++) {
+                  try {
+                    await axios({
+                      url: "/v1/creator-token/poll-buy",
+                      method: "POST",
+                      data: {
+                        creator_token_id:
+                          profileData.data.profile.creator_token.id,
+                        quantity: tokenAmount,
+                        tx_hash: transactionHash,
+                      },
+                    });
+                    break;
+                  } catch (e) {
+                    Logger.error("tx not found");
+                  }
+
+                  await delay(2000);
+                }
+
                 mutate(
                   (key: any) => {
                     const channelId = profileData.data?.profile.channels[0]?.id;
@@ -221,11 +237,16 @@ export const useCreatorTokenBuy = (params: {
     {
       onError: (error) => {
         {
+          if (isInsufficientFundsErrorFn(error)) {
+            toast.error(`Insufficient ${params.paymentMethod} balance`);
+          } else {
+            toast.error("Failed", {
+              message: formatAPIErrorMessage(error),
+            });
+          }
+
           console.error("useCreatorTokenContractBuy", error);
           captureException(error);
-          toast.error("Failed", {
-            message: formatAPIErrorMessage(error),
-          });
         }
       },
     }
