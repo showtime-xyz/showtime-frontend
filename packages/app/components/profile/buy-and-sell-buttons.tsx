@@ -18,6 +18,7 @@ type BuyButtonProps = {
 const BuyButton = ({ username, text = "Buy", ...rest }: BuyButtonProps) => {
   const buyPath = `/creator-token/${username}/buy`;
   const router = useRouter();
+
   return (
     <View>
       <Button
@@ -39,7 +40,7 @@ const BuyButton = ({ username, text = "Buy", ...rest }: BuyButtonProps) => {
             }),
             Platform.select({
               native: buyPath,
-              web: router.asPath === "/" ? buyPath : router.asPath,
+              web: router.asPath,
             }),
             { shallow: true }
           );
@@ -84,7 +85,7 @@ const SellButton = ({
             }),
             Platform.select({
               native: buyPath,
-              web: router.asPath === "/" ? buyPath : router.asPath,
+              web: router.asPath,
             }),
             { shallow: true }
           );

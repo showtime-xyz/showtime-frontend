@@ -211,7 +211,9 @@ export const Default = () => {
           <IconItem icon={Icon.AccessTicket} title="AccessTicket" />
           <IconItem icon={Icon.ArrowTopRounded} title="ArrowTopRounded" />
           <IconItem icon={Icon.GoldHexagon} title="GoldHexagon" />
+          <IconItem icon={Icon.LockV2} title="LockV2" />
         </View>
+
         <View tw="h-10" />
         <Text tw="text-xl font-bold">Social Icons</Text>
         <View tw="flex flex-row flex-wrap bg-white">
@@ -229,6 +231,7 @@ export const Default = () => {
           <IconItem icon={Icon.TwitterOutline} title="TwitterOutline" />
           <IconItem icon={Icon.SpotifyPure} title="SpotifyPure" />
           <IconItem icon={Icon.Spotify} title="Spotify" />
+          <IconItem icon={Icon.X} title="X" />
         </View>
         <Button
           tw="web:fixed web:right-40 absolute right-10 z-10"

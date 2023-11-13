@@ -2,6 +2,7 @@ import { useMemo, useCallback } from "react";
 
 import useSWR from "swr";
 
+import { ChannelMessage } from "app/components/creator-channels/types";
 import {
   fetcher,
   useInfiniteListQuerySWR,
@@ -18,7 +19,7 @@ export type CreatorTokenUser = {
   wallet_address_nonens: string;
   img_url: string;
 };
-export type TopCreatorTokenUser = {
+export type CreatorTokenItem = {
   id: number;
   owner_profile?: Profile;
   owner_address: string;
@@ -26,6 +27,12 @@ export type TopCreatorTokenUser = {
   token_uri: string;
   nft_count: number;
 };
+export type NewCreatorTokenItem = {
+  creator_token: CreatorTokenItem;
+  last_channel_message: ChannelMessage;
+};
+export type TopCreatorTokenUser = NewCreatorTokenItem | CreatorTokenItem;
+
 export type CreatorTokenCollectors = {
   profiles: CreatorTokenUser[];
 };
@@ -83,7 +90,7 @@ export const useCreatorTokenCoLlected = (
     error,
   };
 };
-export const useTopCreatorToken = (limit: number = 15) => {
+export const useTopCreatorToken = (limit: number = 20) => {
   const fetchUrl = useCallback(
     (index: number, previousPageData: any) => {
       if (previousPageData && !previousPageData?.creator_tokens.length)

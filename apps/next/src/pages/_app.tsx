@@ -24,13 +24,6 @@ import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { Sentry } from "app/lib/sentry";
 import { AppProviders } from "app/providers/app-providers";
 import { UnlockedChannelScreen } from "app/screens/channel-unlocked";
-import { CheckoutScreen } from "app/screens/checkout";
-import { CheckoutPaidNFTScreen } from "app/screens/checkout-paid-nft";
-import { CheckoutReturnScreen } from "app/screens/checkout-return";
-import { CheckoutReturnForPaidNFTScreen } from "app/screens/checkout-return-for-paid-nft";
-import { ClaimLimitExplanationScreen } from "app/screens/claim-limit-explanation";
-import { CollectorsScreen } from "app/screens/collectors";
-import { CommentsScreen } from "app/screens/comments";
 import { CreatorChannelsIntroScreen } from "app/screens/creator-channels-intro";
 import { CreatorChannelsMembersScreen } from "app/screens/creator-channels-members";
 import { CreatorChannelsMessageReactionsScreen } from "app/screens/creator-channels-message-reactions";
@@ -39,23 +32,16 @@ import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
 import { CreatorTokenCollectedScreen } from "app/screens/creator-token/creator-token-collected";
 import { CreatorTokenCollectorsScreen } from "app/screens/creator-token/creator-token-collectors";
+import { CreatorTokenSocialShareScreen } from "app/screens/creator-token/creator-token-social-share";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
 import { CreatorTokensSelfServeExplainerScreen } from "app/screens/creator-tokens-self-serve-explainer";
 import { CreatorTokensShareModalScreen } from "app/screens/creator-tokens-share";
 import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-invite-modal";
-import { DetailsScreen } from "app/screens/details";
-import { DropScreen } from "app/screens/drop";
-import { DropEditDetailsScreen } from "app/screens/drop-edit-details";
-import { DropImageShareScreen } from "app/screens/drop-image-share";
-import { DropViewShareScreen } from "app/screens/drop-view-share";
 import { EditProfileScreen } from "app/screens/edit-profile";
-import { FollowersScreen } from "app/screens/followers";
-import { FollowingScreen } from "app/screens/following";
 import { LoginScreen } from "app/screens/login";
 import { OnboardingScreen } from "app/screens/onboarding";
-import { PayoutsSetupScreen } from "app/screens/payouts/setup";
 import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
 import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
@@ -230,30 +216,15 @@ function App({ Component, pageProps, router }: AppProps) {
         </Container>
 
         {/* Modals */}
-        <CommentsScreen />
-        <DetailsScreen />
-        <FollowersScreen />
-        <FollowingScreen />
-        <DropScreen />
         <CreatorTokensExplanationScreen />
         <EnterInviteCodeModalScreen />
-        <CollectorsScreen />
-        <ClaimLimitExplanationScreen />
         <ReportScreen />
-        <PayoutsSetupScreen />
-        <CheckoutScreen />
-        <CheckoutReturnScreen />
-        <CheckoutReturnForPaidNFTScreen />
-        <CheckoutPaidNFTScreen />
         <QRCodeShareScreen />
-        <DropImageShareScreen />
-        <DropViewShareScreen />
         <CreatorChannelsIntroScreen />
         <CreatorChannelsMembersScreen />
         <CreatorChannelsSettingsScreen />
         <CreatorChannelsMessageReactionsScreen />
         <CreatorChannelsShareScreen />
-        <DropEditDetailsScreen />
         <EditProfileScreen />
         <OnboardingScreen />
         <AddEmailScreen />
@@ -268,6 +239,8 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorTokensImportAllowlistSuccessScreen />
         <CreatorTokenCollectedScreen />
         <CreatorTokenCollectorsScreen />
+        <CreatorTokensShareModalScreen />
+        <CreatorTokenSocialShareScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />

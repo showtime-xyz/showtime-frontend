@@ -29,6 +29,7 @@ import { useProfileNftTabs, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useRedirectToCreatorTokenSocialShare } from "app/hooks/use-redirect-to-creator-token-social-share-screen";
 import { useShare } from "app/hooks/use-share";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -40,7 +41,6 @@ import { TabFallback } from "../error-boundary/tab-fallback";
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { ProfileError } from "./profile-error";
 import { ProfileTabBar } from "./profile-tab-bar";
-import { ProfileTabList, ProfileTabListRef } from "./profile-tab-list";
 import { ProfileTop } from "./profile-top";
 import { TokensTab } from "./tokens-tab";
 
@@ -63,7 +63,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     error,
   } = useUserProfile({ address: username });
   const [type] = useParam("type");
-  const { share } = useShare();
+  const redirectToCreatorTokenSocialShare =
+    useRedirectToCreatorTokenSocialShare();
   const userId = useCurrentUserId();
   const profileId = profileData?.data?.profile.profile_id;
   const isSelf = userId === profileId;
@@ -93,7 +94,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     isRefreshing,
     currentTab,
     tabRefs,
-  } = useTabState<ProfileTabListRef>(routes, {
+  } = useTabState<any>(routes, {
     defaultIndex: data?.tabs.findIndex(
       (item) => item.type === (type ? type : data?.default_tab_type)
     ),
@@ -151,37 +152,16 @@ const Profile = ({ username }: ProfileScreenProps) => {
           />
         );
       }
-      return (
-        <ErrorBoundary
-          renderFallback={(props) => (
-            <TabFallback {...props} index={routeIndex} />
-          )}
-          key={`ProfileTabList-${routeIndex}`}
-        >
-          <Suspense fallback={<TabSpinner index={routeIndex} />}>
-            {data?.tabs[routeIndex] && (
-              <ProfileTabList
-                username={profileData?.data?.profile.username}
-                profileId={profileId}
-                isBlocked={isBlocked}
-                list={data?.tabs[routeIndex]}
-                index={routeIndex}
-                ref={(ref) => (tabRefs.current[routeIndex] = ref)}
-              />
-            )}
-          </Suspense>
-        </ErrorBoundary>
-      );
+      return null;
     },
     [
-      data?.tabs,
-      profileData?.data?.profile,
-      profileId,
-      isBlocked,
       channelId,
+      channelPermissions,
+      data?.tabs,
+      isBlocked,
       isSelf,
       messageCount,
-      channelPermissions,
+      profileData?.data?.profile,
       tabRefs,
     ]
   );
@@ -220,11 +200,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
       props: SceneRendererProps & {
         navigationState: NavigationState<Route>;
       }
-    ) => (
-      <View tw="bg-white dark:bg-black">
-        <ProfileTabBar {...props} />
-      </View>
-    ),
+    ) => {
+      return null;
+    },
     []
   );
   const headerCenter = useCallback(() => {
@@ -241,10 +219,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
   }, [isSelf, profileData?.data?.profile]);
 
   const onShare = useCallback(async () => {
-    await share({
-      url: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${username}`,
-    });
-  }, [share, username]);
+    redirectToCreatorTokenSocialShare(username);
+  }, [redirectToCreatorTokenSocialShare, username]);
 
   return (
     <>

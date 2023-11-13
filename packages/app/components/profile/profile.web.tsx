@@ -1,34 +1,19 @@
-import {
-  useCallback,
-  useReducer,
-  useMemo,
-  createContext,
-  useContext,
-  memo,
-  useState,
-  useEffect,
-} from "react";
-import { useWindowDimensions, Platform } from "react-native";
+import { useCallback, useMemo, useState, useEffect } from "react";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
-import chunk from "lodash/chunk";
+import * as Clipboard from "expo-clipboard";
 import { stringify } from "querystring";
 import type { ParsedUrlQuery } from "querystring";
-import { useSharedValue } from "react-native-reanimated";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { EyeOff, EyeOffV2, GiftSolid } from "@showtime-xyz/universal.icon";
+import { Button } from "@showtime-xyz/universal.button";
+import { GiftSolid } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
-import { Route, TabBarSingle } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
-import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { Card } from "app/components/card";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
-import { ButtonGoldLinearGradient } from "app/components/gold-gradient";
 import { HeaderLeft } from "app/components/header";
 import { HeaderRightSm } from "app/components/header/header-right.sm";
 import { CreatorTokensBanner } from "app/components/home/header";
@@ -36,34 +21,26 @@ import { TopPartCreatorTokens } from "app/components/home/top-part-creator-token
 import { DESKTOP_PROFILE_WIDTH } from "app/constants/layout";
 import { ProfileTabsNFTProvider } from "app/context/profile-tabs-nft-context";
 import {
-  defaultFilters,
   useProfileNFTs,
   useProfileNftTabs,
-  UserProfile,
   useUserProfile,
 } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
-import { getNFTSlug } from "app/hooks/use-share-nft";
-import { useUser } from "app/hooks/use-user";
+import { useRedirectToCreatorTokenSocialShare } from "app/hooks/use-redirect-to-creator-token-social-share-screen";
+import { useShare } from "app/hooks/use-share";
 import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
-import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
-import {
-  formatProfileRoutes,
-  getFullSizeCover,
-  getProfileImage,
-} from "app/utilities";
+import { formatProfileRoutes, getFullSizeCover } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
+import { toast } from "design-system/toast";
 
+import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
-import { MyCollection } from "./my-collection";
 import { ProfileError } from "./profile-error";
-import { ProfileHideList, ProfileNFTHiddenButton } from "./profile-hide-list";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileCover, ProfileTop } from "./profile-top";
 import {
@@ -90,7 +67,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
     error,
   } = useUserProfile({ address: username });
   const profileId = profileData?.data?.profile.profile_id;
-  const [showHidden, setShowHidden] = useState(false);
   const { getIsBlocked } = useBlock();
   const router = useRouter();
   const userId = useCurrentUserId();
@@ -99,6 +75,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const { data } = useProfileNftTabs({
     profileId: profileId,
   });
+  const redirectToCreatorTokenSocialShare =
+    useRedirectToCreatorTokenSocialShare();
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
 
@@ -159,20 +137,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
       if (type === "tokens") {
         return null;
       }
-      return (
-        <Card
-          nft={item}
-          key={item.nft_id}
-          numColumns={numColumns}
-          as={getNFTSlug(item)}
-          href={`${getNFTSlug(item)}?initialScrollItemId=${
-            item.nft_id
-          }&tabType=${type}&profileId=${profileId}&collectionId=0&sortType=newest&type=profile`}
-          index={itemIndex}
-        />
-      );
+      return null;
     },
-    [numColumns, profileId, type]
+    [type]
   );
   const ListFooterComponent = useCallback(() => {
     if (((isLoadingMore && isLoading) || profileIsLoading) && !error) {
@@ -248,137 +215,140 @@ const Profile = ({ username }: ProfileScreenProps) => {
         tw="min-h-screen w-full"
         style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}
       >
-        <MutateProvider mutate={updateItem}>
-          <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
-            {isProfileMdScreen ? (
-              <>
-                <CreatorTokensBanner />
-                <ProfileCover
-                  tw="overflow-hidden rounded-b-3xl"
-                  uri={getFullSizeCover(profileData?.data?.profile)}
-                />
-                {/* <Pressable
-                    tw={[
-                      "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
-                    ]}
-                    onPress={() => {
-                      const as = "/creator-token/invite-creator-token";
-                      router.push(
-                        Platform.select({
-                          native: as,
-                          web: {
-                            pathname: router.pathname,
-                            query: {
-                              ...router.query,
-                              inviteCreatorTokenModal: true,
-                            },
-                          } as any,
-                        }),
-                        Platform.select({ native: as, web: router.asPath }),
-                        {
-                          shallow: true,
-                        }
-                      );
-                    }}
-                  >
-                    <ButtonGoldLinearGradient />
-                    <GiftSolid
-                      width={26}
-                      height={26}
-                      color={colors.gray[900]}
-                    />
-                  </Pressable> */}
-              </>
-            ) : null}
-            <View tw="w-full flex-row">
-              <View tw="flex-1">
-                <ProfileTop
-                  address={username}
-                  isBlocked={isBlocked}
-                  profileData={profileData?.data}
-                  isLoading={profileIsLoading}
-                  isError={isError}
-                  isSelf={isSelf}
-                />
-                <ProfileTabBar
+        <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
+          {isProfileMdScreen ? (
+            <>
+              <CreatorTokensBanner />
+              <ProfileCover
+                tw="overflow-hidden rounded-b-3xl"
+                uri={getFullSizeCover(profileData?.data?.profile)}
+              />
+              {/* <Pressable
+                  tw={[
+                    "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+                  ]}
+                  onPress={() => {
+                    const as = "/creator-token/invite-creator-token";
+                    router.push(
+                      Platform.select({
+                        native: as,
+                        web: {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            inviteCreatorTokenModal: true,
+                          },
+                        } as any,
+                      }),
+                      Platform.select({ native: as, web: router.asPath }),
+                      {
+                        shallow: true,
+                      }
+                    );
+                  }}
+                >
+                  <ButtonGoldLinearGradient />
+                  <GiftSolid width={26} height={26} color={colors.gray[900]} />
+                </Pressable> */}
+              <Button
+                tw="absolute right-5 top-2 ml-2 bg-black/60"
+                onPress={async () => {
+                  await Clipboard.setStringAsync(
+                    `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${username}`
+                  );
+                  toast.success("Copied!");
+                }}
+                style={{ height: 30 }}
+                size="small"
+              >
+                Share
+              </Button>
+            </>
+          ) : null}
+          <View tw="w-full flex-row">
+            <View tw="flex-1">
+              <ProfileTop
+                address={username}
+                isBlocked={isBlocked}
+                profileData={profileData?.data}
+                isLoading={profileIsLoading}
+                isError={isError}
+                isSelf={isSelf}
+              />
+              {/* <ProfileTabBar
                   onPress={onChangeTabBar}
                   routes={routes}
                   index={index}
-                />
+                /> */}
 
-                {type === "tokens" ? (
-                  <>
-                    <TokensTabHeader
-                      channelId={channelId}
-                      isSelf={isSelf}
-                      messageCount={messageCount}
-                      channelPermissions={channelPermissions}
+              {type === "tokens" ? (
+                <>
+                  <TokensTabHeader
+                    channelId={channelId}
+                    isSelf={isSelf}
+                    messageCount={messageCount}
+                    channelPermissions={channelPermissions}
+                  />
+                  <View tw="pl-5">
+                    <CreatorTokenCollectors
+                      creatorTokenId={
+                        profileData?.data?.profile.creator_token?.id
+                      }
+                      name={profileData?.data?.profile.name}
+                      username={username}
                     />
-                    <View tw="pl-5">
-                      <CreatorTokenCollectors
-                        creatorTokenId={
-                          profileData?.data?.profile.creator_token?.id
-                        }
-                        name={profileData?.data?.profile.name}
-                        username={username}
-                      />
-                      <CreatorTokenCollected
-                        profileId={profileId}
-                        name={profileData?.data?.profile.name}
-                        username={username}
-                      />
-                    </View>
-                  </>
-                ) : null}
-                {type === "song_drops_created" && isSelf ? (
-                  <>
-                    <ProfileNFTHiddenButton
-                      onPress={() => {
-                        setShowHidden(!showHidden);
-                      }}
-                      showHidden={showHidden}
+                    <CreatorTokenCollected
+                      profileId={profileId}
+                      name={profileData?.data?.profile.name}
+                      username={username}
                     />
-                    {showHidden ? (
-                      <ProfileHideList profileId={profileId} />
-                    ) : null}
-                  </>
-                ) : null}
-
-                <InfiniteScrollList
-                  useWindowScroll
-                  numColumns={numColumns}
-                  preserveScrollPosition
-                  data={isBlocked ? [] : list}
-                  keyExtractor={keyExtractor}
-                  renderItem={renderItem}
-                  overscan={12}
-                  ListEmptyComponent={ListEmptyComponent}
-                  ListFooterComponent={ListFooterComponent}
-                  onEndReached={fetchMore}
-                />
-              </View>
-              {isProfileMdScreen ? (
-                <View
-                  style={{
-                    width: 335,
-                  }}
-                  tw="animate-fade-in-250 ml-10"
-                >
-                  <Sticky enabled>
-                    <CreatorTokensPanel username={username} isSelf={isSelf} />
-                    {isSelf && <MyCollection />}
-                    <TopPartCreatorTokens />
-                  </Sticky>
-                </View>
+                  </View>
+                </>
               ) : null}
+
+              <InfiniteScrollList
+                useWindowScroll
+                numColumns={numColumns}
+                preserveScrollPosition
+                data={isBlocked ? [] : list}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+                overscan={12}
+                ListEmptyComponent={ListEmptyComponent}
+                ListFooterComponent={ListFooterComponent}
+                onEndReached={fetchMore}
+              />
             </View>
-          </ProfileTabsNFTProvider>
-        </MutateProvider>
+            {isProfileMdScreen ? (
+              <View
+                style={{
+                  width: 335,
+                }}
+                tw="animate-fade-in-250 ml-10"
+              >
+                <Sticky enabled>
+                  <CreatorTokensPanel username={username} isSelf={isSelf} />
+                  <TopPartCreatorTokens />
+                </Sticky>
+              </View>
+            ) : null}
+          </View>
+        </ProfileTabsNFTProvider>
       </View>
       <>
         {isSelf ? (
           <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
             <HeaderRightSm withBackground />
+            <Button
+              tw="ml-2"
+              onPress={() => {
+                redirectToCreatorTokenSocialShare(username);
+              }}
+              style={{ height: 30 }}
+              size="small"
+            >
+              Share
+            </Button>
             {/* <Pressable
               tw={[
                 "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
@@ -408,9 +378,23 @@ const Profile = ({ username }: ProfileScreenProps) => {
             </Pressable> */}
           </View>
         ) : (
-          <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
-            <HeaderLeft withBackground canGoBack={true} />
-          </View>
+          <>
+            <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
+              <HeaderLeft withBackground canGoBack={true} />
+            </View>
+            <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
+              <Button
+                tw="ml-2"
+                onPress={() => {
+                  redirectToCreatorTokenSocialShare(username);
+                }}
+                style={{ height: 30 }}
+                size="small"
+              >
+                Share
+              </Button>
+            </View>
+          </>
         )}
       </>
     </View>

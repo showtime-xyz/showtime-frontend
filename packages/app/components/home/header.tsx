@@ -209,8 +209,7 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
   return (
     <View tw="w-full">
       <CreatorTokensBanner />
-
-      <View tw="mt-2 px-4 md:px-0">
+      <View tw="px-4 md:px-0">
         {isLoadingBanner ? (
           <Skeleton
             height={bannerHeight}
@@ -263,7 +262,6 @@ export const ListHeaderComponent = memo(function ListHeaderComponent() {
           )
         )}
       </View>
-      {isLgWidth ? null : <TopPartCreatorTokens />}
     </View>
   );
 });

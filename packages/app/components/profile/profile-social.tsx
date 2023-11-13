@@ -1,11 +1,9 @@
 import { memo, useMemo, useCallback } from "react";
 import { Linking } from "react-native";
 
-import { Divider } from "@showtime-xyz/universal.divider";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import {
   Twitter,
-  Link as LinkIcon,
   Instagram,
   SpotifyPure,
   AppleMusic,
@@ -25,7 +23,6 @@ type ProfileSocialProps = {
 
 export const ProfileSocial = memo<ProfileSocialProps>(function ProfileSocial({
   profile,
-  savedSongs = 0,
 }) {
   const isDark = useIsDarkMode();
 

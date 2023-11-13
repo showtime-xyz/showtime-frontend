@@ -20,7 +20,6 @@ import { Link } from "app/navigation/link";
 import { formatAddressShort } from "app/utilities";
 
 import { EmptyPlaceholder } from "../empty-placeholder";
-import { FollowButton } from "../follow-button";
 import { useCreatorChannelFollowersList } from "./hooks/use-follower-list";
 
 const SEPARATOR_HEIGHT = 1;
@@ -83,6 +82,7 @@ export const CreatorChannelFollowers = ({
   }
 
   return (
+    // @ts-ignore
     <InfiniteScrollList
       data={data}
       keyExtractor={keyExtractor}
@@ -164,13 +164,6 @@ const FollowingListUser = memo(
             </View>
           </View>
         </Link>
-        <View tw="max-w-[120px]">
-          <FollowButton
-            profileId={item.profile_id}
-            name={item.name}
-            onToggleFollow={onToggleFollow}
-          />
-        </View>
       </View>
     );
   }

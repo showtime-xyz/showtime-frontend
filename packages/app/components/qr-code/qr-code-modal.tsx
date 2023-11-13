@@ -57,7 +57,6 @@ import { Skeleton } from "design-system";
 import { toast } from "design-system/toast";
 
 import { BgGoldLinearGradient } from "../gold-gradient";
-import { contentGatingType } from "../tooltips";
 
 const { width: windowWidth } = Dimensions.get("window");
 
@@ -255,23 +254,6 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
     ],
   });
 
-  const ContentType = useCallback(() => {
-    if (!edition?.gating_type || !contentGatingType[edition?.gating_type])
-      return null;
-    const Icon = contentGatingType[edition?.gating_type].icon;
-    return (
-      <View tw="absolute right-1 top-2 h-[18px] flex-row items-center justify-center rounded-full bg-black/60 px-2">
-        <Icon color={imageColors.iconColor} height={12} width={12} />
-        <Text
-          tw="ml-1 font-medium"
-          style={{ color: imageColors.iconColor, fontSize: 10 }}
-        >
-          {`${contentGatingType[edition?.gating_type].text} Drop`}
-        </Text>
-      </View>
-    );
-  }, [edition?.gating_type, imageColors.iconColor]);
-
   const onImageLoad = useCallback(() => {
     if (shareType) {
       setIsLoading(false);
@@ -381,7 +363,6 @@ export const DropImageShare = (props?: QRCodeModalProps) => {
                             onLoad={onImageLoad}
                           />
                         )}
-                        <ContentType />
                       </View>
                     </View>
                     <View tw="pb-4 pt-3">
