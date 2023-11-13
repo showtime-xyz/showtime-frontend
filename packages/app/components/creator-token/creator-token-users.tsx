@@ -356,8 +356,11 @@ export const TopCreatorTokenListItem = ({
             <View tw="select-none overflow-hidden px-2 py-0.5">
               {Platform.OS === "web" ? (
                 // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
-                <View tw="blur-sm">
-                  <Text tw="text-sm text-gray-900 dark:text-gray-100">
+                <View tw="max-w-[200px]  blur-sm">
+                  <Text
+                    tw="text-sm text-gray-900 dark:text-gray-100"
+                    numberOfLines={2}
+                  >
                     {loremText}
                   </Text>
                 </View>
