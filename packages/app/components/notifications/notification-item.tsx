@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { CreatorChannelType } from "@showtime-xyz/universal.icon";
+import { BellFilled, CreatorChannelType } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors, styled } from "@showtime-xyz/universal.tailwind";
@@ -14,6 +14,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
 import { NotificationType } from "app/hooks/use-notifications";
 import { formatDateRelativeWithIntl } from "app/utilities";
+
+import { Actors } from "./actors";
 
 const StyledRectButton = styled(RectButton);
 const PlatformButton =
@@ -26,6 +28,10 @@ export type NotificationItemProp = {
 const NOTIFICATION_TYPE_COPY = new Map([
   ["CHANNEL_NEW_MESSAGE", "channel: "],
   ["CHANNEL_FIRST_MESSAGE", "just created a collector channel: "],
+  ["INVITE_REDEEMED", "just redeemed your invite code! "],
+  ["INVITE_RENEWED", "just renewed your invite code! "],
+  ["CREATOR_TOKEN_PURCHASED", "just purchased your token! "],
+  ["INVITED_TO_CHANNEL", "just invited you to their channel!"],
 ]);
 
 export const NotificationItem = memo(
@@ -122,7 +128,24 @@ const NotificationDescription = memo(
       );
     }
 
-    return null;
+    return (
+      <View tw="flex-1 flex-row justify-between">
+        <Text
+          tw="text-13 web:max-w-[80%] mr-4 max-w-[60vw] self-center text-gray-600 dark:text-gray-400"
+          ellipsizeMode="tail"
+          numberOfLines={2}
+        >
+          <Actors actors={notification.actors} />
+          {NOTIFICATION_TYPE_COPY.get(notification.type_name)}
+          {notification.description?.trim()}
+        </Text>
+        {Boolean(formatDistance) && (
+          <View tw="items-end">
+            <Text tw="text-13 text-gray-500">{`${formatDistance}`}</Text>
+          </View>
+        )}
+      </View>
+    );
   }
 );
 
@@ -137,6 +160,6 @@ export const getNotificationIcon = (type_name: string) => {
       );
 
     default:
-      return undefined;
+      return <BellFilled width={20} height={20} color={colors.indigo[500]} />;
   }
 };

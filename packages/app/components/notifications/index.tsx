@@ -65,7 +65,11 @@ export const Notifications = memo(
         data.filter(
           (obj) =>
             obj.type_name === "CHANNEL_NEW_MESSAGE" ||
-            obj.type_name === "CHANNEL_FIRST_MESSAGE"
+            obj.type_name === "CHANNEL_FIRST_MESSAGE" ||
+            obj.type_name === "INVITE_REDEEMED" ||
+            obj.type_name === "INVITE_RENEWED" ||
+            obj.type_name === "CREATOR_TOKEN_PURCHASED" ||
+            obj.type_name === "INVITED_TO_CHANNEL"
         ),
       [data]
     );
