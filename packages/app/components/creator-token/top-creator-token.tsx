@@ -14,6 +14,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
 import { ErrorBoundary } from "app/components/error-boundary";
 import {
+  CreatorTokenItem,
+  NewCreatorTokenItem,
   TopCreatorTokenUser,
   useTopCreatorToken,
 } from "app/hooks/creator-token/use-creator-tokens";
@@ -63,7 +65,7 @@ const Header = () => {
             #
           </Text>
           <Text
-            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[362px]"
+            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[208px]"
             style={{
               fontSize: 11,
             }}
@@ -78,12 +80,26 @@ const Header = () => {
           >
             COLLECTED
           </Text>
+          <Text
+            tw="hidden text-xs text-gray-600 dark:text-gray-500 lg:block"
+            style={{
+              fontSize: 11,
+              marginLeft: 92,
+            }}
+          >
+            LAST MESSAGE
+          </Text>
         </View>
       </View>
     </>
   );
 };
-const keyExtractor = (item: TopCreatorTokenUser) => `${item.id}`;
+const keyExtractor = (item: TopCreatorTokenUser) =>
+  `${
+    (item as CreatorTokenItem)?.id
+      ? (item as CreatorTokenItem)?.id
+      : (item as NewCreatorTokenItem)?.creator_token.id
+  }`;
 export const TopCreatorTokens = ({
   isSimplified,
   disableFetchMore,
@@ -93,9 +109,7 @@ export const TopCreatorTokens = ({
   disableFetchMore?: boolean;
   limit?: number;
 }) => {
-  const bottom = usePlatformBottomHeight();
   const headerHeight = useHeaderHeight();
-
   const { height: screenHeight, width } = useWindowDimensions();
   const {
     data: list,
