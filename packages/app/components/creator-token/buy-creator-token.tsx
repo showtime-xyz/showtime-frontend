@@ -244,8 +244,7 @@ export const BuyCreatorToken = () => {
       process.env.NEXT_PUBLIC_STAGE === "production" ? "production" : "staging",
     successCallbackURL:
       typeof window !== "undefined"
-        ? window.location.origin +
-          `/creator-token/${profileData?.data?.profile.username}/share`
+        ? window.location.origin + `/creator-token/crossmint-purchase-redirect`
         : undefined,
   } as const;
 
