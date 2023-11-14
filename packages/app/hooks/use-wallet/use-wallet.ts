@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { useEmbeddedWallet, isConnected } from "@privy-io/expo";
 import { createWalletClient, custom } from "viem";
 import { mainnet } from "viem/chains";
 
@@ -7,6 +8,7 @@ import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
 import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 
+import { baseChain } from "../creator-token/utils";
 import { useStableCallback } from "../use-stable-callback";
 import { ConnectResult, UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
@@ -16,11 +18,24 @@ const useWallet = (): UseWalletReturnType => {
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const web3Modal = useWeb3Modal();
   const mobileSDK = useWalletMobileSDK();
+  const privyWallet = useEmbeddedWallet();
   // we use this hook to prevent stale values in closures
   const walletConnectInstanceRef = useLatestValueRef(web3Modal);
   const coinbaseMobileSDKInstanceRef = useLatestValueRef(mobileSDK);
 
-  const walletConnected = web3Modal.isConnected || mobileSDK.connected;
+  const isPrivyWallet = isConnected(privyWallet);
+  const privyWalletClient = useMemo(() => {
+    if (isConnected(privyWallet)) {
+      return createWalletClient({
+        chain: baseChain,
+        transport: custom(privyWallet.provider),
+      });
+    }
+  }, [privyWallet]);
+
+  console.log("walletConnectInstanceRef", privyWallet);
+  const walletConnected =
+    web3Modal.isConnected || mobileSDK.connected || isPrivyWallet;
   const [address, setAddress] = useState<`0x${string}` | undefined>();
 
   useEffect(() => {
@@ -29,11 +44,14 @@ const useWallet = (): UseWalletReturnType => {
         setAddress(web3Modal.address as `0x${string}`);
       } else if (mobileSDK.address) {
         setAddress(mobileSDK.address as `0x${string}`);
+      } else if (privyWalletClient) {
+        const address = (await privyWalletClient.getAddresses())[0];
+        setAddress(address);
       } else {
         setAddress(undefined);
       }
     })();
-  }, [mobileSDK.address, web3Modal.address]);
+  }, [mobileSDK.address, privyWalletClient, web3Modal.address]);
 
   // WalletConnect connected
   useEffect(() => {
@@ -87,6 +105,10 @@ const useWallet = (): UseWalletReturnType => {
   }, [mobileSDK]);
 
   const getWalletClient = useStableCallback(async () => {
+    if (isPrivyWallet) {
+      return privyWalletClient;
+    }
+
     if (web3Modal.isConnected && web3Modal.provider) {
       const client = createWalletClient({
         chain: mainnet,
