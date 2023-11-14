@@ -17,7 +17,6 @@ import { AuthProvider } from "app/providers/auth-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
-import { Web3Provider } from "app/providers/web3-provider";
 
 import { WalletProvider } from "./wallet-provider";
 
@@ -29,27 +28,25 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           <ColorSchemeProvider>
             <ReactionProvider>
               <WalletMobileSDKProvider>
-                <Web3Provider>
-                  <WalletProvider>
-                    <AlertProvider>
-                      <LightBoxProvider>
-                        <SnackbarProvider>
-                          <NavigationProvider>
-                            <SWRProvider>
-                              <AuthProvider>
-                                <UserProvider>
-                                  <BottomSheetModalProvider>
-                                    {children}
-                                  </BottomSheetModalProvider>
-                                </UserProvider>
-                              </AuthProvider>
-                            </SWRProvider>
-                          </NavigationProvider>
-                        </SnackbarProvider>
-                      </LightBoxProvider>
-                    </AlertProvider>
-                  </WalletProvider>
-                </Web3Provider>
+                <WalletProvider>
+                  <AlertProvider>
+                    <LightBoxProvider>
+                      <SnackbarProvider>
+                        <NavigationProvider>
+                          <SWRProvider>
+                            <AuthProvider>
+                              <UserProvider>
+                                <BottomSheetModalProvider>
+                                  {children}
+                                </BottomSheetModalProvider>
+                              </UserProvider>
+                            </AuthProvider>
+                          </SWRProvider>
+                        </NavigationProvider>
+                      </SnackbarProvider>
+                    </LightBoxProvider>
+                  </AlertProvider>
+                </WalletProvider>
               </WalletMobileSDKProvider>
             </ReactionProvider>
           </ColorSchemeProvider>

@@ -15,7 +15,6 @@ import { AuthContext } from "app/context/auth-context";
 import { useAccessTokenManager } from "app/hooks/auth/use-access-token-manager";
 import { useFetchOnAppForeground } from "app/hooks/use-fetch-on-app-foreground";
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
-import { useWeb3 } from "app/hooks/use-web3";
 import * as accessTokenStorage from "app/lib/access-token";
 import { deleteAccessToken, useAccessToken } from "app/lib/access-token";
 import { Analytics, EVENTS } from "app/lib/analytics";
@@ -59,7 +58,6 @@ export function AuthProvider({
   const { mutate } = useSWRConfig();
   const web3Modal = useWeb3Modal();
   const mobileSDK = useWalletMobileSDK();
-  const { setWeb3 } = useWeb3();
   const { magic } = useMagic();
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
@@ -70,7 +68,7 @@ export function AuthProvider({
   const login = useCallback(
     async function login(endpoint: string, data: object): Promise<MyInfo> {
       const response = await fetchOnAppForeground({
-        url: `/v1/${endpoint}`,
+        url: endpoint.includes("/v2/") ? endpoint : `/v1/${endpoint}`,
         method: "POST",
         data,
       });
@@ -96,20 +94,15 @@ export function AuthProvider({
           user_id: res?.data?.profile?.profile_id,
         });
 
-        if (router.canGoBack()) {
-          router.pop();
-        } else {
-          router.replace("/");
-        }
-
         return res;
       }
 
       setAuthenticationStatus("UNAUTHENTICATED");
       throw "Login failed";
     },
-    [setTokens, setAuthenticationStatus, fetchOnAppForeground, mutate, router]
+    [setTokens, setAuthenticationStatus, fetchOnAppForeground, mutate]
   );
+
   /**
    * Log out the customer if logged in, and clear auth cache.
    */
@@ -139,21 +132,12 @@ export function AuthProvider({
 
       magic?.user?.logout();
 
-      setWeb3(null);
       setAuthenticationStatus("UNAUTHENTICATED");
       mutate(null);
 
       router.push("/");
     },
-    [
-      onWagmiDisconnect,
-      web3Modal,
-      mobileSDK,
-      magic?.user,
-      setWeb3,
-      mutate,
-      router,
-    ]
+    [onWagmiDisconnect, web3Modal, mobileSDK, magic?.user, mutate, router]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");

@@ -81,7 +81,7 @@ export const CreatorTokenSocialShare = () => {
     () => `${getWebBaseURL()}/creator-token/${username}/buy`,
     [username]
   );
-  const twitterIntent = ``;
+  const twitterIntent = `Trying the @Showtime_xyz alpha. Collect at least 1 @${username} token to unlock my channel.🪩`;
 
   const shareWithXIntent = useCallback(() => {
     Linking.openURL(

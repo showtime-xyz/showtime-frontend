@@ -2,14 +2,22 @@ import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 
 import { PortalProvider } from "@gorhom/portal";
+import { usePrivy } from "@privy-io/react-auth";
 
 import { Button } from "@showtime-xyz/universal.button";
+import {
+  Apple,
+  GoogleOriginal,
+  MessageFilled,
+} from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { LoginComponent } from "./login";
+import SvgPhonePortraitOutline from "design-system/icon/PhonePortraitOutline";
+
+import { ConnectButton } from "../connect-button";
 import { useLogin } from "./use-login";
 
 export function Login() {
@@ -19,11 +27,10 @@ export function Login() {
     walletName,
     showSignMessage,
     verifySignature,
-    handleSubmitEmail,
-    handleSubmitPhoneNumber,
     handleSubmitWallet,
     loading,
   } = useLogin();
+  const privy = usePrivy();
   //#endregion
   const modalScreenContext = useModalScreenContext();
 
@@ -62,12 +69,20 @@ export function Login() {
             </Button>
           </View>
         ) : (
-          <LoginComponent
-            handleSubmitEmail={handleSubmitEmail}
-            handleSubmitPhoneNumber={handleSubmitPhoneNumber}
-            handleSubmitWallet={handleSubmitWallet}
-            loading={loading}
-          />
+          <View tw="p-4">
+            <Button
+              size="regular"
+              onPress={async () => {
+                if (privy.authenticated) {
+                  await privy.logout();
+                }
+                privy.login();
+              }}
+            >
+              Email & Social
+            </Button>
+            <ConnectButton handleSubmitWallet={handleSubmitWallet} />
+          </View>
         )}
       </ScrollView>
     </PortalProvider>

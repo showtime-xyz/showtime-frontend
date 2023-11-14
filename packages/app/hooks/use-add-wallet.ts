@@ -7,7 +7,6 @@ import { useAlert } from "@showtime-xyz/universal.alert";
 import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
 import { useUser } from "app/hooks/use-user";
 import { useWallet } from "app/hooks/use-wallet";
-import { useWeb3 } from "app/hooks/use-web3";
 import { addWalletToBackend } from "app/lib/add-wallet/add-wallet";
 import { Logger } from "app/lib/logger";
 import { fetchNonce } from "app/lib/nonce";
@@ -33,7 +32,6 @@ const useAddWallet = () => {
   const { setPrimaryWallet } = useSetPrimaryWallet();
   const user = useUser();
   const wallet = useWallet();
-  const { isMagic } = useWeb3();
 
   const hasNoPrimaryWallet = user?.user?.data.profile.primary_wallet === null;
   const userWallets = user?.user?.data.profile.wallet_addresses_v2;
@@ -46,7 +44,7 @@ const useAddWallet = () => {
     try {
       setStatus("loading");
 
-      if (wallet.connected && !isMagic) {
+      if (wallet.connected) {
         await wallet.disconnect();
       }
 

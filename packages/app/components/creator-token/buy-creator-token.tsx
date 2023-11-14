@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import { Linking } from "react-native";
 
+import { CrossmintPayButton } from "@crossmint/client-sdk-react-ui";
 import { createParam } from "solito";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  Ethereum,
-  InformationCircle,
-  LockBadge,
-} from "@showtime-xyz/universal.icon";
+import { InformationCircle, LockBadge } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -210,8 +207,8 @@ export const BuyCreatorToken = () => {
             : wallet.isMagicWallet
             ? "Connect"
             : paymentMethod === "ETH"
-            ? "Buy"
-            : "Approve & Buy"}
+            ? "Buy with ETH"
+            : "Buy with USDC"}
         </Button>
       );
     }
@@ -231,6 +228,26 @@ export const BuyCreatorToken = () => {
     }
   }, [selectedAction, tokenBalance.data]);
   const isDark = useIsDarkMode();
+
+  const crossmintConfig = {
+    collectionId: "93def410-f564-46e4-a8d6-459586aacd17",
+    projectId: process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID,
+    mintConfig: {
+      totalPrice: (
+        Number(priceToBuyNext.data?.totalPrice) / 1000000
+      ).toString(),
+      _numOfTokens: tokenAmount,
+      _maxPayment: priceToBuyNext.data?.totalPrice?.toString(),
+    },
+    mintTo: wallet.address,
+    environment:
+      process.env.NEXT_PUBLIC_STAGE === "production" ? "production" : "staging",
+    successCallbackURL:
+      typeof window !== "undefined"
+        ? window.location.origin +
+          `/creator-token/${profileData?.data?.profile.username}/share?type=collected&collectedCount=${tokenAmount}`
+        : undefined,
+  } as const;
 
   return (
     <BottomSheetModalProvider>
@@ -310,7 +327,7 @@ export const BuyCreatorToken = () => {
                       height={44}
                     />
                   )}
-                  {selectedAction === "buy" ? (
+                  {crossmintConfig.collectionId && selectedAction === "buy" ? (
                     <View>
                       {(priceToBuyNext.isLoading && paymentMethod === "USDC") ||
                       (ethPriceToBuyNext.isLoading &&
@@ -449,6 +466,21 @@ export const BuyCreatorToken = () => {
             </Text>
           </View>
         </View>
+        {selectedAction === "buy" ? (
+          <>
+            <View tw="mx-auto my-2 h-[1px] w-[20%] rounded-full bg-gray-400" />
+            <CrossmintPayButton
+              style={{
+                borderRadius: 100,
+                marginLeft: 16,
+                marginRight: 16,
+                fontWeight: 600,
+              }}
+              onClick={() => router.pop()}
+              {...crossmintConfig}
+            />
+          </>
+        ) : null}
         <ModalSheet
           snapPoints={[400]}
           title=""
