@@ -327,7 +327,7 @@ export const BuyCreatorToken = () => {
                       height={44}
                     />
                   )}
-                  {selectedAction === "buy" ? (
+                  {crossmintConfig.collectionId && selectedAction === "buy" ? (
                     <View>
                       {(priceToBuyNext.isLoading && paymentMethod === "USDC") ||
                       (ethPriceToBuyNext.isLoading &&
