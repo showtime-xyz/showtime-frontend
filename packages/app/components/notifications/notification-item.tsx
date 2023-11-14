@@ -4,7 +4,11 @@ import { Platform } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { BellFilled, CreatorChannelType } from "@showtime-xyz/universal.icon";
+import {
+  BellFilled,
+  CreatorChannelType,
+  User,
+} from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors, styled } from "@showtime-xyz/universal.tailwind";
@@ -184,10 +188,14 @@ export const getNotificationIcon = (type_name: string) => {
   switch (type_name) {
     case "CHANNEL_NEW_MESSAGE":
     case "CHANNEL_FIRST_MESSAGE":
+    case "INVITED_TO_CHANNEL":
+    case "INVITE_REDEEMED":
       return (
         <CreatorChannelType width={20} height={20} color={colors.indigo[500]} />
       );
 
+    case "CREATOR_TOKEN_PURCHASED":
+      return <User width={20} height={20} color={colors.indigo[500]} />;
     default:
       return <BellFilled width={20} height={20} color={colors.indigo[500]} />;
   }
