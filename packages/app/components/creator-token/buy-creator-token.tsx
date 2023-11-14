@@ -248,7 +248,8 @@ export const BuyCreatorToken = () => {
       process.env.NEXT_PUBLIC_STAGE === "production" ? "production" : "staging",
     successCallbackURL:
       typeof window !== "undefined"
-        ? window.location.origin + `/creator-token/crossmint-purchase-redirect`
+        ? window.location.origin +
+          `/creator-token/${profileData?.data?.profile.username}/share`
         : undefined,
   } as const;
 
@@ -330,7 +331,7 @@ export const BuyCreatorToken = () => {
                       height={44}
                     />
                   )}
-                  {crossmintConfig.collectionId && selectedAction === "buy" ? (
+                  {selectedAction === "buy" ? (
                     <View>
                       {(priceToBuyNext.isLoading && paymentMethod === "USDC") ||
                       (ethPriceToBuyNext.isLoading &&
@@ -469,7 +470,7 @@ export const BuyCreatorToken = () => {
             </Text>
           </View>
         </View>
-        {selectedAction === "buy" ? (
+        {selectedAction === "buy" && crossmintConfig.collectionId ? (
           <>
             <View tw="mx-auto my-2 h-[1px] w-[20%] rounded-full bg-gray-400" />
             <CrossmintPayButton
@@ -485,27 +486,7 @@ export const BuyCreatorToken = () => {
                   e.preventDefault();
                   return;
                 }
-
-                function listenCrossmintMessage(event: any) {
-                  if (event.data.type === "purchase.succeeded") {
-                    if (profileData?.data?.profile) {
-                      redirectToCreatorTokensShare({
-                        username: profileData?.data?.profile.username,
-                        type: "collected",
-                        collectedCount: tokenAmount,
-                      });
-                      router.pop();
-                      console.log(
-                        `Received message from crossmint window: ${event.data}`
-                      );
-                      window.removeEventListener(
-                        "message",
-                        listenCrossmintMessage
-                      );
-                    }
-                  }
-                }
-                window.addEventListener("message", listenCrossmintMessage);
+                router.pop();
               }}
               {...crossmintConfig}
             />

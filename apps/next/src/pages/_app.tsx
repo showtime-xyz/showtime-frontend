@@ -231,7 +231,6 @@ function App({ Component, pageProps, router }: AppProps) {
         <VerifyPhoneNumberScreen />
         <UnlockedChannelScreen />
         <CreatorTokenBuyScreen />
-        <CreatorTokensShareModalScreen />
         <CreatorTokenInviteSignInScreen />
         <InviteCreatorTokenScreen />
         <CreatorTokensSelfServeExplainerScreen />

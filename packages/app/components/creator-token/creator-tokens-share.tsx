@@ -45,13 +45,30 @@ const { useParam } = createParam<{
   username: string;
   type: TokenShareType;
   collectedCount: string;
+  p: string;
 }>();
 
 export const CreatorTokensShareModal = memo(function CreatorTokens() {
   const linearOpaticy = useSharedValue(0);
   const [username] = useParam("username");
-  const [collectedCount] = useParam("collectedCount");
-  const [type] = useParam("type");
+  let [collectedCount] = useParam("collectedCount");
+  let [type] = useParam("type");
+
+  // Redirect from crossmint
+  // https://docs.crossmint.com/docs/redirect-url#redirection-payload
+  const [p] = useParam("p");
+
+  if (p) {
+    try {
+      const params = JSON.parse(p);
+      if (params && params[0] && params[0].type === "purchase.succeeded") {
+        collectedCount = params?.[0]?.tokenIds?.length;
+        type = "collected";
+      }
+    } catch (e) {
+      // noop
+    }
+  }
 
   const { data: userInfo } = useUserProfile({ address: username });
   const profileData = userInfo?.data?.profile;
