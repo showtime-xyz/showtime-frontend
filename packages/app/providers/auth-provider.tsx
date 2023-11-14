@@ -24,6 +24,7 @@ import * as loginStorage from "app/lib/login";
 import { loginPromiseCallbacks } from "app/lib/login-promise";
 import * as logoutStorage from "app/lib/logout";
 import { useMagic } from "app/lib/magic";
+import { usePrivyLogout } from "app/lib/privy/privy-provider";
 import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 import { deleteRefreshToken } from "app/lib/refresh-token";
 import type { AuthenticationStatus, MyInfo } from "app/types";
@@ -62,6 +63,7 @@ export function AuthProvider({
   const { setTokens, refreshTokens } = useAccessTokenManager();
   const fetchOnAppForeground = useFetchOnAppForeground();
   const router = useRouter();
+  const privyLogout = usePrivyLogout();
   //#endregion
 
   //#region methods
@@ -114,6 +116,8 @@ export function AuthProvider({
         Analytics.reset();
       }
 
+      privyLogout();
+
       onWagmiDisconnect?.();
       loginStorage.deleteLogin();
       logoutStorage.setLogout(Date.now().toString());
@@ -137,7 +141,15 @@ export function AuthProvider({
 
       router.push("/");
     },
-    [onWagmiDisconnect, web3Modal, mobileSDK, magic?.user, mutate, router]
+    [
+      privyLogout,
+      onWagmiDisconnect,
+      web3Modal,
+      mobileSDK,
+      magic?.user,
+      mutate,
+      router,
+    ]
   );
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");

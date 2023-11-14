@@ -102,7 +102,7 @@ export function LoginComponent({
           <LoginWithApple />
           <LoginWithGoogle />
           {/* <LoginWithTwitter /> */}
-          <LoginButton onPress={() => setShowEmailLogin(true)} type="email" />
+          {/* <LoginButton onPress={() => setShowEmailLogin(true)} type="email" /> */}
           <ConnectButton handleSubmitWallet={handleSubmitWallet} />
           <LoginFooter tw="mt-4" />
         </View>

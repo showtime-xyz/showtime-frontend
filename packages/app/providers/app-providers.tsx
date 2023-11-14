@@ -12,6 +12,7 @@ import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
 import { KeyboardProvider } from "app/lib/keyboard-controller";
+import { PrivyProvider } from "app/lib/privy/privy-provider";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { SWRProvider } from "app/providers/swr-provider";
@@ -34,13 +35,15 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                       <SnackbarProvider>
                         <NavigationProvider>
                           <SWRProvider>
-                            <AuthProvider>
-                              <UserProvider>
-                                <BottomSheetModalProvider>
-                                  {children}
-                                </BottomSheetModalProvider>
-                              </UserProvider>
-                            </AuthProvider>
+                            <PrivyProvider>
+                              <AuthProvider>
+                                <UserProvider>
+                                  <BottomSheetModalProvider>
+                                    {children}
+                                  </BottomSheetModalProvider>
+                                </UserProvider>
+                              </AuthProvider>
+                            </PrivyProvider>
                           </SWRProvider>
                         </NavigationProvider>
                       </SnackbarProvider>
