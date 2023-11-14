@@ -2,7 +2,6 @@ import { useMemo, useState, useRef, useEffect } from "react";
 import { StyleSheet } from "react-native";
 
 import { PortalProvider } from "@gorhom/portal";
-import { useLoginWithSMS } from "@privy-io/expo";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
@@ -11,6 +10,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { useAuth } from "app/hooks/auth/use-auth";
+import { useLoginWithSMS } from "app/lib/privy/privy-hooks";
 
 import { LoginComponent } from "./login";
 import { useLogin } from "./use-login";
