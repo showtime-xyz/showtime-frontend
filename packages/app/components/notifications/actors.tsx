@@ -12,14 +12,14 @@ export const Actors = ({ actors }: ActorsProps) => {
   if (actors?.length === 1) {
     return (
       <>
-        <ActorLink actor={actors[0]} />{" "}
+        <ActorLink actor={actors[0]} />
       </>
     );
   }
   if (actors?.length === 2) {
     return (
       <>
-        <ActorLink actor={actors[0]} /> and <ActorLink actor={actors[1]} />{" "}
+        <ActorLink actor={actors[0]} /> and <ActorLink actor={actors[1]} />
       </>
     );
   }
