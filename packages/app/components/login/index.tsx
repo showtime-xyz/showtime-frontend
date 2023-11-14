@@ -81,6 +81,7 @@ export function Login() {
             />
             <View tw="mt-8" style={{ rowGap: 16 }}>
               <Button
+                size="regular"
                 onPress={() =>
                   handleSubmitOtp(otpValueRef.current, phoneNumber)
                 }
@@ -91,6 +92,7 @@ export function Login() {
                   : "Submit"}
               </Button>
               <Button
+                size="regular"
                 variant="secondary"
                 onPress={() => setShowOtp(false)}
                 disabled={authenticationStatus === "AUTHENTICATING"}
