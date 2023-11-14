@@ -356,9 +356,9 @@ export const TopCreatorTokenListItem = ({
             <View tw="select-none overflow-hidden px-2 py-0.5">
               {Platform.OS === "web" ? (
                 // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
-                <View tw="max-w-[200px]  blur-sm">
+                <View tw="max-w-[200px] blur-sm">
                   <Text
-                    tw="text-sm text-gray-900 dark:text-gray-100"
+                    tw="text-xs text-gray-900 dark:text-gray-100"
                     numberOfLines={2}
                   >
                     {loremText}
@@ -366,7 +366,7 @@ export const TopCreatorTokenListItem = ({
                 </View>
               ) : (
                 <>
-                  <Text tw="py-1.5 text-sm  text-gray-900 dark:text-gray-100">
+                  <Text tw="py-1.5 text-xs  text-gray-900 dark:text-gray-100">
                     {loremText}
                   </Text>
                   <BlurView
@@ -385,7 +385,7 @@ export const TopCreatorTokenListItem = ({
             <>
               {lastMessage.body_text_length > 0 ? (
                 <Text
-                  tw={"text-sm text-gray-900 dark:text-gray-100"}
+                  tw={"text-xs text-gray-900 dark:text-gray-100"}
                   style={
                     Platform.OS === "web"
                       ? {
@@ -400,11 +400,6 @@ export const TopCreatorTokenListItem = ({
               ) : null}
             </>
           )}
-          <ChevronRight
-            width={14}
-            height={14}
-            color={isDark ? colors.white : colors.gray[900]}
-          />
         </View>
       )}
     </PressableHover>

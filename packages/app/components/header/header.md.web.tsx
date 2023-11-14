@@ -106,7 +106,7 @@ const NotificationsInHeader = () => {
       <Popover.Portal>
         <Popover.Content sideOffset={36} side="right" align="center">
           <View
-            tw="h-screen w-[332px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
+            tw="h-screen w-[450px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
             style={{
               // @ts-ignore
               boxShadow: "rgb(0 0 0 / 10%) 5px 15px 15px",
@@ -162,7 +162,7 @@ const SearchInHeader = () => {
       <Popover.Portal>
         <Popover.Content sideOffset={36} side="right" align="center">
           <View
-            tw="h-screen w-[332px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
+            tw="h-screen w-[450px] overflow-hidden border-l border-gray-200 bg-white dark:border-r dark:border-gray-800 dark:bg-black"
             style={{
               // @ts-ignore
               boxShadow: "rgb(0 0 0 / 10%) 5px 15px 15px",
