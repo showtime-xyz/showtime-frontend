@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 
-import { createWalletClient, custom } from "viem";
-import { mainnet } from "viem/chains";
+import { useLoginWithSMS } from "@privy-io/expo";
 
 import {
   BYPASS_EMAIL,
@@ -17,28 +16,18 @@ export const LOGIN_MAGIC_ENDPOINT = "login_magic";
 export function useMagicLogin() {
   //#region hooks
   const { setAuthenticationStatus, login, logout } = useAuth();
+  const { loginWithCode } = useLoginWithSMS();
   const { magic, Magic } = useMagic();
-  //#endregion
 
   //#region methods
-  const loginWithPhoneNumber = useCallback(
-    async function loginWithPhoneNumber(phoneNumber: string) {
-      setAuthenticationStatus("AUTHENTICATING");
-      try {
-        const did = await magic.auth.loginWithSMS({
-          phoneNumber,
-        });
-
-        await login(LOGIN_MAGIC_ENDPOINT, {
-          did,
-          phone_number: phoneNumber,
-        });
-      } catch (error) {
-        logout();
-        throw error;
-      }
+  const loginWithOtp = useCallback(
+    async function loginWithOtp(code: string, phone: string) {
+      loginWithCode({
+        code,
+        phone,
+      });
     },
-    [magic, login, logout, setAuthenticationStatus]
+    [loginWithCode]
   );
 
   const loginWithEmail = useCallback(
@@ -90,7 +79,7 @@ export function useMagicLogin() {
 
   //#endregion
   return {
-    loginWithPhoneNumber,
     loginWithEmail,
+    loginWithOtp,
   };
 }

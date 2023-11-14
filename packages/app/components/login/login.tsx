@@ -20,7 +20,7 @@ import type { SubmitWalletParams } from "./use-login";
 interface LoginComponentProps {
   tw?: string;
   handleSubmitEmail: (email: string) => Promise<void>;
-  handleSubmitPhoneNumber: (phoneNumber: string) => Promise<void>;
+  handleSubmitPhoneNumber: (phoneNumber: string) => void;
   handleSubmitWallet: (
     params?: SubmitWalletParams | undefined
   ) => Promise<void>;
