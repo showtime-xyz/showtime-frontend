@@ -6,7 +6,7 @@ export const CreatorTokenSocialShareScreen = withModalScreen(
   CreatorTokenSocialShare,
   {
     title: "",
-    matchingPathname: "/creator-token/[username]/share",
+    matchingPathname: "/creator-token/[username]/social-share",
     matchingQueryParam: "creatorTokenSocialShareModal",
     snapPoints: ["100%"],
     enableHandlePanningGesture: true,
