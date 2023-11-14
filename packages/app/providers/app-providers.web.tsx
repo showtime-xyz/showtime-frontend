@@ -10,7 +10,7 @@ import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
 import { growthbook } from "app/lib/growthbook";
-import { PrivyProvider } from "app/lib/privy/privy-provider";
+import { PrivyAuth, PrivyProvider } from "app/lib/privy/privy-provider";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { MagicProvider } from "app/providers/magic-provider.web";
@@ -32,17 +32,17 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                 <AlertProvider>
                   <SnackbarProvider>
                     <SWRProvider>
-                      <AuthProvider>
-                        <UserProvider>
-                          <PrivyProvider>
+                      <PrivyProvider>
+                        <AuthProvider>
+                          <UserProvider>
                             <BottomSheetModalProvider>
                               <NavigationProvider>
-                                {children}
+                                <PrivyAuth>{children}</PrivyAuth>
                               </NavigationProvider>
                             </BottomSheetModalProvider>
-                          </PrivyProvider>
-                        </UserProvider>
-                      </AuthProvider>
+                          </UserProvider>
+                        </AuthProvider>
+                      </PrivyProvider>
                     </SWRProvider>
                   </SnackbarProvider>
                 </AlertProvider>

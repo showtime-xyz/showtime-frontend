@@ -1,10 +1,11 @@
-import { forwardRef, useImperativeHandle, useRef, useEffect } from "react";
+import { forwardRef, useRef, useEffect } from "react";
 
 import {
   PrivyProvider as PrivyProviderImpl,
   User as PrivyUser,
   usePrivy,
   PrivyInterface,
+  useLogin,
 } from "@privy-io/react-auth";
 
 import { useAuth } from "app/hooks/auth/use-auth";
@@ -13,16 +14,9 @@ import { useStableCallback } from "app/hooks/use-stable-callback";
 import { useWallet } from "app/hooks/use-wallet";
 
 export const PrivyProvider = ({ children }: any) => {
-  const privyAuthRef = useRef<any>(null);
-  const handleLoginSuccess = (user: PrivyUser) => {
-    console.log(`User logged in! `, user);
-    privyAuthRef.current.createWalletAndLogin(user);
-  };
-
   return (
     <PrivyProviderImpl
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
-      onSuccess={handleLoginSuccess}
       config={{
         loginMethods: ["email", "google", "apple", "sms"],
         defaultChain: baseChain,
@@ -35,7 +29,7 @@ export const PrivyProvider = ({ children }: any) => {
         },
       }}
     >
-      <PrivyAuth ref={privyAuthRef}>{children}</PrivyAuth>
+      {children}
     </PrivyProviderImpl>
   );
 };
@@ -44,7 +38,7 @@ export const privyRef = {
   current: null,
 } as { current: PrivyInterface | null };
 
-const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
+export const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
   const privy = usePrivy();
   const { authenticationStatus, setAuthenticationStatus, login, logout } =
     useAuth();
@@ -69,15 +63,17 @@ const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
     }
   });
 
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        createWalletAndLogin,
-      };
+  useLogin({
+    onComplete: (
+      user: PrivyUser,
+      isNewUser: boolean,
+      wasAlreadyAuthenticated: boolean
+    ) => {
+      if (!wasAlreadyAuthenticated) {
+        createWalletAndLogin(user);
+      }
     },
-    [createWalletAndLogin]
-  );
+  });
 
   const disconnect = wallet.disconnect;
 

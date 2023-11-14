@@ -1,13 +1,12 @@
 import { useCallback } from "react";
 
-import { useLoginWithSMS } from "@privy-io/expo";
-
 import {
   BYPASS_EMAIL,
   BYPASS_EMAIL_WITH_INSECURE_KEYS,
 } from "app/lib/constants";
 import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
+import { useLoginWithSMS } from "app/lib/privy/privy-hooks";
 
 import { useAuth } from "./use-auth";
 
