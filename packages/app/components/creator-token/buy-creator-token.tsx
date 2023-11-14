@@ -28,8 +28,10 @@ import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-crea
 import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-sell";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
+import { useUser } from "app/hooks/use-user";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import { toast } from "design-system/toast";
 import { Toggle } from "design-system/toggle";
@@ -214,6 +216,8 @@ export const BuyCreatorToken = () => {
     }
   };
 
+  const navigateToLogin = useNavigateToLogin();
+  const { isAuthenticated } = useUser();
   useEffect(() => {
     if (selectedAction === "sell" && typeof tokenBalance.data !== "undefined") {
       setTokenAmount(Math.min(1, Number(tokenBalance.data)));
@@ -475,7 +479,13 @@ export const BuyCreatorToken = () => {
                 marginRight: 16,
                 fontWeight: 600,
               }}
-              onClick={() => {
+              onClick={(e) => {
+                if (!isAuthenticated) {
+                  navigateToLogin();
+                  e.preventDefault();
+                  return;
+                }
+
                 function listenCrossmintMessage(event: any) {
                   if (event.data.type === "purchase.succeeded") {
                     if (profileData?.data?.profile) {
