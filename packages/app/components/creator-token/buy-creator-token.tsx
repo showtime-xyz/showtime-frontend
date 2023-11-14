@@ -230,7 +230,7 @@ export const BuyCreatorToken = () => {
   const isDark = useIsDarkMode();
 
   const crossmintConfig = {
-    collectionId: profileData?.data?.profile.creator_token?.crossmint_id,
+    collectionId: "93def410-f564-46e4-a8d6-459586aacd17",
     projectId: process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID,
     mintConfig: {
       totalPrice: (
@@ -245,7 +245,7 @@ export const BuyCreatorToken = () => {
     successCallbackURL:
       typeof window !== "undefined"
         ? window.location.origin +
-          `/creator-token/${profileData?.data?.profile.username}/share?type=collected&collectedCount=${tokenAmount}`
+          `/creator-token/${profileData?.data?.profile.username}/share`
         : undefined,
   } as const;
 
@@ -476,7 +476,28 @@ export const BuyCreatorToken = () => {
                 marginRight: 16,
                 fontWeight: 600,
               }}
-              onClick={() => router.pop()}
+              onClick={() => {
+                function listenCrossmintMessage(event: any) {
+                  if (event.data.type === "purchase.succeeded") {
+                    if (profileData?.data?.profile) {
+                      redirectToCreatorTokensShare({
+                        username: profileData?.data?.profile.username,
+                        type: "collected",
+                        collectedCount: tokenAmount,
+                      });
+                      router.pop();
+                      console.log(
+                        `Received message from crossmint window: ${event.data}`
+                      );
+                      window.removeEventListener(
+                        "message",
+                        listenCrossmintMessage
+                      );
+                    }
+                  }
+                }
+                window.addEventListener("message", listenCrossmintMessage);
+              }}
               {...crossmintConfig}
             />
           </>
