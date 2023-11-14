@@ -230,7 +230,7 @@ export const BuyCreatorToken = () => {
   const isDark = useIsDarkMode();
 
   const crossmintConfig = {
-    collectionId: "93def410-f564-46e4-a8d6-459586aacd17",
+    collectionId: profileData?.data?.profile.creator_token?.crossmint_id,
     projectId: process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID,
     mintConfig: {
       totalPrice: (
