@@ -327,7 +327,7 @@ export const BuyCreatorToken = () => {
                       height={44}
                     />
                   )}
-                  {selectedAction === "buy" ? (
+                  {crossmintConfig.collectionId && selectedAction === "buy" ? (
                     <View>
                       {(priceToBuyNext.isLoading && paymentMethod === "USDC") ||
                       (ethPriceToBuyNext.isLoading &&
@@ -466,7 +466,7 @@ export const BuyCreatorToken = () => {
             </Text>
           </View>
         </View>
-        {crossmintConfig.collectionId && selectedAction === "buy" ? (
+        {selectedAction === "buy" ? (
           <>
             <View tw="mx-auto my-2 h-[1px] w-[20%] rounded-full bg-gray-400" />
             <CrossmintPayButton
@@ -474,6 +474,7 @@ export const BuyCreatorToken = () => {
                 borderRadius: 100,
                 marginLeft: 16,
                 marginRight: 16,
+                fontWeight: 600,
               }}
               onClick={() => router.pop()}
               {...crossmintConfig}
