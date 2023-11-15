@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Linking } from "react-native";
 
+import { CrossmintPayButton } from "@crossmint/client-sdk-react-ui";
 import { useWallets } from "@privy-io/react-auth";
 import { createParam } from "solito";
 
@@ -28,8 +29,10 @@ import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-crea
 import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-sell";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
+import { useUser } from "app/hooks/use-user";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
+import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import { toast } from "design-system/toast";
 import { Toggle } from "design-system/toggle";
@@ -241,13 +244,15 @@ export const BuyCreatorToken = () => {
             : wallet.isMagicWallet
             ? "Connect"
             : paymentMethod === "ETH"
-            ? "Buy"
-            : "Approve & Buy"}
+            ? "Buy with ETH"
+            : "Buy with USDC"}
         </Button>
       );
     }
   };
 
+  const navigateToLogin = useNavigateToLogin();
+  const { isAuthenticated } = useUser();
   useEffect(() => {
     if (selectedAction === "sell" && typeof tokenBalance.data !== "undefined") {
       setTokenAmount(Math.min(1, Number(tokenBalance.data)));
@@ -262,6 +267,26 @@ export const BuyCreatorToken = () => {
     }
   }, [selectedAction, tokenBalance.data]);
   const isDark = useIsDarkMode();
+
+  const crossmintConfig = {
+    collectionId: profileData?.data?.profile.creator_token?.crossmint_id,
+    projectId: process.env.NEXT_PUBLIC_CROSSMINT_PROJECT_ID,
+    mintConfig: {
+      totalPrice: (
+        Number(priceToBuyNext.data?.totalPrice) / 1000000
+      ).toString(),
+      _numOfTokens: tokenAmount,
+      _maxPayment: priceToBuyNext.data?.totalPrice?.toString(),
+    },
+    mintTo: wallet.address,
+    environment:
+      process.env.NEXT_PUBLIC_STAGE === "production" ? "production" : "staging",
+    successCallbackURL:
+      typeof window !== "undefined"
+        ? window.location.origin +
+          `/creator-token/${profileData?.data?.profile.username}/share`
+        : undefined,
+  } as const;
 
   return (
     <BottomSheetModalProvider>
@@ -480,6 +505,28 @@ export const BuyCreatorToken = () => {
             </Text>
           </View>
         </View>
+        {selectedAction === "buy" && crossmintConfig.collectionId ? (
+          <>
+            <View tw="mx-auto my-2 h-[1px] w-[20%] rounded-full bg-gray-400" />
+            <CrossmintPayButton
+              style={{
+                borderRadius: 100,
+                marginLeft: 16,
+                marginRight: 16,
+                fontWeight: 600,
+              }}
+              onClick={(e) => {
+                if (!isAuthenticated) {
+                  navigateToLogin();
+                  e.preventDefault();
+                  return;
+                }
+                router.pop();
+              }}
+              {...crossmintConfig}
+            />
+          </>
+        ) : null}
         <ModalSheet
           snapPoints={[400]}
           title=""
