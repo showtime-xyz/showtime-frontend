@@ -19,7 +19,9 @@ import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Edit, Trash, Flag } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
+import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -44,6 +46,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { SharedElement } from "design-system/shared-element/SharedElement";
 
 import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
@@ -57,6 +60,7 @@ import { LeanText, LeanView } from "./lean-text";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 
 export const MessageItem = memo(
   ({
@@ -421,7 +425,7 @@ export const MessageItem = memo(
               </>
             )}
 
-            {/* ADD LETER
+            {/* ADD LATER
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("video") ? (
               <Video
@@ -436,10 +440,24 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              <ImagePreview
-                attachment={item.channel_message?.attachments[0]}
-                isViewable={permissions?.can_view_creator_messages}
-              />
+              <SharedElement tag={channel_message?.id.toString()}>
+                {({ animatedRef, animatedStyles }) => (
+                  <Pressable
+                    onPress={() => {
+                      router.push(
+                        `/viewer?tag=${channel_message?.id}&url=${channel_message?.attachments[0].url}&width=${channel_message?.attachments[0].width}&height=${channel_message?.attachments[0].height}`
+                      );
+                    }}
+                  >
+                    <ImagePreview
+                      style={animatedStyles}
+                      animatedRef={animatedRef}
+                      attachment={item.channel_message?.attachments[0]}
+                      isViewable={permissions?.can_view_creator_messages}
+                    />
+                  </Pressable>
+                )}
+              </SharedElement>
             ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&

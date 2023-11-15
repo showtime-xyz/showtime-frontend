@@ -345,7 +345,10 @@ export const TopCreatorTokenListItem = ({
         </View>
         <View tw="ml-auto lg:ml-4">
           <PlatformBuyButton
-            style={{ backgroundColor: "#08F6CC", height: 26 }}
+            style={{
+              backgroundColor: "#08F6CC",
+              height: 26,
+            }}
             username={token.owner_profile?.username}
           />
         </View>

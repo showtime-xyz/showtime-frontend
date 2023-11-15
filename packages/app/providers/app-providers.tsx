@@ -19,6 +19,8 @@ import { UserProvider } from "app/providers/user-provider";
 import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
 import { Web3Provider } from "app/providers/web3-provider";
 
+import { SharedElementProvider } from "design-system/shared-element/SharedElementContext";
+
 import { WalletProvider } from "./wallet-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
@@ -26,33 +28,35 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
     <GestureHandlerRootView style={{ flexGrow: 1 }}>
       <KeyboardProvider statusBarTranslucent>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <ColorSchemeProvider>
-            <ReactionProvider>
-              <WalletMobileSDKProvider>
-                <Web3Provider>
-                  <WalletProvider>
-                    <AlertProvider>
-                      <LightBoxProvider>
-                        <SnackbarProvider>
-                          <NavigationProvider>
-                            <SWRProvider>
-                              <AuthProvider>
-                                <UserProvider>
-                                  <BottomSheetModalProvider>
-                                    {children}
-                                  </BottomSheetModalProvider>
-                                </UserProvider>
-                              </AuthProvider>
-                            </SWRProvider>
-                          </NavigationProvider>
-                        </SnackbarProvider>
-                      </LightBoxProvider>
-                    </AlertProvider>
-                  </WalletProvider>
-                </Web3Provider>
-              </WalletMobileSDKProvider>
-            </ReactionProvider>
-          </ColorSchemeProvider>
+          <SharedElementProvider>
+            <ColorSchemeProvider>
+              <ReactionProvider>
+                <WalletMobileSDKProvider>
+                  <Web3Provider>
+                    <WalletProvider>
+                      <AlertProvider>
+                        <LightBoxProvider>
+                          <SnackbarProvider>
+                            <NavigationProvider>
+                              <SWRProvider>
+                                <AuthProvider>
+                                  <UserProvider>
+                                    <BottomSheetModalProvider>
+                                      {children}
+                                    </BottomSheetModalProvider>
+                                  </UserProvider>
+                                </AuthProvider>
+                              </SWRProvider>
+                            </NavigationProvider>
+                          </SnackbarProvider>
+                        </LightBoxProvider>
+                      </AlertProvider>
+                    </WalletProvider>
+                  </Web3Provider>
+                </WalletMobileSDKProvider>
+              </ReactionProvider>
+            </ColorSchemeProvider>
+          </SharedElementProvider>
         </SafeAreaProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>
