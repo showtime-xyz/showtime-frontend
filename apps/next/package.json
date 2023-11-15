@@ -20,6 +20,7 @@
     "@magic-ext/oauth": "^10.1.0",
     "@next/bundle-analyzer": "^13.4.13",
     "@nissy-dev/swc-plugin-react-native-web": "^0.3.1",
+    "@privy-io/react-auth": "^1.46.1",
     "@radix-ui/react-accordion": "1.1.2",
     "@radix-ui/react-hover-card": "^1.0.6",
     "@radix-ui/react-popover": "^1.0.6",
@@ -75,8 +76,7 @@
     "swiper": "^10.0.4",
     "swr": "^2.2.0",
     "twitter-lite": "^1.1.0",
-    "viem": "^1.17.1",
-    "wagmi": "^1.4.5"
+    "viem": "^1.17.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.9",

@@ -19,14 +19,14 @@ export const SETTINGS_ROUTES = [
     key: "Wallets",
     hidden: false,
   },
-  {
-    title: "Sign In",
-    key: "Sign In",
-  },
-  {
-    title: "Connected Apps",
-    key: "Account",
-  },
+  // {
+  //   title: "Sign In",
+  //   key: "Sign In",
+  // },
+  // {
+  //   title: "Connected Apps",
+  //   key: "Account",
+  // },
   {
     title: "Notifications",
     key: "Push Notifications",
