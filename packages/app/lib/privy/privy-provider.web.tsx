@@ -27,6 +27,9 @@ export const PrivyProvider = ({ children }: any) => {
           accentColor: "#676FFF",
           logo: "https://pbs.twimg.com/profile_images/1720182212468051968/CPBHLyGx_400x400.jpg",
         },
+        fiatOnRamp: {
+          useSandbox: process.env.NEXT_PUBLIC_STAGE === "development",
+        },
       }}
     >
       {children}

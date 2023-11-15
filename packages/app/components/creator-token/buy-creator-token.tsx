@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Linking } from "react-native";
 
 import { CrossmintPayButton } from "@crossmint/client-sdk-react-ui";
+import { useWallets } from "@privy-io/react-auth";
 import { createParam } from "solito";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -78,6 +79,8 @@ export const BuyCreatorToken = () => {
   const [username] = useParam("username");
   const [selectedActionParam] = useParam("selectedAction");
   const [tokenAmount, setTokenAmount] = useState(1);
+  const { wallets } = useWallets();
+  const isPrivyWalletConnected = wallets?.[0]?.walletClientType === "privy";
 
   const { data: profileData } = useUserProfile({ address: username });
   const sellToken = useCreatorTokenSell();
@@ -157,9 +160,25 @@ export const BuyCreatorToken = () => {
       );
     } else if (
       paymentMethod === "USDC" &&
-      usdcBalance.data?.balance === 0n &&
-      !wallet.isMagicWallet
+      Number(usdcBalance.data?.balance) === 0
     ) {
+      if (isPrivyWalletConnected) {
+        return (
+          <Button
+            size="regular"
+            onPress={() => {
+              wallets[0].fund({
+                config: {
+                  currencyCode: "USDC_BASE",
+                },
+              });
+            }}
+          >
+            Add USDC to your wallet
+          </Button>
+        );
+      }
+
       return (
         <Button
           onPress={() =>
@@ -174,9 +193,25 @@ export const BuyCreatorToken = () => {
       );
     } else if (
       paymentMethod === "ETH" &&
-      ethBalance.data?.balance === 0n &&
-      !wallet.isMagicWallet
+      Number(ethBalance.data?.balance) === 0
     ) {
+      if (isPrivyWalletConnected) {
+        return (
+          <Button
+            size="regular"
+            onPress={() => {
+              wallets[0].fund({
+                config: {
+                  currencyCode: "ETH_BASE",
+                },
+              });
+            }}
+          >
+            Add ETH to your wallet
+          </Button>
+        );
+      }
+
       return (
         <Button
           onPress={() => Linking.openURL("https://bridge.base.org/deposit")}
