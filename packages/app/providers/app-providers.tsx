@@ -12,12 +12,12 @@ import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
 import { KeyboardProvider } from "app/lib/keyboard-controller";
+import { PrivyAuth, PrivyProvider } from "app/lib/privy/privy-provider";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
-import { Web3Provider } from "app/providers/web3-provider";
 
 import { WalletProvider } from "./wallet-provider";
 
@@ -29,27 +29,27 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
           <ColorSchemeProvider>
             <ReactionProvider>
               <WalletMobileSDKProvider>
-                <Web3Provider>
-                  <WalletProvider>
-                    <AlertProvider>
-                      <LightBoxProvider>
-                        <SnackbarProvider>
-                          <NavigationProvider>
-                            <SWRProvider>
+                <WalletProvider>
+                  <AlertProvider>
+                    <LightBoxProvider>
+                      <SnackbarProvider>
+                        <NavigationProvider>
+                          <SWRProvider>
+                            <PrivyProvider>
                               <AuthProvider>
                                 <UserProvider>
                                   <BottomSheetModalProvider>
-                                    {children}
+                                    <PrivyAuth>{children}</PrivyAuth>
                                   </BottomSheetModalProvider>
                                 </UserProvider>
                               </AuthProvider>
-                            </SWRProvider>
-                          </NavigationProvider>
-                        </SnackbarProvider>
-                      </LightBoxProvider>
-                    </AlertProvider>
-                  </WalletProvider>
-                </Web3Provider>
+                            </PrivyProvider>
+                          </SWRProvider>
+                        </NavigationProvider>
+                      </SnackbarProvider>
+                    </LightBoxProvider>
+                  </AlertProvider>
+                </WalletProvider>
               </WalletMobileSDKProvider>
             </ReactionProvider>
           </ColorSchemeProvider>

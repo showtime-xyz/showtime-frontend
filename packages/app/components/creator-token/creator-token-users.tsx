@@ -1,8 +1,15 @@
+import { useMemo } from "react";
 import { Platform } from "react-native";
+
+import { BlurView } from "expo-blur";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { GoldHexagon, ShowtimeRounded } from "@showtime-xyz/universal.icon";
+import {
+  ChevronRight,
+  GoldHexagon,
+  ShowtimeRounded,
+} from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -12,12 +19,21 @@ import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
 import {
+  CreatorTokenItem,
   CreatorTokenUser,
+  NewCreatorTokenItem,
   TopCreatorTokenUser,
 } from "app/hooks/creator-token/use-creator-tokens";
+import { linkifyDescription } from "app/lib/linkify";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
-import { formatAddressShort } from "app/utilities";
+import {
+  cleanUserTextInput,
+  formatAddressShort,
+  limitLineBreaks,
+  removeTags,
+} from "app/utilities";
 
+import { generateLoremIpsum } from "../creator-channels/utils";
 import { PlatformBuyButton } from "../profile/buy-and-sell-buttons";
 
 export const CreatorTokensTitle = ({ title }: { title: string }) => {
@@ -135,15 +151,17 @@ export const TopCreatorTokenItem = ({
 }) => {
   const router = useRouter();
   const isDark = useIsDarkMode();
-
+  const token = (item as NewCreatorTokenItem)?.creator_token
+    ? ((item as NewCreatorTokenItem).creator_token as CreatorTokenItem)
+    : (item as CreatorTokenItem);
   return (
     <PressableHover
       tw={["mb-2 py-1.5", tw].join(" ")}
       onPress={() => {
         router.push(
-          item.owner_profile?.username
-            ? `/@${item.owner_profile?.username}`
-            : `/@${item.owner_address}`
+          token?.owner_profile?.username
+            ? `/@${token?.owner_profile?.username}`
+            : `/@${token?.owner_address}`
         );
       }}
       {...rest}
@@ -168,7 +186,7 @@ export const TopCreatorTokenItem = ({
           ) : null}
         </View>
         <View tw="ml-1 flex-1 flex-row items-center">
-          <Avatar url={item?.owner_profile?.img_url} size={34} />
+          <Avatar url={token?.owner_profile?.img_url} size={34} />
           <View tw="ml-2 flex-1 justify-center">
             <View tw="flex-row items-center">
               <Text
@@ -176,11 +194,11 @@ export const TopCreatorTokenItem = ({
                 numberOfLines={1}
               >
                 @
-                {item.owner_profile?.username
-                  ? item.owner_profile?.username
-                  : formatAddressShort(item.owner_address)}
+                {token?.owner_profile?.username
+                  ? token?.owner_profile?.username
+                  : formatAddressShort(token?.owner_address)}
               </Text>
-              {Boolean(item.owner_profile?.verified) && (
+              {Boolean(token?.owner_profile?.verified) && (
                 <View tw="ml-1">
                   <VerificationBadge size={14} />
                 </View>
@@ -191,7 +209,7 @@ export const TopCreatorTokenItem = ({
                 tw="text-xs font-semibold text-gray-900 dark:text-white"
                 numberOfLines={1}
               >
-                {item.nft_count}
+                {token?.nft_count}
               </Text>
               <View tw="w-1" />
               <ShowtimeRounded
@@ -221,14 +239,39 @@ export const TopCreatorTokenListItem = ({
 }) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
+  const token = (item as NewCreatorTokenItem)?.creator_token
+    ? ((item as NewCreatorTokenItem).creator_token as CreatorTokenItem)
+    : (item as CreatorTokenItem);
+  const lastMessage = (item as NewCreatorTokenItem)?.last_channel_message;
+  const loremText = useMemo(
+    () =>
+      lastMessage?.body_text_length > 0
+        ? generateLoremIpsum(lastMessage?.body_text_length)
+        : "",
+    [lastMessage?.body_text_length]
+  );
+  const linkifiedMessage = useMemo(
+    () =>
+      lastMessage?.body
+        ? linkifyDescription(
+            limitLineBreaks(
+              cleanUserTextInput(removeTags(lastMessage.body)),
+              10
+            ),
+            "!text-indigo-600 dark:!text-blue-400"
+          )
+        : "",
+    [lastMessage?.body]
+  );
+
   return (
     <PressableHover
       tw={["flex-row py-2.5", tw].join(" ")}
       onPress={() => {
         router.push(
-          item.owner_profile?.username
-            ? `/@${item.owner_profile?.username}`
-            : `/@${item.owner_address}`
+          token.owner_profile?.username
+            ? `/@${token.owner_profile?.username}`
+            : `/@${token.owner_address}`
         );
       }}
       {...rest}
@@ -252,10 +295,10 @@ export const TopCreatorTokenListItem = ({
             )
           ) : null}
         </View>
-        <Avatar url={item?.owner_profile?.img_url} size={34} />
+        <Avatar url={token?.owner_profile?.img_url} size={34} />
       </View>
       <View tw="web:flex-1 ml-2 flex-row">
-        <View tw="w-[168px] justify-center md:w-[320px]">
+        <View tw="w-[168px] justify-center md:w-[180px]">
           <View tw="min-w-[180px] flex-row">
             <Text
               tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
@@ -263,12 +306,12 @@ export const TopCreatorTokenListItem = ({
               style={{ lineHeight: 20 }}
             >
               @
-              {item.owner_profile?.username
-                ? item.owner_profile?.username
-                : formatAddressShort(item.owner_address)}
+              {token.owner_profile?.username
+                ? token.owner_profile?.username
+                : formatAddressShort(token.owner_address)}
             </Text>
             <View tw="h-1" />
-            {Boolean(item.owner_profile?.verified) && (
+            {Boolean(token.owner_profile?.verified) && (
               <View tw="ml-1">
                 <VerificationBadge size={14} />
               </View>
@@ -281,17 +324,17 @@ export const TopCreatorTokenListItem = ({
                 tw="text-xs text-gray-500 dark:text-gray-400"
                 numberOfLines={2}
               >
-                {item.owner_profile?.bio}
+                {token.owner_profile?.bio}
               </Text>
             </>
           ) : null}
         </View>
-        <View tw="ml-4 min-w-[50px] flex-row items-center md:ml-10">
+        <View tw="ml-4 min-w-[50px] flex-row items-center md:ml-6">
           <Text
             tw="text-sm font-semibold text-gray-900 dark:text-white"
             numberOfLines={1}
           >
-            {item.nft_count}
+            {token.nft_count}
           </Text>
           <View tw="w-1" />
           <ShowtimeRounded
@@ -300,13 +343,65 @@ export const TopCreatorTokenListItem = ({
             color={isDark ? colors.white : colors.gray[900]}
           />
         </View>
+        <View tw="ml-auto lg:ml-4">
+          <PlatformBuyButton
+            style={{ backgroundColor: "#08F6CC", height: 26 }}
+            username={token.owner_profile?.username}
+          />
+        </View>
       </View>
-      <View tw="ml-auto">
-        <PlatformBuyButton
-          style={{ backgroundColor: "#08F6CC", height: 26 }}
-          username={item.owner_profile?.username}
-        />
-      </View>
+      {!lastMessage ? null : (
+        <View tw="ml-auto hidden w-full max-w-[200px] flex-row items-center justify-between lg:flex">
+          {lastMessage.is_payment_gated ? (
+            <View tw="select-none overflow-hidden px-2 py-0.5">
+              {Platform.OS === "web" ? (
+                // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
+                <View tw="max-w-[200px] blur-sm">
+                  <Text
+                    tw="text-xs text-gray-900 dark:text-gray-100"
+                    numberOfLines={2}
+                  >
+                    {loremText}
+                  </Text>
+                </View>
+              ) : (
+                <>
+                  <Text tw="py-1.5 text-xs  text-gray-900 dark:text-gray-100">
+                    {loremText}
+                  </Text>
+                  <BlurView
+                    intensity={10}
+                    style={{
+                      left: 0,
+                      height: "200%",
+                      width: "200%",
+                      position: "absolute",
+                    }}
+                  />
+                </>
+              )}
+            </View>
+          ) : (
+            <>
+              {lastMessage.body_text_length > 0 ? (
+                <Text
+                  tw={"text-xs text-gray-900 dark:text-gray-100"}
+                  style={
+                    Platform.OS === "web"
+                      ? {
+                          // @ts-ignore
+                          wordBreak: "break-word",
+                        }
+                      : {}
+                  }
+                >
+                  {linkifiedMessage}
+                </Text>
+              ) : null}
+            </>
+          )}
+        </View>
+      )}
     </PressableHover>
   );
 };
@@ -342,12 +437,15 @@ export const TopCreatorTokenListItemSkeleton = ({
         <Skeleton width={16} height={16} show radius={8} />
         <View tw="w-2.5" />
         <Skeleton width={34} height={34} show radius={999} />
-        <View tw="ml-2 w-[178px] md:w-[354px]">
+        <View tw="ml-2 w-[178px] md:w-[214px]">
           <Skeleton width={140} height={13} show radius={4} />
         </View>
         <Skeleton width={30} height={14} show radius={4} />
-        <View tw="ml-auto">
+        <View tw="ml-auto lg:ml-10">
           <Skeleton width={42} height={24} show radius={999} />
+        </View>
+        <View tw="hidden lg:ml-8 lg:flex">
+          <Skeleton width={200} height={14} show radius={999} />
         </View>
       </View>
     </View>

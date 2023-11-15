@@ -17,7 +17,6 @@ export type UseWalletReturnType = {
   address?: `0x${string}`;
   disconnect: () => ConnectResult;
   connected?: boolean;
-  networkChanged?: boolean;
   connect: () => ConnectResult;
   name?: string;
   signMessageAsync: (args: SignMessageArgs) => Promise<string | undefined>;

@@ -13,6 +13,7 @@ declare global {
       E2E: string;
       NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: string;
       NEXT_PUBLIC_CROSSMINT_PROJECT_ID: string;
+      NEXT_PUBLIC_PRIVY_APP_ID: string;
     }
   }
   interface Window {

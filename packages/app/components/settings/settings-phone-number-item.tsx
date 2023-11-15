@@ -8,7 +8,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useManageAccount } from "app/hooks/use-manage-account";
-import { useWeb3 } from "app/hooks/use-web3";
 import { useMagic } from "app/lib/magic";
 import { WalletAddressesV2 } from "app/types";
 
@@ -25,33 +24,11 @@ export type PhoneNumberHeaderProps = {
 };
 
 export const SettingsPhoneNumberItem = (props: PhoneNumberItemProps) => {
-  const [isCurrentPhoneNumber, setIsCurrentPhoneNumber] = useState(false);
-  const { magic } = useMagic();
-  const { isMagic } = useWeb3();
-  const { userAddress } = useCurrentUserAddress();
+  const [isCurrentPhoneNumber] = useState(false);
   const { removePhoneNumber } = useManageAccount();
 
   const phoneNumber = props.phoneNumber;
   const address = props.address;
-
-  const getCurrentMagicUser = useCallback(async () => {
-    if (isMagic) {
-      const magicMetaData = await magic?.user?.getMetadata();
-      const currentPhoneNumber = magicMetaData.phoneNumber;
-      const currentMagicAddress = magicMetaData.publicAddress;
-      const isMatchingMagicPhoneNumber =
-        currentPhoneNumber?.toLowerCase() === phoneNumber?.toLowerCase();
-      const isMatchingMagicAddress =
-        currentMagicAddress?.toLowerCase() === userAddress?.toLowerCase();
-      if (isMatchingMagicPhoneNumber && isMatchingMagicAddress) {
-        setIsCurrentPhoneNumber(true);
-      }
-    }
-  }, [magic, isMagic, phoneNumber, userAddress]);
-
-  useEffect(() => {
-    getCurrentMagicUser();
-  }, [getCurrentMagicUser]);
 
   return (
     <View tw="w-full flex-row items-center justify-between px-4 py-5 lg:px-0">
