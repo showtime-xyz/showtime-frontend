@@ -44,8 +44,11 @@ export function Login() {
   }, [showSignMessage, modalScreenContext]);
 
   useEffect(() => {
-    // pop back to the previous screen if the user is authenticated
-    if (user.isAuthenticated && !prevUser?.isAuthenticated) {
+    if (
+      user.isAuthenticated &&
+      !prevUser?.isAuthenticated &&
+      router.asPath === "/login"
+    ) {
       router.pop();
     }
   }, [router, user, prevUser]);
@@ -84,6 +87,7 @@ export function Login() {
                 if (privy.authenticated) {
                   await privy.logout();
                 }
+                router.pop();
                 privy.login();
               }}
             >
