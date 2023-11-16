@@ -6975,7 +6975,7 @@ __metadata:
     jest-expo: ^49.0.0
     jest-next-dynamic: ^1.0.1
     metro-minify-esbuild: ^0.2.0
-    moti: 0.25.3
+    moti: 0.27.2
     nativewind: ^2.0.11
     node-libs-react-native: ^1.2.1
     path-browserify: ^1.0.1
@@ -21830,14 +21830,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moti@npm:0.25.3":
-  version: 0.25.3
-  resolution: "moti@npm:0.25.3"
+"moti@npm:0.27.2":
+  version: 0.27.2
+  resolution: "moti@npm:0.27.2"
   dependencies:
     framer-motion: ^6.5.1
   peerDependencies:
     react-native-reanimated: "*"
-  checksum: 13b013f7c8aca8720f4d85abd3706a8b8d7f835be33fecb627e1b919ec3635fee18895ffdf69f16706f48b468db847bbee8d28b8d3af4b57e7f5f5e19671d33a
+  checksum: 7695e914180608cee58c6bd95a66f5b02cfde2ccfbce82b31395a190115acf5cca7723e08cad5119fdc6c452c7bc7f5127207c66cba625e75ba65aa8e64a49f9
   languageName: node
   linkType: hard
 
