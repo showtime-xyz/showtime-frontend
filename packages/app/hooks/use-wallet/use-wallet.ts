@@ -33,7 +33,6 @@ const useWallet = (): UseWalletReturnType => {
     }
   }, [privyWallet]);
 
-  console.log("walletConnectInstanceRef", privyWallet);
   const walletConnected =
     web3Modal.isConnected || mobileSDK.connected || isPrivyWallet;
   const [address, setAddress] = useState<`0x${string}` | undefined>();
