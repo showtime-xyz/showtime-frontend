@@ -28,12 +28,11 @@ export function Login() {
     loading,
   } = useLogin();
   const privy = usePrivy();
-  //#endregion
-  const modalScreenContext = useModalScreenContext();
-
   const user = useUser();
   const router = useRouter();
   const prevUser = usePreviousValue(user);
+  //#endregion
+  const modalScreenContext = useModalScreenContext();
 
   useEffect(() => {
     if (showSignMessage) {
@@ -42,13 +41,10 @@ export function Login() {
       modalScreenContext?.setTitle("Sign in to collect & unlock");
     }
   }, [showSignMessage, modalScreenContext]);
-
   useEffect(() => {
-    if (
-      user.isAuthenticated &&
-      !prevUser?.isAuthenticated &&
-      router.asPath === "/login"
-    ) {
+    // This will happen when user is logged in after connect wallet.
+    // For social logins, privy refreshes the page so we don't need to do anything.
+    if (user.isAuthenticated && !prevUser?.isAuthenticated) {
       router.pop();
     }
   }, [router, user, prevUser]);
@@ -87,7 +83,6 @@ export function Login() {
                 if (privy.authenticated) {
                   await privy.logout();
                 }
-                router.pop();
                 privy.login();
               }}
             >
