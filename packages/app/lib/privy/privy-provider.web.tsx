@@ -8,12 +8,15 @@ import {
   useLogin,
 } from "@privy-io/react-auth";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+
 import { useAuth } from "app/hooks/auth/use-auth";
 import { baseChain } from "app/hooks/creator-token/utils";
 import { useStableCallback } from "app/hooks/use-stable-callback";
 import { useWallet } from "app/hooks/use-wallet";
 
 export const PrivyProvider = ({ children }: any) => {
+  const colorScheme = useIsDarkMode() ? "dark" : "light";
   return (
     <PrivyProviderImpl
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
@@ -26,6 +29,7 @@ export const PrivyProvider = ({ children }: any) => {
         appearance: {
           accentColor: "#676FFF",
           logo: "https://pbs.twimg.com/profile_images/1720182212468051968/CPBHLyGx_400x400.jpg",
+          theme: colorScheme,
         },
         fiatOnRamp: {
           useSandbox: process.env.NEXT_PUBLIC_STAGE === "development",
