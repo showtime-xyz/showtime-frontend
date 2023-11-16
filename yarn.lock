@@ -369,6 +369,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/helper-create-class-features-plugin@npm:^7.22.15":
+  version: 7.22.15
+  resolution: "@babel/helper-create-class-features-plugin@npm:7.22.15"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.22.5
+    "@babel/helper-environment-visitor": ^7.22.5
+    "@babel/helper-function-name": ^7.22.5
+    "@babel/helper-member-expression-to-functions": ^7.22.15
+    "@babel/helper-optimise-call-expression": ^7.22.5
+    "@babel/helper-replace-supers": ^7.22.9
+    "@babel/helper-skip-transparent-expression-wrappers": ^7.22.5
+    "@babel/helper-split-export-declaration": ^7.22.6
+    semver: ^6.3.1
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: 52c500d8d164abb3a360b1b7c4b8fff77bc4a5920d3a2b41ae6e1d30617b0dc0b972c1f5db35b1752007e04a748908b4a99bc872b73549ae837e87dcdde005a3
+  languageName: node
+  linkType: hard
+
 "@babel/helper-create-regexp-features-plugin@npm:^7.18.6, @babel/helper-create-regexp-features-plugin@npm:^7.22.5":
   version: 7.22.9
   resolution: "@babel/helper-create-regexp-features-plugin@npm:7.22.9"
@@ -437,6 +456,15 @@ __metadata:
   dependencies:
     "@babel/types": ^7.22.5
   checksum: 394ca191b4ac908a76e7c50ab52102669efe3a1c277033e49467913c7ed6f7c64d7eacbeabf3bed39ea1f41731e22993f763b1edce0f74ff8563fd1f380d92cc
+  languageName: node
+  linkType: hard
+
+"@babel/helper-member-expression-to-functions@npm:^7.22.15":
+  version: 7.23.0
+  resolution: "@babel/helper-member-expression-to-functions@npm:7.23.0"
+  dependencies:
+    "@babel/types": ^7.23.0
+  checksum: 494659361370c979ada711ca685e2efe9460683c36db1b283b446122596602c901e291e09f2f980ecedfe6e0f2bd5386cb59768285446530df10c14df1024e75
   languageName: node
   linkType: hard
 
@@ -923,6 +951,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-syntax-flow@npm:^7.23.3":
+  version: 7.23.3
+  resolution: "@babel/plugin-syntax-flow@npm:7.23.3"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: c6e6f355d6ace5f4a9e7bb19f1fed2398aeb9b62c4c671a189d81b124f9f5bb77c4225b6e85e19339268c60a021c1e49104e450375de5e6bb70612190d9678af
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-syntax-import-assertions@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/plugin-syntax-import-assertions@npm:7.22.5"
@@ -1161,6 +1200,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-transform-class-properties@npm:^7.23.3":
+  version: 7.23.3
+  resolution: "@babel/plugin-transform-class-properties@npm:7.23.3"
+  dependencies:
+    "@babel/helper-create-class-features-plugin": ^7.22.15
+    "@babel/helper-plugin-utils": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 9c6f8366f667897541d360246de176dd29efc7a13d80a5b48361882f7173d9173be4646c3b7d9b003ccc0e01e25df122330308f33db921fa553aa17ad544b3fc
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-transform-class-static-block@npm:^7.22.5":
   version: 7.22.5
   resolution: "@babel/plugin-transform-class-static-block@npm:7.22.5"
@@ -1284,6 +1335,18 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 1ba48187d6f33814be01c6870489f0b1858256cf2b9dd7e62f02af8b30049bf375112f1d44692c5fed3cb9cd26ee2fb32e358cd79b6ad2360a51e8f993e861bf
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-transform-flow-strip-types@npm:^7.23.3":
+  version: 7.23.3
+  resolution: "@babel/plugin-transform-flow-strip-types@npm:7.23.3"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.22.5
+    "@babel/plugin-syntax-flow": ^7.23.3
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: de38cc5cf948bc19405ea041292181527a36f59f08d787a590415fac36e9b0c7992f0d3e2fd3b9402089bafdaa1a893291a0edf15beebfd29bdedbbe582fee9b
   languageName: node
   linkType: hard
 
@@ -1538,6 +1601,18 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   checksum: 321479b4fcb6d3b3ef622ab22fd24001e43d46e680e8e41324c033d5810c84646e470f81b44cbcbef5c22e99030784f7cac92f1829974da7a47a60a7139082c3
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-transform-private-methods@npm:^7.23.3":
+  version: 7.23.3
+  resolution: "@babel/plugin-transform-private-methods@npm:7.23.3"
+  dependencies:
+    "@babel/helper-create-class-features-plugin": ^7.22.15
+    "@babel/helper-plugin-utils": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: cedc1285c49b5a6d9a3d0e5e413b756ac40b3ac2f8f68bdfc3ae268bc8d27b00abd8bb0861c72756ff5dd8bf1eb77211b7feb5baf4fdae2ebbaabe49b9adc1d0
   languageName: node
   linkType: hard
 
@@ -7223,6 +7298,9 @@ __metadata:
   dependencies:
     "@amplitude/analytics-react-native": ^1.3.1
     "@babel/core": ^7.22.9
+    "@babel/plugin-transform-class-properties": ^7.23.3
+    "@babel/plugin-transform-flow-strip-types": ^7.23.3
+    "@babel/plugin-transform-private-methods": ^7.23.3
     "@babel/runtime": ^7.22.6
     "@bacons/css-to-expo-linear-gradient": ^1.3.0
     "@bacons/link-assets": ^1.1.0
