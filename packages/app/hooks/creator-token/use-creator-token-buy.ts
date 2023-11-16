@@ -66,7 +66,7 @@ export const useCreatorTokenBuy = (params: {
         await wallet.connect();
       }
 
-      const walletClient = await wallet.getWalletClient?.();
+      const walletClient = wallet.getWalletClient?.();
       const walletAddress = walletClient?.account?.address;
 
       if (walletAddress && profileData?.data?.profile.creator_token) {
@@ -158,6 +158,7 @@ export const useCreatorTokenBuy = (params: {
 
             transactionHash = await walletClient?.writeContract?.({
               ...requestPayload,
+              type: "eip1559",
               maxFeePerGas,
               maxPriorityFeePerGas,
             });

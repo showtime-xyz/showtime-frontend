@@ -1,9 +1,14 @@
-import { useState, useRef } from "react";
+import { useMemo, useEffect, useState, useRef } from "react";
+
+import { useWalletClient } from "wagmi";
 
 import { useWallet } from "app/hooks/use-wallet";
+import { useAccessToken } from "app/lib/access-token";
 import { Logger } from "app/lib/logger";
 import { isMobileWeb } from "app/utilities";
 
+import { useUser } from "../use-user";
+import { useWeb3 } from "../use-web3";
 import { useAuth } from "./use-auth";
 import { useNonce } from "./use-nonce";
 import { useWalletLoginState } from "./use-wallet-login-state";
@@ -16,12 +21,18 @@ export function useWalletLogin() {
   //#endregion
 
   //#region hooks
+  const { setWeb3 } = useWeb3();
   const { getNonce, rotateNonce } = useNonce();
   const { login: _login, logout, setAuthenticationStatus } = useAuth();
   const [showSignMessage, setShowSignMessage] = useState(false);
   const walletConnector = useWallet();
   const cachedNonce = useRef<string | null>();
 
+  const wagmiSigner = useWalletClient();
+
+  const { isAuthenticated } = useUser();
+  const accessToken = useAccessToken();
+  const authenticated = useMemo(() => !!isAuthenticated, [isAuthenticated]);
   //#endregion
 
   const loginWithWallet = async () => {
@@ -29,12 +40,16 @@ export function useWalletLogin() {
 
     dispatch("CONNECT_TO_WALLET_REQUEST");
 
-    const res = await walletConnector.connect();
-
-    if (res?.address) {
-      address = res.address;
+    if (!walletConnector.address) {
+      const res = await walletConnector.connect();
+      if (res?.address) {
+        address = res.address;
+      }
+      if (res?.walletName) walletName = res.walletName;
+    } else {
+      address = walletConnector.address;
+      walletName = walletConnector.name;
     }
-    if (res?.walletName) walletName = res.walletName;
 
     try {
       if (address) {
@@ -105,6 +120,30 @@ export function useWalletLogin() {
   };
 
   //#endregion
+
+  // TODO: below thing doesn't work. Keeping it for now
+  const handleSetWeb3 = async () => {
+    if (wagmiSigner.data) {
+      setWeb3(wagmiSigner.data);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      (walletConnector.connected && authenticated) ||
+      (walletConnector.connected &&
+        authenticated &&
+        !walletConnector.networkChanged)
+    ) {
+      handleSetWeb3();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    accessToken,
+    walletConnector.connected,
+    authenticated,
+    walletConnector.networkChanged,
+  ]);
 
   return {
     status,

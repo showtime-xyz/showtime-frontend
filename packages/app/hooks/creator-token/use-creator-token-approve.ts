@@ -22,7 +22,7 @@ export const useApproveToken = () => {
       }
     ) {
       const erc20Abi = require("app/abi/IERC20Permit.json");
-      const walletClient = await wallet.getWalletClient?.();
+      const walletClient = wallet.getWalletClient?.();
 
       const walletAddress = walletClient?.account?.address;
       if (walletAddress) {
@@ -67,6 +67,7 @@ export const useApproveToken = () => {
           //@ts-ignore
           const hash = await walletClient?.writeContract({
             ...request,
+            type: "eip1559",
             maxFeePerGas,
             maxPriorityFeePerGas,
           });

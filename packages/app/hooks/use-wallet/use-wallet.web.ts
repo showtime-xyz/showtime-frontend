@@ -1,61 +1,122 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 
-import { usePrivy, useWallets, useConnectWallet } from "@privy-io/react-auth";
-import { createWalletClient, custom } from "viem";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import {
+  useAccount,
+  useSignMessage,
+  useWalletClient,
+  useNetwork,
+  useDisconnect,
+} from "wagmi";
 
-import { baseChain } from "../creator-token/utils";
+import { Alert } from "@showtime-xyz/universal.alert";
+
+import { useWeb3 } from "app/hooks/use-web3";
+
 import { useLatestValueRef } from "../use-latest-value-ref";
-import { useStableCallback } from "../use-stable-callback";
 import { ConnectResult, UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
-  const privy = usePrivy();
-  const wallets = useWallets();
-  const latestConnectedWallet = useLatestValueRef(wallets.wallets[0]);
-  useConnectWallet({
-    onSuccess: (wallet) => {
-      if (walletConnectedPromiseResolveCallback.current) {
-        walletConnectedPromiseResolveCallback.current(wallet);
-        walletConnectedPromiseResolveCallback.current = null;
-      }
+  const connectorRef = useRef<any>(null);
+  const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
+  const wagmiData = useAccount({
+    onConnect: (connectorParams) => {
+      connectorRef.current = connectorParams;
+    },
+    onDisconnect: () => {
+      walletDisconnectedPromiseResolveCallback.current?.();
+      walletDisconnectedPromiseResolveCallback.current = null;
     },
   });
+  const { signMessageAsync } = useSignMessage();
+  const { data: wagmiSigner } = useWalletClient();
+  const { chain } = useNetwork();
+  const { openConnectModal } = useConnectModal();
+  const { disconnect } = useDisconnect();
+  const { web3, isMagic, magicWalletAddress, getWalletClient } = useWeb3();
 
-  const connected = !!wallets.wallets[0];
+  const networkChanged = useMemo(() => !!chain && chain.id !== 137, [chain]);
+  const [address, setAddress] = useState<`0x${string}` | undefined>();
 
-  const disconnect = useStableCallback(() => {
-    localStorage.removeItem("walletconnect");
-    wallets.wallets.forEach((wallet) => wallet.disconnect());
-  });
+  // we use this hook to prevent stale values in closures
+  const openConnectModalRef = useLatestValueRef(openConnectModal);
+
+  useEffect(() => {
+    (async function fetchUserAddress() {
+      if (wagmiData?.address) {
+        setAddress(wagmiData?.address);
+      } else if (magicWalletAddress) {
+        setAddress(magicWalletAddress as `0x${string}`);
+      } else if (web3) {
+        const address = web3.account?.address;
+        setAddress(address);
+      } else {
+        setAddress(undefined);
+      }
+    })();
+  }, [web3, wagmiData?.address, magicWalletAddress]);
+
+  useEffect(() => {
+    if (
+      wagmiData.isConnected &&
+      walletConnectedPromiseResolveCallback.current &&
+      web3?.account?.address === wagmiData.address
+    ) {
+      walletConnectedPromiseResolveCallback.current(connectorRef.current);
+      walletConnectedPromiseResolveCallback.current = null;
+    }
+  }, [wagmiData.address, wagmiData.isConnected, web3?.account?.address]);
+
+  const connected =
+    (wagmiData.isConnected && !!wagmiSigner?.account.address && !!chain) ||
+    isMagic;
 
   const result = useMemo(() => {
     return {
+      address,
+      isMagicWallet: isMagic,
+      walletClient: web3,
       connect: async () => {
-        privy.connectWallet();
+        if (openConnectModalRef.current) {
+          openConnectModalRef.current();
+        } else {
+          Alert.alert(
+            "Oops, connection to wallet failed. Please refresh the page and try again."
+          );
+        }
         return new Promise<ConnectResult>((resolve) => {
           walletConnectedPromiseResolveCallback.current = resolve;
         });
       },
-      getWalletClient: async () => {
-        await latestConnectedWallet.current?.switchChain(baseChain.id);
-        const ethereumProvider =
-          await wallets.wallets[0]?.getEthereumProvider();
-        const walletClient = await createWalletClient({
-          account: latestConnectedWallet.current?.address as any,
-          chain: baseChain,
-          transport: custom(ethereumProvider),
-        });
-        return walletClient;
-      },
+      getWalletClient,
       connected,
-      address: wallets.wallets[0]?.address,
-      disconnect,
-      signMessageAsync: ({ message }: { message: string }) => {
-        return latestConnectedWallet.current.sign(message);
+      disconnect: async () => {
+        localStorage.removeItem("walletconnect");
+        disconnect();
+        return new Promise<any>((resolve) => {
+          if (wagmiData.isConnected) {
+            walletDisconnectedPromiseResolveCallback.current = resolve;
+          } else {
+            resolve(true);
+          }
+        });
       },
+      networkChanged,
+      signMessageAsync,
     };
-  }, [connected, disconnect, privy, latestConnectedWallet, wallets.wallets]);
+  }, [
+    address,
+    isMagic,
+    connected,
+    web3,
+    networkChanged,
+    signMessageAsync,
+    openConnectModalRef,
+    disconnect,
+    wagmiData.isConnected,
+    getWalletClient,
+  ]);
 
   return result;
 };

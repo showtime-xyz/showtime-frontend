@@ -1,15 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 
-import { useEmbeddedWallet, isConnected } from "@privy-io/expo";
 import { createWalletClient, custom } from "viem";
 import { mainnet } from "viem/chains";
 
 import { useLatestValueRef } from "app/hooks/use-latest-value-ref";
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
+import { useWeb3 } from "app/hooks/use-web3";
 import { useWeb3Modal } from "app/lib/react-native-web3-modal";
 
-import { baseChain } from "../creator-token/utils";
-import { useStableCallback } from "../use-stable-callback";
 import { ConnectResult, UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
 
@@ -17,41 +15,31 @@ const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const web3Modal = useWeb3Modal();
+  const { web3, isMagic, magicWalletAddress, getWalletClient } = useWeb3();
   const mobileSDK = useWalletMobileSDK();
-  const privyWallet = useEmbeddedWallet();
+  const [address, setAddress] = useState<`0x${string}` | undefined>();
+
   // we use this hook to prevent stale values in closures
   const walletConnectInstanceRef = useLatestValueRef(web3Modal);
   const coinbaseMobileSDKInstanceRef = useLatestValueRef(mobileSDK);
 
-  const isPrivyWallet = isConnected(privyWallet);
-  const privyWalletClient = useMemo(() => {
-    if (isConnected(privyWallet)) {
-      return createWalletClient({
-        chain: baseChain,
-        transport: custom(privyWallet.provider),
-      });
-    }
-  }, [privyWallet]);
-
-  console.log("walletConnectInstanceRef", privyWallet);
-  const walletConnected =
-    web3Modal.isConnected || mobileSDK.connected || isPrivyWallet;
-  const [address, setAddress] = useState<`0x${string}` | undefined>();
-
+  const walletConnected = web3Modal.isConnected || mobileSDK.connected;
   useEffect(() => {
     (async function fetchUserAddress() {
       if (web3Modal.address) {
         setAddress(web3Modal.address as `0x${string}`);
+      } else if (magicWalletAddress) {
+        setAddress(magicWalletAddress as `0x${string}`);
       } else if (mobileSDK.address) {
         setAddress(mobileSDK.address as `0x${string}`);
-      } else if (privyWalletClient) {
-        const address = (await privyWalletClient.getAddresses())[0];
+      } else if (web3) {
+        const address = web3.account?.address;
         setAddress(address);
       } else {
         setAddress(undefined);
       }
     })();
-  }, [mobileSDK.address, privyWalletClient, web3Modal.address]);
+  }, [web3, magicWalletAddress, mobileSDK.address, web3Modal.address]);
 
   // WalletConnect connected
   useEffect(() => {
@@ -104,37 +92,6 @@ const useWallet = (): UseWalletReturnType => {
     }
   }, [mobileSDK]);
 
-  const getWalletClient = useStableCallback(async () => {
-    if (isPrivyWallet) {
-      return privyWalletClient;
-    }
-
-    if (web3Modal.isConnected && web3Modal.provider) {
-      const client = createWalletClient({
-        chain: mainnet,
-        transport: custom(web3Modal.provider),
-      });
-      return client;
-    } else if (mobileSDK.connected && mobileSDK.address) {
-      const MobileSDKProvider = (
-        await import(
-          "@coinbase/wallet-mobile-sdk/build/WalletMobileSDKEVMProvider"
-        )
-      ).WalletMobileSDKEVMProvider;
-      const mobileSDKProvider = new MobileSDKProvider({
-        jsonRpcUrl: `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
-        address: mobileSDK.address,
-      });
-
-      const client = createWalletClient({
-        chain: mainnet,
-        transport: custom(mobileSDKProvider as any),
-      });
-
-      return client;
-    }
-  });
-
   const result = useMemo(() => {
     const wcConnected = web3Modal.isConnected;
     const mobileSDKConnected = mobileSDK.connected;
@@ -157,8 +114,7 @@ const useWallet = (): UseWalletReturnType => {
       disconnect: async () => {
         if (walletConnectInstanceRef.current.isConnected) {
           walletConnectInstanceRef.current.disconnect();
-        }
-        if (coinbaseMobileSDKInstanceRef.current.connected) {
+        } else if (coinbaseMobileSDKInstanceRef.current.connected) {
           coinbaseMobileSDKInstanceRef.current.disconnect();
         }
 
@@ -167,7 +123,10 @@ const useWallet = (): UseWalletReturnType => {
         });
       },
       name: walletName,
-      connected: walletConnected,
+      connected: walletConnected || isMagic,
+      isMagicWallet: isMagic,
+      networkChanged: undefined,
+      walletClient: web3,
       getWalletClient,
       signMessageAsync: async (args: { message: string }) => {
         if (
@@ -203,11 +162,13 @@ const useWallet = (): UseWalletReturnType => {
     web3Modal.isConnected,
     mobileSDK.connected,
     mobileSDK.metadata?.name,
+    address,
     walletConnected,
+    isMagic,
     walletConnectInstanceRef,
     coinbaseMobileSDKInstanceRef,
+    web3,
     getWalletClient,
-    address,
   ]);
 
   if (process.env.E2E) {

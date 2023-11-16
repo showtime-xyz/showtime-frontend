@@ -19,7 +19,7 @@ export const useNavigateToLogin = () => {
       }),
       Platform.select({
         native: "/login",
-        web: router.asPath,
+        web: router.asPath === "/" ? "/login" : router.asPath,
       }),
       { shallow: true }
     );

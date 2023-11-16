@@ -26,8 +26,7 @@ export const useLogin = () => {
     //@ts-ignore web only
     verifySignature,
   } = useWalletLogin();
-  const { loginWithEmail, loginWithOtp } = useMagicLogin();
-
+  const { loginWithEmail, loginWithPhoneNumber } = useMagicLogin();
   //#endregion
 
   //#region methods
@@ -81,20 +80,20 @@ export const useLogin = () => {
     },
     [loginWithEmail, handleLoginFailure]
   );
-
-  const handleSubmitOtp = useCallback(
-    async function handleSubmitOtp(code: string, phone: string) {
+  const handleSubmitPhoneNumber = useCallback(
+    async function handleSubmitPhoneNumber(phoneNumber: string) {
       try {
+        loginSource.current = "magic";
         Analytics.track(EVENTS.BUTTON_CLICKED, {
           name: "Login with phone number",
         });
 
-        return await loginWithOtp(code, phone);
+        return await loginWithPhoneNumber(phoneNumber);
       } catch (error) {
         handleLoginFailure(error);
       }
     },
-    [loginWithOtp, handleLoginFailure]
+    [loginWithPhoneNumber, handleLoginFailure]
   );
 
   /**
@@ -128,8 +127,8 @@ export const useLogin = () => {
     walletStatus,
     handleSubmitWallet,
     handleSubmitEmail,
+    handleSubmitPhoneNumber,
     showSignMessage,
-    handleSubmitOtp,
     verifySignature,
   };
 };

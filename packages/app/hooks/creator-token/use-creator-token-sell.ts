@@ -58,9 +58,10 @@ export const useCreatorTokenSell = () => {
         await wallet.disconnect();
         await wallet.connect();
       }
-      const walletClient = await wallet.getWalletClient?.();
 
-      const walletAddress = wallet.address;
+      const walletAddress = (
+        await wallet.getWalletClient?.()?.getAddresses?.()
+      )?.[0];
 
       const tokenIdsRes: TokenIdsMappingResponseType = await axios({
         url:
@@ -132,8 +133,9 @@ export const useCreatorTokenSell = () => {
               maxPriorityFeePerGas,
             });
 
-            const txHash = await walletClient?.writeContract({
+            const txHash = await wallet.walletClient?.writeContract({
               ...requestPayload,
+              type: "eip1559",
               maxFeePerGas,
               maxPriorityFeePerGas,
             });
