@@ -582,7 +582,7 @@ export const HeaderMd = withColorScheme(() => {
               >
                 <>
                   <Text tw="text-base font-bold text-white dark:text-black">
-                    {loginLoading ? "loading..." : "Email & Social"}
+                    {loginLoading ? "loading..." : "Phone & Social"}
                   </Text>
                 </>
               </Button>

@@ -6,9 +6,13 @@ import { usePrivy } from "@privy-io/react-auth";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { usePreviousValue } from "app/hooks/use-previous-value";
+import { useUser } from "app/hooks/use-user";
 
 import { ConnectButton } from "../connect-button";
 import { useLogin } from "./use-login";
@@ -27,6 +31,10 @@ export function Login() {
   //#endregion
   const modalScreenContext = useModalScreenContext();
 
+  const user = useUser();
+  const router = useRouter();
+  const prevUser = usePreviousValue(user);
+
   useEffect(() => {
     if (showSignMessage) {
       modalScreenContext?.setTitle("Sign in with your wallet to continue");
@@ -34,6 +42,13 @@ export function Login() {
       modalScreenContext?.setTitle("Sign in to collect & unlock");
     }
   }, [showSignMessage, modalScreenContext]);
+
+  useEffect(() => {
+    // pop back to the previous screen if the user is authenticated
+    if (user.isAuthenticated && !prevUser?.isAuthenticated) {
+      router.pop();
+    }
+  }, [router, user, prevUser]);
 
   return (
     <PortalProvider>
@@ -72,7 +87,7 @@ export function Login() {
                 privy.login();
               }}
             >
-              Email & Social
+              Phone & Social
             </Button>
             <ConnectButton handleSubmitWallet={handleSubmitWallet} />
           </View>
