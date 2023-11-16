@@ -193,6 +193,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
+    "@babel/plugin-transform-class-properties": "^7.23.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.23.3",
+    "@babel/plugin-transform-private-methods": "^7.23.3",
     "@babel/runtime": "^7.22.6",
     "@expo/xcpretty": "^4.2.2",
     "@types/jest": "^29.5.3",
