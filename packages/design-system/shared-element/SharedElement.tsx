@@ -500,6 +500,7 @@ function SharedElementTargetImplementation({
 
     return {
       opacity: interpolate(progress.value, [0, 0.05, 1], [0, 1, 1], "clamp"),
+      borderRadius: interpolate(progress.value, [0, 1], [8, 0], "clamp"),
       transform: [
         {
           translateX: interpolate(progress.value, [0, 1], [x, 0], "clamp"),
@@ -509,14 +510,6 @@ function SharedElementTargetImplementation({
         },
         {
           scale: interpolate(progress.value, [0, 1], [scale, 1], "clamp"),
-        },
-        {
-          rotate: `${interpolate(
-            progress.value,
-            [0, 1],
-            [rotation, 0],
-            "clamp"
-          )}rad`,
         },
       ],
     };
