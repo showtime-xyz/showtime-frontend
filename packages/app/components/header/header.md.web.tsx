@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, Suspense, useMemo } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
+import { usePrivy } from "@privy-io/react-auth";
 import * as Popover from "@radix-ui/react-popover";
 import { SvgProps } from "react-native-svg";
 
@@ -63,6 +64,7 @@ import {
 } from "design-system/dropdown-menu";
 
 import { useChannelsUnreadMessages } from "../creator-channels/hooks/use-channels-unread-messages";
+import { useLogin } from "../login/use-login";
 import { withColorScheme } from "../memo-with-theme";
 
 const NotificationsInHeader = () => {
@@ -233,7 +235,7 @@ const ChannelsUnreadMessages = () => {
 
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
-  const navigateToLogin = useNavigateToLogin();
+  const { handleSubmitWallet, loading: loginLoading } = useLogin();
   const { links, social } = useFooter();
   const isDark = useIsDarkMode();
   const router = useRouter();
@@ -241,6 +243,7 @@ export const HeaderMd = withColorScheme(() => {
   const { setColorScheme } = useColorScheme();
   const { logout } = useAuth();
   const { height: screenHeight } = useWindowDimensions();
+  const privy = usePrivy();
 
   const HOME_ROUTES = useMemo(
     () =>
@@ -553,13 +556,37 @@ export const HeaderMd = withColorScheme(() => {
         </View>
         <View tw="w-40">
           {!isAuthenticated && (
-            <Button size="regular" tw="mt-6" onPress={navigateToLogin}>
-              <>
-                <Text tw="text-base font-bold text-white dark:text-black">
-                  Sign in
-                </Text>
-              </>
-            </Button>
+            <>
+              <Button
+                size="regular"
+                tw="mt-6"
+                onPress={handleSubmitWallet}
+                disabled={loginLoading}
+              >
+                <>
+                  <Text tw="text-base font-bold text-white dark:text-black">
+                    {loginLoading ? "loading..." : "Connect"}
+                  </Text>
+                </>
+              </Button>
+              <Button
+                size="regular"
+                tw="mt-6"
+                disabled={loginLoading}
+                onPress={async () => {
+                  if (privy.authenticated) {
+                    await privy.logout();
+                  }
+                  privy.login();
+                }}
+              >
+                <>
+                  <Text tw="text-base font-bold text-white dark:text-black">
+                    {loginLoading ? "loading..." : "Phone & Social"}
+                  </Text>
+                </>
+              </Button>
+            </>
           )}
 
           <Divider tw="my-5" />

@@ -1,15 +1,12 @@
 import { useCallback } from "react";
 
-import { createWalletClient, custom } from "viem";
-import { mainnet } from "viem/chains";
-
-import { useWeb3 } from "app/hooks/use-web3";
 import {
   BYPASS_EMAIL,
   BYPASS_EMAIL_WITH_INSECURE_KEYS,
 } from "app/lib/constants";
 import { Logger } from "app/lib/logger";
 import { useMagic } from "app/lib/magic";
+import { useLoginWithSMS } from "app/lib/privy/privy-hooks";
 
 import { useAuth } from "./use-auth";
 
@@ -18,36 +15,18 @@ export const LOGIN_MAGIC_ENDPOINT = "login_magic";
 export function useMagicLogin() {
   //#region hooks
   const { setAuthenticationStatus, login, logout } = useAuth();
-  const { setWeb3 } = useWeb3();
+  const { loginWithCode } = useLoginWithSMS();
   const { magic, Magic } = useMagic();
-  //#endregion
 
   //#region methods
-  const loginWithPhoneNumber = useCallback(
-    async function loginWithPhoneNumber(phoneNumber: string) {
-      setAuthenticationStatus("AUTHENTICATING");
-      try {
-        const did = await magic.auth.loginWithSMS({
-          phoneNumber,
-        });
-
-        await login(LOGIN_MAGIC_ENDPOINT, {
-          did,
-          phone_number: phoneNumber,
-        });
-
-        const client = createWalletClient({
-          chain: mainnet,
-          transport: custom(magic.rpcProvider),
-        });
-
-        setWeb3({ ...client, isMagic: true });
-      } catch (error) {
-        logout();
-        throw error;
-      }
+  const loginWithOtp = useCallback(
+    async function loginWithOtp(code: string, phone: string) {
+      loginWithCode({
+        code,
+        phone,
+      });
     },
-    [magic, login, logout, setAuthenticationStatus, setWeb3]
+    [loginWithCode]
   );
 
   const loginWithEmail = useCallback(
@@ -89,24 +68,17 @@ export function useMagicLogin() {
           did,
           email: overrideEmail,
         });
-
-        const client = createWalletClient({
-          chain: mainnet,
-          transport: custom(magic.rpcProvider),
-        });
-
-        setWeb3({ ...client, isMagic: true });
       } catch (error) {
         logout();
         throw error;
       }
     },
-    [magic, Magic, login, logout, setAuthenticationStatus, setWeb3]
+    [magic, Magic, login, logout, setAuthenticationStatus]
   );
 
   //#endregion
   return {
-    loginWithPhoneNumber,
     loginWithEmail,
+    loginWithOtp,
   };
 }

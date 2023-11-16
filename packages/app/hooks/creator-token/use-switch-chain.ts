@@ -10,7 +10,7 @@ import { baseChain } from "./utils";
 export const useSwitchChain = () => {
   const wallet = useWallet();
   const state = useSWRMutation("switchChain", async function switchChain() {
-    const walletClient = wallet.getWalletClient?.();
+    const walletClient = await wallet.getWalletClient?.();
     const currentChain = await walletClient?.getChainId();
     if (currentChain !== baseChain.id) {
       // HACK because mobile wallets are notoriously buggy

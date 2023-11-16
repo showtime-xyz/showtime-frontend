@@ -182,6 +182,7 @@ export interface Profile {
     | "opted_in";
   creator_token?: {
     address: `0x${string}`;
+    crossmint_id: string | null;
     id: number;
   };
 }
