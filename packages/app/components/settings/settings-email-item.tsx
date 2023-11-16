@@ -1,19 +1,19 @@
 import { useState } from "react";
 
+import { usePrivy } from "@privy-io/react-auth";
+
 import { DataPill } from "@showtime-xyz/universal.data-pill";
 import { CheckFilled1 } from "@showtime-xyz/universal.icon";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { useManageAccount } from "app/hooks/use-manage-account";
 import { WalletAddressesV2 } from "app/types";
 
 import { DropdownMenu } from "./dropdown-menu";
 
 export type EmailItemProps = {
   email: WalletAddressesV2["email"];
-  address: WalletAddressesV2["address"];
 };
 
 export type EmailHeaderProps = {
@@ -23,9 +23,8 @@ export type EmailHeaderProps = {
 
 export const SettingsEmailItem = (props: EmailItemProps) => {
   const [isCurrentEmail] = useState(false);
-  const { removeAccount } = useManageAccount();
   const email = props.email;
-  const backendAddress = props.address;
+  const { unlinkEmail } = usePrivy();
 
   return (
     <View tw="w-full flex-row items-center justify-between px-4 py-5 lg:px-0">
@@ -42,7 +41,7 @@ export const SettingsEmailItem = (props: EmailItemProps) => {
       </View>
       <View tw="flex justify-center">
         <DropdownMenu
-          onRemove={() => removeAccount(backendAddress)}
+          onRemove={() => unlinkEmail(props.email)}
           ctaCopy="Delete Email Address"
           isCurrent={isCurrentEmail}
         />

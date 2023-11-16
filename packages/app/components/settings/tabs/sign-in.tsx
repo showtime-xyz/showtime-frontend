@@ -5,12 +5,12 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { View } from "@showtime-xyz/universal.view";
 
-import { EmptyPlaceholder } from "app/components/empty-placeholder";
-import { SettingsPhoneNumberItem } from "app/components/settings/settings-phone-number-item";
+// import { EmptyPlaceholder } from "app/components/empty-placeholder";
+// import { SettingsPhoneNumberItem } from "app/components/settings/settings-phone-number-item";
 import { useUser } from "app/hooks/use-user";
 
 import { SettingItemSeparator } from "../setting-item-separator";
-import { SettingsEmailItem } from "../settings-email-item";
+// import { SettingsEmailItem } from "../settings-email-item";
 import { SettingsTitle } from "../settings-title";
 
 const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
@@ -64,7 +64,7 @@ export const SignInTab = ({ index = 0 }: PhoneTabProps) => {
         }
       />
 
-      {phoneNumberWallets?.length === 0 ? (
+      {/* {phoneNumberWallets?.length === 0 ? (
         <EmptyPlaceholder
           tw="min-h-[60px] px-4"
           title="No phone number connected to your profile."
@@ -77,7 +77,7 @@ export const SignInTab = ({ index = 0 }: PhoneTabProps) => {
             key={item.address}
           />
         ))
-      )}
+      )} */}
       <SettingItemSeparator tw="my-8" />
 
       <SettingsTitle
@@ -104,7 +104,7 @@ export const SignInTab = ({ index = 0 }: PhoneTabProps) => {
           )
         }
       />
-      {emailWallets?.length === 0 ? (
+      {/* {emailWallets?.length === 0 ? (
         <EmptyPlaceholder
           tw="min-h-[60px] px-4"
           title="No email connected to your profile."
@@ -119,7 +119,7 @@ export const SignInTab = ({ index = 0 }: PhoneTabProps) => {
             />
           );
         })
-      )}
+      )} */}
     </SettingScrollComponent>
   );
 };
