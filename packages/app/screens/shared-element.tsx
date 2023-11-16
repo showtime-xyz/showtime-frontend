@@ -161,7 +161,7 @@ const SharedElementScreen = withColorScheme(() => {
                         }}
                         ref={animatedRef}
                         placeholder={{
-                          uri: url + "?optimizer=image&width=600",
+                          uri: url + "?optimizer=image&width=300",
                           width: normalizedImageDimensions.width,
                           height: normalizedImageDimensions.height,
                         }}

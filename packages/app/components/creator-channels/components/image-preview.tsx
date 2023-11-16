@@ -79,7 +79,7 @@ export const ImagePreview = ({
           height={height}
           source={{
             uri: fileObj.url
-              ? `${fileObj.url}?optimizer=image&width=300&quality=50`
+              ? `${fileObj.url}?optimizer=image&width=300`
               : undefined,
             width: 600,
           }}
