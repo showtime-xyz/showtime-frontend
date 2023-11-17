@@ -1,6 +1,5 @@
 import { memo, useCallback } from "react";
 
-import { Chip } from "@showtime-xyz/universal.chip";
 import { Image } from "@showtime-xyz/universal.image";
 import {
   InfiniteScrollList,
@@ -13,7 +12,6 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { useMyInfo } from "app/hooks/api-hooks";
 import { UserItemType } from "app/hooks/api/use-follow-list";
-import { useFollow } from "app/hooks/use-follow";
 import { useModalListProps } from "app/hooks/use-modal-list-props";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { Link } from "app/navigation/link";
@@ -101,11 +99,6 @@ export const CreatorChannelFollowers = ({
 
 const FollowingListUser = memo(
   ({ item }: { item: UserItemType } & FollowingListProp) => {
-    const { data } = useMyInfo();
-
-    const { onToggleFollow } = useFollow({
-      username: data?.data.profile.username,
-    });
     return (
       <View
         tw={`flex-row items-center justify-between overflow-hidden px-4`}
@@ -157,9 +150,6 @@ const FollowingListUser = memo(
                     <VerificationBadge size={14} />
                   </View>
                 )}
-                {item?.follows_you ? (
-                  <Chip label="Follows You" tw="ml-1 py-1" />
-                ) : null}
               </View>
             </View>
           </View>

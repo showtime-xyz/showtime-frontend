@@ -30,7 +30,7 @@ export const CONTRACTS = {
 };
 
 export const DEFAULT_PROFILE_PIC =
-  "https://cdn.tryshowtime.com/profile_placeholder2.jpg";
+  "https://media.showtime.xyz/assets/profile_placeholder2.jpg";
 export const DISABLE_ALL = false;
 
 // fields to sort by on profile page
