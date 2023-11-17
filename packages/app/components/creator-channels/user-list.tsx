@@ -180,9 +180,6 @@ const CCUserListItem = memo(
                     <VerificationBadge size={14} />
                   </View>
                 )}
-                {/* {item?.follows_you ? (
-                  <Chip label="Follows You" tw="ml-1 py-1" />
-                ) : null} */}
               </View>
             </View>
           </View>
