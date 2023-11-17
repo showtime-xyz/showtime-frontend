@@ -314,12 +314,24 @@ type SocialConnectButtonProps = {
 };
 
 const SocialConnectButton = ({ connected, type }: SocialConnectButtonProps) => {
-  const { linkApple, linkGoogle, unlinkApple, unlinkGoogle } = usePrivy();
+  const {
+    linkApple,
+    linkGoogle,
+    unlinkApple,
+    unlinkGoogle,
+    login,
+    authenticated,
+    ready,
+  } = usePrivy();
   const accountSubject = connected[type]?.subject;
   return (
     <Button
       variant={accountSubject ? "danger" : "tertiary"}
       onPress={async () => {
+        if (ready && !authenticated) {
+          login();
+          return;
+        }
         if (accountSubject) {
           if (type === "apple") {
             unlinkApple(accountSubject);
