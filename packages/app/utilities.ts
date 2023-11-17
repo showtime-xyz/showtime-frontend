@@ -66,7 +66,7 @@ export const getProfileName = (profile?: Profile) => {
 export const globalTimeFormatter = new Intl.NumberFormat();
 
 export const DEFAULT_PROFILE_PIC =
-  "https://cdn.tryshowtime.com/profile_placeholder2.jpg";
+  "https://media.showtime.xyz/assets/profile_placeholder2.jpg";
 
 export const getProfileImage = (profile?: Profile) => {
   if (!profile?.img_url) {
