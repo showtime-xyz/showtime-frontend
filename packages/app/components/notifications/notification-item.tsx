@@ -35,7 +35,7 @@ const NOTIFICATION_TYPE_COPY = new Map([
   ["INVITE_REDEEMED", " redeemed your invite code! "],
   ["INVITE_RENEWED", "You received 3 more Creator Token invites!"], // add "Tap to share." after function is implemented
   ["INVITED_TO_CHANNEL", " gave you free access to their channel!"],
-  ["CREATOR_TOKEN_PURCHASED", " purchased your token! "],
+  ["CREATOR_TOKEN_PURCHASED", " bought your token! "],
 ]);
 
 export const NotificationItem = memo(
