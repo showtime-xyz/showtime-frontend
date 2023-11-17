@@ -62,7 +62,7 @@
     "raf": "^3.4.1",
     "react-datepicker": "^4.21.0",
     "react-dropzone": "^14.2.3",
-    "react-easy-crop": "^4.7.5",
+    "react-easy-crop": "^5.0.2",
     "react-hot-toast": "^2.4.1",
     "react-native-reanimated-swc-plugin": "^0.3.0",
     "react-native-web": "~0.19.9",
@@ -90,6 +90,6 @@
     "eslint-plugin-diff": "^2.0.1",
     "next-compose-plugins": "^2.2.1",
     "postcss": "^8.4.31",
-    "tailwindcss": "3.3.2"
+    "tailwindcss": "3.3.5"
   }
 }
