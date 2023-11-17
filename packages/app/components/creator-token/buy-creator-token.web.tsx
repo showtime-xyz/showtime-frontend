@@ -32,6 +32,7 @@ import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creat
 import { useUser } from "app/hooks/use-user";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
+import { usePrivyFundWallet } from "app/lib/privy/privy-hooks";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import { toast } from "design-system/toast";
@@ -97,6 +98,7 @@ export const BuyCreatorToken = () => {
 
   const usdcBalance = useWalletUSDCBalance();
   const ethBalance = useWalletETHBalance();
+  const fundWallet = usePrivyFundWallet();
   const [showExplanation, setShowExplanation] = useState(false);
   const priceToBuyNext = useCreatorTokenPriceToBuyNext(
     selectedAction === "buy"
@@ -167,11 +169,7 @@ export const BuyCreatorToken = () => {
           <Button
             size="regular"
             onPress={() => {
-              wallets[0].fund({
-                config: {
-                  currencyCode: "USDC_BASE",
-                },
-              });
+              fundWallet("usdc");
             }}
           >
             Add USDC to your wallet
@@ -200,11 +198,7 @@ export const BuyCreatorToken = () => {
           <Button
             size="regular"
             onPress={() => {
-              wallets[0].fund({
-                config: {
-                  currencyCode: "ETH_BASE",
-                },
-              });
+              fundWallet("eth");
             }}
           >
             Add ETH to your wallet
