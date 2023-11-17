@@ -69,10 +69,14 @@ export const DEFAULT_PROFILE_PIC =
   "https://media.showtime.xyz/assets/profile_placeholder2.jpg";
 
 export const getProfileImage = (profile?: Profile) => {
-  if (!profile?.img_url) {
+  let imgUrl = profile?.img_url;
+  if (!imgUrl) {
     return DEFAULT_PROFILE_PIC;
   }
-  return profile?.img_url;
+  if (imgUrl && imgUrl.includes("showtime.xyz")) {
+    imgUrl = imgUrl + "?optimizer=image&width=1000";
+  }
+  return imgUrl;
 };
 
 export const getSortFields = () => {
