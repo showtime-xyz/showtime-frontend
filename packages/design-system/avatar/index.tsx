@@ -31,6 +31,10 @@ const getAvatarImageUrl = (imgUrl: string, size: number) => {
   if (imgUrl && imgUrl.includes("https://lh3.googleusercontent.com")) {
     imgUrl = imgUrl.split("=")[0] + "=s" + size * 2;
   }
+
+  if (imgUrl && imgUrl.includes("showtime.xyz")) {
+    imgUrl = imgUrl + "?optimizer=image&width=" + size * 2;
+  }
   return imgUrl;
 };
 
