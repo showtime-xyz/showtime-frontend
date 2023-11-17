@@ -163,7 +163,7 @@
     "react-native-share": "^9.4.1",
     "react-native-svg": "14.0.0",
     "react-native-tab-view": "^3.5.2",
-    "react-native-track-player": "v4.0.0-rc08",
+    "react-native-track-player": "4.0.1",
     "react-native-view-shot": "3.8.0",
     "react-native-volume-manager": "^1.10.0",
     "react-native-web": "~0.19.9",

@@ -32,7 +32,7 @@
     "path-browserify": "^1.0.1",
     "postcss": "^8.4.31",
     "storybook": "^7.0.26",
-    "tailwindcss": "3.3.5",
-    "typescript": "^5.1.6"
+    "tailwindcss": "3.3.2",
+    "typescript": "^5.2.2"
   }
 }
