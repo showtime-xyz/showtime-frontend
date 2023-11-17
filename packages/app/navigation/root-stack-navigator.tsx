@@ -73,7 +73,8 @@ export function RootStackNavigator() {
           headerShown: false,
           fullScreenGestureEnabled: true,
           animationDuration: Platform.OS === "ios" ? 400 : undefined,
-          animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
+          // https://github.com/showtime-xyz/showtime-frontend/pull/2213
+          animation: Platform.OS === "android" ? "none" : "default",
           statusBarStyle: isDark ? "light" : "dark",
         }}
       >
