@@ -24,7 +24,7 @@ export const SETTINGS_ROUTES = [
   {
     title: "Sign In",
     key: "Sign In",
-    hidden: Platform.OS !== "web",
+    hidden: true,
   },
   {
     title: "Connected Apps",

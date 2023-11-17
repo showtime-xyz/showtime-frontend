@@ -5,6 +5,7 @@ import { Edit, MoreHorizontal, Wallet } from "@showtime-xyz/universal.icon";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
 import { useManageAccount } from "app/hooks/use-manage-account";
+import { useExportPrivyWallet } from "app/lib/privy/privy-hooks";
 import { WalletAddressesV2 } from "app/types";
 
 import {
@@ -21,11 +22,14 @@ type AddressMenuProps = {
   isCurrent: boolean;
   onEditNickname: (item?: WalletAddressesV2) => void;
   isMagicWallet: boolean;
+  isPrivyWallet: boolean;
 };
 
 export const WalletDropdownMenu = (props: AddressMenuProps) => {
   const { removeAccount } = useManageAccount();
   const address = props.address;
+
+  const exportPrivyWallet = useExportPrivyWallet();
 
   return (
     <DropdownMenuRoot>
@@ -41,11 +45,15 @@ export const WalletDropdownMenu = (props: AddressMenuProps) => {
             Edit nickname
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
-        {props.isMagicWallet ? (
+        {props.isMagicWallet || props.isPrivyWallet ? (
           <DropdownMenuItem
-            onSelect={() =>
-              Linking.openURL("https://reveal.magic.link/showtime")
-            }
+            onSelect={() => {
+              if (props.isMagicWallet) {
+                Linking.openURL("https://reveal.magic.link/showtime");
+              } else if (props.isPrivyWallet) {
+                exportPrivyWallet();
+              }
+            }}
             key="export_key"
           >
             <MenuItemIcon Icon={Wallet} ios={{ name: "person.badge.key" }} />
