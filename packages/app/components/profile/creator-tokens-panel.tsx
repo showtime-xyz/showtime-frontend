@@ -193,10 +193,8 @@ export const CreatorTokensPanel = ({
               <Text tw="text-base font-bold text-gray-900 dark:text-white">
                 {ethBalance.data?.displayBalance}
               </Text>
-              {Platform.OS === "web" &&
-              ethBalance.data?.displayBalance &&
-              Number(ethBalance.data?.displayBalance) <= 0.005 ? (
-                <Button onPress={() => fundWallet("eth")}>Top up</Button>
+              {Platform.OS === "web" ? (
+                <Button onPress={() => fundWallet("eth")}>Buy ETH</Button>
               ) : null}
             </View>
           </View>
