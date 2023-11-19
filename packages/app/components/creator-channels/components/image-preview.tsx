@@ -50,7 +50,7 @@ export const ImagePreview = ({
   attachment: ChannelMessage;
   isViewable?: boolean;
   animatedRef?: AnimatedRef<any>;
-  style: AnimatedStyle;
+  style?: AnimatedStyle;
 }) => {
   const router = useRouter();
   const fileObj = useMemo(

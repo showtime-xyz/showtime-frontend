@@ -18,7 +18,6 @@ import { AuthProvider } from "app/providers/auth-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
-import { Web3Provider } from "app/providers/web3-provider";
 
 import { SharedElementProvider } from "design-system/shared-element/SharedElementContext";
 

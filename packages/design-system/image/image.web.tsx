@@ -1,4 +1,10 @@
-import { ComponentProps, CSSProperties, useCallback, useMemo } from "react";
+import {
+  ComponentProps,
+  CSSProperties,
+  useCallback,
+  useMemo,
+  forwardRef,
+} from "react";
 import { ImageURISource } from "react-native";
 
 // @ts-ignore
@@ -126,20 +132,24 @@ function Img({
 
 type ImageProps = { tw?: TW; style?: any } & ComponentProps<typeof Img>;
 
-function StyledImage({ borderRadius = 0, tw = "", ...props }: ImageProps) {
-  return (
-    <View
-      style={{
-        width: "inherit" as any,
-        height: "inherit" as any,
-        borderRadius,
-        overflow: "hidden",
-      }}
-      tw="w-in"
-    >
-      <Img {...props} className={Array.isArray(tw) ? tw.join(" ") : tw} />
-    </View>
-  );
-}
+const StyledImage = forwardRef<any, ImageProps>(
+  ({ borderRadius = 0, tw = "", ...props }, ref) => {
+    return (
+      <View
+        style={{
+          width: "inherit" as any,
+          height: "inherit" as any,
+          borderRadius,
+          overflow: "hidden",
+        }}
+        tw="w-in"
+      >
+        <Img {...props} className={Array.isArray(tw) ? tw.join(" ") : tw} />
+      </View>
+    );
+  }
+);
+
+StyledImage.displayName = "StyledImage";
 
 export { StyledImage as Image };

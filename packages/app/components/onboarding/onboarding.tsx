@@ -44,7 +44,7 @@ export const Onboarding = () => {
     <OnboardingStepContext.Provider value={value}>
       <BottomSheetModalProvider>
         <View tw="mt-8 flex-1">
-          <AnimatePresence exitBeforeEnter>
+          <AnimatePresence mode="wait">
             {step === OnboardingStep.Username && (
               <SelectUsername key="username" />
             )}

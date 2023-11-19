@@ -1,105 +1,184 @@
-import { useMemo } from "react";
+import { useMemo, useState, useRef } from "react";
+import { Modal, useWindowDimensions, ScaledSize } from "react-native";
 
-import Animated, { AnimatedRef, AnimatedStyle } from "react-native-reanimated";
+import { motion, useDomEvent } from "framer-motion";
 
-import { Image } from "@showtime-xyz/universal.image";
-import { Pressable } from "@showtime-xyz/universal.pressable";
-import { useRouter } from "@showtime-xyz/universal.router";
+import { Close } from "@showtime-xyz/universal.icon";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { ChannelMessage, ChannelMessageAttachment } from "../types";
-import { LeanText, LeanView } from "./lean-text";
 
-const AnimatedImage = Animated.createAnimatedComponent(Image);
-
-export const getImageAttachmentWidth = (
-  attachment: ChannelMessageAttachment
-) => {
+type SizeProps = {
+  attachment: ChannelMessageAttachment;
+  dimensions?: ScaledSize;
+};
+export const getImageAttachmentWidth = ({
+  attachment,
+  dimensions,
+}: SizeProps) => {
   if (!attachment || !attachment.height || !attachment.width) {
     return 0;
   }
-  if (attachment?.height > attachment?.width) {
-    return 160;
-  } else if (attachment?.height < attachment?.width) {
-    return 320;
+
+  const aspectRatio = attachment.width / attachment.height;
+  const maxWidth = !dimensions ? 320 : dimensions.width;
+  const maxHeight = !dimensions ? 284 : dimensions.height - 150;
+
+  // Determine which dimension is the limiting factor (width or height)
+  if (maxWidth / aspectRatio <= maxHeight) {
+    // Width is the limiting factor
+    return maxWidth;
   } else {
-    return 320;
+    // Height is the limiting factor
+    return Math.round(maxHeight * aspectRatio);
   }
 };
 
-export const getImageAttachmentHeight = (
-  attachment: ChannelMessageAttachment
-) => {
+export const getImageAttachmentHeight = ({
+  attachment,
+  dimensions,
+}: SizeProps) => {
   if (!attachment || !attachment.height || !attachment.width) {
     return 0;
   }
-  if (attachment.height > attachment.width) {
-    return 284;
-  } else if (attachment.height < attachment.width) {
-    return 180;
+
+  const aspectRatio = attachment.width / attachment.height;
+  const maxWidth = !dimensions ? 320 : dimensions.width;
+  const maxHeight = !dimensions ? 284 : dimensions.height - 150;
+
+  // Determine which dimension is the limiting factor (width or height)
+  if (maxHeight * aspectRatio <= maxWidth) {
+    // Height is the limiting factor
+    return maxHeight;
   } else {
-    return 320;
+    // Width is the limiting factor
+    return Math.round(maxWidth / aspectRatio);
   }
+};
+
+const transition = {
+  type: "spring",
+  damping: 50,
+  stiffness: 450,
 };
 
 export const ImagePreview = ({
   attachment,
-  isViewable = false,
-  animatedRef,
-  style,
+  isViewable = true,
 }: {
   attachment: ChannelMessage;
   isViewable?: boolean;
-  animatedRef?: AnimatedRef<any>;
-  style: AnimatedStyle;
 }) => {
-  const router = useRouter();
+  const [isOpen, setOpen] = useState(false);
+
+  useDomEvent(
+    useRef(document.documentElement),
+    "scroll",
+    () => isOpen && setOpen(false)
+  );
+
   const fileObj = useMemo(
     () => attachment.attachments[0],
     [attachment.attachments]
   );
-  const width = useMemo(() => getImageAttachmentWidth(fileObj), [fileObj]);
-  const height = useMemo(() => getImageAttachmentHeight(fileObj), [fileObj]);
+  const dimensions = useWindowDimensions();
+  const width = useMemo(
+    () => getImageAttachmentWidth({ attachment: fileObj }),
+    [fileObj]
+  );
+  const height = useMemo(
+    () => getImageAttachmentHeight({ attachment: fileObj }),
+    [fileObj]
+  );
+
+  const modalWidth = useMemo(
+    () => getImageAttachmentWidth({ attachment: fileObj, dimensions }),
+    [fileObj, dimensions]
+  );
+  const modalHeight = useMemo(
+    () => getImageAttachmentHeight({ attachment: fileObj, dimensions }),
+    [fileObj, dimensions]
+  );
 
   return (
     <>
-      <Pressable
-        onPress={() => {
-          router.push(
-            `/viewer?tag=${attachment?.id}&url=${fileObj.url}&width=${width}&height=${height}`
-          );
+      <motion.img
+        src={`${fileObj.url}?optimizer=image&width=300&quality=50`}
+        alt=""
+        onClick={() => setOpen((current) => !current)}
+        layoutId={attachment.id.toString()}
+        style={{
+          borderRadius: 8,
+          position: "relative",
+          width,
+          height,
+          display: isViewable ? "flex" : "none",
+          cursor: "zoom-in",
+          transform: "translateZ(0)",
+          backfaceVisibility: "hidden",
         }}
-        disabled={!isViewable}
+        width={width}
+        height={height}
+        transition={transition}
+        draggable={false}
+      />
+
+      <Modal
+        transparent
+        visible={isOpen}
+        animationType="none"
+        onRequestClose={() => setOpen((current) => !current)}
       >
-        <AnimatedImage
-          ref={animatedRef}
-          tw="web:cursor-pointer"
-          transition={100}
-          recyclingKey={attachment.attachments[0]?.media_upload}
-          width={width}
-          height={height}
-          source={{
-            uri: fileObj.url
-              ? `${fileObj.url}?optimizer=image&width=300&quality=50`
-              : undefined,
-            width: 600,
-          }}
-          alt=""
-          style={[
-            { borderRadius: 8 },
-            { display: isViewable ? undefined : "none" },
-            style,
-          ]}
-        />
-      </Pressable>
+        <View tw="absolute bottom-0 left-0 right-0 top-0 items-center justify-center">
+          <View
+            tw="absolute left-5 top-5 cursor-pointer"
+            onPointerUp={() => setOpen(false)}
+          >
+            <Close color="white" width={30} height={30} />
+          </View>
+          <motion.div
+            animate={{ opacity: isOpen ? 0.95 : 0 }}
+            onClick={() => setOpen(false)}
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "black",
+              position: "absolute",
+              opacity: 0,
+              zIndex: -1,
+              cursor: "zoom-out",
+            }}
+            layoutId="overlay"
+          />
+          <motion.img
+            src={`${fileObj.url}?optimizer=image&width=1200`}
+            alt=""
+            onClick={() => setOpen((current) => !current)}
+            layoutId={attachment.id.toString()}
+            style={{
+              borderRadius: 0,
+              width: modalWidth,
+              height: modalHeight,
+              cursor: "zoom-out",
+              willChange: "translateZ(0)",
+              backfaceVisibility: "hidden",
+            }}
+            placeholder={`${fileObj.url}?optimizer=image&width=300&quality=50`}
+            transition={transition}
+            draggable={false}
+          />
+        </View>
+      </Modal>
       {isViewable ? null : (
-        <LeanView
+        <View
           tw="items-center justify-center rounded-lg bg-gray-800 bg-opacity-90"
           style={{ width, height }}
         >
-          <LeanText tw="text-center text-lg text-white dark:text-gray-300">
+          <Text tw="text-center text-lg text-white dark:text-gray-300">
             Unlock to view
-          </LeanText>
-        </LeanView>
+          </Text>
+        </View>
       )}
     </>
   );

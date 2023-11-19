@@ -436,16 +436,25 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              <SharedElement tag={channel_message?.id.toString()}>
-                {({ animatedRef, animatedStyles }) => (
+              Platform.OS === "web" ? (
+                <>
                   <ImagePreview
-                    style={animatedStyles}
-                    animatedRef={animatedRef}
                     attachment={channel_message}
                     isViewable={permissions?.can_view_creator_messages}
                   />
-                )}
-              </SharedElement>
+                </>
+              ) : (
+                <SharedElement tag={channel_message?.id.toString()}>
+                  {({ animatedRef, animatedStyles }) => (
+                    <ImagePreview
+                      style={animatedStyles}
+                      animatedRef={animatedRef}
+                      attachment={channel_message}
+                      isViewable={permissions?.can_view_creator_messages}
+                    />
+                  )}
+                </SharedElement>
+              )
             ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&
