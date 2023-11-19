@@ -107,19 +107,19 @@ const SharedElementScreen = withColorScheme(() => {
                   // Interpolate each value to an opacity value and then average them
                   const opacityX = interpolate(
                     translateX.value,
-                    [-200, 0, 200],
+                    [-500, 0, 500],
                     [0, 1, 0],
                     Extrapolate.CLAMP
                   );
                   const opacityY = interpolate(
                     translateY.value,
-                    [-200, 0, 200],
+                    [-500, 0, 500],
                     [0, 1, 0],
                     Extrapolate.CLAMP
                   );
                   const opacityProgress = interpolate(
                     progress.value,
-                    [0.3, 1],
+                    [0.5, 1],
                     [0, 1],
                     Extrapolate.CLAMP
                   );
