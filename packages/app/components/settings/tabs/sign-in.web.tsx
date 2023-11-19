@@ -7,11 +7,11 @@ import { TabScrollView } from "@showtime-xyz/universal.tab-view";
 import { View } from "@showtime-xyz/universal.view";
 
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
-import { SettingsPhoneNumberItem } from "app/components/settings/settings-phone-number-item";
+import { SettingsPhoneNumberItem } from "app/components/settings/settings-phone-number-item.web";
 import { useUser } from "app/hooks/use-user";
 
 import { SettingItemSeparator } from "../setting-item-separator";
-import { SettingsEmailItem } from "../settings-email-item";
+import { SettingsEmailItem } from "../settings-email-item.web";
 import { SettingsTitle } from "../settings-title";
 
 const SettingScrollComponent = Platform.OS === "web" ? View : TabScrollView;
