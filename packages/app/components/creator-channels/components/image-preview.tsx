@@ -1,4 +1,5 @@
 import { useMemo, memo } from "react";
+import { useWindowDimensions } from "react-native";
 
 import Animated, { AnimatedRef, AnimatedStyle } from "react-native-reanimated";
 
@@ -9,7 +10,9 @@ import { ChannelMessageAttachment } from "../types";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 
-const getImageAttachmentWidth = (attachment: ChannelMessageAttachment) => {
+export const getImageAttachmentWidth = (
+  attachment: ChannelMessageAttachment
+) => {
   if (!attachment || !attachment.height || !attachment.width) {
     return 0;
   }
@@ -22,7 +25,9 @@ const getImageAttachmentWidth = (attachment: ChannelMessageAttachment) => {
   }
 };
 
-const getImageAttachmentHeight = (attachment: ChannelMessageAttachment) => {
+export const getImageAttachmentHeight = (
+  attachment: ChannelMessageAttachment
+) => {
   if (!attachment || !attachment.height || !attachment.width) {
     return 0;
   }
@@ -65,11 +70,12 @@ export const ImagePreview = memo(
         recyclingKey={attachment?.media_upload}
         width={imageAttachmentWidth}
         height={imageAttachmentHeight}
-        source={
-          attachment?.url
+        source={{
+          uri: attachment?.url
             ? `${attachment?.url}?optimizer=image&width=600`
-            : undefined
-        }
+            : undefined,
+          width: 600,
+        }}
         alt=""
         style={style}
       />

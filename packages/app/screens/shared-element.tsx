@@ -3,8 +3,11 @@ import { Dimensions, StyleSheet } from "react-native";
 import { useWindowDimensions } from "react-native";
 
 import Reanimated, {
+  useDerivedValue,
   useSharedValue,
   useAnimatedStyle,
+  interpolate,
+  Extrapolate,
 } from "react-native-reanimated";
 
 import { Image } from "@showtime-xyz/universal.image";
@@ -47,7 +50,7 @@ const SharedElementScreen = withColorScheme(() => {
 
     if (scaledWidth > screenDimensions.width) {
       return {
-        width: width * scaleFactorX,
+        width: screenDimensions.width,
         height: height * scaleFactorX,
         scale: scaleFactorX,
       };
@@ -79,12 +82,6 @@ const SharedElementScreen = withColorScheme(() => {
         //containerMeasurements,
         //originMeasurements,
       }) => {
-        const opacity = useAnimatedStyle(() => {
-          return {
-            opacity: progress.value,
-          };
-        });
-
         return (
           <View
             style={[
@@ -95,17 +92,6 @@ const SharedElementScreen = withColorScheme(() => {
               StyleSheet.absoluteFill,
             ]}
           >
-            <Reanimated.View
-              style={[
-                {
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "rgba(0,0,0,0.95)",
-                },
-                opacity,
-              ]}
-            />
             <ScreenGesture
               scale={scale}
               onClose={() => {
@@ -114,24 +100,79 @@ const SharedElementScreen = withColorScheme(() => {
                 });
               }}
             >
-              {({ screenAnimatedStyles }) => (
-                <Reanimated.View style={[screenAnimatedStyles]}>
-                  <AnimatedImage
-                    source={{
-                      uri: url + "?optimizer=image",
-                    }}
-                    ref={animatedRef}
-                    resizeMode={"contain"}
-                    style={[
-                      {
-                        width: normalizedImageDimensions.width,
-                        height: normalizedImageDimensions.height,
-                      },
-                      animatedStyles,
-                    ]}
-                  />
-                </Reanimated.View>
-              )}
+              {({ screenAnimatedStyles, translateX, translateY }) => {
+                const opacityDerived = useDerivedValue(() => {
+                  // Interpolate each value to an opacity value and then average them
+                  const opacityX = interpolate(
+                    translateX.value,
+                    [-200, 0, 200],
+                    [0, 1, 0],
+                    Extrapolate.CLAMP
+                  );
+                  const opacityY = interpolate(
+                    translateY.value,
+                    [-200, 0, 200],
+                    [0, 1, 0],
+                    Extrapolate.CLAMP
+                  );
+                  const opacityProgress = interpolate(
+                    progress.value,
+                    [0.3, 1],
+                    [0, 1],
+                    Extrapolate.CLAMP
+                  );
+
+                  return progress.value < 0.3
+                    ? progress.value
+                    : (opacityX + opacityY + opacityProgress) / 3;
+                });
+
+                const opacity = useAnimatedStyle(() => {
+                  return {
+                    opacity: opacityDerived.value,
+                  };
+                });
+                return (
+                  <View>
+                    <Reanimated.View
+                      style={[
+                        {
+                          position: "absolute",
+                          width: "100%",
+                          height: "100%",
+                          backgroundColor: "rgba(0,0,0,0.95)",
+                        },
+                        opacity,
+                      ]}
+                    />
+                    <Reanimated.View
+                      style={[
+                        { flex: 1, justifyContent: "center" },
+                        screenAnimatedStyles,
+                      ]}
+                    >
+                      <AnimatedImage
+                        source={{
+                          uri: url + "?optimizer=image&width=1000",
+                          width: normalizedImageDimensions.width,
+                          height: normalizedImageDimensions.height,
+                        }}
+                        ref={animatedRef}
+                        placeholder={{
+                          uri: url + "?optimizer=image&width=600",
+                        }}
+                        style={[
+                          {
+                            width: normalizedImageDimensions.width,
+                            height: normalizedImageDimensions.height,
+                          },
+                          animatedStyles,
+                        ]}
+                      />
+                    </Reanimated.View>
+                  </View>
+                );
+              }}
             </ScreenGesture>
           </View>
         );

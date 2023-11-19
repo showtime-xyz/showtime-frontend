@@ -55,7 +55,11 @@ import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { ChannelById, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
-import { ImagePreview } from "./image-preview";
+import {
+  ImagePreview,
+  getImageAttachmentHeight,
+  getImageAttachmentWidth,
+} from "./image-preview";
 import { LeanText, LeanView } from "./lean-text";
 
 const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
@@ -445,7 +449,13 @@ export const MessageItem = memo(
                   <Pressable
                     onPress={() => {
                       router.push(
-                        `/viewer?tag=${channel_message?.id}&url=${channel_message?.attachments[0].url}&width=${channel_message?.attachments[0].width}&height=${channel_message?.attachments[0].height}`
+                        `/viewer?tag=${channel_message?.id}&url=${
+                          channel_message?.attachments[0].url
+                        }&width=${getImageAttachmentWidth(
+                          channel_message?.attachments[0]
+                        )}&height=${getImageAttachmentHeight(
+                          channel_message?.attachments[0]
+                        )}`
                       );
                     }}
                   >
