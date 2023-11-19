@@ -124,7 +124,7 @@ function App() {
       fallback={({ error, componentStack }) => (
         <>
           <View>You have encountered an error</View>
-          <View>{error.toString()}</View>
+          <View>{error.message}</View>
           <View>{componentStack}</View>
         </>
       )}
