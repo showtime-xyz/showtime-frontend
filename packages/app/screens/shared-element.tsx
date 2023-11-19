@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { useWindowDimensions } from "react-native";
 
 import Reanimated, {
@@ -42,28 +42,30 @@ const SharedElementScreen = withColorScheme(() => {
   const [width] = useParam("width");
   const [height] = useParam("height");
 
-  const normalizedImageDimensions = useMemo(() => {
-    const scaleFactorX = screenDimensions.width / width;
-    const scaleFactorY = screenDimensions.height / height;
+  if (!tag || !width || !height) return null;
 
-    const scaledWidth = width * scaleFactorY;
+  const normalizedImageDimensions = useMemo(() => {
+    const imgWidth = Number(width);
+    const imgHeight = Number(height);
+    const scaleFactorX = screenDimensions.width / imgWidth;
+    const scaleFactorY = screenDimensions.height / imgHeight;
+
+    const scaledWidth = imgWidth * scaleFactorY;
 
     if (scaledWidth > screenDimensions.width) {
       return {
         width: screenDimensions.width,
-        height: height * scaleFactorX,
+        height: imgHeight * scaleFactorX,
         scale: scaleFactorX,
       };
     }
 
     return {
-      width: width * scaleFactorY,
-      height: height * scaleFactorY,
+      width: imgWidth * scaleFactorY,
+      height: imgHeight * scaleFactorY,
       scale: scaleFactorY,
     };
   }, [screenDimensions, width, height]);
-
-  if (!tag) return null;
 
   return (
     <SharedElementTarget
