@@ -2,11 +2,14 @@ import { useEffect } from "react";
 import { AppState, LogBox } from "react-native";
 
 import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
+import * as SentryReact from "@sentry/react";
 import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
 import { Image } from "expo-image";
 import * as SplashScreen from "expo-splash-screen";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableFreeze, enableScreens } from "react-native-screens";
+
+import { View } from "@showtime-xyz/universal.view";
 
 import { useExpoUpdate } from "app/hooks/use-expo-update";
 import { Logger } from "app/lib/logger";
@@ -117,9 +120,19 @@ function App() {
   */
 
   return (
-    <AppProviders>
-      <RootStackNavigator />
-    </AppProviders>
+    <SentryReact.ErrorBoundary
+      fallback={({ error, componentStack }) => (
+        <>
+          <View>You have encountered an error</View>
+          <View>{error.toString()}</View>
+          <View>{componentStack}</View>
+        </>
+      )}
+    >
+      <AppProviders>
+        <RootStackNavigator />
+      </AppProviders>
+    </SentryReact.ErrorBoundary>
   );
 }
 
