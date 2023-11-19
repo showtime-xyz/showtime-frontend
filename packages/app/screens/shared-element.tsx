@@ -15,6 +15,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
 import { withColorScheme } from "app/components/memo-with-theme";
+import { useStableCallback } from "app/hooks/use-stable-callback";
 import { createParam } from "app/navigation/use-param";
 
 import { ScreenGesture } from "design-system/shared-element/ScreenGesture";
@@ -67,10 +68,16 @@ const SharedElementScreen = withColorScheme(() => {
     };
   }, [screenDimensions, width, height]);
 
+  const onClose = useStableCallback(() => {
+    sharedElementContext.hideActive(() => {
+      router.pop();
+    });
+  });
+
   return (
     <SharedElementTarget
-      animateOutsideTheScreen={false}
-      isActive={true}
+      animateOutsideTheScreen
+      isActive
       tag={tag}
       extraStyles={{
         scale,
@@ -94,14 +101,7 @@ const SharedElementScreen = withColorScheme(() => {
               StyleSheet.absoluteFill,
             ]}
           >
-            <ScreenGesture
-              scale={scale}
-              onClose={() => {
-                sharedElementContext.hideActive(() => {
-                  router.pop();
-                });
-              }}
-            >
+            <ScreenGesture scale={scale} onClose={onClose}>
               {({ screenAnimatedStyles, translateX, translateY }) => {
                 const opacityDerived = useDerivedValue(() => {
                   // Interpolate each value to an opacity value and then average them
@@ -124,7 +124,7 @@ const SharedElementScreen = withColorScheme(() => {
                     Extrapolate.CLAMP
                   );
 
-                  return progress.value < 0.3
+                  return progress.value < 0.5
                     ? progress.value
                     : (opacityX + opacityY + opacityProgress) / 3;
                 });
@@ -162,7 +162,10 @@ const SharedElementScreen = withColorScheme(() => {
                         ref={animatedRef}
                         placeholder={{
                           uri: url + "?optimizer=image&width=600",
+                          width: normalizedImageDimensions.width,
+                          height: normalizedImageDimensions.height,
                         }}
+                        placeholderContentFit={"cover"}
                         style={[
                           {
                             width: normalizedImageDimensions.width,

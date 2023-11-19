@@ -446,26 +446,12 @@ export const MessageItem = memo(
             item.channel_message?.attachments[0].mime.includes("image") ? (
               <SharedElement tag={channel_message?.id.toString()}>
                 {({ animatedRef, animatedStyles }) => (
-                  <Pressable
-                    onPress={() => {
-                      router.push(
-                        `/viewer?tag=${channel_message?.id}&url=${
-                          channel_message?.attachments[0].url
-                        }&width=${getImageAttachmentWidth(
-                          channel_message?.attachments[0]
-                        )}&height=${getImageAttachmentHeight(
-                          channel_message?.attachments[0]
-                        )}`
-                      );
-                    }}
-                  >
-                    <ImagePreview
-                      style={animatedStyles}
-                      animatedRef={animatedRef}
-                      attachment={item.channel_message?.attachments[0]}
-                      isViewable={permissions?.can_view_creator_messages}
-                    />
-                  </Pressable>
+                  <ImagePreview
+                    style={animatedStyles}
+                    animatedRef={animatedRef}
+                    attachment={channel_message}
+                    isViewable={permissions?.can_view_creator_messages}
+                  />
                 )}
               </SharedElement>
             ) : null}

@@ -266,17 +266,15 @@ export function RootStackNavigator() {
           name="creatorTokenSocialShare"
           component={CreatorTokenSocialShareScreen}
         />
+        <Stack.Screen
+          name="viewer"
+          component={SharedElementScreen}
+          options={{
+            statusBarHidden: true,
+            statusBarColor: "white",
+          }}
+        />
       </Stack.Group>
-      <Stack.Screen
-        name="viewer"
-        component={SharedElementScreen}
-        options={{
-          statusBarStyle: "light",
-          presentation: "transparentModal",
-          animation: "none",
-          headerShown: false,
-        }}
-      />
     </Stack.Navigator>
   );
 }

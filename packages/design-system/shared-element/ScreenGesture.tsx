@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo } from "react";
 import { ViewStyle } from "react-native";
 
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
@@ -43,36 +43,43 @@ export function ScreenGesture({
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
 
-  const onPan = Gesture.Pan()
-    .onChange((event) => {
-      translateX.value = event.translationX;
-      translateY.value = event.translationY;
+  const onPan = useMemo(
+    () =>
+      Gesture.Pan()
+        .onChange((event) => {
+          translateX.value = event.translationX;
+          translateY.value = event.translationY;
 
-      const scaleX = interpolate(
-        translateX.value,
-        [-200, 0, 200],
-        [0.9, 1, 0.9],
-        Extrapolate.CLAMP
-      );
-      const scaleY = interpolate(
-        translateY.value,
-        [-200, 0, 200],
-        [0.9, 1, 0.9],
-        Extrapolate.CLAMP
-      );
+          const scaleX = interpolate(
+            translateX.value,
+            [-200, 0, 200],
+            [0.9, 1, 0.9],
+            Extrapolate.CLAMP
+          );
+          const scaleY = interpolate(
+            translateY.value,
+            [-200, 0, 200],
+            [0.9, 1, 0.9],
+            Extrapolate.CLAMP
+          );
 
-      scale.value = Math.min(scaleX, scaleY);
-    })
+          scale.value = Math.min(scaleX, scaleY);
+        })
 
-    .onEnd(() => {
-      if (Math.abs(translateY.value) > 40 || Math.abs(translateX.value) > 40) {
-        runOnJS(onClose)();
-      } else {
-        translateX.value = withSpring(0, springConfig);
-        translateY.value = withSpring(0, springConfig);
-        scale.value = withSpring(1, springConfig);
-      }
-    });
+        .onEnd(() => {
+          if (
+            Math.abs(translateY.value) > 40 ||
+            Math.abs(translateX.value) > 40
+          ) {
+            runOnJS(onClose)();
+          } else {
+            translateX.value = withSpring(0, springConfig);
+            translateY.value = withSpring(0, springConfig);
+            scale.value = withSpring(1, springConfig);
+          }
+        }),
+    [onClose, scale, translateX, translateY]
+  );
 
   const screenAnimatedStyles = useAnimatedStyle(() => {
     return {
