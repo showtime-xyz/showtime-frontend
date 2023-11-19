@@ -120,9 +120,6 @@ export function AvatarHoverCardContent({ username }: AvatarHoverCardProps) {
                       <VerificationBadge size={16} />
                     </View>
                   ) : null}
-                  {profileData?.follows_you && !isSelf ? (
-                    <Chip label="Follows You" tw="ml-2" />
-                  ) : null}
                 </View>
                 {bio ? (
                   <View tw="mt-4 items-baseline">

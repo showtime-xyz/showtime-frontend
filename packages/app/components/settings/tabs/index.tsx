@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { Route } from "@showtime-xyz/universal.tab-view";
 
 import { WalletAddressesV2 } from "app/types";
@@ -22,10 +24,12 @@ export const SETTINGS_ROUTES = [
   {
     title: "Sign In",
     key: "Sign In",
+    hidden: true,
   },
   {
     title: "Connected Apps",
     key: "Account",
+    hidden: Platform.OS !== "web",
   },
   {
     title: "Notifications",

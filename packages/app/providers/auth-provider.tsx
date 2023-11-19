@@ -155,6 +155,18 @@ export function AuthProvider({
       router,
     ]
   );
+
+  // Temp code to logout users who are logged in with Magic
+  useEffect(() => {
+    async function logoutMagicUsers() {
+      const isMagicLoggedIn = await magic?.user?.isLoggedIn();
+      if (isMagicLoggedIn) {
+        logout();
+      }
+    }
+    logoutMagicUsers();
+  }, [logout, magic]);
+
   const doRefreshToken = useCallback(async () => {
     setAuthenticationStatus("REFRESHING");
     try {

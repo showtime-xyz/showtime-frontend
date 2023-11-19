@@ -100,6 +100,7 @@ export interface WalletAddressesV2 {
   is_twitter: number;
   is_google: number;
   is_apple: number;
+  is_privy: number;
   phone_number: string;
   is_phone: number;
   nickname?: string;

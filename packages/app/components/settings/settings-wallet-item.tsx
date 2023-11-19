@@ -124,10 +124,16 @@ const LoginWithTitle = ({
 const MakePrimaryBtn = ({
   isPrimary,
   onPress,
+  isMagicWallet,
 }: {
   isPrimary: boolean;
   onPress?: () => void;
+  isMagicWallet: boolean;
 }) => {
+  if (isMagicWallet) {
+    return null;
+  }
+
   return (
     <View tw="mb-2 md:mb-0">
       {!isPrimary ? (
@@ -162,6 +168,12 @@ export const SettingsWalletItem = (props: Props) => {
 
   const isPrimary = user.user?.data.profile.primary_wallet?.address === address;
   const { setPrimaryWallet } = useSetPrimaryWallet();
+  const isMagicWallet =
+    (!!props.wallet.is_email ||
+      !!props.wallet.is_phone ||
+      !!props.wallet.is_apple ||
+      !!props.wallet.is_google) &&
+    !props.wallet.is_privy;
 
   return (
     <>
@@ -195,6 +207,7 @@ export const SettingsWalletItem = (props: Props) => {
               <MakePrimaryBtn
                 isPrimary={isPrimary}
                 onPress={() => setPrimaryWallet(wallet.address)}
+                isMagicWallet={isMagicWallet}
               />
             </Hidden>
             <Text tw="text-sm text-gray-900 dark:text-white">{address}</Text>
@@ -205,17 +218,14 @@ export const SettingsWalletItem = (props: Props) => {
               <MakePrimaryBtn
                 isPrimary={isPrimary}
                 onPress={() => setPrimaryWallet(wallet.address)}
+                isMagicWallet={isMagicWallet}
               />
             </Hidden>
             <WalletDropdownMenu
               address={address}
               isCurrent={isConnectedAddress}
-              isMagicWallet={
-                !!props.wallet.is_email ||
-                !!props.wallet.is_phone ||
-                !!props.wallet.is_apple ||
-                !!props.wallet.is_google
-              }
+              isMagicWallet={isMagicWallet}
+              isPrivyWallet={!!props.wallet.is_privy}
               onEditNickname={props.onEditNickname}
             />
           </View>

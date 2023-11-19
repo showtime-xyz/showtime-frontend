@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { InformationCircle, LockRounded } from "@showtime-xyz/universal.icon";
 import { PressableScale } from "@showtime-xyz/universal.pressable-scale";
@@ -16,6 +17,8 @@ import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creat
 import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 import { useWallet } from "app/hooks/use-wallet";
+import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
+import { usePrivyFundWallet } from "app/lib/privy/privy-hooks";
 import { getCurrencyPrice } from "app/utilities";
 
 import { TextTooltip } from "../tooltips/text-tooltip";
@@ -160,6 +163,8 @@ export const CreatorTokensPanel = ({
   const isDark = useIsDarkMode();
 
   const usdcBalance = useWalletUSDCBalance();
+  const ethBalance = useWalletETHBalance();
+  const fundWallet = usePrivyFundWallet();
 
   if (isSelf) {
     return (
@@ -170,9 +175,38 @@ export const CreatorTokensPanel = ({
             <View tw="w-full flex-row items-center justify-between">
               <View tw="flex-row items-center">
                 <Text tw="mr-2 text-gray-500 dark:text-gray-300">
+                  ETH balance
+                </Text>
+                <TextTooltip
+                  side="bottom"
+                  theme={isDark ? "dark" : "light"}
+                  triggerElement={
+                    <InformationCircle
+                      width={16}
+                      height={16}
+                      color={isDark ? colors.gray[300] : colors.gray[500]}
+                    />
+                  }
+                  text={"Your ETH balance on\nthe Base Ethereum L2."}
+                />
+              </View>
+              <Text tw="text-base font-bold text-gray-900 dark:text-white">
+                {ethBalance.data?.displayBalance}
+              </Text>
+              {Platform.OS === "web" ? (
+                <Button onPress={() => fundWallet("eth")}>Buy ETH</Button>
+              ) : null}
+            </View>
+          </View>
+        </View>
+
+        <View tw="mb-2 mt-2 rounded-xl border border-gray-200 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+          <View tw="items-center gap-2">
+            <View tw="w-full flex-row items-center justify-between">
+              <View tw="flex-row items-center">
+                <Text tw="mr-2 text-gray-500 dark:text-gray-300">
                   USDC balance
                 </Text>
-
                 <TextTooltip
                   side="bottom"
                   theme={isDark ? "dark" : "light"}
@@ -190,32 +224,6 @@ export const CreatorTokensPanel = ({
                 {getCurrencyPrice("USD", usdcBalance.data?.displayBalance)}
               </Text>
             </View>
-            {/* TODO: creator tokens p2
-            <View tw="w-full flex-row items-center justify-between">
-              <View tw="flex-row items-center">
-                <Text tw="mr-2 text-gray-500 dark:text-gray-300">
-                  Token earnings
-                </Text>
-                <TextTooltip
-                  side="bottom"
-                  theme={isDark ? "dark" : "light"}
-                  triggerElement={
-                    <InformationCircle
-                      width={16}
-                      height={16}
-                      color={isDark ? colors.gray[300] : colors.gray[500]}
-                    />
-                  }
-                  text={
-                    "Every time someone trades\nyour token you earn a 7%\nfee."
-                  }
-                />
-              </View>
-              <Text tw="text-base font-bold text-gray-900 dark:text-white">
-                $21.67
-              </Text>
-            </View>
-            */}
           </View>
         </View>
       </View>
