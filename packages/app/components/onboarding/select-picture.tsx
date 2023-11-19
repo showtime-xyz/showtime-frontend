@@ -191,7 +191,7 @@ export const SelectPicture = () => {
                         }}
                         end={{ x: 0.8817565797072159, y: 1.0780856651910535 }}
                       />
-                      <AnimatePresence exitBeforeEnter>
+                      <AnimatePresence mode="wait">
                         {value ? (
                           <MotiView
                             key={value.toString()}

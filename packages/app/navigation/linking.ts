@@ -39,6 +39,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     initialRouteName: "bottomTabs",
     screens: {
       login: "login",
+      viewer: "viewer",
       trending: "trending",
       qrCodeShare: "/qr-code-share/:contractAddress",
       dropImageShare: "/drop-image-share/:contractAddress",

@@ -103,6 +103,7 @@ type RootStackNavigatorParams = {
   channelsShare: undefined;
   channelsCongrats: undefined;
   channelsMembers: undefined;
+  viewer: undefined;
 };
 
 export type {

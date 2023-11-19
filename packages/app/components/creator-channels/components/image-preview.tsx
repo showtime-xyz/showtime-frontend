@@ -1,16 +1,19 @@
-import { useMemo, memo } from "react";
-import { Platform, StyleSheet, Dimensions } from "react-native";
+import { useMemo } from "react";
+
+import Animated, { AnimatedRef, AnimatedStyle } from "react-native-reanimated";
 
 import { Image } from "@showtime-xyz/universal.image";
-import { LightBox } from "@showtime-xyz/universal.light-box";
+import { Pressable } from "@showtime-xyz/universal.pressable";
+import { useRouter } from "@showtime-xyz/universal.router";
 
-import { ChannelMessageAttachment } from "../types";
+import { ChannelMessage, ChannelMessageAttachment } from "../types";
 import { LeanText, LeanView } from "./lean-text";
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 
-const getImageAttachmentWidth = (attachment: ChannelMessageAttachment) => {
+export const getImageAttachmentWidth = (
+  attachment: ChannelMessageAttachment
+) => {
   if (!attachment || !attachment.height || !attachment.width) {
     return 0;
   }
@@ -23,7 +26,9 @@ const getImageAttachmentWidth = (attachment: ChannelMessageAttachment) => {
   }
 };
 
-const getImageAttachmentHeight = (attachment: ChannelMessageAttachment) => {
+export const getImageAttachmentHeight = (
+  attachment: ChannelMessageAttachment
+) => {
   if (!attachment || !attachment.height || !attachment.width) {
     return 0;
   }
@@ -36,101 +41,69 @@ const getImageAttachmentHeight = (attachment: ChannelMessageAttachment) => {
   }
 };
 
-export const ImagePreview = memo(
-  ({
-    attachment,
-    isViewable,
-  }: {
-    attachment: ChannelMessageAttachment;
-    isViewable?: boolean;
-  }) => {
-    const imageAttachmentWidth = useMemo(
-      () => getImageAttachmentWidth(attachment),
-      [attachment]
-    );
+export const ImagePreview = ({
+  attachment,
+  isViewable = false,
+  animatedRef,
+  style,
+}: {
+  attachment: ChannelMessage;
+  isViewable?: boolean;
+  animatedRef?: AnimatedRef<any>;
+  style?: AnimatedStyle;
+}) => {
+  const router = useRouter();
+  const fileObj = useMemo(
+    () => attachment.attachments[0],
+    [attachment.attachments]
+  );
+  const width = useMemo(() => getImageAttachmentWidth(fileObj), [fileObj]);
+  const height = useMemo(() => getImageAttachmentHeight(fileObj), [fileObj]);
 
-    const imageAttachmentHeight = useMemo(
-      () => getImageAttachmentHeight(attachment),
-      [attachment]
-    );
-    const isLandscape =
-      attachment.width && attachment.height
-        ? attachment.width > attachment.height
-        : false;
-
-    const imageWidth = isLandscape
-      ? Math.max(380, Math.min(width, height * 0.7))
-      : Math.min(width, height * 0.7);
-
-    const imageHeight =
-      attachment.height && attachment?.width
-        ? isLandscape
-          ? imageWidth * (attachment.height / attachment.width)
-          : Math.min(
-              height,
-              imageWidth * (attachment.height / attachment.width)
-            )
-        : 320;
-
-    return (
-      <LeanView
-        tw="overflow-hidden rounded-xl bg-gray-600"
-        style={{
-          width: imageAttachmentWidth,
-          height: imageAttachmentHeight,
+  return (
+    <>
+      <Pressable
+        onPress={() => {
+          router.push(
+            `/viewer?tag=${attachment?.id}&url=${fileObj.url}&width=${width}&height=${height}`
+          );
         }}
-        pointerEvents={isViewable ? "auto" : "none"}
+        disabled={!isViewable}
       >
-        <LightBox
-          width={imageAttachmentWidth}
-          height={imageAttachmentHeight}
-          imgLayout={{
-            width: "100%",
-            height:
-              Platform.OS === "web"
-                ? imageAttachmentHeight
-                : width *
-                  (attachment.height && attachment?.width
-                    ? attachment?.height / attachment.width
-                    : 320),
+        <AnimatedImage
+          ref={animatedRef}
+          tw="web:cursor-pointer"
+          transition={100}
+          recyclingKey={attachment.attachments[0]?.media_upload}
+          width={width}
+          height={height}
+          source={{
+            uri: fileObj.url
+              ? `${fileObj.url}?optimizer=image&width=300`
+              : undefined,
+            width: 600,
           }}
-          tapToClose
-          borderRadius={12}
-          containerStyle={
-            Platform.OS === "web"
-              ? {
-                  width: imageWidth,
-                  height: imageHeight,
-                }
-              : null
-          }
+          alt=""
+          style={[
+            { borderRadius: 8 },
+            { backgroundColor: "#f5f5f5" },
+            { display: isViewable ? undefined : "none" },
+            style,
+          ]}
+        />
+      </Pressable>
+      {isViewable ? null : (
+        <LeanView
+          tw="items-center justify-center rounded-lg bg-gray-800 bg-opacity-90"
+          style={{ width, height }}
         >
-          <Image
-            tw="web:cursor-pointer"
-            transition={100}
-            recyclingKey={attachment?.media_upload}
-            source={
-              attachment?.url
-                ? `${attachment?.url}?optimizer=image&width=600`
-                : undefined
-            }
-            alt=""
-            resizeMode="cover"
-            style={{
-              ...StyleSheet.absoluteFillObject,
-            }}
-          />
-        </LightBox>
-        {!isViewable ? (
-          <LeanView tw="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-gray-800 bg-opacity-90">
-            <LeanText tw="text-center text-lg text-white dark:text-gray-300">
-              Unlock to view
-            </LeanText>
-          </LeanView>
-        ) : null}
-      </LeanView>
-    );
-  }
-);
+          <LeanText tw="text-center text-lg text-white dark:text-gray-300">
+            Unlock to view
+          </LeanText>
+        </LeanView>
+      )}
+    </>
+  );
+};
 
 ImagePreview.displayName = "ImagePreview";
