@@ -66,7 +66,6 @@ export const ImagePreview = ({
           }}
           transition={{ type: "timing" }}
           draggable={false}
-          initial={{ height, width }}
         />
 
         <Modal
