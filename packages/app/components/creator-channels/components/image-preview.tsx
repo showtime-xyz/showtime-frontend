@@ -2,44 +2,16 @@ import { useMemo } from "react";
 
 import Animated, { AnimatedRef, AnimatedStyle } from "react-native-reanimated";
 
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Image } from "@showtime-xyz/universal.image";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 
-import { ChannelMessage, ChannelMessageAttachment } from "../types";
+import { ChannelMessage } from "../types";
+import { getImageAttachmentHeight, getImageAttachmentWidth } from "../utils";
 import { LeanText, LeanView } from "./lean-text";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
-
-export const getImageAttachmentWidth = (
-  attachment: ChannelMessageAttachment
-) => {
-  if (!attachment || !attachment.height || !attachment.width) {
-    return 0;
-  }
-  if (attachment?.height > attachment?.width) {
-    return 160;
-  } else if (attachment?.height < attachment?.width) {
-    return 320;
-  } else {
-    return 320;
-  }
-};
-
-export const getImageAttachmentHeight = (
-  attachment: ChannelMessageAttachment
-) => {
-  if (!attachment || !attachment.height || !attachment.width) {
-    return 0;
-  }
-  if (attachment.height > attachment.width) {
-    return 284;
-  } else if (attachment.height < attachment.width) {
-    return 180;
-  } else {
-    return 320;
-  }
-};
 
 export const ImagePreview = ({
   attachment,
@@ -52,13 +24,20 @@ export const ImagePreview = ({
   animatedRef?: AnimatedRef<any>;
   style?: AnimatedStyle;
 }) => {
+  const isDark = useIsDarkMode();
   const router = useRouter();
   const fileObj = useMemo(
     () => attachment.attachments[0],
     [attachment.attachments]
   );
-  const width = useMemo(() => getImageAttachmentWidth(fileObj), [fileObj]);
-  const height = useMemo(() => getImageAttachmentHeight(fileObj), [fileObj]);
+  const width = useMemo(
+    () => getImageAttachmentWidth({ attachment: fileObj }),
+    [fileObj]
+  );
+  const height = useMemo(
+    () => getImageAttachmentHeight({ attachment: fileObj }),
+    [fileObj]
+  );
 
   return (
     <>
@@ -86,7 +65,7 @@ export const ImagePreview = ({
           alt=""
           style={[
             { borderRadius: 8 },
-            { backgroundColor: "#f5f5f5" },
+            { backgroundColor: isDark ? "#333" : "#f5f5f5" },
             { display: isViewable ? undefined : "none" },
             style,
           ]}
