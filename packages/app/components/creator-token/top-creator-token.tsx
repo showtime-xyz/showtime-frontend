@@ -19,7 +19,6 @@ import {
   TopCreatorTokenUser,
   useTopCreatorToken,
 } from "app/hooks/creator-token/use-creator-tokens";
-import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { useScrollToTop } from "app/lib/react-navigation/native";
 
