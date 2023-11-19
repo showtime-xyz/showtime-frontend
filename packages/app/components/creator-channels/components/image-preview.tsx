@@ -86,6 +86,7 @@ export const ImagePreview = ({
           alt=""
           style={[
             { borderRadius: 8 },
+            { backgroundColor: "#f5f5f5" },
             { display: isViewable ? undefined : "none" },
             style,
           ]}

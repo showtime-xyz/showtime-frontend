@@ -13,15 +13,12 @@ import Animated, {
   SharedValue,
 } from "react-native-reanimated";
 
-import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { Edit, Trash, Flag } from "@showtime-xyz/universal.icon";
 import { MoreHorizontal } from "@showtime-xyz/universal.icon";
-import { Image } from "@showtime-xyz/universal.image";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
@@ -55,16 +52,11 @@ import { useReactOnMessage } from "../hooks/use-react-on-message";
 import { ChannelById, MessageItemProps } from "../types";
 import { generateLoremIpsum } from "../utils";
 import { CreatorBadge } from "./creator-badge";
-import {
-  ImagePreview,
-  getImageAttachmentHeight,
-  getImageAttachmentWidth,
-} from "./image-preview";
+import { ImagePreview } from "./image-preview";
 import { LeanText, LeanView } from "./lean-text";
 
-const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
+//const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
-const AnimatedImage = Animated.createAnimatedComponent(Image);
 
 export const MessageItem = memo(
   ({
