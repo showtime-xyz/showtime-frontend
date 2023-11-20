@@ -20,6 +20,7 @@ export const ImagePreview = ({
   index: number;
 }) => {
   const [isOpen, setOpen] = useState(false);
+  const [loaded, setIsLoaded] = useState(false);
   const backdropOpacity = useMotionValue(1);
   const isDark = useIsDarkMode();
 
@@ -51,7 +52,6 @@ export const ImagePreview = ({
       <View style={{ width, height }}>
         <motion.img
           src={`${fileObj.url}?optimizer=image&width=300&quality=50`}
-          placeholder={`${fileObj.url}?optimizer=image&width=300&quality=50`}
           alt=""
           onClick={() => setOpen((current) => !current)}
           layoutId={attachment.id.toString()}
@@ -96,17 +96,16 @@ export const ImagePreview = ({
               }}
             />
             <motion.img
-              src={`${fileObj.url}?optimizer=image&width=1200`}
+              src={`${fileObj.url}?optimizer=image&width=300&quality=50&blur=100`}
               alt=""
               layoutId={attachment.id.toString()}
               style={{
                 borderRadius: 0,
                 width: modalWidth,
                 height: modalHeight,
-                opacity: 1,
+                display: loaded ? "none" : "flex",
               }}
-              placeholder={`${fileObj.url}?optimizer=image&width=300&quality=50`}
-              transition={{ type: "timing" }}
+              transition={{ type: "tween" }}
               draggable={false}
               drag
               dragSnapToOrigin
@@ -127,6 +126,40 @@ export const ImagePreview = ({
                   backdropOpacity.set(1);
                 }
               }}
+            />
+            <motion.img
+              src={`${fileObj.url}?optimizer=image&width=1200`}
+              alt=""
+              style={{
+                borderRadius: 0,
+                width: modalWidth,
+                height: modalHeight,
+                opacity: 1,
+                position: "absolute",
+              }}
+              layoutId={attachment.id.toString()}
+              transition={{ type: "tween" }}
+              draggable={false}
+              drag
+              dragSnapToOrigin
+              dragElastic={1}
+              dragMomentum={false}
+              onDrag={(event, info) => {
+                const parentHeight = dimensions.height || window.innerHeight;
+                const percentDragged = Math.abs(info.offset.y / parentHeight);
+                backdropOpacity.set(1 - percentDragged);
+              }}
+              onDragEnd={(event, info) => {
+                const parentHeight = dimensions.height || window.innerHeight;
+                const percentDragged = Math.abs(info.offset.y / parentHeight);
+                console.log("drag", 1 - percentDragged);
+                if (1 - percentDragged < 0.95 || info.velocity.y > 500) {
+                  setOpen(false);
+                } else {
+                  backdropOpacity.set(1);
+                }
+              }}
+              onLoad={() => setIsLoaded(true)}
             />
           </View>
         </Modal>
