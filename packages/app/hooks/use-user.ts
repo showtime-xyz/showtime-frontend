@@ -3,7 +3,10 @@ import { useContext, useEffect } from "react";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { UserContext } from "app/context/user-context";
-import { useNavigateToOnboarding } from "app/navigation/use-navigate-to";
+import {
+  useNavigateToLogin,
+  useNavigateToOnboarding,
+} from "app/navigation/use-navigate-to";
 
 type UserParams = {
   redirectTo?: string;
@@ -13,9 +16,14 @@ export function useUser(params?: UserParams) {
   const context = useContext(UserContext);
   const router = useRouter();
   const navigateToOnboarding = useNavigateToOnboarding();
+  const navigateToLogin = useNavigateToLogin();
   useEffect(() => {
     if (!context?.isAuthenticated && params?.redirectTo && router) {
-      router.replace(params?.redirectTo);
+      if (params.redirectTo === "/login") {
+        navigateToLogin();
+      } else {
+        router.replace(params?.redirectTo);
+      }
     }
     if (
       context?.isAuthenticated &&
@@ -28,6 +36,7 @@ export function useUser(params?: UserParams) {
   }, [
     context?.isAuthenticated,
     context?.isIncompletedProfile,
+    navigateToLogin,
     navigateToOnboarding,
     params?.redirectIfProfileIncomplete,
     params?.redirectTo,
