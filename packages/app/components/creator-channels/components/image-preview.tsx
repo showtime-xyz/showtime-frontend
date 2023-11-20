@@ -48,6 +48,7 @@ export const ImagePreview = ({
           );
         }}
         disabled={!isViewable}
+        style={{ display: isViewable ? undefined : "none" }}
       >
         <AnimatedImage
           ref={animatedRef}
@@ -56,12 +57,16 @@ export const ImagePreview = ({
           recyclingKey={attachment.attachments[0]?.media_upload}
           width={width}
           height={height}
-          source={{
-            uri: fileObj.url
-              ? `${fileObj.url}?optimizer=image&width=300`
-              : undefined,
-            width: 600,
-          }}
+          source={
+            fileObj.url
+              ? {
+                  uri: fileObj.url
+                    ? `${fileObj.url}?optimizer=image&width=300`
+                    : undefined,
+                  width: 300,
+                }
+              : undefined
+          }
           alt=""
           style={[
             { borderRadius: 8 },
@@ -71,7 +76,7 @@ export const ImagePreview = ({
           ]}
         />
       </Pressable>
-      {isViewable ? null : (
+      {!isViewable ? (
         <LeanView
           tw="items-center justify-center rounded-lg bg-gray-800 bg-opacity-90"
           style={{ width, height }}
@@ -80,7 +85,7 @@ export const ImagePreview = ({
             Unlock to view
           </LeanText>
         </LeanView>
-      )}
+      ) : null}
     </>
   );
 };

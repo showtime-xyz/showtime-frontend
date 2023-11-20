@@ -379,7 +379,7 @@ export const MessageItem = memo(
                       {loremText}
                     </LeanText>
                   </LeanView>
-                ) : (
+                ) : item.channel_message.body_text_length > 0 ? (
                   <>
                     <LeanText tw="py-1.5 text-sm  text-gray-900 dark:text-gray-100">
                       {loremText}
@@ -394,7 +394,7 @@ export const MessageItem = memo(
                       }}
                     />
                   </>
-                )}
+                ) : null}
               </LeanView>
             ) : (
               <>
