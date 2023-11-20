@@ -1,14 +1,12 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
 import { EditProfile } from "app/components/edit-profile";
-import { useUser } from "app/hooks/use-user";
+import { useAuthScreen } from "app/hooks/use-auth-screen";
 import { useTrackPageViewed } from "app/lib/analytics";
 
 export const EditProfilePage = () => {
   useTrackPageViewed({ name: "Edit Profile" });
-  useUser({
-    redirectIfProfileIncomplete: false,
-  });
+  useAuthScreen();
 
   return <EditProfile />;
 };
