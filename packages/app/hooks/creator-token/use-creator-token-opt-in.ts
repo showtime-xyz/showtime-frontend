@@ -24,11 +24,12 @@ export const useCreatorTokenOptIn = () => {
     async (_url: string, { arg }: { arg?: { inviteCode: string } }) => {
       // if primary wallet is magic, we don't support creating tokens
       if (
-        user.user?.data.profile.primary_wallet?.is_apple ||
-        user.user?.data.profile.primary_wallet?.is_google ||
-        user.user?.data.profile.primary_wallet?.is_phone ||
-        user.user?.data.profile.primary_wallet?.is_twitter ||
-        user.user?.data.profile.primary_wallet?.is_email
+        (user.user?.data.profile.primary_wallet?.is_apple ||
+          user.user?.data.profile.primary_wallet?.is_google ||
+          user.user?.data.profile.primary_wallet?.is_phone ||
+          user.user?.data.profile.primary_wallet?.is_twitter ||
+          user.user?.data.profile.primary_wallet?.is_email) &&
+        !user.user?.data.profile.primary_wallet.is_privy
       ) {
         await setPrimaryIfMagic();
       }
@@ -74,30 +75,8 @@ export const useCreatorTokenOptIn = () => {
             },
           ]
         );
-      } else {
-        Alert.alert(
-          "Unsupported wallet set to Primary",
-          `Would you like to set current wallet (${formatAddressShort(
-            wallet.address
-          )}) to Primary? Primary wallet is used to create the creator token.`,
-          [
-            {
-              text: "Okay",
-              onPress: async () => {
-                if (wallet.address) {
-                  setPrimaryWallet(wallet.address).then(resolve).catch(reject);
-                }
-              },
-            },
-            {
-              text: "Cancel",
-              style: "cancel",
-              onPress: () => {
-                reject("User cancelled");
-              },
-            },
-          ]
-        );
+      } else if (wallet.address) {
+        setPrimaryWallet(wallet.address).then(resolve).catch(reject);
       }
     });
   };

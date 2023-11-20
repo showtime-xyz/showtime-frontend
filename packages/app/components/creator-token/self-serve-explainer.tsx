@@ -48,6 +48,7 @@ export const SelfServeExplainer = () => {
   const [selectedImg, setSelectedImg] = useState<
     string | File | undefined | null
   >(null);
+  const { mutate: mutateUserProfile } = useUser();
 
   const pickFile = useFilePicker();
   const { trigger: deployContract, isMutating } = useCreatorTokenOptIn();
@@ -55,6 +56,7 @@ export const SelfServeExplainer = () => {
   const creatorTokenDeployStatus = useCreatorTokenDeployStatus({
     onSuccess: () => {
       if (user?.data.profile.username) {
+        mutateUserProfile();
         redirectToCreatorTokensShare({
           username: user?.data.profile.username,
           type: "launched",
