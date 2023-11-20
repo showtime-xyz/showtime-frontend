@@ -190,38 +190,39 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
           {isProfileMdScreen ? (
             <>
-              <CreatorTokensBanner />
               <ProfileCover
                 tw="overflow-hidden rounded-b-3xl"
                 uri={getFullSizeCover(profileData?.data?.profile)}
               />
-              <Pressable
-                tw={[
-                  "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
-                ]}
-                onPress={() => {
-                  const as = "/creator-token/invite-creator-token";
-                  router.push(
-                    Platform.select({
-                      native: as,
-                      web: {
-                        pathname: router.pathname,
-                        query: {
-                          ...router.query,
-                          inviteCreatorTokenModal: true,
-                        },
-                      } as any,
-                    }),
-                    Platform.select({ native: as, web: router.asPath }),
-                    {
-                      shallow: true,
-                    }
-                  );
-                }}
-              >
-                <ButtonGoldLinearGradient />
-                <GiftSolid width={26} height={26} color={colors.gray[900]} />
-              </Pressable>
+              {isSelf && profileData?.data?.profile.creator_token?.id ? (
+                <Pressable
+                  tw={[
+                    "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+                  ]}
+                  onPress={() => {
+                    const as = "/creator-token/invite-creator-token";
+                    router.push(
+                      Platform.select({
+                        native: as,
+                        web: {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            inviteCreatorTokenModal: true,
+                          },
+                        } as any,
+                      }),
+                      Platform.select({ native: as, web: router.asPath }),
+                      {
+                        shallow: true,
+                      }
+                    );
+                  }}
+                >
+                  <ButtonGoldLinearGradient />
+                  <GiftSolid width={26} height={26} color={colors.gray[900]} />
+                </Pressable>
+              ) : null}
             </>
           ) : null}
           <View tw="w-full flex-row">
@@ -295,19 +296,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
         </ProfileTabsNFTProvider>
       </View>
       <>
-        {isSelf ? (
+        {isSelf &&
+        !profileIsLoading &&
+        profileData?.data?.profile.creator_token?.id ? (
           <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
             <HeaderRightSm withBackground />
-            <Button
-              tw="ml-2"
-              onPress={() => {
-                redirectToCreatorTokenSocialShare(username);
-              }}
-              style={{ height: 30 }}
-              size="small"
-            >
-              Share
-            </Button>
             <Pressable
               tw={[
                 "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
