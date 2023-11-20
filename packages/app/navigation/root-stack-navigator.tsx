@@ -21,6 +21,7 @@ import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
 import { CreatorTokenCollectedScreen } from "app/screens/creator-token/creator-token-collected";
 import { CreatorTokenCollectorsScreen } from "app/screens/creator-token/creator-token-collectors";
+import { CreatorTokenSocialShareScreen } from "app/screens/creator-token/creator-token-social-share";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { ReviewCreatorTokenScreen } from "app/screens/creator-token/review-creator-token";
@@ -42,6 +43,7 @@ import { SearchScreen } from "app/screens/search";
 import { SettingsScreen } from "app/screens/settings";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { SharedElementScreen } from "app/screens/shared-element";
 import { TrendingScreen } from "app/screens/trending";
 
 import packageJson from "../../../package.json";
@@ -72,8 +74,12 @@ export function RootStackNavigator() {
           headerShown: false,
           fullScreenGestureEnabled: true,
           animationDuration: Platform.OS === "ios" ? 400 : undefined,
-          animation: Platform.OS === "android" ? "fade_from_bottom" : "default",
+          // https://github.com/showtime-xyz/showtime-frontend/pull/2213
+          animation: Platform.OS === "android" ? "none" : "default",
           statusBarStyle: isDark ? "light" : "dark",
+          navigationBarColor: isDark
+            ? "rgba(0,0,0,0.95)"
+            : "rgba(255,255,255,1)",
         }}
       >
         <Stack.Screen
@@ -170,7 +176,7 @@ export function RootStackNavigator() {
         />
         <Stack.Screen
           name="trending"
-          options={{ headerTitle: "Top Creator Tokens" }}
+          options={{ headerTitle: "Leaderboard" }}
           component={TrendingScreen}
         />
         <Stack.Screen
@@ -258,6 +264,17 @@ export function RootStackNavigator() {
         <Stack.Screen
           name="creatorTokensImportAllowlist"
           component={CreatorTokensImportAllowlistScreen}
+        />
+        <Stack.Screen
+          name="creatorTokenSocialShare"
+          component={CreatorTokenSocialShareScreen}
+        />
+        <Stack.Screen
+          name="viewer"
+          component={SharedElementScreen}
+          options={{
+            navigationBarColor: "rgba(0,0,0,0.95)",
+          }}
         />
       </Stack.Group>
     </Stack.Navigator>

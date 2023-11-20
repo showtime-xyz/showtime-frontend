@@ -1,6 +1,6 @@
-apps/next @intergalacticspacehighway @alantoa @hirbod
-apps/expo @intergalacticspacehighway @alantoa @hirbod
+apps/next @intergalacticspacehighway @hirbod
+apps/expo @intergalacticspacehighway @hirbod
 apps/storybook-react @intergalacticspacehighway
-packages/app @intergalacticspacehighway @alantoa @hirbod
-packages/design-system @intergalacticspacehighway @alantoa @hirbod
+packages/app @intergalacticspacehighway @hirbod
+packages/design-system @intergalacticspacehighway @hirbod
 .github/workflows @intergalacticspacehighway

@@ -231,6 +231,7 @@ export const Default = () => {
           <IconItem icon={Icon.TwitterOutline} title="TwitterOutline" />
           <IconItem icon={Icon.SpotifyPure} title="SpotifyPure" />
           <IconItem icon={Icon.Spotify} title="Spotify" />
+          <IconItem icon={Icon.X} title="X" />
         </View>
         <Button
           tw="web:fixed web:right-40 absolute right-10 z-10"

@@ -61,7 +61,6 @@ export const useRandomWallet = (): UseWalletReturnType => {
       },
       name: "test wallet",
       connected,
-      networkChanged: undefined,
       signMessageAsync: async (args: { message: string | Bytes }) => {
         const signature = await wallet.signMessage(args.message);
         return signature;

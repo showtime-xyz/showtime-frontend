@@ -214,15 +214,6 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
                         <VerificationBadge size={16} />
                       </View>
                     ) : null}
-                    <View tw="ml-1">
-                      <StarDropBadge
-                        size={16}
-                        data={profileData?.profile.latest_star_drop_collected}
-                      />
-                    </View>
-                    {profileData?.follows_you && !isSelf ? (
-                      <Chip label="Follows You" tw="ml-2" />
-                    ) : null}
                   </View>
                 </View>
                 <CompleteProfileButton isSelf={isSelf} />
@@ -346,14 +337,6 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
                     <VerificationBadge size={16} />
                   ) : null}
                 </View>
-                <StarDropBadge
-                  size={16}
-                  data={profileData?.profile.latest_star_drop_collected}
-                  tw="ml-1"
-                />
-                {profileData?.follows_you && !isSelf ? (
-                  <Chip label="Follows You" tw="ml-2" />
-                ) : null}
               </Pressable>
             </View>
             <View tw="-mt-1 ml-auto">

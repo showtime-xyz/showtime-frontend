@@ -32,6 +32,7 @@ import { CreatorChannelsShareScreen } from "app/screens/creator-channles-share";
 import { CreatorTokenBuyScreen } from "app/screens/creator-token/buy-creator-token";
 import { CreatorTokenCollectedScreen } from "app/screens/creator-token/creator-token-collected";
 import { CreatorTokenCollectorsScreen } from "app/screens/creator-token/creator-token-collectors";
+import { CreatorTokenSocialShareScreen } from "app/screens/creator-token/creator-token-social-share";
 import { InviteCreatorTokenScreen } from "app/screens/creator-token/invite-creator-token";
 import { CreatorTokenInviteSignInScreen } from "app/screens/creator-token/invite-sign-in";
 import { CreatorTokensExplanationScreen } from "app/screens/creator-tokens-explanation";
@@ -230,7 +231,6 @@ function App({ Component, pageProps, router }: AppProps) {
         <VerifyPhoneNumberScreen />
         <UnlockedChannelScreen />
         <CreatorTokenBuyScreen />
-        <CreatorTokensShareModalScreen />
         <CreatorTokenInviteSignInScreen />
         <InviteCreatorTokenScreen />
         <CreatorTokensSelfServeExplainerScreen />
@@ -238,6 +238,8 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorTokensImportAllowlistSuccessScreen />
         <CreatorTokenCollectedScreen />
         <CreatorTokenCollectorsScreen />
+        <CreatorTokensShareModalScreen />
+        <CreatorTokenSocialShareScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />

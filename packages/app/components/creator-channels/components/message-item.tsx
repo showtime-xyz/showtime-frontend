@@ -13,7 +13,6 @@ import Animated, {
   SharedValue,
 } from "react-native-reanimated";
 
-import { AnimateHeight } from "@showtime-xyz/universal.accordion";
 import { useAlert } from "@showtime-xyz/universal.alert";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -44,6 +43,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
+import { SharedElement } from "design-system/shared-element/SharedElement";
 
 import { MenuItemIcon } from "../../dropdown/menu-item-icon";
 import { MessageReactions } from "../../reaction/message-reactions";
@@ -55,7 +55,7 @@ import { CreatorBadge } from "./creator-badge";
 import { ImagePreview } from "./image-preview";
 import { LeanText, LeanView } from "./lean-text";
 
-const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
+//const PlatformAnimateHeight = Platform.OS === "web" ? AnimateHeight : View;
 const AnimatedView = Animated.createAnimatedComponent(View);
 
 export const MessageItem = memo(
@@ -379,7 +379,7 @@ export const MessageItem = memo(
                       {loremText}
                     </LeanText>
                   </LeanView>
-                ) : (
+                ) : item.channel_message.body_text_length > 0 ? (
                   <>
                     <LeanText tw="py-1.5 text-sm  text-gray-900 dark:text-gray-100">
                       {loremText}
@@ -394,7 +394,7 @@ export const MessageItem = memo(
                       }}
                     />
                   </>
-                )}
+                ) : null}
               </LeanView>
             ) : (
               <>
@@ -421,7 +421,7 @@ export const MessageItem = memo(
               </>
             )}
 
-            {/* ADD LETER
+            {/* ADD LATER
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("video") ? (
               <Video
@@ -436,10 +436,25 @@ export const MessageItem = memo(
 
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
-              <ImagePreview
-                attachment={item.channel_message?.attachments[0]}
-                isViewable={permissions?.can_view_creator_messages}
-              />
+              Platform.OS === "web" ? (
+                <>
+                  <ImagePreview
+                    attachment={channel_message}
+                    isViewable={permissions?.can_view_creator_messages}
+                  />
+                </>
+              ) : (
+                <SharedElement tag={channel_message?.id.toString()}>
+                  {({ animatedRef, animatedStyles }) => (
+                    <ImagePreview
+                      style={animatedStyles}
+                      animatedRef={animatedRef}
+                      attachment={channel_message}
+                      isViewable={permissions?.can_view_creator_messages}
+                    />
+                  )}
+                </SharedElement>
+              )
             ) : null}
 
             {item.channel_message?.attachments?.length > 0 &&

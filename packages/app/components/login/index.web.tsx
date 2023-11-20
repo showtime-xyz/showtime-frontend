@@ -2,14 +2,22 @@ import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 
 import { PortalProvider } from "@gorhom/portal";
+import { usePrivy } from "@privy-io/react-auth";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Ethereum } from "@showtime-xyz/universal.icon";
 import { useModalScreenContext } from "@showtime-xyz/universal.modal-screen";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { ScrollView } from "@showtime-xyz/universal.scroll-view";
+import Spinner from "@showtime-xyz/universal.spinner";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { LoginComponent } from "./login";
+import { usePreviousValue } from "app/hooks/use-previous-value";
+import { useUser } from "app/hooks/use-user";
+
 import { useLogin } from "./use-login";
 
 export function Login() {
@@ -19,11 +27,13 @@ export function Login() {
     walletName,
     showSignMessage,
     verifySignature,
-    handleSubmitEmail,
-    handleSubmitPhoneNumber,
     handleSubmitWallet,
     loading,
   } = useLogin();
+  const privy = usePrivy();
+  const user = useUser();
+  const router = useRouter();
+  const prevUser = usePreviousValue(user);
   //#endregion
   const modalScreenContext = useModalScreenContext();
 
@@ -34,6 +44,15 @@ export function Login() {
       modalScreenContext?.setTitle("Sign in to collect & unlock");
     }
   }, [showSignMessage, modalScreenContext]);
+  useEffect(() => {
+    // This will happen when user is logged in after connect wallet.
+    // For social logins, privy refreshes the page so we don't need to do anything.
+    if (user.isAuthenticated && !prevUser?.isAuthenticated) {
+      router.pop();
+    }
+  }, [router, user, prevUser]);
+
+  const isDark = useIsDarkMode();
 
   return (
     <PortalProvider>
@@ -62,13 +81,43 @@ export function Login() {
             </Button>
           </View>
         ) : (
-          <LoginComponent
-            handleSubmitEmail={handleSubmitEmail}
-            handleSubmitPhoneNumber={handleSubmitPhoneNumber}
-            handleSubmitWallet={handleSubmitWallet}
-            loading={loading}
-          />
+          <View tw="p-4">
+            <Button
+              size="regular"
+              tw={`${loading ? "opacity-[0.5]" : ""}`}
+              disabled={loading}
+              onPress={async () => {
+                if (privy.authenticated) {
+                  await privy.logout();
+                }
+                privy.login();
+              }}
+            >
+              Phone & Social
+            </Button>
+            <Button
+              size="regular"
+              variant="primary"
+              tw={`my-2 ${loading ? "opacity-[0.5]" : ""}`}
+              disabled={loading}
+              onPress={handleSubmitWallet}
+            >
+              <View tw="absolute left-4 top-3">
+                <Ethereum
+                  width={24}
+                  height={24}
+                  color={isDark ? colors.black : colors.white}
+                />
+              </View>
+              Connect
+            </Button>
+          </View>
         )}
+        {loading ? (
+          <View tw="my-2 items-center">
+            <Spinner />
+          </View>
+        ) : null}
       </ScrollView>
     </PortalProvider>
   );

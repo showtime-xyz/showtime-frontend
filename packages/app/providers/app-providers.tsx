@@ -12,16 +12,14 @@ import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
 import { KeyboardProvider } from "app/lib/keyboard-controller";
+import { PrivyAuth, PrivyProvider } from "app/lib/privy/privy-provider";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
-import { ClaimProvider } from "app/providers/claim-provider";
-import { DropProvider } from "app/providers/drop-provider";
-import { FeedProvider } from "app/providers/feed-provider";
-import { MuteProvider } from "app/providers/mute-provider";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provider";
-import { Web3Provider } from "app/providers/web3-provider";
+
+import { SharedElementProvider } from "design-system/shared-element/SharedElementContext";
 
 import { WalletProvider } from "./wallet-provider";
 
@@ -30,42 +28,35 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
     <GestureHandlerRootView style={{ flexGrow: 1 }}>
       <KeyboardProvider statusBarTranslucent>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <ColorSchemeProvider>
-            <ReactionProvider>
-              <WalletMobileSDKProvider>
-                <Web3Provider>
+          <SharedElementProvider>
+            <ColorSchemeProvider>
+              <ReactionProvider>
+                <WalletMobileSDKProvider>
                   <WalletProvider>
                     <AlertProvider>
                       <LightBoxProvider>
                         <SnackbarProvider>
                           <NavigationProvider>
                             <SWRProvider>
-                              <AuthProvider>
-                                <UserProvider>
-                                  <BottomSheetModalProvider>
-                                    {/* @ts-ignore */}
-                                    <FeedProvider>
-                                      <MuteProvider>
-                                        <ClaimProvider>
-                                          <DropProvider>
-                                            {children}
-                                          </DropProvider>
-                                        </ClaimProvider>
-                                      </MuteProvider>
-                                    </FeedProvider>
-                                  </BottomSheetModalProvider>
-                                </UserProvider>
-                              </AuthProvider>
+                              <PrivyProvider>
+                                <AuthProvider>
+                                  <UserProvider>
+                                    <BottomSheetModalProvider>
+                                      <PrivyAuth>{children}</PrivyAuth>
+                                    </BottomSheetModalProvider>
+                                  </UserProvider>
+                                </AuthProvider>
+                              </PrivyProvider>
                             </SWRProvider>
                           </NavigationProvider>
                         </SnackbarProvider>
                       </LightBoxProvider>
                     </AlertProvider>
                   </WalletProvider>
-                </Web3Provider>
-              </WalletMobileSDKProvider>
-            </ReactionProvider>
-          </ColorSchemeProvider>
+                </WalletMobileSDKProvider>
+              </ReactionProvider>
+            </ColorSchemeProvider>
+          </SharedElementProvider>
         </SafeAreaProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>

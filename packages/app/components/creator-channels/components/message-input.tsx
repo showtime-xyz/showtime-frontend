@@ -220,7 +220,7 @@ export const MessageInput = memo(
         <LeanView
           tw="flex-row items-center justify-start bg-black px-2 py-2"
           style={{
-            paddingBottom: Math.max(bottom || 0, 8),
+            marginBottom: Math.max(bottom || 0, 16),
           }}
         >
           <PlatformBuyButton

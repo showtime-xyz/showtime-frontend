@@ -20,7 +20,7 @@ import type { SubmitWalletParams } from "./use-login";
 interface LoginComponentProps {
   tw?: string;
   handleSubmitEmail: (email: string) => Promise<void>;
-  handleSubmitPhoneNumber: (phoneNumber: string) => Promise<void>;
+  handleSubmitPhoneNumber: (phoneNumber: string) => void;
   handleSubmitWallet: (
     params?: SubmitWalletParams | undefined
   ) => Promise<void>;
@@ -102,7 +102,7 @@ export function LoginComponent({
           <LoginWithApple />
           <LoginWithGoogle />
           {/* <LoginWithTwitter /> */}
-          <LoginButton onPress={() => setShowEmailLogin(true)} type="email" />
+          {/* <LoginButton onPress={() => setShowEmailLogin(true)} type="email" /> */}
           <ConnectButton handleSubmitWallet={handleSubmitWallet} />
           <LoginFooter tw="mt-4" />
         </View>

@@ -78,6 +78,7 @@ type RootStackNavigatorParams = {
   creatorTokensExplanation: undefined;
   enterInviteCode: undefined;
   creatorTokenInviteSignIn: undefined;
+  creatorTokenSocialShare: undefined;
   creatorTokensSelfServeExplainer: undefined;
   creatorTokensImportAllowlist: undefined;
   creatorTokensImportAllowlistSuccess: undefined;
@@ -102,6 +103,7 @@ type RootStackNavigatorParams = {
   channelsShare: undefined;
   channelsCongrats: undefined;
   channelsMembers: undefined;
+  viewer: undefined;
 };
 
 export type {

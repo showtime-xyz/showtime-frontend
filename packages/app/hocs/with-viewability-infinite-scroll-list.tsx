@@ -1,14 +1,23 @@
 import * as React from "react";
-import { forwardRef, useCallback } from "react";
+import { createContext, forwardRef, useCallback, useMemo } from "react";
 
-import { useSharedValue } from "react-native-reanimated";
-
-import {
-  ItemKeyContext,
-  ViewabilityItemsContext,
-} from "app/components/viewability-tracker-flatlist";
+import { useSharedValue, SharedValue } from "react-native-reanimated";
 
 type ViewabilityItemsContextType = any[];
+
+export const ViewabilityItemsContext = createContext<
+  SharedValue<ViewabilityItemsContextType>
+>({
+  value: [],
+  addListener: function (
+    listenerID: number,
+    listener: (value: any) => void
+  ): void {},
+  removeListener: function (listenerID: number): void {},
+  modify: function (modifier: (value: any) => any): void {},
+});
+
+export const ItemKeyContext = createContext<any | undefined>(undefined);
 
 const viewabilityConfig = {
   minimumViewTime: 50,

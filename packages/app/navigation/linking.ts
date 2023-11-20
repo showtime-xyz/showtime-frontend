@@ -39,6 +39,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
     initialRouteName: "bottomTabs",
     screens: {
       login: "login",
+      viewer: "viewer",
       trending: "trending",
       qrCodeShare: "/qr-code-share/:contractAddress",
       dropImageShare: "/drop-image-share/:contractAddress",
@@ -55,6 +56,7 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       creatorTokenBuy: "creator-token/:username/buy",
       enterInviteCode: "enterInviteCode",
       creatorTokenInviteSignIn: "creator-token/:username/invite-sign-in",
+      creatorTokenSocialShare: "creator-token/:username/social-share",
       creatorTokensSelfServeExplainer: "creator-token/self-serve-explainer",
       privacySecuritySettings: "settings/privacy-and-security",
       notificationSettings: "settings/notifications",

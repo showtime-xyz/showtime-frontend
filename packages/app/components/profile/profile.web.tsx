@@ -2,11 +2,16 @@ import { useCallback, useMemo, useState, useEffect } from "react";
 import { Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
+import * as Clipboard from "expo-clipboard";
+import { stringify } from "querystring";
+import type { ParsedUrlQuery } from "querystring";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { GiftSolid } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
 import { EmptyPlaceholder } from "app/components/empty-placeholder";
@@ -24,13 +29,15 @@ import {
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useRedirectToCreatorTokenSocialShare } from "app/hooks/use-redirect-to-creator-token-social-share-screen";
+import { useShare } from "app/hooks/use-share";
 import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
-import { MutateProvider } from "app/providers/mutate-provider";
 import { NFT } from "app/types";
 import { getFullSizeCover } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
+import { toast } from "design-system/toast";
 import { colors } from "design-system/tailwind/colors";
 
 import { ButtonGoldLinearGradient } from "../gold-gradient";
@@ -69,6 +76,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
   const { data } = useProfileNftTabs({
     profileId: profileId,
   });
+  const redirectToCreatorTokenSocialShare =
+    useRedirectToCreatorTokenSocialShare();
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
 
@@ -233,65 +242,74 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   index={index}
                 /> */}
 
-                {type === "tokens" ? (
-                  <>
-                    <TokensTabHeader
-                      channelId={channelId}
-                      isSelf={isSelf}
-                      messageCount={messageCount}
-                      channelPermissions={channelPermissions}
+              {type === "tokens" ? (
+                <>
+                  <TokensTabHeader
+                    channelId={channelId}
+                    isSelf={isSelf}
+                    messageCount={messageCount}
+                    channelPermissions={channelPermissions}
+                  />
+                  <View tw="pl-5">
+                    <CreatorTokenCollectors
+                      creatorTokenId={
+                        profileData?.data?.profile.creator_token?.id
+                      }
+                      name={profileData?.data?.profile.name}
+                      username={username}
                     />
-                    <View tw="pl-5">
-                      <CreatorTokenCollectors
-                        creatorTokenId={
-                          profileData?.data?.profile.creator_token?.id
-                        }
-                        name={profileData?.data?.profile.name}
-                        username={username}
-                      />
-                      <CreatorTokenCollected
-                        profileId={profileId}
-                        name={profileData?.data?.profile.name}
-                        username={username}
-                      />
-                    </View>
-                  </>
-                ) : null}
-
-                <InfiniteScrollList
-                  useWindowScroll
-                  numColumns={numColumns}
-                  preserveScrollPosition
-                  data={isBlocked ? [] : list}
-                  keyExtractor={keyExtractor}
-                  renderItem={renderItem}
-                  overscan={12}
-                  ListEmptyComponent={ListEmptyComponent}
-                  ListFooterComponent={ListFooterComponent}
-                  onEndReached={fetchMore}
-                />
-              </View>
-              {isProfileMdScreen ? (
-                <View
-                  style={{
-                    width: 335,
-                  }}
-                  tw="animate-fade-in-250 ml-10"
-                >
-                  <Sticky enabled>
-                    <CreatorTokensPanel username={username} isSelf={isSelf} />
-                    <TopPartCreatorTokens />
-                  </Sticky>
-                </View>
+                    <CreatorTokenCollected
+                      profileId={profileId}
+                      name={profileData?.data?.profile.name}
+                      username={username}
+                    />
+                  </View>
+                </>
               ) : null}
+
+              <InfiniteScrollList
+                useWindowScroll
+                numColumns={numColumns}
+                preserveScrollPosition
+                data={isBlocked ? [] : list}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
+                overscan={12}
+                ListEmptyComponent={ListEmptyComponent}
+                ListFooterComponent={ListFooterComponent}
+                onEndReached={fetchMore}
+              />
             </View>
-          </ProfileTabsNFTProvider>
-        </MutateProvider>
+            {isProfileMdScreen ? (
+              <View
+                style={{
+                  width: 335,
+                }}
+                tw="animate-fade-in-250 ml-10"
+              >
+                <Sticky enabled>
+                  <CreatorTokensPanel username={username} isSelf={isSelf} />
+                  <TopPartCreatorTokens />
+                </Sticky>
+              </View>
+            ) : null}
+          </View>
+        </ProfileTabsNFTProvider>
       </View>
       <>
         {isSelf ? (
           <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
             <HeaderRightSm withBackground />
+            <Button
+              tw="ml-2"
+              onPress={() => {
+                redirectToCreatorTokenSocialShare(username);
+              }}
+              style={{ height: 30 }}
+              size="small"
+            >
+              Share
+            </Button>
             <Pressable
               tw={[
                 "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
@@ -321,9 +339,23 @@ const Profile = ({ username }: ProfileScreenProps) => {
             </Pressable>
           </View>
         ) : (
-          <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
-            <HeaderLeft withBackground canGoBack={true} />
-          </View>
+          <>
+            <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
+              <HeaderLeft withBackground canGoBack={true} />
+            </View>
+            <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
+              <Button
+                tw="ml-2"
+                onPress={() => {
+                  redirectToCreatorTokenSocialShare(username);
+                }}
+                style={{ height: 30 }}
+                size="small"
+              >
+                Share
+              </Button>
+            </View>
+          </>
         )}
       </>
     </View>

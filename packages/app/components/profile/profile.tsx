@@ -29,6 +29,7 @@ import { useProfileNftTabs, useUserProfile } from "app/hooks/api-hooks";
 import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
+import { useRedirectToCreatorTokenSocialShare } from "app/hooks/use-redirect-to-creator-token-social-share-screen";
 import { useShare } from "app/hooks/use-share";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
@@ -62,7 +63,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
     error,
   } = useUserProfile({ address: username });
   const [type] = useParam("type");
-  const { share } = useShare();
+  const redirectToCreatorTokenSocialShare =
+    useRedirectToCreatorTokenSocialShare();
   const userId = useCurrentUserId();
   const profileId = profileData?.data?.profile.profile_id;
   const isSelf = userId === profileId;
@@ -217,10 +219,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
   }, [isSelf, profileData?.data?.profile]);
 
   const onShare = useCallback(async () => {
-    await share({
-      url: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${username}`,
-    });
-  }, [share, username]);
+    redirectToCreatorTokenSocialShare(username);
+  }, [redirectToCreatorTokenSocialShare, username]);
 
   return (
     <>

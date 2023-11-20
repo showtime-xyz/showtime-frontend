@@ -1,12 +1,9 @@
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Plus } from "@showtime-xyz/universal.icon";
-import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { View } from "@showtime-xyz/universal.view";
 
 import { HeaderDropdown } from "app/components/header-dropdown";
-import { useRedirectToCreateDrop } from "app/hooks/use-redirect-to-create-drop";
 import { useUser } from "app/hooks/use-user";
 import {
   CreatorChannelsTabBarIcon,
@@ -23,7 +20,6 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
   const router = useRouter();
   const { isLoading, isAuthenticated, user } = useUser();
   const isDark = useIsDarkMode();
-  const redirectToDrop = useRedirectToCreateDrop();
   const navigateToLogin = useNavigateToLogin();
 
   return (
@@ -48,23 +44,6 @@ export const HeaderRight = ({ withBackground }: HeaderRightProps) => {
               </View>
               <View tw="mx-2">
                 <NotificationsInHeader />
-              </View>
-              <View tw="mx-2">
-                <PressableHover onPress={redirectToDrop}>
-                  <View
-                    testID="mint-nft"
-                    tw={[
-                      "h-12 w-12 items-center justify-center rounded-full",
-                      "bg-black dark:bg-white",
-                    ]}
-                  >
-                    <Plus
-                      width={24}
-                      height={24}
-                      color={isDark ? "black" : "white"}
-                    />
-                  </View>
-                </PressableHover>
               </View>
             </>
           )}
