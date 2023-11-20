@@ -156,14 +156,19 @@ const SharedElementScreen = withColorScheme(() => {
                       <AnimatedImage
                         source={{
                           uri: url + "?optimizer=image&width=1000",
+                          width: 1000,
                         }}
+                        placeholder={
+                          url
+                            ? {
+                                uri:
+                                  url + "?optimizer=image&width=300&quality=50",
+                                width: 300,
+                              }
+                            : undefined
+                        }
+                        placeholderContentFit={"contain"}
                         ref={animatedRef}
-                        placeholder={{
-                          uri: url + "?optimizer=image&width=300",
-                          width: normalizedImageDimensions.width,
-                          height: normalizedImageDimensions.height,
-                        }}
-                        placeholderContentFit={"cover"}
                         style={[
                           {
                             width: normalizedImageDimensions.width,
@@ -171,6 +176,9 @@ const SharedElementScreen = withColorScheme(() => {
                           },
                           animatedStyles,
                         ]}
+                        width={normalizedImageDimensions.width}
+                        height={normalizedImageDimensions.height}
+                        cachePolicy={"none"}
                       />
                     </Reanimated.View>
                   </View>

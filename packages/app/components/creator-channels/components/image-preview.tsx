@@ -55,24 +55,25 @@ export const ImagePreview = ({
           tw="web:cursor-pointer"
           transition={300}
           recyclingKey={attachment.attachments[0]?.media_upload}
-          width={width}
-          height={height}
           source={
             fileObj.url
               ? {
                   uri: fileObj.url + "?optimizer=image&width=300&quality=50",
-                  width: width,
-                  height: height,
+                  width: 300,
                 }
               : undefined
           }
+          placeholderContentFit={"contain"}
           alt=""
           style={[
             { borderRadius: 8 },
             { backgroundColor: isDark ? "#333" : "#f5f5f5" },
             { display: isViewable ? undefined : "none" },
+            { width },
+            { height },
             style,
           ]}
+          cachePolicy={"none"}
         />
       </Pressable>
       {!isViewable ? (
