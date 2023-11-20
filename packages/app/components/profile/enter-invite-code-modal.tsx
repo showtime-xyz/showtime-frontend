@@ -1,61 +1,33 @@
-import { useState, useEffect, useRef } from "react";
-import { LayoutChangeEvent } from "react-native";
+import { useState, useRef, useEffect } from "react";
 
 import * as Clipboard from "expo-clipboard";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withSequence,
-  withTiming,
-} from "react-native-reanimated";
+import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useRouter } from "@showtime-xyz/universal.router";
+import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
-import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
 import { axios } from "app/lib/axios";
 
 import { toast } from "design-system/toast";
 
-const AnimatedView = Animated.createAnimatedComponent(View);
+import { OtpInput, OtpInputRef } from "../otp-input";
 
 export const EnterInviteCodeModal = () => {
+  const otpRef = useRef<OtpInputRef>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [letterSpacing, setLetterSpacing] = useState(0);
   const [inviteCode, setInviteCode] = useState("");
-  const [caretPosition, setCaretPosition] = useState(0);
-  const caretOpacity = useSharedValue(1);
-  const inputRef = useRef(null);
   const router = useRouter();
 
-  const handleLayout = (event: LayoutChangeEvent) => {
-    const width = event.nativeEvent.layout.width;
-    const avgCharWidth = 20; // Ein geschätzter Wert, den Sie anpassen müssen
-    const totalCharWidth = avgCharWidth * 6;
-    const totalSpacingWidth = width - totalCharWidth;
-    const spacing = totalSpacingWidth / 5; // 5 Zwischenräume zwischen 6 Zeichen
-    setLetterSpacing(spacing);
-  };
-
   useEffect(() => {
-    setCaretPosition(inviteCode.length);
-  }, [inviteCode]);
+    AvoidSoftInput.setEnabled(false);
 
-  const animatedCaretStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withRepeat(
-        withSequence(
-          withTiming(0, { duration: 400 }),
-          withTiming(1, { duration: 400 })
-        ),
-        -1,
-        false
-      ),
+    return () => {
+      AvoidSoftInput.setEnabled(true);
     };
-  }, [caretOpacity]);
+  }, []);
 
   const checkCode = async () => {
     try {
@@ -73,17 +45,19 @@ export const EnterInviteCodeModal = () => {
     } catch (e: any) {
       const errorCode = e.response.data.error.code;
       if (errorCode === 400) {
-        toast.error("You already have a creator token!");
+        toast.error("You already have a creator token!", { from: "top" });
       } else if (errorCode === 404) {
-        toast.error("Invalid code");
+        toast.error("Invalid code", { from: "top" });
       } else if (errorCode === 410) {
-        toast.error("Code expired or already used");
+        toast.error("Code expired or already used", { from: "top" });
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong", { from: "top" });
       }
     } finally {
       setIsLoading(false);
       setInviteCode("");
+      otpRef.current?.clear();
+      2;
     }
   };
 
@@ -93,44 +67,19 @@ export const EnterInviteCodeModal = () => {
         Enter invite code to launch your creator token
       </Text>
       <View tw="flex-row items-center justify-between py-4">
-        <View tw="relative mr-4 flex-1 select-none rounded-md bg-gray-200 p-4 dark:bg-gray-700">
-          <TextInput
-            ref={inputRef}
-            onChangeText={setInviteCode}
-            value={inviteCode}
-            maxLength={6}
-            onLayout={handleLayout}
-            tw={
-              "w-full select-none text-3xl font-bold uppercase text-transparent"
-            }
-            style={{ letterSpacing }}
-            autoFocus
+        <View tw="relative mr-4 flex-1">
+          <OtpInput
+            ref={otpRef}
+            numberOfDigits={6}
+            onTextChange={(text) => setInviteCode(text)}
+            focusColor={colors.indigo[500]}
+            theme={{
+              pinCodeTextStyle: {
+                fontWeight: "bold",
+                textTransform: "uppercase",
+              },
+            }}
           />
-          <View tw="pointer-events-none absolute left-0 top-0 z-0 h-full w-full flex-row items-center justify-between p-4">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <Text
-                key={index}
-                tw={
-                  "flex-1 self-center text-center text-3xl font-bold uppercase dark:text-white"
-                }
-              >
-                {inviteCode[index] || " "}
-              </Text>
-            ))}
-            {caretPosition < 7 && (
-              <AnimatedView
-                tw="absolute h-2/3 w-px bg-black dark:bg-gray-300"
-                style={[
-                  { left: `${Math.min(caretPosition * 16.66, 93)}%` },
-                  {
-                    marginLeft:
-                      caretPosition < 1 ? 32 : caretPosition >= 6 ? 0 : 16,
-                  },
-                  animatedCaretStyle,
-                ]}
-              />
-            )}
-          </View>
         </View>
         <Text
           onPress={async () => {
@@ -138,6 +87,7 @@ export const EnterInviteCodeModal = () => {
               const code = await Clipboard.getStringAsync();
               if (code.length === 6) {
                 setInviteCode(code);
+                otpRef.current?.setValue(code);
                 toast.success("Pasted from clipboard");
               } else {
                 toast.error("Invalid code");
