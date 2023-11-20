@@ -62,7 +62,6 @@ export const ImagePreview = ({
             display: isViewable ? "flex" : "none",
             cursor: "zoom-in",
             backgroundColor: isDark ? "#333" : "#f5f5f5",
-            opacity: isOpen ? 0 : 1,
           }}
           transition={{ type: "timing" }}
           draggable={false}
