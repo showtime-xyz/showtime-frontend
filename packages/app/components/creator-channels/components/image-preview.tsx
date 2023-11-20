@@ -53,7 +53,7 @@ export const ImagePreview = ({
         <AnimatedImage
           ref={animatedRef}
           tw="web:cursor-pointer"
-          transition={100}
+          transition={300}
           recyclingKey={attachment.attachments[0]?.media_upload}
           width={width}
           height={height}
