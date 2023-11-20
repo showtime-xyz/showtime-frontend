@@ -77,6 +77,9 @@ export function RootStackNavigator() {
           // https://github.com/showtime-xyz/showtime-frontend/pull/2213
           animation: Platform.OS === "android" ? "none" : "default",
           statusBarStyle: isDark ? "light" : "dark",
+          navigationBarColor: isDark
+            ? "rgba(0,0,0,0.95)"
+            : "rgba(255,255,255,1)",
         }}
       >
         <Stack.Screen
@@ -266,7 +269,13 @@ export function RootStackNavigator() {
           name="creatorTokenSocialShare"
           component={CreatorTokenSocialShareScreen}
         />
-        <Stack.Screen name="viewer" component={SharedElementScreen} />
+        <Stack.Screen
+          name="viewer"
+          component={SharedElementScreen}
+          options={{
+            navigationBarColor: "rgba(0,0,0,0.95)",
+          }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
