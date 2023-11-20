@@ -96,7 +96,7 @@ export const ImagePreview = ({
               }}
             />
             <motion.img
-              src={`${fileObj.url}?optimizer=image&width=300&quality=50&blur=100`}
+              src={`${fileObj.url}?optimizer=image&width=300&quality=50`}
               alt=""
               layoutId={attachment.id.toString()}
               style={{
