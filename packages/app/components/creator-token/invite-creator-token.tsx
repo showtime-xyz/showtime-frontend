@@ -49,10 +49,19 @@ const InviteCreatorTokenItem = ({ code }: { code: string }) => {
   return (
     <View tw="mt-2 rounded-2xl border border-gray-500 p-4">
       <View tw="flex flex-row">
-        <View tw="flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-800">
-          <Text tw="letter tracking-ultra-wide py-2.5 pl-6 pr-5 text-center text-2xl text-black dark:text-white">
-            {code}
-          </Text>
+        <View tw="flex flex-row items-center justify-center rounded-lg bg-gray-200 px-5  py-2.5 dark:bg-gray-800">
+          {code.split("").map((char, i) => {
+            return (
+              <View
+                key={i}
+                tw="letter tracking-ultra-wide w-8 items-center justify-center"
+              >
+                <Text tw="text-3xl font-semibold text-black dark:text-white">
+                  {char}
+                </Text>
+              </View>
+            );
+          })}
         </View>
         <View tw="flex-1 items-center justify-center">
           <Pressable onPress={copyCode}>
@@ -62,9 +71,11 @@ const InviteCreatorTokenItem = ({ code }: { code: string }) => {
           </Pressable>
         </View>
       </View>
-      <Button tw="mt-4" onPress={shareInvite}>
-        Share invite
-      </Button>
+      {/* TODO: implement share invite
+        <Button tw="mt-4" onPress={shareInvite}>
+          Share invite
+        </Button>
+        */}
     </View>
   );
 };
@@ -129,8 +140,9 @@ export const InviteCreatorToken = () => {
                   }
                 : require("./assets/invite_coin_header.png")
             }
-            width={220}
+            width={260}
             height={200}
+            contentFit="contain"
           />
         </View>
         <View tw="mt-6">
@@ -185,11 +197,7 @@ export const InviteCreatorToken = () => {
                   />
                 ))}
               </>
-            ) : (
-              <Text tw="font-bold text-black dark:text-white">
-                No invites claimed yet.
-              </Text>
-            )}
+            ) : null}
           </View>
         </View>
       </View>
