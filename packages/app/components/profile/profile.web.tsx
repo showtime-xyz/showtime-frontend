@@ -79,6 +79,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     useRedirectToCreatorTokenSocialShare();
   const contentWidth = useContentWidth();
   const isProfileMdScreen = contentWidth > DESKTOP_PROFILE_WIDTH - 10;
+  const isMd = contentWidth > 768;
 
   const channelId = useMemo(() => {
     if (profileData?.data?.profile.channels) {
@@ -188,16 +189,30 @@ const Profile = ({ username }: ProfileScreenProps) => {
         style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}
       >
         <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
-          {isProfileMdScreen ? (
-            <>
+          <>
+            {isProfileMdScreen ? (
               <ProfileCover
                 tw="overflow-hidden rounded-b-3xl"
                 uri={getFullSizeCover(profileData?.data?.profile)}
               />
+            ) : null}
+            <View tw="absolute right-5 top-2 z-10 hidden flex-row lg:flex">
+              {isSelf ? <HeaderRightSm withBackground /> : null}
+
+              <Button
+                tw="ml-2 md:ml-0"
+                onPress={() => {
+                  redirectToCreatorTokenSocialShare(username);
+                }}
+                style={{ height: 30 }}
+                size="small"
+              >
+                Share
+              </Button>
               {isSelf && profileData?.data?.profile.creator_token?.id ? (
                 <Pressable
                   tw={[
-                    "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+                    "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
                   ]}
                   onPress={() => {
                     const as = "/creator-token/invite-creator-token";
@@ -223,8 +238,9 @@ const Profile = ({ username }: ProfileScreenProps) => {
                   <GiftSolid width={26} height={26} color={colors.gray[900]} />
                 </Pressable>
               ) : null}
-            </>
-          ) : null}
+            </View>
+          </>
+
           <View tw="w-full flex-row">
             <View tw="flex-1">
               <ProfileTop
@@ -296,58 +312,55 @@ const Profile = ({ username }: ProfileScreenProps) => {
         </ProfileTabsNFTProvider>
       </View>
       <>
-        {isSelf &&
-        !profileIsLoading &&
-        profileData?.data?.profile.creator_token?.id ? (
-          <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
-            <HeaderRightSm withBackground />
-            <Pressable
-              tw={[
-                "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
-              ]}
+        {!profileIsLoading ? (
+          <View tw={["fixed right-4 top-2 z-50 flex flex-row lg:hidden"]}>
+            {isSelf ? <HeaderRightSm withBackground /> : null}
+            <Button
+              tw="ml-2 md:ml-0"
               onPress={() => {
-                const as = "/creator-token/invite-creator-token";
-                router.push(
-                  Platform.select({
-                    native: as,
-                    web: {
-                      pathname: router.pathname,
-                      query: {
-                        ...router.query,
-                        inviteCreatorTokenModal: true,
-                      },
-                    } as any,
-                  }),
-                  Platform.select({ native: as, web: router.asPath }),
-                  {
-                    shallow: true,
-                  }
-                );
+                redirectToCreatorTokenSocialShare(username);
               }}
+              style={{ height: 30 }}
+              size="small"
             >
-              <ButtonGoldLinearGradient />
-              <GiftSolid width={26} height={26} color={colors.gray[900]} />
-            </Pressable>
-          </View>
-        ) : (
-          <>
-            <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
-              <HeaderLeft withBackground canGoBack={true} />
-            </View>
-            <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
-              <Button
-                tw="ml-2"
+              Share
+            </Button>
+            {isSelf && profileData?.data?.profile.creator_token?.id ? (
+              <Pressable
+                tw={[
+                  "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+                ]}
                 onPress={() => {
-                  redirectToCreatorTokenSocialShare(username);
+                  const as = "/creator-token/invite-creator-token";
+                  router.push(
+                    Platform.select({
+                      native: as,
+                      web: {
+                        pathname: router.pathname,
+                        query: {
+                          ...router.query,
+                          inviteCreatorTokenModal: true,
+                        },
+                      } as any,
+                    }),
+                    Platform.select({ native: as, web: router.asPath }),
+                    {
+                      shallow: true,
+                    }
+                  );
                 }}
-                style={{ height: 30 }}
-                size="small"
               >
-                Share
-              </Button>
-            </View>
-          </>
-        )}
+                <ButtonGoldLinearGradient />
+                <GiftSolid width={26} height={26} color={colors.gray[900]} />
+              </Pressable>
+            ) : null}
+          </View>
+        ) : null}
+        <>
+          <View tw={["fixed left-4 top-2 z-50 flex md:hidden"]}>
+            <HeaderLeft withBackground canGoBack={true} />
+          </View>
+        </>
       </>
     </View>
   );

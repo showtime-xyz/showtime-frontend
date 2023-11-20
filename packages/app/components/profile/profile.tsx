@@ -239,6 +239,15 @@ const Profile = ({ username }: ProfileScreenProps) => {
               withBackground
               user={profileData?.data?.profile}
             />
+            <Button
+              tw="ml-2"
+              onPress={onShare}
+              style={{ height: 30 }}
+              size="small"
+            >
+              Share
+            </Button>
+
             {isSelf && profileData?.data?.profile.creator_token?.id ? (
               <Pressable
                 tw={[
@@ -253,15 +262,6 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 <GiftSolid width={26} height={26} color={colors.gray[900]} />
               </Pressable>
             ) : null}
-
-            <Button
-              tw="ml-2"
-              onPress={onShare}
-              style={{ height: 30 }}
-              size="small"
-            >
-              Share
-            </Button>
           </View>
         }
         headerCenter={headerCenter}
