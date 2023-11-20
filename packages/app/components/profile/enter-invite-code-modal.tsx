@@ -4,6 +4,7 @@ import * as Clipboard from "expo-clipboard";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
@@ -20,6 +21,7 @@ export const EnterInviteCodeModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
   const router = useRouter();
+  const isDark = useIsDarkMode();
 
   useEffect(() => {
     AvoidSoftInput.setEnabled(false);
@@ -77,8 +79,13 @@ export const EnterInviteCodeModal = () => {
               pinCodeTextStyle: {
                 fontWeight: "bold",
                 textTransform: "uppercase",
+                color: isDark ? colors.white : colors.black,
+              },
+              pinCodeContainerStyle: {
+                borderColor: isDark ? colors.gray[800] : colors.gray[300],
               },
             }}
+            onFilled={checkCode}
           />
         </View>
         <Text
@@ -96,7 +103,7 @@ export const EnterInviteCodeModal = () => {
               toast.error("No permission to paste from clipboard");
             }
           }}
-          tw="text-sm font-medium text-indigo-500"
+          tw="text-sm font-semibold text-indigo-500"
         >
           Paste
         </Text>
