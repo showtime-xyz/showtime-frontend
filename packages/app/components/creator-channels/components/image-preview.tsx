@@ -53,9 +53,17 @@ export const ImagePreview = ({
         <AnimatedImage
           ref={animatedRef}
           tw="web:cursor-pointer"
-          transition={300}
           recyclingKey={attachment.attachments[0]?.media_upload}
+          transition={300}
           source={
+            fileObj.url
+              ? {
+                  uri: fileObj.url + "?optimizer=image&width=1000",
+                  width: 300,
+                }
+              : undefined
+          }
+          placeholder={
             fileObj.url
               ? {
                   uri: fileObj.url + "?optimizer=image&width=300&quality=50",
