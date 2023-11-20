@@ -38,7 +38,6 @@ import { getFullSizeCover } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
 import { toast } from "design-system/toast";
-import { colors } from "design-system/tailwind/colors";
 
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
@@ -188,55 +187,54 @@ const Profile = ({ username }: ProfileScreenProps) => {
         tw="min-h-screen w-full"
         style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}
       >
-        <MutateProvider mutate={updateItem}>
-          <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
-            {isProfileMdScreen ? (
-              <>
-                <CreatorTokensBanner />
-                <ProfileCover
-                  tw="overflow-hidden rounded-b-3xl"
-                  uri={getFullSizeCover(profileData?.data?.profile)}
-                />
-                <Pressable
-                  tw={[
-                    "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
-                  ]}
-                  onPress={() => {
-                    const as = "/creator-token/invite-creator-token";
-                    router.push(
-                      Platform.select({
-                        native: as,
-                        web: {
-                          pathname: router.pathname,
-                          query: {
-                            ...router.query,
-                            inviteCreatorTokenModal: true,
-                          },
-                        } as any,
-                      }),
-                      Platform.select({ native: as, web: router.asPath }),
-                      {
-                        shallow: true,
-                      }
-                    );
-                  }}
-                >
-                  <ButtonGoldLinearGradient />
-                  <GiftSolid width={26} height={26} color={colors.gray[900]} />
-                </Pressable>
-              </>
-            ) : null}
-            <View tw="w-full flex-row">
-              <View tw="flex-1">
-                <ProfileTop
-                  address={username}
-                  isBlocked={isBlocked}
-                  profileData={profileData?.data}
-                  isLoading={profileIsLoading}
-                  isError={isError}
-                  isSelf={isSelf}
-                />
-                {/* <ProfileTabBar
+        <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
+          {isProfileMdScreen ? (
+            <>
+              <CreatorTokensBanner />
+              <ProfileCover
+                tw="overflow-hidden rounded-b-3xl"
+                uri={getFullSizeCover(profileData?.data?.profile)}
+              />
+              <Pressable
+                tw={[
+                  "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
+                ]}
+                onPress={() => {
+                  const as = "/creator-token/invite-creator-token";
+                  router.push(
+                    Platform.select({
+                      native: as,
+                      web: {
+                        pathname: router.pathname,
+                        query: {
+                          ...router.query,
+                          inviteCreatorTokenModal: true,
+                        },
+                      } as any,
+                    }),
+                    Platform.select({ native: as, web: router.asPath }),
+                    {
+                      shallow: true,
+                    }
+                  );
+                }}
+              >
+                <ButtonGoldLinearGradient />
+                <GiftSolid width={26} height={26} color={colors.gray[900]} />
+              </Pressable>
+            </>
+          ) : null}
+          <View tw="w-full flex-row">
+            <View tw="flex-1">
+              <ProfileTop
+                address={username}
+                isBlocked={isBlocked}
+                profileData={profileData?.data}
+                isLoading={profileIsLoading}
+                isError={isError}
+                isSelf={isSelf}
+              />
+              {/* <ProfileTabBar
                   onPress={onChangeTabBar}
                   routes={routes}
                   index={index}
