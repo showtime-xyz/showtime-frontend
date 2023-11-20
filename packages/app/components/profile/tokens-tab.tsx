@@ -1,4 +1,11 @@
-import React, { forwardRef, useImperativeHandle, useRef, useMemo } from "react";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useMemo,
+  useContext,
+} from "react";
+import { Platform } from "react-native";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
@@ -10,6 +17,7 @@ import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View, ViewProps } from "@showtime-xyz/universal.view";
 
+import { UserContext } from "app/context/user-context";
 import { List } from "app/hooks/api-hooks";
 import {
   useCreatorTokenCoLlected,
@@ -47,6 +55,7 @@ export const TokensTabHeader = ({
 }) => {
   const isDark = useIsDarkMode();
   const router = useRouter();
+  const user = useContext(UserContext);
 
   const channelMessageCountFormatted = useMemo(
     () => formatNumber(messageCount || 0),
@@ -72,39 +81,41 @@ export const TokensTabHeader = ({
         </View>
       ) : null}
 
-      {/* TODO: Creator tokens P1
-      <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-4 py-4 dark:border-gray-700 dark:bg-gray-900">
-        <Text tw="mr-4 flex-1 text-sm text-gray-500 dark:text-gray-400">
-          Create your token to access your channel.
-        </Text>
-        <Pressable
-          onPress={() => {
-            router.push(
-              Platform.select({
-                native: "/enterInviteCode",
-                web: {
-                  pathname: router.pathname,
-                  query: {
-                    ...router.query,
-                    enterInviteCodeModal: true,
-                  },
-                } as any,
-              }),
-              Platform.select({
-                native: "/enterInviteCode",
-                web: router.asPath,
-              }),
-              { shallow: true }
-            );
-          }}
-          tw="rounded-3xl border border-gray-900 px-3 py-2 dark:border-gray-200"
-        >
-          <Text tw="text-sm font-bold text-gray-900 dark:text-white">
-            Enter invite code
+      {!user?.user?.data?.profile?.creator_token?.id &&
+      user?.user?.data?.profile?.creator_token_onboarding_status ===
+        "requires_invite" ? (
+        <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-4 py-4 dark:border-gray-700 dark:bg-gray-900">
+          <Text tw="mr-4 flex-1 text-sm text-gray-500 dark:text-gray-400">
+            Create your token to access your channel.
           </Text>
-        </Pressable>
-      </View>
-      */}
+          <Pressable
+            onPress={() => {
+              router.push(
+                Platform.select({
+                  native: "/enterInviteCode",
+                  web: {
+                    pathname: router.pathname,
+                    query: {
+                      ...router.query,
+                      enterInviteCodeModal: true,
+                    },
+                  } as any,
+                }),
+                Platform.select({
+                  native: "/enterInviteCode",
+                  web: router.asPath,
+                }),
+                { shallow: true }
+              );
+            }}
+            tw="rounded-3xl border border-gray-900 px-3 py-2 dark:border-gray-200"
+          >
+            <Text tw="text-sm font-bold text-gray-900 dark:text-white">
+              Enter invite code
+            </Text>
+          </Pressable>
+        </View>
+      ) : null}
 
       {channelId && (messageCount || messageCount == 0) && messageCount >= 0 ? (
         <Pressable

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState, useEffect } from "react";
+import { Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 import * as Clipboard from "expo-clipboard";
@@ -33,7 +34,7 @@ import { useShare } from "app/hooks/use-share";
 import { Sticky } from "app/lib/stickynode";
 import { createParam } from "app/navigation/use-param";
 import { NFT } from "app/types";
-import { formatProfileRoutes, getFullSizeCover } from "app/utilities";
+import { getFullSizeCover } from "app/utilities";
 
 import { Spinner } from "design-system/spinner";
 import { toast } from "design-system/toast";
@@ -41,7 +42,6 @@ import { toast } from "design-system/toast";
 import { ButtonGoldLinearGradient } from "../gold-gradient";
 import { CreatorTokensPanel } from "./creator-tokens-panel";
 import { ProfileError } from "./profile-error";
-import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileCover, ProfileTop } from "./profile-top";
 import {
   CreatorTokenCollected,
@@ -95,17 +95,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
     return profileData?.data?.profile?.channels?.[0]?.permissions;
   }, [profileData?.data?.profile.channels]);
 
-  const routes = useMemo(() => formatProfileRoutes(data?.tabs), [data?.tabs]);
-
   const [queryTab] = useParam("type", {
     initial: data?.default_tab_type,
   });
   const [type, setType] = useState(queryTab);
   const numColumns = useMemo(() => (type === "tokens" ? 1 : 3), [type]);
-  const index = useMemo(
-    () => routes.findIndex((item) => item.key === type),
-    [routes, type]
-  );
+
   useEffect(() => {
     if (!data?.default_tab_type || type) return;
     setType(data?.default_tab_type);
@@ -154,30 +149,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
     }
     return null;
   }, [isLoadingMore, isLoading, profileIsLoading, error, contentWidth]);
-  const onChangeTabBar = useCallback(
-    (index: number) => {
-      const currentType = routes[index].key;
-      const newQuery = {
-        ...router.query,
-        type: currentType,
-      } as ParsedUrlQuery;
-      const { username = null, ...restQuery } = newQuery;
-      const queryPath = stringify(restQuery) ? `?${stringify(restQuery)}` : "";
-      /**
-       * because this packages/app/pages/profile/index.web.tsx file, we did rename route,
-       * so need to avoid triggering route changes when switching tabs.
-       */
-      router.replace(
-        {
-          pathname: router.pathname,
-          query: newQuery,
-        },
-        username ? `/@${username}${queryPath}` : ""
-      );
-      setType(currentType);
-    },
-    [router, routes, setType]
-  );
+
   const ListEmptyComponent = useCallback(() => {
     if (error || isBlocked) {
       return (
@@ -218,12 +190,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
         <ProfileTabsNFTProvider tabType={isSelf ? type : undefined}>
           {isProfileMdScreen ? (
             <>
-              <CreatorTokensBanner />
               <ProfileCover
                 tw="overflow-hidden rounded-b-3xl"
                 uri={getFullSizeCover(profileData?.data?.profile)}
               />
-              {/* <Pressable
+              {isSelf && profileData?.data?.profile.creator_token?.id ? (
+                <Pressable
                   tw={[
                     "absolute right-5 top-2 ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
                   ]}
@@ -249,20 +221,8 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 >
                   <ButtonGoldLinearGradient />
                   <GiftSolid width={26} height={26} color={colors.gray[900]} />
-                </Pressable> */}
-              <Button
-                tw="absolute right-5 top-2 ml-2 bg-black/60"
-                onPress={async () => {
-                  await Clipboard.setStringAsync(
-                    `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${username}`
-                  );
-                  toast.success("Copied!");
-                }}
-                style={{ height: 30 }}
-                size="small"
-              >
-                Share
-              </Button>
+                </Pressable>
+              ) : null}
             </>
           ) : null}
           <View tw="w-full flex-row">
@@ -336,20 +296,12 @@ const Profile = ({ username }: ProfileScreenProps) => {
         </ProfileTabsNFTProvider>
       </View>
       <>
-        {isSelf ? (
+        {isSelf &&
+        !profileIsLoading &&
+        profileData?.data?.profile.creator_token?.id ? (
           <View tw={["fixed right-4 top-2 z-50 flex flex-row md:hidden"]}>
             <HeaderRightSm withBackground />
-            <Button
-              tw="ml-2"
-              onPress={() => {
-                redirectToCreatorTokenSocialShare(username);
-              }}
-              style={{ height: 30 }}
-              size="small"
-            >
-              Share
-            </Button>
-            {/* <Pressable
+            <Pressable
               tw={[
                 "ml-2 h-8 w-8 items-center justify-center rounded-full bg-black/60",
               ]}
@@ -375,7 +327,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
             >
               <ButtonGoldLinearGradient />
               <GiftSolid width={26} height={26} color={colors.gray[900]} />
-            </Pressable> */}
+            </Pressable>
           </View>
         ) : (
           <>

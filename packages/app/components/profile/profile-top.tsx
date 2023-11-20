@@ -137,7 +137,7 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
     return (
       <View tw="pl-7">
         <View tw="flex-row">
-          <View tw="pb-7">
+          <View tw="pb-2">
             <View
               style={[
                 {
@@ -241,15 +241,6 @@ export const ProfileTop = memo<ProfileTopProps>(function ProfileTop({
   }
   return (
     <>
-      {Platform.OS === "web" && (
-        <CreatorTokensBanner
-          height={52}
-          style={{
-            paddingLeft: isSelf ? 16 : 44,
-            paddingRight: isSelf ? 44 : 16,
-          }}
-        />
-      )}
       <View tw="web:bg-gray-100 overflow-hidden bg-gray-400 dark:bg-gray-800">
         <ProfileCover uri={getFullSizeCover(profileData?.profile)} />
       </View>

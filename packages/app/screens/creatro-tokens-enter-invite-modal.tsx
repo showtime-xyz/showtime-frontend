@@ -9,7 +9,7 @@ export const EnterInviteCodeModalScreen = withModalScreen(
     matchingPathname: "/enterInviteCode",
     matchingQueryParam: "enterInviteCodeModal",
     tw: "w-full md:w-[420px] web:lg:pb-8",
-    snapPoints: [320],
+    snapPoints: [250],
     useNativeModal: false,
   }
 );

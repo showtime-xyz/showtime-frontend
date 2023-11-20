@@ -239,7 +239,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
               withBackground
               user={profileData?.data?.profile}
             />
-            {/* {isSelf && (
+            {isSelf && profileData?.data?.profile.creator_token?.id ? (
               <Pressable
                 tw={[
                   "ml-2 w-8 items-center justify-center rounded-full bg-black/60",
@@ -252,7 +252,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
                 <ButtonGoldLinearGradient />
                 <GiftSolid width={26} height={26} color={colors.gray[900]} />
               </Pressable>
-            )} */}
+            ) : null}
 
             <Button
               tw="ml-2"
