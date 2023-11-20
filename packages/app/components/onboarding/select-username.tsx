@@ -33,8 +33,8 @@ const editProfileValidationSchema = yup.object({
     .min(2)
     .max(30)
     .matches(
-      /^([0-9a-zA-Z_]{2,30})$/g,
-      "Invalid username. Use only letters, numbers, and underscores (_)."
+      /^([0-9a-zA-Z_.]{2,30})$/g,
+      "Invalid username. Use only letters, numbers, underscores (_), and periods (.)"
     ),
 });
 
