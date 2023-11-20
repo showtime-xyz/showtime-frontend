@@ -24,11 +24,12 @@ export const useCreatorTokenOptIn = () => {
     async (_url: string, { arg }: { arg?: { inviteCode: string } }) => {
       // if primary wallet is magic, we don't support creating tokens
       if (
-        user.user?.data.profile.primary_wallet?.is_apple ||
-        user.user?.data.profile.primary_wallet?.is_google ||
-        user.user?.data.profile.primary_wallet?.is_phone ||
-        user.user?.data.profile.primary_wallet?.is_twitter ||
-        user.user?.data.profile.primary_wallet?.is_email
+        (user.user?.data.profile.primary_wallet?.is_apple ||
+          user.user?.data.profile.primary_wallet?.is_google ||
+          user.user?.data.profile.primary_wallet?.is_phone ||
+          user.user?.data.profile.primary_wallet?.is_twitter ||
+          user.user?.data.profile.primary_wallet?.is_email) &&
+        !user.user?.data.profile.primary_wallet.is_privy
       ) {
         await setPrimaryIfMagic();
       }
