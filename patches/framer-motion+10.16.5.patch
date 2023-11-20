@@ -1,0 +1,14 @@
+diff --git a/node_modules/framer-motion/dist/cjs/index.js b/node_modules/framer-motion/dist/cjs/index.js
+index bd8dc68..8c1397d 100644
+--- a/node_modules/framer-motion/dist/cjs/index.js
++++ b/node_modules/framer-motion/dist/cjs/index.js
+@@ -4219,8 +4219,7 @@ const defaultLayoutTransition = {
+     duration: 0.45,
+     ease: [0.4, 0, 0.1, 1],
+ };
+-const userAgentContains = (string) => typeof navigator !== "undefined" &&
+-    navigator.userAgent.toLowerCase().includes(string);
++const userAgentContains = (string) => typeof navigator !== "undefined" && typeof navigator.userAgent !== "undefined" && navigator.userAgent.toLowerCase().includes(string);
+ /**
+  * Measured bounding boxes must be rounded in Safari and
+  * left untouched in Chrome, otherwise non-integer layouts within scaled-up elements
