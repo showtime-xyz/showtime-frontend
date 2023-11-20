@@ -4,14 +4,12 @@ import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
 import { SelfServeExplainer } from "app/components/creator-token/self-serve-explainer";
 import { withColorScheme } from "app/components/memo-with-theme";
-import { useUser } from "app/hooks/use-user";
+import { useAuthScreen } from "app/hooks/use-auth-screen";
 import { useTrackPageViewed } from "app/lib/analytics";
 
 const SelfServeExplainerScreen = withColorScheme(() => {
   useTrackPageViewed({ name: "Creator Tokens self serve explainer" });
-  useUser({
-    redirectTo: "/login",
-  });
+  useAuthScreen();
 
   return <SelfServeExplainer />;
 });
