@@ -11,6 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Button } from "@showtime-xyz/universal.button";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
@@ -28,6 +29,7 @@ export const EnterInviteCodeModal = () => {
   const [caretPosition, setCaretPosition] = useState(0);
   const caretOpacity = useSharedValue(1);
   const inputRef = useRef(null);
+  const router = useRouter();
 
   const handleLayout = (event: LayoutChangeEvent) => {
     const width = event.nativeEvent.layout.width;
@@ -58,22 +60,24 @@ export const EnterInviteCodeModal = () => {
   const checkCode = async () => {
     try {
       setIsLoading(true);
-      const res = await axios({
+      await axios({
         method: "POST",
         url: "/v1/profile/creator-tokens/optin",
         data: {
           invite_code: inviteCode,
         },
       });
-      console.log(res);
-      // TODO: Success message / modal or redirect to creator token page/channel
-      // Payload is still missing in the API response
+      //console.log(res);
+      toast.success("Success! Launch your creator token now");
+      router.push("/creator-token/self-serve-explainer");
     } catch (e: any) {
       const errorCode = e.response.data.error.code;
       if (errorCode === 400) {
         toast.error("You already have a creator token!");
       } else if (errorCode === 404) {
-        toast.error("Invalid or expired invite code");
+        toast.error("Invalid code");
+      } else if (errorCode === 410) {
+        toast.error("Code expired or already used");
       } else {
         toast.error("Something went wrong");
       }
