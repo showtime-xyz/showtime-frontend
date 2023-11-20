@@ -122,11 +122,37 @@ export const CreatorTokensBanner = ({
       redirectToSelfServeExplainerModal();
       return;
     }
+
+    if (
+      user?.user?.data.profile.creator_token_onboarding_status ===
+      "requires_invite"
+    ) {
+      router.push(
+        Platform.select({
+          native: "/enterInviteCode",
+          web: {
+            pathname: router.pathname,
+            query: {
+              ...router.query,
+              enterInviteCodeModal: true,
+            },
+          } as any,
+        }),
+        Platform.select({
+          native: "/enterInviteCode",
+          web: router.asPath,
+        }),
+        { shallow: true }
+      );
+      return;
+    }
+
     Linking.openURL(
       "https://www.notion.so/showtime-xyz/Showtime-xyz-Creator-Tokens-alpha-1-min-read-7f8b0c621e4442e98ec4c4189bec28df?pvs=4"
     );
   }, [
     redirectToSelfServeExplainerModal,
+    router,
     user?.user?.data.profile.creator_token_onboarding_status,
   ]);
   if (
@@ -156,6 +182,9 @@ export const CreatorTokensBanner = ({
             {user?.user?.data.profile.creator_token_onboarding_status ===
             "allowlist"
               ? "You are eligible to launch your Creator Token. Get closer to your collectors."
+              : user?.user?.data.profile.creator_token_onboarding_status ===
+                "requires_invite"
+              ? "Creator Tokens are live. Enter your invite code now."
               : "Introducing Creator Tokens: a place for all your collectors."}
           </Text>
         </View>
