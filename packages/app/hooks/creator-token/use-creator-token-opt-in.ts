@@ -74,30 +74,8 @@ export const useCreatorTokenOptIn = () => {
             },
           ]
         );
-      } else {
-        Alert.alert(
-          "Unsupported wallet set to Primary",
-          `Would you like to set current wallet (${formatAddressShort(
-            wallet.address
-          )}) to Primary? Primary wallet is used to create the creator token.`,
-          [
-            {
-              text: "Okay",
-              onPress: async () => {
-                if (wallet.address) {
-                  setPrimaryWallet(wallet.address).then(resolve).catch(reject);
-                }
-              },
-            },
-            {
-              text: "Cancel",
-              style: "cancel",
-              onPress: () => {
-                reject("User cancelled");
-              },
-            },
-          ]
-        );
+      } else if (wallet.address) {
+        setPrimaryWallet(wallet.address).then(resolve).catch(reject);
       }
     });
   };
