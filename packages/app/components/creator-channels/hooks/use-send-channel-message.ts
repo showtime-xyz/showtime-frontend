@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { Platform } from "react-native";
 
 import * as FileSystem from "expo-file-system";
-import { Audio, Image } from "react-native-compressor";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import { Audio } from "react-native-compressor";
 import useSWRMutation from "swr/mutation";
 
 import { UserContext } from "app/context/user-context";
@@ -61,7 +62,7 @@ async function uploadMediaNative(
     Authorization: `Bearer ${accessToken}`,
   };
 
-  let result = arg.attachment;
+  let result = "";
 
   // TODO: video compression
 
@@ -72,10 +73,12 @@ async function uploadMediaNative(
   }
 
   if (arg?.mimeType?.includes("image")) {
-    result = await Image.compress(arg.attachment, {
-      quality: 0.8,
-      maxWidth: 1200,
-    });
+    const manipulatedFile = await manipulateAsync(
+      arg.attachment,
+      [{ rotate: 0 }, { resize: { width: 1500 } }],
+      { compress: 0.8, format: SaveFormat.JPEG }
+    );
+    result = manipulatedFile.uri;
   }
 
   return FileSystem.uploadAsync(url, result, {
@@ -89,9 +92,30 @@ async function uploadMediaNative(
 
 async function uploadMediaWeb(
   url: string,
-  { arg }: { arg: { channelId: string; message: string; attachment: string } }
+  {
+    arg,
+  }: {
+    arg: {
+      channelId: string;
+      message: string;
+      attachment: string;
+      mimeType: string;
+    };
+  }
 ) {
-  const attachmentFormData = await getFileFormData(arg.attachment);
+  let file = "";
+  file = arg.attachment;
+
+  if (arg?.mimeType?.includes("image")) {
+    const manipulatedFile = await manipulateAsync(
+      arg.attachment,
+      [{ rotate: 0 }, { resize: { width: 1500 } }],
+      { compress: 0.8, format: SaveFormat.JPEG }
+    );
+    file = manipulatedFile.uri;
+  }
+
+  const attachmentFormData = await getFileFormData(file);
   const formData = new FormData();
   if (attachmentFormData) {
     formData.append(

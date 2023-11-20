@@ -7547,6 +7547,7 @@ __metadata:
     expo-gl: ~13.2.0
     expo-haptics: ~12.6.0
     expo-image: ~1.8.1
+    expo-image-manipulator: ~11.3.0
     expo-image-picker: ~14.5.0
     expo-insights: ~0.4.0
     expo-linear-gradient: ~12.5.0
@@ -16932,12 +16933,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-image-loader@npm:~4.3.0":
+  version: 4.3.0
+  resolution: "expo-image-loader@npm:4.3.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 0440ac80a7b2331cdfd0db88aac0ba2fe61689e6347e2c6bedba6bf3220b95410c724ac9004252486870b582fc36d47d4bff008bba7052dcee2830256950974f
+  languageName: node
+  linkType: hard
+
 "expo-image-loader@npm:~4.4.0":
   version: 4.4.0
   resolution: "expo-image-loader@npm:4.4.0"
   peerDependencies:
     expo: "*"
   checksum: e872e45a807cd867c5a8e8fc5665de33de5d467ea533222037b09b70268d0166012769bfcd340ab8922dbf826a3e4f0498ff73973ad62f21134764b4bc8b1f5a
+  languageName: node
+  linkType: hard
+
+"expo-image-manipulator@npm:~11.3.0":
+  version: 11.3.0
+  resolution: "expo-image-manipulator@npm:11.3.0"
+  dependencies:
+    expo-image-loader: ~4.3.0
+  peerDependencies:
+    expo: "*"
+  checksum: 7f3009e2f31973057d2008a4fa5738c79d8e21a3e203aa1fba4ff815cc78e96402ea337c799c4e2ad930f7148153a1a685ba952825c0ffab2df7b98b210d4fa2
   languageName: node
   linkType: hard
 
