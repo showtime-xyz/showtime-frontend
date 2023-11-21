@@ -15,6 +15,7 @@ const useWallet = (): UseWalletReturnType => {
   const latestConnectedWallet = useLatestValueRef(wallets.wallets[0]);
   useConnectWallet({
     onSuccess: (wallet) => {
+      console.log("wallet connect success", wallet);
       if (walletConnectedPromiseResolveCallback.current) {
         walletConnectedPromiseResolveCallback.current(wallet);
         walletConnectedPromiseResolveCallback.current = null;

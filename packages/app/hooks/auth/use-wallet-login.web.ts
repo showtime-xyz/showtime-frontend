@@ -52,6 +52,8 @@ export function useWalletLogin() {
         } else {
           await verifySignature(address);
         }
+      } else {
+        console.log("address not received after connect!!!");
       }
     } catch (error) {
       logout();

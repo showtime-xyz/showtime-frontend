@@ -135,6 +135,7 @@ export const BuyCreatorToken = () => {
     if (selectedAction === "sell") {
       return (
         <Button
+          tw="flex-1"
           disabled={sellToken.isMutating}
           onPress={async () => {
             const tokenSellPrice = priceToSellNext.data?.displayPrice;
@@ -167,6 +168,7 @@ export const BuyCreatorToken = () => {
       if (isPrivyWalletConnected) {
         return (
           <Button
+            tw="flex-1"
             size="regular"
             onPress={() => {
               fundWallet("usdc");
@@ -179,6 +181,7 @@ export const BuyCreatorToken = () => {
 
       return (
         <Button
+          tw="flex-1"
           onPress={() =>
             Linking.openURL(
               "https://app.uniswap.org/swap?outputCurrency=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&chain=base"
@@ -196,6 +199,7 @@ export const BuyCreatorToken = () => {
       if (isPrivyWalletConnected) {
         return (
           <Button
+            tw="flex-1"
             size="regular"
             onPress={() => {
               fundWallet("eth");
@@ -208,6 +212,7 @@ export const BuyCreatorToken = () => {
 
       return (
         <Button
+          tw="flex-1"
           onPress={() => Linking.openURL("https://bridge.base.org/deposit")}
           size="regular"
         >
@@ -217,6 +222,7 @@ export const BuyCreatorToken = () => {
     } else {
       return (
         <Button
+          tw="flex-1"
           disabled={buyToken.isMutating}
           onPress={async () => {
             if (profileData?.data?.profile) {
@@ -293,9 +299,11 @@ export const BuyCreatorToken = () => {
               </Text>
               <VerificationBadge size={20} />
             </View>
-            <Text tw="text-xl font-semibold dark:text-gray-200">tokens</Text>
+            <Text tw="text-xl font-semibold dark:text-gray-200">
+              {selectedAction === "buy" ? "to unlock" : "tokens"}
+            </Text>
           </View>
-          {selectedAction === "buy" ? (
+          {/* {selectedAction === "buy" ? (
             <View tw="h-6 flex-row items-center pt-2" style={{ columnGap: 2 }}>
               <LockBadge
                 width={14}
@@ -308,7 +316,7 @@ export const BuyCreatorToken = () => {
             </View>
           ) : (
             <View tw="h-6" />
-          )}
+          )} */}
           <View tw="mt-4 rounded-3xl border-[1px] border-gray-300 px-6 py-4 dark:border-gray-800">
             <View tw="flex-row" style={{ columnGap: 16 }}>
               <Avatar size={100} url={profileData?.data?.profile.img_url} />
@@ -393,14 +401,14 @@ export const BuyCreatorToken = () => {
             </View>
           </View>
           <View style={{ rowGap: 16 }} tw="mt-6">
-            <Toggle
+            {/* <Toggle
               options={SELECT_LIST}
               value={selectedAction}
               onChange={(value) =>
                 setSelectedAction(value as Query["selectedAction"])
               }
               tw="ml-auto"
-            />
+            /> */}
             <View tw="flex-row justify-between">
               <Text tw="text-gray-700 dark:text-gray-200">You own:</Text>
               {tokenBalance.isLoading ? (
@@ -490,37 +498,41 @@ export const BuyCreatorToken = () => {
             </View>
           </View>
           <View tw="h-8" />
-          {renderBuyButton()}
-          <View tw="items-center pt-4">
+          {/* <View tw="items-center pt-4">
             <Text tw="text-center text-xs text-gray-500 dark:text-gray-400">
               {paymentMethod === "USDC"
                 ? "Trade with USDC on the Base Ethereum L2."
                 : "Buy with ETH or USDC on the Base Ethereum L2."}
             </Text>
-          </View>
+          </View> */}
         </View>
-        {selectedAction === "buy" && crossmintConfig.collectionId ? (
-          <>
-            <View tw="mx-auto my-2 h-[1px] w-[20%] rounded-full bg-gray-400" />
-            <CrossmintPayButton
-              style={{
-                borderRadius: 100,
-                marginLeft: 16,
-                marginRight: 16,
-                fontWeight: 600,
-              }}
-              onClick={(e) => {
-                if (!isAuthenticated) {
-                  navigateToLogin();
-                  e.preventDefault();
-                  return;
-                }
-                router.pop();
-              }}
-              {...crossmintConfig}
-            />
-          </>
-        ) : null}
+        <View tw="flex-row justify-between px-4" style={{ columnGap: 12 }}>
+          {renderBuyButton()}
+          {selectedAction === "buy" && crossmintConfig.collectionId ? (
+            <>
+              {/* @ts-ignore */}
+              <CrossmintPayButton
+                style={{
+                  borderRadius: 100,
+                  fontWeight: 600,
+                  height: 48,
+                  flex: 1.2,
+                }}
+                getButtonText={() => "Buy with card"}
+                onClick={(e) => {
+                  if (!isAuthenticated) {
+                    navigateToLogin();
+                    e.preventDefault();
+                    return;
+                  }
+                  router.pop();
+                }}
+                {...crossmintConfig}
+              />
+            </>
+          ) : null}
+        </View>
+
         <ModalSheet
           snapPoints={[400]}
           title=""
