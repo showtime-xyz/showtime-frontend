@@ -182,7 +182,7 @@ export const MessageItem = memo(
         <LeanView
           tw="web:mb-1 mb-3 mt-6 flex-row items-center"
           style={{
-            display: item.isSameSenderAsNext ? "none" : "flex",
+            display: item.isSameSenderAsNext ? "none" : undefined,
           }}
         >
           <LeanView>
