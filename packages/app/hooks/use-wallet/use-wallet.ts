@@ -12,9 +12,9 @@ import { baseChain } from "../creator-token/utils";
 import { useStableCallback } from "../use-stable-callback";
 import { ConnectResult, UseWalletReturnType } from "./types";
 import { useRandomWallet } from "./use-random-wallet";
+import { walletConnectPromiseCallback } from "./wallet-connect-promise-callback";
 
 const useWallet = (): UseWalletReturnType => {
-  const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const walletDisconnectedPromiseResolveCallback = useRef<any>(null);
   const web3Modal = useWeb3Modal();
   const mobileSDK = useWalletMobileSDK();
@@ -54,30 +54,27 @@ const useWallet = (): UseWalletReturnType => {
 
   // WalletConnect connected
   useEffect(() => {
-    if (
-      walletConnectedPromiseResolveCallback.current &&
-      web3Modal.isConnected
-    ) {
-      walletConnectedPromiseResolveCallback.current({
+    if (walletConnectPromiseCallback.resolve && web3Modal.isConnected) {
+      walletConnectPromiseCallback.resolve({
         address: web3Modal.address,
         walletName: "",
       });
-      walletConnectedPromiseResolveCallback.current = null;
+      walletConnectPromiseCallback.resolve = null;
     }
   }, [web3Modal]);
 
   // Coinbase connected
   useEffect(() => {
     if (
-      walletConnectedPromiseResolveCallback.current &&
+      walletConnectPromiseCallback.resolve &&
       mobileSDK.connected &&
       mobileSDK.address
     ) {
-      walletConnectedPromiseResolveCallback.current({
+      walletConnectPromiseCallback.resolve({
         address: mobileSDK.address,
         walletName: mobileSDK.metadata?.name,
       });
-      walletConnectedPromiseResolveCallback.current = null;
+      walletConnectPromiseCallback.resolve = null;
     }
   }, [mobileSDK]);
 
@@ -149,8 +146,9 @@ const useWallet = (): UseWalletReturnType => {
       address,
       connect: async () => {
         walletConnectInstanceRef.current.open();
-        return new Promise<ConnectResult>((resolve) => {
-          walletConnectedPromiseResolveCallback.current = resolve;
+        return new Promise<ConnectResult>((resolve, reject) => {
+          walletConnectPromiseCallback.resolve = resolve;
+          walletConnectPromiseCallback.reject = reject;
         });
       },
       disconnect: async () => {
