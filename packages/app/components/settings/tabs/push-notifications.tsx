@@ -46,7 +46,7 @@ const notificationMapping = {
       "When the first message is posted in a new channel you’ve joined.",
   },
   channel_new_message: {
-    title: "New Channel Message",
+    title: "Channel Message",
     description: "When a new message is posted in a channel you are part of.",
   },
   claimed_creator_airdrop_from_following: {
