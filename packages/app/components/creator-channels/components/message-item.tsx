@@ -61,6 +61,7 @@ const AnimatedView = Animated.createAnimatedComponent(View);
 export const MessageItem = memo(
   ({
     item,
+    index,
     reactions,
     channelId,
     listRef,
@@ -71,6 +72,7 @@ export const MessageItem = memo(
     isUserAdmin,
     channelOwnerProfileId,
   }: MessageItemProps & {
+    index: number;
     edition?: CreatorEditionResponse;
     isUserAdmin?: boolean;
     permissions?: ChannelById["permissions"];
@@ -103,8 +105,8 @@ export const MessageItem = memo(
                 10
               ),
               isByCreator
-                ? "text-base underline text-white"
-                : "text-underline text-base"
+                ? "text-base underline text-white font-medium"
+                : "text-underline text-base font-medium"
             )
           : "",
       [channel_message.body, isByCreator]
@@ -170,16 +172,18 @@ export const MessageItem = memo(
       <AnimatedView
         style={[
           {
-            marginBottom: item.reaction_group.length > 0 ? 20 : 0,
+            backgroundColor: "red",
           },
           style,
         ]}
-        tw="mt-1 px-3"
+        tw="group mb-1 flex-1 px-3"
         ref={animatedViewRef}
       >
         <LeanView
           tw="mb-1 mt-6 flex-row items-center"
-          style={{ display: item.isSameSenderAsNext ? "none" : "flex" }}
+          style={{
+            display: item.isSameSenderAsNext ? "none" : "flex",
+          }}
         >
           <LeanView>
             <Link
@@ -215,8 +219,13 @@ export const MessageItem = memo(
           </LeanView>
         </LeanView>
 
-        <LeanView tw="ml-9 flex-row">
-          <LeanView tw="flex-1 flex-row items-center gap-4">
+        <LeanView
+          tw="web:ml-9 flex-1 flex-row items-center"
+          style={{
+            marginBottom: item.reaction_group.length > 0 ? 25 : 0,
+          }}
+        >
+          <LeanView tw="md:web:justify-start flex-1 flex-row items-center justify-between">
             {isByCreator && !permissions?.can_view_creator_messages ? (
               <LeanView tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
                 {Platform.OS === "web" ? (
@@ -247,11 +256,11 @@ export const MessageItem = memo(
               <>
                 {item.channel_message.body_text_length > 0 ? (
                   <LeanView
-                    tw="w-fit max-w-[50%] rounded-xl px-3 py-3 "
+                    tw="xl:web:max-w-[60%] w-fit max-w-[80%] rounded-xl px-3 py-3 "
                     style={{
                       minWidth:
                         item.reaction_group.length > 0
-                          ? 45 * item.reaction_group.length
+                          ? 48 * item.reaction_group.length
                           : undefined,
                       backgroundColor: isByCreator
                         ? "#0074FE"
@@ -321,6 +330,7 @@ export const MessageItem = memo(
               Platform.OS === "web" ? (
                 <>
                   <ImagePreview
+                    key={`img-${channel_message.id}`}
                     attachment={channel_message}
                     isViewable={permissions?.can_view_creator_messages}
                   />
@@ -329,6 +339,7 @@ export const MessageItem = memo(
                 <SharedElement tag={channel_message?.id.toString()}>
                   {({ animatedRef, animatedStyles }) => (
                     <ImagePreview
+                      key={`img-${channel_message.id}`}
                       style={animatedStyles}
                       animatedRef={animatedRef}
                       attachment={channel_message}
@@ -350,7 +361,7 @@ export const MessageItem = memo(
             ) : null}
 
             <LeanView
-              tw="flex-row"
+              tw="md:web:opacity-0 ml-4 w-12 cursor-pointer flex-row group-hover:opacity-100"
               style={{
                 gap: 12,
                 display:
@@ -386,8 +397,8 @@ export const MessageItem = memo(
                 >
                   <MoreHorizontal
                     color={isDark ? colors.gray[400] : colors.gray[700]}
-                    width={20}
-                    height={20}
+                    width={18}
+                    height={18}
                   />
                 </DropdownMenuTrigger>
 
@@ -512,11 +523,11 @@ export const MessageItem = memo(
             {item.reaction_group.length > 0 ? (
               <>
                 <AnimatedView
+                  key={channel_message.id}
                   layout={Layout}
-                  tw="absolute -bottom-4 left-2 justify-center rounded-full bg-gray-200 dark:bg-gray-900"
+                  tw="absolute -bottom-5 left-2 z-50"
                 >
                   <MessageReactions
-                    key={channel_message.id}
                     reactionGroup={item.reaction_group}
                     channelId={channelId}
                     channelReactions={reactions}
