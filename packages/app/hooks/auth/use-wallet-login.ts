@@ -52,7 +52,7 @@ export function useWalletLogin() {
             dispatch("LOG_IN_SUCCESS");
 
             dispatch("EXPIRE_NONCE_REQUEST");
-            await rotateNonce(res.address);
+            rotateNonce(res.address);
             dispatch("EXPIRE_NONCE_SUCCESS");
           }
         }

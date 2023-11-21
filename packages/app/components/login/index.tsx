@@ -5,6 +5,7 @@ import { PortalProvider } from "@gorhom/portal";
 
 import { Button } from "@showtime-xyz/universal.button";
 import { Fieldset } from "@showtime-xyz/universal.fieldset";
+import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -32,6 +33,7 @@ export function Login() {
   const { sendCode } = useLoginWithSMS();
   const otpInputRef = useRef<any>(null);
   const { authenticationStatus } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (showOtp) {
@@ -111,7 +113,10 @@ export function Login() {
               setPhoneNumber(phoneNumber);
               setShowOtp(true);
             }}
-            handleSubmitWallet={handleSubmitWallet}
+            handleSubmitWallet={async () => {
+              await handleSubmitWallet();
+              router.pop();
+            }}
             loading={loading && !isConnectingToWallet}
           />
         )}
