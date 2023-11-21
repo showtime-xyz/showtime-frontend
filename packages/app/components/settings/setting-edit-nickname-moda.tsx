@@ -13,7 +13,7 @@ import { WalletAddressesV2 } from "app/types";
 export type EditNicknameModalProps = {
   editingWallet?: WalletAddressesV2;
   onClose: any;
-  visible: boolean;
+  visible?: boolean;
 };
 export const EditNicknameModal = ({
   editingWallet,

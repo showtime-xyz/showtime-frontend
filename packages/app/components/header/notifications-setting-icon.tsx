@@ -10,7 +10,7 @@ export const NotificationsSettingIcon = ({ size = 24 }) => {
   return (
     <PressableScale
       onPress={() => {
-        router.push("/settings?tab=3");
+        router.push("/settings?tab=1");
       }}
       tw="h-8 w-8 items-center justify-center rounded-full"
     >
