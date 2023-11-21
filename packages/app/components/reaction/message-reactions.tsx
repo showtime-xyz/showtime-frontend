@@ -57,7 +57,7 @@ export const MessageReactions = ({
   );
 
   return (
-    <View tw="w-full flex-1 flex-row items-center gap-1">
+    <View tw="w-full flex-1 flex-row items-center" style={{ columnGap: 2 }}>
       {channelReactions
         ? channelReactions.map((item, index) => {
             const userReaction = reactionGroup.find(
@@ -74,10 +74,10 @@ export const MessageReactions = ({
                   <Pressable
                     onPress={() => handleReactionPress(item.id)}
                     tw={[
-                      "min-h-[20px] items-center justify-center px-2",
+                      "min-h-[25px] items-center justify-center rounded-lg border-2 border-white px-1.5 dark:border-black",
                       userReaction.self_reacted
-                        ? "rounded-lg bg-gray-100 dark:bg-gray-700"
-                        : "",
+                        ? "bg-[#C4DFFF] dark:bg-[#102743]"
+                        : "bg-[#F1F1F1] dark:bg-[#1C1C1C]",
                     ]}
                   >
                     <Text
