@@ -31,14 +31,14 @@ export const EnterInviteCodeModal = () => {
     };
   }, []);
 
-  const checkCode = async () => {
+  const checkCode = async (code = "") => {
     try {
       setIsLoading(true);
       await axios({
         method: "POST",
         url: "/v1/profile/creator-tokens/optin",
         data: {
-          invite_code: inviteCode,
+          invite_code: code || inviteCode,
         },
       });
       //console.log(res);
@@ -110,7 +110,7 @@ export const EnterInviteCodeModal = () => {
       </View>
       <Button
         size="regular"
-        onPress={checkCode}
+        onPress={() => checkCode()}
         disabled={inviteCode.length < 6 || isLoading}
         style={{ opacity: inviteCode.length < 6 || isLoading ? 0.5 : 1 }}
       >
