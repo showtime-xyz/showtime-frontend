@@ -54,7 +54,7 @@ export const ReactionProvider = ({ children }: any) => {
       willChange: "transform", // make it hardware accelerated on web
       transform: [
         {
-          translateX: width < 768 ? -18 : totalRectButtonWidth - 30,
+          translateX: width < 768 ? -18 : -totalRectButtonWidth / 2 + 60,
         },
         {
           translateY: -emojiButtonWidth / 2 + 10,
