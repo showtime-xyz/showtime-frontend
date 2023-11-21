@@ -44,6 +44,7 @@ function InfiniteScrollListImpl<Item>(
     renderItem,
     extraData,
     onViewableItemsChanged,
+    pagingEnabled,
     viewabilityConfig,
     ItemSeparatorComponent,
     estimatedItemSize,
@@ -227,6 +228,7 @@ function InfiniteScrollListImpl<Item>(
                   flexGrow: 1,
                   //@ts-ignore
                   ...style,
+                  "scroll-snap-type": pagingEnabled ? "y mandatory" : undefined,
                 }
               : {}
           }
@@ -281,7 +283,12 @@ function InfiniteScrollListImpl<Item>(
                     key={virtualItem.key}
                     data-index={index}
                     ref={rowVirtualizer.measureElement}
-                    style={{ width: "100%", ...transformStyle }}
+                    style={{
+                      width: "100%",
+                      ...transformStyle,
+                      // @ts-ignore
+                      "scroll-snap-align": pagingEnabled ? "start" : undefined,
+                    }}
                   >
                     {typeof data?.[index] !== "undefined" ? (
                       <div
