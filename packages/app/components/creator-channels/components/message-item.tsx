@@ -11,6 +11,8 @@ import Animated, {
   Layout,
   enableLayoutAnimations,
   SharedValue,
+  SlideInLeft,
+  SlideOutLeft,
 } from "react-native-reanimated";
 
 import { useAlert } from "@showtime-xyz/universal.alert";
@@ -232,16 +234,7 @@ export const MessageItem = memo(
         >
           <LeanView tw="md:web:justify-start flex-1 flex-row items-center justify-between">
             {isByCreator && !permissions?.can_view_creator_messages ? (
-              <LeanView
-                tw="xl:web:max-w-[60%] w-fit max-w-[80%] rounded-xl px-3 py-3 "
-                style={{
-                  minWidth:
-                    item.reaction_group.length > 0
-                      ? 48 * item.reaction_group.length
-                      : undefined,
-                  backgroundColor: "#0074FE",
-                }}
-              >
+              <LeanView tw="xl:web:max-w-[60%] w-fit max-w-[80%] rounded-xl px-3 py-3 ">
                 {Platform.OS === "web" ? (
                   // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
                   <LeanView tw="blur-sm">
@@ -535,22 +528,19 @@ export const MessageItem = memo(
               </DropdownMenuRoot>
             </LeanView>
 
-            {item.reaction_group.length > 0 ? (
-              <>
-                <AnimatedView
-                  key={`${channel_message.id}-${item.reaction_group.length}`}
-                  layout={Layout}
-                  tw="absolute -bottom-5 left-2 z-50"
-                >
-                  <MessageReactions
-                    reactionGroup={item.reaction_group}
-                    channelId={channelId}
-                    channelReactions={reactions}
-                    messageId={channel_message.id}
-                  />
-                </AnimatedView>
-              </>
-            ) : null}
+            <AnimatedView
+              layout={Layout.springify().damping(500).stiffness(100)}
+              entering={SlideInLeft}
+              exiting={SlideOutLeft}
+              tw="absolute -bottom-5 left-2 z-50"
+            >
+              <MessageReactions
+                reactionGroup={item.reaction_group}
+                channelId={channelId}
+                channelReactions={reactions}
+                messageId={channel_message.id}
+              />
+            </AnimatedView>
           </LeanView>
         </LeanView>
       </AnimatedView>
