@@ -523,7 +523,7 @@ export const MessageItem = memo(
             {item.reaction_group.length > 0 ? (
               <>
                 <AnimatedView
-                  key={channel_message.id}
+                  key={`${channel_message.id}-${item.reaction_group.length}`}
                   layout={Layout}
                   tw="absolute -bottom-5 left-2 z-50"
                 >
