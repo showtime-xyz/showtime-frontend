@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { useWindowDimensions } from "react-native";
 
 import Animated, {
   useSharedValue,
@@ -19,6 +20,7 @@ export const ReactionProvider = ({ children }: any) => {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [reactions, setReactions] = useState<any>(null);
   const animatedV = useSharedValue(0);
+  const { width } = useWindowDimensions();
   const close = () => {
     setVisible(false);
   };
@@ -52,27 +54,21 @@ export const ReactionProvider = ({ children }: any) => {
       willChange: "transform", // make it hardware accelerated on web
       transform: [
         {
-          translateX: totalRectButtonWidth / 2 - 5,
+          translateX: width < 768 ? -18 : totalRectButtonWidth - 30,
         },
         {
-          translateY: -emojiButtonWidth / 2,
+          translateY: -emojiButtonWidth / 2 + 10,
         },
         { scale: animatedV.value },
-        {
-          translateX: -totalRectButtonWidth / 2 - 5,
-        },
-        {
-          translateY: emojiButtonWidth / 2,
-        },
       ],
     };
-  }, [animatedV]);
+  }, [animatedV, width]);
 
   return (
     <ReactionContext.Provider value={memoizedValue}>
       {children}
       {visible && (
-        <View tw="absolute h-full w-full">
+        <View tw="absolute h-full w-full bg-black/60">
           <Pressable tw="absolute h-full w-full" onPress={handleClose} />
           <View tw="absolute" style={position}>
             <Animated.View style={animatedStyle}>{reactions}</Animated.View>
