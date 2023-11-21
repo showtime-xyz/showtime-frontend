@@ -176,7 +176,7 @@ export const MessageItem = memo(
           },
           style,
         ]}
-        tw="group mb-1 flex-1 px-3"
+        tw="web:mb-0.5 group mb-1 flex-1 px-3"
         ref={animatedViewRef}
       >
         <LeanView
