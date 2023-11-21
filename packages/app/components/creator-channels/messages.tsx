@@ -323,11 +323,54 @@ export const Messages = memo(() => {
     }
   }, [channelDetail.data?.owner, error, router, fresh]);
 
+  const transformedData = useMemo(() => {
+    let consecutiveCount = 0; // Initialize the consecutive message count
+
+    return data.map((item, index, array) => {
+      let isSameSenderAsNext = false;
+
+      if (index < array.length - 1) {
+        const currentSenderId =
+          item?.channel_message?.sent_by?.profile?.profile_id;
+        const nextSenderId =
+          array[index + 1]?.channel_message?.sent_by?.profile?.profile_id;
+
+        const currentDate = new Date(
+          item.channel_message?.created_at
+        ).getTime();
+        const nextDate = new Date(
+          array[index + 1].channel_message?.created_at
+        ).getTime();
+        const dayDifference =
+          Math.abs(currentDate - nextDate) / (1000 * 60 * 60 * 24);
+
+        // Increment count or reset if sender changes
+        if (currentSenderId === nextSenderId) {
+          consecutiveCount++;
+        } else {
+          consecutiveCount = 0; // Reset count if sender changes
+        }
+
+        // Check for same sender as next, less than a day's difference, and not the 5th message in a row
+        isSameSenderAsNext =
+          currentSenderId === nextSenderId &&
+          dayDifference < 1 &&
+          consecutiveCount % 10 !== 0;
+      } else {
+        // For the last item in the list, always show the sender
+        isSameSenderAsNext = false;
+      }
+
+      return { ...item, isSameSenderAsNext };
+    });
+  }, [data]);
+
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
-    ({ item, extraData }) => {
+    ({ item, index, extraData }) => {
       return (
         <MessageItem
           item={item}
+          index={index}
           reactions={extraData.reactions}
           channelId={extraData.channelId}
           listRef={listRef}
@@ -562,7 +605,7 @@ export const Messages = memo(() => {
               <AnimatedInfiniteScrollListWithRef
                 ref={listRef}
                 keyExtractor={keyExtractor}
-                data={data}
+                data={transformedData}
                 onEndReached={onLoadMore}
                 inverted
                 getItemType={getItemType}

@@ -62,6 +62,7 @@ export type ReactionGroup = {
 export type ChannelMessageItem = {
   channel_message: ChannelMessage;
   reaction_group: ReactionGroup[];
+  isSameSenderAsNext?: boolean;
 };
 
 export type ChannelMessageResponse = Array<ChannelMessageItem>;
