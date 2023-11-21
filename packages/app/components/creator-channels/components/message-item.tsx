@@ -180,7 +180,7 @@ export const MessageItem = memo(
         ref={animatedViewRef}
       >
         <LeanView
-          tw="mb-1 mt-6 flex-row items-center"
+          tw="web:mb-1 mb-3 mt-6 flex-row items-center"
           style={{
             display: item.isSameSenderAsNext ? "none" : "flex",
           }}
@@ -227,29 +227,39 @@ export const MessageItem = memo(
         >
           <LeanView tw="md:web:justify-start flex-1 flex-row items-center justify-between">
             {isByCreator && !permissions?.can_view_creator_messages ? (
-              <LeanView tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
+              <LeanView
+                tw="xl:web:max-w-[60%] w-fit max-w-[80%] rounded-xl px-3 py-3 "
+                style={{
+                  minWidth:
+                    item.reaction_group.length > 0
+                      ? 48 * item.reaction_group.length
+                      : undefined,
+                  backgroundColor: "#0074FE",
+                }}
+              >
                 {Platform.OS === "web" ? (
                   // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
                   <LeanView tw="blur-sm">
-                    <LeanText tw="text-base text-gray-900 dark:text-gray-100">
-                      {loremText}
-                    </LeanText>
+                    <LeanText tw="text-base text-white">{loremText}</LeanText>
                   </LeanView>
                 ) : item.channel_message.body_text_length > 0 ? (
-                  <>
-                    <LeanText tw="py-1.5 text-base  text-gray-900 dark:text-gray-100">
+                  <LeanView tw="overflow-hidden">
+                    <LeanText tw="text-base text-gray-900 dark:text-gray-100">
                       {loremText}
                     </LeanText>
                     <BlurView
                       intensity={10}
+                      tint="default"
                       style={{
-                        left: 0,
-                        height: "200%",
-                        width: "200%",
+                        left: -20,
+                        top: -20,
+                        right: -20,
+                        bottom: -20,
                         position: "absolute",
+                        borderRadius: 9999,
                       }}
                     />
-                  </>
+                  </LeanView>
                 ) : null}
               </LeanView>
             ) : (
