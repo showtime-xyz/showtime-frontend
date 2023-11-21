@@ -65,6 +65,8 @@ export const ImagePreview = ({
           }}
           transition={{ type: "timing" }}
           draggable={false}
+          animate={{ transform: "translate3d(0,0,0) scale(1)" }}
+          initial={{ transform: "translate3d(0,0,0) scale(1)" }}
         />
 
         <Modal
