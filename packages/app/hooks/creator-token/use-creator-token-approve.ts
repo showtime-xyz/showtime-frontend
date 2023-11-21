@@ -60,7 +60,8 @@ export const useApproveToken = () => {
             account: walletAddress,
             abi: erc20Abi,
             functionName: "approve",
-            args: [creatorTokenContract, maxPrice],
+            // add 100 USD more to reduce approval transactions
+            args: [creatorTokenContract, maxPrice + 100000000n],
             chain: chain,
           });
 

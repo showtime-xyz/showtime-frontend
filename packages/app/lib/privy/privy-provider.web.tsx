@@ -27,8 +27,7 @@ export const PrivyProvider = ({ children }: any) => {
           noPromptOnSignature: true,
         },
         appearance: {
-          accentColor: "#676FFF",
-          logo: "https://pbs.twimg.com/profile_images/1720182212468051968/CPBHLyGx_400x400.jpg",
+          logo: "https://media.showtime.xyz/9864af22-44ed-4913-8d87-6d734a08edb3.jpg?optimizer=image&width=300",
           theme: colorScheme,
         },
         fiatOnRamp: {
