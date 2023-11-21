@@ -10,6 +10,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useWalletMobileSDK } from "app/hooks/use-wallet-mobile-sdk";
+import { walletConnectPromiseCallback } from "app/hooks/use-wallet/wallet-connect-promise-callback";
 import type { IProviderMetadata } from "app/lib/react-native-web3-modal";
 import { Web3Modal } from "app/lib/react-native-web3-modal";
 import { RenderModalProps } from "app/lib/react-native-web3-modal/components/Web3Modal";
@@ -258,7 +259,16 @@ function WalletConnectQRCodeModal(props: RenderModalProps) {
     <FullWindowOverlay>
       <View tw="flex-1 bg-white dark:bg-black">
         <View style={{ paddingTop: insets.top }} />
-        <ModalHeader title="Connect my wallet" onClose={props.onDismiss} />
+        <ModalHeader
+          title="Connect my wallet"
+          onClose={() => {
+            props.onDismiss?.();
+            if (walletConnectPromiseCallback.reject) {
+              walletConnectPromiseCallback.reject();
+              walletConnectPromiseCallback.reject = null;
+            }
+          }}
+        />
         <View tw="justify-center bg-white p-4 dark:bg-black">
           <PressableScale
             key={`wallet-cbw`}
