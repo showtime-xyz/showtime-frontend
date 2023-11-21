@@ -330,13 +330,16 @@ export const Messages = memo(() => {
       let isSameSenderAsNext = false;
 
       if (index < array.length - 1) {
-        const currentSenderId = item.channel_message.sent_by.profile.profile_id;
+        const currentSenderId =
+          item?.channel_message?.sent_by?.profile?.profile_id;
         const nextSenderId =
-          array[index + 1].channel_message.sent_by.profile.profile_id;
+          array[index + 1]?.channel_message?.sent_by?.profile?.profile_id;
 
-        const currentDate = new Date(item.channel_message.created_at).getTime();
+        const currentDate = new Date(
+          item.channel_message?.created_at
+        ).getTime();
         const nextDate = new Date(
-          array[index + 1].channel_message.created_at
+          array[index + 1].channel_message?.created_at
         ).getTime();
         const dayDifference =
           Math.abs(currentDate - nextDate) / (1000 * 60 * 60 * 24);
