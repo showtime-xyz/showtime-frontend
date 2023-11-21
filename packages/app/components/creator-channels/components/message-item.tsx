@@ -217,6 +217,11 @@ export const MessageItem = memo(
               </LeanText>
             </Link>
           </LeanView>
+          <LeanView tw="ml-2">
+            <LeanText tw={"text-xs text-gray-700 dark:text-gray-200"}>
+              {formatDateRelativeWithIntl(channel_message.created_at)}
+            </LeanText>
+          </LeanView>
         </LeanView>
 
         <LeanView
