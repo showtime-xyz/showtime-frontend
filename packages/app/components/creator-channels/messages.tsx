@@ -324,6 +324,8 @@ export const Messages = memo(() => {
   }, [channelDetail.data?.owner, error, router, fresh]);
 
   const transformedData = useMemo(() => {
+    let consecutiveCount = 0; // Initialize the consecutive message count
+
     return data.map((item, index, array) => {
       let isSameSenderAsNext = false;
 
@@ -339,24 +341,33 @@ export const Messages = memo(() => {
         const dayDifference =
           Math.abs(currentDate - nextDate) / (1000 * 60 * 60 * 24);
 
-        // Check for same sender as next and less than a day's difference
+        // Increment count or reset if sender changes
+        if (currentSenderId === nextSenderId) {
+          consecutiveCount++;
+        } else {
+          consecutiveCount = 0; // Reset count if sender changes
+        }
+
+        // Check for same sender as next, less than a day's difference, and not the 5th message in a row
         isSameSenderAsNext =
-          currentSenderId === nextSenderId && dayDifference < 1;
-        console.log(
-          `Item at index ${index}: Current Sender ID = ${currentSenderId}, Next Sender ID = ${nextSenderId}, isSameSenderAsNext = ${isSameSenderAsNext}`
-        );
+          currentSenderId === nextSenderId &&
+          dayDifference < 1 &&
+          consecutiveCount % 10 !== 0;
+      } else {
+        // For the last item in the list, always show the sender
+        isSameSenderAsNext = false;
       }
 
-      // For the last item in the data (visually the first in the list), it's not same as the next
       return { ...item, isSameSenderAsNext };
     });
   }, [data]);
 
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
-    ({ item, extraData }) => {
+    ({ item, index, extraData }) => {
       return (
         <MessageItem
           item={item}
+          index={index}
           reactions={extraData.reactions}
           channelId={extraData.channelId}
           listRef={listRef}
