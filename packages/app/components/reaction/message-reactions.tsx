@@ -57,7 +57,7 @@ export const MessageReactions = ({
   );
 
   return (
-    <View tw="-ml-0.5 w-full flex-1 flex-row items-center">
+    <View tw="w-full flex-1 flex-row items-center gap-1">
       {channelReactions
         ? channelReactions.map((item, index) => {
             const userReaction = reactionGroup.find(
@@ -67,7 +67,6 @@ export const MessageReactions = ({
               return (
                 <AnimatedView
                   key={index}
-                  tw="mr-1"
                   layout={Layout.springify().damping(500).stiffness(100)}
                   entering={FadeIn}
                   exiting={FadeOut}
@@ -75,20 +74,20 @@ export const MessageReactions = ({
                   <Pressable
                     onPress={() => handleReactionPress(item.id)}
                     tw={[
-                      "min-h-[25px] items-center justify-center px-2",
+                      "min-h-[20px] items-center justify-center px-2",
                       userReaction.self_reacted
-                        ? "rounded-lg bg-gray-100 dark:bg-gray-900"
+                        ? "rounded-lg bg-gray-100 dark:bg-gray-700"
                         : "",
                     ]}
                   >
                     <Text
                       tw="text-gray-700 dark:text-gray-200"
                       style={{
-                        fontSize: 12,
+                        fontSize: 10,
                         lineHeight: Platform.select({
-                          web: 12,
+                          web: 10,
                           ios: undefined,
-                          android: 14,
+                          android: 12,
                         }),
                       }}
                     >

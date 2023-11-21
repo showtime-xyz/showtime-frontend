@@ -323,6 +323,35 @@ export const Messages = memo(() => {
     }
   }, [channelDetail.data?.owner, error, router, fresh]);
 
+  const transformedData = useMemo(() => {
+    return data.map((item, index, array) => {
+      let isSameSenderAsNext = false;
+
+      if (index < array.length - 1) {
+        const currentSenderId = item.channel_message.sent_by.profile.profile_id;
+        const nextSenderId =
+          array[index + 1].channel_message.sent_by.profile.profile_id;
+
+        const currentDate = new Date(item.channel_message.created_at).getTime();
+        const nextDate = new Date(
+          array[index + 1].channel_message.created_at
+        ).getTime();
+        const dayDifference =
+          Math.abs(currentDate - nextDate) / (1000 * 60 * 60 * 24);
+
+        // Check for same sender as next and less than a day's difference
+        isSameSenderAsNext =
+          currentSenderId === nextSenderId && dayDifference < 1;
+        console.log(
+          `Item at index ${index}: Current Sender ID = ${currentSenderId}, Next Sender ID = ${nextSenderId}, isSameSenderAsNext = ${isSameSenderAsNext}`
+        );
+      }
+
+      // For the last item in the data (visually the first in the list), it's not same as the next
+      return { ...item, isSameSenderAsNext };
+    });
+  }, [data]);
+
   const renderItem: ListRenderItem<ChannelMessageItem> = useCallback(
     ({ item, extraData }) => {
       return (
@@ -562,7 +591,7 @@ export const Messages = memo(() => {
               <AnimatedInfiniteScrollListWithRef
                 ref={listRef}
                 keyExtractor={keyExtractor}
-                data={data}
+                data={transformedData}
                 onEndReached={onLoadMore}
                 inverted
                 getItemType={getItemType}

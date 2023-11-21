@@ -91,6 +91,9 @@ export const MessageItem = memo(
     const animatedViewRef = useAnimatedRef<any>();
     const router = useRouter();
 
+    const isByCreator =
+      channel_message?.sent_by?.profile.profile_id === channelOwnerProfileId;
+
     const linkifiedMessage = useMemo(
       () =>
         channel_message.body
@@ -99,10 +102,12 @@ export const MessageItem = memo(
                 cleanUserTextInput(removeTags(channel_message.body)),
                 10
               ),
-              "!text-indigo-600 dark:!text-blue-400"
+              isByCreator
+                ? "text-base underline text-white"
+                : "text-underline text-base"
             )
           : "",
-      [channel_message.body]
+      [channel_message.body, isByCreator]
     );
 
     const style = useAnimatedStyle(() => {
@@ -146,9 +151,6 @@ export const MessageItem = memo(
       return false;
     }, [channel_message.created_at]);
 
-    const isByCreator =
-      channel_message?.sent_by?.profile.profile_id === channelOwnerProfileId;
-
     const loremText = useMemo(
       () =>
         item.channel_message.body_text_length > 0
@@ -165,223 +167,68 @@ export const MessageItem = memo(
       return null;
 
     return (
-      <AnimatedView tw="my-2 px-3" style={style} ref={animatedViewRef}>
-        <LeanView tw="flex-row" style={{ columnGap: 8 }}>
-          <Link
-            href={`/@${
-              item.channel_message?.sent_by?.profile.username ??
-              item.channel_message?.sent_by?.profile.wallet_addresses ??
-              "deleted-user"
-            }`}
-          >
-            <LeanView tw="h-6 w-6">
-              <Avatar
-                size={24}
-                url={channel_message?.sent_by?.profile.img_url}
-              />
-              <View tw="absolute h-full w-full rounded-full border-[1.4px] border-white/60 dark:border-black/60" />
-            </LeanView>
-          </Link>
-          <LeanView tw="flex-1" style={{ rowGap: 8 }}>
-            <LeanView tw="flex-row items-center" style={{ columnGap: 8 }}>
-              <Link
-                href={`/@${
-                  item.channel_message?.sent_by?.profile.username ??
-                  item.channel_message?.sent_by?.profile.wallet_addresses ??
-                  "deleted-user"
-                }`}
-              >
-                <LeanText
-                  tw={"text-sm font-bold text-gray-900 dark:text-gray-100"}
-                >
-                  {channel_message?.sent_by?.profile.name ?? "Deleted User"}
-                </LeanText>
-              </Link>
-
-              <LeanView tw="flex-row items-center">
-                <LeanText tw={"text-xs text-gray-700 dark:text-gray-200"}>
-                  {formatDateRelativeWithIntl(channel_message.created_at)}
-                </LeanText>
-                {isByCreator ? (
-                  <View tw="ml-2">
-                    <CreatorBadge />
-                  </View>
-                ) : null}
-              </LeanView>
-
-              <LeanView
-                tw="mr-2 flex-1 flex-row items-center justify-end"
-                style={{
-                  gap: 12,
-                  display:
-                    isByCreator && !permissions?.can_view_creator_messages
-                      ? "none"
-                      : undefined,
-                }}
-              >
-                <Reaction
-                  reactions={reactions}
-                  reactionGroup={item.reaction_group}
-                  onPress={(id) => {
-                    enableLayoutAnimations(true);
-                    requestAnimationFrame(async () => {
-                      await reactOnMessage.trigger({
-                        messageId: item.channel_message.id,
-                        reactionId: id,
-                      });
-                      requestAnimationFrame(() => {
-                        enableLayoutAnimations(false);
-                      });
-                    });
-                  }}
+      <AnimatedView
+        style={[
+          {
+            marginBottom: item.reaction_group.length > 0 ? 20 : 0,
+          },
+          style,
+        ]}
+        tw="mt-1 px-3"
+        ref={animatedViewRef}
+      >
+        <LeanView
+          tw="mb-1 mt-6 flex-row items-center"
+          style={{ display: item.isSameSenderAsNext ? "none" : "flex" }}
+        >
+          <LeanView>
+            <Link
+              href={`/@${
+                item?.channel_message?.sent_by?.profile?.username ??
+                item?.channel_message?.sent_by?.profile?.wallet_addresses ??
+                "deleted-user"
+              }`}
+            >
+              <LeanView tw="h-8 w-8">
+                <Avatar
+                  size={32}
+                  url={item?.channel_message?.sent_by?.profile?.img_url}
                 />
-                <DropdownMenuRoot>
-                  <DropdownMenuTrigger
-                    // @ts-expect-error - RNW
-                    style={Platform.select({
-                      web: {
-                        cursor: "pointer",
-                      },
-                    })}
-                  >
-                    <MoreHorizontal
-                      color={isDark ? colors.gray[400] : colors.gray[700]}
-                      width={20}
-                      height={20}
-                    />
-                  </DropdownMenuTrigger>
-
-                  <DropdownMenuContent loop sideOffset={8}>
-                    {item.channel_message?.sent_by?.profile.profile_id ===
-                      user?.user?.data.profile.profile_id || isUserAdmin ? (
-                      <DropdownMenuItem
-                        onSelect={() => {
-                          Alert.alert(
-                            "Are you sure you want to delete this message?",
-                            "",
-                            [
-                              {
-                                text: "Cancel",
-                              },
-                              {
-                                text: "Delete",
-                                style: "destructive",
-                                onPress: () => {
-                                  enableLayoutAnimations(true);
-                                  requestAnimationFrame(async () => {
-                                    listRef.current?.prepareForLayoutAnimationRender();
-                                    await deleteMessage.trigger({
-                                      messageId: item.channel_message.id,
-                                    });
-                                    requestAnimationFrame(() => {
-                                      enableLayoutAnimations(false);
-                                    });
-                                  });
-                                },
-                              },
-                            ]
-                          );
-                        }}
-                        key="delete"
-                      >
-                        <MenuItemIcon
-                          Icon={Trash}
-                          ios={{
-                            paletteColors: ["red"],
-                            name: "trash",
-                          }}
-                        />
-                        <DropdownMenuItemTitle tw="font-semibold text-red-500">
-                          Delete
-                        </DropdownMenuItemTitle>
-                      </DropdownMenuItem>
-                    ) : null}
-
-                    {
-                      // edit message only if message is not older than 2 hours and it belongs to the user
-                      item.channel_message?.sent_by?.profile.profile_id ===
-                        user?.user?.data.profile.profile_id &&
-                      allowMessageEditing ? (
-                        <DropdownMenuItem
-                          onSelect={() => {
-                            runOnUI(() => {
-                              "worklet";
-                              const values = measure(animatedViewRef);
-                              if (values) {
-                                editMessageItemDimension.value = {
-                                  height: values.height,
-                                  pageY: values.pageY,
-                                };
-                              }
-                              runOnJS(setEditMessage)({
-                                text: item.channel_message.body,
-                                id: item.channel_message.id,
-                              });
-                            })();
-                          }}
-                          key="edit"
-                        >
-                          <MenuItemIcon
-                            Icon={Edit}
-                            ios={{
-                              name: "pencil",
-                            }}
-                          />
-                          <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                            Edit
-                          </DropdownMenuItemTitle>
-                        </DropdownMenuItem>
-                      ) : null
-                    }
-                    {item.channel_message?.sent_by?.profile.profile_id !==
-                    user?.user?.data.profile.profile_id ? (
-                      <DropdownMenuItem
-                        onSelect={() => {
-                          router.push(
-                            {
-                              pathname:
-                                Platform.OS === "web"
-                                  ? router.pathname
-                                  : "/report",
-                              query: {
-                                ...router.query,
-                                reportModal: true,
-                                channelMessageId: item.channel_message.id,
-                              },
-                            },
-                            Platform.OS === "web" ? router.asPath : undefined
-                          );
-                        }}
-                        key="report"
-                      >
-                        <MenuItemIcon
-                          Icon={Flag}
-                          ios={{
-                            name: "flag",
-                          }}
-                        />
-                        <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
-                          Report
-                        </DropdownMenuItemTitle>
-                      </DropdownMenuItem>
-                    ) : null}
-                  </DropdownMenuContent>
-                </DropdownMenuRoot>
+                <View tw="absolute h-full w-full rounded-full" />
               </LeanView>
-            </LeanView>
+            </Link>
+          </LeanView>
+          <LeanView tw="ml-2">
+            <Link
+              href={`/@${
+                item?.channel_message?.sent_by?.profile?.username ??
+                item?.channel_message?.sent_by?.profile?.wallet_addresses ??
+                "deleted-user"
+              }`}
+            >
+              <LeanText
+                tw={"text-base font-bold text-gray-900 dark:text-gray-100"}
+              >
+                {item?.channel_message?.sent_by?.profile.name ?? "Deleted User"}
+              </LeanText>
+            </Link>
+          </LeanView>
+        </LeanView>
 
+        <LeanView tw="ml-9 flex-row">
+          <LeanView tw="flex-1 flex-row items-center gap-4">
             {isByCreator && !permissions?.can_view_creator_messages ? (
               <LeanView tw="-mb-0.5 -ml-2 -mt-0.5 select-none overflow-hidden px-2 py-0.5">
                 {Platform.OS === "web" ? (
                   // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
                   <LeanView tw="blur-sm">
-                    <LeanText tw="text-sm text-gray-900 dark:text-gray-100">
+                    <LeanText tw="text-base text-gray-900 dark:text-gray-100">
                       {loremText}
                     </LeanText>
                   </LeanView>
                 ) : item.channel_message.body_text_length > 0 ? (
                   <>
-                    <LeanText tw="py-1.5 text-sm  text-gray-900 dark:text-gray-100">
+                    <LeanText tw="py-1.5 text-base  text-gray-900 dark:text-gray-100">
                       {loremText}
                     </LeanText>
                     <BlurView
@@ -399,24 +246,59 @@ export const MessageItem = memo(
             ) : (
               <>
                 {item.channel_message.body_text_length > 0 ? (
-                  <LeanText
-                    tw={"text-sm text-gray-900 dark:text-gray-100"}
-                    style={
-                      Platform.OS === "web"
-                        ? {
-                            // @ts-ignore
-                            wordBreak: "break-word",
-                          }
-                        : {}
-                    }
+                  <LeanView
+                    tw="w-fit max-w-[50%] rounded-xl px-3 py-3 "
+                    style={{
+                      minWidth:
+                        item.reaction_group.length > 0
+                          ? 45 * item.reaction_group.length
+                          : undefined,
+                      backgroundColor: isByCreator
+                        ? "#0074FE"
+                        : isDark
+                        ? "#1F1F1F"
+                        : "#ECECEC",
+                    }}
                   >
-                    {linkifiedMessage}
-                    {messageWasEdited && (
-                      <LeanText tw="text-xs text-gray-500 dark:text-gray-200">
-                        {` • edited`}
-                      </LeanText>
-                    )}
-                  </LeanText>
+                    <LeanText
+                      tw={"text-base"}
+                      style={
+                        Platform.OS === "web"
+                          ? {
+                              // @ts-ignore
+                              wordBreak: "break-word",
+                              color: isByCreator
+                                ? "#FFF"
+                                : isDark
+                                ? "#FFF"
+                                : "#000",
+                            }
+                          : {
+                              color: isByCreator
+                                ? "#FFF"
+                                : isDark
+                                ? "#FFF"
+                                : "#000",
+                            }
+                      }
+                    >
+                      {linkifiedMessage}
+                      {messageWasEdited && (
+                        <LeanText
+                          tw="text-[10px]"
+                          style={{
+                            color: isByCreator
+                              ? "#FFF"
+                              : isDark
+                              ? "#FFF"
+                              : "#000",
+                          }}
+                        >
+                          {` • edited`}
+                        </LeanText>
+                      )}
+                    </LeanText>
+                  </LeanView>
                 ) : null}
               </>
             )}
@@ -466,16 +348,182 @@ export const MessageItem = memo(
                 isViewable={permissions?.can_view_creator_messages}
               />
             ) : null}
+
+            <LeanView
+              tw="flex-row"
+              style={{
+                gap: 12,
+                display:
+                  isByCreator && !permissions?.can_view_creator_messages
+                    ? "none"
+                    : undefined,
+              }}
+            >
+              <Reaction
+                reactions={reactions}
+                reactionGroup={item.reaction_group}
+                onPress={(id) => {
+                  enableLayoutAnimations(true);
+                  requestAnimationFrame(async () => {
+                    await reactOnMessage.trigger({
+                      messageId: item.channel_message.id,
+                      reactionId: id,
+                    });
+                    requestAnimationFrame(() => {
+                      enableLayoutAnimations(false);
+                    });
+                  });
+                }}
+              />
+              <DropdownMenuRoot>
+                <DropdownMenuTrigger
+                  // @ts-expect-error - RNW
+                  style={Platform.select({
+                    web: {
+                      cursor: "pointer",
+                    },
+                  })}
+                >
+                  <MoreHorizontal
+                    color={isDark ? colors.gray[400] : colors.gray[700]}
+                    width={20}
+                    height={20}
+                  />
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent loop sideOffset={8}>
+                  {item.channel_message?.sent_by?.profile.profile_id ===
+                    user?.user?.data.profile.profile_id || isUserAdmin ? (
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        Alert.alert(
+                          "Are you sure you want to delete this message?",
+                          "",
+                          [
+                            {
+                              text: "Cancel",
+                            },
+                            {
+                              text: "Delete",
+                              style: "destructive",
+                              onPress: () => {
+                                enableLayoutAnimations(true);
+                                requestAnimationFrame(async () => {
+                                  listRef.current?.prepareForLayoutAnimationRender();
+                                  await deleteMessage.trigger({
+                                    messageId: item.channel_message.id,
+                                  });
+                                  requestAnimationFrame(() => {
+                                    enableLayoutAnimations(false);
+                                  });
+                                });
+                              },
+                            },
+                          ]
+                        );
+                      }}
+                      key="delete"
+                    >
+                      <MenuItemIcon
+                        Icon={Trash}
+                        ios={{
+                          paletteColors: ["red"],
+                          name: "trash",
+                        }}
+                      />
+                      <DropdownMenuItemTitle tw="font-semibold text-red-500">
+                        Delete
+                      </DropdownMenuItemTitle>
+                    </DropdownMenuItem>
+                  ) : null}
+
+                  {
+                    // edit message only if message is not older than 2 hours and it belongs to the user
+                    item.channel_message?.sent_by?.profile.profile_id ===
+                      user?.user?.data.profile.profile_id &&
+                    allowMessageEditing ? (
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          runOnUI(() => {
+                            "worklet";
+                            const values = measure(animatedViewRef);
+                            if (values) {
+                              editMessageItemDimension.value = {
+                                height: values.height,
+                                pageY: values.pageY,
+                              };
+                            }
+                            runOnJS(setEditMessage)({
+                              text: item.channel_message.body,
+                              id: item.channel_message.id,
+                            });
+                          })();
+                        }}
+                        key="edit"
+                      >
+                        <MenuItemIcon
+                          Icon={Edit}
+                          ios={{
+                            name: "pencil",
+                          }}
+                        />
+                        <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
+                          Edit
+                        </DropdownMenuItemTitle>
+                      </DropdownMenuItem>
+                    ) : null
+                  }
+                  {item.channel_message?.sent_by?.profile.profile_id !==
+                  user?.user?.data.profile.profile_id ? (
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        router.push(
+                          {
+                            pathname:
+                              Platform.OS === "web"
+                                ? router.pathname
+                                : "/report",
+                            query: {
+                              ...router.query,
+                              reportModal: true,
+                              channelMessageId: item.channel_message.id,
+                            },
+                          },
+                          Platform.OS === "web" ? router.asPath : undefined
+                        );
+                      }}
+                      key="report"
+                    >
+                      <MenuItemIcon
+                        Icon={Flag}
+                        ios={{
+                          name: "flag",
+                        }}
+                      />
+                      <DropdownMenuItemTitle tw="font-semibold text-gray-700 dark:text-gray-400">
+                        Report
+                      </DropdownMenuItemTitle>
+                    </DropdownMenuItem>
+                  ) : null}
+                </DropdownMenuContent>
+              </DropdownMenuRoot>
+            </LeanView>
+
             {item.reaction_group.length > 0 ? (
-              <AnimatedView layout={Layout}>
-                <MessageReactions
-                  key={channel_message.id}
-                  reactionGroup={item.reaction_group}
-                  channelId={channelId}
-                  channelReactions={reactions}
-                  messageId={channel_message.id}
-                />
-              </AnimatedView>
+              <>
+                <AnimatedView
+                  layout={Layout}
+                  tw="absolute -bottom-4 left-2 justify-center rounded-full bg-gray-200 dark:bg-gray-900"
+                >
+                  <MessageReactions
+                    key={channel_message.id}
+                    reactionGroup={item.reaction_group}
+                    channelId={channelId}
+                    channelReactions={reactions}
+                    messageId={channel_message.id}
+                  />
+                </AnimatedView>
+              </>
             ) : null}
           </LeanView>
         </LeanView>
