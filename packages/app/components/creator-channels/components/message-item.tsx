@@ -339,13 +339,11 @@ export const MessageItem = memo(
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
               Platform.OS === "web" ? (
-                <LeanView tw="flex-1">
-                  <ImagePreview
-                    key={`img-${channel_message.id}`}
-                    attachment={channel_message}
-                    isViewable={permissions?.can_view_creator_messages}
-                  />
-                </LeanView>
+                <ImagePreview
+                  key={`img-${channel_message.id}`}
+                  attachment={channel_message}
+                  isViewable={permissions?.can_view_creator_messages}
+                />
               ) : (
                 <SharedElement tag={channel_message?.id.toString()}>
                   {({ animatedRef, animatedStyles }) => (
