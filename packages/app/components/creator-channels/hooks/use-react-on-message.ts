@@ -90,7 +90,7 @@ export const useReactOnMessage = (channelId: string) => {
         captureException(e);
         Logger.error(e);
       } finally {
-        channelMessages.mutate();
+        //channelMessages.mutate();
       }
     }
   );
