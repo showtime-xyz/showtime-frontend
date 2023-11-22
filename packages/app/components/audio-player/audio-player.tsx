@@ -123,7 +123,7 @@ export const AudioPlayer = memo(
     }, [id, prepare, url]);
 
     return (
-      <LeanView tw="web:max-w-sm web:p-2 web:min-w-[320px] min-w-[80%] overflow-hidden rounded-full bg-black p-4 dark:bg-white">
+      <LeanView tw="web:max-w-sm web:p-2 web:md:min-w-[320px] min-w-[75%] overflow-hidden rounded-full bg-black p-4 dark:bg-white">
         <LeanView tw="flex-row items-center">
           <LeanView tw="mr-4 items-center justify-center">
             <LeanView tw="h-12 w-12 items-center justify-center rounded-full bg-white dark:bg-black">
