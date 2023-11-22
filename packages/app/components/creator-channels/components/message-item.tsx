@@ -226,41 +226,6 @@ export const MessageItem = memo(
           </LeanView>
         </LeanView>
 
-        {item.channel_message?.attachments?.length > 0 &&
-        item.channel_message?.attachments[0].mime.includes("image") ? (
-          Platform.OS === "web" ? (
-            <LeanView tw="flex-1">
-              <ImagePreview
-                key={`img-${channel_message.id}`}
-                attachment={channel_message}
-                isViewable={permissions?.can_view_creator_messages}
-              />
-            </LeanView>
-          ) : (
-            <SharedElement tag={channel_message?.id.toString()}>
-              {({ animatedRef, animatedStyles }) => (
-                <ImagePreview
-                  key={`img-${channel_message.id}`}
-                  style={animatedStyles}
-                  animatedRef={animatedRef}
-                  attachment={channel_message}
-                  isViewable={permissions?.can_view_creator_messages}
-                />
-              )}
-            </SharedElement>
-          )
-        ) : null}
-
-        {item.channel_message?.attachments?.length > 0 &&
-        item.channel_message?.attachments[0].mime.includes("audio") ? (
-          <AudioPlayer
-            id={item.channel_message.id}
-            url={item.channel_message.attachments[0]?.url}
-            duration={item.channel_message.attachments[0]?.duration}
-            isViewable={permissions?.can_view_creator_messages}
-          />
-        ) : null}
-
         <LeanView
           tw="web:ml-9 flex-1 flex-row items-center"
           style={{
@@ -297,7 +262,8 @@ export const MessageItem = memo(
               </LeanView>
             ) : (
               <>
-                {item.channel_message.body_text_length > 0 ? (
+                {item.channel_message.body_text_length > 0 &&
+                item.channel_message?.attachments?.length === 0 ? (
                   <LeanView
                     tw="xl:web:max-w-[60%] w-fit max-w-[80%] rounded-xl px-3 py-3 "
                     style={{
@@ -367,6 +333,41 @@ export const MessageItem = memo(
               />
             ) : null}
             */}
+
+            {item.channel_message?.attachments?.length > 0 &&
+            item.channel_message?.attachments[0].mime.includes("image") ? (
+              Platform.OS === "web" ? (
+                <LeanView tw="flex-1">
+                  <ImagePreview
+                    key={`img-${channel_message.id}`}
+                    attachment={channel_message}
+                    isViewable={permissions?.can_view_creator_messages}
+                  />
+                </LeanView>
+              ) : (
+                <SharedElement tag={channel_message?.id.toString()}>
+                  {({ animatedRef, animatedStyles }) => (
+                    <ImagePreview
+                      key={`img-${channel_message.id}`}
+                      style={animatedStyles}
+                      animatedRef={animatedRef}
+                      attachment={channel_message}
+                      isViewable={permissions?.can_view_creator_messages}
+                    />
+                  )}
+                </SharedElement>
+              )
+            ) : null}
+
+            {item.channel_message?.attachments?.length > 0 &&
+            item.channel_message?.attachments[0].mime.includes("audio") ? (
+              <AudioPlayer
+                id={item.channel_message.id}
+                url={item.channel_message.attachments[0]?.url}
+                duration={item.channel_message.attachments[0]?.duration}
+                isViewable={permissions?.can_view_creator_messages}
+              />
+            ) : null}
 
             <LeanView
               tw="md:web:opacity-0 ml-4 w-12 cursor-pointer flex-row group-hover:opacity-100"
@@ -460,6 +461,7 @@ export const MessageItem = memo(
                     // edit message only if message is not older than 2 hours and it belongs to the user
                     item.channel_message?.sent_by?.profile.profile_id ===
                       user?.user?.data.profile.profile_id &&
+                    item.channel_message?.attachments?.length === 0 &&
                     allowMessageEditing ? (
                       <DropdownMenuItem
                         onSelect={() => {
