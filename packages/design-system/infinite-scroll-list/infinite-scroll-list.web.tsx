@@ -288,6 +288,7 @@ function InfiniteScrollListImpl<Item>(
                       ...transformStyle,
                       // @ts-ignore
                       "scroll-snap-align": pagingEnabled ? "start" : undefined,
+                      "scroll-snap-stop": pagingEnabled ? "always" : undefined,
                     }}
                   >
                     {typeof data?.[index] !== "undefined" ? (

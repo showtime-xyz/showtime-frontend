@@ -29,13 +29,14 @@ export function BottomTabNavigator() {
       screenOptions={{
         headerShown: false,
       }}
-      tabBar={(props) => <BottomTabbar {...props} />}
+      tabBar={(props) => null}
     >
       <BottomTab.Screen
         name="homeTab"
         component={HomeNavigator}
         options={{
           tabBarIcon: HomeTabBarIcon,
+          headerShown: false,
         }}
       />
       <BottomTab.Screen

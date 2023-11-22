@@ -194,26 +194,19 @@ function App({ Component, pageProps, router }: AppProps) {
         />
       </Head>
       <AppProviders>
-        <Container>
-          <View tw="mx-auto flex-col md:flex-row">
-            <Header
+        {/* <Header
               canGoBack={
                 router.pathname === "/search" ||
                 router.pathname.split("/").length - 1 >= 2
               }
-            />
+            /> */}
 
-            <View tw="w-full items-center md:ml-auto md:w-[calc(100%-248px)]">
-              <NextNProgress
-                color="#4F46E5"
-                options={{ showSpinner: false }}
-                showOnShallow={false}
-              />
-              <Component {...pageProps} />
-            </View>
-          </View>
-          <Footer />
-        </Container>
+        <NextNProgress
+          color="#4F46E5"
+          options={{ showSpinner: false }}
+          showOnShallow={false}
+        />
+        <Component {...pageProps} />
 
         {/* Modals */}
         <CreatorTokensExplanationScreen />
