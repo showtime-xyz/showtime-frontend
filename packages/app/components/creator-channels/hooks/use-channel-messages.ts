@@ -1,8 +1,9 @@
 import { useCallback, useMemo, useRef } from "react";
 
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
+import { axios } from "app/lib/axios";
 
-import { ChannelMessageResponse } from "../types";
+import { ChannelMessageItem, ChannelMessageResponse } from "../types";
 
 const PAGE_SIZE = 20;
 
@@ -50,6 +51,53 @@ export const useChannelMessages = (channelId?: string | number) => {
     messagesUrl,
     {
       pageSize: PAGE_SIZE,
+    },
+    (url: string) => {
+      return axios({
+        url,
+        method: "GET",
+      }).then((data: ChannelMessageItem[]) => {
+        let consecutiveCount = 0; // Initialize the consecutive message count
+
+        // we transform data for useChannelMessages to show the sender's name / or not
+        return data.map((item, index, array) => {
+          let isSameSenderAsNext = false;
+
+          if (index < array.length - 1) {
+            const currentSenderId =
+              item?.channel_message?.sent_by?.profile?.profile_id;
+            const nextSenderId =
+              array[index + 1]?.channel_message?.sent_by?.profile?.profile_id;
+
+            const currentDate = new Date(
+              item.channel_message?.created_at
+            ).getTime();
+            const nextDate = new Date(
+              array[index + 1].channel_message?.created_at
+            ).getTime();
+            const dayDifference =
+              Math.abs(currentDate - nextDate) / (1000 * 60 * 60 * 24);
+
+            // Increment count or reset if sender changes
+            if (currentSenderId === nextSenderId) {
+              consecutiveCount++;
+            } else {
+              consecutiveCount = 0; // Reset count if sender changes
+            }
+
+            // Check for same sender as next, less than a day's difference, and not the 5th message in a row
+            isSameSenderAsNext =
+              currentSenderId === nextSenderId &&
+              dayDifference < 1 &&
+              consecutiveCount % 10 !== 0;
+          } else {
+            // For the last item in the list, always show the sender
+            isSameSenderAsNext = false;
+          }
+
+          return { ...item, isSameSenderAsNext };
+        });
+      });
     }
   );
   const newData = useMemo(() => {
