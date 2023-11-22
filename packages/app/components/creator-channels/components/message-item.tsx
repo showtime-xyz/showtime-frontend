@@ -244,9 +244,7 @@ export const MessageItem = memo(
                   </LeanView>
                 ) : item.channel_message.body_text_length > 0 ? (
                   <LeanView tw="overflow-hidden">
-                    <LeanText tw="text-base text-gray-900 dark:text-gray-100">
-                      {loremText}
-                    </LeanText>
+                    <LeanText tw="text-base text-white">{loremText}</LeanText>
                     <BlurView
                       intensity={10}
                       tint="default"
