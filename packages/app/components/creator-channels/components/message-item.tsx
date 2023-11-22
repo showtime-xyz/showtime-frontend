@@ -182,7 +182,7 @@ export const MessageItem = memo(
         ref={animatedViewRef}
       >
         <LeanView
-          tw="web:mb-1 mb-3 mt-6 flex-row items-center"
+          tw="web:mb-2 mb-2 mt-2 flex-row items-center"
           style={{
             display: item.isSameSenderAsNext ? "none" : undefined,
           }}
@@ -195,9 +195,9 @@ export const MessageItem = memo(
                 "deleted-user"
               }`}
             >
-              <LeanView tw="h-8 w-8">
+              <LeanView tw="h-5 w-5">
                 <Avatar
-                  size={32}
+                  size={20}
                   url={item?.channel_message?.sent_by?.profile?.img_url}
                 />
                 <View tw="absolute h-full w-full rounded-full" />
@@ -213,7 +213,7 @@ export const MessageItem = memo(
               }`}
             >
               <LeanText
-                tw={"text-base font-bold text-gray-900 dark:text-gray-100"}
+                tw={"text-xs font-semibold text-gray-900 dark:text-gray-100"}
               >
                 {item?.channel_message?.sent_by?.profile.name ?? "Deleted User"}
               </LeanText>
@@ -227,14 +227,16 @@ export const MessageItem = memo(
         </LeanView>
 
         <LeanView
-          tw="web:ml-9 flex-1 flex-row items-center"
+          tw="web:ml-6 flex-1 flex-row items-center"
           style={{
             paddingBottom: item.reaction_group.length > 0 ? 25 : 0,
           }}
         >
           <LeanView tw="md:web:justify-start flex-1 flex-row items-center justify-between">
-            {isByCreator && !permissions?.can_view_creator_messages ? (
-              <LeanView tw="xl:web:max-w-[60%] w-fit max-w-[80%] rounded-xl px-3 py-3 ">
+            {isByCreator &&
+            !permissions?.can_view_creator_messages &&
+            item.channel_message?.attachments?.length === 0 ? (
+              <LeanView tw="web:xl:max-w-[50%] web:lg:max-w-[70%] max-w-[80%] rounded-xl bg-[#0074FE] px-3 py-3">
                 {Platform.OS === "web" ? (
                   // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
                   <LeanView tw="blur-sm">
@@ -265,7 +267,7 @@ export const MessageItem = memo(
                 {item.channel_message.body_text_length > 0 &&
                 item.channel_message?.attachments?.length === 0 ? (
                   <LeanView
-                    tw="xl:web:max-w-[60%] w-fit max-w-[80%] rounded-xl px-3 py-3 "
+                    tw="xl:web:max-w-[50%] lg:web:max-w-[70%] max-w-[80%] rounded-xl px-3 py-3 "
                     style={{
                       minWidth:
                         item.reaction_group.length > 0
