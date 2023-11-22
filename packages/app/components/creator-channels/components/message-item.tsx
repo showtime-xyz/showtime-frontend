@@ -229,7 +229,7 @@ export const MessageItem = memo(
         <LeanView
           tw="web:ml-9 flex-1 flex-row items-center"
           style={{
-            marginBottom: item.reaction_group.length > 0 ? 25 : 0,
+            paddingBottom: item.reaction_group.length > 0 ? 25 : 0,
           }}
         >
           <LeanView tw="md:web:justify-start flex-1 flex-row items-center justify-between">
