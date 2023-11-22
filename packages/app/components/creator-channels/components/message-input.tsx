@@ -217,22 +217,23 @@ export const MessageInput = memo(
       !hasUnlockedMessages
     ) {
       return (
-        <LeanView
-          tw="flex-row items-center justify-start bg-black px-2 py-2"
-          style={{
-            marginBottom: Math.max(bottom || 0, 16),
-          }}
-        >
-          <PlatformBuyButton
-            username={channelOwnerProfile?.username}
-            text={
-              <LeanText tw="text-center text-base font-semibold">
-                Buy - ${priceToBuyNext.data?.displayPrice}
-              </LeanText>
-            }
-            side="top"
-            tw="web:min-w-[200px] mr-4 min-w-[180px]"
-          />
+        <LeanView tw="flex-row items-center justify-start bg-black px-2 py-2">
+          <LeanView
+            style={{
+              paddingBottom: bottom || 0,
+            }}
+          >
+            <PlatformBuyButton
+              username={channelOwnerProfile?.username}
+              text={
+                <LeanText tw="text-center text-base font-semibold">
+                  Buy - ${priceToBuyNext.data?.displayPrice}
+                </LeanText>
+              }
+              side="top"
+              tw="web:min-w-[200px] mr-4 mt-auto min-w-[180px]"
+            />
+          </LeanView>
         </LeanView>
       );
     }
