@@ -210,6 +210,8 @@ export const useCreatorTokenBuy = (params: {
                   await delay(2000);
                 }
 
+                await delay(5000);
+
                 mutate(
                   (key: any) => {
                     const channelId = profileData.data?.profile.channels[0]?.id;
