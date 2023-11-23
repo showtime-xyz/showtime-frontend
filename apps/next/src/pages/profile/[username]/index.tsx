@@ -37,6 +37,12 @@ export async function getServerSideProps(context) {
             title,
             description: user.data.profile.bio,
             image: user.data.profile.img_url,
+            nftCollection: user.data.profile.username,
+            nftContractAddress: user.data.profile.creator_token.address,
+            nftCreatorAddress: user.data.profile.primary_wallet.address,
+            nftSchema: "erc721",
+            nftChain: "base",
+            nftMintUrl: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${user.data.profile.username}`,
           },
         },
       };
