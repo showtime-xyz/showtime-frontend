@@ -11,6 +11,7 @@ import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AvatarHoverCard } from "app/components/card/avatar-hover-card";
@@ -172,6 +173,11 @@ const CreatorChannelsListItem = memo(
                 >
                   {item.owner.name ?? item.owner.username}
                 </Text>
+                {Boolean(item?.owner?.verified) && (
+                  <View tw="ml-1">
+                    <VerificationBadge size={10} />
+                  </View>
+                )}
                 {item.itemType === "owned" ? (
                   <Text
                     tw="text-md ml-3 max-w-[160px] overflow-ellipsis whitespace-nowrap text-[15px] font-semibold text-gray-500 dark:text-white"
