@@ -143,6 +143,9 @@ function App({ Component, pageProps, router }: AppProps) {
         <meta name="eth:nft:schema" content={meta.nftSchema} />
       )}
       {meta.nftChain && <meta name="eth:nft:chain" content={meta.nftChain} />}
+      {meta.nftMintUrl && (
+        <meta name="eth:nft:mint_url" content={meta.nftMintUrl} />
+      )}
     </>
   ) : (
     <>
