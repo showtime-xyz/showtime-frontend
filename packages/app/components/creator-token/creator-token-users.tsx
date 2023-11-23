@@ -300,7 +300,7 @@ export const TopCreatorTokenListItem = ({
       </View>
       <View tw="ml-2 flex-1 flex-row items-center">
         <View tw="w-[168px] justify-center md:w-[180px]">
-          <View tw="min-w-[180px] flex-row">
+          <View tw="min-w-[180px] flex-1 flex-row items-center">
             <Text
               tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
               numberOfLines={1}
@@ -319,7 +319,11 @@ export const TopCreatorTokenListItem = ({
             )}
           </View>
           {!isSimplified ? (
-            <>
+            <View
+              style={{
+                display: token.owner_profile?.bio ? undefined : "none",
+              }}
+            >
               <View tw="h-1.5" />
               <Text
                 tw="text-xs text-gray-500 dark:text-gray-400"
@@ -327,7 +331,7 @@ export const TopCreatorTokenListItem = ({
               >
                 {token.owner_profile?.bio}
               </Text>
-            </>
+            </View>
           ) : null}
         </View>
         <View tw="ml-4 min-w-[50px] flex-row items-center md:ml-6">
