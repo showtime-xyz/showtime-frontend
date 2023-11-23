@@ -276,7 +276,7 @@ export const TopCreatorTokenListItem = ({
       {...rest}
     >
       <View tw="h-[34px] flex-row">
-        <View tw="min-w-[26px] items-start self-center  pl-1.5">
+        <View tw="min-w-[26px] items-start self-center ">
           {index != undefined ? (
             index < 3 ? (
               <View tw="items-center">
