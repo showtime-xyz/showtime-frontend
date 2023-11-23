@@ -348,7 +348,7 @@ export const TopCreatorTokenListItem = ({
             color={isDark ? colors.white : colors.gray[900]}
           />
         </View>
-        <View tw="web:pr-2 ml-auto items-center lg:ml-4">
+        <View tw="web:md:pr-3 web:lg:pr-0 ml-auto items-center lg:ml-4">
           <PlatformBuyButton
             style={{
               backgroundColor: "#08F6CC",
