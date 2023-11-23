@@ -29,6 +29,7 @@ export type CreatorTokenItem = {
   name: string;
   token_uri: string;
   nft_count: number;
+  channel_id: number;
 };
 export type NewCreatorTokenItem = {
   creator_token: CreatorTokenItem;
