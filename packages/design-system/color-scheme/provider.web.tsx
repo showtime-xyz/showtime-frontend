@@ -40,6 +40,19 @@ export function ColorSchemeProvider({
     } else {
       document.documentElement.classList.remove("dark");
     }
+
+    const themeColor = isDark ? "#000000" : "#ffffff";
+    // Change the content attribute
+    let metaThemeColor = document.querySelector("meta[name='theme-color']");
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute("content", themeColor);
+    } else {
+      // If the meta tag does not exist, you can create it and append it to the <head>
+      metaThemeColor = document.createElement("meta");
+      metaThemeColor.setAttribute("name", "theme-color");
+      metaThemeColor.setAttribute("content", themeColor);
+      document.head.appendChild(metaThemeColor);
+    }
   }, []);
 
   useEffect(() => {
@@ -47,6 +60,7 @@ export function ColorSchemeProvider({
       const theme = Appearance.getColorScheme();
       changeTheme(theme && !getDisabledSystemTheme() ? theme : colorScheme);
     };
+
     themeChangeListener();
     const appearanceListener =
       Appearance.addChangeListener(themeChangeListener);
