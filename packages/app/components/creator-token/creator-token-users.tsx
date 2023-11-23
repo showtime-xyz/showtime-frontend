@@ -5,11 +5,8 @@ import { BlurView } from "expo-blur";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  ChevronRight,
-  GoldHexagon,
-  ShowtimeRounded,
-} from "@showtime-xyz/universal.icon";
+import { GoldHexagon, ShowtimeRounded } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -242,6 +239,7 @@ export const TopCreatorTokenListItem = ({
   const token = (item as NewCreatorTokenItem)?.creator_token
     ? ((item as NewCreatorTokenItem).creator_token as CreatorTokenItem)
     : (item as CreatorTokenItem);
+
   const lastMessage = (item as NewCreatorTokenItem)?.last_channel_message;
   const permissions = (item as NewCreatorTokenItem)?.permissions;
   const loremText = useMemo(
@@ -266,8 +264,8 @@ export const TopCreatorTokenListItem = ({
   );
 
   return (
-    <PressableHover
-      tw={["flex flex-row items-center py-2.5", tw].join(" ")}
+    <Pressable
+      tw={["flex flex-row items-center rounded-lg py-2.5", tw].join(" ")}
       onPress={() => {
         router.push(
           token.owner_profile?.username
@@ -278,10 +276,10 @@ export const TopCreatorTokenListItem = ({
       {...rest}
     >
       <View tw="h-[34px] flex-row">
-        <View tw="min-w-[26px] items-start self-center">
+        <View tw="min-w-[26px] items-start self-center  pl-1.5">
           {index != undefined ? (
             index < 3 ? (
-              <View tw="items-center ">
+              <View tw="items-center">
                 <View tw="absolute -top-1">
                   <GoldHexagon width={18} height={18} />
                 </View>
@@ -360,7 +358,12 @@ export const TopCreatorTokenListItem = ({
         </View>
       </View>
       {!lastMessage || !permissions ? null : (
-        <View tw="ml-auto hidden w-full max-w-[200px] flex-row items-center justify-between lg:flex">
+        <Pressable
+          onPress={() => {
+            router.push(`/channels/${token.channel_id}`);
+          }}
+          tw="ml-auto hidden w-full max-w-[200px] flex-row items-center justify-between lg:flex"
+        >
           {lastMessage.sent_by?.profile.profile_id ===
             token.owner_profile?.profile_id &&
           !permissions.can_view_creator_messages ? (
@@ -415,9 +418,9 @@ export const TopCreatorTokenListItem = ({
               ) : null}
             </>
           )}
-        </View>
+        </Pressable>
       )}
-    </PressableHover>
+    </Pressable>
   );
 };
 
