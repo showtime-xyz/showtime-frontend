@@ -30,20 +30,27 @@ export async function getServerSideProps(context) {
     title += " | Showtime";
 
     if (user) {
+      let meta: any = {
+        title,
+        description: user.data.profile.bio,
+        image: user.data.profile.img_url,
+      };
+
+      if (user.data.profile.creator_token) {
+        meta = {
+          ...meta,
+          nftCollection: user.data.profile.username,
+          nftContractAddress: user.data.profile.creator_token.address,
+          nftSchema: "erc721",
+          nftChain: "base",
+          nftMintUrl: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${user.data.profile.username}`,
+        };
+      }
+
       return {
         props: {
           fallback,
-          meta: {
-            title,
-            description: user.data.profile.bio,
-            image: user.data.profile.img_url,
-            nftCollection: user.data.profile.username,
-            nftContractAddress: user.data.profile.creator_token.address,
-            nftCreatorAddress: user.data.profile.primary_wallet.address,
-            nftSchema: "erc721",
-            nftChain: "base",
-            nftMintUrl: `https://${process.env.NEXT_PUBLIC_WEBSITE_DOMAIN}/@${user.data.profile.username}`,
-          },
+          meta,
         },
       };
     }
