@@ -21,7 +21,7 @@ export const PrivyProvider = ({ children }: any) => {
     <PrivyProviderImpl
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
       config={{
-        loginMethods: ["sms", "google", "apple"],
+        loginMethods: ["wallet", "sms", "google", "apple"],
         defaultChain: baseChain,
         embeddedWallets: {
           noPromptOnSignature: true,

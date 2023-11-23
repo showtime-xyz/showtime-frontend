@@ -560,7 +560,12 @@ export const HeaderMd = withColorScheme(() => {
               <Button
                 size="regular"
                 tw="mt-6"
-                onPress={handleSubmitWallet}
+                onPress={async () => {
+                  if (privy.authenticated) {
+                    await privy.logout();
+                  }
+                  privy.login();
+                }}
                 disabled={loginLoading}
               >
                 <>

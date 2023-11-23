@@ -27,7 +27,6 @@ export function Login() {
     walletName,
     showSignMessage,
     verifySignature,
-    handleSubmitWallet,
     loading,
   } = useLogin();
   const privy = usePrivy();
@@ -100,7 +99,12 @@ export function Login() {
               variant="primary"
               tw={`my-2 ${loading ? "opacity-[0.5]" : ""}`}
               disabled={loading}
-              onPress={handleSubmitWallet}
+              onPress={async () => {
+                if (privy.authenticated) {
+                  await privy.logout();
+                }
+                privy.login();
+              }}
             >
               <View tw="absolute left-4 top-3">
                 <Ethereum
