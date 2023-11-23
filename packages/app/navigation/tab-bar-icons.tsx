@@ -113,13 +113,25 @@ export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
 export const CreatorChannelsTabBarIcon = ({
   color,
   focused,
+  onPress,
 }: TabBarIconProps & {
   tooltipSide?: ContentProps["side"];
 }) => {
   const { data } = useChannelsUnreadMessages();
+  const redirectToScreen = useRedirectToScreen();
 
   return (
-    <TabBarIcon tab="/channels">
+    <TabBarIcon
+      onPress={() => {
+        if (onPress) {
+          onPress();
+        } else {
+          redirectToScreen({
+            pathname: "/channels",
+          });
+        }
+      }}
+    >
       {focused ? (
         <CreatorChannelFilled width={24} height={24} color={color} />
       ) : (
