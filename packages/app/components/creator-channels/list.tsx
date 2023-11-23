@@ -22,6 +22,7 @@ import { Skeleton } from "@showtime-xyz/universal.skeleton";
 import { Spinner } from "@showtime-xyz/universal.spinner";
 import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
@@ -201,7 +202,11 @@ const CreatorChannelsListItem = memo(
                 >
                   {item.owner.name ?? item.owner.username}
                 </Text>
-
+                {Boolean(item?.owner?.verified) && (
+                  <View tw="ml-1.5">
+                    <VerificationBadge size={12} />
+                  </View>
+                )}
                 {item.itemType === "owned" ? (
                   <LeanText
                     tw="web:max-w-[80%] web:text-base ml-3 overflow-ellipsis whitespace-nowrap text-lg font-medium text-gray-500 dark:text-slate-300"
