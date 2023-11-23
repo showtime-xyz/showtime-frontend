@@ -138,8 +138,11 @@ export const CreatorChannelsTabBarIcon = ({
         <CreatorChannel width={24} height={24} color={color} />
       )}
       {data && data.unread > 0 && (
-        <View tw="web:-right-0.5 absolute right-0.5 top-0 h-4 w-4 items-center justify-center rounded-full bg-indigo-700">
-          <Text tw="text-[8px] text-white" style={{ lineHeight: 12 }}>
+        <View tw="web:-right-1.5 absolute -right-0.5 top-0 h-5 w-5 items-center justify-center rounded-full bg-indigo-700 text-center">
+          <Text
+            tw="text-center text-[10px] font-medium text-white"
+            style={{ lineHeight: 12 }}
+          >
             {data.unread > 99 ? "99" : data.unread}
           </Text>
         </View>
