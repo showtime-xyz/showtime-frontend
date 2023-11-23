@@ -1,51 +1,85 @@
-import { ScrollView, Dimensions } from "react-native";
+import { Platform } from "react-native";
 
-import { useSafeAreaFrame } from "react-native-safe-area-context";
+import { ResizeMode } from "expo-av";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
-import { Text } from "@showtime-xyz/universal.text";
+import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { View } from "@showtime-xyz/universal.view";
 
-const items = new Array(100).fill(0).map((_, i) => i);
+import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
+
+import { Video } from "design-system/video";
+
+import { videos } from "../../../apps/video-data";
+
+const ViewabilityInfiniteScrollList =
+  withViewabilityInfiniteScrollList(InfiniteScrollList);
+
 export const VideoFeed = () => {
   const size = useSafeAreaFrame();
+
+  const videoDimensions =
+    Platform.OS === "web"
+      ? {
+          width: "100%",
+          height: "100vh",
+        }
+      : {
+          width: size.width,
+          height: size.height,
+        };
   return (
-    <View tw="w-scree h-screen">
-      {/* <InfiniteScrollList
+    <View tw="h-screen w-screen">
+      <ViewabilityInfiniteScrollList
         useWindowScroll={false}
-        // pagingEnabled
-        data={[1, 2, 3, 4, 5, 6, 7, 8]}
-        estimatedItemSize={100}
-        // snapToOffsets={[50, 400, 800]}
+        data={videos}
+        estimatedItemSize={200}
         pagingEnabled
-        snapToStart
-        renderItem={({ index }) =>
+        snapToOffsets={[256].concat(
+          videos.map((_, i) => i * size.height + 256)
+        )}
+        decelerationRate="fast"
+        renderItem={({ item, index }) =>
           index === 0 ? (
-            <View tw="bg-red-400 pt-10" />
+            <View tw="h-[256px] w-full border-2 bg-red-400" />
           ) : (
-            <View tw="h-screen w-screen items-center justify-center border-2 bg-white">
-              <Text>Hello</Text>
+            <View
+              tw="items-center justify-center border-2"
+              //@ts-ignore
+              style={videoDimensions}
+            >
+              <FeedVideo video={item} />
             </View>
           )
         }
-      /> */}
-      <ScrollView
-        snapToOffsets={[256].concat(items.map((_, i) => i * size.height + 256))}
-        decelerationRate="fast"
-      >
-        <View tw="h-[256px] w-full border-2 bg-red-400" />
-        {items.map((_, i) => (
-          <View
-            key={i}
-            tw="w-screen items-center justify-center border-2 bg-white"
-            style={{
-              height: size.height,
-            }}
-          >
-            <Text>Hello</Text>
-          </View>
-        ))}
-      </ScrollView>
+      />
     </View>
+  );
+};
+
+const FeedVideo = ({ video }: any) => {
+  const size = useSafeAreaFrame();
+
+  const videoDimensions =
+    Platform.OS === "web"
+      ? {
+          width: "100%",
+          height: "100vh",
+        }
+      : {
+          width: size.width,
+          height: size.height,
+        };
+
+  return (
+    <Video
+      source={{ uri: video.sources[0] }}
+      // @ts-ignore
+      style={videoDimensions}
+      // @ts-ignore
+      videoStyle={videoDimensions}
+      useNativeControls
+      resizeMode={ResizeMode.CONTAIN}
+    />
   );
 };
