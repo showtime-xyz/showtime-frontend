@@ -1,4 +1,11 @@
-import { forwardRef, useRef, useEffect } from "react";
+import {
+  forwardRef,
+  useRef,
+  useEffect,
+  useState,
+  useContext,
+  createContext,
+} from "react";
 
 import {
   PrivyProvider as PrivyProviderImpl,
@@ -15,13 +22,22 @@ import { baseChain } from "app/hooks/creator-token/utils";
 import { useStableCallback } from "app/hooks/use-stable-callback";
 import { useWallet } from "app/hooks/use-wallet";
 
+export const PrivySetLoginMethodContext = createContext<any>(null);
+
 export const PrivyProvider = ({ children }: any) => {
   const colorScheme = useIsDarkMode() ? "dark" : "light";
+  const [loginMethods, setLoginMethods] = useState<any>([
+    "wallet",
+    "sms",
+    "google",
+    "apple",
+  ] as const);
+
   return (
     <PrivyProviderImpl
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID}
       config={{
-        loginMethods: ["wallet", "sms", "google", "apple"],
+        loginMethods: loginMethods,
         defaultChain: baseChain,
         embeddedWallets: {
           noPromptOnSignature: true,
@@ -35,7 +51,9 @@ export const PrivyProvider = ({ children }: any) => {
         },
       }}
     >
-      {children}
+      <PrivySetLoginMethodContext.Provider value={{ setLoginMethods }}>
+        {children}
+      </PrivySetLoginMethodContext.Provider>
     </PrivyProviderImpl>
   );
 };

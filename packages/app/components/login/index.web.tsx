@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { StyleSheet } from "react-native";
 
 import { PortalProvider } from "@gorhom/portal";
@@ -17,6 +17,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { usePreviousValue } from "app/hooks/use-previous-value";
 import { useUser } from "app/hooks/use-user";
+import { PrivySetLoginMethodContext } from "app/lib/privy/privy-provider.web";
 
 import { useLogin } from "./use-login";
 
@@ -35,6 +36,7 @@ export function Login() {
   const prevUser = usePreviousValue(user);
   //#endregion
   const modalScreenContext = useModalScreenContext();
+  const privyLoginMethodContext = useContext(PrivySetLoginMethodContext);
 
   useEffect(() => {
     if (showSignMessage) {
@@ -89,7 +91,14 @@ export function Login() {
                 if (privy.authenticated) {
                   await privy.logout();
                 }
-                privy.login();
+                privyLoginMethodContext.setLoginMethods([
+                  "sms",
+                  "google",
+                  "apple",
+                ]);
+                setTimeout(() => {
+                  privy.login();
+                });
               }}
             >
               Phone & Social
@@ -103,7 +112,10 @@ export function Login() {
                 if (privy.authenticated) {
                   await privy.logout();
                 }
-                privy.login();
+                privyLoginMethodContext.setLoginMethods(["wallet"]);
+                setTimeout(() => {
+                  privy.login();
+                });
               }}
             >
               <View tw="absolute left-4 top-3">

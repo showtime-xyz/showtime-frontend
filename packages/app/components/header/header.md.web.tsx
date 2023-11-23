@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, Suspense, useMemo } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  Suspense,
+  useMemo,
+  useContext,
+} from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { usePrivy } from "@privy-io/react-auth";
@@ -49,6 +56,7 @@ import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useFooter } from "app/hooks/use-footer";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
+import { PrivySetLoginMethodContext } from "app/lib/privy/privy-provider.web";
 import { Link, TextLink } from "app/navigation/link";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
@@ -235,7 +243,7 @@ const ChannelsUnreadMessages = () => {
 
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
-  const { handleSubmitWallet, loading: loginLoading } = useLogin();
+  const { loading: loginLoading } = useLogin();
   const { links, social } = useFooter();
   const isDark = useIsDarkMode();
   const router = useRouter();
@@ -314,6 +322,7 @@ export const HeaderMd = withColorScheme(() => {
     ]
   );
 
+  const privyLoginMethodContext = useContext(PrivySetLoginMethodContext);
   return (
     <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
       <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
@@ -564,7 +573,10 @@ export const HeaderMd = withColorScheme(() => {
                   if (privy.authenticated) {
                     await privy.logout();
                   }
-                  privy.login();
+                  privyLoginMethodContext.setLoginMethods(["wallet"]);
+                  setTimeout(() => {
+                    privy.login();
+                  });
                 }}
                 disabled={loginLoading}
               >
@@ -582,7 +594,14 @@ export const HeaderMd = withColorScheme(() => {
                   if (privy.authenticated) {
                     await privy.logout();
                   }
-                  privy.login();
+                  privyLoginMethodContext.setLoginMethods([
+                    "sms",
+                    "google",
+                    "apple",
+                  ]);
+                  setTimeout(() => {
+                    privy.login();
+                  });
                 }}
               >
                 <>
