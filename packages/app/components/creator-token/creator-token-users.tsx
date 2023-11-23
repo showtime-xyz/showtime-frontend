@@ -243,6 +243,7 @@ export const TopCreatorTokenListItem = ({
     ? ((item as NewCreatorTokenItem).creator_token as CreatorTokenItem)
     : (item as CreatorTokenItem);
   const lastMessage = (item as NewCreatorTokenItem)?.last_channel_message;
+  const permissions = (item as NewCreatorTokenItem)?.permissions;
   const loremText = useMemo(
     () =>
       lastMessage?.body_text_length > 0
@@ -266,7 +267,7 @@ export const TopCreatorTokenListItem = ({
 
   return (
     <PressableHover
-      tw={["flex-row py-2.5", tw].join(" ")}
+      tw={["flex flex-row items-center py-2.5", tw].join(" ")}
       onPress={() => {
         router.push(
           token.owner_profile?.username
@@ -297,7 +298,7 @@ export const TopCreatorTokenListItem = ({
         </View>
         <Avatar url={token?.owner_profile?.img_url} size={34} />
       </View>
-      <View tw="web:flex-1 ml-2 flex-row">
+      <View tw="ml-2 flex-1 flex-row items-center">
         <View tw="w-[168px] justify-center md:w-[180px]">
           <View tw="min-w-[180px] flex-row">
             <Text
@@ -343,19 +344,22 @@ export const TopCreatorTokenListItem = ({
             color={isDark ? colors.white : colors.gray[900]}
           />
         </View>
-        <View tw="ml-auto lg:ml-4">
+        <View tw="web:pr-2 ml-auto items-center lg:ml-4">
           <PlatformBuyButton
             style={{
               backgroundColor: "#08F6CC",
               height: 26,
+              marginTop: 0,
             }}
             username={token.owner_profile?.username}
           />
         </View>
       </View>
-      {!lastMessage ? null : (
+      {!lastMessage || !permissions ? null : (
         <View tw="ml-auto hidden w-full max-w-[200px] flex-row items-center justify-between lg:flex">
-          {lastMessage.is_payment_gated ? (
+          {lastMessage.sent_by?.profile.profile_id ===
+            token.owner_profile?.profile_id &&
+          !permissions.can_view_creator_messages ? (
             <View tw="select-none overflow-hidden px-2 py-0.5">
               {Platform.OS === "web" ? (
                 // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
@@ -369,7 +373,10 @@ export const TopCreatorTokenListItem = ({
                 </View>
               ) : (
                 <>
-                  <Text tw="py-1.5 text-xs  text-gray-900 dark:text-gray-100">
+                  <Text
+                    tw="py-1.5 text-xs  text-gray-900 dark:text-gray-100"
+                    numberOfLines={3}
+                  >
                     {loremText}
                   </Text>
                   <BlurView
@@ -389,6 +396,7 @@ export const TopCreatorTokenListItem = ({
               {lastMessage.body_text_length > 0 ? (
                 <Text
                   tw={"text-xs text-gray-900 dark:text-gray-100"}
+                  numberOfLines={3}
                   style={
                     Platform.OS === "web"
                       ? {
