@@ -190,7 +190,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <meta name="apple-mobile-web-app-title" content="Showtime" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#000000" />
+
         <meta
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover"
           name="viewport"
