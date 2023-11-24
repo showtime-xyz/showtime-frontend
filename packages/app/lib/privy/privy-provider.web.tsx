@@ -27,7 +27,7 @@ export const PrivySetLoginMethodContext = createContext<any>(null);
 export const PrivyProvider = ({ children }: any) => {
   const colorScheme = useIsDarkMode() ? "dark" : "light";
   const [loginMethods, setLoginMethods] = useState<any>([
-    "wallet",
+    // "wallet",
     "sms",
     "google",
     "apple",
