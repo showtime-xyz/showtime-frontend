@@ -15,6 +15,7 @@ import { useContractBalanceOfToken } from "app/hooks/creator-token/use-balance-o
 import { useContractTotalCollected } from "app/hooks/creator-token/use-contract-total-collected";
 import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
 import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
+import { useTokenEarnings } from "app/hooks/creator-token/use-token-earnings";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
 import { useWallet } from "app/hooks/use-wallet";
 import { useWalletETHBalance } from "app/hooks/use-wallet-balance";
@@ -164,19 +165,18 @@ export const CreatorTokensPanel = ({
 
   const usdcBalance = useWalletUSDCBalance();
   const ethBalance = useWalletETHBalance();
+  const totalEarnings = useTokenEarnings();
   const { fundWallet, isAvailable } = usePrivyFundWallet();
 
   if (isSelf) {
     return (
       <View>
         <DataPanel username={username} />
-        <View tw="mb-2 mt-4 rounded-xl border border-gray-200 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+
+        <View tw="mb-2 mt-2 flex-col rounded-xl border border-gray-200 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-900">
           <View tw="items-center gap-2">
             <View tw="w-full flex-row items-center justify-between">
               <View tw="flex-row items-center">
-                <Text tw="mr-2 text-gray-500 dark:text-gray-300">
-                  ETH balance
-                </Text>
                 <TextTooltip
                   side="bottom"
                   theme={isDark ? "dark" : "light"}
@@ -189,24 +189,32 @@ export const CreatorTokensPanel = ({
                   }
                   text={"Your ETH balance on\nthe Base Ethereum L2."}
                 />
+                <Text tw="ml-2 text-gray-500 dark:text-gray-300">
+                  ETH balance
+                </Text>
               </View>
+              {Platform.OS === "web" && isAvailable ? (
+                <Button
+                  onPress={() => fundWallet("eth")}
+                  style={{
+                    paddingHorizontal: 8,
+                    paddingVertical: 2,
+                    height: 22,
+                    overflow: "visible",
+                  }}
+                >
+                  <Text tw="text-[11px] font-semibold">Buy ETH</Text>
+                </Button>
+              ) : null}
               <Text tw="text-base font-bold text-gray-900 dark:text-white">
                 {ethBalance.data?.displayBalance}
               </Text>
-              {Platform.OS === "web" && isAvailable ? (
-                <Button onPress={() => fundWallet("eth")}>Buy ETH</Button>
-              ) : null}
             </View>
           </View>
-        </View>
-
-        <View tw="mb-2 mt-2 rounded-xl border border-gray-200 bg-slate-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+          <View tw="my-2 h-[1px] bg-gray-200 dark:bg-gray-800" />
           <View tw="items-center gap-2">
             <View tw="w-full flex-row items-center justify-between">
               <View tw="flex-row items-center">
-                <Text tw="mr-2 text-gray-500 dark:text-gray-300">
-                  USDC balance
-                </Text>
                 <TextTooltip
                   side="bottom"
                   theme={isDark ? "dark" : "light"}
@@ -219,9 +227,37 @@ export const CreatorTokensPanel = ({
                   }
                   text={"Your USDC balance on\nthe Base Ethereum L2."}
                 />
+                <Text tw="ml-2 text-gray-500 dark:text-gray-300">
+                  USDC balance
+                </Text>
               </View>
               <Text tw="text-base font-bold text-gray-900 dark:text-white">
                 {getCurrencyPrice("USD", usdcBalance.data?.displayBalance)}
+              </Text>
+            </View>
+          </View>
+          <View tw="my-2 h-[1px] bg-gray-200 dark:bg-gray-800" />
+          <View tw="items-center gap-2">
+            <View tw="w-full flex-row items-center justify-between">
+              <View tw="flex-row items-center">
+                <TextTooltip
+                  side="bottom"
+                  theme={isDark ? "dark" : "light"}
+                  triggerElement={
+                    <InformationCircle
+                      width={16}
+                      height={16}
+                      color={isDark ? colors.gray[300] : colors.gray[500]}
+                    />
+                  }
+                  text={"Total earnings from\nall trades of your token."}
+                />
+                <Text tw="ml-2 text-gray-500 dark:text-gray-300">
+                  Token earnings
+                </Text>
+              </View>
+              <Text tw="text-base font-bold text-gray-900 dark:text-white">
+                {getCurrencyPrice("USD", totalEarnings)}
               </Text>
             </View>
           </View>
