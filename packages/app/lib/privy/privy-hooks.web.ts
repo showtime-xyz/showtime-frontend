@@ -22,5 +22,8 @@ export const usePrivyFundWallet = () => {
     });
   };
 
-  return fundWallet;
+  return {
+    fundWallet,
+    isAvailable: wallets?.[0]?.walletClientType === "privy",
+  };
 };

@@ -164,7 +164,7 @@ export const CreatorTokensPanel = ({
 
   const usdcBalance = useWalletUSDCBalance();
   const ethBalance = useWalletETHBalance();
-  const fundWallet = usePrivyFundWallet();
+  const { fundWallet, isAvailable } = usePrivyFundWallet();
 
   if (isSelf) {
     return (
@@ -193,7 +193,7 @@ export const CreatorTokensPanel = ({
               <Text tw="text-base font-bold text-gray-900 dark:text-white">
                 {ethBalance.data?.displayBalance}
               </Text>
-              {Platform.OS === "web" ? (
+              {Platform.OS === "web" && isAvailable ? (
                 <Button onPress={() => fundWallet("eth")}>Buy ETH</Button>
               ) : null}
             </View>
