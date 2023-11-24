@@ -206,9 +206,13 @@ export const CreatorTokensPanel = ({
                   <Text tw="text-[11px] font-semibold">Buy ETH</Text>
                 </Button>
               ) : null}
-              <Text tw="text-base font-bold text-gray-900 dark:text-white">
-                {ethBalance.data?.displayBalance}
-              </Text>
+              {(Number(ethBalance.data?.displayBalance) > 0 &&
+                Platform.OS === "web") ||
+              Platform.OS !== "web" ? (
+                <Text tw="text-base font-bold text-gray-900 dark:text-white">
+                  {ethBalance.data?.displayBalance}
+                </Text>
+              ) : null}
             </View>
           </View>
           <View tw="my-2 h-[1px] bg-gray-200 dark:bg-gray-800" />
