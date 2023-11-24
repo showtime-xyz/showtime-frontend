@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import {
   Platform,
   useWindowDimensions,
@@ -267,12 +273,18 @@ export const EditProfile = () => {
   );
   const accounts = useListSocialAccounts();
 
-  const instagramProviderId = accounts.data?.find?.(
-    (v) => v.provider === "instagram"
-  )?.provider_account_id;
-  const twitterProviderId = accounts.data?.find?.(
-    (v) => v.provider === "twitter"
-  )?.provider_account_id;
+  const [instagramProviderId, twitterProviderId] = useMemo(() => {
+    let data: any = [];
+    accounts.data?.forEach((v) => {
+      if (v.provider === "instagram") {
+        data[0] = v.provider_account_id;
+      }
+      if (v.provider === "twitter") {
+        data[1] = v.provider_account_id;
+      }
+    });
+    return data;
+  }, [accounts.data]);
 
   return (
     <>
@@ -651,45 +663,56 @@ const ConnectButton = ({
   const { trigger: disconnectInstagram, isMutating: isDisconnectingInstagram } =
     useDisconnectInstagram();
   const Alert = useAlert();
+
+  const handlePress = useCallback(async () => {
+    if (isConnected) {
+      Alert.alert(
+        "Disconnect " + type,
+        "Are you sure you want to disconnect this social account?",
+        [
+          {
+            text: "Cancel",
+          },
+          {
+            text: "Disconnect",
+            style: "destructive",
+            onPress: async () => {
+              if (type === "twitter") {
+                await disconnectTwitter({
+                  providerId,
+                });
+              } else if (type === "instagram") {
+                await disconnectInstagram({
+                  providerId,
+                  provider: "instagram",
+                });
+              }
+            },
+          },
+        ]
+      );
+    } else {
+      try {
+        await trigger({
+          type,
+        });
+      } catch {
+        // do nothing
+      }
+    }
+  }, [
+    Alert,
+    disconnectInstagram,
+    disconnectTwitter,
+    isConnected,
+    providerId,
+    trigger,
+    type,
+  ]);
+
   return (
     <PressableHover
-      onPress={async () => {
-        if (isConnected) {
-          Alert.alert(
-            "Disconnect " + type,
-            "Are you sure you want to disconnect this social account?",
-            [
-              {
-                text: "Cancel",
-              },
-              {
-                text: "Disconnect",
-                style: "destructive",
-                onPress: async () => {
-                  if (type === "twitter") {
-                    await disconnectTwitter({
-                      providerId,
-                    });
-                  } else if (type === "instagram") {
-                    await disconnectInstagram({
-                      providerId,
-                      provider: "instagram",
-                    });
-                  }
-                },
-              },
-            ]
-          );
-        } else {
-          try {
-            await trigger({
-              type,
-            });
-          } catch {
-            // do nothing
-          }
-        }
-      }}
+      onPress={handlePress}
       disabled={
         isMutating || isDisconnectingInstagram || isDisconnectingTwitter
       }
