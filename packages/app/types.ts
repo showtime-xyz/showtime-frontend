@@ -185,6 +185,7 @@ export interface Profile {
     address: `0x${string}`;
     crossmint_id: string | null;
     id: number;
+    total_earnings: string;
   };
 }
 
