@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { useSWRConfig } from "swr";
 
+import { useAlert } from "@showtime-xyz/universal.alert";
 import { BottomSheetModalProvider } from "@showtime-xyz/universal.bottom-sheet";
 import { Button } from "@showtime-xyz/universal.button";
 import { ErrorText, Fieldset } from "@showtime-xyz/universal.fieldset";
@@ -34,6 +35,9 @@ import { BottomSheetScrollView } from "app/components/bottom-sheet-scroll-view";
 import { getLocalFileURI, Preview } from "app/components/preview";
 import { USER_PROFILE_KEY } from "app/hooks/api-hooks";
 import { useAddMagicSocialAccount } from "app/hooks/use-add-magic-social-account";
+import { useDisconnectInstagram } from "app/hooks/use-disconnect-instagram";
+import { useDisconnectTwitter } from "app/hooks/use-disconnect-twitter";
+import { useListSocialAccounts } from "app/hooks/use-list-social-accounts";
 import { useMatchMutate } from "app/hooks/use-match-mutate";
 import { useUser } from "app/hooks/use-user";
 import { useValidateUsername } from "app/hooks/use-validate-username";
@@ -261,6 +265,14 @@ export const EditProfile = () => {
     () => (width < 768 ? width / 3 : 160),
     [width]
   );
+  const accounts = useListSocialAccounts();
+
+  const instagramProviderId = accounts.data?.find?.(
+    (v) => v.provider === "instagram"
+  )?.provider_account_id;
+  const twitterProviderId = accounts.data?.find?.(
+    (v) => v.provider === "twitter"
+  )?.provider_account_id;
 
   return (
     <>
@@ -531,6 +543,7 @@ export const EditProfile = () => {
                     </View>
                     <ConnectButton
                       type="twitter"
+                      providerId={twitterProviderId}
                       isConnected={
                         user?.data?.profile?.social_login_connections?.twitter
                       }
@@ -548,6 +561,7 @@ export const EditProfile = () => {
                     </View>
                     <ConnectButton
                       type="instagram"
+                      providerId={instagramProviderId}
                       isConnected={
                         user?.data?.profile?.social_login_connections?.instagram
                       }
@@ -623,25 +637,62 @@ const ConnectButton = ({
   type,
   isConnected,
   handle,
+  providerId,
 }: {
   type: "apple" | "google" | "instagram" | "twitter";
   isConnected?: boolean;
   handle?: string | null;
+  providerId: any;
 }) => {
   const isDark = useIsDarkMode();
   const { trigger, isMutating } = useAddMagicSocialAccount();
+  const { trigger: disconnectTwitter, isMutating: isDisconnectingTwitter } =
+    useDisconnectTwitter();
+  const { trigger: disconnectInstagram, isMutating: isDisconnectingInstagram } =
+    useDisconnectInstagram();
+  const Alert = useAlert();
   return (
     <PressableHover
       onPress={async () => {
-        try {
-          await trigger({
-            type,
-          });
-        } catch {
-          // do nothing
+        if (isConnected) {
+          Alert.alert(
+            "Disconnect " + type,
+            "Are you sure you want to disconnect this social account?",
+            [
+              {
+                text: "Cancel",
+              },
+              {
+                text: "Disconnect",
+                style: "destructive",
+                onPress: async () => {
+                  if (type === "twitter") {
+                    await disconnectTwitter({
+                      providerId,
+                    });
+                  } else if (type === "instagram") {
+                    await disconnectInstagram({
+                      providerId,
+                      provider: "instagram",
+                    });
+                  }
+                },
+              },
+            ]
+          );
+        } else {
+          try {
+            await trigger({
+              type,
+            });
+          } catch {
+            // do nothing
+          }
         }
       }}
-      disabled={isConnected || isMutating}
+      disabled={
+        isMutating || isDisconnectingInstagram || isDisconnectingTwitter
+      }
       tw={"items-center justify-center"}
     >
       <View
@@ -667,7 +718,7 @@ const ConnectButton = ({
                 : "text-black dark:text-white"
             }`}
           >
-            {isMutating
+            {isMutating || isDisconnectingInstagram || isDisconnectingTwitter
               ? "Loading..."
               : isConnected
               ? `@${handle}` ?? "Connected"
