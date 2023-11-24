@@ -39,7 +39,7 @@ export const useCreatorTokenSell = () => {
   const { getMaxFeePerGasAndPriorityPrice } = useMaxGasPrices();
   const user = useContext(UserContext);
   const { loginPromise } = useLogInPromise();
-  const fundWallet = usePrivyFundWallet();
+  const { fundWallet } = usePrivyFundWallet();
   const state = useSWRMutation(
     "sellToken",
     async (
