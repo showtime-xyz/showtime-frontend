@@ -13,6 +13,7 @@ export const useContractBalanceOfToken = (params: {
   ownerAddress?: any;
   contractAddress?: any;
 }) => {
+  console.log("balance of address ", params);
   const res = useSWR(
     getContractBalanceOfTokenKey({
       ownerAddress: params.ownerAddress,
