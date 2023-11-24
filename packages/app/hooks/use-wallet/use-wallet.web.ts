@@ -13,7 +13,6 @@ const useWallet = (): UseWalletReturnType => {
   const privy = usePrivy();
   const wallets = useWallets();
   const latestConnectedWallet = useLatestValueRef(wallets.wallets[0]);
-  console.log("connected wallets ", wallets);
   useConnectWallet({
     onSuccess: (wallet) => {
       console.log("wallet connect success", wallet);
@@ -59,7 +58,6 @@ const useWallet = (): UseWalletReturnType => {
     };
   }, [connected, disconnect, privy, latestConnectedWallet, wallets.wallets]);
 
-  console.log("wallet address ", result.address);
   return result;
 };
 
