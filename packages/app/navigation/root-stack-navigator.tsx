@@ -7,6 +7,8 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Messages } from "app/components/creator-channels/messages";
+import UploadComposer from "app/components/upload/composer";
+import UploadPreview from "app/components/upload/preview";
 import { useHandleNotification } from "app/hooks/use-handle-notification";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
@@ -277,6 +279,20 @@ export function RootStackNavigator() {
           }}
         />
       </Stack.Group>
+      <Stack.Screen
+        name="uploadPreview"
+        component={UploadPreview}
+        options={{
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        name="uploadComposer"
+        component={UploadComposer}
+        options={{
+          presentation: "modal",
+        }}
+      />
     </Stack.Navigator>
   );
 }
