@@ -70,7 +70,7 @@ const FeedItem = ({ video }: any) => {
             `linear-gradient(to top,rgba(0,0,0,.4) 0,rgba(0,0,0,0) 160px),linear-gradient(to bottom,rgba(0,0,0,.4) 0,rgba(0,0,0,0) 96px);`
           )}
         >
-          <View style={{ rowGap: 10, flex: 3 }}>
+          <View style={{ rowGap: 12, flex: 3 }}>
             <View tw="flex-row items-center">
               <Avatar size={32} />
               <Text tw="ml-2 mr-4 text-white">lilbubble</Text>
@@ -90,13 +90,13 @@ const FeedItem = ({ video }: any) => {
               ever since the 1500s, when an unknown
             </Text>
           </View>
-          <View tw="flex-1 items-end" style={{ rowGap: 12 }}>
-            <Pressable tw="items-center p-1" style={{ rowGap: 4 }}>
+          <View tw="flex-1 items-end" style={{ rowGap: 16 }}>
+            <Pressable tw="items-center" style={{ rowGap: 4 }}>
               <ChannelLocked color="white" width={31} height={28} />
               <Text tw="text-white">139</Text>
             </Pressable>
-            <Pressable tw="items-center p-1">
-              <Share color="white" width={31} height={28} />
+            <Pressable tw="items-center">
+              <Share color="white" width={28} height={28} />
             </Pressable>
           </View>
         </LinearGradient>
