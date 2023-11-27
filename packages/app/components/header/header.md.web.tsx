@@ -66,6 +66,7 @@ import {
 import { useChannelsUnreadMessages } from "../creator-channels/hooks/use-channels-unread-messages";
 import { useLogin } from "../login/use-login";
 import { withColorScheme } from "../memo-with-theme";
+import { CreateTabBarIcon } from "../upload/upload-tab-bar-icon";
 
 const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -357,6 +358,8 @@ export const HeaderMd = withColorScheme(() => {
               />
             );
           })}
+          <CreateTabBarIcon />
+
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
               <View
