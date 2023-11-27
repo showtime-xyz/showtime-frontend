@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import type { ContentProps } from "universal-tooltip";
@@ -14,7 +14,6 @@ import {
   HomeFilled,
   Hot,
   HotFilled,
-  Plus,
   Showtime,
   User,
 } from "@showtime-xyz/universal.icon";
@@ -31,7 +30,7 @@ import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
-type TabBarIconProps = {
+export type TabBarIconProps = {
   color?: string;
   focused?: boolean;
   tw?: TW;
