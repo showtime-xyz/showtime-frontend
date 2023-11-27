@@ -9,7 +9,6 @@ import { SafeAreaProvider } from "@showtime-xyz/universal.safe-area";
 import { SnackbarProvider } from "@showtime-xyz/universal.snackbar";
 
 import { ReactionProvider } from "app/components/reaction/reaction-provider";
-import { growthbook } from "app/lib/growthbook";
 import { PrivyAuth, PrivyProvider } from "app/lib/privy/privy-provider";
 import { NavigationProvider } from "app/navigation";
 import { AuthProvider } from "app/providers/auth-provider";
