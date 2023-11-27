@@ -85,6 +85,16 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen
+          name="uploadPreview"
+          component={UploadPreview}
+          options={{
+            headerShown: false,
+            fullScreenGestureEnabled: true,
+            customAnimationOnGesture: true,
+          }}
+        />
+        <Stack.Screen name="uploadComposer" component={UploadComposer} />
+        <Stack.Screen
           name="profile"
           component={ProfileScreen}
           getId={({ params }) => params?.username}
@@ -279,20 +289,6 @@ export function RootStackNavigator() {
           }}
         />
       </Stack.Group>
-      <Stack.Screen
-        name="uploadPreview"
-        component={UploadPreview}
-        options={{
-          presentation: "modal",
-        }}
-      />
-      <Stack.Screen
-        name="uploadComposer"
-        component={UploadComposer}
-        options={{
-          presentation: "modal",
-        }}
-      />
     </Stack.Navigator>
   );
 }
