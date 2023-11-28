@@ -10,7 +10,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 interface VideoThumbnailProps {
-  videoUri: string;
+  videoUri?: string;
   timeFrame?: number;
 }
 
@@ -68,6 +68,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
   );
 
   const generateThumbnail = useCallback(async () => {
+    if (!videoUri) return;
     if (Platform.OS === "web") {
       try {
         const thumbnailUrl = await generateThumbnailForWeb(videoUri, timeFrame);
@@ -90,7 +91,9 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
   }, [generateThumbnailForWeb, timeFrame, videoUri]);
 
   useEffect(() => {
-    generateThumbnail();
+    if (videoUri) {
+      generateThumbnail();
+    }
   }, [videoUri, timeFrame, generateThumbnail]);
 
   return (
@@ -101,7 +104,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
         height: height * 0.2,
       }}
     >
-      {thumbnailUri && !hasError ? (
+      {videoUri && thumbnailUri && !hasError ? (
         <Image
           source={thumbnailUri}
           alt="Video Thumbnail"
@@ -114,7 +117,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
             overflow: "hidden",
           }}
         />
-      ) : hasError ? (
+      ) : hasError || !videoUri ? (
         <Text tw="text-white">No Preview</Text>
       ) : (
         <Spinner />
