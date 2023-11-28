@@ -1,11 +1,11 @@
-import { Platform, StyleSheet } from "react-native";
+import { memo } from "react";
+import { StyleSheet, Platform } from "react-native";
 
 import { ResizeMode } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { ChannelLocked, Share } from "@showtime-xyz/universal.icon";
-import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import {
   useSafeAreaFrame,
@@ -14,48 +14,34 @@ import {
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
-
 import { CollapsibleText } from "design-system/collapsible-text/collapsible-text";
 import { Video } from "design-system/video";
 
-import { videos } from "../../../apps/video-data";
-
-const ViewabilityInfiniteScrollList =
-  withViewabilityInfiniteScrollList(InfiniteScrollList);
-
-export const VideoFeed = () => {
-  const size = useSafeAreaFrame();
-
-  return (
-    <View tw="h-screen w-screen">
-      <ViewabilityInfiniteScrollList
-        useWindowScroll={false}
-        data={videos}
-        estimatedItemSize={200}
-        pagingEnabled
-        snapToOffsets={[256].concat(
-          videos.map((_, i) => i * size.height + 256)
-        )}
-        decelerationRate="fast"
-        renderItem={({ item, index }) =>
-          index === 0 ? (
-            <View tw="h-[256px] w-full bg-gray-100" />
-          ) : (
-            <FeedItem video={item} />
-          )
-        }
-      />
-    </View>
-  );
-};
-
-const FeedItem = ({ video }: any) => {
+export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
   const safeAreaInsets = useSafeAreaInsets();
+  const size = useSafeAreaFrame();
+  const videoDimensions =
+    Platform.OS === "web"
+      ? {
+          width: "100%",
+          height: "100vh",
+        }
+      : {
+          width: size.width,
+          height: size.height,
+        };
 
   return (
     <View tw="w-full">
-      <FeedVideo video={video} />
+      <Video
+        source={{ uri: video.sources[0] }}
+        // @ts-ignore
+        style={videoDimensions}
+        // @ts-ignore
+        videoStyle={videoDimensions}
+        useNativeControls={false}
+        resizeMode={ResizeMode.COVER}
+      />
       <View tw="z-1 absolute bottom-0 w-full">
         <LinearGradient
           pointerEvents="none"
@@ -66,13 +52,9 @@ const FeedItem = ({ video }: any) => {
           colors={["rgba(12,12,12,0)", "rgba(12,12,12,.8)"]}
         />
         <View
+          tw="flex-1 flex-row items-center justify-between px-4"
           style={{
-            flex: 1,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
             paddingBottom: safeAreaInsets.bottom + 16,
-            paddingHorizontal: 16,
           }}
         >
           <View style={{ rowGap: 12, flex: 3 }}>
@@ -105,31 +87,4 @@ const FeedItem = ({ video }: any) => {
       </View>
     </View>
   );
-};
-
-const FeedVideo = ({ video }: any) => {
-  const size = useSafeAreaFrame();
-
-  const videoDimensions =
-    Platform.OS === "web"
-      ? {
-          width: "100%",
-          height: "100vh",
-        }
-      : {
-          width: size.width,
-          height: size.height,
-        };
-
-  return (
-    <Video
-      source={{ uri: video.sources[0] }}
-      // @ts-ignore
-      style={videoDimensions}
-      // @ts-ignore
-      videoStyle={videoDimensions}
-      useNativeControls={false}
-      resizeMode={ResizeMode.COVER}
-    />
-  );
-};
+});
