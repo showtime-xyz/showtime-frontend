@@ -51,7 +51,7 @@ const UploadComposer = () => {
             <TextInput
               tw="h-28 w-full rounded-3xl bg-gray-200 p-4 text-base text-black  dark:bg-[#1B1B1B] dark:text-white"
               placeholder="Write a caption..."
-              placeholderTextColor={isDark ? "#9CA3AF" : "#9F9F9F"}
+              placeholderTextColor={isDark ? "#737373" : "#9F9F9F"}
               textAlignVertical="top"
               textAlign="left"
               multiline
