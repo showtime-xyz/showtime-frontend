@@ -7,6 +7,7 @@ import { useSnapshot } from "valtio";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowTop } from "@showtime-xyz/universal.icon";
 import { ModalHeader } from "@showtime-xyz/universal.modal";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
@@ -19,7 +20,7 @@ const PlatformSafeView = Platform.OS === "web" ? View : SafeAreaView;
 
 const UploadComposer = () => {
   const router = useRouter();
-  const { videoPath } = useSnapshot(videoUploadStore);
+  const { videoPath, signUpload } = useSnapshot(videoUploadStore);
   const isDark = useIsDarkMode();
   const close = useCallback(() => {
     router.pop();
@@ -27,19 +28,21 @@ const UploadComposer = () => {
 
   const renderEndComponent = useCallback(() => {
     return (
-      <View
-        tw="absolute right-3 flex-row items-center justify-center rounded-full bg-[#FF3370] px-8 py-2"
-        style={{
-          opacity: videoPath?.uri ? 1 : 0.5,
-        }}
-      >
-        <Text tw="font-bold text-white">Post</Text>
-        <View tw="ml-1">
-          <ArrowTop width={18} height={18} color={"white"} stroke={"white"} />
+      <Pressable onPress={signUpload}>
+        <View
+          tw="absolute right-3 flex-row items-center justify-center rounded-full bg-[#FF3370] px-8 py-2"
+          style={{
+            opacity: videoPath?.uri ? 1 : 0.5,
+          }}
+        >
+          <Text tw="font-bold text-white">Post</Text>
+          <View tw="ml-1">
+            <ArrowTop width={18} height={18} color={"white"} stroke={"white"} />
+          </View>
         </View>
-      </View>
+      </Pressable>
     );
-  }, [videoPath?.uri]);
+  }, [videoPath?.uri, signUpload]);
 
   return (
     <PlatformSafeView>
