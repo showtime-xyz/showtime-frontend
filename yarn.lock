@@ -7499,6 +7499,7 @@ __metadata:
     expo-status-bar: ~1.7.1
     expo-system-ui: ~2.6.0
     expo-updates: ~0.18.17
+    expo-video-thumbnails: ~7.4.0
     expo-web-browser: ~12.5.0
     fastestsmallesttextencoderdecoder: ^1.0.22
     https-browserify: ~1.0.0
@@ -17175,6 +17176,15 @@ __metadata:
   bin:
     expo-updates: bin/cli.js
   checksum: 68d667f786eefdf69d8bd4ca84358158e01ee33c531b3f4d873594368f82287ef277f2a0cbd69ee46518707d4a9b6a16867b3cf9b9977d1d6797b2e221b2fa48
+  languageName: node
+  linkType: hard
+
+"expo-video-thumbnails@npm:~7.4.0":
+  version: 7.4.0
+  resolution: "expo-video-thumbnails@npm:7.4.0"
+  peerDependencies:
+    expo: "*"
+  checksum: bc51388822ce49386d4fd8e3a7dd8eb9b0b19060acc3c0fbb0b61dce6a002299e24844920e585d850772992812554c2095ce7d8761496ee85176eb756ca1e36b
   languageName: node
   linkType: hard
 

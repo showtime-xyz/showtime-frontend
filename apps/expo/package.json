@@ -122,6 +122,7 @@
     "expo-status-bar": "~1.7.1",
     "expo-system-ui": "~2.6.0",
     "expo-updates": "~0.18.17",
+    "expo-video-thumbnails": "~7.4.0",
     "expo-web-browser": "~12.5.0",
     "fastestsmallesttextencoderdecoder": "^1.0.22",
     "https-browserify": "~1.0.0",
