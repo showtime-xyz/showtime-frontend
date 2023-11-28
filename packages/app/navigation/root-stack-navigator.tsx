@@ -88,7 +88,7 @@ export function RootStackNavigator() {
           name="uploadComposer"
           component={UploadComposer}
           options={{
-            headerShown: true,
+            headerShown: false,
           }}
         />
         <Stack.Screen
