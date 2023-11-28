@@ -2,7 +2,7 @@ import { Platform } from "react-native";
 
 import { useSnapshot } from "valtio";
 
-import { Video } from "@showtime-xyz/universal.icon";
+import { Gallery, Image, Video } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
@@ -52,24 +52,27 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
           color={color ?? "black"}
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent loop sideOffset={8}>
+      <DropdownMenuContent side="bottom" align="start" sideOffset={10} loop>
         <DropdownMenuItem
           key="b_library"
           onSelect={async () => {
-            await chooseVideo();
-            redirectToComposerScreen();
+            const success = await chooseVideo();
+            if (success) redirectToComposerScreen();
           }}
         >
-          <MenuItemIcon Icon={() => null} ios={{ name: "folder" }} />
           <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Choose Video
           </DropdownMenuItemTitle>
+          <MenuItemIcon
+            Icon={() => <Image height={20} width={20} color={"black"} />}
+            ios={{ name: "folder" }}
+          />
         </DropdownMenuItem>
         <DropdownMenuItem
           key="c_camera"
           onSelect={async () => {
-            await takeVideo();
-            redirectToComposerScreen();
+            const success = await takeVideo();
+            if (success) redirectToComposerScreen();
           }}
         >
           <MenuItemIcon Icon={() => null} ios={{ name: "camera" }} />
@@ -80,17 +83,17 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
         <DropdownMenuItem
           key="a_roll"
           onSelect={async () => {
-            await pickVideo();
-            redirectToComposerScreen();
+            const success = await pickVideo();
+            if (success) redirectToComposerScreen();
           }}
         >
-          <MenuItemIcon
-            Icon={() => null}
-            ios={{ name: "photo.on.rectangle" }}
-          />
           <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Camera Roll
           </DropdownMenuItemTitle>
+          <MenuItemIcon
+            Icon={() => <Gallery height={20} width={20} color={"black"} />}
+            ios={{ name: "photo.on.rectangle" }}
+          />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>
