@@ -34,7 +34,7 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
           key="b_library"
           onSelect={async () => {
             await chooseVideo();
-            //router.push("/upload/preview");
+            router.push("/upload/composer");
           }}
         >
           <MenuItemIcon Icon={() => null} ios={{ name: "folder" }} />
@@ -42,13 +42,25 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
             Choose Video
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
-        <DropdownMenuItem key="c_camera" onSelect={takeVideo}>
+        <DropdownMenuItem
+          key="c_camera"
+          onSelect={async () => {
+            await takeVideo();
+            router.push("/upload/composer");
+          }}
+        >
           <MenuItemIcon Icon={() => null} ios={{ name: "camera" }} />
           <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
             Take Video
           </DropdownMenuItemTitle>
         </DropdownMenuItem>
-        <DropdownMenuItem key="a_roll" onSelect={pickVideo}>
+        <DropdownMenuItem
+          key="a_roll"
+          onSelect={async () => {
+            await pickVideo();
+            router.push("/upload/composer");
+          }}
+        >
           <MenuItemIcon
             Icon={() => null}
             ios={{ name: "photo.on.rectangle" }}
