@@ -48,15 +48,18 @@ const UploadComposer = () => {
         <View tw="flex-1 items-center justify-start p-4">
           <VideoThumbnail videoUri={videoPath?.uri} timeFrame={100} />
           <View tw="mt-8 w-full">
-            <TextInput
-              tw="h-28 w-full rounded-3xl bg-gray-200 p-4 text-base text-black  dark:bg-[#1B1B1B] dark:text-white"
-              placeholder="Write a caption..."
-              placeholderTextColor={isDark ? "#737373" : "#9F9F9F"}
-              textAlignVertical="top"
-              textAlign="left"
-              multiline
-              maxLength={280}
-            />
+            <View tw="h-28 w-full overflow-hidden rounded-3xl bg-gray-200 p-4 text-base  text-black dark:bg-[#1B1B1B] dark:text-white">
+              <TextInput
+                tw="h-24 w-full text-base text-black dark:text-white"
+                placeholder="Write a caption..."
+                placeholderTextColor={isDark ? "#737373" : "#9F9F9F"}
+                textAlignVertical="top"
+                textAlign="left"
+                multiline
+                maxLength={280}
+                style={{ lineHeight: 20 }}
+              />
+            </View>
           </View>
         </View>
       </View>
