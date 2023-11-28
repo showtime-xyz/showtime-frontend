@@ -80,8 +80,7 @@ export const BuyCreatorToken = () => {
   const [username] = useParam("username");
   const [selectedActionParam] = useParam("selectedAction");
   const [tokenAmount, setTokenAmount] = useState(1);
-  const { wallets } = useWallets();
-  const isPrivyWalletConnected = wallets?.[0]?.walletClientType === "privy";
+  const isPrivyWalletConnected = wallet?.walletClientType === "privy";
 
   const { data: profileData } = useUserProfile({ address: username });
   const sellToken = useCreatorTokenSell();

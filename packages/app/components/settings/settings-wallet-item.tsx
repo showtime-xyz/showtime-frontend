@@ -22,6 +22,7 @@ import { View } from "@showtime-xyz/universal.view";
 import { useSetPrimaryWallet } from "app/hooks/api/use-set-primary-wallet";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
+import { useWallet } from "app/hooks/use-wallet";
 import { WalletAddressesV2 } from "app/types";
 import { formatAddressShort } from "app/utilities";
 
@@ -222,6 +223,11 @@ export const SettingsWalletItem = (props: Props) => {
           </View>
           <View tw="flex flex-row items-center justify-center">
             <Hidden until="md">
+              {isConnectedAddress ? (
+                <PressableHover tw="mr-4 h-6 flex-row items-center justify-center self-start rounded-3xl border border-blue-500 bg-blue-500/20 px-2 md:h-8">
+                  <Text tw="text-xs text-blue-600"> Active</Text>
+                </PressableHover>
+              ) : null}
               <MakePrimaryBtn
                 isPrimary={isPrimary}
                 onPress={() => setPrimaryWallet(wallet.address)}

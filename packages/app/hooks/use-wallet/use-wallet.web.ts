@@ -11,8 +11,11 @@ import { ConnectResult, UseWalletReturnType } from "./types";
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const privy = usePrivy();
-  const wallets = useWallets();
-  const latestConnectedWallet = useLatestValueRef(wallets.wallets[0]);
+  const { wallets: connectedWallets } = useWallets();
+  const wallet = connectedWallets.find(
+    (wallet) => wallet.walletClientType === "privy"
+  );
+  const latestConnectedWallet = useLatestValueRef(wallet);
   useConnectWallet({
     onSuccess: (wallet) => {
       console.log("wallet connect success", wallet);
@@ -23,11 +26,11 @@ const useWallet = (): UseWalletReturnType => {
     },
   });
 
-  const connected = !!wallets.wallets[0];
+  const connected = !!wallet;
 
   const disconnect = useStableCallback(() => {
     localStorage.removeItem("walletconnect");
-    wallets.wallets.forEach((wallet) => wallet.disconnect());
+    connectedWallets.forEach((wallet) => wallet.disconnect());
   });
 
   const result = useMemo(() => {
@@ -40,23 +43,25 @@ const useWallet = (): UseWalletReturnType => {
       },
       getWalletClient: async () => {
         await latestConnectedWallet.current?.switchChain(baseChain.id);
-        const ethereumProvider =
-          await wallets.wallets[0]?.getEthereumProvider();
-        const walletClient = await createWalletClient({
-          account: latestConnectedWallet.current?.address as any,
-          chain: baseChain,
-          transport: custom(ethereumProvider),
-        });
-        return walletClient;
+        const ethereumProvider = await wallet?.getEthereumProvider();
+        if (ethereumProvider) {
+          const walletClient = await createWalletClient({
+            account: latestConnectedWallet.current?.address as any,
+            chain: baseChain,
+            transport: custom(ethereumProvider),
+          });
+          return walletClient;
+        }
       },
       connected,
-      address: wallets.wallets[0]?.address,
+      address: wallet?.address,
       disconnect,
+      walletClientType: wallet?.walletClientType,
       signMessageAsync: ({ message }: { message: string }) => {
-        return latestConnectedWallet.current.sign(message);
+        return latestConnectedWallet.current?.sign(message);
       },
     };
-  }, [connected, disconnect, privy, latestConnectedWallet, wallets.wallets]);
+  }, [connected, wallet, disconnect, privy, latestConnectedWallet]);
 
   return result;
 };

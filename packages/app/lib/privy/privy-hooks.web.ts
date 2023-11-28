@@ -1,5 +1,7 @@
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 
+import { useWallet } from "app/hooks/use-wallet";
+
 export const useLoginWithSMS = () => {
   return {
     loginWithCode: () => {},
@@ -13,17 +15,20 @@ export const useExportPrivyWallet = () => {
 };
 
 export const usePrivyFundWallet = () => {
-  const { wallets } = useWallets();
+  const wallets = useWallets();
+  const wallet = useWallet();
   const fundWallet = (currencyCode: "eth" | "usdc") => {
-    return wallets[0].fund({
-      config: {
-        currencyCode: currencyCode === "usdc" ? "USDC_BASE" : "ETH_BASE",
-      },
-    });
+    return wallets.wallets
+      .find((w) => w.walletClientType === "privy")
+      ?.fund({
+        config: {
+          currencyCode: currencyCode === "usdc" ? "USDC_BASE" : "ETH_BASE",
+        },
+      });
   };
 
   return {
     fundWallet,
-    isAvailable: wallets?.[0]?.walletClientType === "privy",
+    isAvailable: wallet?.walletClientType === "privy",
   };
 };

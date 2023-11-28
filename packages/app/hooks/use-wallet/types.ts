@@ -10,17 +10,19 @@ export type ConnectResult = Promise<
        */
       connector?: GetAccountResult["connector"];
       isReconnected?: boolean;
+      walletClientType?: string;
     }
   | undefined
 >;
 export type UseWalletReturnType = {
-  address?: `0x${string}`;
+  address?: string;
   disconnect: () => ConnectResult;
   connected?: boolean;
   connect: () => ConnectResult;
   name?: string;
-  signMessageAsync: (args: SignMessageArgs) => Promise<string | undefined>;
+  signMessageAsync: (args: SignMessageArgs) => Promise<string> | undefined;
   isMagicWallet?: boolean;
   walletClient?: WalletClient | null;
-  getWalletClient: () => WalletClient | undefined | null;
+  getWalletClient: () => any;
+  walletClientType?: string;
 };

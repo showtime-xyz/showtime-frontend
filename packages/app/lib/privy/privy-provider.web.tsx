@@ -1,11 +1,4 @@
-import {
-  forwardRef,
-  useRef,
-  useEffect,
-  useState,
-  useContext,
-  createContext,
-} from "react";
+import { forwardRef, useRef, useEffect, useState, createContext } from "react";
 
 import {
   PrivyProvider as PrivyProviderImpl,
@@ -14,20 +7,30 @@ import {
   PrivyInterface,
   useLogin,
 } from "@privy-io/react-auth";
+import * as Clipboard from "expo-clipboard";
 
+import { Button } from "@showtime-xyz/universal.button";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { Copy, Ethereum } from "@showtime-xyz/universal.icon";
+import { ModalSheet } from "@showtime-xyz/universal.modal-sheet";
+import { Text } from "@showtime-xyz/universal.text";
+import { View } from "@showtime-xyz/universal.view";
 
 import { useAuth } from "app/hooks/auth/use-auth";
 import { baseChain } from "app/hooks/creator-token/utils";
 import { useStableCallback } from "app/hooks/use-stable-callback";
 import { useWallet } from "app/hooks/use-wallet";
 
+import { toast } from "design-system/toast";
+
+import { usePrivyFundWallet } from "./privy-hooks";
+
 export const PrivySetLoginMethodContext = createContext<any>(null);
 
 export const PrivyProvider = ({ children }: any) => {
   const colorScheme = useIsDarkMode() ? "dark" : "light";
   const [loginMethods, setLoginMethods] = useState<any>([
-    // "wallet",
+    "wallet",
     "sms",
     "google",
     "apple",
@@ -67,11 +70,14 @@ export const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
   const { authenticationStatus, setAuthenticationStatus, login, logout } =
     useAuth();
   const wallet = useWallet();
+  const { fundWallet } = usePrivyFundWallet();
   let prevAuthStatus = useRef<any>();
+  const [showWalletCreated, setShowWalletCreated] = useState(false);
 
   const createWalletAndLogin = useStableCallback(async (user: PrivyUser) => {
     try {
       await privy.createWallet();
+      setShowWalletCreated(true);
     } catch (e) {
       console.log("wallet is already created by privy!");
     }
@@ -100,6 +106,7 @@ export const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
   });
 
   const disconnect = wallet.disconnect;
+  const isDark = useIsDarkMode();
 
   // TODO: remove this when we have a better way to handle this. Providers hierarchy is not ideal.
   useEffect(() => {
@@ -120,7 +127,71 @@ export const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
 
   privyRef.current = privy;
 
-  return props.children;
+  return (
+    <>
+      {props.children}
+      {showWalletCreated ? (
+        <ModalSheet
+          snapPoints={[240]}
+          title="You just created a Showtime wallet!"
+          visible={showWalletCreated}
+          close={() => setShowWalletCreated(false)}
+          onClose={() => setShowWalletCreated(false)}
+        >
+          <View tw="p-4">
+            <Text tw="text-base">
+              Your wallet is linked to your sign in method. Transfer or buy ETH
+              (on the Base network only) to get started. You can manage your
+              wallets in settings.
+            </Text>
+            <View tw="mt-4 w-full flex-row justify-between">
+              <Button
+                size="regular"
+                tw="flex-1"
+                onPress={() => {
+                  fundWallet("eth");
+                }}
+              >
+                <Ethereum
+                  color={isDark ? "black" : "white"}
+                  height={20}
+                  width={20}
+                />
+                {"  "}
+                Buy ETH
+              </Button>
+              <Button
+                variant="text"
+                size="regular"
+                tw="flex-1"
+                onPress={async () => {
+                  if (wallet.address) {
+                    await Clipboard.setStringAsync(wallet.address);
+                    toast.success("Copied!");
+                  }
+                }}
+              >
+                Copy wallet{"  "}
+                <Copy
+                  color={isDark ? "white" : "black"}
+                  height={20}
+                  width={20}
+                />
+              </Button>
+            </View>
+            <Button
+              tw="mt-3 flex-1"
+              variant="outlined"
+              size="regular"
+              onPress={() => setShowWalletCreated(false)}
+            >
+              Continue
+            </Button>
+          </View>
+        </ModalSheet>
+      ) : null}
+    </>
+  );
 });
 
 export const usePrivyLogout = () => {
