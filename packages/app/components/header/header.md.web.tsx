@@ -16,9 +16,7 @@ import {
   Home,
   Search as SearchIcon,
   ShowtimeBrand,
-  Hot,
   User,
-  Plus,
   PhonePortraitOutline,
   CreatorChannel,
   Settings,
@@ -50,7 +48,6 @@ import { useFooter } from "app/hooks/use-footer";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import {
   DropdownMenuContent,
@@ -358,7 +355,6 @@ export const HeaderMd = withColorScheme(() => {
               />
             );
           })}
-          <CreateTabBarIcon />
 
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
@@ -591,7 +587,8 @@ export const HeaderMd = withColorScheme(() => {
               </Button>
             </>
           )}
-
+          <Divider tw="my-5" />
+          <CreateTabBarIcon />
           <Divider tw="my-5" />
           <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
             <View tw="flex-row items-center justify-center">
