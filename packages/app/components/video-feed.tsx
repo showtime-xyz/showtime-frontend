@@ -1,6 +1,5 @@
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
-import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { ResizeMode } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -17,6 +16,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 
+import { CollapsibleText } from "design-system/collapsible-text/collapsible-text";
 import { Video } from "design-system/video";
 
 import { videos } from "../../../apps/video-data";
@@ -58,6 +58,14 @@ const FeedItem = ({ video }: any) => {
       <FeedVideo video={video} />
       <View tw="z-1 absolute bottom-0 w-full">
         <LinearGradient
+          pointerEvents="none"
+          style={StyleSheet.absoluteFill}
+          start={[1, 0]}
+          end={[1, 1]}
+          locations={[0.05, 0.8]}
+          colors={["rgba(12,12,12,0)", "rgba(12,12,12,.8)"]}
+        />
+        <View
           style={{
             flex: 1,
             flexDirection: "row",
@@ -66,9 +74,6 @@ const FeedItem = ({ video }: any) => {
             paddingBottom: safeAreaInsets.bottom + 16,
             paddingHorizontal: 16,
           }}
-          {...fromCSS(
-            `linear-gradient(to top,rgba(0,0,0,.4) 0,rgba(0,0,0,0) 160px),linear-gradient(to bottom,rgba(0,0,0,.4) 0,rgba(0,0,0,0) 96px);`
-          )}
         >
           <View style={{ rowGap: 12, flex: 3 }}>
             <View tw="flex-row items-center">
@@ -81,14 +86,11 @@ const FeedItem = ({ video }: any) => {
                 <Text>Buy $21.67</Text>
               </Pressable>
             </View>
-            <Text
-              tw="overflow-hidden whitespace-nowrap text-white"
-              numberOfLines={1}
-            >
+            <CollapsibleText tw="text-white" initialNumberOfLines={1}>
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry's standard dummy text
               ever since the 1500s, when an unknown
-            </Text>
+            </CollapsibleText>
           </View>
           <View tw="flex-1 items-end" style={{ rowGap: 16 }}>
             <Pressable tw="items-center" style={{ rowGap: 4 }}>
@@ -99,7 +101,7 @@ const FeedItem = ({ video }: any) => {
               <Share color="white" width={28} height={28} />
             </Pressable>
           </View>
-        </LinearGradient>
+        </View>
       </View>
     </View>
   );
