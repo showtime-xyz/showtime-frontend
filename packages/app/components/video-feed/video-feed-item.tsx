@@ -5,7 +5,12 @@ import { ResizeMode } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
-import { ChannelLocked, Share } from "@showtime-xyz/universal.icon";
+import {
+  ChannelLocked,
+  Muted,
+  Share,
+  Unmuted,
+} from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
 import {
   useSafeAreaFrame,
@@ -13,6 +18,8 @@ import {
 } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
+
+import { useMuted } from "app/providers/mute-provider";
 
 import { CollapsibleText } from "design-system/collapsible-text/collapsible-text";
 import { Video } from "design-system/video";
@@ -54,7 +61,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
         <View
           tw="flex-1 flex-row items-center justify-between px-4"
           style={{
-            paddingBottom: safeAreaInsets.bottom + 16,
+            paddingBottom: safeAreaInsets.bottom + 32,
           }}
         >
           <View style={{ rowGap: 12, flex: 3 }}>
@@ -65,7 +72,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
                 tw="rounded-4xl items-center justify-center px-4"
                 style={{ backgroundColor: "#08F6CC", height: 30 }}
               >
-                <Text>Buy $21.67</Text>
+                <Text tw="text-xs font-semibold">Buy $21.67</Text>
               </Pressable>
             </View>
             <CollapsibleText tw="text-white" initialNumberOfLines={1}>
@@ -75,6 +82,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
             </CollapsibleText>
           </View>
           <View tw="flex-1 items-end" style={{ rowGap: 16 }}>
+            <MuteButton />
             <Pressable tw="items-center" style={{ rowGap: 4 }}>
               <ChannelLocked color="white" width={31} height={28} />
               <Text tw="text-white">139</Text>
@@ -88,3 +96,17 @@ export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
     </View>
   );
 });
+
+const MuteButton = () => {
+  const [muted, setMuted] = useMuted();
+  if (Platform.OS !== "web") return null;
+  return (
+    <Pressable onPress={() => setMuted(!muted)}>
+      {muted ? (
+        <Muted color="white" width={28} height={28} />
+      ) : (
+        <Unmuted color="white" width={28} height={28} />
+      )}
+    </Pressable>
+  );
+};

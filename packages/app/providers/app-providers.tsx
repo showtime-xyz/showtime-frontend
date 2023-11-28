@@ -21,6 +21,7 @@ import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provide
 
 import { SharedElementProvider } from "design-system/shared-element/SharedElementContext";
 
+import { MuteProvider } from "./mute-provider";
 import { WalletProvider } from "./wallet-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
@@ -42,7 +43,9 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                 <AuthProvider>
                                   <UserProvider>
                                     <BottomSheetModalProvider>
-                                      <PrivyAuth>{children}</PrivyAuth>
+                                      <MuteProvider>
+                                        <PrivyAuth>{children}</PrivyAuth>
+                                      </MuteProvider>
                                     </BottomSheetModalProvider>
                                   </UserProvider>
                                 </AuthProvider>

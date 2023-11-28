@@ -17,6 +17,8 @@ import { MagicProvider } from "app/providers/magic-provider.web";
 import { SWRProvider } from "app/providers/swr-provider";
 import { UserProvider } from "app/providers/user-provider";
 
+import { MuteProvider } from "./mute-provider";
+
 const AlertProvider = dynamic(() => import("@showtime-xyz/universal.alert"), {
   ssr: false,
 });
@@ -37,7 +39,9 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                           <UserProvider>
                             <BottomSheetModalProvider>
                               <NavigationProvider>
-                                <PrivyAuth>{children}</PrivyAuth>
+                                <MuteProvider>
+                                  <PrivyAuth>{children}</PrivyAuth>
+                                </MuteProvider>
                               </NavigationProvider>
                             </BottomSheetModalProvider>
                           </UserProvider>
