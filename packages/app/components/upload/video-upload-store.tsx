@@ -2,6 +2,8 @@ import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { proxy } from "valtio";
 
+import { axios } from "app/lib/axios";
+
 interface VideoUploadStoreState {
   videoPath:
     | ImagePicker.ImagePickerAsset
@@ -10,6 +12,7 @@ interface VideoUploadStoreState {
   takeVideo: () => Promise<boolean>;
   pickVideo: () => Promise<boolean>;
   chooseVideo: () => Promise<boolean>;
+  signUpload: () => Promise<boolean>;
 }
 
 export const videoUploadStore = proxy<VideoUploadStoreState>({
@@ -56,6 +59,20 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
     }
 
     videoUploadStore.videoPath = video.assets[0];
+    return true;
+  },
+  signUpload: async (description?: string) => {
+    if (videoUploadStore.videoPath === null) {
+      return false;
+    }
+
+    const result = axios({
+      method: "POST",
+      url: "/v1/posts/create",
+    });
+
+    console.log(result);
+
     return true;
   },
 });
