@@ -8,4 +8,5 @@ export const UploadComposerScreen = withModalScreen(UploadComposer, {
   matchingQueryParam: "uploadComposerModal",
   disableBackdropPress: true,
   snapPoints: ["100%"],
+  headerShown: false,
 });
