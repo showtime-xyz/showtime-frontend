@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import { useSnapshot } from "valtio";
 
 import { Video } from "@showtime-xyz/universal.icon";
@@ -19,6 +21,27 @@ import { videoUploadStore } from "./video-upload-store";
 export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
   const { takeVideo, pickVideo, chooseVideo } = useSnapshot(videoUploadStore);
   const router = useRouter();
+
+  const redirectToComposerScreen = () => {
+    const as = "/upload/composer";
+    router.push(
+      Platform.select({
+        native: as,
+        web: {
+          pathname: router.pathname,
+          query: {
+            ...router.query,
+            uploadComposerModal: true,
+          },
+        } as any,
+      }),
+      Platform.select({ native: as, web: router.asPath }),
+      {
+        shallow: true,
+      }
+    );
+  };
+
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
@@ -34,7 +57,7 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
           key="b_library"
           onSelect={async () => {
             await chooseVideo();
-            router.push("/upload/composer");
+            redirectToComposerScreen();
           }}
         >
           <MenuItemIcon Icon={() => null} ios={{ name: "folder" }} />
@@ -46,7 +69,7 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
           key="c_camera"
           onSelect={async () => {
             await takeVideo();
-            router.push("/upload/composer");
+            redirectToComposerScreen();
           }}
         >
           <MenuItemIcon Icon={() => null} ios={{ name: "camera" }} />
@@ -58,7 +81,7 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
           key="a_roll"
           onSelect={async () => {
             await pickVideo();
-            router.push("/upload/composer");
+            redirectToComposerScreen();
           }}
         >
           <MenuItemIcon
