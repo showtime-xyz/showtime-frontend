@@ -26,6 +26,7 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
     if (video.canceled) {
       return false;
     }
+
     videoUploadStore.videoPath = video.assets[0];
     return true;
   },
@@ -48,12 +49,11 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
   },
   chooseVideo: async () => {
     const video = await DocumentPicker.getDocumentAsync({
-      type: ["video/mp4", "video/quicktime", "video/x-m4v"],
+      type: ["video/mp4", "video/mov", "video/quicktime", "video/x-m4v"],
     });
     if (video.canceled) {
       return false;
     }
-    console.log(video);
 
     videoUploadStore.videoPath = video.assets[0];
     return true;
