@@ -85,15 +85,12 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen
-          name="uploadPreview"
-          component={UploadPreview}
+          name="uploadComposer"
+          component={UploadComposer}
           options={{
-            headerShown: false,
-            fullScreenGestureEnabled: true,
-            customAnimationOnGesture: true,
+            headerShown: true,
           }}
         />
-        <Stack.Screen name="uploadComposer" component={UploadComposer} />
         <Stack.Screen
           name="profile"
           component={ProfileScreen}
