@@ -48,6 +48,7 @@ import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { UploadComposerScreen } from "app/screens/upload-composer/upload-composer";
 import { prevRouteRef } from "app/utilities";
 
 import { Toaster } from "design-system/toast";
@@ -243,6 +244,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorTokenCollectorsScreen />
         <CreatorTokensShareModalScreen />
         <CreatorTokenSocialShareScreen />
+        <UploadComposerScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />
