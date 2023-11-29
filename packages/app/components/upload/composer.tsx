@@ -1,10 +1,10 @@
-import { useCallback } from "react";
+import { useCallback, useState, useLayoutEffect } from "react";
 import { Platform } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSnapshot } from "valtio";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useEffectOnce, useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowTop } from "@showtime-xyz/universal.icon";
 import { ModalHeader } from "@showtime-xyz/universal.modal";
 import { Pressable } from "@showtime-xyz/universal.pressable";
@@ -13,6 +13,8 @@ import { Text } from "@showtime-xyz/universal.text";
 import { TextInput } from "@showtime-xyz/universal.text-input";
 import { View } from "@showtime-xyz/universal.view";
 
+import { toast } from "design-system/toast";
+
 import VideoThumbnail from "./video-thumbnail";
 import { videoUploadStore } from "./video-upload-store";
 
@@ -20,15 +22,31 @@ const PlatformSafeView = Platform.OS === "web" ? View : SafeAreaView;
 
 const UploadComposer = () => {
   const router = useRouter();
+  const [previewImg, setPreviewImg] = useState<string | undefined>(undefined);
   const { videoPath, signUpload } = useSnapshot(videoUploadStore);
   const isDark = useIsDarkMode();
   const close = useCallback(() => {
     router.pop();
   }, [router]);
 
+  // we need to delay this because otherwise it will block the UI
+  useLayoutEffect(() => {
+    requestAnimationFrame(() => {
+      setPreviewImg(videoPath?.uri);
+    });
+  }, [videoPath?.uri]);
+
   const renderEndComponent = useCallback(() => {
     return (
-      <Pressable onPress={signUpload}>
+      <Pressable
+        onPress={async () => {
+          close();
+          toast.success("Uploading video...", {
+            duration: 5000,
+          });
+          signUpload({ data: { description: "asd" }, router });
+        }}
+      >
         <View
           tw="absolute right-3 flex-row items-center justify-center rounded-full bg-[#FF3370] px-8 py-2"
           style={{
@@ -42,14 +60,14 @@ const UploadComposer = () => {
         </View>
       </Pressable>
     );
-  }, [videoPath?.uri, signUpload]);
+  }, [videoPath?.uri, close, signUpload, router]);
 
   return (
     <PlatformSafeView>
       <View>
         <ModalHeader onClose={close} endContentComponent={renderEndComponent} />
         <View tw="flex-1 items-center justify-start p-4">
-          <VideoThumbnail videoUri={videoPath?.uri} timeFrame={100} />
+          <VideoThumbnail videoUri={previewImg} timeFrame={100} />
           <View tw="mt-8 w-full">
             <View tw="h-28 w-full overflow-hidden rounded-3xl bg-gray-200 p-4 text-base  text-black dark:bg-[#1B1B1B] dark:text-white">
               <TextInput
