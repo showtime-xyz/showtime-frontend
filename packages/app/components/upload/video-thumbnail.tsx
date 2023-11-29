@@ -9,10 +9,7 @@ import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-interface VideoThumbnailProps {
-  videoUri?: string;
-  timeFrame?: number;
-}
+import { VideoThumbnailProps } from "./types";
 
 const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
   videoUri,
@@ -37,17 +34,47 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
         });
 
         video.addEventListener("error", (e) => {
-          console.log(e.message);
+          setHasError(true);
         });
 
         video.addEventListener("seeked", () => {
           try {
             const canvas = document.createElement("canvas");
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            const maxDimension = 1000;
+
+            // Calculate aspect ratio of the video
+            const videoAspectRatio = video.videoWidth / video.videoHeight;
+            let canvasWidth, canvasHeight;
+
+            // Determine canvas dimensions based on aspect ratio
+            if (video.videoWidth > video.videoHeight) {
+              // Video is wider than tall
+              canvasWidth = Math.min(video.videoWidth, maxDimension);
+              canvasHeight = canvasWidth / videoAspectRatio;
+            } else {
+              // Video is taller than wide
+              canvasHeight = Math.min(video.videoHeight, maxDimension);
+              canvasWidth = canvasHeight * videoAspectRatio;
+            }
+
+            // Set canvas dimensions
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+
             const ctx = canvas.getContext("2d");
             if (ctx) {
-              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              // Draw the image on the canvas (this will cover the canvas)
+              ctx.drawImage(
+                video,
+                0,
+                0,
+                video.videoWidth,
+                video.videoHeight,
+                0,
+                0,
+                canvasWidth,
+                canvasHeight
+              );
               const imageUrl = canvas.toDataURL();
               setHasError(false);
               resolve(imageUrl);
@@ -102,22 +129,25 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
       style={{
         aspectRatio: 11 / 16,
         height: height * 0.2,
+        width: 180,
       }}
     >
-      {videoUri && thumbnailUri && !hasError ? (
+      {!hasError && videoUri && thumbnailUri ? (
         <Image
           source={thumbnailUri}
           alt="Video Thumbnail"
           height={height * 0.2}
-          width={150}
+          width={180}
+          blurhash="L5H2EC=PM+yV0g-mq.wG9c010JIp"
           contentFit="cover"
           style={{
-            aspectRatio: 11 / 16,
             backgroundColor: "black",
             overflow: "hidden",
+            width: "100%",
+            height: "100%",
           }}
         />
-      ) : hasError || !videoUri ? (
+      ) : hasError ? (
         <Text tw="text-white">No Preview</Text>
       ) : (
         <Spinner />
