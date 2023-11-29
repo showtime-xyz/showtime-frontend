@@ -148,10 +148,7 @@ export const signUpload = async (payload?: SignUploadPayload) => {
         videoUploadStore.isUploading = false;
         globalThis?.gc?.();
       },
-      onShouldRetry: function (err, retryAttempt) {
-        if (retryAttempt === 1) {
-          toast.error("Upload failed. Retrying...");
-        }
+      onShouldRetry: function (err) {
         const status = (err as tus.DetailedError).originalResponse
           ? (err as tus.DetailedError)?.originalResponse?.getStatus()
           : 0;
