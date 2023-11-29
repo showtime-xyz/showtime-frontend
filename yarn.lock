@@ -7448,6 +7448,7 @@ __metadata:
     "@walletconnect/core": 2.9.1
     "@walletconnect/react-native-compat": ^2.9.1
     "@walletconnect/universal-provider": 2.9.1
+    amazon-ivs-react-native-player: ^1.4.1
     app: "*"
     array-to-image: ^1.0.0
     assert: ^2.1.0
@@ -7470,7 +7471,6 @@ __metadata:
     events: ^3.3.0
     expo: ^49.0.19
     expo-application: ~5.4.0
-    expo-av: ~13.6.0
     expo-blur: ~12.6.0
     expo-build-properties: ~0.8.3
     expo-clipboard: ~4.5.0
@@ -7630,6 +7630,7 @@ __metadata:
     eslint-config-next: 13.4.13
     eslint-config-prettier: ^8.8.0
     eslint-plugin-diff: ^2.0.1
+    expo-av: ~13.6.0
     export-from-json: ^1.7.3
     fortmatic: ^2.4.0
     magic-sdk: ^13.1.0
@@ -11138,6 +11139,16 @@ __metadata:
     require-from-string: ^2.0.2
     uri-js: ^4.2.2
   checksum: 4dc13714e316e67537c8b31bc063f99a1d9d9a497eb4bbd55191ac0dcd5e4985bbb71570352ad6f1e76684fb6d790928f96ba3b2d4fd6e10024be9612fe3f001
+  languageName: node
+  linkType: hard
+
+"amazon-ivs-react-native-player@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "amazon-ivs-react-native-player@npm:1.4.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 4d7e82229c075a99debe474896d1d112351bb918e1c608adcf3c127257ca5c748f88c5a67a61e7b63d70502182449fe7e3c7e2e08c42aa91023931042a03581e
   languageName: node
   linkType: hard
 

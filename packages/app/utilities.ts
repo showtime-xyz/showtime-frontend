@@ -8,7 +8,6 @@ import {
   formatDuration,
   intervalToDuration,
 } from "date-fns";
-import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { locale } from "expo-localization";
 
@@ -858,17 +857,6 @@ export const getFormatDistanceStrictToWeek = (time?: string) => {
   }
 
   return `${Math.ceil(diffDays / 7)}w`;
-};
-
-export const contentFitToresizeMode = (resizeMode: ImageResizeMode) => {
-  switch (resizeMode) {
-    case "cover":
-      return ResizeMode.COVER;
-    case "contain":
-      return ResizeMode.CONTAIN;
-    default:
-      return ResizeMode.STRETCH;
-  }
 };
 
 export const cleanUserTextInput = (text: string) => {

@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { StyleSheet, Platform } from "react-native";
 
-import { ResizeMode } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -22,7 +21,8 @@ import { View } from "@showtime-xyz/universal.view";
 import { useMuted } from "app/providers/mute-provider";
 
 import { CollapsibleText } from "design-system/collapsible-text/collapsible-text";
-import { Video } from "design-system/video";
+
+import { FeedVideo } from "./video-feed-video";
 
 export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
   const safeAreaInsets = useSafeAreaInsets();
@@ -40,14 +40,10 @@ export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
 
   return (
     <View tw="w-full">
-      <Video
-        source={{ uri: video.sources[0] }}
-        // @ts-ignore
-        style={videoDimensions}
-        // @ts-ignore
-        videoStyle={videoDimensions}
-        useNativeControls={false}
-        resizeMode={ResizeMode.COVER}
+      <FeedVideo
+        uri={video.sources[0]}
+        height={videoDimensions.height}
+        width={videoDimensions.width}
       />
       <View tw="z-1 absolute bottom-0 w-full">
         <LinearGradient

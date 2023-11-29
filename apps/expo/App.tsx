@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { AppState, LogBox } from "react-native";
 
 import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
-import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
 import { Image } from "expo-image";
 import * as SplashScreen from "expo-splash-screen";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
@@ -34,12 +33,6 @@ configureWalletMobileSDK({
   hostURL: new URL("https://go.cb-w.com/wsegue"),
   hostPackageName: "org.toshi",
 });
-
-Audio.setAudioModeAsync({
-  playsInSilentModeIOS: true,
-  interruptionModeIOS: InterruptionModeIOS.DoNotMix,
-  interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
-}).catch(() => {});
 
 LogBox.ignoreLogs([
   "Constants.deviceYearClass",
