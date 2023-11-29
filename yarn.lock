@@ -7483,7 +7483,7 @@ __metadata:
     expo-haptics: ~12.6.0
     expo-image: ~1.8.1
     expo-image-manipulator: ~11.3.0
-    expo-image-picker: ~14.5.0
+    expo-image-picker: ~14.6.0
     expo-insights: ~0.4.0
     expo-linear-gradient: ~12.5.0
     expo-linking: ~5.0.2
@@ -16897,12 +16897,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image-loader@npm:~4.4.0":
-  version: 4.4.0
-  resolution: "expo-image-loader@npm:4.4.0"
+"expo-image-loader@npm:~4.5.0":
+  version: 4.5.0
+  resolution: "expo-image-loader@npm:4.5.0"
   peerDependencies:
     expo: "*"
-  checksum: e872e45a807cd867c5a8e8fc5665de33de5d467ea533222037b09b70268d0166012769bfcd340ab8922dbf826a3e4f0498ff73973ad62f21134764b4bc8b1f5a
+  checksum: 017667e71f30a1285f178266af2729736badf0b6d36a4f525fc4838848c6b0788abb2bcd3cdda19264719c8108a91910af25994b670a04534ef3102d857f4730
   languageName: node
   linkType: hard
 
@@ -16917,14 +16917,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image-picker@npm:~14.5.0":
-  version: 14.5.0
-  resolution: "expo-image-picker@npm:14.5.0"
+"expo-image-picker@npm:~14.6.0":
+  version: 14.6.0
+  resolution: "expo-image-picker@npm:14.6.0"
   dependencies:
-    expo-image-loader: ~4.4.0
+    expo-image-loader: ~4.5.0
   peerDependencies:
     expo: "*"
-  checksum: 94854776cdfd40dba408c34b6b351e3f2b0e047851f50ed6da5bb6ccbcd3bc7a387459aba9cc274b725a801ced0b280570d4251de88e2ec89d92c03a3f32dd97
+  checksum: fa879923e7fa4cd184b01e2039d7fb1c74f4c6293ac71476d37121e5dafeefdbf594f3b1f1425cf154c46f1f4839fa4d4bb43d3ee527d2c5d2745893b67a45cb
   languageName: node
   linkType: hard
 
