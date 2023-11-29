@@ -1,21 +1,22 @@
 import { useMemo, useRef } from "react";
 
-import { usePrivy, useWallets, useConnectWallet } from "@privy-io/react-auth";
+import { usePrivy, useConnectWallet, useWallets } from "@privy-io/react-auth";
 import { createWalletClient, custom } from "viem";
 
 import { baseChain } from "../creator-token/utils";
 import { useLatestValueRef } from "../use-latest-value-ref";
+import { usePrivyWallet } from "../use-privy-wallet";
 import { useStableCallback } from "../use-stable-callback";
 import { ConnectResult, UseWalletReturnType } from "./types";
 
 const useWallet = (): UseWalletReturnType => {
   const walletConnectedPromiseResolveCallback = useRef<any>(null);
   const privy = usePrivy();
-  const wallets = useWallets();
-  const latestConnectedWallet = useLatestValueRef(wallets.wallets[0]);
+  const privyWallet = usePrivyWallet();
+  const latestConnectedWallet = useLatestValueRef(privyWallet);
+  const privyWallets = useWallets();
   useConnectWallet({
     onSuccess: (wallet) => {
-      console.log("wallet connect success", wallet);
       if (walletConnectedPromiseResolveCallback.current) {
         walletConnectedPromiseResolveCallback.current(wallet);
         walletConnectedPromiseResolveCallback.current = null;
@@ -23,11 +24,11 @@ const useWallet = (): UseWalletReturnType => {
     },
   });
 
-  const connected = !!wallets.wallets[0];
+  const connected = privyWallet;
 
   const disconnect = useStableCallback(() => {
     localStorage.removeItem("walletconnect");
-    wallets.wallets.forEach((wallet) => wallet.disconnect());
+    privyWallets.wallets.forEach((wallet) => wallet.disconnect());
   });
 
   const result = useMemo(() => {
@@ -39,10 +40,13 @@ const useWallet = (): UseWalletReturnType => {
         });
       },
       getWalletClient: async () => {
+        // @ts-ignore - Privy native embedded wallet types are not compatible with web
         await latestConnectedWallet.current?.switchChain(baseChain.id);
         const ethereumProvider =
-          await wallets.wallets[0]?.getEthereumProvider();
+          // @ts-ignore - Privy native embedded wallet types are not compatible with web
+          await latestConnectedWallet.current?.getEthereumProvider();
         const walletClient = await createWalletClient({
+          // @ts-ignore - Privy native embedded wallet types are not compatible with web
           account: latestConnectedWallet.current?.address as any,
           chain: baseChain,
           transport: custom(ethereumProvider),
@@ -50,14 +54,17 @@ const useWallet = (): UseWalletReturnType => {
         return walletClient;
       },
       connected,
-      address: wallets.wallets[0]?.address,
+      // @ts-ignore - Privy native embedded wallet types are not compatible with web
+      address: privyWallet?.address,
       disconnect,
       signMessageAsync: ({ message }: { message: string }) => {
+        // @ts-ignore - Privy native embedded wallet types are not compatible with web
         return latestConnectedWallet.current.sign(message);
       },
     };
-  }, [connected, disconnect, privy, latestConnectedWallet, wallets.wallets]);
+  }, [connected, disconnect, privy, latestConnectedWallet, privyWallet]);
 
+  // @ts-ignore - Privy native embedded wallet types are not compatible with web
   return result;
 };
 

@@ -27,11 +27,20 @@ export const PrivySetLoginMethodContext = createContext<any>(null);
 export const PrivyProvider = ({ children }: any) => {
   const colorScheme = useIsDarkMode() ? "dark" : "light";
   const [loginMethods, setLoginMethods] = useState<any>([
-    // "wallet",
+    "wallet",
     "sms",
     "google",
     "apple",
   ] as const);
+
+  const handleSetLoginMethods = (params: Array<string>) => {
+    setLoginMethods(params);
+    if (params.includes("wallet")) {
+      localStorage.setItem("loginMethod", "wallet");
+    } else {
+      localStorage.setItem("loginMethod", "social");
+    }
+  };
 
   return (
     <PrivyProviderImpl
@@ -51,7 +60,9 @@ export const PrivyProvider = ({ children }: any) => {
         },
       }}
     >
-      <PrivySetLoginMethodContext.Provider value={{ setLoginMethods }}>
+      <PrivySetLoginMethodContext.Provider
+        value={{ setLoginMethods: handleSetLoginMethods }}
+      >
         {children}
       </PrivySetLoginMethodContext.Provider>
     </PrivyProviderImpl>
@@ -67,6 +78,7 @@ export const PrivyAuth = forwardRef(function PrivyAuth(props: any, ref) {
   const { authenticationStatus, setAuthenticationStatus, login, logout } =
     useAuth();
   const wallet = useWallet();
+
   let prevAuthStatus = useRef<any>();
 
   const createWalletAndLogin = useStableCallback(async (user: PrivyUser) => {

@@ -38,7 +38,7 @@ export const CreatorTokensExplanation = () => {
           <Text tw="text-sm font-bold text-gray-900 dark:text-gray-50">
             Earn every trade.{" "}
           </Text>
-          Each trade, you earn a 7% fee and Showtime earns a 3% fee. This
+          Each trade, creators earn a 7% fee and Showtime earns a 3% fee. This
           rewards you for engaging with their collectors.
         </Text>
       </View>
