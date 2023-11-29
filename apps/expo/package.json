@@ -137,7 +137,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
-    "react-native": "0.72.3",
+    "react-native": "0.72.7",
     "react-native-avoid-softinput": "^4.0.2",
     "react-native-bignumber": "^0.2.2",
     "react-native-blob-jsi-helper": "^0.3.1",

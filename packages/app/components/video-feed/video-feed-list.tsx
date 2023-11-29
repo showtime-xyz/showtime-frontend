@@ -14,7 +14,7 @@ export const VideoFeedList = () => {
   const size = useSafeAreaFrame();
 
   return (
-    <View style={{ flex: 1 }}>
+    <View tw="web:h-screen web:w-screen ios:flex-[1] android:flex-[1]">
       <ViewabilityInfiniteScrollList
         useWindowScroll={false}
         data={videos}

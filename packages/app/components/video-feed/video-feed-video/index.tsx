@@ -56,7 +56,6 @@ export const FeedVideo = (props: VideoProps) => {
 
   return (
     <>
-      <Text tw="absolute text-white">{id}</Text>
       <IVSPlayer
         //  @ts-ignore
         style={{ width, height }}
