@@ -1,9 +1,10 @@
+import { useCallback } from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { useSnapshot } from "valtio";
 
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { Create, Gallery, Image, Video } from "@showtime-xyz/universal.icon";
+import { Close, Create, Gallery, Image } from "@showtime-xyz/universal.icon";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
@@ -23,13 +24,14 @@ import { breakpoints } from "design-system/theme";
 import { videoUploadStore } from "./video-upload-store";
 
 export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
-  const { takeVideo, pickVideo, chooseVideo } = useSnapshot(videoUploadStore);
+  const { takeVideo, pickVideo, chooseVideo, uploadProgress, isUploading } =
+    useSnapshot(videoUploadStore);
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
   const isDark = useIsDarkMode();
 
-  const redirectToComposerScreen = () => {
+  const redirectToComposerScreen = useCallback(() => {
     const as = "/upload/composer";
     router.push(
       Platform.select({
@@ -47,12 +49,12 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
         shallow: true,
       }
     );
-  };
+  }, [router]);
 
   return (
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
-        <View tw="cursor-pointer flex-row items-center justify-center text-center">
+        <View tw="cursor-pointer flex-col items-center justify-center text-center md:flex-row">
           <Create
             style={{ zIndex: 1 }}
             width={34}
@@ -60,10 +62,21 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
             color={color ?? "black"}
             isDark={isDark}
           />
-          {isMdWidth && (
-            <View tw="ml-2">
+          {isMdWidth ? (
+            <View tw="ml-2 gap-1">
               <Text tw="font-bold">Create</Text>
+              {isUploading && (
+                <Text tw="text-xs text-gray-500 dark:text-gray-400">
+                  {uploadProgress}%
+                </Text>
+              )}
             </View>
+          ) : (
+            isUploading && (
+              <Text tw="text-xs text-gray-500 dark:text-gray-200">
+                {uploadProgress}%
+              </Text>
+            )
           )}
         </View>
       </DropdownMenuTrigger>
@@ -73,48 +86,70 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
         sideOffset={10}
         loop
       >
-        <DropdownMenuItem
-          key="b_library"
-          onSelect={async () => {
-            const success = await chooseVideo();
-            if (success) redirectToComposerScreen();
-          }}
-        >
-          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-            Choose Video
-          </DropdownMenuItemTitle>
-          <MenuItemIcon
-            Icon={() => <Image height={20} width={20} color={"black"} />}
-            ios={{ name: "folder" }}
-          />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          key="c_camera"
-          onSelect={async () => {
-            const success = await takeVideo();
-            if (success) redirectToComposerScreen();
-          }}
-        >
-          <MenuItemIcon Icon={() => null} ios={{ name: "camera" }} />
-          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-            Take Video
-          </DropdownMenuItemTitle>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          key="a_roll"
-          onSelect={async () => {
-            const success = await pickVideo();
-            if (success) redirectToComposerScreen();
-          }}
-        >
-          <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-            Camera Roll
-          </DropdownMenuItemTitle>
-          <MenuItemIcon
-            Icon={() => <Gallery height={20} width={20} color={"black"} />}
-            ios={{ name: "photo.on.rectangle" }}
-          />
-        </DropdownMenuItem>
+        {isUploading ? (
+          <DropdownMenuItem
+            key="b_library"
+            onSelect={async () => {
+              videoUploadStore.uploadInstance.abort();
+              videoUploadStore.uploadProgress = 0;
+              videoUploadStore.isUploading = false;
+            }}
+            destructive
+          >
+            <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+              Abort upload
+            </DropdownMenuItemTitle>
+            <MenuItemIcon
+              Icon={() => <Close height={20} width={20} color={"black"} />}
+              ios={{ name: "arrowshape.bounce.right" }}
+            />
+          </DropdownMenuItem>
+        ) : (
+          <>
+            <DropdownMenuItem
+              key="b_library"
+              onSelect={async () => {
+                const success = await chooseVideo();
+                if (success) redirectToComposerScreen();
+              }}
+            >
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                Choose Video
+              </DropdownMenuItemTitle>
+              <MenuItemIcon
+                Icon={() => <Image height={20} width={20} color={"black"} />}
+                ios={{ name: "folder" }}
+              />
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              key="c_camera"
+              onSelect={async () => {
+                const success = await takeVideo();
+                if (success) redirectToComposerScreen();
+              }}
+            >
+              <MenuItemIcon Icon={() => null} ios={{ name: "camera" }} />
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                Take Video
+              </DropdownMenuItemTitle>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              key="a_roll"
+              onSelect={async () => {
+                const success = await pickVideo();
+                if (success) redirectToComposerScreen();
+              }}
+            >
+              <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                Camera Roll
+              </DropdownMenuItemTitle>
+              <MenuItemIcon
+                Icon={() => <Gallery height={20} width={20} color={"black"} />}
+                ios={{ name: "photo.on.rectangle" }}
+              />
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenuRoot>
   );
