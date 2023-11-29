@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Linking } from "react-native";
 
 import { CrossmintPayButton } from "@crossmint/client-sdk-react-ui";
-import { useWallets } from "@privy-io/react-auth";
 import { createParam } from "solito";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
@@ -28,6 +27,7 @@ import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creat
 import { useCreatorTokenPriceToSellNext } from "app/hooks/creator-token/use-creator-token-price-to-sell-next";
 import { useCreatorTokenSell } from "app/hooks/creator-token/use-creator-token-sell";
 import { useWalletUSDCBalance } from "app/hooks/creator-token/use-wallet-usdc-balance";
+import { usePrivyWallet } from "app/hooks/use-privy-wallet";
 import { useRedirectToCreatorTokensShare } from "app/hooks/use-redirect-to-creator-token-share-screen";
 import { useUser } from "app/hooks/use-user";
 import { useWallet } from "app/hooks/use-wallet";
@@ -80,8 +80,9 @@ export const BuyCreatorToken = () => {
   const [username] = useParam("username");
   const [selectedActionParam] = useParam("selectedAction");
   const [tokenAmount, setTokenAmount] = useState(1);
-  const { wallets } = useWallets();
-  const isPrivyWalletConnected = wallets?.[0]?.walletClientType === "privy";
+  const privyWallet = usePrivyWallet();
+  // @ts-ignore Privy native types are not compatible with web types
+  const isPrivyWalletConnected = privyWallet.walletClientType === "privy";
 
   const { data: profileData } = useUserProfile({ address: username });
   const sellToken = useCreatorTokenSell();

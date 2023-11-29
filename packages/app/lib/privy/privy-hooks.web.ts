@@ -1,4 +1,6 @@
-import { usePrivy, useWallets } from "@privy-io/react-auth";
+import { usePrivy } from "@privy-io/react-auth";
+
+import { usePrivyWallet } from "app/hooks/use-privy-wallet";
 
 export const useLoginWithSMS = () => {
   return {
@@ -13,9 +15,10 @@ export const useExportPrivyWallet = () => {
 };
 
 export const usePrivyFundWallet = () => {
-  const { wallets } = useWallets();
+  const wallet = usePrivyWallet();
   const fundWallet = (currencyCode: "eth" | "usdc") => {
-    return wallets[0].fund({
+    // @ts-ignore Privy native types are not compatible with web types
+    return wallet.fund({
       config: {
         currencyCode: currencyCode === "usdc" ? "USDC_BASE" : "ETH_BASE",
       },
@@ -24,6 +27,13 @@ export const usePrivyFundWallet = () => {
 
   return {
     fundWallet,
-    isAvailable: wallets?.[0]?.walletClientType === "privy",
+    isAvailable: true,
+  };
+};
+
+export const usePrivyLoginModal = () => {
+  const privy = usePrivy();
+  return {
+    login: privy.login,
   };
 };

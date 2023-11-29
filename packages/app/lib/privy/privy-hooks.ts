@@ -10,3 +10,9 @@ export const usePrivyFundWallet = () => {
 
   return { fundWallet, isAvailable: false };
 };
+
+export const usePrivyLoginModal = () => {
+  return {
+    login: () => {},
+  };
+};

@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, Suspense, useMemo } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+  Suspense,
+  useMemo,
+} from "react";
 import { Platform, useWindowDimensions } from "react-native";
 
 import { usePrivy } from "@privy-io/react-auth";
@@ -49,6 +56,7 @@ import { downloadCollectorList } from "app/hooks/use-download-collector-list";
 import { useFooter } from "app/hooks/use-footer";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
+import { PrivySetLoginMethodContext } from "app/lib/privy/privy-provider.web";
 import { Link, TextLink } from "app/navigation/link";
 import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
@@ -235,7 +243,7 @@ const ChannelsUnreadMessages = () => {
 
 export const HeaderMd = withColorScheme(() => {
   const { user, isAuthenticated } = useUser();
-  const { handleSubmitWallet, loading: loginLoading } = useLogin();
+  const { loading: loginLoading } = useLogin();
   const { links, social } = useFooter();
   const isDark = useIsDarkMode();
   const router = useRouter();
@@ -244,6 +252,7 @@ export const HeaderMd = withColorScheme(() => {
   const { logout } = useAuth();
   const { height: screenHeight } = useWindowDimensions();
   const privy = usePrivy();
+  const privyLoginMethodContext = useContext(PrivySetLoginMethodContext);
 
   const HOME_ROUTES = useMemo(
     () =>
@@ -560,7 +569,16 @@ export const HeaderMd = withColorScheme(() => {
               <Button
                 size="regular"
                 tw="mt-6"
-                onPress={handleSubmitWallet}
+                onPress={async () => {
+                  if (privy.authenticated) {
+                    await privy.logout();
+                  }
+                  privyLoginMethodContext.setLoginMethods(["wallet"]);
+
+                  setTimeout(() => {
+                    privy.login();
+                  });
+                }}
                 disabled={loginLoading}
               >
                 <>
@@ -574,10 +592,14 @@ export const HeaderMd = withColorScheme(() => {
                 tw="mt-6"
                 disabled={loginLoading}
                 onPress={async () => {
-                  if (privy.authenticated) {
-                    await privy.logout();
-                  }
-                  privy.login();
+                  privyLoginMethodContext.setLoginMethods([
+                    "sms",
+                    "google",
+                    "apple",
+                  ]);
+                  setTimeout(() => {
+                    privy.login();
+                  });
                 }}
               >
                 <>
