@@ -24,6 +24,7 @@ const UploadComposer = () => {
   const router = useRouter();
   const [previewImg, setPreviewImg] = useState<string | undefined>(undefined);
   const { videoPath, signUpload } = useSnapshot(videoUploadStore);
+  const [text, setText] = useState<string>("");
   const isDark = useIsDarkMode();
   const close = useCallback(() => {
     router.pop();
@@ -44,7 +45,7 @@ const UploadComposer = () => {
           toast.success("Uploading video...", {
             duration: 5000,
           });
-          signUpload({ data: { description: "asd" }, router });
+          signUpload({ data: { description: text }, router });
         }}
       >
         <View
@@ -60,7 +61,7 @@ const UploadComposer = () => {
         </View>
       </Pressable>
     );
-  }, [videoPath?.uri, close, signUpload, router]);
+  }, [videoPath?.uri, close, signUpload, text, router]);
 
   return (
     <PlatformSafeView>
@@ -79,6 +80,8 @@ const UploadComposer = () => {
                 multiline
                 maxLength={280}
                 style={{ lineHeight: 20 }}
+                value={text}
+                onChangeText={setText}
               />
             </View>
           </View>
