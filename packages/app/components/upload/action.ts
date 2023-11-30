@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import * as tus from "tus-js-client";
-import { proxy, ref } from "valtio";
+import { ref } from "valtio";
 
 import { axios } from "app/lib/axios";
 
