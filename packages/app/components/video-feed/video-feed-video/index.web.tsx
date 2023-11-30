@@ -43,7 +43,7 @@ export const FeedVideo = (props: VideoProps) => {
     () => context.value,
     (ctx) => {
       if (isItemInList) {
-        // Only load the video if it's in the viewport
+        // Only load the video if it's in the sliding viewport
         if (ctx[0] === id || ctx[1] === id || ctx[2] === id) {
           runOnJS(setSrc)();
         } else {
