@@ -172,3 +172,20 @@ textarea:focus-visible {
   overflow: hidden;
   height: 100%;
 }
+
+/* To prevent chromd mobile web from collapsing the address bar */
+/* Start */
+html {
+  overflow: hidden;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  position: fixed;
+  /* prevent overscroll bounce*/
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  /* iOS velocity scrolling */
+}
+/* End */

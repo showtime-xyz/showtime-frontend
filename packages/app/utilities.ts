@@ -674,24 +674,24 @@ export const getTwitterIntent = ({
   )}&text=${encodeURIComponent(message)}`;
 };
 
-export function isAndroid(): boolean {
+export function isAndroidWeb(): boolean {
   return (
     typeof navigator !== "undefined" && /android/i.test(navigator.userAgent)
   );
 }
 
-export function isSmallIOS(): boolean {
+export function isSmalliOSWeb(): boolean {
   return (
     typeof navigator !== "undefined" && /iPhone|iPod/.test(navigator.userAgent)
   );
 }
 
-export function isLargeIOS(): boolean {
+export function isLargeIOSWeb(): boolean {
   return typeof navigator !== "undefined" && /iPad/.test(navigator.userAgent);
 }
 
 export function isIOS(): boolean {
-  return isSmallIOS() || isLargeIOS();
+  return isSmalliOSWeb() || isLargeIOSWeb();
 }
 export function isSafari(): boolean {
   return (
@@ -702,10 +702,10 @@ export function isSafari(): boolean {
 }
 
 export function isMobileWeb(): boolean {
-  return Platform.OS === "web" && (isAndroid() || isIOS());
+  return Platform.OS === "web" && (isAndroidWeb() || isIOS());
 }
 export function isDesktopWeb(): boolean {
-  return Platform.OS === "web" && !isAndroid() && !isIOS();
+  return Platform.OS === "web" && !isAndroidWeb() && !isIOS();
 }
 
 export function isClassComponent(component: any) {

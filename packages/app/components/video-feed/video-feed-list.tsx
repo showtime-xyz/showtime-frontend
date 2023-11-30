@@ -6,6 +6,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { isAndroidWeb } from "app/utilities";
 
 import { videos } from "../../../../apps/video-data";
 import { VideoFeedItem } from "./video-feed-item";
@@ -20,7 +21,7 @@ export const VideoFeedList = () => {
     Platform.OS === "web"
       ? {
           width: "100%",
-          height: `calc(100vh - ${bottomBarHeight}px)`,
+          height: `calc(100dvh - ${bottomBarHeight}px)`,
         }
       : {
           width: size.width,
@@ -32,6 +33,7 @@ export const VideoFeedList = () => {
       <ViewabilityInfiniteScrollList
         useWindowScroll={false}
         data={videos}
+        overscan={isAndroidWeb() ? 15 : 4}
         estimatedItemSize={size.height}
         pagingEnabled
         snapToOffsets={
