@@ -91,7 +91,7 @@ export const signUpload = async (payload?: SignUploadPayload) => {
 
     const options: tus.UploadOptions = {
       endpoint: "https://video.bunnycdn.com/tusupload",
-      retryDelays: [0, 3000],
+      retryDelays: [0, 3000, 5000, 10000, 20000],
       chunkSize: 5 * 1024 * 1024,
       uploadLengthDeferred: !size || size === 0,
       headers: {
