@@ -63,7 +63,7 @@ import {
 import { useChannelsUnreadMessages } from "../creator-channels/hooks/use-channels-unread-messages";
 import { useLogin } from "../login/use-login";
 import { withColorScheme } from "../memo-with-theme";
-import { CreateTabBarIcon } from "../upload/upload-tab-bar-icon";
+import { CreateButtonDesktop } from "../upload/create-icon-xl";
 
 const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -591,7 +591,7 @@ export const HeaderMd = withColorScheme(() => {
             </>
           )}
           <Divider tw="my-5" />
-          <CreateTabBarIcon />
+          <CreateButtonDesktop />
           <Divider tw="my-5" />
           <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
             <View tw="flex-row items-center justify-center">
