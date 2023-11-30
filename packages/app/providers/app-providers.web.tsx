@@ -24,7 +24,7 @@ const AlertProvider = dynamic(() => import("@showtime-xyz/universal.alert"), {
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <ReactionProvider>
         <MagicProvider>
           <ColorSchemeProvider>

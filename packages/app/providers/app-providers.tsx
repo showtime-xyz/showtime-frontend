@@ -26,7 +26,7 @@ import { WalletProvider } from "./wallet-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <GestureHandlerRootView style={{ flexGrow: 1 }}>
+    <GestureHandlerRootView style={{ flexGrow: 1 }} nativeID="3444">
       <KeyboardProvider statusBarTranslucent>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
           <ColorSchemeProvider>

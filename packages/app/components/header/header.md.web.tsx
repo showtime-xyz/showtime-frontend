@@ -313,7 +313,10 @@ export const HeaderMd = withColorScheme(() => {
   );
 
   return (
-    <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
+    <View
+      tw="max-h-screen bg-white pl-2 dark:bg-black"
+      style={{ overflow: "scroll" }}
+    >
       <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
         <Link
           href="/"

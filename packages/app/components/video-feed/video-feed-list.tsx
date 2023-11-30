@@ -14,7 +14,7 @@ export const VideoFeedList = () => {
   const size = useSafeAreaFrame();
 
   return (
-    <View tw="web:h-screen web:w-screen ios:flex-[1] android:flex-[1]">
+    <View style={{ flex: 1 }}>
       <ViewabilityInfiniteScrollList
         useWindowScroll={false}
         data={videos}
@@ -26,7 +26,7 @@ export const VideoFeedList = () => {
         decelerationRate="fast"
         renderItem={({ item, index }) =>
           index === 0 ? (
-            <View tw="h-[256px] w-full bg-gray-100" />
+            <View tw="h-[256px] w-full bg-red-500" nativeID="3434" />
           ) : (
             <VideoFeedItem video={item} />
           )

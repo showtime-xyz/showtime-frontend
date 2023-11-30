@@ -199,23 +199,19 @@ function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <AppProviders>
         <Container>
-          <View tw="mx-auto flex-col md:flex-row">
-            <Header
-              canGoBack={
-                router.pathname === "/search" ||
-                router.pathname.split("/").length - 1 >= 2
-              }
-            />
+          <Header
+            canGoBack={
+              router.pathname === "/search" ||
+              router.pathname.split("/").length - 1 >= 2
+            }
+          />
 
-            <View tw="w-full items-center md:ml-auto md:w-[calc(100%-248px)]">
-              <NextNProgress
-                color="#4F46E5"
-                options={{ showSpinner: false }}
-                showOnShallow={false}
-              />
-              <Component {...pageProps} />
-            </View>
-          </View>
+          <NextNProgress
+            color="#4F46E5"
+            options={{ showSpinner: false }}
+            showOnShallow={false}
+          />
+          <Component {...pageProps} />
           <Footer />
         </Container>
 
@@ -265,14 +261,18 @@ const Container = withColorScheme(
     const bottomBarHeight = usePlatformBottomHeight();
     return (
       <View
-        tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900"
+        tw={
+          "bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900 " + fonts
+        }
         // @ts-ignore
         style={{
           paddingTop: headerHeight,
           paddingBottom: `calc(${bottomBarHeight}px + env(safe-area-inset-bottom))`,
+          flex: 1,
+          flexDirection: "row",
         }}
       >
-        <div className={fonts}>{children}</div>
+        {children}
       </View>
     );
   }
