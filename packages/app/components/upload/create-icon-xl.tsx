@@ -58,8 +58,8 @@ export const CreateButtonDesktop = () => {
           }}
         >
           <Create
-            width={28}
-            height={28}
+            width={24}
+            height={24}
             color={"white"}
             crossColor={"#FF3370"}
           />
