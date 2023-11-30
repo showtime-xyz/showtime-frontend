@@ -129,7 +129,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = memo(
         tw="items-center justify-center overflow-hidden rounded-3xl border-2 border-gray-500 bg-black dark:border-gray-800"
         style={{
           aspectRatio: 12 / 16,
-          maxHeight: height * 0.3,
+          maxHeight: 220,
           width: 160,
           minHeight: 220,
           height: "100%",
