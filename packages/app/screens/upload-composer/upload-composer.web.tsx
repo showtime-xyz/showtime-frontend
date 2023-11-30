@@ -9,5 +9,5 @@ export const UploadComposerScreen = withModalScreen(UploadComposer, {
   disableBackdropPress: true,
   snapPoints: ["100%"],
   headerShown: false,
-  tw: "min-h-[80vh]",
+  tw: "min-h-[90vh] md:min-h-[auto] max-h-[500px] md:max-h-[500px]",
 });
