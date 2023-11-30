@@ -164,7 +164,7 @@ function getVideoUrlByClosestWidth(
 }
 */
 
-function getVideoUrl(
+export function getVideoUrl(
   videoData: BunnyVideoUrls,
   preferredQualities: string[] = []
 ) {

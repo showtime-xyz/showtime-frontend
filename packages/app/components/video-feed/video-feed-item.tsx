@@ -15,6 +15,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useMuted } from "app/providers/mute-provider";
+import { getVideoUrl } from "app/utilities";
 
 import { CollapsibleText } from "design-system/collapsible-text/collapsible-text";
 
@@ -27,7 +28,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({
   return (
     <View tw="w-full">
       <FeedVideo
-        uri={video.sources[0]}
+        uri={getVideoUrl(video.media.urls)}
         height={videoDimensions.height}
         width={videoDimensions.width}
       />
