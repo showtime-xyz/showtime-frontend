@@ -48,6 +48,7 @@ import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { UploadComposerScreen } from "app/screens/upload-composer/upload-composer";
 import { prevRouteRef } from "app/utilities";
 
 import { Toaster } from "design-system/toast";
@@ -143,6 +144,9 @@ function App({ Component, pageProps, router }: AppProps) {
         <meta name="eth:nft:schema" content={meta.nftSchema} />
       )}
       {meta.nftChain && <meta name="eth:nft:chain" content={meta.nftChain} />}
+      {meta.nftMintUrl && (
+        <meta name="eth:nft:mint_url" content={meta.nftMintUrl} />
+      )}
     </>
   ) : (
     <>
@@ -187,7 +191,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <meta name="apple-mobile-web-app-title" content="Showtime" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#000000" />
+
         <meta
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no, viewport-fit=cover"
           name="viewport"
@@ -233,6 +237,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorTokenCollectorsScreen />
         <CreatorTokensShareModalScreen />
         <CreatorTokenSocialShareScreen />
+        <UploadComposerScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />

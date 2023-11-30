@@ -5,11 +5,8 @@ import { BlurView } from "expo-blur";
 
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import {
-  ChevronRight,
-  GoldHexagon,
-  ShowtimeRounded,
-} from "@showtime-xyz/universal.icon";
+import { GoldHexagon, ShowtimeRounded } from "@showtime-xyz/universal.icon";
+import { Pressable } from "@showtime-xyz/universal.pressable";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -242,7 +239,9 @@ export const TopCreatorTokenListItem = ({
   const token = (item as NewCreatorTokenItem)?.creator_token
     ? ((item as NewCreatorTokenItem).creator_token as CreatorTokenItem)
     : (item as CreatorTokenItem);
+
   const lastMessage = (item as NewCreatorTokenItem)?.last_channel_message;
+  const permissions = (item as NewCreatorTokenItem)?.permissions;
   const loremText = useMemo(
     () =>
       lastMessage?.body_text_length > 0
@@ -265,8 +264,8 @@ export const TopCreatorTokenListItem = ({
   );
 
   return (
-    <PressableHover
-      tw={["flex-row py-2.5", tw].join(" ")}
+    <Pressable
+      tw={["flex flex-row items-center rounded-lg py-2.5", tw].join(" ")}
       onPress={() => {
         router.push(
           token.owner_profile?.username
@@ -277,10 +276,10 @@ export const TopCreatorTokenListItem = ({
       {...rest}
     >
       <View tw="h-[34px] flex-row">
-        <View tw="min-w-[26px] items-start self-center">
+        <View tw="min-w-[26px] items-start self-center ">
           {index != undefined ? (
             index < 3 ? (
-              <View tw="items-center ">
+              <View tw="items-center">
                 <View tw="absolute -top-1">
                   <GoldHexagon width={18} height={18} />
                 </View>
@@ -297,9 +296,9 @@ export const TopCreatorTokenListItem = ({
         </View>
         <Avatar url={token?.owner_profile?.img_url} size={34} />
       </View>
-      <View tw="web:flex-1 ml-2 flex-row">
+      <View tw="ml-2 flex-1 flex-row items-center">
         <View tw="w-[168px] justify-center md:w-[180px]">
-          <View tw="min-w-[180px] flex-row">
+          <View tw="min-w-[180px] flex-1 flex-row items-center">
             <Text
               tw="max-w-[150px] text-sm font-semibold text-gray-900 dark:text-white"
               numberOfLines={1}
@@ -318,7 +317,11 @@ export const TopCreatorTokenListItem = ({
             )}
           </View>
           {!isSimplified ? (
-            <>
+            <View
+              style={{
+                display: token.owner_profile?.bio ? undefined : "none",
+              }}
+            >
               <View tw="h-1.5" />
               <Text
                 tw="text-xs text-gray-500 dark:text-gray-400"
@@ -326,7 +329,7 @@ export const TopCreatorTokenListItem = ({
               >
                 {token.owner_profile?.bio}
               </Text>
-            </>
+            </View>
           ) : null}
         </View>
         <View tw="ml-4 min-w-[50px] flex-row items-center md:ml-6">
@@ -343,19 +346,27 @@ export const TopCreatorTokenListItem = ({
             color={isDark ? colors.white : colors.gray[900]}
           />
         </View>
-        <View tw="ml-auto lg:ml-4">
+        <View tw="web:md:pr-3 web:lg:pr-0 ml-auto items-center lg:ml-4">
           <PlatformBuyButton
             style={{
               backgroundColor: "#08F6CC",
               height: 26,
+              marginTop: 0,
             }}
             username={token.owner_profile?.username}
           />
         </View>
       </View>
-      {!lastMessage ? null : (
-        <View tw="ml-auto hidden w-full max-w-[200px] flex-row items-center justify-between lg:flex">
-          {lastMessage.is_payment_gated ? (
+      {!lastMessage || !permissions ? null : (
+        <Pressable
+          onPress={() => {
+            router.push(`/channels/${token.channel_id}`);
+          }}
+          tw="ml-auto hidden w-full max-w-[200px] flex-row items-center justify-between lg:flex"
+        >
+          {lastMessage.sent_by?.profile.profile_id ===
+            token.owner_profile?.profile_id &&
+          !permissions.can_view_creator_messages ? (
             <View tw="select-none overflow-hidden px-2 py-0.5">
               {Platform.OS === "web" ? (
                 // INFO: I had to do it like that because blur-sm would crash for no reason even with web prefix
@@ -369,7 +380,10 @@ export const TopCreatorTokenListItem = ({
                 </View>
               ) : (
                 <>
-                  <Text tw="py-1.5 text-xs  text-gray-900 dark:text-gray-100">
+                  <Text
+                    tw="py-1.5 text-xs  text-gray-900 dark:text-gray-100"
+                    numberOfLines={3}
+                  >
                     {loremText}
                   </Text>
                   <BlurView
@@ -389,6 +403,7 @@ export const TopCreatorTokenListItem = ({
               {lastMessage.body_text_length > 0 ? (
                 <Text
                   tw={"text-xs text-gray-900 dark:text-gray-100"}
+                  numberOfLines={3}
                   style={
                     Platform.OS === "web"
                       ? {
@@ -403,9 +418,9 @@ export const TopCreatorTokenListItem = ({
               ) : null}
             </>
           )}
-        </View>
+        </Pressable>
       )}
-    </PressableHover>
+    </Pressable>
   );
 };
 

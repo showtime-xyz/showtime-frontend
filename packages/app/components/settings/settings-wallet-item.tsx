@@ -12,6 +12,7 @@ import {
   GoogleOriginal,
   Apple,
   Twitter,
+  Wallet,
 } from "@showtime-xyz/universal.icon";
 import { PressableHover } from "@showtime-xyz/universal.pressable-hover";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -83,6 +84,11 @@ const Title = ({ wallet }: { wallet: WalletAddressesV2 }) => {
       <LoginWithPlatformTitle text={"Login from Twitter"} Icon={Twitter} />
     );
   }
+
+  if (wallet.is_privy) {
+    return <LoginWithPlatformTitle text={"Privy wallet"} Icon={Wallet} />;
+  }
+
   return null;
 };
 const LoginWithTitle = ({
@@ -97,7 +103,8 @@ const LoginWithTitle = ({
     wallet.phone_number ||
     wallet.is_google ||
     wallet.is_apple ||
-    wallet.is_twitter;
+    wallet.is_twitter ||
+    wallet.is_privy;
 
   if (!nickname && !isHasSubTitle) {
     return null;

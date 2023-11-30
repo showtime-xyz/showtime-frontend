@@ -8,5 +8,5 @@ export const useExportPrivyWallet = () => {
 export const usePrivyFundWallet = () => {
   const fundWallet = (currencyCode: "eth" | "usdc") => {};
 
-  return fundWallet;
+  return { fundWallet, isAvailable: false };
 };

@@ -29,8 +29,8 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
     <GestureHandlerRootView style={{ flexGrow: 1 }}>
       <KeyboardProvider statusBarTranslucent>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <SharedElementProvider>
-            <ColorSchemeProvider>
+          <ColorSchemeProvider>
+            <SharedElementProvider>
               <ReactionProvider>
                 <WalletMobileSDKProvider>
                   <WalletProvider>
@@ -58,8 +58,8 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                   </WalletProvider>
                 </WalletMobileSDKProvider>
               </ReactionProvider>
-            </ColorSchemeProvider>
-          </SharedElementProvider>
+            </SharedElementProvider>
+          </ColorSchemeProvider>
         </SafeAreaProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>

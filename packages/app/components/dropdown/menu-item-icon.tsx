@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import type { ImageSystemSymbolConfiguration } from "react-native-ios-context-menu/lib/typescript/types/ImageItemConfig";
 import { SvgProps } from "react-native-svg";
+import type { SFSymbol } from "sf-symbols-typescript";
 import * as DropdownMenu from "zeego/src/dropdown-menu";
 import type { MenuItemIconProps as ZeegoMenuItemIconProps } from "zeego/src/menu/types";
 
@@ -14,11 +15,11 @@ import { DropdownMenuItemIcon } from "design-system/dropdown-menu";
 type MenuItemIconProps = Omit<ZeegoMenuItemIconProps, "ios"> & {
   Icon: ComponentType<SvgProps>;
   ios?: ImageSystemSymbolConfiguration & {
-    name: any;
+    name: SFSymbol;
   };
 };
 
-export const MenuItemIcon = DropdownMenu.menuify(
+export const MenuItemIcon = DropdownMenu.create(
   ({ Icon, ...rest }: MenuItemIconProps) => {
     const isDark = useIsDarkMode();
     if (Platform.OS === "web") {

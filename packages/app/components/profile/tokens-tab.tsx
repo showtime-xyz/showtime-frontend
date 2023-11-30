@@ -65,7 +65,7 @@ export const TokensTabHeader = ({
   return (
     <View tw="w-full px-4">
       {channelId && isSelf ? (
-        <View tw="mt-4 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5 dark:border-transparent">
+        <View tw="web:mt-4 mt-2 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-indigo-600 px-4 py-5 dark:border-transparent">
           <Text tw="flex-1 text-sm text-white">
             Share updates, audio, and photos to token collectors
           </Text>
@@ -122,7 +122,7 @@ export const TokensTabHeader = ({
           onPress={() => {
             router.push(`/channels/${channelId}`);
           }}
-          tw="mt-6 rounded-xl border border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900"
+          tw="mt-4 rounded-xl border border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900"
         >
           <View tw="flex-row items-center justify-between py-4">
             <View tw="flex-row items-center justify-between">

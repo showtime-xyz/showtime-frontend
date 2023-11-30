@@ -29,7 +29,7 @@ export const SETTINGS_ROUTES = [
   {
     title: "Connected Apps",
     key: "Account",
-    hidden: Platform.OS !== "web",
+    hidden: true,
   },
   {
     title: "Notifications",

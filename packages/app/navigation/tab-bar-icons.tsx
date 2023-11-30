@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { Platform, StyleProp, ViewStyle } from "react-native";
 
 import type { ContentProps } from "universal-tooltip";
@@ -14,7 +14,6 @@ import {
   HomeFilled,
   Hot,
   HotFilled,
-  Plus,
   Showtime,
   User,
 } from "@showtime-xyz/universal.icon";
@@ -31,7 +30,7 @@ import { useRedirectToScreen } from "app/hooks/use-redirect-to-screen";
 import { useUser } from "app/hooks/use-user";
 import { Link } from "app/navigation/link";
 
-type TabBarIconProps = {
+export type TabBarIconProps = {
   color?: string;
   focused?: boolean;
   tw?: TW;
@@ -113,21 +112,36 @@ export const ShowtimeTabBarIcon = ({ tw }: TabBarIconProps) => {
 export const CreatorChannelsTabBarIcon = ({
   color,
   focused,
+  onPress,
 }: TabBarIconProps & {
   tooltipSide?: ContentProps["side"];
 }) => {
   const { data } = useChannelsUnreadMessages();
+  const redirectToScreen = useRedirectToScreen();
 
   return (
-    <TabBarIcon tab="/channels">
+    <TabBarIcon
+      onPress={() => {
+        if (onPress) {
+          onPress();
+        } else {
+          redirectToScreen({
+            pathname: "/channels",
+          });
+        }
+      }}
+    >
       {focused ? (
         <CreatorChannelFilled width={24} height={24} color={color} />
       ) : (
         <CreatorChannel width={24} height={24} color={color} />
       )}
       {data && data.unread > 0 && (
-        <View tw="web:-right-0.5 absolute right-0.5 top-0 h-4 w-4 items-center justify-center rounded-full bg-indigo-700">
-          <Text tw="text-[8px] text-white" style={{ lineHeight: 12 }}>
+        <View tw="web:-right-1.5 absolute -right-0.5 top-0 h-5 w-5 items-center justify-center rounded-full bg-indigo-700 text-center">
+          <Text
+            tw="text-center text-[10px] font-medium text-white"
+            style={{ lineHeight: 12 }}
+          >
             {data.unread > 99 ? "99" : data.unread}
           </Text>
         </View>

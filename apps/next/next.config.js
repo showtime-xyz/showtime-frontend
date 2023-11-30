@@ -82,6 +82,7 @@ const nextConfig = {
     "react-native-compressor",
     "expo-sharing",
     "@gorhom/bottom-sheet",
+    "expo-video-thumbnails",
   ],
   webpack: (config, options) => {
     if (!options.isServer) {

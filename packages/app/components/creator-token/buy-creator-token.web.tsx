@@ -98,7 +98,7 @@ export const BuyCreatorToken = () => {
 
   const usdcBalance = useWalletUSDCBalance();
   const ethBalance = useWalletETHBalance();
-  const fundWallet = usePrivyFundWallet();
+  const { fundWallet } = usePrivyFundWallet();
   const [showExplanation, setShowExplanation] = useState(false);
   const priceToBuyNext = useCreatorTokenPriceToBuyNext(
     selectedAction === "buy"

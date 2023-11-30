@@ -7483,7 +7483,7 @@ __metadata:
     expo-haptics: ~12.6.0
     expo-image: ~1.8.1
     expo-image-manipulator: ~11.3.0
-    expo-image-picker: ~14.5.0
+    expo-image-picker: ~14.6.0
     expo-insights: ~0.4.0
     expo-linear-gradient: ~12.5.0
     expo-linking: ~5.0.2
@@ -7499,6 +7499,7 @@ __metadata:
     expo-status-bar: ~1.7.1
     expo-system-ui: ~2.6.0
     expo-updates: ~0.18.17
+    expo-video-thumbnails: ~7.4.0
     expo-web-browser: ~12.5.0
     fastestsmallesttextencoderdecoder: ^1.0.22
     https-browserify: ~1.0.0
@@ -7557,6 +7558,7 @@ __metadata:
     readable-stream: 4.4.2
     semver: ^7.5.4
     sentry-expo: ~7.1.1
+    sf-symbols-typescript: ^1.0.0
     solito: ~3.2.9
     stream-browserify: ^3.0.0
     string_decoder: ~1.3.0
@@ -7565,6 +7567,7 @@ __metadata:
     tldts: ^6.0.12
     ts-jest: ^29.1.1
     tty-browserify: 0.0.1
+    tus-js-client: ^3.1.1
     typescript: ^5.1.6
     universal-tooltip: 1.0.2
     url: ~0.11.3
@@ -13139,7 +13142,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer-from@npm:^1.0.0, buffer-from@npm:^1.1.1":
+"buffer-from@npm:^1.0.0, buffer-from@npm:^1.1.1, buffer-from@npm:^1.1.2":
   version: 1.1.2
   resolution: "buffer-from@npm:1.1.2"
   checksum: 0448524a562b37d4d7ed9efd91685a5b77a50672c556ea254ac9a6d30e3403a517d8981f10e565db24e8339413b43c97ca2951f10e399c6125a0d8911f5679bb
@@ -13890,6 +13893,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"combine-errors@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "combine-errors@npm:3.0.3"
+  dependencies:
+    custom-error-instance: 2.1.1
+    lodash.uniqby: 4.5.0
+  checksum: bd0b0d2a4020f9976b8fe8eb7d5aa855b43ecacdcb61ee1fc5664d73ff8c1d7d0bbe4dd948bea7ba1870518bfc5688b89941de7a4967659418b4664cdb02884f
+  languageName: node
+  linkType: hard
+
 "combined-stream@npm:^1.0.8":
   version: 1.0.8
   resolution: "combined-stream@npm:1.0.8"
@@ -14568,6 +14581,13 @@ __metadata:
   version: 5.1.0
   resolution: "currency-symbol-map@npm:5.1.0"
   checksum: 7c84dd81bff5703179a816012650b3e11f128e1fa83b7d376acdf8f41d544e9f6036ab08a02521cf365ed9b7a5c34bae276c7f23e0239936165534cb39d52a43
+  languageName: node
+  linkType: hard
+
+"custom-error-instance@npm:2.1.1":
+  version: 2.1.1
+  resolution: "custom-error-instance@npm:2.1.1"
+  checksum: db01483864c9f4356b720b443a1f9b374758745a75199187a0ccc12505cf822bc801a0d8e3f96d727559880024f40e09667d5c08e5de0bff243c6b5ae0bd303c
   languageName: node
   linkType: hard
 
@@ -16888,12 +16908,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image-loader@npm:~4.4.0":
-  version: 4.4.0
-  resolution: "expo-image-loader@npm:4.4.0"
+"expo-image-loader@npm:~4.5.0":
+  version: 4.5.0
+  resolution: "expo-image-loader@npm:4.5.0"
   peerDependencies:
     expo: "*"
-  checksum: e872e45a807cd867c5a8e8fc5665de33de5d467ea533222037b09b70268d0166012769bfcd340ab8922dbf826a3e4f0498ff73973ad62f21134764b4bc8b1f5a
+  checksum: 017667e71f30a1285f178266af2729736badf0b6d36a4f525fc4838848c6b0788abb2bcd3cdda19264719c8108a91910af25994b670a04534ef3102d857f4730
   languageName: node
   linkType: hard
 
@@ -16908,14 +16928,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-image-picker@npm:~14.5.0":
-  version: 14.5.0
-  resolution: "expo-image-picker@npm:14.5.0"
+"expo-image-picker@npm:~14.6.0":
+  version: 14.6.0
+  resolution: "expo-image-picker@npm:14.6.0"
   dependencies:
-    expo-image-loader: ~4.4.0
+    expo-image-loader: ~4.5.0
   peerDependencies:
     expo: "*"
-  checksum: 94854776cdfd40dba408c34b6b351e3f2b0e047851f50ed6da5bb6ccbcd3bc7a387459aba9cc274b725a801ced0b280570d4251de88e2ec89d92c03a3f32dd97
+  checksum: fa879923e7fa4cd184b01e2039d7fb1c74f4c6293ac71476d37121e5dafeefdbf594f3b1f1425cf154c46f1f4839fa4d4bb43d3ee527d2c5d2745893b67a45cb
   languageName: node
   linkType: hard
 
@@ -17167,6 +17187,15 @@ __metadata:
   bin:
     expo-updates: bin/cli.js
   checksum: 68d667f786eefdf69d8bd4ca84358158e01ee33c531b3f4d873594368f82287ef277f2a0cbd69ee46518707d4a9b6a16867b3cf9b9977d1d6797b2e221b2fa48
+  languageName: node
+  linkType: hard
+
+"expo-video-thumbnails@npm:~7.4.0":
+  version: 7.4.0
+  resolution: "expo-video-thumbnails@npm:7.4.0"
+  peerDependencies:
+    expo: "*"
+  checksum: bc51388822ce49386d4fd8e3a7dd8eb9b0b19060acc3c0fbb0b61dce6a002299e24844920e585d850772992812554c2095ce7d8761496ee85176eb756ca1e36b
   languageName: node
   linkType: hard
 
@@ -20604,6 +20633,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-base64@npm:^3.7.2":
+  version: 3.7.5
+  resolution: "js-base64@npm:3.7.5"
+  checksum: 67a78c8b1c47b73f1c6fba1957e9fe6fd9dc78ac93ac46cc2e43472dcb9cf150d126fb0e593192e88e0497354fa634d17d255add7cc6ee3c7b4d29870faa8e18
+  languageName: node
+  linkType: hard
+
 "js-cookie@npm:^3.0.5":
   version: 3.0.5
   resolution: "js-cookie@npm:3.0.5"
@@ -21595,6 +21631,55 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash._baseiteratee@npm:~4.7.0":
+  version: 4.7.0
+  resolution: "lodash._baseiteratee@npm:4.7.0"
+  dependencies:
+    lodash._stringtopath: ~4.8.0
+  checksum: 814a7125b9e2fa7e436c4402eae842a200189e2839b56bd6cde7cd0a3628b60842f5d39a9f5dceaf8766669b2e4a17a36ce2a213d1d6a891c1bef8a6bda36ea9
+  languageName: node
+  linkType: hard
+
+"lodash._basetostring@npm:~4.12.0":
+  version: 4.12.0
+  resolution: "lodash._basetostring@npm:4.12.0"
+  checksum: ccaf83827f86be5c9daeb7b939f761d6a43f0de0781bc3b6772fcb8568fbcbfa1e1082c66e5e12dd23e00ac40a18349c5a793a6a552e3574cbbcb3e1545fcb4c
+  languageName: node
+  linkType: hard
+
+"lodash._baseuniq@npm:~4.6.0":
+  version: 4.6.0
+  resolution: "lodash._baseuniq@npm:4.6.0"
+  dependencies:
+    lodash._createset: ~4.0.0
+    lodash._root: ~3.0.0
+  checksum: 8c16fe2e80716b18c2f28bbcc902768141d432b0b98e03b30a2fba6a097377fabdc8753da232568375d2aa9502dc6b3a390200aa1467d2f685a582a46a271936
+  languageName: node
+  linkType: hard
+
+"lodash._createset@npm:~4.0.0":
+  version: 4.0.3
+  resolution: "lodash._createset@npm:4.0.3"
+  checksum: fb4450fbf4846aa7b420837ee44400b88664e28499388b7e04b4db38adca1305915f68a245fb2a87e031e7f440b997de4f360de6dea2712952520e97c7898de1
+  languageName: node
+  linkType: hard
+
+"lodash._root@npm:~3.0.0":
+  version: 3.0.1
+  resolution: "lodash._root@npm:3.0.1"
+  checksum: 3e12c6f409ae13164a8db358f44a691f1e038dad4e25463802980d0ed641ed118c147b65657501c51778c885422b913264dfbe33ec0c5d676443dd630a7e685a
+  languageName: node
+  linkType: hard
+
+"lodash._stringtopath@npm:~4.8.0":
+  version: 4.8.0
+  resolution: "lodash._stringtopath@npm:4.8.0"
+  dependencies:
+    lodash._basetostring: ~4.12.0
+  checksum: 00663b317796333e6315ebb4e8b590e68845de10d5d25c7585751fd9d28adf3e60e1ce85a6fbb6a0d440447c841465b91877e761239e358231eed2f52f0a5472
+  languageName: node
+  linkType: hard
+
 "lodash.debounce@npm:4.0.8, lodash.debounce@npm:^4.0.8":
   version: 4.0.8
   resolution: "lodash.debounce@npm:4.0.8"
@@ -21634,6 +21719,16 @@ __metadata:
   version: 4.1.1
   resolution: "lodash.throttle@npm:4.1.1"
   checksum: 129c0a28cee48b348aef146f638ef8a8b197944d4e9ec26c1890c19d9bf5a5690fe11b655c77a4551268819b32d27f4206343e30c78961f60b561b8608c8c805
+  languageName: node
+  linkType: hard
+
+"lodash.uniqby@npm:4.5.0":
+  version: 4.5.0
+  resolution: "lodash.uniqby@npm:4.5.0"
+  dependencies:
+    lodash._baseiteratee: ~4.7.0
+    lodash._baseuniq: ~4.6.0
+  checksum: 40a4fdd4c31323fcb6db91ec3124020333212ca1f13e75cc9939decdd33e8b176d204fb277be36a51a855c2c90e14d67932b3b130b2f0eedc729e4cb9cdcaed1
   languageName: node
   linkType: hard
 
@@ -24892,6 +24987,17 @@ __metadata:
     object-assign: ^4.1.1
     react-is: ^16.13.1
   checksum: c056d3f1c057cb7ff8344c645450e14f088a915d078dcda795041765047fa080d38e5d626560ccaac94a4e16e3aa15f3557c1a9a8d1174530955e992c675e459
+  languageName: node
+  linkType: hard
+
+"proper-lockfile@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "proper-lockfile@npm:4.1.2"
+  dependencies:
+    graceful-fs: ^4.2.4
+    retry: ^0.12.0
+    signal-exit: ^3.0.2
+  checksum: 00078ee6a61c216a56a6140c7d2a98c6c733b3678503002dc073ab8beca5d50ca271de4c85fca13b9b8ee2ff546c36674d1850509b84a04a5d0363bcb8638939
   languageName: node
   linkType: hard
 
@@ -29266,6 +29372,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tus-js-client@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "tus-js-client@npm:3.1.1"
+  dependencies:
+    buffer-from: ^1.1.2
+    combine-errors: ^3.0.3
+    is-stream: ^2.0.0
+    js-base64: ^3.7.2
+    lodash.throttle: ^4.1.1
+    proper-lockfile: ^4.1.2
+    url-parse: ^1.5.7
+  checksum: 7cb227b8d94e1f48a172f52c0cf8f0d58a7866211157788c6a8c9d7512550d21ef5ed13d074b8ffadbecc7e730273eca9f346d0ea4c89d9da60f351162a68d02
+  languageName: node
+  linkType: hard
+
 "tweetnacl-util@npm:^0.15.1":
   version: 0.15.1
   resolution: "tweetnacl-util@npm:0.15.1"
@@ -29777,7 +29898,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-parse@npm:^1.5.3, url-parse@npm:^1.5.9":
+"url-parse@npm:^1.5.3, url-parse@npm:^1.5.7, url-parse@npm:^1.5.9":
   version: 1.5.10
   resolution: "url-parse@npm:1.5.10"
   dependencies:

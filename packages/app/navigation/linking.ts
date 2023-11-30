@@ -77,12 +77,15 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       creatorTokensImportAllowlistSuccess:
         "creator-token/import-allowlist-success",
       creatorTokensImportAllowlist: "creator-token/import-allowlist",
+      uploadPreview: "upload/preview",
+      uploadComposer: "upload/composer",
       bottomTabs: {
         initialRouteName: "homeTab",
         screens: {
           // Bottom Tab Navigator
           homeTab: "",
           channelsTab: "channels",
+          uploadTab: "preview",
           notificationsTab: "notifications",
           profileTab: "profile",
         },

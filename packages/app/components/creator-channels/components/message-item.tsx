@@ -23,6 +23,7 @@ import { MoreHorizontal } from "@showtime-xyz/universal.icon";
 import { FlashList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useRouter } from "@showtime-xyz/universal.router";
 import { colors } from "@showtime-xyz/universal.tailwind";
+import { VerificationBadge } from "@showtime-xyz/universal.verification-badge";
 import { View } from "@showtime-xyz/universal.view";
 
 import { AudioPlayer } from "app/components/audio-player/audio-player";
@@ -212,11 +213,19 @@ export const MessageItem = memo(
                 "deleted-user"
               }`}
             >
-              <LeanText
-                tw={"text-xs font-semibold text-gray-900 dark:text-gray-100"}
-              >
-                {item?.channel_message?.sent_by?.profile.name ?? "Deleted User"}
-              </LeanText>
+              <LeanView tw="flex-row items-center">
+                <LeanText
+                  tw={"text-xs font-semibold text-gray-900 dark:text-gray-100"}
+                >
+                  {item?.channel_message?.sent_by?.profile.name ??
+                    "Deleted User"}
+                </LeanText>
+                {Boolean(item?.channel_message?.sent_by?.profile.verified) && (
+                  <View tw="ml-1">
+                    <VerificationBadge size={12} />
+                  </View>
+                )}
+              </LeanView>
             </Link>
           </LeanView>
           <LeanView tw="ml-2">
@@ -244,9 +253,7 @@ export const MessageItem = memo(
                   </LeanView>
                 ) : item.channel_message.body_text_length > 0 ? (
                   <LeanView tw="overflow-hidden">
-                    <LeanText tw="text-base text-gray-900 dark:text-gray-100">
-                      {loremText}
-                    </LeanText>
+                    <LeanText tw="text-base text-white">{loremText}</LeanText>
                     <BlurView
                       intensity={10}
                       tint="default"
@@ -339,13 +346,11 @@ export const MessageItem = memo(
             {item.channel_message?.attachments?.length > 0 &&
             item.channel_message?.attachments[0].mime.includes("image") ? (
               Platform.OS === "web" ? (
-                <LeanView tw="flex-1">
-                  <ImagePreview
-                    key={`img-${channel_message.id}`}
-                    attachment={channel_message}
-                    isViewable={permissions?.can_view_creator_messages}
-                  />
-                </LeanView>
+                <ImagePreview
+                  key={`img-${channel_message.id}`}
+                  attachment={channel_message}
+                  isViewable={permissions?.can_view_creator_messages}
+                />
               ) : (
                 <SharedElement tag={channel_message?.id.toString()}>
                   {({ animatedRef, animatedStyles }) => (

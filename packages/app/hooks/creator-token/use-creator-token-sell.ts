@@ -10,6 +10,7 @@ import { UserContext } from "app/context/user-context";
 import { axios } from "app/lib/axios";
 import { Logger } from "app/lib/logger";
 import { useLogInPromise } from "app/lib/login-promise";
+import { usePrivyFundWallet } from "app/lib/privy/privy-hooks";
 import { publicClient } from "app/lib/wallet-public-client";
 import { delay, formatAPIErrorMessage } from "app/utilities";
 
@@ -38,6 +39,7 @@ export const useCreatorTokenSell = () => {
   const { getMaxFeePerGasAndPriorityPrice } = useMaxGasPrices();
   const user = useContext(UserContext);
   const { loginPromise } = useLogInPromise();
+  const { fundWallet } = usePrivyFundWallet();
   const state = useSWRMutation(
     "sellToken",
     async (
@@ -194,7 +196,29 @@ export const useCreatorTokenSell = () => {
     {
       onError: (error) => {
         Logger.error("useContractSellToken failed", error);
-        Alert.alert("Failed", formatAPIErrorMessage(error));
+        // TODO: improve way to check if user has ETH
+        if (error.details.includes("cannot estimate gas; ")) {
+          Alert.alert(
+            "Failed",
+            `You need ETH to sell. Buy ETH or send it to your wallet address: ${wallet.address}`,
+            [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "Buy ETH",
+                style: "default",
+                onPress: () => {
+                  fundWallet("eth");
+                },
+              },
+            ]
+          );
+          return;
+        } else {
+          Alert.alert("Failed", formatAPIErrorMessage(error));
+        }
       },
     }
   );

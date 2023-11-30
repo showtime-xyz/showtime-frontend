@@ -22,17 +22,6 @@ type TrendingStackParams = {
   settings: undefined;
 };
 
-type CameraStackParams = {
-  login: undefined;
-  create: undefined;
-};
-
-type CreateStackParams = {
-  login: undefined;
-  create: undefined;
-  drop: undefined;
-};
-
 type NotificationsStackParams = {
   notifications: undefined;
   login: undefined;
@@ -104,6 +93,8 @@ type RootStackNavigatorParams = {
   channelsCongrats: undefined;
   channelsMembers: undefined;
   viewer: undefined;
+  uploadPreview: undefined;
+  uploadComposer: undefined;
 };
 
 export type {
@@ -111,8 +102,6 @@ export type {
   HomeStackParams,
   CreatorChannelsStackParams,
   TrendingStackParams,
-  CameraStackParams,
-  CreateStackParams,
   NotificationsStackParams,
   ProfileStackParams,
   BottomTabNavigatorParams,

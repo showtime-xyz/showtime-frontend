@@ -2,7 +2,10 @@ import { useMemo, useCallback } from "react";
 
 import useSWR from "swr";
 
-import { ChannelMessage } from "app/components/creator-channels/types";
+import {
+  ChannelMessage,
+  ChannelPermissions,
+} from "app/components/creator-channels/types";
 import {
   fetcher,
   useInfiniteListQuerySWR,
@@ -26,10 +29,12 @@ export type CreatorTokenItem = {
   name: string;
   token_uri: string;
   nft_count: number;
+  channel_id: number;
 };
 export type NewCreatorTokenItem = {
   creator_token: CreatorTokenItem;
   last_channel_message: ChannelMessage;
+  permissions: ChannelPermissions;
 };
 export type TopCreatorTokenUser = NewCreatorTokenItem | CreatorTokenItem;
 
