@@ -133,6 +133,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = memo(
           width: 160,
           minHeight: 220,
           height: "100%",
+          borderCurve: "continuous",
         }}
       >
         {!hasError && videoUri && thumbnailUri ? (

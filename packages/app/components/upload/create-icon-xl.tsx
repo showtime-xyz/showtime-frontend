@@ -48,7 +48,7 @@ export const CreateButtonDesktop = () => {
           tw="w-full flex-row items-center justify-center rounded-full bg-[#FF3370] p-2 transition-transform duration-300 hover:scale-105"
           onPress={async () => {
             if (isUploading) {
-              videoUploadStore.uploadInstance.abort(true);
+              videoUploadStore.uploadInstance.abort();
               videoUploadStore.uploadProgress = 0;
               videoUploadStore.isUploading = false;
             } else {
