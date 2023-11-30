@@ -11,10 +11,6 @@ import {
   Unmuted,
 } from "@showtime-xyz/universal.icon";
 import { Pressable } from "@showtime-xyz/universal.pressable";
-import {
-  useSafeAreaFrame,
-  useSafeAreaInsets,
-} from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -24,20 +20,10 @@ import { CollapsibleText } from "design-system/collapsible-text/collapsible-text
 
 import { FeedVideo } from "./video-feed-video";
 
-export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
-  const safeAreaInsets = useSafeAreaInsets();
-  const size = useSafeAreaFrame();
-  const videoDimensions =
-    Platform.OS === "web"
-      ? {
-          width: "100%",
-          height: "100vh",
-        }
-      : {
-          width: size.width,
-          height: size.height,
-        };
-
+export const VideoFeedItem = memo(function VideoFeedItem({
+  video,
+  videoDimensions,
+}: any) {
   return (
     <View tw="w-full">
       <FeedVideo
@@ -54,12 +40,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({ video }: any) {
           locations={[0.05, 0.8]}
           colors={["rgba(12,12,12,0)", "rgba(12,12,12,.8)"]}
         />
-        <View
-          tw="flex-1 flex-row items-center justify-between px-4"
-          style={{
-            paddingBottom: safeAreaInsets.bottom + 32,
-          }}
-        >
+        <View tw="flex-1 flex-row items-center justify-between px-4 pb-8">
           <View style={{ rowGap: 12, flex: 3 }}>
             <View tw="flex-row items-center">
               <Avatar size={32} />

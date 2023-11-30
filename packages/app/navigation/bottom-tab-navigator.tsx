@@ -32,7 +32,7 @@ export function BottomTabNavigator() {
       screenOptions={{
         headerShown: false,
       }}
-      tabBar={(props) => null}
+      tabBar={(props) => <BottomTabbar {...props} />}
     >
       <BottomTab.Screen
         name="homeTab"

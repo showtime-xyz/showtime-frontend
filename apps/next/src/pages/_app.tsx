@@ -257,8 +257,6 @@ const inter = Inter({
 const Container = withColorScheme(
   ({ children }: { children: React.ReactNode }) => {
     const fonts = [inter.variable].join(" ");
-    const headerHeight = useHeaderHeight();
-    const bottomBarHeight = usePlatformBottomHeight();
     return (
       <View
         tw={
@@ -266,8 +264,6 @@ const Container = withColorScheme(
         }
         // @ts-ignore
         style={{
-          paddingTop: headerHeight,
-          paddingBottom: `calc(${bottomBarHeight}px + env(safe-area-inset-bottom))`,
           flex: 1,
           flexDirection: "row",
         }}

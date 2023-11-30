@@ -101,14 +101,14 @@ function App() {
   }, []);
 
   const onAppStateChange = useCallback(async (status: AppStateStatus) => {
-    VolumeManager.enable(true);
+    // VolumeManager.enable(true);
     if (status === "active") {
       if (audioSessionIsInactive.current) {
-        VolumeManager.setActive(true);
+        // VolumeManager.setActive(true);
         audioSessionIsInactive.current = false;
       }
     } else if (status === "background") {
-      VolumeManager.setActive(false);
+      // VolumeManager.setActive(false);
       audioSessionIsInactive.current = true;
     }
   }, []);
