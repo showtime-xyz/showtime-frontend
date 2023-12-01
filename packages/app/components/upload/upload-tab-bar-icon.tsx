@@ -23,8 +23,14 @@ import { breakpoints } from "design-system/theme";
 import { videoUploadStore } from "./video-upload-store";
 
 export const CreateTabBarIcon = () => {
-  const { takeVideo, pickVideo, chooseVideo, uploadProgress, isUploading } =
-    useSnapshot(videoUploadStore);
+  const {
+    takeVideo,
+    pickVideo,
+    chooseVideo,
+    uploadProgress,
+    isUploading,
+    abortUpload,
+  } = useSnapshot(videoUploadStore);
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isMdWidth = width >= breakpoints["md"];
@@ -85,15 +91,7 @@ export const CreateTabBarIcon = () => {
         loop
       >
         {isUploading ? (
-          <DropdownMenuItem
-            key="b_library"
-            onSelect={async () => {
-              videoUploadStore.uploadInstance.abort();
-              videoUploadStore.uploadProgress = 0;
-              videoUploadStore.isUploading = false;
-            }}
-            destructive
-          >
+          <DropdownMenuItem key="b_library" onSelect={abortUpload} destructive>
             <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
               Abort upload
             </DropdownMenuItemTitle>
