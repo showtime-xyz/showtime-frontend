@@ -154,13 +154,13 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
         },
         onProgress: function (bytesUploaded, bytesTotal) {
           const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
-          console.log(bytesUploaded, bytesTotal, percentage + "%");
+          //console.log(bytesUploaded, bytesTotal, percentage + "%");
 
           videoUploadStore.uploadProgress = Number(percentage);
           globalThis?.gc?.();
         },
         onSuccess: function () {
-          console.log("Upload finished");
+          //console.log("Upload finished");
           toast.success("Upload finished");
 
           cleanUp();
