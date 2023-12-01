@@ -17,10 +17,12 @@ const ViewabilityInfiniteScrollList =
 export const VideoFeedList = (props: {
   data?: VideoPost[];
   initialScrollIndex?: number;
+  onEndReached?: () => void;
 }) => {
-  const { data, initialScrollIndex = 0 } = props;
+  const { data, initialScrollIndex = 0, onEndReached } = props;
   const size = useSafeAreaFrame();
   const bottomBarHeight = usePlatformBottomHeight();
+
   const videoDimensions = useMemo(
     () =>
       Platform.OS === "web"
@@ -34,7 +36,6 @@ export const VideoFeedList = (props: {
           },
     [bottomBarHeight, size.height, size.width]
   );
-
   const renderItem = useCallback(
     ({ item }: { item: VideoPost }) => (
       <VideoFeedItem post={item} videoDimensions={videoDimensions} />
@@ -55,11 +56,17 @@ export const VideoFeedList = (props: {
   );
 
   return (
-    <View style={{ flex: 1, paddingBottom: bottomBarHeight }}>
+    <View
+      style={{
+        flex: 1,
+        paddingBottom: bottomBarHeight,
+      }}
+    >
       <ViewabilityInfiniteScrollList
         useWindowScroll={false}
         data={data}
         overscan={12}
+        onEndReached={onEndReached}
         estimatedItemSize={Platform.select({
           web: typeof window !== "undefined" ? window.innerHeight : 0,
           default: videoDimensions.height as number,

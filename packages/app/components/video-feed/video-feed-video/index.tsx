@@ -22,7 +22,7 @@ import { VideoProps } from "./type";
 export const FeedVideo = (props: VideoProps) => {
   const videoRef = useRef<any>(null);
   const [muted] = useMuted();
-  const { width, height, uri } = props;
+  const { width, height, uri, aspectRatio } = props;
 
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
@@ -85,13 +85,15 @@ export const FeedVideo = (props: VideoProps) => {
     }
   };
 
+  const resizeMode = aspectRatio > 0.65 ? "aspectFit" : "aspectFill";
+
   return (
     <>
       <IVSPlayer
         //  @ts-ignore
         style={{ width, height }}
         ref={videoRef}
-        resizeMode={"aspectFill"}
+        resizeMode={resizeMode}
         streamUrl={uri as string}
         autoplay={false}
         muted={muted}

@@ -17,7 +17,7 @@ export const FeedVideo = (props: VideoProps) => {
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
-  const { height, width, uri } = props;
+  const { height, width, uri, aspectRatio } = props;
 
   const play = () => {
     videoRef.current?.play();
@@ -59,6 +59,7 @@ export const FeedVideo = (props: VideoProps) => {
     },
     [id, isItemInList, context, uri]
   );
+  const resizeMode = aspectRatio > 0.65 ? "contain" : "cover";
 
   return (
     <>
@@ -66,7 +67,7 @@ export const FeedVideo = (props: VideoProps) => {
         style={{
           width,
           height,
-          objectFit: "cover",
+          objectFit: resizeMode,
         }}
         playsInline
         controls={false}

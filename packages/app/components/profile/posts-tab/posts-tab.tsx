@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { useWindowDimensions } from "react-native";
 
 import { Image } from "@showtime-xyz/universal.image";
@@ -8,6 +8,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import { Link } from "app/navigation/link";
 import { VideoPost } from "app/types";
 
@@ -22,6 +23,8 @@ export const PostsTab = (props: {
   const gap = 1;
   const itemWidth = useWindowDimensions().width / 3 - gap;
   const bottomBarHeight = usePlatformBottomHeight();
+  const listRef = useRef(null);
+  useScrollToTop(listRef);
 
   const renderItem = useCallback(
     ({ item }: { item: VideoPost }) => {
@@ -75,6 +78,7 @@ export const PostsTab = (props: {
     <View style={{ margin: -gap }}>
       <TabInfiniteScrollList
         index={index}
+        ref={listRef}
         data={profilePostsState.data}
         estimatedItemSize={300}
         numColumns={3}
