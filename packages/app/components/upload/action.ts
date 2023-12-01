@@ -16,14 +16,13 @@ import { videoUploadStore } from "./video-upload-store";
 export const takeVideo = async () => {
   const { status } = await ImagePicker.requestCameraPermissionsAsync();
   if (status !== "granted") {
-    alert("Sorry, we need camera permissions to make this work!");
+    toast.error("No permissions granted");
     return false;
   }
   const video = await ImagePicker.launchCameraAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Videos,
     videoMaxDuration: 600, // 10 minutes
     allowsEditing: true,
-    aspect: [9, 16],
     selectionLimit: 1,
   });
   if (video.canceled) {
@@ -37,15 +36,16 @@ export const takeVideo = async () => {
 export const pickVideo = async () => {
   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (status !== "granted") {
-    alert("Sorry, we need media library permissions to make this work!");
+    toast.error("No permissions granted");
     return false;
   }
   const video = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Videos,
     allowsEditing: true,
-    aspect: [9, 16],
     videoMaxDuration: 600, // 10 minutes
+    selectionLimit: 1,
   });
+
   if (video.canceled) {
     return false;
   }
