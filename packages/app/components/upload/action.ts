@@ -5,6 +5,8 @@ import * as ImagePicker from "expo-image-picker";
 import * as tus from "tus-js-client";
 import { ref } from "valtio";
 
+import { Alert } from "@showtime-xyz/universal.alert";
+
 import { axios } from "app/lib/axios";
 
 import { toast } from "design-system/toast";
@@ -31,6 +33,24 @@ export const takeVideo = async () => {
 
   videoUploadStore.videoPath = video.assets[0];
   return true;
+};
+
+export const abortUpload = () => {
+  Alert.alert("Abort upload?", "Are you sure you want to abort the upload?", [
+    {
+      text: "Cancel",
+    },
+    {
+      text: "Abort",
+      style: "destructive",
+      onPress: async () => {
+        videoUploadStore.uploadInstance.abort();
+        videoUploadStore.uploadProgress = 0;
+        videoUploadStore.isUploading = false;
+        toast.error("Upload aborted");
+      },
+    },
+  ]);
 };
 
 export const pickVideo = async () => {
