@@ -220,6 +220,7 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
           videoUploadStore.uploadInstance.abort();
           videoUploadStore.uploadProgress = 0;
           videoUploadStore.isUploading = false;
+          globalThis?.gc?.();
 
           toast.error("Upload aborted");
         },
