@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
 
 import { useSnapshot } from "valtio";
 
@@ -18,7 +18,6 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
 } from "design-system/dropdown-menu";
-import { breakpoints } from "design-system/theme";
 
 import { videoUploadStore } from "../../store/video-upload-store";
 
@@ -32,8 +31,6 @@ export const CreateTabBarIcon = () => {
     abortUpload,
   } = useSnapshot(videoUploadStore);
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
   const isDark = useIsDarkMode();
 
   const redirectToComposerScreen = useCallback(() => {
@@ -60,36 +57,21 @@ export const CreateTabBarIcon = () => {
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <View tw="cursor-pointer flex-col items-center justify-center text-center md:flex-row">
-          <Create
-            style={{ zIndex: 1 }}
-            width={isUploading ? 24 : 34}
-            height={isUploading ? 24 : 34}
-            isDark={isDark}
-          />
-          {isMdWidth ? (
-            <View tw="ml-2 gap-1">
-              <Text tw="font-bold">Create</Text>
-              {isUploading && (
-                <Text tw="text-xs text-gray-500 dark:text-gray-400">
-                  {uploadProgress}%
-                </Text>
-              )}
-            </View>
-          ) : (
-            isUploading && (
-              <Text tw="text-xs text-gray-500 dark:text-gray-200">
+          <View tw="items-center">
+            <Create
+              width={isUploading ? 24 : 34}
+              height={isUploading ? 24 : 34}
+              isDark={isDark}
+            />
+            {isUploading && (
+              <Text tw="pb-1 pt-1 text-center text-xs font-semibold text-gray-500 dark:text-gray-200">
                 {uploadProgress}%
               </Text>
-            )
-          )}
+            )}
+          </View>
         </View>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        side="bottom"
-        align={isMdWidth ? "start" : "center"}
-        sideOffset={10}
-        loop
-      >
+      <DropdownMenuContent side="bottom" align={"center"} sideOffset={10} loop>
         {isUploading ? (
           <DropdownMenuItem key="b_library" onSelect={abortUpload} destructive>
             <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
@@ -97,7 +79,7 @@ export const CreateTabBarIcon = () => {
             </DropdownMenuItemTitle>
             <MenuItemIcon
               Icon={() => <Close height={20} width={20} color={"black"} />}
-              ios={{ name: "arrowshape.bounce.right" }}
+              ios={{ name: "clear" }}
             />
           </DropdownMenuItem>
         ) : (
