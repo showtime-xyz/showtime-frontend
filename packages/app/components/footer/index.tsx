@@ -17,7 +17,7 @@ import {
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
-import { CreateTabBarIcon } from "../upload/upload-tab-bar-icon";
+import { CreateIconMobileWeb } from "../upload/create-icon-mobile-web";
 
 const Footer = () => {
   const router = useRouter();
@@ -61,7 +61,7 @@ const Footer = () => {
         color={color}
         focused={router.pathname === "/channels"}
       />
-      <CreateTabBarIcon />
+      <CreateIconMobileWeb />
       <NotificationsTabBarIcon
         color={color}
         focused={router.pathname === "/notifications"}
