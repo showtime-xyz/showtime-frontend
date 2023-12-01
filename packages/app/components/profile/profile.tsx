@@ -1,4 +1,4 @@
-import { useCallback, useReducer, Suspense, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { useSharedValue } from "react-native-reanimated";
@@ -12,7 +12,6 @@ import {
   SceneRendererProps,
   HeaderTabView,
   Route,
-  TabSpinner,
   NavigationState,
 } from "@showtime-xyz/universal.tab-view";
 import { colors } from "@showtime-xyz/universal.tailwind";
@@ -30,15 +29,13 @@ import { useBlock } from "app/hooks/use-block";
 import { useContentWidth } from "app/hooks/use-content-width";
 import { useCurrentUserId } from "app/hooks/use-current-user-id";
 import { useRedirectToCreatorTokenSocialShare } from "app/hooks/use-redirect-to-creator-token-social-share-screen";
-import { useShare } from "app/hooks/use-share";
 import { useTabState } from "app/hooks/use-tab-state";
 import { useHeaderHeight } from "app/lib/react-navigation/elements";
 import { createParam } from "app/navigation/use-param";
 import { formatProfileRoutes, getProfileName } from "app/utilities";
 
-import { ErrorBoundary } from "../error-boundary";
-import { TabFallback } from "../error-boundary/tab-fallback";
 import { ButtonGoldLinearGradient } from "../gold-gradient";
+import { PostsTab } from "./posts-tab/posts-tab";
 import { ProfileError } from "./profile-error";
 import { ProfileTabBar } from "./profile-tab-bar";
 import { ProfileTop } from "./profile-top";
@@ -152,6 +149,14 @@ const Profile = ({ username }: ProfileScreenProps) => {
           />
         );
       }
+      if (key === "posts") {
+        return (
+          <PostsTab
+            profileUsername={profileData?.data?.profile.username}
+            index={routeIndex}
+          />
+        );
+      }
       return null;
     },
     [
@@ -201,7 +206,11 @@ const Profile = ({ username }: ProfileScreenProps) => {
         navigationState: NavigationState<Route>;
       }
     ) => {
-      return null;
+      return (
+        <View tw="bg-white dark:bg-black">
+          <ProfileTabBar {...props} />
+        </View>
+      );
     },
     []
   );
