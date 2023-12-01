@@ -63,9 +63,11 @@ export const PostsTab = (props: {
     }
     if (profilePostsState.data?.length === 0) {
       return (
-        <Text tw="pt-10 text-center text-xl font-semibold text-gray-700 dark:text-gray-100">
-          No Posts
-        </Text>
+        <View tw="mt-12">
+          <Text tw="text-center text-xl font-semibold text-gray-700 dark:text-gray-100">
+            No Posts
+          </Text>
+        </View>
       );
     }
     return null;
