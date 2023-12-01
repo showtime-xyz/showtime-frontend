@@ -62,8 +62,8 @@ export const CreateTabBarIcon = () => {
         <View tw="cursor-pointer flex-col items-center justify-center text-center md:flex-row">
           <Create
             style={{ zIndex: 1 }}
-            width={34}
-            height={34}
+            width={isUploading ? 24 : 34}
+            height={isUploading ? 24 : 34}
             isDark={isDark}
           />
           {isMdWidth ? (

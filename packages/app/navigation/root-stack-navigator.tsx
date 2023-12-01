@@ -8,8 +8,7 @@ import { Text } from "@showtime-xyz/universal.text";
 
 import { Messages } from "app/components/creator-channels/messages";
 import { PostDetail } from "app/components/post-detail";
-import UploadComposer from "app/components/upload/components/composer";
-import UploadPreview from "app/components/upload/preview";
+import UploadComposer from "app/components/upload/composer";
 import { useHandleNotification } from "app/hooks/use-handle-notification";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
