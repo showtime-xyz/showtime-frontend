@@ -11,7 +11,7 @@ import { axios } from "app/lib/axios";
 
 import { toast } from "design-system/toast";
 
-import TusFileReader from "./FileReader";
+import TusFileReader from "./filereader";
 import { PresignPayload, SignUploadPayload } from "./types";
 import { VideoUploadStoreState } from "./types";
 
