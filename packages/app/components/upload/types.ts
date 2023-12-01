@@ -21,6 +21,7 @@ export interface VideoUploadStoreState {
   chooseVideo: () => Promise<boolean>;
   signUpload: (payload?: SignUploadPayload) => Promise<void | boolean>;
   uploadInstance: tus.Upload;
+  abortUpload: () => void;
 }
 
 export type PresignPayload = {
