@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
 
 import { useSnapshot } from "valtio";
 
@@ -10,16 +10,12 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { breakpoints } from "design-system/theme";
-
 import { videoUploadStore } from "./video-upload-store";
 
 export const CreateIconMobileWeb = () => {
-  const { pickVideo, uploadProgress, isUploading } =
+  const { pickVideo, uploadProgress, isUploading, abortUpload } =
     useSnapshot(videoUploadStore);
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isMdWidth = width >= breakpoints["md"];
   const isDark = useIsDarkMode();
 
   const redirectToComposerScreen = useCallback(() => {
@@ -42,31 +38,30 @@ export const CreateIconMobileWeb = () => {
     );
   }, [router]);
 
+  const uploadAction = useCallback(async () => {
+    if (isUploading) {
+      abortUpload();
+    } else {
+      await pickVideo();
+      redirectToComposerScreen();
+    }
+  }, [abortUpload, isUploading, pickVideo, redirectToComposerScreen]);
+
   return (
     <View tw="cursor-pointer flex-col items-center justify-center text-center md:flex-row">
-      <Pressable
-        onPress={async () => {
-          await pickVideo();
-          redirectToComposerScreen();
-        }}
-      >
-        <Create width={32} height={32} isDark={isDark} />
-        {isMdWidth ? (
-          <View tw="ml-2 gap-1">
-            <Text tw="font-bold">Create</Text>
-            {isUploading && (
-              <Text tw="text-xs text-gray-500 dark:text-gray-400">
-                {uploadProgress}%
-              </Text>
-            )}
-          </View>
-        ) : (
-          isUploading && (
-            <Text tw="text-xs text-gray-500 dark:text-gray-200">
+      <Pressable onPress={uploadAction}>
+        <View tw="items-center">
+          <Create
+            width={isUploading ? 24 : 32}
+            height={isUploading ? 24 : 32}
+            isDark={isDark}
+          />
+          {isUploading && (
+            <Text tw="w-14 pb-1 pt-1 text-center text-xs text-gray-500 dark:text-gray-200">
               {uploadProgress}%
             </Text>
-          )
-        )}
+          )}
+        </View>
       </Pressable>
     </View>
   );
