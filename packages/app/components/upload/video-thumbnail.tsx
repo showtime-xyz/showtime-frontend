@@ -108,6 +108,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = memo(
         try {
           const { uri } = await VideoThumbnails.getThumbnailAsync(videoUri, {
             time: timeFrame * 1000,
+            quality: 0.8,
           });
           setThumbnailUri(uri);
           setHasError(false);
