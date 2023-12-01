@@ -43,7 +43,7 @@ export const PostCreateSuccess = () => {
   const mediaHeight = mediaWidth / mediaAspectRatio;
 
   return (
-    <View tw="p-4">
+    <View tw="p-8">
       <View tw="self-center">
         <Image
           source={{ uri: post.media.urls.thumbnail }}
@@ -51,12 +51,11 @@ export const PostCreateSuccess = () => {
           width={mediaWidth}
         />
       </View>
-      <View style={{ flex: 1, rowGap: 8, marginTop: 32 }}>
-        <Text tw="mb-2 text-center text-2xl font-bold">
-          Posted successfully!
-        </Text>
-        <Text tw="text-center">
-          Share your new video to gain new Creator Token collectors.
+      <View style={{ flex: 1, rowGap: 16, marginTop: 32, marginBottom: 32 }}>
+        <Text tw="text-center text-2xl font-bold">Posted successfully!</Text>
+        <Text tw="text-center text-base text-black dark:text-white">
+          Share your new video to gain new{" "}
+          <Text tw="font-bold">Creator Token</Text> collectors.
         </Text>
       </View>
       <View style={{ rowGap: 16, marginTop: 16 }}>
