@@ -44,14 +44,16 @@ export const FeedVideo = (props: VideoProps) => {
 
   useEffect(() => {
     const focusListener = navigation.addListener("focus", () => {
-      if (wasStoppedBecauseOfBlur.current) {
+      if (wasStoppedBecauseOfBlur.current && isVisibleRef.current) {
         wasStoppedBecauseOfBlur.current = false;
         setVisible(true);
       }
     });
     const blurListener = navigation.addListener("blur", () => {
-      wasStoppedBecauseOfBlur.current = true;
-      setVisible(false);
+      if (isVisibleRef.current) {
+        wasStoppedBecauseOfBlur.current = true;
+        setVisible(false);
+      }
     });
     return () => {
       focusListener();
