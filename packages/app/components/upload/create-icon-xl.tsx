@@ -17,7 +17,7 @@ import { colors } from "design-system/tailwind/colors";
 import { videoUploadStore } from "./video-upload-store";
 
 export const CreateButtonDesktop = () => {
-  const { chooseVideo, uploadProgress, isUploading } =
+  const { chooseVideo, uploadProgress, isUploading, abortUpload } =
     useSnapshot(videoUploadStore);
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -50,9 +50,7 @@ export const CreateButtonDesktop = () => {
           tw="w-full flex-row items-center justify-center rounded-full bg-[#FF3370] p-2 transition-transform duration-300 hover:scale-105"
           onPress={async () => {
             if (isUploading) {
-              videoUploadStore.uploadInstance.abort();
-              videoUploadStore.uploadProgress = 0;
-              videoUploadStore.isUploading = false;
+              abortUpload();
             } else {
               const success = await chooseVideo();
               if (success) {
