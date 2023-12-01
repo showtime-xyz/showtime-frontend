@@ -90,6 +90,17 @@ export const signUpload = async (payload?: SignUploadPayload) => {
     return false;
   }
 
+  const unloadListener = (event: BeforeUnloadEvent) => {
+    event.returnValue = `Are you sure you want to leave?`;
+  };
+
+  const cleanUp = () => {
+    videoUploadStore.uploadProgress = 0;
+    videoUploadStore.isUploading = false;
+    globalThis?.gc?.();
+    window.removeEventListener("beforeunload", unloadListener);
+  };
+
   videoUploadStore.isUploading = true;
   try {
     const result: PresignPayload = await axios({
@@ -154,9 +165,7 @@ export const signUpload = async (payload?: SignUploadPayload) => {
           }
         );
 
-        videoUploadStore.uploadProgress = 0;
-        videoUploadStore.isUploading = false;
-        globalThis?.gc?.();
+        cleanUp();
       },
       onProgress: function (bytesUploaded, bytesTotal) {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
@@ -169,9 +178,7 @@ export const signUpload = async (payload?: SignUploadPayload) => {
         console.log("Upload finished");
         toast.success("Upload finished");
 
-        videoUploadStore.uploadProgress = 0;
-        videoUploadStore.isUploading = false;
-        globalThis?.gc?.();
+        cleanUp();
       },
       onShouldRetry: function (err) {
         const status = (err as tus.DetailedError).originalResponse
@@ -205,10 +212,12 @@ export const signUpload = async (payload?: SignUploadPayload) => {
         }
         // Start the upload
         videoUploadStore.uploadInstance.start();
+        if (Platform.OS === "web" && typeof window !== "undefined") {
+          window.addEventListener("beforeunload", unloadListener);
+        }
       });
   } catch (e) {
     toast.error("Something went wrong");
-    videoUploadStore.uploadProgress = 0;
-    videoUploadStore.isUploading = false;
+    cleanUp();
   }
 };
