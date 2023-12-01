@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
 import { Platform } from "react-native";
-import { useWindowDimensions } from "react-native";
 
 import * as VideoThumbnails from "expo-video-thumbnails";
 
@@ -15,7 +14,6 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = memo(
   ({ videoUri, timeFrame = 0 }) => {
     const [thumbnailUri, setThumbnailUri] = useState<string | null>(null);
     const [hasError, setHasError] = useState(false);
-    const { height } = useWindowDimensions();
 
     const generateThumbnailForWeb = useCallback(
       async (uri: string, time: number): Promise<string> => {
