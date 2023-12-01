@@ -21,6 +21,10 @@ export const takeVideo = async () => {
   }
   const video = await ImagePicker.launchCameraAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+    videoMaxDuration: 600, // 10 minutes
+    allowsEditing: true,
+    aspect: [9, 16],
+    selectionLimit: 1,
   });
   if (video.canceled) {
     return false;
@@ -40,6 +44,7 @@ export const pickVideo = async () => {
     mediaTypes: ImagePicker.MediaTypeOptions.Videos,
     allowsEditing: true,
     aspect: [9, 16],
+    videoMaxDuration: 600, // 10 minutes
   });
   if (video.canceled) {
     return false;
