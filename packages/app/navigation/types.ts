@@ -80,6 +80,7 @@ type RootStackNavigatorParams = {
   dropViewShareModal: undefined;
   claimLimitExplanation: undefined;
   posts: undefined;
+  postDetail: undefined;
   channelsSettings: undefined;
   channelUnlocked: undefined;
   creatorTokensShare: undefined;

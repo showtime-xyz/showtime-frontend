@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from "react";
 import { Platform } from "react-native";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -20,16 +21,38 @@ export const VideoFeedList = (props: {
   const { data, initialScrollIndex = 0 } = props;
   const size = useSafeAreaFrame();
   const bottomBarHeight = usePlatformBottomHeight();
-  const videoDimensions =
-    Platform.OS === "web"
-      ? {
-          width: "100%",
-          height: `calc(100dvh - ${bottomBarHeight}px)`,
-        }
-      : {
-          width: size.width,
-          height: size.height - bottomBarHeight,
-        };
+  const videoDimensions = useMemo(
+    () =>
+      Platform.OS === "web"
+        ? {
+            width: "100%",
+            height: `calc(100dvh - ${bottomBarHeight}px)`,
+          }
+        : {
+            width: size.width,
+            height: size.height - bottomBarHeight,
+          },
+    [bottomBarHeight, size.height, size.width]
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: VideoPost }) => (
+      <VideoFeedItem post={item} videoDimensions={videoDimensions} />
+    ),
+    [videoDimensions]
+  );
+
+  const snapToOffsets = useMemo(
+    () =>
+      Platform.OS !== "web"
+        ? data?.map(
+            (_, i) =>
+              // @ts-ignore
+              i * videoDimensions.height
+          )
+        : undefined,
+    [data, videoDimensions.height]
+  );
 
   return (
     <View style={{ flex: 1, paddingBottom: bottomBarHeight }}>
@@ -43,15 +66,9 @@ export const VideoFeedList = (props: {
         })}
         initialScrollIndex={initialScrollIndex}
         pagingEnabled
-        snapToOffsets={data?.map(
-          (_, i) =>
-            // @ts-ignore
-            i * videoDimensions.height
-        )}
+        snapToOffsets={snapToOffsets}
         decelerationRate="fast"
-        renderItem={({ item }) => (
-          <VideoFeedItem video={item} videoDimensions={videoDimensions} />
-        )}
+        renderItem={renderItem}
       />
     </View>
   );

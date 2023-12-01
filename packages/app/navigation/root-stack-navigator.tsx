@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Messages } from "app/components/creator-channels/messages";
+import { PostDetail } from "app/components/post-detail";
 import UploadComposer from "app/components/upload/composer";
 import UploadPreview from "app/components/upload/preview";
 import { useHandleNotification } from "app/hooks/use-handle-notification";
@@ -109,6 +110,7 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen name="channelsMessage" component={Messages} />
+        <Stack.Screen name="postDetail" component={PostDetail} />
         <Stack.Screen
           name="channelUnlocked"
           component={UnlockedChannelScreen}

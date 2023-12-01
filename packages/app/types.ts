@@ -8,7 +8,7 @@ export type BunnyVideoUrls = {
   mp4_360?: string | null;
   mp4_480?: string | null;
   mp4_720?: string | null;
-  original?: string | null;
+  original?: string;
   preview_animation?: string | null;
   thumbnail?: string | null;
   optimized_thumbnail?: string | null;

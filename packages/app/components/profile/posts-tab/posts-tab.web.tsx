@@ -27,6 +27,7 @@ export const PostsTab = (props: {
       return (
         <Link
           href={`/posts?username=${item.profile.username}&type=profilePosts&postId=${item.id}`}
+          as={`/posts/${item.id}`}
         >
           <img
             style={{

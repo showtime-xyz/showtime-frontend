@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { StyleSheet, Platform } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -15,6 +15,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { useMuted } from "app/providers/mute-provider";
+import { VideoPost } from "app/types";
 import { getVideoUrl } from "app/utilities";
 
 import { CollapsibleText } from "design-system/collapsible-text/collapsible-text";
@@ -22,16 +23,26 @@ import { CollapsibleText } from "design-system/collapsible-text/collapsible-text
 import { FeedVideo } from "./video-feed-video";
 
 export const VideoFeedItem = memo(function VideoFeedItem({
-  video,
+  post,
   videoDimensions,
-}: any) {
+}: {
+  post: VideoPost;
+  videoDimensions: { height: any; width: any };
+}) {
+  const mediaURI = useMemo(
+    () => getVideoUrl(post.media.urls),
+    [post.media.urls]
+  );
   return (
     <View tw="w-full">
-      <FeedVideo
-        uri={getVideoUrl(video.media.urls)}
-        height={videoDimensions.height}
-        width={videoDimensions.width}
-      />
+      {mediaURI ? (
+        <FeedVideo
+          uri={mediaURI}
+          height={videoDimensions.height}
+          width={videoDimensions.width}
+        />
+      ) : null}
+
       <View tw="z-1 absolute bottom-0 w-full">
         <LinearGradient
           pointerEvents="none"
