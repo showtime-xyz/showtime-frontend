@@ -1,7 +1,13 @@
 import * as tus from "tus-js-client";
 import { proxy, ref } from "valtio";
 
-import { chooseVideo, pickVideo, signUpload, takeVideo } from "./action";
+import {
+  chooseVideo,
+  pickVideo,
+  signUpload,
+  takeVideo,
+  abortUpload,
+} from "./action";
 import { VideoUploadStoreState } from "./types";
 
 export const videoUploadStore = proxy<VideoUploadStoreState>({
@@ -13,4 +19,5 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
   pickVideo,
   chooseVideo,
   signUpload,
+  abortUpload,
 });
