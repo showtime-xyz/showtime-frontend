@@ -42,6 +42,7 @@ import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-inv
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { LoginScreen } from "app/screens/login";
 import { OnboardingScreen } from "app/screens/onboarding";
+import { PostCreateSuccessScreen } from "app/screens/post-create-success-screen";
 import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
 import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
@@ -240,6 +241,7 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorTokenCollectorsScreen />
         <CreatorTokensShareModalScreen />
         <CreatorTokenSocialShareScreen />
+        <PostCreateSuccessScreen />
         <UploadComposerScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />

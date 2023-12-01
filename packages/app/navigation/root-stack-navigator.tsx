@@ -36,6 +36,7 @@ import { EditProfileScreen } from "app/screens/edit-profile";
 import { LoginScreen } from "app/screens/login";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PayoutsSetupScreen } from "app/screens/payouts/setup";
+import { PostCreateSuccessScreen } from "app/screens/post-create-success-screen";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
 import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
@@ -243,6 +244,7 @@ export function RootStackNavigator() {
           name="channelsShare"
           component={CreatorChannelsShareScreen}
         />
+        <Stack.Screen name="postShare" component={PostCreateSuccessScreen} />
         <Stack.Screen
           name="creatorTokenBuy"
           component={CreatorTokenBuyScreen}

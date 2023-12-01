@@ -59,6 +59,7 @@ type RootStackNavigatorParams = {
   payoutsSetup: undefined;
   trending: undefined;
   channelsMessageReactions: undefined;
+  postShare: undefined;
   search: undefined;
   login: undefined;
   editProfile: undefined;
