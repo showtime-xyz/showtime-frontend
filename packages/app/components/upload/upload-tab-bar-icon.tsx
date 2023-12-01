@@ -10,7 +10,6 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
-import { TabBarIconProps } from "app/navigation/tab-bar-icons";
 
 import {
   DropdownMenuContent,
@@ -23,7 +22,7 @@ import { breakpoints } from "design-system/theme";
 
 import { videoUploadStore } from "./video-upload-store";
 
-export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
+export const CreateTabBarIcon = () => {
   const { takeVideo, pickVideo, chooseVideo, uploadProgress, isUploading } =
     useSnapshot(videoUploadStore);
   const router = useRouter();
@@ -59,7 +58,6 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
             style={{ zIndex: 1 }}
             width={34}
             height={34}
-            color={color ?? "black"}
             isDark={isDark}
           />
           {isMdWidth ? (
@@ -141,7 +139,7 @@ export const CreateTabBarIcon = ({ color }: TabBarIconProps) => {
               }}
             >
               <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                Camera Roll
+                Photo Library
               </DropdownMenuItemTitle>
               <MenuItemIcon
                 Icon={() => <Gallery height={20} width={20} color={"black"} />}
