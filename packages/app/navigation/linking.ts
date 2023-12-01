@@ -67,6 +67,8 @@ export const linking: LinkingOptions<ReactNavigation.RootParamList> = {
       channelsMembers: "channels/:channelId/members",
       channelsSettings: "channels/:channelId/settings",
       channelsShare: "channels/:channelId/share",
+      postDetail: "posts/:postId",
+      posts: "posts",
       channelsMessageReactions:
         "channels/:channelId/messages/:messageId/reactions",
       channelUnlocked: "channels/:contractAddress/unlocked",

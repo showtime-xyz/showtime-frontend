@@ -1,15 +1,16 @@
 import React, { useCallback } from "react";
 import { useWindowDimensions } from "react-native";
 
-import { Image } from "@showtime-xyz/universal.image";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { Link } from "app/navigation/link";
+import { VideoPost } from "app/types";
 
-import { ProfilePost, useProfilePosts } from "../hooks/use-profile-posts";
+import { useProfilePosts } from "../hooks/use-profile-posts";
 
 export const PostsTab = (props: {
   index: number;
@@ -22,18 +23,22 @@ export const PostsTab = (props: {
   const gap = 1;
 
   const renderItem = useCallback(
-    ({ item }: { item: ProfilePost }) => {
+    ({ item }: { item: VideoPost }) => {
       return (
-        <img
-          style={{
-            margin: gap,
-            objectFit: "cover",
-            width: itemWidth,
-            maxWidth: `calc(100% - ${gap}px)`,
-            aspectRatio: 0.76,
-          }}
-          src={item.media.urls.optimized_thumbnail}
-        />
+        <Link
+          href={`/posts?username=${item.profile.username}&type=profilePosts&postId=${item.id}`}
+        >
+          <img
+            style={{
+              margin: gap,
+              objectFit: "cover",
+              width: itemWidth,
+              maxWidth: `calc(100% - ${gap}px)`,
+              aspectRatio: 0.76,
+            }}
+            src={item.media.urls.optimized_thumbnail}
+          />
+        </Link>
       );
     },
     [itemWidth]

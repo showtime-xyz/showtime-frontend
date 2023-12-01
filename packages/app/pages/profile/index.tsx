@@ -1,3 +1,4 @@
+import { Posts } from "app/components/posts";
 import { useCurrentUserAddress } from "app/hooks/use-current-user-address";
 import { useUser } from "app/hooks/use-user";
 import { createStackNavigator } from "app/navigation/create-stack-navigator";
@@ -25,6 +26,7 @@ function ProfileNavigator() {
         }}
         getId={({ params }) => params?.username}
       />
+      <ProfileStack.Screen name="posts" component={Posts} />
     </ProfileStack.Navigator>
   );
 }

@@ -33,6 +33,7 @@ type ProfileStackParams = {
   profile: { username: string };
   login: undefined;
   settings: undefined;
+  posts: undefined;
 };
 
 type NextPageProps = any;
@@ -78,6 +79,7 @@ type RootStackNavigatorParams = {
   dropImageShare: undefined;
   dropViewShareModal: undefined;
   claimLimitExplanation: undefined;
+  posts: undefined;
   channelsSettings: undefined;
   channelUnlocked: undefined;
   creatorTokensShare: undefined;

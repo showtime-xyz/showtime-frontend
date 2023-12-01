@@ -8,8 +8,10 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { Link } from "app/navigation/link";
+import { VideoPost } from "app/types";
 
-import { ProfilePost, useProfilePosts } from "../hooks/use-profile-posts";
+import { useProfilePosts } from "../hooks/use-profile-posts";
 
 export const PostsTab = (props: {
   index: number;
@@ -17,19 +19,23 @@ export const PostsTab = (props: {
 }) => {
   const { index, profileUsername } = props;
   const profilePostsState = useProfilePosts(profileUsername);
-  const itemWidth = useWindowDimensions().width / 3 - 2;
-  const bottomBarHeight = usePlatformBottomHeight();
   const gap = 1;
+  const itemWidth = useWindowDimensions().width / 3 - gap;
+  const bottomBarHeight = usePlatformBottomHeight();
 
   const renderItem = useCallback(
-    ({ item }: { item: ProfilePost }) => {
+    ({ item }: { item: VideoPost }) => {
       return (
-        <Image
-          style={{ width: itemWidth, height: itemWidth / 0.76, margin: gap }}
-          source={{
-            uri: item.media.urls.optimized_thumbnail,
-          }}
-        />
+        <Link
+          href={`/posts?username=${item.profile.username}&type=profilePosts&postId=${item.id}`}
+        >
+          <Image
+            style={{ width: itemWidth, height: itemWidth / 0.76, margin: gap }}
+            source={{
+              uri: item.media.urls.optimized_thumbnail,
+            }}
+          />
+        </Link>
       );
     },
     [itemWidth]

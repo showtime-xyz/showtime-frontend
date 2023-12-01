@@ -52,6 +52,7 @@ function InfiniteScrollListImpl<Item>(
     ListFooterComponent,
     ListEmptyComponent,
     onEndReached,
+    initialScrollIndex,
     numColumns = 1,
     overscan,
     style,
@@ -99,6 +100,9 @@ function InfiniteScrollListImpl<Item>(
       scrollMargin: parentOffsetRef.current,
       overscan: overscan ?? 2,
       initialOffset: (() => {
+        if (initialScrollIndex && estimatedItemSize) {
+          return initialScrollIndex * estimatedItemSize;
+        }
         if (!preserveScrollPosition || positionWasRestored.current) return;
         const pos = sessionStorage.getItem(key);
         if (pos) {
@@ -119,6 +123,9 @@ function InfiniteScrollListImpl<Item>(
       scrollMargin: parentOffsetRef.current,
       overscan: overscan ?? 4,
       initialOffset: (() => {
+        if (initialScrollIndex && estimatedItemSize) {
+          return initialScrollIndex * estimatedItemSize;
+        }
         if (!preserveScrollPosition || positionWasRestored.current) return;
         const pos = sessionStorage.getItem(key);
         if (pos) {
