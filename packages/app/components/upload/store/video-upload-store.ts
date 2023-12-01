@@ -82,7 +82,9 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
       videoUploadStore.uploadProgress = 0;
       videoUploadStore.isUploading = false;
       globalThis?.gc?.();
-      window.removeEventListener("beforeunload", unloadListener);
+      if (Platform.OS === "web" && typeof window !== "undefined") {
+        window.removeEventListener("beforeunload", unloadListener);
+      }
     };
 
     videoUploadStore.isUploading = true;
@@ -218,6 +220,7 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
           videoUploadStore.uploadInstance.abort();
           videoUploadStore.uploadProgress = 0;
           videoUploadStore.isUploading = false;
+
           toast.error("Upload aborted");
         },
       },
