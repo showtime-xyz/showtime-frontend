@@ -32,9 +32,9 @@ const UploadComposer = () => {
 
   // we need to delay this because otherwise it will block the UI
   useLayoutEffect(() => {
-    requestAnimationFrame(() => {
+    setTimeout(() => {
       setPreviewImg(videoPath?.uri);
-    });
+    }, 500);
   }, [videoPath?.uri]);
 
   const renderEndComponent = useCallback(() => {
@@ -69,7 +69,7 @@ const UploadComposer = () => {
       <View>
         <ModalHeader onClose={close} endContentComponent={renderEndComponent} />
         <View tw="flex-1 items-center justify-start p-4">
-          <VideoThumbnail videoUri={previewImg} timeFrame={100} />
+          <VideoThumbnail videoUri={previewImg} timeFrame={5} />
           <View tw="mt-8 w-full">
             <View tw="h-28 w-full overflow-hidden rounded-3xl bg-gray-200 p-4 text-base  text-black dark:bg-[#1B1B1B] dark:text-white">
               <TextInput
