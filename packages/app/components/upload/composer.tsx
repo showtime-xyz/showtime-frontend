@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSnapshot } from "valtio";
 
-import { useEffectOnce, useIsDarkMode } from "@showtime-xyz/universal.hooks";
+import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
 import { ArrowTop } from "@showtime-xyz/universal.icon";
 import { ModalHeader } from "@showtime-xyz/universal.modal";
 import { Pressable } from "@showtime-xyz/universal.pressable";
