@@ -31,6 +31,7 @@ export const PrivyProvider = ({ children }: any) => {
     "sms",
     "google",
     "apple",
+    "tiktok",
   ] as const);
 
   return (
