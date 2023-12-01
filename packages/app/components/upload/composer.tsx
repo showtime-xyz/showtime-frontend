@@ -15,8 +15,8 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { toast } from "design-system/toast";
 
-import { videoUploadStore } from "../store/video-upload-store";
-import VideoThumbnail from "./video-thumbnail";
+import VideoThumbnail from "./components/video-thumbnail";
+import { videoUploadStore } from "./store/video-upload-store";
 
 const PlatformSafeView = Platform.OS === "web" ? View : SafeAreaView;
 
