@@ -47,6 +47,7 @@ const UploadComposer = () => {
           });
           signUpload({ data: { description: text }, router });
         }}
+        disabled={!videoPath?.uri}
       >
         <View
           tw="absolute -top-4 right-0 flex-row items-center justify-center rounded-full bg-[#FF3370] px-8 py-2"
