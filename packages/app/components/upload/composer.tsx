@@ -42,14 +42,14 @@ const UploadComposer = () => {
       <Pressable
         onPress={async () => {
           close();
-          toast.success("Uploading video...", {
-            duration: 5000,
+          toast.success("Upload queued", {
+            duration: 2000,
           });
           signUpload({ data: { description: text }, router });
         }}
       >
         <View
-          tw="absolute right-3 flex-row items-center justify-center rounded-full bg-[#FF3370] px-8 py-2"
+          tw="absolute -top-4 right-0 flex-row items-center justify-center rounded-full bg-[#FF3370] px-8 py-2"
           style={{
             opacity: videoPath?.uri ? 1 : 0.5,
           }}
