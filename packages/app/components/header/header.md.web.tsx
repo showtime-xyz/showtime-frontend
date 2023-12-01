@@ -63,7 +63,7 @@ import {
 import { useChannelsUnreadMessages } from "../creator-channels/hooks/use-channels-unread-messages";
 import { useLogin } from "../login/use-login";
 import { withColorScheme } from "../memo-with-theme";
-import { CreateButtonDesktop } from "../upload/create-icon-xl";
+import { CreateButtonDesktop } from "../upload/components/icons/create-icon-xl";
 
 const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -3,7 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { CreateTabBarIcon } from "app/components/upload/upload-tab-bar-icon";
+import { CreateTabBarIcon } from "app/components/upload/components/icons/upload-tab-bar-icon";
 import { UserContext } from "app/context/user-context";
 import CreatorChannelsNavigator from "app/pages/creator-channels";
 import HomeNavigator from "app/pages/home";

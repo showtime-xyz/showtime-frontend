@@ -10,7 +10,7 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { videoUploadStore } from "./video-upload-store";
+import { videoUploadStore } from "../../store/video-upload-store";
 
 export const CreateIconMobileWeb = () => {
   const { pickVideo, uploadProgress, isUploading, abortUpload } =

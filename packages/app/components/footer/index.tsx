@@ -17,7 +17,7 @@ import {
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
-import { CreateIconMobileWeb } from "../upload/create-icon-mobile-web";
+import { CreateIconMobileWeb } from "../upload/components/icons/create-icon-mobile-web";
 
 const Footer = () => {
   const router = useRouter();

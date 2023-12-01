@@ -1,6 +1,6 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import { PostCreateSuccess } from "app/components/upload/post-create-success";
+import { PostCreateSuccess } from "app/components/upload/components/post-create-success";
 
 export const PostCreateSuccessScreen = withModalScreen(PostCreateSuccess, {
   title: "",

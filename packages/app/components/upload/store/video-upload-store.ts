@@ -11,9 +11,9 @@ import { axios } from "app/lib/axios";
 
 import { toast } from "design-system/toast";
 
-import TusFileReader from "./filereader";
-import { PresignPayload, SignUploadPayload } from "./types";
-import { VideoUploadStoreState } from "./types";
+import TusFileReader from "../classes/filereader";
+import { PresignPayload, SignUploadPayload } from "../types/types";
+import { VideoUploadStoreState } from "../types/types";
 
 export const videoUploadStore = proxy<VideoUploadStoreState>({
   videoPath: null,

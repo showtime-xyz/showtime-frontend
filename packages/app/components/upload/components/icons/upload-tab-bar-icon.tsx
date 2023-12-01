@@ -20,7 +20,7 @@ import {
 } from "design-system/dropdown-menu";
 import { breakpoints } from "design-system/theme";
 
-import { videoUploadStore } from "./video-upload-store";
+import { videoUploadStore } from "../../store/video-upload-store";
 
 export const CreateTabBarIcon = () => {
   const {

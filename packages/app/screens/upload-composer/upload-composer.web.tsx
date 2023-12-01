@@ -1,6 +1,6 @@
 import { withModalScreen } from "@showtime-xyz/universal.modal-screen";
 
-import UploadComposer from "app/components/upload/composer";
+import UploadComposer from "app/components/upload/components/composer";
 
 export const UploadComposerScreen = withModalScreen(UploadComposer, {
   title: "",

@@ -14,7 +14,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { colors } from "design-system/tailwind/colors";
 
-import { videoUploadStore } from "./video-upload-store";
+import { videoUploadStore } from "../../store/video-upload-store";
 
 export const CreateButtonDesktop = () => {
   const { chooseVideo, uploadProgress, isUploading, abortUpload } =

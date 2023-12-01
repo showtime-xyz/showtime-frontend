@@ -1,5 +1,5 @@
 import { withColorScheme } from "app/components/memo-with-theme";
-import UploadComposer from "app/components/upload/composer";
+import UploadComposer from "app/components/upload/components/composer";
 import { useAuthScreen } from "app/hooks/use-auth-screen";
 import { useTrackPageViewed } from "app/lib/analytics";
 

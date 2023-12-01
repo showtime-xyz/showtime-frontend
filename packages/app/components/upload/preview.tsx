@@ -3,7 +3,7 @@ import { useSnapshot } from "valtio";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
-import { videoUploadStore } from "./video-upload-store";
+import { videoUploadStore } from "./store/video-upload-store";
 
 const UploadPreview = () => {
   const { videoPath } = useSnapshot(videoUploadStore);
