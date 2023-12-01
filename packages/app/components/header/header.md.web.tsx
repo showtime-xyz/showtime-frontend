@@ -23,9 +23,7 @@ import {
   Home,
   Search as SearchIcon,
   ShowtimeBrand,
-  Hot,
   User,
-  Plus,
   PhonePortraitOutline,
   CreatorChannel,
   Settings,
@@ -58,7 +56,6 @@ import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { PrivySetLoginMethodContext } from "app/lib/privy/privy-provider.web";
 import { Link, TextLink } from "app/navigation/link";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import {
   DropdownMenuContent,
@@ -74,6 +71,7 @@ import {
 import { useChannelsUnreadMessages } from "../creator-channels/hooks/use-channels-unread-messages";
 import { useLogin } from "../login/use-login";
 import { withColorScheme } from "../memo-with-theme";
+import { CreateButtonDesktop } from "../upload/components/icons/create-icon-xl";
 
 const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -324,7 +322,10 @@ export const HeaderMd = withColorScheme(() => {
   );
 
   return (
-    <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
+    <View
+      tw="max-h-screen bg-white pl-2 dark:bg-black"
+      style={{ overflow: "scroll" }}
+    >
       <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
         <Link
           href="/"
@@ -366,6 +367,7 @@ export const HeaderMd = withColorScheme(() => {
               />
             );
           })}
+
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
               <View
@@ -610,7 +612,8 @@ export const HeaderMd = withColorScheme(() => {
               </Button>
             </>
           )}
-
+          <Divider tw="my-5" />
+          <CreateButtonDesktop />
           <Divider tw="my-5" />
           <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
             <View tw="flex-row items-center justify-center">

@@ -84,7 +84,7 @@ export const TokensTabHeader = ({
       {!user?.user?.data?.profile?.creator_token?.id &&
       user?.user?.data?.profile?.creator_token_onboarding_status ===
         "requires_invite" ? (
-        <View tw="mt-8 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-4 py-4 dark:border-gray-700 dark:bg-gray-900">
+        <View tw="mt-4 w-full flex-row items-center justify-between rounded-xl border border-gray-200 bg-slate-50 px-4 py-4 dark:border-gray-700 dark:bg-gray-900">
           <Text tw="mr-4 flex-1 text-sm text-gray-500 dark:text-gray-400">
             Create your token to access your channel.
           </Text>

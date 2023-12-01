@@ -50,6 +50,7 @@
     "date-fns": "^2.30.0",
     "design-system": "*",
     "dom-to-image": "^2.6.0",
+    "expo-av": "~13.6.0",
     "export-from-json": "^1.7.3",
     "fortmatic": "^2.4.0",
     "magic-sdk": "^13.1.0",

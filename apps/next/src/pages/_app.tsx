@@ -42,12 +42,14 @@ import { EnterInviteCodeModalScreen } from "app/screens/creatro-tokens-enter-inv
 import { EditProfileScreen } from "app/screens/edit-profile";
 import { LoginScreen } from "app/screens/login";
 import { OnboardingScreen } from "app/screens/onboarding";
+import { PostCreateSuccessScreen } from "app/screens/post-create-success-screen";
 import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
 import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
 import { QRCodeShareScreen } from "app/screens/qr-code-share";
 import { ReportScreen } from "app/screens/report";
 import { AddEmailScreen } from "app/screens/settings-add-email";
 import { VerifyPhoneNumberScreen } from "app/screens/settings-verify-phone-number";
+import { UploadComposerScreen } from "app/screens/upload-composer/upload-composer";
 import { prevRouteRef } from "app/utilities";
 
 import { Toaster } from "design-system/toast";
@@ -198,23 +200,19 @@ function App({ Component, pageProps, router }: AppProps) {
       </Head>
       <AppProviders>
         <Container>
-          <View tw="mx-auto flex-col md:flex-row">
-            <Header
-              canGoBack={
-                router.pathname === "/search" ||
-                router.pathname.split("/").length - 1 >= 2
-              }
-            />
+          <Header
+            canGoBack={
+              router.pathname === "/search" ||
+              router.pathname.split("/").length - 1 >= 2
+            }
+          />
 
-            <View tw="w-full items-center md:ml-auto md:w-[calc(100%-248px)]">
-              <NextNProgress
-                color="#4F46E5"
-                options={{ showSpinner: false }}
-                showOnShallow={false}
-              />
-              <Component {...pageProps} />
-            </View>
-          </View>
+          <NextNProgress
+            color="#4F46E5"
+            options={{ showSpinner: false }}
+            showOnShallow={false}
+          />
+          <Component {...pageProps} />
           <Footer />
         </Container>
 
@@ -243,6 +241,8 @@ function App({ Component, pageProps, router }: AppProps) {
         <CreatorTokenCollectorsScreen />
         <CreatorTokensShareModalScreen />
         <CreatorTokenSocialShareScreen />
+        <PostCreateSuccessScreen />
+        <UploadComposerScreen />
         {/* Login should be the last so it renders on top of others if needed */}
         <LoginScreen />
         <Toaster />
@@ -259,18 +259,18 @@ const inter = Inter({
 const Container = withColorScheme(
   ({ children }: { children: React.ReactNode }) => {
     const fonts = [inter.variable].join(" ");
-    const headerHeight = useHeaderHeight();
-    const bottomBarHeight = usePlatformBottomHeight();
     return (
       <View
-        tw="bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900"
+        tw={
+          "bg-white dark:bg-black md:bg-gray-100 dark:md:bg-gray-900 " + fonts
+        }
         // @ts-ignore
         style={{
-          paddingTop: headerHeight,
-          paddingBottom: `calc(${bottomBarHeight}px + env(safe-area-inset-bottom))`,
+          flex: 1,
+          flexDirection: "row",
         }}
       >
-        <div className={fonts}>{children}</div>
+        {children}
       </View>
     );
   }

@@ -238,7 +238,7 @@ const expoConfig: ExpoConfig = {
           unstable_networkInspector: true,
         },
         ios: {
-          deploymentTarget: "13.0",
+          deploymentTarget: "13.4",
           unstable_networkInspector: true,
         },
       },

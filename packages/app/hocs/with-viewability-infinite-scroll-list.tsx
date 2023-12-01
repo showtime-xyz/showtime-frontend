@@ -3,6 +3,8 @@ import { createContext, forwardRef, useCallback, useMemo } from "react";
 
 import { useSharedValue, SharedValue } from "react-native-reanimated";
 
+import { useStableCallback } from "app/hooks/use-stable-callback";
+
 type ViewabilityItemsContextType = any[];
 
 export const ViewabilityItemsContext = createContext<
@@ -31,7 +33,7 @@ export function withViewabilityInfiniteScrollList<T>(Component: T): T {
 
       const { renderItem: _renderItem } = props;
 
-      const onViewableItemsChanged = useCallback(
+      const onViewableItemsChanged = useStableCallback(
         ({ viewableItems }: any) => {
           let viewableItem = viewableItems[0];
           if (viewableItems.length > 4) {
@@ -48,8 +50,7 @@ export function withViewabilityInfiniteScrollList<T>(Component: T): T {
             const newWindow = [prevIndex, visibleIndex, nextIndex];
             visibleItems.value = newWindow;
           }
-        },
-        [props.data, visibleItems]
+        }
       );
 
       const renderItem = useCallback(

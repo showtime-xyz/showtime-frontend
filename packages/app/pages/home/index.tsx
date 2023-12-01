@@ -21,7 +21,13 @@ function HomeNavigator() {
         headerRight: HeaderSearch,
       })}
     >
-      <HomeStack.Screen name="home" component={HomeScreenV2} />
+      <HomeStack.Screen
+        name="home"
+        component={HomeScreenV2}
+        options={{
+          headerShown: false,
+        }}
+      />
     </HomeStack.Navigator>
   );
 }

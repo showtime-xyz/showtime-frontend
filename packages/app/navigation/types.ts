@@ -22,17 +22,6 @@ type TrendingStackParams = {
   settings: undefined;
 };
 
-type CameraStackParams = {
-  login: undefined;
-  create: undefined;
-};
-
-type CreateStackParams = {
-  login: undefined;
-  create: undefined;
-  drop: undefined;
-};
-
 type NotificationsStackParams = {
   notifications: undefined;
   login: undefined;
@@ -44,6 +33,7 @@ type ProfileStackParams = {
   profile: { username: string };
   login: undefined;
   settings: undefined;
+  posts: undefined;
 };
 
 type NextPageProps = any;
@@ -69,6 +59,7 @@ type RootStackNavigatorParams = {
   payoutsSetup: undefined;
   trending: undefined;
   channelsMessageReactions: undefined;
+  postShare: undefined;
   search: undefined;
   login: undefined;
   editProfile: undefined;
@@ -89,6 +80,8 @@ type RootStackNavigatorParams = {
   dropImageShare: undefined;
   dropViewShareModal: undefined;
   claimLimitExplanation: undefined;
+  posts: undefined;
+  postDetail: undefined;
   channelsSettings: undefined;
   channelUnlocked: undefined;
   creatorTokensShare: undefined;
@@ -104,6 +97,8 @@ type RootStackNavigatorParams = {
   channelsCongrats: undefined;
   channelsMembers: undefined;
   viewer: undefined;
+  uploadPreview: undefined;
+  uploadComposer: undefined;
 };
 
 export type {
@@ -111,8 +106,6 @@ export type {
   HomeStackParams,
   CreatorChannelsStackParams,
   TrendingStackParams,
-  CameraStackParams,
-  CreateStackParams,
   NotificationsStackParams,
   ProfileStackParams,
   BottomTabNavigatorParams,

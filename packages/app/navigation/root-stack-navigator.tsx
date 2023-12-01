@@ -7,6 +7,8 @@ import { useSafeAreaInsets } from "@showtime-xyz/universal.safe-area";
 import { Text } from "@showtime-xyz/universal.text";
 
 import { Messages } from "app/components/creator-channels/messages";
+import { PostDetail } from "app/components/post-detail";
+import UploadComposer from "app/components/upload/composer";
 import { useHandleNotification } from "app/hooks/use-handle-notification";
 import { useNetWorkConnection } from "app/hooks/use-network-connection";
 import { screenOptions } from "app/navigation/navigator-screen-options";
@@ -33,6 +35,7 @@ import { EditProfileScreen } from "app/screens/edit-profile";
 import { LoginScreen } from "app/screens/login";
 import { NotificationSettingsScreen } from "app/screens/notification-settings";
 import { PayoutsSetupScreen } from "app/screens/payouts/setup";
+import { PostCreateSuccessScreen } from "app/screens/post-create-success-screen";
 import { PrivacySecuritySettingsScreen } from "app/screens/privacy-and-security-settings";
 import { CreatorTokensImportAllowlistScreen } from "app/screens/profile/import-allowlist";
 import { CreatorTokensImportAllowlistSuccessScreen } from "app/screens/profile/imported-allowlist-succeeded";
@@ -83,6 +86,13 @@ export function RootStackNavigator() {
         }}
       >
         <Stack.Screen
+          name="uploadComposer"
+          component={UploadComposer}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="profile"
           component={ProfileScreen}
           getId={({ params }) => params?.username}
@@ -100,6 +110,7 @@ export function RootStackNavigator() {
         />
 
         <Stack.Screen name="channelsMessage" component={Messages} />
+        <Stack.Screen name="postDetail" component={PostDetail} />
         <Stack.Screen
           name="channelUnlocked"
           component={UnlockedChannelScreen}
@@ -232,6 +243,7 @@ export function RootStackNavigator() {
           name="channelsShare"
           component={CreatorChannelsShareScreen}
         />
+        <Stack.Screen name="postShare" component={PostCreateSuccessScreen} />
         <Stack.Screen
           name="creatorTokenBuy"
           component={CreatorTokenBuyScreen}

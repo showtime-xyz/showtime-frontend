@@ -8,7 +8,6 @@ import {
   formatDuration,
   intervalToDuration,
 } from "date-fns";
-import { ResizeMode } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { locale } from "expo-localization";
 
@@ -165,7 +164,7 @@ function getVideoUrlByClosestWidth(
 }
 */
 
-function getVideoUrl(
+export function getVideoUrl(
   videoData: BunnyVideoUrls,
   preferredQualities: string[] = []
 ) {
@@ -675,24 +674,24 @@ export const getTwitterIntent = ({
   )}&text=${encodeURIComponent(message)}`;
 };
 
-export function isAndroid(): boolean {
+export function isAndroidWeb(): boolean {
   return (
     typeof navigator !== "undefined" && /android/i.test(navigator.userAgent)
   );
 }
 
-export function isSmallIOS(): boolean {
+export function isSmalliOSWeb(): boolean {
   return (
     typeof navigator !== "undefined" && /iPhone|iPod/.test(navigator.userAgent)
   );
 }
 
-export function isLargeIOS(): boolean {
+export function isLargeIOSWeb(): boolean {
   return typeof navigator !== "undefined" && /iPad/.test(navigator.userAgent);
 }
 
 export function isIOS(): boolean {
-  return isSmallIOS() || isLargeIOS();
+  return isSmalliOSWeb() || isLargeIOSWeb();
 }
 export function isSafari(): boolean {
   return (
@@ -703,10 +702,10 @@ export function isSafari(): boolean {
 }
 
 export function isMobileWeb(): boolean {
-  return Platform.OS === "web" && (isAndroid() || isIOS());
+  return Platform.OS === "web" && (isAndroidWeb() || isIOS());
 }
 export function isDesktopWeb(): boolean {
-  return Platform.OS === "web" && !isAndroid() && !isIOS();
+  return Platform.OS === "web" && !isAndroidWeb() && !isIOS();
 }
 
 export function isClassComponent(component: any) {
@@ -858,17 +857,6 @@ export const getFormatDistanceStrictToWeek = (time?: string) => {
   }
 
   return `${Math.ceil(diffDays / 7)}w`;
-};
-
-export const contentFitToresizeMode = (resizeMode: ImageResizeMode) => {
-  switch (resizeMode) {
-    case "cover":
-      return ResizeMode.COVER;
-    case "contain":
-      return ResizeMode.CONTAIN;
-    default:
-      return ResizeMode.STRETCH;
-  }
 };
 
 export const cleanUserTextInput = (text: string) => {
