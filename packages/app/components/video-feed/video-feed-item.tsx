@@ -7,6 +7,7 @@ import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
   ChannelLocked,
+  ChannelUnlocked,
   Muted,
   Share,
   Unmuted,
@@ -111,8 +112,12 @@ export const VideoFeedItem = memo(function VideoFeedItem({
                   router.push(`/channels/${post.creator_channel_id}`);
                 }}
               >
-                <ChannelLocked color="white" width={31} height={28} />
-                <Text tw="text-white">139</Text>
+                {post.viewer_is_in_creator_channel ? (
+                  <ChannelUnlocked width={31} height={28} />
+                ) : (
+                  <ChannelLocked color="white" width={31} height={28} />
+                )}
+                <Text tw="text-white">{post.channel_message_count}</Text>
               </Pressable>
               <Pressable
                 tw="items-center"
@@ -175,12 +180,12 @@ const BuyButton = (props: {
     <PlatformBuyButton
       username={props.username}
       text={
-        <LeanText tw="text-center font-semibold">
+        <LeanText tw="text-center text-sm font-semibold">
           Buy ${price.data?.displayPrice}
         </LeanText>
       }
       side="top"
-      tw="rounded-4xl items-center justify-center px-4"
+      tw="rounded-4xl max-w-[150px] items-center justify-center px-4"
     />
   );
 };
