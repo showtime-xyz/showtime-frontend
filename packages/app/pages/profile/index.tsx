@@ -16,6 +16,7 @@ function ProfileNavigator() {
       screenOptions={{
         headerShown: false,
         statusBarStyle: "inverted",
+        fullScreenGestureEnabled: true,
       }}
     >
       <ProfileStack.Screen
