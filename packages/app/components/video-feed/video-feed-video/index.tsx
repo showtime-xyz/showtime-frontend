@@ -1,14 +1,9 @@
 import { useRef, useContext, useEffect } from "react";
+import { AppState } from "react-native";
 
-import {
-  useFocusEffect,
-  useIsFocused,
-  useNavigation,
-} from "@react-navigation/core";
+import { useNavigation } from "@react-navigation/core";
 import IVSPlayer from "amazon-ivs-react-native-player";
 import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
-
-import { Text } from "@showtime-xyz/universal.text";
 
 import {
   ItemKeyContext,
@@ -28,7 +23,6 @@ export const FeedVideo = (props: VideoProps) => {
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
   const isVisibleRef = useRef(false);
-  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const wasStoppedBecauseOfBlur = useRef(false);
 
@@ -46,25 +40,40 @@ export const FeedVideo = (props: VideoProps) => {
     const focusListener = navigation.addListener("focus", () => {
       if (wasStoppedBecauseOfBlur.current && isVisibleRef.current) {
         wasStoppedBecauseOfBlur.current = false;
-        setVisible(true);
+        videoRef.current.play();
       }
     });
+
     const blurListener = navigation.addListener("blur", () => {
       if (isVisibleRef.current) {
         wasStoppedBecauseOfBlur.current = true;
-        setVisible(false);
+        videoRef.current.pause();
       }
     });
+
+    const appStateListener = AppState.addEventListener("change", (state) => {
+      if (isVisibleRef.current) {
+        if (state === "active" && wasStoppedBecauseOfBlur.current) {
+          wasStoppedBecauseOfBlur.current = false;
+          videoRef.current.play();
+        } else if (state === "background" || state === "inactive") {
+          wasStoppedBecauseOfBlur.current = true;
+          videoRef.current.pause();
+        }
+      }
+    });
+
     return () => {
       focusListener();
       blurListener();
+      appStateListener.remove();
     };
   }, [navigation, setVisible]);
 
   useAnimatedReaction(
     () => context.value,
     (ctx) => {
-      if (isItemInList && isFocused) {
+      if (isItemInList) {
         if (ctx[1] === id) {
           runOnJS(setVisible)(true);
         } else {
@@ -74,13 +83,17 @@ export const FeedVideo = (props: VideoProps) => {
         runOnJS(setVisible)(false);
       }
     },
-    [id, isItemInList, context, isFocused]
+    [id, isItemInList, context]
   );
 
   const onPlayerStateChange = (onPlayerStateChange: any) => {
     // Sometimes IVS can become idle. Could be play pause race conditions.
     // Not very sure, but this fixes it. Dig more later.
-    if (onPlayerStateChange === "Idle" && isVisibleRef.current) {
+    if (
+      onPlayerStateChange === "Idle" &&
+      isVisibleRef.current &&
+      !wasStoppedBecauseOfBlur.current
+    ) {
       videoRef.current.play();
     }
   };
@@ -97,6 +110,7 @@ export const FeedVideo = (props: VideoProps) => {
         streamUrl={uri as string}
         autoplay={false}
         muted={muted}
+        paused={true}
         initialBufferDuration={0.5}
         autoQualityMode={false}
         liveLowLatency={false}
