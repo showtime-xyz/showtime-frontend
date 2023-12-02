@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { Platform } from "react-native";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -7,6 +7,7 @@ import { View } from "@showtime-xyz/universal.view";
 
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
 import { usePlatformBottomHeight } from "app/hooks/use-platform-bottom-height";
+import { useScrollToTop } from "app/lib/react-navigation/native";
 import { VideoPost } from "app/types";
 
 import { VideoFeedItem } from "./video-feed-item";
@@ -22,6 +23,8 @@ export const VideoFeedList = (props: {
   const { data, initialScrollIndex = 0, onEndReached } = props;
   const size = useSafeAreaFrame();
   const bottomBarHeight = usePlatformBottomHeight();
+  const listRef = useRef<any>(null);
+  useScrollToTop(listRef);
 
   const videoDimensions = useMemo(
     () =>
@@ -54,7 +57,6 @@ export const VideoFeedList = (props: {
         : undefined,
     [data, videoDimensions.height]
   );
-
   return (
     <View
       style={{
@@ -73,6 +75,7 @@ export const VideoFeedList = (props: {
         })}
         initialScrollIndex={initialScrollIndex}
         pagingEnabled
+        ref={listRef}
         snapToOffsets={snapToOffsets}
         decelerationRate="fast"
         renderItem={renderItem}
