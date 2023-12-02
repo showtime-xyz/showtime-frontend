@@ -24,7 +24,8 @@ export const FeedVideo = (props: VideoProps) => {
   const isItemInList = typeof id !== "undefined";
   const isVisibleRef = useRef(false);
   const navigation = useNavigation();
-  const wasStoppedBecauseOfBlur = useRef(false);
+  const wasStoppedBecauseOfNavigationBlur = useRef(false);
+  const wasStoppedBecauseOfAppStateBlur = useRef(false);
 
   const setVisible = useStableCallback((visible: boolean) => {
     isVisibleRef.current = visible;
@@ -38,26 +39,26 @@ export const FeedVideo = (props: VideoProps) => {
 
   useEffect(() => {
     const focusListener = navigation.addListener("focus", () => {
-      if (wasStoppedBecauseOfBlur.current && isVisibleRef.current) {
-        wasStoppedBecauseOfBlur.current = false;
+      if (wasStoppedBecauseOfNavigationBlur.current && isVisibleRef.current) {
+        wasStoppedBecauseOfNavigationBlur.current = false;
         videoRef.current.play();
       }
     });
 
     const blurListener = navigation.addListener("blur", () => {
       if (isVisibleRef.current) {
-        wasStoppedBecauseOfBlur.current = true;
+        wasStoppedBecauseOfNavigationBlur.current = true;
         videoRef.current.pause();
       }
     });
 
     const appStateListener = AppState.addEventListener("change", (state) => {
       if (isVisibleRef.current) {
-        if (state === "active" && wasStoppedBecauseOfBlur.current) {
-          wasStoppedBecauseOfBlur.current = false;
+        if (state === "active" && wasStoppedBecauseOfAppStateBlur.current) {
+          wasStoppedBecauseOfAppStateBlur.current = false;
           videoRef.current.play();
         } else if (state === "background" || state === "inactive") {
-          wasStoppedBecauseOfBlur.current = true;
+          wasStoppedBecauseOfAppStateBlur.current = true;
           videoRef.current.pause();
         }
       }
@@ -92,7 +93,8 @@ export const FeedVideo = (props: VideoProps) => {
     if (
       onPlayerStateChange === "Idle" &&
       isVisibleRef.current &&
-      !wasStoppedBecauseOfBlur.current
+      !wasStoppedBecauseOfNavigationBlur.current &&
+      !wasStoppedBecauseOfAppStateBlur.current
     ) {
       videoRef.current.play();
     }
