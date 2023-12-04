@@ -560,20 +560,20 @@ export const HeaderMd = withColorScheme(() => {
           {!isAuthenticated && (
             <>
               <Button
-                size="regular"
-                tw="mt-6"
+                size="small"
+                tw="mt-4 !h-10"
                 onPress={handleSubmitWallet}
                 disabled={loginLoading}
               >
                 <>
-                  <Text tw="text-base font-bold text-white dark:text-black">
+                  <Text tw="text-[14px] font-semibold text-white dark:text-black">
                     {loginLoading ? "loading..." : "Connect"}
                   </Text>
                 </>
               </Button>
               <Button
-                size="regular"
-                tw="mt-6"
+                size="small"
+                tw="mt-4 !h-10"
                 disabled={loginLoading}
                 onPress={async () => {
                   if (privy.authenticated) {
@@ -583,16 +583,16 @@ export const HeaderMd = withColorScheme(() => {
                 }}
               >
                 <>
-                  <Text tw="text-base font-bold text-white dark:text-black">
+                  <Text tw="text-[14px] font-semibold text-white dark:text-black">
                     {loginLoading ? "loading..." : "Phone & Social"}
                   </Text>
                 </>
               </Button>
             </>
           )}
-          <Divider tw="my-5" />
+          <Divider tw="my-4" />
           <CreateButtonDesktop />
-          <Divider tw="my-5" />
+          <Divider tw="my-4" />
           <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
             <View tw="flex-row items-center justify-center">
               <PhonePortraitOutline color={iconColor} width={18} height={18} />
