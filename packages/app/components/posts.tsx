@@ -22,12 +22,16 @@ export const Posts = () => {
 const ProfilePosts = () => {
   const [username] = useParam("username");
   const [postId] = useParam("postId");
-  const { data } = useProfilePosts(username);
-  const postIndex = data?.findIndex((d) => d.id === postId);
+  const profilePostsState = useProfilePosts(username);
+  const postIndex = profilePostsState.data?.findIndex((d) => d.id === postId);
   const initialScrollIndex = postIndex === -1 ? 0 : postIndex;
-  if (data) {
+  if (profilePostsState.data) {
     return (
-      <VideoFeedList data={data} initialScrollIndex={initialScrollIndex} />
+      <VideoFeedList
+        data={profilePostsState.data}
+        initialScrollIndex={initialScrollIndex}
+        onEndReached={profilePostsState.fetchMore}
+      />
     );
   }
 };

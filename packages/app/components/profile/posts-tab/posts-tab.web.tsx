@@ -85,6 +85,7 @@ export const PostsTab = (props: {
         estimatedItemSize={300}
         numColumns={3}
         style={{ paddingBottom: bottomBarHeight }}
+        onEndReached={profilePostsState.fetchMore}
         ListEmptyComponent={ListEmptyComponent}
         renderItem={renderItem}
         refreshing={false}

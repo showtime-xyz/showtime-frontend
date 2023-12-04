@@ -1,17 +1,40 @@
-import useSWR from "swr";
+import { useCallback, useRef, useMemo } from "react";
 
-import { fetcher } from "app/hooks/use-infinite-list-query";
+import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
 import { VideoPost } from "app/types";
 
-export const getProfilePostByUsername = (username: string) => {
-  return `/v1/posts/profile/${username}`;
-};
+const PAGE_SIZE = 10;
 
 export const useProfilePosts = (username?: string) => {
-  const queryState = useSWR<VideoPost[]>(
-    username ? getProfilePostByUsername(username) : null,
-    fetcher
+  let indexRef = useRef(0);
+  const url = useCallback(
+    (index: number) => {
+      indexRef.current = index;
+      return `v1/posts/profile/${username}?page=${
+        index + 1
+      }&limit=${PAGE_SIZE}`;
+    },
+    [username]
   );
 
-  return queryState;
+  const queryState = useInfiniteListQuerySWR<VideoPost[]>(url, {
+    pageSize: PAGE_SIZE,
+  });
+
+  const newData = useMemo(() => {
+    let newData: VideoPost[] = [];
+    if (queryState.data) {
+      queryState.data.forEach((p) => {
+        if (p) {
+          newData = newData.concat(p);
+        }
+      });
+    }
+    return newData;
+  }, [queryState.data]);
+
+  return {
+    ...queryState,
+    data: newData,
+  };
 };
