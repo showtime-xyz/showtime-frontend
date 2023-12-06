@@ -61,7 +61,7 @@ export const VideoFeedList = (props: {
       listRef.current &&
       Platform.OS === "web" &&
       typeof window !== "undefined" &&
-      window.navigator.userAgent.includes("Chrome")
+      window.navigator?.userAgent?.includes("Chrome")
     ) {
       listRef.current.addEventListener("scroll", () => {
         if (pagingEnabled) {
