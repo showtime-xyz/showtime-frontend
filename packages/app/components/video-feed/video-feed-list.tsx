@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useEffect, useState } from "react";
 import { Platform } from "react-native";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
@@ -54,6 +54,28 @@ export const VideoFeedList = (props: {
     [videoDimensions]
   );
 
+  const [pagingEnabled, setPagingEnabled] = useState(true);
+
+  useEffect(() => {
+    if (
+      listRef.current &&
+      Platform.OS === "web" &&
+      typeof window !== "undefined" &&
+      window.navigator.userAgent.includes("Chrome")
+    ) {
+      listRef.current.addEventListener("scroll", () => {
+        if (pagingEnabled) {
+          setPagingEnabled(false);
+        }
+      });
+      listRef.current.addEventListener("scrollend", () => {
+        if (!pagingEnabled) {
+          setPagingEnabled(true);
+        }
+      });
+    }
+  }, [pagingEnabled]);
+
   return (
     <View
       style={{
@@ -88,7 +110,7 @@ export const VideoFeedList = (props: {
           default: videoDimensions.height as number,
         })}
         initialScrollIndex={initialScrollIndex}
-        pagingEnabled={Platform.OS !== "web"}
+        pagingEnabled={pagingEnabled}
         ref={listRef}
         //snapToOffsets={snapToOffsets}
         decelerationRate="fast"
