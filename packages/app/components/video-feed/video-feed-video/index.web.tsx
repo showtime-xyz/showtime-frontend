@@ -21,6 +21,7 @@ export const FeedVideo = (props: VideoProps) => {
 
   const play = () => {
     videoRef.current?.play();
+    videoRef.current?.setAttribute("data-visible", "true");
   };
 
   const setSrc = () => {
@@ -37,6 +38,7 @@ export const FeedVideo = (props: VideoProps) => {
 
   const pause = () => {
     videoRef.current?.pause();
+    videoRef.current?.removeAttribute("data-visible");
   };
 
   useAnimatedReaction(
