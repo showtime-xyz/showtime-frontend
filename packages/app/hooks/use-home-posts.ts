@@ -16,7 +16,7 @@ export const useHomePosts = () => {
     pageSize: PAGE_SIZE,
     revalidateFirstPage: false,
     revalidateIfStale: false,
-    revalidateOnMount: false,
+    revalidateOnMount: true,
     revalidateOnFocus: false,
   });
 
