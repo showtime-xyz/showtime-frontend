@@ -78,7 +78,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({
             locations={[0.05, 0.8]}
             colors={["rgba(12,12,12,0)", "rgba(12,12,12,.8)"]}
           />
-          <View tw="flex-1 flex-row items-center justify-between px-4 pb-8">
+          <View tw="flex-1 flex-row items-center justify-between px-4 pb-8 pt-4">
             <View style={{ rowGap: 12, flex: 3 }}>
               <View tw="flex-row items-center">
                 <Link
