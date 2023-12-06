@@ -80,7 +80,7 @@ export const VideoFeedList = (props: {
         initialScrollIndex={initialScrollIndex}
         pagingEnabled={Platform.OS !== "web"}
         ref={listRef}
-        snapToOffsets={snapToOffsets}
+        //snapToOffsets={snapToOffsets}
         decelerationRate="fast"
         renderItem={renderItem}
       />
