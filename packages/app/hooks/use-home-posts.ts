@@ -1,7 +1,6 @@
 import { useCallback, useRef, useMemo } from "react";
 
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
-import { axios } from "app/lib/axios";
 import { VideoPost } from "app/types";
 
 const PAGE_SIZE = 3;
