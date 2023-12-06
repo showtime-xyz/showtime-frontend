@@ -65,6 +65,7 @@ export const VideoFeedList = (props: {
         useWindowScroll={false}
         data={data}
         overscan={3}
+        preserveScrollPosition
         onEndReached={onEndReached}
         ListEmptyComponent={() => (
           <View tw="h-full items-center justify-center">
