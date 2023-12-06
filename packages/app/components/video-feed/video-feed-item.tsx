@@ -29,7 +29,6 @@ import { VideoPost } from "app/types";
 import { getVideoUrl, getWebBaseURL } from "app/utilities";
 
 import { CollapsibleText } from "design-system/collapsible-text/collapsible-text";
-import { breakpoints } from "design-system/theme";
 
 import { LeanText } from "../creator-channels/components/lean-text";
 import { PlatformBuyButton } from "../profile/buy-and-sell-buttons";
@@ -48,14 +47,13 @@ export const VideoFeedItem = memo(function VideoFeedItem({
   );
   const router = useRouter();
   const { share } = useShare();
-  const windowDimension = useWindowDimensions();
 
   return (
-    <View tw="w-full items-center">
+    <View tw="w-full items-center md:py-10">
       <View
+        tw="md:overflow-hidden md:rounded-xl"
         style={{
-          width: windowDimension.width <= breakpoints["md"] ? "100%" : 500,
-          marginHorizontal: "auto",
+          width: videoDimensions.width,
         }}
       >
         {mediaURI ? (
