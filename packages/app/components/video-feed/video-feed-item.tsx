@@ -88,7 +88,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({
                   href={`/@${post.profile.username}`}
                 >
                   <Avatar size={32} url={post.profile.img_url} />
-                  <Text tw="text-semibold ml-2 mr-4 text-white">
+                  <Text tw="ml-2 mr-4 font-semibold text-white">
                     {post.profile.username}
                   </Text>
                 </Link>
