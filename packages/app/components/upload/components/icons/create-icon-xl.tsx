@@ -12,11 +12,14 @@ import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useLogInPromise } from "app/lib/login-promise";
+
 import { colors } from "design-system/tailwind/colors";
 
 import { videoUploadStore } from "../../store/video-upload-store";
 
 export const CreateButtonDesktop = () => {
+  const { loginPromise } = useLogInPromise();
   const { chooseVideo, uploadProgress, isUploading, abortUpload } =
     useSnapshot(videoUploadStore);
   const router = useRouter();
@@ -49,17 +52,22 @@ export const CreateButtonDesktop = () => {
         <Pressable
           tw="w-full flex-row items-center justify-center rounded-full bg-[#FF3370] p-2 transition-transform duration-300 hover:scale-105"
           onPress={async () => {
-            if (isUploading) {
-              abortUpload();
-            } else {
-              const success = await chooseVideo();
-              if (success) {
-                setIsPreparing(true);
-                redirectToComposerScreen();
-                setTimeout(() => {
-                  setIsPreparing(false);
-                }, 1500);
+            try {
+              await loginPromise();
+              if (isUploading) {
+                abortUpload();
+              } else {
+                const success = await chooseVideo();
+                if (success) {
+                  setIsPreparing(true);
+                  redirectToComposerScreen();
+                  setTimeout(() => {
+                    setIsPreparing(false);
+                  }, 1500);
+                }
               }
+            } catch (e) {
+              // do nothing
             }
           }}
           disabled={isPreparing}

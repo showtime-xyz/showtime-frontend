@@ -10,9 +10,12 @@ import { useRouter } from "@showtime-xyz/universal.router";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
+import { useLogInPromise } from "app/lib/login-promise";
+
 import { videoUploadStore } from "../../store/video-upload-store";
 
 export const CreateIconMobileWeb = () => {
+  const { loginPromise } = useLogInPromise();
   const { pickVideo, uploadProgress, isUploading, abortUpload } =
     useSnapshot(videoUploadStore);
   const router = useRouter();
@@ -39,13 +42,24 @@ export const CreateIconMobileWeb = () => {
   }, [router]);
 
   const uploadAction = useCallback(async () => {
-    if (isUploading) {
-      abortUpload();
-    } else {
-      await pickVideo();
-      redirectToComposerScreen();
+    try {
+      await loginPromise();
+      if (isUploading) {
+        abortUpload();
+      } else {
+        await pickVideo();
+        redirectToComposerScreen();
+      }
+    } catch (e) {
+      //console.error(e);
     }
-  }, [abortUpload, isUploading, pickVideo, redirectToComposerScreen]);
+  }, [
+    abortUpload,
+    isUploading,
+    loginPromise,
+    pickVideo,
+    redirectToComposerScreen,
+  ]);
 
   return (
     <View tw="cursor-pointer flex-col items-center justify-center text-center md:flex-row">

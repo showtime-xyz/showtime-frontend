@@ -10,6 +10,7 @@ import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { MenuItemIcon } from "app/components/dropdown/menu-item-icon";
+import { useLogInPromise } from "app/lib/login-promise";
 
 import {
   DropdownMenuContent,
@@ -22,6 +23,7 @@ import {
 import { videoUploadStore } from "../../store/video-upload-store";
 
 export const CreateTabBarIcon = () => {
+  const { loginPromise } = useLogInPromise();
   const {
     takeVideo,
     pickVideo,
@@ -87,6 +89,7 @@ export const CreateTabBarIcon = () => {
             <DropdownMenuItem
               key="b_library"
               onSelect={async () => {
+                await loginPromise();
                 const success = await chooseVideo();
                 if (success) redirectToComposerScreen();
               }}
@@ -102,6 +105,7 @@ export const CreateTabBarIcon = () => {
             <DropdownMenuItem
               key="c_camera"
               onSelect={async () => {
+                await loginPromise();
                 const success = await takeVideo();
                 if (success) redirectToComposerScreen();
               }}
@@ -114,6 +118,7 @@ export const CreateTabBarIcon = () => {
             <DropdownMenuItem
               key="a_roll"
               onSelect={async () => {
+                await loginPromise();
                 const success = await pickVideo();
                 if (success) redirectToComposerScreen();
               }}
