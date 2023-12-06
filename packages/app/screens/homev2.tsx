@@ -10,6 +10,8 @@ export const HomeScreenV2 = withColorScheme(() => {
     <VideoFeedList
       data={homePostsState.data}
       onEndReached={homePostsState.fetchMore}
+      isLoading={homePostsState.isLoading}
+      isLoadingMore={homePostsState.isLoadingMore}
     />
   );
 });

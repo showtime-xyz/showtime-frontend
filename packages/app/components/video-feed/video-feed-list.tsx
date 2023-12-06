@@ -3,6 +3,8 @@ import { Platform } from "react-native";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -22,6 +24,8 @@ export const VideoFeedList = (props: {
   data?: VideoPost[];
   initialScrollIndex?: number;
   onEndReached?: () => void;
+  isLoading?: boolean;
+  isLoadingMore?: boolean;
 }) => {
   const { data, initialScrollIndex = 0, onEndReached } = props;
   const size = useSafeAreaFrame();
@@ -65,7 +69,16 @@ export const VideoFeedList = (props: {
         ListEmptyComponent={() => (
           <View tw="h-full items-center justify-center">
             <Text tw="font-semibold">
-              You're all caught up - check back later.
+              {props.isLoading ? (
+                <Skeleton
+                  tw="h-full w-full"
+                  width={videoDimensions.width}
+                  height={videoDimensions.height}
+                  show
+                />
+              ) : (
+                "You're all caught up - check back later."
+              )}
             </Text>
           </View>
         )}
@@ -79,6 +92,15 @@ export const VideoFeedList = (props: {
         //snapToOffsets={snapToOffsets}
         decelerationRate="fast"
         renderItem={renderItem}
+        ListFooterComponent={
+          props.isLoadingMore && !props.isLoading
+            ? () => (
+                <View tw="mb-4 items-center justify-center">
+                  <Spinner size="small" />
+                </View>
+              )
+            : undefined
+        }
       />
     </View>
   );
