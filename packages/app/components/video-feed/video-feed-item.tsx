@@ -51,7 +51,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({
   return (
     <View tw="w-full items-center md:py-10">
       <View
-        tw="md:overflow-hidden md:rounded-xl"
+        tw="bg-black md:overflow-hidden md:rounded-xl"
         style={{
           width: videoDimensions.width,
         }}

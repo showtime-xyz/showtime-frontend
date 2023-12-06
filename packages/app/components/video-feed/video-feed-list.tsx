@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
+import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
 import { withViewabilityInfiniteScrollList } from "app/hocs/with-viewability-infinite-scroll-list";
@@ -49,18 +50,6 @@ export const VideoFeedList = (props: {
     [videoDimensions]
   );
 
-  const snapToOffsets = useMemo(
-    () =>
-      Platform.OS !== "web"
-        ? data?.map(
-            (_, i) =>
-              // @ts-ignore
-              i * videoDimensions.height
-          )
-        : undefined,
-    [data, videoDimensions.height]
-  );
-
   return (
     <View
       style={{
@@ -73,6 +62,13 @@ export const VideoFeedList = (props: {
         data={data}
         overscan={3}
         onEndReached={onEndReached}
+        ListEmptyComponent={() => (
+          <View tw="h-full items-center justify-center">
+            <Text tw="font-semibold">
+              You're all caught up - check back later.
+            </Text>
+          </View>
+        )}
         estimatedItemSize={Platform.select({
           web: typeof window !== "undefined" ? window.innerHeight : 0,
           default: videoDimensions.height as number,
@@ -80,7 +76,7 @@ export const VideoFeedList = (props: {
         initialScrollIndex={initialScrollIndex}
         pagingEnabled={Platform.OS !== "web"}
         ref={listRef}
-        snapToOffsets={snapToOffsets}
+        //snapToOffsets={snapToOffsets}
         decelerationRate="fast"
         renderItem={renderItem}
       />
