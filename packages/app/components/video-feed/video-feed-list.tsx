@@ -1,8 +1,10 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useEffect, useState } from "react";
 import { Platform } from "react-native";
 
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
+import { Skeleton } from "@showtime-xyz/universal.skeleton";
+import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -22,6 +24,8 @@ export const VideoFeedList = (props: {
   data?: VideoPost[];
   initialScrollIndex?: number;
   onEndReached?: () => void;
+  isLoading?: boolean;
+  isLoadingMore?: boolean;
 }) => {
   const { data, initialScrollIndex = 0, onEndReached } = props;
   const size = useSafeAreaFrame();
@@ -50,6 +54,28 @@ export const VideoFeedList = (props: {
     [videoDimensions]
   );
 
+  const [pagingEnabled, setPagingEnabled] = useState(true);
+
+  useEffect(() => {
+    if (
+      listRef.current &&
+      Platform.OS === "web" &&
+      typeof window !== "undefined" &&
+      window.navigator?.userAgent?.includes("Chrome")
+    ) {
+      listRef.current.addEventListener("scroll", () => {
+        if (pagingEnabled) {
+          setPagingEnabled(false);
+        }
+      });
+      listRef.current.addEventListener("scrollend", () => {
+        if (!pagingEnabled) {
+          setPagingEnabled(true);
+        }
+      });
+    }
+  }, [pagingEnabled]);
+
   return (
     <View
       style={{
@@ -61,11 +87,21 @@ export const VideoFeedList = (props: {
         useWindowScroll={false}
         data={data}
         overscan={3}
+        preserveScrollPosition
         onEndReached={onEndReached}
         ListEmptyComponent={() => (
           <View tw="h-full items-center justify-center">
             <Text tw="font-semibold">
-              You're all caught up - check back later.
+              {props.isLoading ? (
+                <Skeleton
+                  tw="h-full w-full"
+                  width={videoDimensions.width}
+                  height={videoDimensions.height}
+                  show
+                />
+              ) : (
+                "You're all caught up - check back later."
+              )}
             </Text>
           </View>
         )}
@@ -74,11 +110,20 @@ export const VideoFeedList = (props: {
           default: videoDimensions.height as number,
         })}
         initialScrollIndex={initialScrollIndex}
-        pagingEnabled={Platform.OS !== "web"}
+        pagingEnabled={pagingEnabled}
         ref={listRef}
         //snapToOffsets={snapToOffsets}
         decelerationRate="fast"
         renderItem={renderItem}
+        ListFooterComponent={
+          props.isLoadingMore && !props.isLoading
+            ? () => (
+                <View tw="mb-4 items-center justify-center">
+                  <Spinner size="small" />
+                </View>
+              )
+            : undefined
+        }
       />
     </View>
   );

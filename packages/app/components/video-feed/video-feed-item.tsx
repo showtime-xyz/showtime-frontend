@@ -23,6 +23,7 @@ import {
 } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
 import { useShare } from "app/hooks/use-share";
+import { useLogInPromise } from "app/lib/login-promise";
 import { Link } from "app/navigation/link";
 import { useMuted } from "app/providers/mute-provider";
 import { VideoPost } from "app/types";
@@ -47,6 +48,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({
   );
   const router = useRouter();
   const { share } = useShare();
+  const { loginPromise } = useLogInPromise();
 
   return (
     <View tw="w-full items-center md:py-10">
@@ -86,7 +88,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({
                   href={`/@${post.profile.username}`}
                 >
                   <Avatar size={32} url={post.profile.img_url} />
-                  <Text tw="text-semibold ml-2 mr-4 text-white">
+                  <Text tw="ml-2 mr-4 font-semibold text-white">
                     {post.profile.username}
                   </Text>
                 </Link>
@@ -106,7 +108,8 @@ export const VideoFeedItem = memo(function VideoFeedItem({
               <Pressable
                 tw="items-center"
                 style={{ rowGap: 4 }}
-                onPress={() => {
+                onPress={async () => {
+                  await loginPromise();
                   router.push(`/channels/${post.creator_channel_id}`);
                 }}
               >
