@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useEffect, useState } from "react";
 import { Platform } from "react-native";
 
+import { useEffectOnce } from "@showtime-xyz/universal.hooks";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import { useSafeAreaFrame } from "@showtime-xyz/universal.safe-area";
 import { Skeleton } from "@showtime-xyz/universal.skeleton";
@@ -32,6 +33,7 @@ export const VideoFeedList = (props: {
   const bottomBarHeight = usePlatformBottomHeight();
   const listRef = useRef<any>(null);
   useScrollToTop(listRef);
+  const scrollFixTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Add some padding to the height for desktop screen
   const padding = size.width >= breakpoints["md"] ? 80 : 0;
@@ -54,27 +56,34 @@ export const VideoFeedList = (props: {
     [videoDimensions]
   );
 
-  const [pagingEnabled, setPagingEnabled] = useState(true);
+  useEffectOnce(() => {
+    const scrollEvent = () => {
+      if (scrollFixTimeout.current) clearTimeout(scrollFixTimeout.current);
+    };
 
-  useEffect(() => {
+    const scrollEnd = () => {
+      scrollFixTimeout.current = setTimeout(() => {
+        const el = document.querySelector("[data-visible=true]");
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    };
     if (
       listRef.current &&
       Platform.OS === "web" &&
       typeof window !== "undefined" &&
       window.navigator?.userAgent?.includes("Chrome")
     ) {
-      listRef.current.addEventListener("scroll", () => {
-        if (pagingEnabled) {
-          setPagingEnabled(false);
-        }
-      });
-      listRef.current.addEventListener("scrollend", () => {
-        if (!pagingEnabled) {
-          setPagingEnabled(true);
-        }
-      });
+      listRef.current.addEventListener("scroll", scrollEvent);
+      listRef.current.addEventListener("scrollend", scrollEnd);
     }
-  }, [pagingEnabled]);
+
+    return () => {
+      if (Platform.OS === "web") {
+        listRef.current.removeEventListener("scroll", scrollEvent);
+        listRef.current.removeEventListener("scrollend", scrollEnd);
+      }
+    };
+  });
 
   return (
     <View
@@ -110,7 +119,9 @@ export const VideoFeedList = (props: {
           default: videoDimensions.height as number,
         })}
         initialScrollIndex={initialScrollIndex}
-        pagingEnabled={pagingEnabled}
+        pagingEnabled={
+          window.navigator?.userAgent?.includes("Chrome") ? false : true
+        }
         ref={listRef}
         //snapToOffsets={snapToOffsets}
         decelerationRate="fast"
