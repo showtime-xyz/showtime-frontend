@@ -161,11 +161,21 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
           videoUploadStore.uploadProgress = Number(percentage);
           globalThis?.gc?.();
         },
-        onSuccess: function () {
+        onSuccess: async function () {
           //console.log("Upload finished");
           toast.success("Upload finished");
 
+          // clean the store
           cleanUp();
+
+          // we inform the backend the upload is complete
+          // this will make the video available even if the transcoding is not done
+          axios({
+            method: "POST",
+            url: `/v1/posts/upload-complete/${result.id}`,
+          }).catch(() => {
+            // we dont care if this fails, its fire and forget but catch it so it doesnt throw an error
+          });
         },
         onShouldRetry: function (err) {
           const status = (err as tus.DetailedError).originalResponse

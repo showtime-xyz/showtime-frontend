@@ -1,9 +1,10 @@
 import { useCallback, useRef, useMemo } from "react";
 
 import { useInfiniteListQuerySWR } from "app/hooks/use-infinite-list-query";
+import { axios } from "app/lib/axios";
 import { VideoPost } from "app/types";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 3;
 
 export const useHomePosts = () => {
   let indexRef = useRef(0);
@@ -12,9 +13,23 @@ export const useHomePosts = () => {
     return `v1/posts/feed?page=${index + 1}&limit=${PAGE_SIZE}`;
   }, []);
 
-  const queryState = useInfiniteListQuerySWR<VideoPost[]>(url, {
-    pageSize: PAGE_SIZE,
-  });
+  const queryState = useInfiniteListQuerySWR<VideoPost[]>(
+    url,
+    {
+      pageSize: PAGE_SIZE,
+      revalidateFirstPage: false,
+      revalidateIfStale: false,
+      revalidateOnMount: true,
+      revalidateOnFocus: false,
+    },
+    (url: string) => {
+      return axios({ url, method: "GET" }).then((data: VideoPost[]) => {
+        return data.filter(
+          (v, i, a) => a.findIndex((v2) => v2.id === v.id) === i
+        );
+      });
+    }
+  );
 
   const newData = useMemo(() => {
     let newData: VideoPost[] = [];

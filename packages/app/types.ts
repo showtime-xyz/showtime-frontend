@@ -370,4 +370,6 @@ export type VideoPost = {
   creator_token_id: number;
   creator_token_address: string;
   creator_channel_id: number;
+  channel_message_count: null | number;
+  viewer_is_in_creator_channel: boolean;
 };

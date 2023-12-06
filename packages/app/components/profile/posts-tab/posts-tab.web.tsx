@@ -37,7 +37,10 @@ export const PostsTab = (props: {
               maxWidth: `calc(100% - ${gap}px)`,
               aspectRatio: 0.76,
             }}
-            src={item.media.urls.optimized_thumbnail}
+            src={
+              item.media.urls.optimized_thumbnail +
+              "?optimizer=image&width=600&quality=70"
+            }
           />
         </Link>
       );
@@ -85,6 +88,7 @@ export const PostsTab = (props: {
         estimatedItemSize={300}
         numColumns={3}
         style={{ paddingBottom: bottomBarHeight }}
+        onEndReached={profilePostsState.fetchMore}
         ListEmptyComponent={ListEmptyComponent}
         renderItem={renderItem}
         refreshing={false}

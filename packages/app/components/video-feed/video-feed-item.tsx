@@ -7,6 +7,7 @@ import { useAnimatedReaction, runOnJS } from "react-native-reanimated";
 import { Avatar } from "@showtime-xyz/universal.avatar";
 import {
   ChannelLocked,
+  ChannelUnlocked,
   Muted,
   Share,
   Unmuted,
@@ -28,7 +29,6 @@ import { VideoPost } from "app/types";
 import { getVideoUrl, getWebBaseURL } from "app/utilities";
 
 import { CollapsibleText } from "design-system/collapsible-text/collapsible-text";
-import { breakpoints } from "design-system/theme";
 
 import { LeanText } from "../creator-channels/components/lean-text";
 import { PlatformBuyButton } from "../profile/buy-and-sell-buttons";
@@ -47,14 +47,13 @@ export const VideoFeedItem = memo(function VideoFeedItem({
   );
   const router = useRouter();
   const { share } = useShare();
-  const windowDimension = useWindowDimensions();
 
   return (
-    <View tw="w-full items-center">
+    <View tw="w-full items-center md:py-10">
       <View
+        tw="md:overflow-hidden md:rounded-xl"
         style={{
-          width: windowDimension.width <= breakpoints["md"] ? "100%" : 500,
-          marginHorizontal: "auto",
+          width: videoDimensions.width,
         }}
       >
         {mediaURI ? (
@@ -111,8 +110,12 @@ export const VideoFeedItem = memo(function VideoFeedItem({
                   router.push(`/channels/${post.creator_channel_id}`);
                 }}
               >
-                <ChannelLocked color="white" width={31} height={28} />
-                <Text tw="text-white">139</Text>
+                {post.viewer_is_in_creator_channel ? (
+                  <ChannelUnlocked width={31} height={28} />
+                ) : (
+                  <ChannelLocked color="white" width={31} height={28} />
+                )}
+                <Text tw="text-white">{post.channel_message_count}</Text>
               </Pressable>
               <Pressable
                 tw="items-center"
@@ -175,12 +178,12 @@ const BuyButton = (props: {
     <PlatformBuyButton
       username={props.username}
       text={
-        <LeanText tw="text-center font-semibold">
+        <LeanText tw="text-center text-sm font-semibold">
           Buy ${price.data?.displayPrice}
         </LeanText>
       }
       side="top"
-      tw="rounded-4xl items-center justify-center px-4"
+      tw="rounded-4xl max-w-[150px] items-center justify-center px-4"
     />
   );
 };
