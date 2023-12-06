@@ -35,7 +35,9 @@ export const PostsTab = (props: {
           <Image
             style={{ width: itemWidth, height: itemWidth / 0.76, margin: gap }}
             source={{
-              uri: item.media.urls.optimized_thumbnail,
+              uri:
+                item.media.urls.optimized_thumbnail +
+                "?optimizer=image&width=600&quality=70",
             }}
           />
         </Link>
