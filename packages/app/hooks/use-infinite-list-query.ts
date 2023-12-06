@@ -24,6 +24,12 @@ type UseInfiniteListQueryReturn<T> = {
 type UseInfiniteListConfig = {
   refreshInterval?: number;
   pageSize?: number;
+  revalidateOnMount?: boolean;
+  dedupingInterval?: number;
+  focusThrottleInterval?: number;
+  revalidateFirstPage?: boolean;
+  revalidateOnFocus?: boolean;
+  revalidateIfStale?: boolean;
 };
 export const useInfiniteListQuerySWR = <T>(
   urlFunction: (pageIndex: number, previousPageData: []) => string | null,
@@ -38,12 +44,14 @@ export const useInfiniteListQuerySWR = <T>(
   const [isRefreshing, setRefreshing] = useState(false);
   const { data, error, mutate, size, setSize, isValidating, isLoading } =
     useSWRInfinite<T>(urlFunction, fetcher, {
-      revalidateFirstPage: true,
+      revalidateFirstPage: config?.revalidateFirstPage ?? true,
       // suspense: true,
       refreshInterval,
-      revalidateOnMount: true,
-      dedupingInterval: 5000,
-      focusThrottleInterval: 30000,
+      revalidateOnMount: config?.revalidateOnMount ?? true,
+      dedupingInterval: config?.dedupingInterval ?? 5000,
+      focusThrottleInterval: config?.focusThrottleInterval ?? 30000,
+      revalidateOnFocus: config?.revalidateOnFocus ?? true,
+      revalidateIfStale: config?.revalidateIfStale ?? true,
     });
 
   const isRefreshingSWR = isValidating && data && data.length === size;
