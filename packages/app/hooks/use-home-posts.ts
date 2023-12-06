@@ -13,23 +13,13 @@ export const useHomePosts = () => {
     return `v1/posts/feed?page=${index + 1}&limit=${PAGE_SIZE}`;
   }, []);
 
-  const queryState = useInfiniteListQuerySWR<VideoPost[]>(
-    url,
-    {
-      pageSize: PAGE_SIZE,
-      revalidateFirstPage: false,
-      revalidateIfStale: false,
-      revalidateOnMount: true,
-      revalidateOnFocus: false,
-    },
-    (url: string) => {
-      return axios({ url, method: "GET" }).then((data: VideoPost[]) => {
-        return data.filter(
-          (v, i, a) => a.findIndex((v2) => v2.id === v.id) === i
-        );
-      });
-    }
-  );
+  const queryState = useInfiniteListQuerySWR<VideoPost[]>(url, {
+    pageSize: PAGE_SIZE,
+    revalidateFirstPage: false,
+    revalidateIfStale: false,
+    revalidateOnMount: true,
+    revalidateOnFocus: false,
+  });
 
   const newData = useMemo(() => {
     let newData: VideoPost[] = [];
@@ -40,7 +30,10 @@ export const useHomePosts = () => {
         }
       });
     }
-    return newData;
+
+    return newData.filter(
+      (v, i, a) => a.findIndex((v2) => v2.id === v.id) === i
+    );
   }, [queryState.data]);
 
   return {
