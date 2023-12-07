@@ -7637,7 +7637,7 @@ __metadata:
     export-from-json: ^1.7.3
     fortmatic: ^2.4.0
     magic-sdk: ^13.1.0
-    next: ^13.4.13
+    next: ^13.5.1
     next-compose-plugins: ^2.2.1
     next-images: ^1.8.5
     next-pwa: ^5.6.0
@@ -7683,7 +7683,7 @@ __metadata:
     design-system: "*"
     eslint: 8.45.0
     eslint-config-next: 13.4.13
-    next: ^13.4.13
+    next: ^13.5.1
     path-browserify: ^1.0.1
     postcss: ^8.4.31
     react: 18.2.0
