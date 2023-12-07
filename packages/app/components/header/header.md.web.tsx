@@ -313,361 +313,375 @@ export const HeaderMd = withColorScheme(() => {
   );
 
   return (
-    <View tw="max-h-screen bg-white pl-2 dark:bg-black">
-      <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
-        <Link
-          href="/"
-          tw="flex-row items-center"
-          style={{
-            paddingTop: screenHeight > 860 ? 40 : 24,
-          }}
-        >
-          <ShowtimeBrand color={iconColor} width={19 * (84 / 16)} height={19} />
-        </Link>
-        <View tw="-ml-4 mt-5 w-48 justify-center">
-          {HOME_ROUTES.map((item) => {
-            if (item.key === "Notifications") {
-              return <NotificationsInHeader key={item.key} />;
-            }
-            if (item.key === "Search") {
-              return <SearchInHeader key={item.key} />;
-            }
-            return (
-              <MenuItem
-                focused={item.focused}
-                href={item.pathname}
-                icon={() => {
-                  return (
-                    <>
-                      {item.icon({
-                        color: iconColor,
-                        width: 24,
-                        height: 24,
-                      })}
-                      {item.key === "Channels" ? (
-                        <ChannelsUnreadMessages />
-                      ) : null}
-                    </>
-                  );
-                }}
-                title={item.title}
-                key={item.pathname}
-              />
-            );
-          })}
+    <View tw="md:w-[248px]">
+      <View tw="fixed max-h-screen bg-white pl-2 dark:bg-black">
+        <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
+          <Link
+            href="/"
+            tw="flex-row items-center"
+            style={{
+              paddingTop: screenHeight > 860 ? 40 : 24,
+            }}
+          >
+            <ShowtimeBrand
+              color={iconColor}
+              width={19 * (84 / 16)}
+              height={19}
+            />
+          </Link>
+          <View tw="-ml-4 mt-5 w-48 justify-center">
+            {HOME_ROUTES.map((item) => {
+              if (item.key === "Notifications") {
+                return <NotificationsInHeader key={item.key} />;
+              }
+              if (item.key === "Search") {
+                return <SearchInHeader key={item.key} />;
+              }
+              return (
+                <MenuItem
+                  focused={item.focused}
+                  href={item.pathname}
+                  icon={() => {
+                    return (
+                      <>
+                        {item.icon({
+                          color: iconColor,
+                          width: 24,
+                          height: 24,
+                        })}
+                        {item.key === "Channels" ? (
+                          <ChannelsUnreadMessages />
+                        ) : null}
+                      </>
+                    );
+                  }}
+                  title={item.title}
+                  key={item.pathname}
+                />
+              );
+            })}
 
-          <DropdownMenuRoot>
-            <DropdownMenuTrigger>
-              <View
-                tw={[
-                  "mt-2 h-12 cursor-pointer flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
-                ]}
+            <DropdownMenuRoot>
+              <DropdownMenuTrigger>
+                <View
+                  tw={[
+                    "mt-2 h-12 cursor-pointer flex-row items-center rounded-2xl pl-4 transition-all hover:bg-gray-50 hover:dark:bg-gray-900",
+                  ]}
+                >
+                  <Menu width={24} height={24} color={iconColor} />
+                  <Text tw={["ml-4 text-lg text-black dark:text-white"]}>
+                    More
+                  </Text>
+                </View>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                align="center"
+                style={{ minWidth: 150 }}
+                disableBlurEffect
+                side="bottom"
+                sideOffset={0}
               >
-                <Menu width={24} height={24} color={iconColor} />
-                <Text tw={["ml-4 text-lg text-black dark:text-white"]}>
-                  More
-                </Text>
-              </View>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent
-              align="center"
-              style={{ minWidth: 150 }}
-              disableBlurEffect
-              side="bottom"
-              sideOffset={0}
-            >
-              {isAuthenticated && (
-                <DropdownMenuItem
-                  onSelect={() => router.push("/settings")}
-                  key="your-settings"
-                >
-                  <MenuItemIcon Icon={Settings} />
-
-                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
-                    Settings
-                  </DropdownMenuItemTitle>
-                </DropdownMenuItem>
-              )}
-
-              {isAuthenticated && (
-                <DropdownMenuItem
-                  onSelect={() => {
-                    router.push(
-                      Platform.select({
-                        native: "/profile/edit",
-                        web: {
-                          pathname: router.pathname,
-                          query: {
-                            ...router.query,
-                            editProfileModal: true,
-                          },
-                        } as any,
-                      }),
-                      Platform.select({
-                        native: "/profile/edit",
-                        web: router.asPath,
-                      })
-                    );
-                  }}
-                  key="edit-profile"
-                >
-                  <MenuItemIcon
-                    Icon={Edit}
-                    ios={{
-                      name: "square.and.pencil",
-                    }}
-                  />
-
-                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
-                    Edit Profile
-                  </DropdownMenuItemTitle>
-                </DropdownMenuItem>
-              )}
-              {isAuthenticated && (
-                <DropdownMenuItem
-                  onSelect={() => {
-                    downloadCollectorList();
-                  }}
-                  key="download-collector-list"
-                >
-                  <MenuItemIcon
-                    Icon={Download3}
-                    ios={{
-                      name: "arrow.down.doc",
-                    }}
-                  />
-
-                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                    Download collector list
-                  </DropdownMenuItemTitle>
-                </DropdownMenuItem>
-              )}
-              {isAuthenticated && (
-                <DropdownMenuItem
-                  onSelect={() => {
-                    const as = "/creator-token/import-allowlist";
-                    router.push(
-                      Platform.select({
-                        native: as,
-                        web: {
-                          pathname: router.pathname,
-                          query: {
-                            ...router.query,
-                            creatorTokensImportAllowlistModal: true,
-                          },
-                        } as any,
-                      }),
-                      Platform.select({ native: as, web: router.asPath }),
-                      {
-                        shallow: true,
-                      }
-                    );
-                  }}
-                  key="import-allowlist"
-                >
-                  <MenuItemIcon
-                    Icon={AccessTicket}
-                    ios={{
-                      name: "ticket",
-                    }}
-                  />
-
-                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
-                    Import allowlist to channel
-                  </DropdownMenuItemTitle>
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger key="nested-group-trigger">
-                  <MenuItemIcon
-                    Icon={isDark ? Moon : Sun}
-                    ios={{
-                      name: isDark ? "moon" : "sun.max",
-                    }}
-                  />
-
-                  <DropdownMenuItemTitle tw="w-full text-gray-700 dark:text-neutral-100">
-                    Theme
-                  </DropdownMenuItemTitle>
-
-                  <View tw="absolute right-0">
-                    <ChevronRight
-                      width={20}
-                      height={20}
-                      color={isDark ? "#fff" : colors.gray[900]}
-                    />
-                  </View>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuSubContent
-                  disableBlurEffect
-                  alignOffset={-8}
-                  sideOffset={4}
-                >
+                {isAuthenticated && (
                   <DropdownMenuItem
-                    onSelect={() => setColorScheme("light")}
-                    key="nested-group-1"
+                    onSelect={() => router.push("/settings")}
+                    key="your-settings"
                   >
-                    <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
+                    <MenuItemIcon Icon={Settings} />
+
                     <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
-                      Light
+                      Settings
                     </DropdownMenuItemTitle>
                   </DropdownMenuItem>
+                )}
+
+                {isAuthenticated && (
                   <DropdownMenuItem
-                    onSelect={() => setColorScheme("dark")}
-                    key="nested-group-2"
-                  >
-                    <MenuItemIcon Icon={Moon} ios={{ name: "moon" }} />
-                    <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
-                      Dark
-                    </DropdownMenuItemTitle>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => setColorScheme(null)}
-                    key="nested-group-3"
+                    onSelect={() => {
+                      router.push(
+                        Platform.select({
+                          native: "/profile/edit",
+                          web: {
+                            pathname: router.pathname,
+                            query: {
+                              ...router.query,
+                              editProfileModal: true,
+                            },
+                          } as any,
+                        }),
+                        Platform.select({
+                          native: "/profile/edit",
+                          web: router.asPath,
+                        })
+                      );
+                    }}
+                    key="edit-profile"
                   >
                     <MenuItemIcon
-                      Icon={DarkMode}
+                      Icon={Edit}
                       ios={{
-                        name: "circle.righthalf.filled",
+                        name: "square.and.pencil",
                       }}
                     />
+
                     <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
-                      System
+                      Edit Profile
                     </DropdownMenuItemTitle>
                   </DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
+                )}
+                {isAuthenticated && (
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      downloadCollectorList();
+                    }}
+                    key="download-collector-list"
+                  >
+                    <MenuItemIcon
+                      Icon={Download3}
+                      ios={{
+                        name: "arrow.down.doc",
+                      }}
+                    />
 
-              {isAuthenticated && (
-                <DropdownMenuItem destructive onSelect={logout} key="sign-out">
-                  <MenuItemIcon
-                    Icon={LogOut}
-                    ios={{ name: "rectangle.portrait.and.arrow.right" }}
+                    <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                      Download collector list
+                    </DropdownMenuItemTitle>
+                  </DropdownMenuItem>
+                )}
+                {isAuthenticated && (
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      const as = "/creator-token/import-allowlist";
+                      router.push(
+                        Platform.select({
+                          native: as,
+                          web: {
+                            pathname: router.pathname,
+                            query: {
+                              ...router.query,
+                              creatorTokensImportAllowlistModal: true,
+                            },
+                          } as any,
+                        }),
+                        Platform.select({ native: as, web: router.asPath }),
+                        {
+                          shallow: true,
+                        }
+                      );
+                    }}
+                    key="import-allowlist"
+                  >
+                    <MenuItemIcon
+                      Icon={AccessTicket}
+                      ios={{
+                        name: "ticket",
+                      }}
+                    />
+
+                    <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-300">
+                      Import allowlist to channel
+                    </DropdownMenuItemTitle>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger key="nested-group-trigger">
+                    <MenuItemIcon
+                      Icon={isDark ? Moon : Sun}
+                      ios={{
+                        name: isDark ? "moon" : "sun.max",
+                      }}
+                    />
+
+                    <DropdownMenuItemTitle tw="w-full text-gray-700 dark:text-neutral-100">
+                      Theme
+                    </DropdownMenuItemTitle>
+
+                    <View tw="absolute right-0">
+                      <ChevronRight
+                        width={20}
+                        height={20}
+                        color={isDark ? "#fff" : colors.gray[900]}
+                      />
+                    </View>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent
+                    disableBlurEffect
+                    alignOffset={-8}
+                    sideOffset={4}
+                  >
+                    <DropdownMenuItem
+                      onSelect={() => setColorScheme("light")}
+                      key="nested-group-1"
+                    >
+                      <MenuItemIcon Icon={Sun} ios={{ name: "sun.max" }} />
+                      <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
+                        Light
+                      </DropdownMenuItemTitle>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => setColorScheme("dark")}
+                      key="nested-group-2"
+                    >
+                      <MenuItemIcon Icon={Moon} ios={{ name: "moon" }} />
+                      <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
+                        Dark
+                      </DropdownMenuItemTitle>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => setColorScheme(null)}
+                      key="nested-group-3"
+                    >
+                      <MenuItemIcon
+                        Icon={DarkMode}
+                        ios={{
+                          name: "circle.righthalf.filled",
+                        }}
+                      />
+                      <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
+                        System
+                      </DropdownMenuItemTitle>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+
+                {isAuthenticated && (
+                  <DropdownMenuItem
+                    destructive
+                    onSelect={logout}
+                    key="sign-out"
+                  >
+                    <MenuItemIcon
+                      Icon={LogOut}
+                      ios={{ name: "rectangle.portrait.and.arrow.right" }}
+                    />
+                    <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
+                      Sign Out
+                    </DropdownMenuItemTitle>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenuRoot>
+          </View>
+          <View tw="w-40">
+            {!isAuthenticated && (
+              <>
+                <Button
+                  size="small"
+                  tw="mt-4 !h-10"
+                  onPress={handleSubmitWallet}
+                  disabled={loginLoading}
+                >
+                  <>
+                    <Text tw="text-[14px] font-semibold text-white dark:text-black">
+                      {loginLoading ? "loading..." : "Connect"}
+                    </Text>
+                  </>
+                </Button>
+                <Button
+                  size="small"
+                  tw="mt-4 !h-10"
+                  disabled={loginLoading}
+                  onPress={async () => {
+                    if (privy.authenticated) {
+                      await privy.logout();
+                    }
+                    privy.login();
+                  }}
+                >
+                  <>
+                    <Text tw="text-[14px] font-semibold text-white dark:text-black">
+                      {loginLoading ? "loading..." : "Phone & Social"}
+                    </Text>
+                  </>
+                </Button>
+              </>
+            )}
+            <Divider tw="my-4" />
+            <CreateButtonDesktop />
+            <Divider tw="my-4" />
+            <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
+              <View tw="flex-row items-center justify-center">
+                <PhonePortraitOutline
+                  color={iconColor}
+                  width={18}
+                  height={18}
+                />
+                <Text tw="text-15 ml-1 font-bold dark:text-white">Get App</Text>
+              </View>
+              <View tw="flex items-center justify-between px-2 pt-4">
+                <Link
+                  href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
+                  target="_blank"
+                  tw="duration-150 hover:scale-105"
+                >
+                  <Image
+                    source={{
+                      uri: "/assets/AppStoreDownload.png",
+                    }}
+                    width={120}
+                    height={40}
+                    alt="App Store"
                   />
-                  <DropdownMenuItemTitle tw="text-gray-700 dark:text-neutral-100">
-                    Sign Out
-                  </DropdownMenuItemTitle>
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenuRoot>
-        </View>
-        <View tw="w-40">
-          {!isAuthenticated && (
-            <>
-              <Button
-                size="small"
-                tw="mt-4 !h-10"
-                onPress={handleSubmitWallet}
-                disabled={loginLoading}
-              >
-                <>
-                  <Text tw="text-[14px] font-semibold text-white dark:text-black">
-                    {loginLoading ? "loading..." : "Connect"}
-                  </Text>
-                </>
-              </Button>
-              <Button
-                size="small"
-                tw="mt-4 !h-10"
-                disabled={loginLoading}
-                onPress={async () => {
-                  if (privy.authenticated) {
-                    await privy.logout();
-                  }
-                  privy.login();
-                }}
-              >
-                <>
-                  <Text tw="text-[14px] font-semibold text-white dark:text-black">
-                    {loginLoading ? "loading..." : "Phone & Social"}
-                  </Text>
-                </>
-              </Button>
-            </>
-          )}
-          <Divider tw="my-4" />
-          <CreateButtonDesktop />
-          <Divider tw="my-4" />
-          <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
-            <View tw="flex-row items-center justify-center">
-              <PhonePortraitOutline color={iconColor} width={18} height={18} />
-              <Text tw="text-15 ml-1 font-bold dark:text-white">Get App</Text>
-            </View>
-            <View tw="flex items-center justify-between px-2 pt-4">
-              <Link
-                href="https://apps.apple.com/us/app/showtime-nft-social-network/id1606611688"
-                target="_blank"
-                tw="duration-150 hover:scale-105"
-              >
-                <Image
-                  source={{
-                    uri: "/assets/AppStoreDownload.png",
-                  }}
-                  width={120}
-                  height={40}
-                  alt="App Store"
-                />
-              </Link>
-              <Link
-                href="https://play.google.com/store/apps/details?id=io.showtime"
-                target="_blank"
-                tw="mt-2 duration-150 hover:scale-105"
-              >
-                <Image
-                  source={{
-                    uri: "/assets/GooglePlayDownload.png",
-                  }}
-                  width={120}
-                  height={40}
-                  alt="Google Play"
-                />
-              </Link>
+                </Link>
+                <Link
+                  href="https://play.google.com/store/apps/details?id=io.showtime"
+                  target="_blank"
+                  tw="mt-2 duration-150 hover:scale-105"
+                >
+                  <Image
+                    source={{
+                      uri: "/assets/GooglePlayDownload.png",
+                    }}
+                    width={120}
+                    height={40}
+                    alt="Google Play"
+                  />
+                </Link>
+              </View>
             </View>
           </View>
-        </View>
-        <View
-          tw={[
-            "bottom-0 mt-4 inline-block",
-            screenHeight > 840 ? "absolute" : "relative",
-          ]}
-          style={{}}
-        >
-          <View tw="inline-block">
-            {links.map((item) => (
-              <TextLink
-                href={item.link}
-                target="_blank"
-                tw="text-xs text-gray-500 dark:text-gray-300"
-                key={item.title}
-              >
-                {item.title}
-                {` · `}
-              </TextLink>
-            ))}
-          </View>
-          <Text tw="text-xs text-gray-500 dark:text-gray-300">
-            © 2023 Showtime Technologies, Inc.
-          </Text>
-          <View tw="mt-2 inline-block w-full">
-            {social.map((item) => (
-              <Link
-                href={item.link}
-                hrefAttrs={{
-                  target: "_blank",
-                  rel: "noreferrer",
-                }}
-                key={item.title}
-                tw="inline-block w-1/4"
-              >
-                {item?.icon({
-                  color: colors.gray[400],
-                  width: 20,
-                  height: 20,
-                })}
-              </Link>
-            ))}
+          <View
+            tw={[
+              "bottom-0 mt-4 inline-block",
+              screenHeight > 840 ? "absolute" : "relative",
+            ]}
+            style={{}}
+          >
+            <View tw="inline-block">
+              {links.map((item) => (
+                <TextLink
+                  href={item.link}
+                  target="_blank"
+                  tw="text-xs text-gray-500 dark:text-gray-300"
+                  key={item.title}
+                >
+                  {item.title}
+                  {` · `}
+                </TextLink>
+              ))}
+            </View>
+            <Text tw="text-xs text-gray-500 dark:text-gray-300">
+              © 2023 Showtime Technologies, Inc.
+            </Text>
+            <View tw="mt-2 inline-block w-full">
+              {social.map((item) => (
+                <Link
+                  href={item.link}
+                  hrefAttrs={{
+                    target: "_blank",
+                    rel: "noreferrer",
+                  }}
+                  key={item.title}
+                  tw="inline-block w-1/4"
+                >
+                  {item?.icon({
+                    color: colors.gray[400],
+                    width: 20,
+                    height: 20,
+                  })}
+                </Link>
+              ))}
+            </View>
           </View>
         </View>
       </View>

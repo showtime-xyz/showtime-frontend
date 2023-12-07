@@ -64,13 +64,7 @@ export const FeedVideo = (props: VideoProps) => {
   const resizeMode = aspectRatio > 0.65 ? "contain" : "cover";
 
   return (
-    <div
-      onClick={() => {
-        if (muted) {
-          setMuted(false);
-        }
-      }}
-    >
+    <>
       <video
         style={{
           width,
@@ -84,12 +78,17 @@ export const FeedVideo = (props: VideoProps) => {
       />
 
       <div
+        onClick={() => {
+          if (muted) {
+            setMuted(false);
+          }
+        }}
         style={{
           width: props.width,
           height: props.height,
           position: "absolute",
         }}
       />
-    </div>
+    </>
   );
 };
