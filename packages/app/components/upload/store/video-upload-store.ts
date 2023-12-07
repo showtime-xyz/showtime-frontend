@@ -60,7 +60,7 @@ export const videoUploadStore = proxy<VideoUploadStoreState>({
   },
   chooseVideo: async () => {
     const video = await DocumentPicker.getDocumentAsync({
-      type: ["video/mp4"],
+      type: ["video/mp4", "video/quicktime", "video/mov"],
     });
     if (video.canceled) {
       return false;
