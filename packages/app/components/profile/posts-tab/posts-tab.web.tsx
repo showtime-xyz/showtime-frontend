@@ -68,10 +68,14 @@ export const PostsTab = (props: {
         </Text>
       );
     }
-    if (profilePostsState.data?.length === 0) {
+    if (
+      profilePostsState.data?.length === 0 &&
+      !profilePostsState.isLoading &&
+      !profilePostsState.isLoadingMore
+    ) {
       return (
         <View tw="mt-12">
-          <Text tw="text-center text-xl font-semibold text-gray-700 dark:text-gray-100">
+          <Text tw="text-center text-base font-semibold text-gray-700 dark:text-gray-100">
             No Posts
           </Text>
         </View>
@@ -82,6 +86,7 @@ export const PostsTab = (props: {
     profilePostsState.data?.length,
     profilePostsState.error,
     profilePostsState.isLoading,
+    profilePostsState.isLoadingMore,
   ]);
 
   return (
