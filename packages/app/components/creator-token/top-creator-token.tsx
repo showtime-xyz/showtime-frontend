@@ -114,7 +114,6 @@ export const TopCreatorTokens = ({
         useWindowScroll={false}
         data={list || []}
         ref={listRef}
-        preserveScrollPosition
         keyExtractor={keyExtractor}
         numColumns={numColumns}
         refreshing={isRefreshing}
