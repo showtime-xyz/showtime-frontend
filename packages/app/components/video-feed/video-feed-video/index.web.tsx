@@ -13,7 +13,7 @@ import { VideoProps } from "./type";
 export const FeedVideo = (props: VideoProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const [muted] = useMuted();
+  const [muted, setMuted] = useMuted();
   const id = useContext(ItemKeyContext);
   const context = useContext(ViewabilityItemsContext);
   const isItemInList = typeof id !== "undefined";
@@ -64,7 +64,13 @@ export const FeedVideo = (props: VideoProps) => {
   const resizeMode = aspectRatio > 0.65 ? "contain" : "cover";
 
   return (
-    <>
+    <div
+      onClick={() => {
+        if (muted) {
+          setMuted(false);
+        }
+      }}
+    >
       <video
         style={{
           width,
@@ -84,6 +90,6 @@ export const FeedVideo = (props: VideoProps) => {
           position: "absolute",
         }}
       />
-    </>
+    </div>
   );
 };

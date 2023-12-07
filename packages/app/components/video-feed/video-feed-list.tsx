@@ -39,7 +39,7 @@ export const VideoFeedList = (props: {
   const padding = size.width >= breakpoints["md"] ? 80 : 0;
   const videoHeight = size.height - bottomBarHeight - padding;
   const videoWidth =
-    size.width <= breakpoints["md"] ? size.width : videoHeight * (9 / 16);
+    size.width < breakpoints["md"] ? size.width : videoHeight * (9 / 16);
 
   const videoDimensions = useMemo(
     () => ({
