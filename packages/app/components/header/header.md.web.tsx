@@ -16,9 +16,7 @@ import {
   Home,
   Search as SearchIcon,
   ShowtimeBrand,
-  Hot,
   User,
-  Plus,
   PhonePortraitOutline,
   CreatorChannel,
   Settings,
@@ -50,7 +48,6 @@ import { useFooter } from "app/hooks/use-footer";
 import { useNotifications } from "app/hooks/use-notifications";
 import { useUser } from "app/hooks/use-user";
 import { Link, TextLink } from "app/navigation/link";
-import { useNavigateToLogin } from "app/navigation/use-navigate-to";
 
 import {
   DropdownMenuContent,
@@ -66,6 +63,7 @@ import {
 import { useChannelsUnreadMessages } from "../creator-channels/hooks/use-channels-unread-messages";
 import { useLogin } from "../login/use-login";
 import { withColorScheme } from "../memo-with-theme";
+import { CreateButtonDesktop } from "../upload/components/icons/create-icon-xl";
 
 const NotificationsInHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -315,7 +313,10 @@ export const HeaderMd = withColorScheme(() => {
   );
 
   return (
-    <View tw="fixed top-0 h-full bg-white pl-2 dark:bg-black">
+    <View
+      tw="max-h-screen bg-white pl-2 dark:bg-black"
+      style={{ overflow: "scroll" }}
+    >
       <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
         <Link
           href="/"
@@ -357,6 +358,7 @@ export const HeaderMd = withColorScheme(() => {
               />
             );
           })}
+
           <DropdownMenuRoot>
             <DropdownMenuTrigger>
               <View
@@ -558,20 +560,20 @@ export const HeaderMd = withColorScheme(() => {
           {!isAuthenticated && (
             <>
               <Button
-                size="regular"
-                tw="mt-6"
+                size="small"
+                tw="mt-4 !h-10"
                 onPress={handleSubmitWallet}
                 disabled={loginLoading}
               >
                 <>
-                  <Text tw="text-base font-bold text-white dark:text-black">
+                  <Text tw="text-[14px] font-semibold text-white dark:text-black">
                     {loginLoading ? "loading..." : "Connect"}
                   </Text>
                 </>
               </Button>
               <Button
-                size="regular"
-                tw="mt-6"
+                size="small"
+                tw="mt-4 !h-10"
                 disabled={loginLoading}
                 onPress={async () => {
                   if (privy.authenticated) {
@@ -581,15 +583,16 @@ export const HeaderMd = withColorScheme(() => {
                 }}
               >
                 <>
-                  <Text tw="text-base font-bold text-white dark:text-black">
+                  <Text tw="text-[14px] font-semibold text-white dark:text-black">
                     {loginLoading ? "loading..." : "Phone & Social"}
                   </Text>
                 </>
               </Button>
             </>
           )}
-
-          <Divider tw="my-5" />
+          <Divider tw="my-4" />
+          <CreateButtonDesktop />
+          <Divider tw="my-4" />
           <View tw="rounded-2xl border  border-gray-200 pb-2 pt-4 dark:border-gray-600">
             <View tw="flex-row items-center justify-center">
               <PhonePortraitOutline color={iconColor} width={18} height={18} />

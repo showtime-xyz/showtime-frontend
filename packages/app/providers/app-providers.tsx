@@ -21,15 +21,16 @@ import { WalletMobileSDKProvider } from "app/providers/wallet-mobile-sdk-provide
 
 import { SharedElementProvider } from "design-system/shared-element/SharedElementContext";
 
+import { MuteProvider } from "./mute-provider";
 import { WalletProvider } from "./wallet-provider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <GestureHandlerRootView style={{ flexGrow: 1 }}>
+    <GestureHandlerRootView style={{ flexGrow: 1 }} nativeID="3444">
       <KeyboardProvider statusBarTranslucent>
         <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <SharedElementProvider>
-            <ColorSchemeProvider>
+          <ColorSchemeProvider>
+            <SharedElementProvider>
               <ReactionProvider>
                 <WalletMobileSDKProvider>
                   <WalletProvider>
@@ -42,7 +43,9 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                                 <AuthProvider>
                                   <UserProvider>
                                     <BottomSheetModalProvider>
-                                      <PrivyAuth>{children}</PrivyAuth>
+                                      <MuteProvider>
+                                        <PrivyAuth>{children}</PrivyAuth>
+                                      </MuteProvider>
                                     </BottomSheetModalProvider>
                                   </UserProvider>
                                 </AuthProvider>
@@ -55,8 +58,8 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => {
                   </WalletProvider>
                 </WalletMobileSDKProvider>
               </ReactionProvider>
-            </ColorSchemeProvider>
-          </SharedElementProvider>
+            </SharedElementProvider>
+          </ColorSchemeProvider>
         </SafeAreaProvider>
       </KeyboardProvider>
     </GestureHandlerRootView>

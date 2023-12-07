@@ -1,0 +1,27 @@
+diff --git a/node_modules/expo-video-thumbnails/ios/VideoThumbnailsModule.swift b/node_modules/expo-video-thumbnails/ios/VideoThumbnailsModule.swift
+index f5d1ca0..55ceeb1 100644
+--- a/node_modules/expo-video-thumbnails/ios/VideoThumbnailsModule.swift
++++ b/node_modules/expo-video-thumbnails/ios/VideoThumbnailsModule.swift
+@@ -25,10 +25,16 @@ public class VideoThumbnailsModule: Module {
+     let generator = AVAssetImageGenerator.init(asset: asset)
+ 
+     generator.appliesPreferredTrackTransform = true
+-    generator.requestedTimeToleranceBefore = CMTime.zero
+     generator.requestedTimeToleranceAfter = CMTime.zero
+ 
+     let time = CMTimeMake(value: options.time, timescale: 1000)
++    
++    // `requestedTimeToleranceBefore` can only be set if `time` is less
++    // than the video duration, otherwise it will fail to generate an image.
++    if(time < asset.duration) {
++      generator.requestedTimeToleranceBefore = CMTime.zero
++    }
++    
+     let imgRef = try generator.copyCGImage(at: time, actualTime: nil)
+     let thumbnail = UIImage.init(cgImage: imgRef)
+     let savedImageUrl = try saveImage(image: thumbnail, quality: options.quality)
+@@ -67,3 +73,4 @@ public class VideoThumbnailsModule: Module {
+     return fileUrl
+   }
+ }
++

@@ -33,7 +33,8 @@ export const usePlatformBottomHeight = () => {
       : mobileWebBottomHeight;
     return webBottomTabBarHeight;
   }
-  if (router.pathname !== "/") {
+  // TODO: Refactor this to use context to determine if the bottom tab bar should be hidden
+  if (router.pathname !== "/" && !router.pathname.includes("/posts")) {
     return Math.max(safeAreaBottom, 8);
   }
   return safeAreaBottom + BOTTOM_TABBAR_BASE_HEIGHT;

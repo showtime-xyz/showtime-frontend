@@ -1,13 +1,11 @@
 import { useMemo, memo } from "react";
 import { Platform, ViewStyle } from "react-native";
 
-import { Video } from "expo-av";
-
-import { Image, ResizeMode } from "@showtime-xyz/universal.image";
+import { Image } from "@showtime-xyz/universal.image";
 import { styled } from "@showtime-xyz/universal.tailwind";
 import { View } from "@showtime-xyz/universal.view";
 
-import { contentFitToresizeMode } from "app/utilities";
+import { Video } from "app/components/video";
 
 import { MuteButton } from "../mute-button";
 
@@ -19,7 +17,7 @@ type PreviewProps = {
   type?: "image" | "video";
   tw?: string;
   style?: any;
-  resizeMode?: ResizeMode;
+  resizeMode?: "cover" | "contain";
   width?: number;
   height?: number;
   isMuted?: boolean;
@@ -28,9 +26,6 @@ type PreviewProps = {
 };
 
 const StyledVideo = styled(Video);
-const videoStyle: ViewStyle = {
-  position: Platform.OS === "web" ? "relative" : "absolute",
-};
 export const Preview = memo(function Preview({
   tw = "",
   style,
@@ -85,20 +80,15 @@ export const Preview = memo(function Preview({
       return (
         <>
           <StyledVideo
-            tw={tw}
-            style={[
-              { width, height, justifyContent: "center", alignItems: "center" },
-              style,
-            ]}
-            resizeMode={contentFitToresizeMode(resizeMode)}
-            source={{ uri: uri as string }}
-            isMuted={isMuted}
-            shouldPlay
-            isLooping={isLooping}
-            videoStyle={videoStyle}
-            onLoad={() => {
-              revokeObjectURL(uri);
-            }}
+            // @ts-ignore
+            width={width}
+            // @ts-ignore
+            height={height}
+            resizeMode={resizeMode}
+            uri={uri}
+            muted={isMuted}
+            autoPlay
+            loop={isLooping}
           />
           {showMuteButton && (
             <View tw="z-9 absolute bottom-2.5 right-2.5">

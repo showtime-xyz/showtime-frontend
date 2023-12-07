@@ -1,13 +1,15 @@
-import { useEffect } from "react";
-import { AppState, LogBox } from "react-native";
+import { useEffect, useRef, useCallback } from "react";
+import { AppState, AppStateStatus, LogBox, Platform } from "react-native";
 
 import { configure as configureWalletMobileSDK } from "@coinbase/wallet-mobile-sdk";
-import { Audio, InterruptionModeIOS, InterruptionModeAndroid } from "expo-av";
 import { Image } from "expo-image";
+import { useKeepAwake } from "expo-keep-awake";
 import * as SplashScreen from "expo-splash-screen";
 import { AvoidSoftInput } from "react-native-avoid-softinput";
 import { enableFreeze, enableScreens } from "react-native-screens";
+import { VolumeManager } from "react-native-volume-manager";
 
+import { useAppState } from "app/hooks/use-app-state";
 import { useExpoUpdate } from "app/hooks/use-expo-update";
 import { Logger } from "app/lib/logger";
 import { Sentry } from "app/lib/sentry";
@@ -34,12 +36,6 @@ configureWalletMobileSDK({
   hostURL: new URL("https://go.cb-w.com/wsegue"),
   hostPackageName: "org.toshi",
 });
-
-Audio.setAudioModeAsync({
-  playsInSilentModeIOS: true,
-  interruptionModeIOS: InterruptionModeIOS.DoNotMix,
-  interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
-}).catch(() => {});
 
 LogBox.ignoreLogs([
   "Constants.deviceYearClass",
@@ -74,6 +70,52 @@ function App() {
       clearInterval(timeoutId);
     };
   }, []);
+
+  const volumeWasTriggered = useRef<boolean>(false);
+  const volumeSystemChangesRunning = useRef<boolean>(false);
+  const audioSessionIsInactive = useRef<boolean>(false);
+
+  useKeepAwake();
+
+  useEffect(() => {
+    const volumeListener = VolumeManager.addVolumeListener(async () => {
+      if (
+        Platform.OS === "ios" &&
+        !volumeSystemChangesRunning.current &&
+        !volumeWasTriggered.current
+      ) {
+        try {
+          volumeSystemChangesRunning.current = true;
+          await VolumeManager.enableInSilenceMode(true);
+          volumeWasTriggered.current = true;
+        } catch {
+        } finally {
+          volumeSystemChangesRunning.current = false;
+        }
+      }
+    });
+
+    return function blur() {
+      volumeListener.remove();
+    };
+  }, []);
+
+  const onAppStateChange = useCallback(async (status: AppStateStatus) => {
+    // VolumeManager.enable(true);
+    if (status === "active") {
+      if (audioSessionIsInactive.current) {
+        // VolumeManager.setActive(true);
+        audioSessionIsInactive.current = false;
+      }
+    } else if (status === "background") {
+      // VolumeManager.setActive(false);
+      audioSessionIsInactive.current = true;
+    }
+  }, []);
+
+  useAppState({
+    onChange: onAppStateChange,
+  });
 
   // Handle push notifications
   useEffect(() => {

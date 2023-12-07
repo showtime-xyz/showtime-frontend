@@ -316,8 +316,13 @@ export const useProfileNftTabs = ({ profileId }: { profileId?: number }) => {
   // }, [data?.tabs]);
   return {
     data: {
-      default_tab_type: "tokens",
+      default_tab_type: "posts",
       tabs: [
+        {
+          type: "posts",
+          name: "Posts",
+          displayed_count: 0,
+        },
         {
           type: "tokens",
           name: "Tokens",

@@ -3,6 +3,7 @@ import { useWindowDimensions } from "react-native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import { CreateTabBarIcon } from "app/components/upload/components/icons/upload-tab-bar-icon";
 import { UserContext } from "app/context/user-context";
 import CreatorChannelsNavigator from "app/pages/creator-channels";
 import HomeNavigator from "app/pages/home";
@@ -18,6 +19,8 @@ import {
 } from "./tab-bar-icons";
 
 const BottomTab = createBottomTabNavigator();
+
+const EmptyComponent = () => null;
 
 export function BottomTabNavigator() {
   const { width } = useWindowDimensions();
@@ -36,6 +39,7 @@ export function BottomTabNavigator() {
         component={HomeNavigator}
         options={{
           tabBarIcon: HomeTabBarIcon,
+          headerShown: false,
         }}
       />
       <BottomTab.Screen
@@ -45,7 +49,18 @@ export function BottomTabNavigator() {
           tabBarIcon: CreatorChannelsTabBarIcon,
         }}
       />
-
+      <BottomTab.Screen
+        name="uploadTab"
+        component={EmptyComponent}
+        options={{
+          tabBarIcon: CreateTabBarIcon,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+          },
+        }}
+      />
       {width < 768 && (
         <BottomTab.Screen
           name="notificationsTab"

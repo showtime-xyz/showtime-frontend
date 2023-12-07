@@ -54,14 +54,12 @@ export const NotificationItem = memo(
         case "CHANNEL_FIRST_MESSAGE":
         case "INVITE_REDEEMED":
         case "INVITED_TO_CHANNEL":
-          console.log(notification);
           if (notification.channel) {
             path = `/channels/${notification.channel.id}`;
           }
           break;
         case "CREATOR_TOKEN_PURCHASED":
         case "INVITE_RENEWED":
-          console.log(notification);
           path = `/@${notification?.actors?.[0].username}`;
       }
 

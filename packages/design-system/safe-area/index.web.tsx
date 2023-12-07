@@ -6,6 +6,8 @@
 // 4) most importantly, I think you can just use the env(safe-area-inset-bottom) CSS variable instead
 // after all, safe area code is few-and-far-between, so if you have to write some platform-speciifc code for it,
 // that is probably better than a massive bundle size for little benefit
+import { useWindowDimensions } from "react-native";
+
 import type { useSafeAreaInsets as nativeHook } from "./index";
 
 // on Web, we don't use React Navigation, so we are going to avoid the safe area provider
@@ -42,8 +44,13 @@ export function useSafeAreaInsets(): ReturnType<typeof nativeHook> {
   return area;
 }
 
-export function useSafeAreaFrame(): ReturnType<typeof nativeHook> {
-  return area;
+export function useSafeAreaFrame(): any {
+  const windowDimensions = useWindowDimensions();
+  return {
+    ...area,
+    width: windowDimensions.width,
+    height: windowDimensions.height,
+  };
 }
 
 export function SafeAreaView({ children }: { children: React.ReactElement }) {

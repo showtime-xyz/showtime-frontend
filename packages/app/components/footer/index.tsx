@@ -17,6 +17,8 @@ import {
 } from "app/navigation/tab-bar-icons";
 import { useNavigationElements } from "app/navigation/use-navigation-elements";
 
+import { CreateIconMobileWeb } from "../upload/components/icons/create-icon-mobile-web";
+
 const Footer = () => {
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -39,6 +41,7 @@ const Footer = () => {
 
   return (
     <View
+      // @ts-ignore
       style={{
         height: `calc(${MOBILE_WEB_TABS_HEIGHT}px + env(safe-area-inset-bottom))`,
         backgroundColor: SWIPE_LIST_SCREENS.includes(router.pathname)
@@ -58,6 +61,7 @@ const Footer = () => {
         color={color}
         focused={router.pathname === "/channels"}
       />
+      <CreateIconMobileWeb />
       <NotificationsTabBarIcon
         color={color}
         focused={router.pathname === "/notifications"}
