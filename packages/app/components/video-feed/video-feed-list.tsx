@@ -196,7 +196,7 @@ export const VideoFeedList = (props: {
         ListFooterComponent={
           props.isLoadingMore && !props.isLoading
             ? () => (
-                <View tw="mb-4 items-center justify-center">
+                <View tw="items-center justify-center p-4">
                   <Spinner size="small" />
                 </View>
               )
