@@ -314,8 +314,8 @@ export const HeaderMd = withColorScheme(() => {
 
   return (
     <View tw="md:w-[248px]">
-      <View tw="fixed max-h-screen bg-white pl-2 dark:bg-black">
-        <View tw="h-full min-h-screen w-60 overflow-y-auto pl-4">
+      <View tw="fixed max-h-screen overflow-y-auto bg-white pl-2 dark:bg-black">
+        <View tw="h-full min-h-screen w-60 pl-4">
           <Link
             href="/"
             tw="flex-row items-center"
