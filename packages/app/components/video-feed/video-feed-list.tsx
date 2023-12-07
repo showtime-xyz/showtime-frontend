@@ -67,6 +67,71 @@ export const VideoFeedList = (props: {
         el?.scrollIntoView({ behavior: "smooth", block: "center" });
       }, 100);
     };
+
+    const keyDownEvent = (event: KeyboardEvent) => {
+      const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+      if (key === "ArrowDown") {
+        event.preventDefault();
+        const el = document.querySelector("[data-visible=true]");
+
+        // Get the closest parent div with data-index attribute
+        const currentParentWithIndex = el?.closest("div[data-index]");
+
+        // Get the next sibling div with data-index attribute
+        let nextParentWithIndex = currentParentWithIndex?.nextElementSibling;
+
+        // Check if the next sibling has a data-index attribute
+        while (
+          nextParentWithIndex &&
+          !nextParentWithIndex.hasAttribute("data-index")
+        ) {
+          nextParentWithIndex = nextParentWithIndex.nextElementSibling;
+        }
+
+        // Do something with the next parent div with data-index
+        if (nextParentWithIndex) {
+          nextParentWithIndex.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        } else {
+          // No next div with data-index found
+          console.log("No next parent div with data-index found");
+        }
+      }
+
+      if (key === "ArrowUp") {
+        event.preventDefault();
+        const el = document.querySelector("[data-visible=true]");
+
+        // Get the closest parent div with data-index attribute
+        var currentParentWithIndex = el?.closest("div[data-index]");
+
+        // Get the next sibling div with data-index attribute
+        var nextParentWithIndex =
+          currentParentWithIndex?.previousElementSibling;
+
+        // Check if the next sibling has a data-index attribute
+        while (
+          nextParentWithIndex &&
+          !nextParentWithIndex.hasAttribute("data-index")
+        ) {
+          nextParentWithIndex = nextParentWithIndex.previousElementSibling;
+        }
+
+        // Do something with the next parent div with data-index
+        if (nextParentWithIndex) {
+          nextParentWithIndex.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        } else {
+          // No next div with data-index found
+          console.log("No next parent div with data-index found");
+        }
+      }
+    };
+
     if (
       listRef.current &&
       Platform.OS === "web" &&
@@ -75,12 +140,14 @@ export const VideoFeedList = (props: {
     ) {
       listRef.current.addEventListener("scroll", scrollEvent);
       listRef.current.addEventListener("scrollend", scrollEnd);
+      window.addEventListener("keydown", keyDownEvent);
     }
 
     return () => {
       if (Platform.OS === "web" && listRef.current) {
         listRef.current.removeEventListener("scroll", scrollEvent);
         listRef.current.removeEventListener("scrollend", scrollEnd);
+        window.removeEventListener("keydown", keyDownEvent);
       }
     };
   });
