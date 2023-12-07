@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Play } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { Text } from "@showtime-xyz/universal.text";
@@ -42,6 +43,9 @@ export const PostsTab = (props: {
               "?optimizer=image&width=600&quality=70"
             }
           />
+          <View tw="absolute bottom-1 left-1">
+            <Play width={24} height={24} color="white" />
+          </View>
         </Link>
       );
     },
@@ -81,7 +85,7 @@ export const PostsTab = (props: {
   ]);
 
   return (
-    <View style={{ margin: -gap }}>
+    <View style={{ margin: -gap, maxWidth: "100%" }}>
       <InfiniteScrollList
         index={index}
         data={profilePostsState.data}

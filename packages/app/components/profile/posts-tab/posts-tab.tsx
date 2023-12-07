@@ -1,6 +1,7 @@
 import React, { useCallback, useRef } from "react";
 import { useWindowDimensions } from "react-native";
 
+import { Play } from "@showtime-xyz/universal.icon";
 import { Image } from "@showtime-xyz/universal.image";
 import Spinner from "@showtime-xyz/universal.spinner";
 import { TabInfiniteScrollList } from "@showtime-xyz/universal.tab-view";
@@ -40,6 +41,9 @@ export const PostsTab = (props: {
                 "?optimizer=image&width=600&quality=70",
             }}
           />
+          <View tw="absolute bottom-1 left-1">
+            <Play width={24} height={24} color="white" />
+          </View>
         </Link>
       );
     },
