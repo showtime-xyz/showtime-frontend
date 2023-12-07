@@ -23,6 +23,7 @@ import {
 } from "app/hocs/with-viewability-infinite-scroll-list";
 import { useCreatorTokenPriceToBuyNext } from "app/hooks/creator-token/use-creator-token-price-to-buy-next";
 import { useShare } from "app/hooks/use-share";
+import { linkifyDescription } from "app/lib/linkify";
 import { useLogInPromise } from "app/lib/login-promise";
 import { Link } from "app/navigation/link";
 import { useMuted } from "app/providers/mute-provider";
@@ -49,6 +50,10 @@ export const VideoFeedItem = memo(function VideoFeedItem({
   const router = useRouter();
   const { share } = useShare();
   const { loginPromise } = useLogInPromise();
+  const description = useMemo(
+    () => linkifyDescription(post.description, "text-white"),
+    [post.description]
+  );
 
   return (
     <View tw="w-full items-center md:py-10">
@@ -100,7 +105,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({
                 ) : null}
               </View>
               <CollapsibleText tw="text-white" initialNumberOfLines={1}>
-                {post.description}
+                {description}
               </CollapsibleText>
             </View>
             <View tw="flex-1 items-end" style={{ rowGap: 16 }}>
