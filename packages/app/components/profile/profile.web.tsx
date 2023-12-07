@@ -120,10 +120,7 @@ const Profile = ({ username }: ProfileScreenProps) => {
   );
 
   return (
-    <View
-      tw="items-center border-gray-200 bg-white dark:border-gray-800 dark:bg-black md:border-l"
-      style={{ flex: 1 }}
-    >
+    <View tw="items-center bg-white dark:bg-black" style={{ flex: 1 }}>
       <View
         tw="min-h-screen w-full"
         style={{ maxWidth: DESKTOP_PROFILE_WIDTH }}

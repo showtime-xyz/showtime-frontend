@@ -435,7 +435,7 @@ export const CreatorChannels = memo(() => {
 
   return (
     <View tw="h-screen w-full flex-row bg-white dark:bg-black">
-      <View tw="h-full w-80 overflow-hidden border-l border-r border-gray-200 dark:border-gray-800">
+      <View tw="h-full w-80 overflow-hidden">
         <InfiniteScrollList
           useWindowScroll={false}
           data={

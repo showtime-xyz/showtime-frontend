@@ -30,7 +30,7 @@ export const SettingsMd = () => {
   return (
     <View tw="h-screen w-full flex-1 bg-white dark:bg-black">
       <View tw="h-screen w-full flex-row">
-        <View tw="w-72 border-l border-r border-gray-200 dark:border-gray-800">
+        <View tw="w-72">
           <View tw="bg-white pt-8 dark:bg-black">
             <Text tw="px-4 text-xl font-bold text-gray-900 dark:text-white">
               Settings
