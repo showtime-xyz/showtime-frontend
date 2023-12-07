@@ -3,11 +3,8 @@ import { useWindowDimensions, Platform } from "react-native";
 
 import type { ListRenderItemInfo } from "@shopify/flash-list";
 
-import { useIsDarkMode } from "@showtime-xyz/universal.hooks";
-import { LockV2 } from "@showtime-xyz/universal.icon";
 import { InfiniteScrollList } from "@showtime-xyz/universal.infinite-scroll-list";
 import Spinner from "@showtime-xyz/universal.spinner";
-import { colors } from "@showtime-xyz/universal.tailwind";
 import { Text } from "@showtime-xyz/universal.text";
 import { View } from "@showtime-xyz/universal.view";
 
@@ -24,73 +21,18 @@ import { useScrollToTop } from "app/lib/react-navigation/native";
 
 import { breakpoints } from "design-system/theme";
 
-import { ListHeaderComponent } from "../home/header";
 import {
-  TopCreatorTokenListItem,
+  TopCreatorTokenItem,
   TopCreatorTokenListItemSkeleton,
 } from "./creator-token-users";
 
 const Header = () => {
-  const isDark = useIsDarkMode();
   return (
-    <>
-      <ListHeaderComponent />
-      <View tw="px-4 md:px-0">
-        <View tw=" border-b border-gray-200 pb-4 dark:border-gray-700">
-          <View tw="flex-row items-center justify-between pb-4 pt-6">
-            <Text tw="text-gray-1100 text-lg font-bold dark:text-white">
-              Welcome to the creator economy.
-            </Text>
-          </View>
-          <View tw="flex-row items-center">
-            <LockV2
-              width={14}
-              height={14}
-              color={isDark ? colors.white : colors.gray[900]}
-            />
-            <View tw="w-1" />
-            <Text tw="text-sm font-medium text-gray-900 dark:text-white">
-              Collect at least 1 token to unlock their channel.
-            </Text>
-          </View>
-        </View>
-        <View tw="flex-row items-center pb-2 pt-4">
-          <Text
-            tw="w-[24px] text-xs text-gray-600 dark:text-gray-500"
-            style={{
-              fontSize: 11,
-            }}
-          >
-            #
-          </Text>
-          <Text
-            tw="w-[186px] text-xs text-gray-600 dark:text-gray-500 md:w-[208px]"
-            style={{
-              fontSize: 11,
-            }}
-          >
-            CREATOR
-          </Text>
-          <Text
-            tw="ml-10 text-xs text-gray-600 dark:text-gray-500"
-            style={{
-              fontSize: 11,
-            }}
-          >
-            COLLECTED
-          </Text>
-          <Text
-            tw="hidden text-xs text-gray-600 dark:text-gray-500 lg:block"
-            style={{
-              fontSize: 11,
-              marginLeft: 92,
-            }}
-          >
-            LAST MESSAGE
-          </Text>
-        </View>
-      </View>
-    </>
+    <View tw="my-2">
+      <Text tw="p-2 text-lg font-semibold text-gray-600 dark:text-gray-500">
+        Leaderboard
+      </Text>
+    </View>
   );
 };
 const keyExtractor = (item: TopCreatorTokenUser) =>
@@ -100,9 +42,7 @@ const keyExtractor = (item: TopCreatorTokenUser) =>
       : (item as NewCreatorTokenItem)?.creator_token.id
   }`;
 export const TopCreatorTokens = ({
-  isSimplified,
   disableFetchMore,
-  limit,
 }: {
   isSimplified?: boolean;
   disableFetchMore?: boolean;
@@ -117,7 +57,7 @@ export const TopCreatorTokens = ({
     isLoadingMore,
     refresh,
     isRefreshing,
-  } = useTopCreatorToken(limit);
+  } = useTopCreatorToken();
   const isMdWidth = width >= breakpoints["md"];
   const numColumns = 1;
   const listRef = useRef<any>();
@@ -127,17 +67,9 @@ export const TopCreatorTokens = ({
       item,
       index,
     }: ListRenderItemInfo<TopCreatorTokenUser & { loading?: boolean }>) => {
-      return (
-        <TopCreatorTokenListItem
-          item={item}
-          index={index}
-          isSimplified={isSimplified}
-          isMdWidth={isMdWidth}
-          tw="px-4 md:px-0"
-        />
-      );
+      return <TopCreatorTokenItem item={item} index={index} />;
     },
-    [isSimplified, isMdWidth]
+    []
   );
 
   const ListEmptyComponent = useCallback(() => {
@@ -179,7 +111,7 @@ export const TopCreatorTokens = ({
   return (
     <ErrorBoundary>
       <InfiniteScrollList
-        useWindowScroll
+        useWindowScroll={false}
         data={list || []}
         ref={listRef}
         preserveScrollPosition
@@ -194,6 +126,7 @@ export const TopCreatorTokens = ({
             web: undefined,
             default: screenHeight - headerHeight,
           }),
+          padding: 4,
           paddingTop: Platform.select({
             ios: headerHeight,
             default: 0,

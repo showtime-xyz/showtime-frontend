@@ -17,7 +17,11 @@ import {
 
 export const TopPartCreatorTokens = () => {
   const router = useRouter();
-  const { data, isLoading } = useTopCreatorToken(6);
+  const { data: tokens, isLoading } = useTopCreatorToken(6);
+
+  const data = useMemo(() => {
+    return tokens?.slice(0, 6);
+  }, [tokens]);
 
   return (
     <View tw="px-4 md:pl-2 md:pr-4 lg:px-0">

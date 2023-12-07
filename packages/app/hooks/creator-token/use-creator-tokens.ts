@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useRef } from "react";
 
 import useSWR from "swr";
 
@@ -95,45 +95,46 @@ export const useCreatorTokenCoLlected = (
     error,
   };
 };
-export const useTopCreatorToken = (limit: number = 20) => {
-  const fetchUrl = useCallback(
-    (index: number, previousPageData: any) => {
-      if (previousPageData && !previousPageData?.creator_tokens.length)
-        return null;
-
+export const useTopCreatorToken = (limit = 20) => {
+  let indexRef = useRef(0);
+  const url = useCallback(
+    (index: number) => {
+      indexRef.current = index;
       return `/v1/creator-token/top?page=${index + 1}&limit=${limit}`;
     },
     [limit]
   );
 
-  const {
-    data,
-    fetchMore: fetchMoreData,
-    ...queryState
-  } = useInfiniteListQuerySWR<TopCreatorToken>(fetchUrl, {
+  const queryState = useInfiniteListQuerySWR<TopCreatorToken>(url, {
     pageSize: limit,
   });
 
   const newData = useMemo(() => {
     let newData: TopCreatorToken["creator_tokens"] = [];
-    if (data) {
-      data.forEach((p) => {
+    if (queryState.data) {
+      queryState.data.forEach((p) => {
         if (p) {
           newData = newData.concat(p.creator_tokens);
         }
       });
     }
     return newData;
-  }, [data]);
+  }, [queryState.data]);
 
-  const fetchMore = useCallback(() => {
-    if (newData.length >= 100) return;
-    fetchMoreData();
-  }, [fetchMoreData, newData.length]);
+  const fetchMore = () => {
+    if (
+      queryState.data &&
+      queryState.data[queryState.data.length - 1].creator_tokens.length === 0
+    ) {
+      return;
+    }
+
+    return queryState.fetchMore();
+  };
 
   return {
     ...queryState,
-    fetchMore,
     data: newData,
+    fetchMore,
   };
 };
