@@ -67,7 +67,7 @@ export const TopCreatorTokens = ({
       item,
       index,
     }: ListRenderItemInfo<TopCreatorTokenUser & { loading?: boolean }>) => {
-      return <TopCreatorTokenItem item={item} index={index} />;
+      return <TopCreatorTokenItem item={item} index={index} showBuyButton />;
     },
     []
   );

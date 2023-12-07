@@ -141,10 +141,12 @@ export const TopCreatorTokenItem = ({
   index,
   tw,
   item,
+  showBuyButton,
   ...rest
 }: ViewProps & {
   index?: number;
   item: TopCreatorTokenUser;
+  showBuyButton?: boolean;
 }) => {
   const router = useRouter();
   const isDark = useIsDarkMode();
@@ -216,6 +218,18 @@ export const TopCreatorTokenItem = ({
               />
             </View>
           </View>
+          {showBuyButton ? (
+            <PlatformBuyButton
+              style={{
+                backgroundColor: "#08F6CC",
+                height: 16,
+                marginTop: 0,
+                width: 48,
+              }}
+              text={<Text tw="text-xs font-semibold">Buy</Text>}
+              username={token.owner_profile?.username}
+            />
+          ) : null}
         </View>
       </View>
     </PressableHover>
