@@ -104,7 +104,7 @@ export const VideoFeedItem = memo(function VideoFeedItem({
                   />
                 ) : null}
               </View>
-              <CollapsibleText tw="text-white" initialNumberOfLines={1}>
+              <CollapsibleText tw="text-white" initialNumberOfLines={2}>
                 {description}
               </CollapsibleText>
             </View>
