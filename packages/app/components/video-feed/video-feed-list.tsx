@@ -78,7 +78,7 @@ export const VideoFeedList = (props: {
     }
 
     return () => {
-      if (Platform.OS === "web") {
+      if (Platform.OS === "web" && listRef.current) {
         listRef.current.removeEventListener("scroll", scrollEvent);
         listRef.current.removeEventListener("scrollend", scrollEnd);
       }
